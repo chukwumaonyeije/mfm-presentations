@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High-Risk Pregnancy Care - Patient Education</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .slideshow-container {
+      max-width: 1200px;
+      width: 100%;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      padding: 60px;
+      min-height: 600px;
+      animation: fadeIn 0.5s;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .color-primary {
+      color: #16A085;
+    }
+
+    .color-accent {
+      color: #FF6B6B;
+    }
+
+    .color-muted {
+      color: #7F8C8D;
+    }
+
+    .bg-primary {
+      background: #16A085;
+      color: white;
+      padding: 24px;
+      border-radius: 8px;
+    }
+
+    .bg-accent {
+      background: #FFE6E6;
+      padding: 18px;
+      border-radius: 8px;
+      border-left: 6px solid #FF6B6B;
+    }
+
+    .bg-warning {
+      background: #FFF5E6;
+      padding: 18px;
+      border-radius: 8px;
+      border-left: 6px solid #FF6B6B;
+    }
+
+    .bg-light {
+      background: #ECF0F1;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .bg-success {
+      background: #E8F8F5;
+      padding: 18px;
+      border-radius: 8px;
+      border: 2px solid #16A085;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .stat-box {
+      text-align: center;
+      background: #ECF0F1;
+      padding: 16px;
+      border-radius: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #16A085;
+      margin: 8px 0;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #7F8C8D;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: #f8f9fa;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    button {
+      background: #16A085;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #117A65;
+    }
+
+    button:disabled {
+      background: #bdc3c7;
+      cursor: not-allowed;
+    }
+
+    .slide-counter {
+      color: #7F8C8D;
+      font-size: 14px;
+    }
+
+    .center {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+    }
+
+    .divider {
+      width: 120px;
+      height: 4px;
+      background: #16A085;
+      margin: 30px auto;
+    }
+
+    .space-y {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .list-item {
+      padding-left: 30px;
+      position: relative;
+    }
+
+    .list-item:before {
+      content: "●";
+      position: absolute;
+      left: 0;
+      color: #16A085;
+      font-size: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .slide {
+        padding: 30px;
+        min-height: 500px;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      h2 {
+        font-size: 24px;
+      }
+
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="slideshow-container">
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+      <div class="center">
+        <h1 class="color-primary">High-Risk Pregnancy Care</h1>
+        <h2 style="margin-bottom: 20px;">Patient Education Guide</h2>
+        <p class="color-muted" style="font-size: 18px;">Understanding Small for Gestational Age</p>
+        <div class="divider"></div>
+        <p class="color-muted">Maternal-Fetal Medicine Consultation</p>
+      </div>
+    </div>
+
+    <!-- Slide 2: Baby's Status -->
+    <div class="slide">
+      <h1 class="color-primary">Your Baby's Current Status</h1>
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px;">
+        <div class="bg-light" style="border-left: 6px solid #16A085;">
+          <h3>✓ Reassuring Findings</h3>
+          <div class="grid-2" style="margin-top: 16px;">
+            <div class="stat-box">
+              <p class="stat-label">Biophysical Profile</p>
+              <p class="stat-value">8/8</p>
+              <p class="stat-label">Excellent score</p>
+            </div>
+            <div class="stat-box">
+              <p class="stat-label">Fetal Heart Rate</p>
+              <p class="stat-value">Normal</p>
+              <p class="stat-label">Healthy range</p>
+            </div>
+            <div class="stat-box">
+              <p class="stat-label">Amniotic Fluid</p>
+              <p class="stat-value">Normal</p>
+              <p class="stat-label">Appropriate levels</p>
+            </div>
+            <div class="stat-box">
+              <p class="stat-label">Umbilical Dopplers</p>
+              <p class="stat-value">Normal</p>
+              <p class="stat-label">Good blood flow</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-warning">
+          <h3>Monitoring Items</h3>
+          <div class="grid-2" style="margin-top: 12px;">
+            <p>• Breech presentation noted</p>
+            <p>• Small for gestational age</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Understanding SGA -->
+    <div class="slide">
+      <h1 class="color-primary">Understanding Small for Gestational Age</h1>
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 24px;">
+        <div>
+          <h3>What does this mean?</h3>
+          <p>Your baby is measuring smaller than average for this stage of pregnancy. This doesn't mean something is wrong, but it does mean we need to monitor your baby more closely.</p>
+        </div>
+        
+        <div class="bg-light">
+          <h3>Why we're monitoring closely:</h3>
+          <div class="space-y" style="margin-top: 12px;">
+            <p class="list-item">To ensure your baby is getting enough nutrition and oxygen</p>
+            <p class="list-item">To watch for any changes in your baby's growth pattern</p>
+            <p class="list-item">To plan the safest time and method for delivery</p>
+          </div>
+        </div>
+        
+        <div class="bg-success">
+          <p style="text-align: center; font-weight: 600; color: #117A65; margin: 0;">
+            The good news: Your baby's current tests are reassuring and show healthy function.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Health Management -->
+    <div class="slide">
+      <h1 class="color-primary">Managing Your Health</h1>
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 18px;">
+        <div>
+          <h3>Typical Health Considerations</h3>
+          <div class="grid-3">
+            <div class="stat-box">
+              <p class="stat-label">Blood Pressure</p>
+              <p style="font-size: 18px; font-weight: 600; margin: 8px 0;">Monitored</p>
+            </div>
+            <div class="stat-box">
+              <p class="stat-label">Weight</p>
+              <p style="font-size: 18px; font-weight: 600; margin: 8px 0;">Tracked</p>
+            </div>
+            <div class="stat-box">
+              <p class="stat-label">BMI</p>
+              <p style="font-size: 18px; font-weight: 600; margin: 8px 0;">Assessed</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-warning">
+          <h3>Areas we monitor closely:</h3>
+          <div class="space-y" style="margin-top: 10px;">
+            <p>• Delivery planning and potential delivery methods</p>
+            <p>• Blood pressure and signs of complications</p>
+            <p>• Fetal monitoring throughout pregnancy</p>
+          </div>
+        </div>
+        
+        <div class="bg-success">
+          <p style="font-weight: 600; color: #117A65; margin-bottom: 8px;">Important Note:</p>
+          <p style="color: #117A65; margin: 0; font-size: 14px;">
+            Avoiding harmful substances during pregnancy is crucial for your baby's growth and development.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Delivery Plan -->
+    <div class="slide">
+      <h1 class="color-primary">Delivery Planning</h1>
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 18px;">
+        <div class="bg-primary">
+          <h3 style="margin-bottom: 12px;">Typical Delivery Timeline</h3>
+          <p style="font-size: 36px; font-weight: 700; margin-bottom: 8px;">39 Weeks</p>
+          <p style="opacity: 0.9; font-size: 15px;">Delivery is typically recommended at 39 weeks gestation for small for gestational age diagnosis</p>
+        </div>
+        
+        <div class="grid-2">
+          <div class="bg-light">
+            <h3>Breech Presentation</h3>
+            <p style="margin: 12px 0; font-size: 15px;">
+              When baby is in a breech position (bottom-down instead of head-down), your care team monitors position throughout pregnancy.
+            </p>
+            <p style="font-size: 14px; color: #7F8C8D;">
+              The safest delivery method will be discussed based on baby's position at term.
+            </p>
+          </div>
+          
+          <div class="bg-light">
+            <h3>Delivery Considerations</h3>
+            <p style="margin: 12px 0; font-size: 15px;">
+              Your care team considers multiple factors when planning delivery.
+            </p>
+            <p style="font-size: 14px; color: #7F8C8D;">
+              All options will be discussed to ensure the best outcome for you and your baby.
+            </p>
+          </div>
+        </div>
+        
+        <div class="bg-success">
+          <p style="text-align: center; font-weight: 600; color: #117A65; margin: 0;">
+            Important: Regular follow-up appointments are essential in the weeks before delivery.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Warning Signs -->
+    <div class="slide">
+      <h1 class="color-accent">Warning Signs</h1>
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px;">
+        <div class="bg-accent">
+          <h3 style="color: #C0392B; margin-bottom: 12px;">🚨 Call 911 or Go to Emergency Room:</h3>
+          <p style="font-size: 15px;">
+            Severe headache, vision changes, severe abdominal pain, vaginal bleeding, or sudden swelling in face or hands
+          </p>
+        </div>
+        
+        <div class="bg-warning">
+          <h3 style="color: #D68910; margin-bottom: 12px;">📞 Call Your Doctor's Office:</h3>
+          <p style="font-size: 15px;">
+            Decreased fetal movement, leaking fluid, regular contractions before 37 weeks, persistent nausea/vomiting, or fever over 100.4°F
+          </p>
+        </div>
+        
+        <div class="bg-success">
+          <p style="text-align: center; font-weight: 600; color: #117A65; margin: 0;">
+            Trust your instincts - if something doesn't feel right, call your healthcare provider.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Care Plan -->
+    <div class="slide">
+      <h1 class="color-primary">Your Care Plan</h1>
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px;">
+        <div class="bg-light">
+          <h3 style="margin-bottom: 16px;">Ongoing Care Schedule</h3>
+          <p style="margin-bottom: 12px;"><strong>1.</strong> Continued fetal surveillance with regular biophysical profiles</p>
+          <p style="margin-bottom: 12px;"><strong>2.</strong> Monitor fetal position to check if baby turns from breech</p>
+          <p><strong>3.</strong> Regular follow-up appointments leading up to delivery</p>
+        </div>
+        
+        <div class="bg-primary">
+          <h3 style="margin-bottom: 12px;">📅 Next Steps</h3>
+          <p>
+            Your doctor's office will schedule your follow-up appointments. Make sure to attend all scheduled visits for the best care for you and your baby.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Support -->
+    <div class="slide">
+      <h1 class="color-primary">You're Not Alone</h1>
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 24px;">
+        <div class="bg-success" style="padding: 28px;">
+          <h3 style="color: #117A65; text-align: center; margin-bottom: 12px;">Remember</h3>
+          <p style="text-align: center; font-size: 17px; color: #2C3E50;">
+            Having a high-risk pregnancy doesn't mean something will go wrong. It means your care team is taking extra care to ensure the best outcome for you and your baby.
+          </p>
+        </div>
+        
+        <div class="grid-2">
+          <div class="bg-light">
+            <h3>📋 Questions</h3>
+            <p style="font-size: 14px;">
+              Write down any questions between visits. No question is too small - your care team wants you to feel informed and supported.
+            </p>
+          </div>
+          
+          <div class="bg-light">
+            <h3>👥 Support</h3>
+            <p style="font-size: 14px;">
+              Bring a support person to appointments if it helps. Having someone with you can make it easier to remember information.
+            </p>
+          </div>
+        </div>
+        
+        <div class="bg-primary" style="text-align: center;">
+          <h3 style="margin-bottom: 12px;">Your Care Team is Here to Help</h3>
+          <p>Call your doctor's office with any questions or concerns throughout your pregnancy.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="controls">
+      <button id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+      <span class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
+      </span>
+      <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    document.getElementById('totalSlides').textContent = totalSlides;
+
+    function showSlide(n) {
+      if (n >= totalSlides) {
+        currentSlide = totalSlides - 1;
+      } else if (n < 0) {
+        currentSlide = 0;
+      } else {
+        currentSlide = n;
+      }
+
+      slides.forEach(slide => slide.classList.remove('active'));
+      slides[currentSlide].classList.add('active');
+
+      document.getElementById('currentSlide').textContent = currentSlide + 1;
+      document.getElementById('prevBtn').disabled = currentSlide === 0;
+      document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+    }
+
+    function changeSlide(direction) {
+      showSlide(currentSlide + direction);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') changeSlide(-1);
+      if (e.key === 'ArrowRight') changeSlide(1);
+    });
+
+    // Initialize
+    showSlide(0);
+  </script>
+</body>
+</html>
