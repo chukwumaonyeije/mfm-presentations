@@ -138,6 +138,34 @@
     .disclaimer strong {
       color: var(--accent2);
     }
+    .search-container {
+      margin-bottom: 32px;
+    }
+    .search-box {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 16px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--fg);
+      transition: border-color 0.2s;
+    }
+    .search-box:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .search-box::placeholder {
+      color: var(--muted);
+    }
+    .search-results {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .card.hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -152,6 +180,17 @@
         Welcome to our collection of high-quality, evidence-based presentations for Maternal-Fetal Medicine clinicians and patients. 
         These presentations are designed for teaching, consultation, and shared decision-making in obstetric care.
       </p>
+    </div>
+
+    <div class="search-container">
+      <input 
+        type="text" 
+        id="searchBox" 
+        class="search-box" 
+        placeholder="🔍 Search presentations by title, topic, or condition..."
+        autocomplete="off"
+      >
+      <div id="searchResults" class="search-results"></div>
     </div>
 
     <div class="presentations">
@@ -279,5 +318,62 @@
       Created for clinical education and consultation
     </p>
   </footer>
+
+  <script>
+    // Search functionality
+    const searchBox = document.getElementById('searchBox');
+    const searchResults = document.getElementById('searchResults');
+    const cards = document.querySelectorAll('.card');
+    const totalCards = cards.length;
+
+    function performSearch() {
+      const searchTerm = searchBox.value.toLowerCase().trim();
+      
+      if (searchTerm === '') {
+        // Show all cards if search is empty
+        cards.forEach(card => card.classList.remove('hidden'));
+        searchResults.textContent = '';
+        return;
+      }
+
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const title = card.querySelector('h2').textContent.toLowerCase();
+        const description = card.querySelector('p').textContent.toLowerCase();
+        const tags = Array.from(card.querySelectorAll('.tag'))
+          .map(tag => tag.textContent.toLowerCase())
+          .join(' ');
+        
+        const searchableText = `${title} ${description} ${tags}`;
+        
+        if (searchableText.includes(searchTerm)) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      // Update search results message
+      if (visibleCount === 0) {
+        searchResults.textContent = `No presentations found matching "${searchBox.value}"`;
+      } else if (visibleCount === totalCards) {
+        searchResults.textContent = `Showing all ${totalCards} presentations`;
+      } else {
+        searchResults.textContent = `Found ${visibleCount} of ${totalCards} presentations`;
+      }
+    }
+
+    // Search on input with debouncing for better performance
+    let searchTimeout;
+    searchBox.addEventListener('input', () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(performSearch, 150);
+    });
+
+    // Initial state
+    searchResults.textContent = `Showing all ${totalCards} presentations`;
+  </script>
 </body>
 </html>
