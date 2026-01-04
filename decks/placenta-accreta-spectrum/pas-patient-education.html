@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Placenta Accreta Spectrum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #4A7C9C;
+            --light-blue: #E8F1F5;
+            --warm-coral: #D9977D;
+            --soft-peach: #F4E8E3;
+            --deep-navy: #2C4556;
+            --warm-gray: #F8F6F4;
+            --text-dark: #2C3E50;
+            --text-light: #5A6C7D;
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: linear-gradient(135deg, var(--warm-gray) 0%, #FFFFFF 100%);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .slide-content {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            padding: 3rem 3.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(74, 124, 156, 0.08);
+            position: relative;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.875rem;
+            color: var(--text-light);
+            font-weight: 300;
+        }
+
+        h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--deep-navy);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 1.25rem;
+            line-height: 1.3;
+        }
+
+        h3 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--warm-coral);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+        }
+
+        p {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .intro-text {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        .highlight-box {
+            background: var(--light-blue);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        .reassurance-box {
+            background: var(--soft-peach);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--warm-coral);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-card {
+            background: var(--warm-gray);
+            padding: 1.25rem;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .info-card h4 {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        li {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--warm-coral);
+            font-weight: 600;
+        }
+
+        .definition {
+            background: linear-gradient(to right, var(--light-blue), transparent);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .nav-hint {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.875rem;
+            color: var(--text-light);
+            background: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--deep-navy) 100%);
+        }
+
+        .title-slide .slide-content {
+            background: rgba(255, 255, 255, 0.98);
+            border-left: none;
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+
+        .decorative-element {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .decorative-1 {
+            background: var(--primary-blue);
+            top: -50px;
+            right: -50px;
+        }
+
+        .decorative-2 {
+            background: var(--warm-coral);
+            bottom: -50px;
+            left: -50px;
+        }
+
+        @media (max-width: 768px) {
+            .slide-content {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .title-slide h1 {
+                font-size: 2.25rem;
+            }
+        }
+
+        .team-list {
+            background: var(--warm-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .team-list li:before {
+            content: "✓";
+        }
+
+        strong {
+            color: var(--deep-navy);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide title-slide">
+            <div class="slide-content">
+                <h1>Understanding Placenta Accreta Spectrum</h1>
+                <p class="subtitle">A Guide for You and Your Family</p>
+                <p class="intro-text">We're here to help you understand your diagnosis and the care plan ahead.</p>
+                <p class="intro-text" style="margin-top: 1.5rem; font-size: 1rem;">This presentation explains what you need to know in plain language.</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: What is PAS? -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="decorative-element decorative-1"></div>
+                <span class="slide-number">1 of 10</span>
+                <h2>What Is Placenta Accreta Spectrum?</h2>
+                
+                <p><strong>What is this?</strong></p>
+                <p>The <span class="definition">placenta</span> (the organ that feeds your baby) sometimes attaches too deeply to the wall of your uterus. We call this Placenta Accreta Spectrum, or PAS.</p>
+                
+                <p style="margin-top: 1.5rem;">Normally, the placenta sits on the uterus lining like a sticker on paper. With PAS, it grows into the muscle wall like roots into soil.</p>
+
+                <div class="highlight-box">
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--deep-navy);">Three Types (From Mild to Deep)</h4>
+                    <ul style="margin-top: 0.75rem;">
+                        <li><strong>Accreta:</strong> Placenta attached to muscle wall</li>
+                        <li><strong>Increta:</strong> Placenta grows into muscle wall</li>
+                        <li><strong>Percreta:</strong> Placenta grows through wall (may reach bladder or other organs)</li>
+                    </ul>
+                </div>
+
+                <p><strong>Why does it matter?</strong></p>
+                <p>The placenta may not separate properly after delivery. This can cause heavy bleeding. Early detection lets us plan for a safe delivery.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Why This Happens -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="slide-number">2 of 10</span>
+                <h2>Why Does This Happen?</h2>
+                
+                <p><strong>What is this?</strong></p>
+                <p>PAS usually happens when the uterus lining has a scar or thin area. The placenta can attach more deeply in these spots.</p>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4>Common Risk Factors</h4>
+                        <p>Previous cesarean birth, placenta previa (placenta over cervix), prior uterine surgery, multiple pregnancies</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Important to Know</h4>
+                        <p>You didn't cause this. PAS happens because of how the placenta grows, not because of anything you did.</p>
+                    </div>
+                </div>
+
+                <div class="reassurance-box">
+                    <p style="margin-bottom: 0;"><strong>Remember:</strong> Most people with risk factors do NOT develop PAS. When it does occur, careful planning leads to good outcomes.</p>
+                </div>
+
+                <p style="margin-top: 1.5rem;"><strong>What happens next?</strong></p>
+                <p>We'll use imaging to confirm the diagnosis and see exactly where the placenta is attached. This helps us create your personalized care plan.</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: How We Diagnose PAS -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="decorative-element decorative-2"></div>
+                <span class="slide-number">3 of 10</span>
+                <h2>How We Diagnose PAS</h2>
+                
+                <p><strong>What is this?</strong></p>
+                <p>We use ultrasound and sometimes MRI to look at where the placenta is attached and how deeply it has grown.</p>
+
+                <h3>Ultrasound Signs We Look For</h3>
+                <ul>
+                    <li>Gaps or "lakes" in the placenta</li>
+                    <li>Thinning of the uterus wall under the placenta</li>
+                    <li>Loss of the normal dark line between placenta and muscle</li>
+                    <li>Blood vessels growing in unusual patterns</li>
+                    <li>Placenta extending beyond the uterus wall</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <p><strong>Doppler ultrasound</strong> uses sound waves to show blood flow. It helps us see the abnormal blood vessels that feed the placenta.</p>
+                </div>
+
+                <p><strong>Why does it matter?</strong></p>
+                <p>Finding PAS before delivery is crucial. It allows us to plan surgery with the right team, in the right place, at the right time. This planning reduces your risk of complications.</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: MRI and Additional Imaging -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="slide-number">4 of 10</span>
+                <h2>When We Need More Information</h2>
+                
+                <p><strong>What is this?</strong></p>
+                <p>Sometimes we recommend an MRI. This gives us a more detailed picture, especially if the placenta is in the back of your uterus or if we need to see nearby organs.</p>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4>MRI Advantages</h4>
+                        <p>Shows placenta depth more clearly. Helps us see if bladder or bowel is involved. Better view of the back of the uterus.</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Safe for Baby</h4>
+                        <p>MRI uses magnets, not radiation. It's safe during pregnancy and doesn't hurt.</p>
+                    </div>
+                </div>
+
+                <p style="margin-top: 1.5rem;"><strong>What happens next?</strong></p>
+                <p>We'll schedule regular ultrasounds throughout your pregnancy. These check-ups help us watch how the placenta grows and adjust your delivery plan if needed.</p>
+
+                <div class="reassurance-box">
+                    <p style="margin-bottom: 0;"><strong>You're being monitored closely.</strong> Frequent imaging might feel overwhelming, but each scan helps us give you the safest care possible.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Your Care Team -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="slide-number">5 of 10</span>
+                <h2>Your Multidisciplinary Care Team</h2>
+                
+                <p><strong>What is this?</strong></p>
+                <p>PAS requires specialists from different fields working together. You'll meet several doctors who each bring specific expertise to your care.</p>
+
+                <div class="team-list">
+                    <ul>
+                        <li><strong>Maternal-Fetal Medicine (MFM) specialist:</strong> Pregnancy expert who coordinates your care</li>
+                        <li><strong>Pelvic surgeon or gynecologic oncologist:</strong> Skilled in complex pelvic surgery</li>
+                        <li><strong>Anesthesiologist:</strong> Manages pain control and monitors you during surgery</li>
+                        <li><strong>Urologist:</strong> Protects bladder and ureters if placenta is nearby</li>
+                        <li><strong>Blood bank specialist:</strong> Prepares blood products in case you need them</li>
+                        <li><strong>Neonatologist:</strong> Cares for your baby after birth</li>
+                    </ul>
+                </div>
+
+                <p><strong>Why does it matter?</strong></p>
+                <p>This team approach means experts are prepared for any situation. Everyone knows the plan before surgery starts.</p>
+
+                <p><strong>What can I do?</strong></p>
+                <p>Meet with team members before delivery. Ask questions. Bring a support person to appointments to help remember information.</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Planning Your Delivery -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="decorative-element decorative-1"></div>
+                <span class="slide-number">6 of 10</span>
+                <h2>Planning Your Delivery</h2>
+                
+                <p><strong>What is this?</strong></p>
+                <p>We'll schedule a cesarean delivery before your due date, usually between 34 and 37 weeks. The exact timing depends on your specific situation.</p>
+
+                <div class="highlight-box">
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--deep-navy);">Why Earlier Than 40 Weeks?</h4>
+                    <p style="margin-bottom: 0;">Delivering before labor starts reduces the risk of emergency surgery and bleeding. We balance this with giving your baby time to develop.</p>
+                </div>
+
+                <h3 style="margin-top: 2rem;">Before Delivery Day</h3>
+                <ul>
+                    <li>You may receive steroid shots to help baby's lungs mature</li>
+                    <li>We'll type and prepare blood that matches yours</li>
+                    <li>You might donate your own blood in advance (autologous donation)</li>
+                    <li>The team reviews your imaging and surgical plan together</li>
+                </ul>
+
+                <p style="margin-top: 1.5rem;"><strong>What happens next?</strong></p>
+                <p>You'll be admitted to a hospital with advanced surgical facilities and a Level III or IV neonatal intensive care unit.</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: What to Expect During Delivery -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="slide-number">7 of 10</span>
+                <h2>What to Expect During Delivery</h2>
+                
+                <p><strong>What is this?</strong></p>
+                <p>The surgery will likely take longer than a standard cesarean. The safest approach is often to deliver your baby and then remove the uterus with the placenta still attached.</p>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4>Cesarean Hysterectomy</h4>
+                        <p>Removing the uterus (hysterectomy) prevents the life-threatening bleeding that can happen if we try to remove the placenta separately.</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Your Baby</h4>
+                        <p>Once delivered, your baby goes to the NICU team. You'll see your baby as soon as it's safe for both of you.</p>
+                    </div>
+                </div>
+
+                <h3>Hemorrhage Prevention</h3>
+                <p>We have multiple strategies ready to control bleeding:</p>
+                <ul>
+                    <li>Medications that help the uterus contract</li>
+                    <li>Special stitches and surgical techniques</li>
+                    <li>Blood transfusions if needed</li>
+                    <li>Cell saver technology (collects and returns your own blood)</li>
+                </ul>
+
+                <div class="reassurance-box">
+                    <p style="margin-bottom: 0;"><strong>This team has trained for this.</strong> Complex cases like yours are what these specialists do. The plan is made with your safety as the top priority.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Recovery -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="decorative-element decorative-2"></div>
+                <span class="slide-number">8 of 10</span>
+                <h2>Recovery and Follow-Up</h2>
+                
+                <p><strong>What is this?</strong></p>
+                <p>Recovery takes longer than a standard cesarean because the surgery is more extensive. Most people stay in the hospital for 3 to 5 days.</p>
+
+                <h3>In the Hospital</h3>
+                <ul>
+                    <li>Pain management with medications adjusted to your needs</li>
+                    <li>Monitoring for bleeding and infection</li>
+                    <li>Help with bonding and feeding your baby</li>
+                    <li>Physical therapy to help you move safely</li>
+                </ul>
+
+                <h3>At Home</h3>
+                <ul>
+                    <li>Rest is essential—don't lift anything heavier than your baby for 6 weeks</li>
+                    <li>Watch for warning signs (fever, heavy bleeding, severe pain)</li>
+                    <li>Follow-up appointments to check your healing</li>
+                    <li>Emotional support—this experience can bring many feelings</li>
+                </ul>
+
+                <p style="margin-top: 1.5rem;"><strong>What can I do?</strong></p>
+                <p>Arrange help at home before delivery. Accept support from family and friends. Be patient with your body as it heals.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Your Role as Partner -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="slide-number">9 of 10</span>
+                <h2>You Are Part of the Team</h2>
+                
+                <p><strong>What can I do?</strong></p>
+                <p>You play an important role in your care. Here's how you can be an active partner:</p>
+
+                <div class="highlight-box">
+                    <h4 style="font-weight: 600; margin-bottom: 0.75rem; color: var(--deep-navy);">Before Delivery</h4>
+                    <ul style="margin-top: 0.5rem;">
+                        <li>Attend all prenatal appointments</li>
+                        <li>Ask questions when something is unclear</li>
+                        <li>Share any changes in how you feel</li>
+                        <li>Follow activity restrictions your doctor recommends</li>
+                        <li>Know warning signs (bleeding, contractions, pain)</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <h4 style="font-weight: 600; margin-bottom: 0.75rem; color: var(--deep-navy);">Making Decisions</h4>
+                    <ul style="margin-top: 0.5rem;">
+                        <li>Think about what matters most to you</li>
+                        <li>Discuss concerns with your care team</li>
+                        <li>Consider bringing an advocate to appointments</li>
+                        <li>Make advance directives if you wish</li>
+                    </ul>
+                </div>
+
+                <div class="reassurance-box">
+                    <p style="margin-bottom: 0;"><strong>Your voice matters.</strong> This is your body and your baby. We make the plan together, with your values guiding our recommendations.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Questions to Ask -->
+        <div class="slide">
+            <div class="slide-content">
+                <span class="slide-number">10 of 10</span>
+                <h2>Questions to Ask Your Care Team</h2>
+                
+                <p>Bring this list to your appointments. There are no wrong questions.</p>
+
+                <div style="background: var(--warm-gray); padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                    <ul>
+                        <li>What type of PAS do I have? How deep is the placenta?</li>
+                        <li>Is the placenta affecting my bladder or other organs?</li>
+                        <li>When will we schedule delivery? Why that specific time?</li>
+                        <li>Who will be in the operating room?</li>
+                        <li>What are the chances I'll need a blood transfusion?</li>
+                        <li>What are my options if I want more children in the future?</li>
+                        <li>How will this affect my baby's health?</li>
+                        <li>What should I do if I have bleeding or contractions before the planned delivery?</li>
+                        <li>Where can I find support from others who've been through this?</li>
+                        <li>What happens if something unexpected comes up during surgery?</li>
+                    </ul>
+                </div>
+
+                <div class="reassurance-box" style="margin-top: 2rem;">
+                    <p><strong>You've got this.</strong> Having PAS is serious, but you're in expert hands. The planning we do together gives you and your baby the best possible outcome.</p>
+                    <p style="margin-top: 1rem; margin-bottom: 0;">We're with you every step of the way.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="nav-hint">Scroll to navigate</div>
+
+    <script>
+        // Smooth scroll behavior and slide animations
+        const slides = document.querySelectorAll('.slide');
+        
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        slides.forEach(slide => {
+            observer.observe(slide);
+        });
+
+        // Hide nav hint after first scroll
+        let scrolled = false;
+        document.querySelector('.slide-container').addEventListener('scroll', () => {
+            if (!scrolled) {
+                document.querySelector('.nav-hint').style.opacity = '0';
+                setTimeout(() => {
+                    document.querySelector('.nav-hint').style.display = 'none';
+                }, 500);
+                scrolled = true;
+            }
+        });
+    </script>
+</body>
+</html>
