@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FGR + Absent End-Diastolic Flow (AEDV) at 35 Weeks</title>
+<style>
+  :root{
+    --bg:#07111c;
+    --panel:#0b1c2c;
+    --fg:#f4f7fb;
+    --muted:#b7c4d6;
+    --accent:#35d0ff;
+    --accent2:#ff4d6d;
+    --ok:#2ee6a6;
+    --warn:#ffd166;
+    --line:#16324a;
+  }
+  html,body{height:100%; margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif; background:var(--bg); color:var(--fg);}
+  .deck{height:100%; display:flex; flex-direction:column;}
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 16px; border-bottom:1px solid var(--line); background:rgba(11,28,44,0.6); backdrop-filter: blur(6px);
+  }
+  .title{font-weight:700; letter-spacing:.2px; font-size:14px; color:var(--muted);}
+  .meta{display:flex; gap:10px; align-items:center;}
+  .pill{border:1px solid var(--line); color:var(--muted); padding:4px 10px; border-radius:999px; font-size:12px;}
+  .pill b{color:var(--fg);}
+  .progress{height:6px; background:#06101a; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .bar{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--ok));}
+  .slides{flex:1; position:relative; overflow:hidden;}
+  section.slide{
+    position:absolute; inset:0; padding:42px 56px;
+    display:grid; grid-template-rows:auto 1fr auto; gap:22px;
+    opacity:0; transform: translateX(18px); transition: opacity .25s ease, transform .25s ease;
+    pointer-events:none;
+  }
+  section.slide.active{opacity:1; transform: translateX(0); pointer-events:auto;}
+  .h1{font-size:44px; line-height:1.05; font-weight:800; letter-spacing:.2px;}
+  .h2{font-size:28px; line-height:1.15; font-weight:800; color:var(--fg);}
+  .sub{color:var(--muted); font-size:18px; line-height:1.35; max-width:1000px;}
+  .grid{display:grid; gap:18px;}
+  .cols-2{grid-template-columns: 1.15fr .85fr;}
+  .cols-3{grid-template-columns: 1fr 1fr 1fr;}
+  .card{
+    background:linear-gradient(180deg, rgba(11,28,44,.92), rgba(9,22,35,.92));
+    border:1px solid var(--line); border-radius:18px; padding:18px 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  }
+  .k{font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:1.2px;}
+  ul{margin:10px 0 0 0; padding-left:18px;}
+  li{margin:8px 0; font-size:20px; line-height:1.25;}
+  .big{font-size:24px; line-height:1.2;}
+  .em{color:var(--accent); font-weight:800;}
+  .danger{color:var(--accent2); font-weight:800;}
+  .ok{color:var(--ok); font-weight:800;}
+  .warn{color:var(--warn); font-weight:800;}
+  .footer{display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:13px;}
+  .keys{opacity:.9}
+  .kbd{border:1px solid var(--line); border-bottom-width:2px; padding:2px 8px; border-radius:8px; color:var(--muted); font-size:12px;}
+  .tagrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
+  .tag{border:1px solid var(--line); padding:6px 10px; border-radius:12px; font-size:14px; color:var(--muted);}
+  .tag b{color:var(--fg);}
+  /* Visuals */
+  .svgwrap{display:flex; align-items:center; justify-content:center; height:100%;}
+  .callout{
+    border-left:6px solid var(--accent2);
+    background:rgba(255,77,109,.08);
+    padding:14px 16px; border-radius:14px; border:1px solid rgba(255,77,109,.28);
+  }
+  .callout .h{font-weight:800; color:var(--fg); font-size:16px; margin-bottom:6px;}
+  .callout .t{color:var(--muted); font-size:16px; line-height:1.3;}
+  .small{font-size:16px; color:var(--muted);}
+  .note{font-size:14px; color:var(--muted);}
+  .divider{height:1px; background:var(--line); margin:10px 0;}
+  /* Print-friendly */
+  @media print{
+    .topbar,.progress{display:none;}
+    section.slide{position:relative; opacity:1; transform:none; page-break-after:always; pointer-events:auto;}
+    body{background:white; color:black;}
+    .card{box-shadow:none;}
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+  <div class="topbar">
+    <div class="title">Fetal Growth Restriction + Absent End-Diastolic Flow (Umbilical Artery) at <b>35 weeks</b></div>
+    <div class="meta">
+      <div class="pill"><b id="idx">1</b> / <span id="tot">12</span></div>
+      <div class="pill">One point / slide</div>
+      <div class="pill keys"><span class="kbd">←</span> <span class="kbd">→</span> <span class="kbd">Space</span> <span class="kbd">Home</span> <span class="kbd">End</span></div>
+    </div>
+  </div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+
+  <div class="slides" id="slides">
+
+    <!-- Slide 1 -->
+    <section class="slide active">
+      <div>
+        <div class="h1">FGR + <span class="danger">AEDV</span> at 35 weeks</div>
+        <div class="sub">Clinical approach to late-preterm FGR with absent umbilical artery end-diastolic velocity (placental insufficiency phenotype).</div>
+        <div class="tagrow">
+          <div class="tag"><b>Audience:</b> OB residents / fellows / MFM</div>
+          <div class="tag"><b>Scope:</b> screening → diagnosis → management</div>
+        </div>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="k">Teaching point</div>
+          <div class="big" style="margin-top:10px;">
+            At <span class="em">35 weeks</span>, persistent <span class="danger">AEDV</span> usually crosses the threshold for <span class="em">delivery planning now</span>, not prolonged expectant management.
+          </div>
+        </div>
+        <div class="card">
+          <div class="k">Why it matters</div>
+          <ul>
+            <li>High placental resistance → fetal hypoxemia risk</li>
+            <li>Stillbirth risk rises as Dopplers worsen</li>
+            <li>Labor tolerance may be limited</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="note">High-contrast, minimal text: designed for oral teaching.</span>
+        <span class="note">Use local protocols + individualized judgment.</span>
+      </div>
+    </section>
+
+    <!-- Slide 2 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Define the problem</div>
+        <div class="sub">Confirm you are managing <span class="em">FGR</span> (not constitutionally small) <span class="em">plus</span> pathologic placental Doppler.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="k">Diagnosis frame</div>
+          <ul>
+            <li>EFW or AC <span class="em">&lt;10th percentile</span> (severe: <span class="em">&lt;3rd</span>)</li>
+            <li>Umbilical artery: <span class="danger">absent end-diastolic flow</span></li>
+            <li>Exclude anomalies / infection when indicated</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Common pitfalls</div>
+          <ul>
+            <li>Dating error → mislabeling FGR</li>
+            <li>Single Doppler sample → repeat for persistence</li>
+            <li>Mixing “SGA” with “FGR” in counseling</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Point: get the phenotype right before acting.</span>
+        <span class="note">AEDV = placental insufficiency until proven otherwise.</span>
+      </div>
+    </section>
+
+    <!-- Slide 3 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Pathophysiology</div>
+        <div class="sub">AEDV reflects <span class="em">marked</span> placental vascular resistance and reduced fetoplacental perfusion.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="k">Concept chain</div>
+          <ul>
+            <li>Abnormal placentation → high resistance villous bed</li>
+            <li>↓ Diastolic flow → ↓ oxygen delivery reserve</li>
+            <li>Progression risk: AEDV → REDV → acidemia</li>
+          </ul>
+          <div class="divider"></div>
+          <div class="callout">
+            <div class="h">Clinical meaning</div>
+            <div class="t">Not “small only.” It is a hemodynamic signal of compromised placental function.</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="k">Umbilical artery waveform (schematic)</div>
+          <div class="svgwrap">
+            <svg width="460" height="240" viewBox="0 0 460 240" role="img" aria-label="Umbilical artery Doppler schematic showing absent end-diastolic flow">
+              <rect x="0" y="0" width="460" height="240" rx="16" fill="rgba(6,16,26,.55)" stroke="#16324a"/>
+              <line x1="40" y1="170" x2="420" y2="170" stroke="#16324a" stroke-width="2"/>
+              <text x="44" y="196" fill="#b7c4d6" font-size="12">Baseline</text>
+
+              <!-- Pulses with absent diastolic -->
+              <path d="M60 170
+                       C75 90, 95 90, 110 170
+                       L140 170
+                       C155 95, 175 95, 190 170
+                       L220 170
+                       C235 105, 255 105, 270 170
+                       L300 170
+                       C315 95, 335 95, 350 170
+                       L380 170" fill="none" stroke="#35d0ff" stroke-width="4"/>
+
+              <text x="44" y="28" fill="#f4f7fb" font-size="16" font-weight="700">AEDV</text>
+              <text x="44" y="50" fill="#b7c4d6" font-size="12">Peak systolic present</text>
+              <text x="44" y="66" fill="#b7c4d6" font-size="12">Diastolic flow = 0</text>
+
+              <rect x="292" y="28" width="142" height="62" rx="12" fill="rgba(255,77,109,.10)" stroke="rgba(255,77,109,.35)"/>
+              <text x="305" y="52" fill="#ff4d6d" font-size="12" font-weight="800">Higher risk phenotype</text>
+              <text x="305" y="70" fill="#b7c4d6" font-size="11">vs elevated PI alone</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Point: AEDV is a severity marker for placental insufficiency.</span>
+        <span class="note">Progression can be rapid or stepwise.</span>
+      </div>
+    </section>
+
+    <!-- Slide 4 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Risk factors to surface (fast)</div>
+        <div class="sub">Risk stratification helps anticipate maternal disease and neonatal course.</div>
+      </div>
+      <div class="grid cols-3">
+        <div class="card">
+          <div class="k">Maternal</div>
+          <ul>
+            <li>Chronic HTN / preeclampsia</li>
+            <li>Renal / autoimmune disease</li>
+            <li>Smoking, substance exposure</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Placental / pregnancy</div>
+          <ul>
+            <li>Abnormal placentation</li>
+            <li>Multiple gestation</li>
+            <li>Prior FGR / stillbirth</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Fetal</div>
+          <ul>
+            <li>Aneuploidy / anomalies</li>
+            <li>Infection (when suspected)</li>
+            <li>Severe oligohydramnios</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Point: AEDV is often a placental disease signal; look for maternal hypertensive disease.</span>
+        <span class="note">Investigations should be indication-driven.</span>
+      </div>
+    </section>
+
+    <!-- Slide 5 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Immediate confirmation at 35 weeks</div>
+        <div class="sub">Before action: confirm persistence, fetal status, and competing indications for expedited delivery.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="k">Do now</div>
+          <ul>
+            <li>Repeat UA Doppler (confirm <span class="danger">persistent</span> AEDV)</li>
+            <li>BPP or NST + AFI/SDP</li>
+            <li>Maternal evaluation: BP, symptoms, labs if indicated</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Interpretation</div>
+          <ul>
+            <li><span class="danger">Nonreassuring testing</span> → deliver urgently</li>
+            <li>Reassuring testing still ≠ “safe for weeks”</li>
+            <li>Document dating + growth trajectory</li>
+          </ul>
+          <div class="callout" style="margin-top:12px;">
+            <div class="h">Uncertainty flag</div>
+            <div class="t">Intermittent vs persistent AEDV may differ in risk; manage conservatively when uncertain.</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Point: confirm phenotype, then move to delivery planning.</span>
+        <span class="note">Avoid serial delays waiting for “more data.”</span>
+      </div>
+    </section>
+
+    <!-- Slide 6 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Delivery timing: where 35 weeks fits</div>
+        <div class="sub">Evidence-based guidance generally recommends <span class="em">earlier</span> delivery for AEDV than 35 weeks.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="k">Guideline anchor (concept)</div>
+          <ul>
+            <li>AEDV typically triggers delivery around <span class="em">33–34 weeks</span></li>
+            <li>REDV earlier (often <span class="em">30–32 weeks</span>)</li>
+            <li>At 35 weeks: balance shifts toward <span class="em">delivery now</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Risk tradeoff at 35 weeks</div>
+          <ul>
+            <li>Placental failure risk persists (stillbirth/acidemia)</li>
+            <li>Late-preterm neonatal risks are real but lower than earlier GA</li>
+            <li>Goal: minimize exposure time to compromised placenta</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Point: AEDV at 35 weeks is “past threshold” for expectant management.</span>
+        <span class="note">Source concepts: SMFM Consult #52; ACOG FGR PB.</span>
+      </div>
+    </section>
+
+    <!-- Slide 7 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Antenatal meds (late preterm)</div>
+        <div class="sub">Use interventions that improve neonatal outcomes <span class="em">without</span> delaying indicated delivery.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="k">Consider</div>
+          <ul>
+            <li><span class="em">Betamethasone</span> if delivery likely within 7 days and no prior course</li>
+            <li>Group B strep prophylaxis per status</li>
+            <li>NICU consult; plan thermoregulation/glucose support</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Not routine at 35 weeks</div>
+          <ul>
+            <li><span class="warn">Magnesium neuroprotection</span> (typically &lt;32 weeks)</li>
+            <li>Tocolysis to “finish steroids” in a compromised fetus</li>
+            <li>Prolonged observation if testing deteriorates</li>
+          </ul>
+          <div class="callout" style="margin-top:12px; border-left-color: var(--warn); background: rgba(255,209,102,.08); border-color: rgba(255,209,102,.28);">
+            <div class="h">Principle</div>
+            <div class="t">Steroids may be helpful, but fetal status dictates urgency.</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Point: optimize neonatal transition, don’t justify unsafe delay.</span>
+        <span class="note">Align with institutional late-preterm steroid criteria.</span>
+      </div>
+    </section>
+
+    <!-- Slide 8 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Mode of delivery: decision framework</div>
+        <div class="sub">AEDV increases risk of intrapartum compromise; route should be individualized.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="k">Favors induction</div>
+          <ul>
+            <li>Reassuring testing; no additional red flags</li>
+            <li>Favorable cervix; vertex; reasonable EFW</li>
+            <li>Capacity for <span class="em">continuous EFM</span> + rapid operative delivery</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Favors cesarean</div>
+          <ul>
+            <li>Nonreassuring NST/BPP, recurrent decelerations</li>
+            <li>Severe growth restriction + poor reserve</li>
+            <li>Unfavorable cervix with high likelihood of prolonged labor</li>
+          </ul>
+          <div class="callout" style="margin-top:12px;">
+            <div class="h">Communicate clearly</div>
+            <div class="t">“Higher chance of urgent cesarean during labor” should be explicit in counseling.</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Point: AEDV is not an automatic cesarean, but it lowers labor tolerance.</span>
+        <span class="note">Document shared decision-making.</span>
+      </div>
+    </section>
+
+    <!-- Slide 9 -->
+    <section class="slide">
+      <div>
+        <div class="h2">If delivery is not immediate (rare)</div>
+        <div class="sub">Only if testing is reassuring and a brief, protocolized window is clinically justified.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="k">Minimum surveillance</div>
+          <ul>
+            <li>Inpatient or very close monitoring</li>
+            <li>Frequent NST/CTG; repeat UA Doppler</li>
+            <li>Low threshold to deliver with any deterioration</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Triggers to deliver now</div>
+          <ul>
+            <li><span class="danger">Reversed</span> UA flow or worsening Dopplers</li>
+            <li>Abnormal CTG / BPP, oligohydramnios worsening</li>
+            <li>Maternal indication (preeclampsia, severe HTN)</li>
+          </ul>
+          <div class="callout" style="margin-top:12px;">
+            <div class="h">Reality check</div>
+            <div class="t">At 35 weeks with persistent AEDV, extended expectant management is usually not favored.</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Point: surveillance cannot “treat” placental insufficiency.</span>
+        <span class="note">Use standardized pathways to reduce variability.</span>
+      </div>
+    </section>
+
+    <!-- Slide 10 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Intrapartum priorities</div>
+        <div class="sub">Assume limited reserve; plan for rapid response to evolving fetal acidemia.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="k">Monitoring</div>
+          <ul>
+            <li>Continuous EFM; interpret conservatively</li>
+            <li>Early attention to recurrent variable/late decels</li>
+            <li>Prompt escalation: intrauterine resuscitation + decision</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Operational readiness</div>
+          <ul>
+            <li>OR availability; anesthesia aware</li>
+            <li>Neonatal team present at delivery</li>
+            <li>Avoid prolonged second stage if tracing deteriorates</li>
+          </ul>
+          <div class="callout" style="margin-top:12px; border-left-color: var(--accent); background: rgba(53,208,255,.08); border-color: rgba(53,208,255,.25);">
+            <div class="h">Key phrase</div>
+            <div class="t">“Low threshold for operative delivery.”</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Point: the safest plan is the one you can execute quickly.</span>
+        <span class="note">Debrief the team before starting induction.</span>
+      </div>
+    </section>
+
+    <!-- Slide 11 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Neonatal implications at 35 weeks</div>
+        <div class="sub">Counsel on both prematurity and growth restriction effects.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="k">Expected issues</div>
+          <ul>
+            <li>Hypoglycemia risk; feeding support</li>
+            <li>Thermoregulation challenges</li>
+            <li>Respiratory morbidity possible (late preterm)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Delivery room plan</div>
+          <ul>
+            <li>NICU/SCN presence; glucose protocol</li>
+            <li>Delayed cord clamping if stable and feasible</li>
+            <li>Placenta to pathology (often high yield)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Point: anticipatory guidance reduces surprise and improves coordination.</span>
+        <span class="note">Align with institutional late-preterm care bundles.</span>
+      </div>
+    </section>
+
+    <!-- Slide 12 -->
+    <section class="slide">
+      <div>
+        <div class="h2">One-slide algorithm (take-home)</div>
+        <div class="sub">For <span class="em">35 weeks</span> with <span class="danger">persistent AEDV</span> in FGR.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="k">Algorithm</div>
+          <ul>
+            <li>Confirm dating + persistent AEDV</li>
+            <li>Assess fetal status (NST/BPP + fluid)</li>
+            <li><span class="danger">Plan delivery now</span> (route individualized)</li>
+            <li>Consider late-preterm steroids if feasible without unsafe delay</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Evidence anchors</div>
+          <ul>
+            <li>SMFM Consult Series #52: FGR + Doppler-based timing</li>
+            <li>ACOG Practice Bulletin: FGR evaluation and management</li>
+            <li>Key idea: AEDV indicates high-risk placental insufficiency</li>
+          </ul>
+          <div class="small" style="margin-top:10px;">
+            This deck is educational; apply local protocols and patient-specific factors.
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Point: at 35 weeks, AEDV usually means “deliver.”</span>
+        <span class="note">SMFM/ACOG-aligned principles.</span>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('section.slide'));
+  const tot = slides.length;
+  const idxEl = document.getElementById('idx');
+  const totEl = document.getElementById('tot');
+  const bar = document.getElementById('bar');
+  totEl.textContent = tot;
+
+  let i = 0;
+  function show(n){
+    i = Math.max(0, Math.min(tot-1, n));
+    slides.forEach((s, k)=> s.classList.toggle('active', k===i));
+    idxEl.textContent = (i+1);
+    bar.style.width = ((i+1)/tot*100).toFixed(1) + '%';
+    // Improve accessibility
+    slides[i].setAttribute('aria-hidden', 'false');
+    slides.forEach((s,k)=>{ if(k!==i) s.setAttribute('aria-hidden','true'); });
+  }
+  function next(){ show(i+1); }
+  function prev(){ show(i-1); }
+
+  document.addEventListener('keydown', (e)=>{
+    const key = e.key;
+    if(key==='ArrowRight' || key===' ' || key==='PageDown'){ e.preventDefault(); next(); }
+    if(key==='ArrowLeft' || key==='PageUp'){ e.preventDefault(); prev(); }
+    if(key==='Home'){ e.preventDefault(); show(0); }
+    if(key==='End'){ e.preventDefault(); show(tot-1); }
+  });
+
+  // Click / tap navigation zones
+  document.addEventListener('click', (e)=>{
+    const x = e.clientX / window.innerWidth;
+    if(x < 0.33) prev();
+    else next();
+  });
+
+  // Init
+  show(0);
+})();
+</script>
+</body>
+</html>
