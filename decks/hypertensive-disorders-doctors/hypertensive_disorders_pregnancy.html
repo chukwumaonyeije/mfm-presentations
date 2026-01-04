@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypertensive Disorders of Pregnancy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 60px;
+            display: none;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #667eea;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            color: #4a5568;
+            font-size: 1.6em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #2d3748;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p, li {
+            color: #4a5568;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 1.4em;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            background: #fef5e7;
+            padding: 20px;
+            border-left: 5px solid #f39c12;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .evidence-box {
+            background: #e8f4fd;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .consensus-box {
+            background: #fef5e7;
+            padding: 15px;
+            border-left: 5px solid #f39c12;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .risk-high {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .risk-moderate {
+            color: #f39c12;
+            font-weight: 600;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .box {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1em;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:nth-child(even) {
+            background: #f7fafc;
+        }
+
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .strong-evidence {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .consensus-evidence {
+            display: inline-block;
+            background: #f39c12;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .key-point {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: 600;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .title-slide {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+        }
+
+        @media print {
+            .slide {
+                page-break-after: always;
+                display: flex !important;
+                height: auto;
+            }
+            .nav-buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <h1>Hypertensive Disorders of Pregnancy</h1>
+            <p class="subtitle">A Comprehensive Clinical Approach</p>
+            <p class="subtitle" style="margin-top: 40px; font-size: 1.2em;">Based on ACOG/SMFM Guidelines</p>
+            <p class="subtitle" style="margin-top: 60px; font-size: 1.1em; color: #667eea; font-weight: 600;">Created by Chukwuma I. Onyeije, MD, FACOG</p>
+        </div>
+
+        <!-- Slide 2: Overview -->
+        <div class="slide">
+            <span class="slide-number">2</span>
+            <h2>Overview: The Spectrum of Disease</h2>
+            <p>Hypertensive disorders of pregnancy are not a single entity but a spectrum of related conditions with distinct pathophysiology and management strategies.</p>
+            
+            <div class="two-column" style="margin-top: 30px;">
+                <div class="box">
+                    <h4>Chronic Hypertension</h4>
+                    <p>Elevated BP predating pregnancy or diagnosed before 20 weeks</p>
+                </div>
+                <div class="box">
+                    <h4>Gestational Hypertension</h4>
+                    <p>New-onset HTN ≥20 weeks without proteinuria or severe features</p>
+                </div>
+                <div class="box">
+                    <h4>Preeclampsia</h4>
+                    <p>HTN with proteinuria or severe features ≥20 weeks</p>
+                </div>
+                <div class="box">
+                    <h4>Superimposed Preeclampsia</h4>
+                    <p>Preeclampsia developing in a woman with chronic HTN</p>
+                </div>
+            </div>
+
+            <div class="highlight" style="margin-top: 30px;">
+                <strong>Central Management Principle:</strong> Anticipating disease trajectory and balancing maternal safety with fetal maturity
+            </div>
+        </div>
+
+        <!-- Slide 3: Epidemiology -->
+        <div class="slide">
+            <span class="slide-number">3</span>
+            <h2>Epidemiology</h2>
+            
+            <h3>Incidence</h3>
+            <ul>
+                <li><strong>Any hypertensive disorder:</strong> 10-15% of pregnancies</li>
+                <li><strong>Preeclampsia:</strong> 3-5% of pregnancies overall; up to 8% of first pregnancies</li>
+                <li><strong>Chronic hypertension:</strong> 1-5%, increasing with maternal age and obesity epidemic</li>
+                <li><strong>Gestational hypertension:</strong> 5-10% of pregnancies</li>
+                <li><strong>Superimposed preeclampsia:</strong> 15-30% of women with chronic HTN</li>
+            </ul>
+
+            <h3>Trends and Disparities</h3>
+            <ul>
+                <li>Increasing incidence over past two decades (advancing maternal age, obesity, assisted reproduction)</li>
+                <li><strong>Racial disparities:</strong> Black women have 60% higher risk of preeclampsia and 3-4× higher risk of maternal mortality from hypertensive disorders</li>
+                <li>Leading cause of maternal mortality worldwide (10-15% of maternal deaths)</li>
+                <li>Major contributor to preterm birth (15-20% of medically indicated preterm deliveries)</li>
+            </ul>
+        </div>
+
+        <!-- Slide 4: Pathophysiology Part 1 -->
+        <div class="slide">
+            <span class="slide-number">4</span>
+            <h2>Pathophysiology: Conceptual Framework</h2>
+            
+            <h3>Chronic Hypertension</h3>
+            <p>Represents pre-existing vascular disease with:</p>
+            <ul>
+                <li>Baseline endothelial dysfunction</li>
+                <li>Impaired vascular compliance</li>
+                <li>Increased risk of placental insufficiency from abnormal spiral artery remodeling</li>
+                <li>Predisposition to superimposed preeclampsia</li>
+            </ul>
+
+            <h3>Gestational Hypertension</h3>
+            <p>May represent:</p>
+            <ul>
+                <li>Unmasking of chronic hypertension (increased plasma volume reveals baseline vascular stiffness)</li>
+                <li>Early or incomplete preeclampsia syndrome</li>
+                <li>Transient vasospasm that resolves postpartum</li>
+            </ul>
+
+            <div class="evidence-box">
+                <strong>Evidence Note:</strong> 15-45% of gestational hypertension evolves into preeclampsia, particularly when diagnosed before 32 weeks
+            </div>
+        </div>
+
+        <!-- Slide 5: Pathophysiology Part 2 -->
+        <div class="slide">
+            <span class="slide-number">5</span>
+            <h2>Pathophysiology: Preeclampsia</h2>
+            
+            <h3>The Two-Stage Model</h3>
+            
+            <h4>Stage 1: Abnormal Placentation (Asymptomatic)</h4>
+            <ul>
+                <li>Defective trophoblast invasion (weeks 8-18)</li>
+                <li>Incomplete spiral artery remodeling</li>
+                <li>Inadequate conversion from high to low resistance vessels</li>
+                <li>Results in placental hypoperfusion and ischemia</li>
+            </ul>
+
+            <h4>Stage 2: Maternal Syndrome (Clinical Manifestations)</h4>
+            <ul>
+                <li>Placental release of antiangiogenic factors (sFlt-1, soluble endoglin)</li>
+                <li>Widespread maternal endothelial dysfunction</li>
+                <li>Systemic consequences:
+                    <ul>
+                        <li>Vasospasm → hypertension</li>
+                        <li>Increased vascular permeability → edema, proteinuria</li>
+                        <li>Platelet activation → thrombocytopenia</li>
+                        <li>Hepatic involvement → elevated transaminases</li>
+                        <li>Renal dysfunction → proteinuria, decreased GFR</li>
+                        <li>Cerebral edema/vasospasm → headache, visual changes, seizures</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Slide 6: Risk Factors -->
+        <div class="slide">
+            <span class="slide-number">6</span>
+            <h2>Risk Factors for Preeclampsia</h2>
+            
+            <div class="two-column">
+                <div>
+                    <h3>High-Risk Factors <span class="risk-high">(RR 2-4)</span></h3>
+                    <ul>
+                        <li>History of preeclampsia (especially if severe or early)</li>
+                        <li>Multifetal gestation</li>
+                        <li>Chronic hypertension</li>
+                        <li>Pregestational diabetes (Type 1 or 2)</li>
+                        <li>Renal disease</li>
+                        <li>Autoimmune disease (SLE, antiphospholipid syndrome)</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3>Moderate-Risk Factors <span class="risk-moderate">(RR 1.5-2)</span></h3>
+                    <ul>
+                        <li>Nulliparity</li>
+                        <li>Maternal age ≥35 years</li>
+                        <li>Obesity (BMI ≥30)</li>
+                        <li>Family history of preeclampsia</li>
+                        <li>Low socioeconomic status</li>
+                        <li>Black race</li>
+                        <li>Previous adverse pregnancy outcome (SGA, abruption, fetal loss)</li>
+                        <li>Interval >10 years since previous pregnancy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight" style="margin-top: 20px;">
+                <span class="key-point">ACOG Recommendation:</span> Women with ≥1 high-risk factor or ≥2 moderate-risk factors should receive low-dose aspirin (81-162 mg daily) starting between 12-28 weeks (ideally before 16 weeks) and continuing until delivery <span class="strong-evidence">Strong Evidence</span>
+            </div>
+        </div>
+
+        <!-- Slide 7: Screening and Diagnosis -->
+        <div class="slide">
+            <span class="slide-number">7</span>
+            <h2>Screening and Diagnosis</h2>
+            
+            <h3>Universal Screening</h3>
+            <ul>
+                <li>Blood pressure measurement at every prenatal visit</li>
+                <li>Urine protein assessment when hypertension develops</li>
+            </ul>
+
+            <h3>Diagnostic Criteria for Hypertension</h3>
+            <div class="evidence-box">
+                <strong>Hypertension:</strong> SBP ≥140 mmHg or DBP ≥90 mmHg on two occasions at least 4 hours apart
+                <br><br>
+                <strong>Severe hypertension:</strong> SBP ≥160 mmHg or DBP ≥110 mmHg (can be confirmed within minutes to facilitate timely treatment)
+            </div>
+
+            <h3>Diagnostic Criteria for Preeclampsia</h3>
+            <p><strong>Hypertension (≥20 weeks) PLUS one of the following:</strong></p>
+            <ul>
+                <li><strong>Proteinuria:</strong> ≥300 mg/24hr or protein/creatinine ratio ≥0.3 mg/dL</li>
+                <li><strong>OR in the absence of proteinuria, new onset of:</strong>
+                    <ul>
+                        <li>Thrombocytopenia (platelets <100,000/μL)</li>
+                        <li>Renal insufficiency (Cr >1.1 mg/dL or doubling of baseline)</li>
+                        <li>Liver involvement (transaminases >2× upper limit)</li>
+                        <li>Pulmonary edema</li>
+                        <li>New-onset headache unresponsive to medication and not explained by alternative diagnoses</li>
+                        <li>Visual disturbances</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Slide 8: Classification of Severity -->
+        <div class="slide">
+            <span class="slide-number">8</span>
+            <h2>Preeclampsia: Features of Severity</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>System</th>
+                        <th>Severe Features</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Blood Pressure</strong></td>
+                        <td>SBP ≥160 mmHg or DBP ≥110 mmHg on two occasions, minutes apart</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hematologic</strong></td>
+                        <td>Platelets <100,000/μL<br>Hemolysis (elevated LDH, bilirubin, or low haptoglobin)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hepatic</strong></td>
+                        <td>Transaminases >2× upper limit<br>Severe RUQ or epigastric pain</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Renal</strong></td>
+                        <td>Creatinine >1.1 mg/dL or doubling from baseline<br>Oliguria <500 mL/24 hours (rarely used)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pulmonary</strong></td>
+                        <td>Pulmonary edema</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Neurologic</strong></td>
+                        <td>New-onset persistent headache unresponsive to medication<br>Visual disturbances (scotomata, photopsia, blindness)<br>Altered mental status, stroke</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Uteroplacental</strong></td>
+                        <td>Fetal growth restriction with abnormal Doppler studies</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="consensus-box" style="margin-top: 20px;">
+                <strong>Important Note:</strong> Proteinuria severity does NOT define severity of preeclampsia. Severe proteinuria alone without other features does not warrant diagnosis of preeclampsia with severe features.
+            </div>
+        </div>
+
+        <!-- Slide 9: Management Overview -->
+        <div class="slide">
+            <span class="slide-number">9</span>
+            <h2>Management Principles</h2>
+            
+            <h3>Fundamental Concepts</h3>
+            <ul>
+                <li><strong>Delivery is the only cure</strong> for preeclampsia</li>
+                <li><strong>Antihypertensive therapy</strong> reduces maternal stroke risk but does not treat the underlying disease or improve perinatal outcomes</li>
+                <li><strong>Management goal:</strong> Balance maternal safety with fetal maturity</li>
+                <li><strong>Decision framework:</strong> Gestational age + disease severity + maternal/fetal status</li>
+            </ul>
+
+            <h3>Key Management Components</h3>
+            <div class="two-column" style="margin-top: 20px;">
+                <div class="box">
+                    <h4>Surveillance</h4>
+                    <ul>
+                        <li>Blood pressure monitoring</li>
+                        <li>Laboratory assessment</li>
+                        <li>Symptom evaluation</li>
+                        <li>Fetal monitoring</li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <h4>Intervention</h4>
+                    <ul>
+                        <li>Antihypertensive medication</li>
+                        <li>Seizure prophylaxis (MgSO₄)</li>
+                        <li>Corticosteroids for fetal maturity</li>
+                        <li>Delivery timing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Chronic HTN Management -->
+        <div class="slide">
+            <span class="slide-number">10</span>
+            <h2>Chronic Hypertension: Management</h2>
+            
+            <h3>Initial Assessment</h3>
+            <ul>
+                <li>Baseline BP documentation</li>
+                <li>Renal function (Cr, BUN) and urinalysis with protein assessment</li>
+                <li>Screen for end-organ damage (ECG, echocardiogram if indicated)</li>
+                <li>Assess for secondary causes in severe/resistant HTN</li>
+            </ul>
+
+            <h3>Pharmacologic Management</h3>
+            <div class="evidence-box">
+                <strong>Treatment threshold (ACOG 2019):</strong> Persistent SBP ≥160 mmHg or DBP ≥110 mmHg <span class="strong-evidence">Strong Evidence</span>
+                <br><br>
+                <strong>Consider treatment:</strong> SBP 140-159 or DBP 90-109 mmHg, especially with:
+                <ul style="margin-top: 10px;">
+                    <li>End-organ damage</li>
+                    <li>Secondary hypertension</li>
+                    <li>Diabetes or renal disease</li>
+                </ul>
+                <span class="consensus-evidence">Consensus</span>
+            </div>
+
+            <h3>First-Line Agents</h3>
+            <ul>
+                <li><strong>Labetalol:</strong> 200-2400 mg/day divided BID-TID</li>
+                <li><strong>Nifedipine (extended-release):</strong> 30-120 mg/day</li>
+                <li><strong>Methyldopa:</strong> 500-3000 mg/day divided BID-TID (longer safety record but less commonly used)</li>
+            </ul>
+
+            <div class="highlight">
+                <strong>Avoid:</strong> ACE inhibitors, ARBs (teratogenic), atenolol (growth restriction), diuretics (reduce plasma volume)
+            </div>
+        </div>
+
+        <!-- Slide 11: Management by GA - Early Gestation -->
+        <div class="slide">
+            <span class="slide-number">11</span>
+            <h2>Management by Gestational Age: <34 Weeks</h2>
+            
+            <h3>Preeclampsia WITHOUT Severe Features</h3>
+            <div class="evidence-box">
+                <strong>Expectant Management Until 37 Weeks</strong> <span class="strong-evidence">Strong Evidence</span>
+                <ul style="margin-top: 10px;">
+                    <li>Outpatient management often appropriate</li>
+                    <li>BP checks 2× weekly</li>
+                    <li>Labs weekly (CBC, liver enzymes, creatinine)</li>
+                    <li>Fetal surveillance: NST/BPP 1-2× weekly</li>
+                    <li>Growth ultrasound every 3-4 weeks</li>
+                    <li>Patient education on warning symptoms</li>
+                </ul>
+            </div>
+
+            <h3>Preeclampsia WITH Severe Features</h3>
+            <div class="highlight">
+                <strong>Delivery ≥34 weeks</strong> <span class="strong-evidence">Strong Evidence</span>
+                <br><br>
+                <strong><34 weeks: Consider expectant management ONLY IF:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Maternal and fetal conditions stable</li>
+                    <li>Available resources for intensive monitoring</li>
+                    <li>Hospitalization required</li>
+                    <li>Continuous fetal monitoring initially</li>
+                    <li>Magnesium sulfate administration</li>
+                    <li>Corticosteroids for fetal lung maturity</li>
+                    <li>Antihypertensive therapy for severe-range BP</li>
+                    <li>Daily labs (CBC, liver enzymes, creatinine)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Management by GA - Later Gestation -->
+        <div class="slide">
+            <span class="slide-number">12</span>
+            <h2>Management by Gestational Age: ≥34 Weeks</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Diagnosis</th>
+                        <th>Delivery Timing</th>
+                        <th>Evidence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Preeclampsia with severe features</td>
+                        <td>≥34 weeks: Deliver<br>May proceed after maternal stabilization</td>
+                        <td><span class="strong-evidence">Strong</span></td>
+                    </tr>
+                    <tr>
+                        <td>Preeclampsia without severe features</td>
+                        <td>≥37 weeks: Deliver<br>34-37 weeks: Expectant management acceptable</td>
+                        <td><span class="strong-evidence">Strong</span></td>
+                    </tr>
+                    <tr>
+                        <td>Gestational hypertension without severe features</td>
+                        <td>≥37 weeks: Deliver (individualize 37-38 weeks)<br><37 weeks: Expectant management</td>
+                        <td><span class="consensus-evidence">Consensus</span></td>
+                    </tr>
+                    <tr>
+                        <td>Chronic hypertension (uncomplicated)</td>
+                        <td>38-39 weeks: Deliver<br>May continue to 40 weeks if well-controlled</td>
+                        <td><span class="consensus-evidence">Consensus</span></td>
+                    </tr>
+                    <tr>
+                        <td>Superimposed preeclampsia with severe features</td>
+                        <td>≥34 weeks: Deliver</td>
+                        <td><span class="strong-evidence">Strong</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="consensus-box" style="margin-top: 20px;">
+                <strong>ACOG 2020:</strong> Delivery at 37 weeks recommended for preeclampsia without severe features (reduces maternal morbidity without increasing neonatal complications)
+            </div>
+        </div>
+
+        <!-- Slide 13: Acute Severe HTN Management -->
+        <div class="slide">
+            <span class="slide-number">13</span>
+            <h2>Acute Severe Hypertension Management</h2>
+            
+            <div class="highlight">
+                <strong>Definition:</strong> SBP ≥160 mmHg or DBP ≥110 mmHg on two occasions, minutes apart
+                <br><br>
+                <strong>Goal:</strong> Reduce BP within 30-60 minutes to prevent maternal cerebrovascular complications while maintaining uteroplacental perfusion
+                <br><br>
+                <strong>Target BP:</strong> 140-150/90-100 mmHg (avoid aggressive lowering)
+            </div>
+
+            <h3>First-Line Agents <span class="strong-evidence">Strong Evidence</span></h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Medication</th>
+                        <th>Dosing</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Labetalol IV</strong></td>
+                        <td>20 mg initial, then 40 mg, 80 mg every 10 min<br>Max cumulative: 220 mg</td>
+                        <td>Preferred in most situations<br>Avoid in asthma, heart failure</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hydralazine IV</strong></td>
+                        <td>5-10 mg every 20 min<br>Max cumulative: 20 mg</td>
+                        <td>May cause reflex tachycardia<br>Monitor for fetal heart rate changes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nifedipine PO</strong></td>
+                        <td>10-20 mg, repeat in 20 min if needed<br>Max initial: 50 mg</td>
+                        <td>Immediate-release formulation<br>Easy to administer<br>Safe with magnesium sulfate</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 14: Magnesium Sulfate -->
+        <div class="slide">
+            <span class="slide-number">14</span>
+            <h2>Magnesium Sulfate for Seizure Prophylaxis</h2>
+            
+            <h3>Indications <span class="strong-evidence">Strong Evidence</span></h3>
+            <ul>
+                <li>Preeclampsia with severe features</li>
+                <li>Eclampsia (treatment and prophylaxis)</li>
+                <li>Consider for delivery in preeclampsia without severe features at term</li>
+            </ul>
+
+            <h3>Dosing</h3>
+            <div class="evidence-box">
+                <strong>Loading dose:</strong> 4-6 grams IV over 15-20 minutes
+                <br><br>
+                <strong>Maintenance:</strong> 2 grams/hour continuous infusion
+                <br><br>
+                <strong>Duration:</strong> Continue for 24 hours postpartum (or 24 hours after last seizure in eclampsia)
+            </div>
+
+            <h3>Monitoring and Toxicity</h3>
+            <ul>
+                <li><strong>Therapeutic level:</strong> 4-8 mEq/L</li>
+                <li><strong>Monitor:</strong> Deep tendon reflexes, respiratory rate (≥12/min), urine output (≥25-30 mL/hr)</li>
+                <li><strong>Signs of toxicity:</strong> Loss of reflexes (10 mEq/L), respiratory depression (12-15 mEq/L), cardiac arrest (>15 mEq/L)</li>
+                <li><strong>Antidote:</strong> Calcium gluconate 1 gram (10 mL of 10% solution) IV over 3 minutes</li>
+            </ul>
+
+            <div class="highlight">
+                Magnesium sulfate reduces eclampsia risk by approximately 60% compared to no treatment (Magpie Trial)
+            </div>
+        </div>
+
+        <!-- Slide 15: Maternal Risks -->
+        <div class="slide">
+            <span class="slide-number">15</span>
+            <h2>Maternal Risks and Complications</h2>
+            
+            <div class="two-column">
+                <div>
+                    <h3>Acute Complications</h3>
+                    <ul>
+                        <li><strong class="risk-high">Eclampsia</strong> (seizures)
+                            <ul><li>Occurs in 1-2% of preeclampsia with severe features</li></ul>
+                        </li>
+                        <li><strong class="risk-high">Stroke</strong>
+                            <ul><li>Hemorrhagic or ischemic</li>
+                            <li>Risk increases significantly with SBP >160</li></ul>
+                        </li>
+                        <li><strong class="risk-high">HELLP syndrome</strong>
+                            <ul><li>Hemolysis, Elevated Liver enzymes, Low Platelets</li>
+                            <li>10-20% of severe preeclampsia</li></ul>
+                        </li>
+                        <li><strong class="risk-high">Acute kidney injury</strong></li>
+                        <li><strong class="risk-high">Pulmonary edema</strong></li>
+                        <li><strong class="risk-high">Hepatic rupture</strong> (rare but catastrophic)</li>
+                        <li><strong class="risk-high">Placental abruption</strong> (2-4× increased risk)</li>
+                        <li><strong class="risk-high">DIC</strong></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3>Long-Term Maternal Health</h3>
+                    <ul>
+                        <li><strong>Cardiovascular disease</strong>
+                            <ul><li>2-4× increased lifetime risk</li>
+                            <li>Risk of HTN, MI, stroke, heart failure</li></ul>
+                        </li>
+                        <li><strong>Chronic kidney disease</strong>
+                            <ul><li>Particularly with early-onset or severe disease</li></ul>
+                        </li>
+                        <li><strong>Metabolic syndrome and diabetes</strong>
+                            <ul><li>2× increased risk of Type 2 diabetes</li></ul>
+                        </li>
+                        <li><strong>Recurrence risk</strong>
+                            <ul><li>15-25% overall recurrence</li>
+                            <li>40% if early-onset (<28 weeks)</li>
+                            <li>13% if term disease</li></ul>
+                        </li>
+                    </ul>
+
+                    <div class="evidence-box" style="margin-top: 15px;">
+                        <strong>Long-term follow-up essential:</strong> Women with history of preeclampsia should be counseled about cardiovascular risk and receive appropriate screening
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Fetal/Neonatal Risks -->
+        <div class="slide">
+            <span class="slide-number">16</span>
+            <h2>Fetal and Neonatal Risks</h2>
+            
+            <h3>Antenatal/Intrapartum Risks</h3>
+            <ul>
+                <li><strong>Fetal growth restriction (FGR)</strong>
+                    <ul>
+                        <li>10-25% of preeclampsia cases</li>
+                        <li>Related to placental insufficiency</li>
+                        <li>Higher risk with early-onset disease</li>
+                    </ul>
+                </li>
+                <li><strong>Oligohydramnios</strong> (reduced amniotic fluid)</li>
+                <li><strong>Abnormal fetal testing</strong>
+                    <ul>
+                        <li>Non-reassuring fetal heart rate patterns</li>
+                        <li>Abnormal Doppler studies (absent/reversed end-diastolic flow)</li>
+                    </ul>
+                </li>
+                <li><strong>Placental abruption</strong> (2-4× increased risk)</li>
+                <li><strong>Stillbirth</strong>
+                    <ul>
+                        <li>1-2% risk with preeclampsia</li>
+                        <li>Higher with severe features and early onset</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Neonatal Complications</h3>
+            <ul>
+                <li><strong>Prematurity</strong> (most significant contributor to neonatal morbidity)
+                    <ul>
+                        <li>15-20% of medically indicated preterm births</li>
+                        <li>Associated complications: RDS, IVH, NEC, sepsis</li>
+                    </ul>
+                </li>
+                <li><strong>Small for gestational age</strong> (if FGR present)</li>
+                <li><strong>Hypoglycemia</strong> (especially with growth restriction)</li>
+                <li><strong>Thrombocytopenia</strong> (10-15%, usually transient)</li>
+                <li><strong>Hyperbilirubinemia</strong></li>
+            </ul>
+
+            <div class="highlight">
+                <strong>Key Point:</strong> Perinatal mortality is primarily driven by prematurity rather than hypertension itself, underscoring the importance of balancing delivery timing with fetal maturity
+            </div>
+        </div>
+
+        <!-- Slide 17: Counseling Points Part 1 -->
+        <div class="slide">
+            <span class="slide-number">17</span>
+            <h2>Key Counseling Points: Prevention and Early Detection</h2>
+            
+            <h3>Preconception and Early Pregnancy Counseling</h3>
+            <ul>
+                <li><strong>Risk assessment:</strong> Review personal and family history of preeclampsia, chronic hypertension, renal disease, diabetes, autoimmune disease</li>
+                <li><strong>Low-dose aspirin:</strong> For women at increased risk, start 81-162 mg daily between 12-28 weeks (ideally <16 weeks) <span class="strong-evidence">Strong Evidence</span></li>
+                <li><strong>Calcium supplementation:</strong> 1-2 grams/day for women with low dietary calcium intake <span class="consensus-evidence">Consensus</span></li>
+                <li><strong>Lifestyle optimization:</strong> Weight management, smoking cessation, manage chronic conditions</li>
+            </ul>
+
+            <h3>Warning Signs - When to Seek Care Immediately</h3>
+            <div class="highlight">
+                <strong>Teach patients to report:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Severe headache that doesn't resolve with acetaminophen</li>
+                    <li>Visual changes (blurred vision, seeing spots, sensitivity to light)</li>
+                    <li>Right upper quadrant or epigastric pain</li>
+                    <li>Nausea/vomiting in late pregnancy</li>
+                    <li>Sudden swelling of face or hands</li>
+                    <li>Decreased fetal movement</li>
+                    <li>Shortness of breath or difficulty breathing</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 18: Counseling Points Part 2 -->
+        <div class="slide">
+            <span class="slide-number">18</span>
+            <h2>Key Counseling Points: Management Expectations</h2>
+            
+            <h3>If Diagnosed with Preeclampsia</h3>
+            <ul>
+                <li><strong>Expectant management risks and benefits</strong>
+                    <ul>
+                        <li>Goal: Balance maternal safety with fetal maturity</li>
+                        <li>Close monitoring required (may require hospitalization)</li>
+                        <li>Condition can progress rapidly</li>
+                        <li>Delivery may be necessary before term</li>
+                    </ul>
+                </li>
+                <li><strong>Delivery is the cure</strong>
+                    <ul>
+                        <li>Medications control blood pressure but don't treat disease</li>
+                        <li>Disease may worsen for 48-72 hours postpartum</li>
+                        <li>Continued monitoring needed after delivery</li>
+                    </ul>
+                </li>
+                <li><strong>Breastfeeding:</strong> Most antihypertensives compatible; discuss specific medications</li>
+            </ul>
+
+            <h3>Future Pregnancy Counseling</h3>
+            <ul>
+                <li><strong>Recurrence risk:</strong> 15-25% overall; higher if early-onset or severe disease</li>
+                <li><strong>Aspirin prophylaxis</strong> recommended in future pregnancies</li>
+                <li><strong>Interpregnancy interval:</strong> Consider waiting 12-18 months for maternal cardiovascular recovery</li>
+                <li><strong>Preconception consultation</strong> recommended</li>
+            </ul>
+
+            <h3>Long-Term Health</h3>
+            <div class="evidence-box">
+                History of preeclampsia increases lifetime cardiovascular risk. Recommend:
+                <ul style="margin-top: 10px;">
+                    <li>Primary care follow-up within 7-14 days postpartum and at 6 weeks</li>
+                    <li>Blood pressure monitoring</li>
+                    <li>Cardiovascular risk factor screening and management</li>
+                    <li>Healthy lifestyle (diet, exercise, weight management)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 19: Areas of Controversy Part 1 -->
+        <div class="slide">
+            <span class="slide-number">19</span>
+            <h2>Areas of Controversy and Evolving Evidence</h2>
+            
+            <h3>1. Treatment Threshold for Chronic Hypertension</h3>
+            <div class="consensus-box">
+                <strong>CHAP Trial (2022):</strong> Demonstrated that treating mild chronic hypertension (target <140/90) reduced composite adverse outcomes compared to reserving treatment for severe hypertension, without increasing SGA births
+                <br><br>
+                <strong>Debate:</strong> Some advocate for lower treatment threshold (SBP ≥140 or DBP ≥90), while others maintain conservative approach reserving treatment for ≥160/110
+                <br><br>
+                <strong>Current ACOG:</strong> Treatment recommended for persistent ≥160/110; consider for 140-159/90-109 with additional risk factors <span class="consensus-evidence">Evolving</span>
+            </div>
+
+            <h3>2. Role of Angiogenic Biomarkers</h3>
+            <div class="evidence-box">
+                <strong>sFlt-1/PlGF ratio</strong> shows promise for:
+                <ul style="margin-top: 10px;">
+                    <li>Predicting short-term development of preeclampsia</li>
+                    <li>Risk stratification in women with suspected disease</li>
+                    <li>Guiding expectant management decisions</li>
+                </ul>
+                <strong>Current status:</strong> FDA-approved in US, used more widely in Europe, not yet incorporated into routine ACOG guidelines <span class="consensus-evidence">Evolving</span>
+            </div>
+        </div>
+
+        <!-- Slide 20: Areas of Controversy Part 2 -->
+        <div class="slide">
+            <span class="slide-number">20</span>
+            <h2>Controversies and Evolving Evidence (cont.)</h2>
+            
+            <h3>3. Delivery Timing for Preeclampsia Without Severe Features</h3>
+            <div class="evidence-box">
+                <strong>HYPITAT Trial:</strong> Supported delivery at 37 weeks
+                <br><br>
+                <strong>Debate:</strong> Some centers deliver at 37 weeks routinely, others individualize 37-38 weeks based on cervical favorability and patient preference
+                <br><br>
+                <strong>ACOG 2020:</strong> Recommends delivery at 37 weeks <span class="strong-evidence">Strong Evidence</span>
+            </div>
+
+            <h3>4. Expectant Management <34 Weeks with Severe Features</h3>
+            <div class="consensus-box">
+                <strong>Highly selected cases only</strong> (tertiary centers with intensive monitoring capability)
+                <br><br>
+                <strong>Debate centers on:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Which specific severe features allow expectant management (severe BP alone vs. lab abnormalities)</li>
+                    <li>Duration of expectant management feasible</li>
+                    <li>Maternal vs. neonatal risk trade-offs at extreme prematurity (23-28 weeks)</li>
+                </ul>
+                <span class="consensus-evidence">Consensus: Individualized</span>
+            </div>
+
+            <h3>5. Postpartum Hypertension Management</h3>
+            <div class="consensus-box">
+                <strong>Unresolved questions:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Optimal timing of antihypertensive initiation postpartum</li>
+                    <li>Target blood pressures in immediate postpartum period</li>
+                    <li>Duration of treatment (when to discontinue medications)</li>
+                    <li>Role of outpatient BP monitoring (telehealth, home monitoring)</li>
+                </ul>
+                <strong>Growing focus on postpartum care</strong> to reduce maternal morbidity and mortality <span class="consensus-evidence">Evolving</span>
+            </div>
+        </div>
+
+        <!-- Slide 21: Areas of Controversy Part 3 -->
+        <div class="slide">
+            <span class="slide-number">21</span>
+            <h2>Controversies and Evolving Evidence (cont.)</h2>
+            
+            <h3>6. Mode of Delivery</h3>
+            <div class="consensus-box">
+                <strong>Key points:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Preeclampsia alone is NOT an indication for cesarean delivery</li>
+                    <li>Induction of labor is safe and appropriate</li>
+                    <li>Cesarean delivery reserved for standard obstetric indications</li>
+                </ul>
+                <strong>Evolving area:</strong> Optimal timing of induction vs. awaiting spontaneous labor in mild disease at term
+            </div>
+
+            <h3>7. Aspirin Dose and Timing</h3>
+            <div class="evidence-box">
+                <strong>Current recommendation:</strong> 81-162 mg daily starting 12-28 weeks (ideally <16 weeks)
+                <br><br>
+                <strong>Ongoing questions:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Is 162 mg superior to 81 mg? (Limited high-quality data)</li>
+                    <li>Should high-risk women start earlier (<12 weeks)?</li>
+                    <li>Bedtime vs. morning dosing?</li>
+                    <li>Should treatment continue beyond 36 weeks?</li>
+                </ul>
+                <strong>ACOG accepts 81-162 mg range</strong> <span class="strong-evidence">Strong Evidence for Aspirin</span>; specific dose <span class="consensus-evidence">Consensus</span>
+            </div>
+
+            <h3>8. Home Blood Pressure Monitoring</h3>
+            <div class="consensus-box">
+                <strong>Increasing acceptance</strong> for select patients with gestational hypertension or mild preeclampsia
+                <br><br>
+                <strong>Requires:</strong> Patient education, validated devices, clear action thresholds, reliable communication
+                <br><br>
+                <strong>Evidence:</strong> Limited RCT data but growing observational support <span class="consensus-evidence">Evolving</span>
+            </div>
+        </div>
+
+        <!-- Slide 22: Summary -->
+        <div class="slide">
+            <span class="slide-number">22</span>
+            <h2>Summary: Principles of Management</h2>
+            
+            <div class="box" style="margin-bottom: 20px;">
+                <h3>Core Concepts</h3>
+                <ul>
+                    <li>Hypertensive disorders represent a <strong>spectrum</strong>, not a single disease</li>
+                    <li>Management requires <strong>continuous reassessment</strong> of disease trajectory</li>
+                    <li><strong>Delivery is the only cure</strong> for preeclampsia</li>
+                    <li>Goal is to <strong>balance maternal safety with fetal maturity</strong></li>
+                    <li>Decision-making integrates gestational age, severity, and maternal/fetal status</li>
+                </ul>
+            </div>
+
+            <div class="two-column">
+                <div class="box">
+                    <h4>Prevention</h4>
+                    <ul>
+                        <li>Risk assessment</li>
+                        <li>Low-dose aspirin for high-risk patients</li>
+                        <li>Optimize chronic conditions</li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <h4>Surveillance</h4>
+                    <ul>
+                        <li>Frequent BP monitoring</li>
+                        <li>Laboratory reassessment</li>
+                        <li>Symptom evaluation</li>
+                        <li>Fetal monitoring</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="two-column" style="margin-top: 15px;">
+                <div class="box">
+                    <h4>Acute Management</h4>
+                    <ul>
+                        <li>Treat severe hypertension urgently</li>
+                        <li>MgSO₄ for seizure prophylaxis</li>
+                        <li>Corticosteroids <34 weeks</li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <h4>Delivery Timing</h4>
+                    <ul>
+                        <li>≥34 weeks: severe features</li>
+                        <li>≥37 weeks: without severe features</li>
+                        <li>Individualize based on trajectory</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight" style="margin-top: 20px;">
+                <strong>Remember:</strong> The clinician's role is to interpret blood pressures within the broader context of placental health, maternal reserve, and fetal well-being—not simply react to numbers.
+            </div>
+        </div>
+
+        <!-- Slide 23: Key Takeaways -->
+        <div class="slide">
+            <span class="slide-number">23</span>
+            <h2>Key Takeaways for Clinical Practice</h2>
+            
+            <h3>1. Risk Stratification is Essential</h3>
+            <p>Identify high-risk patients early and initiate aspirin prophylaxis between 12-28 weeks (ideally <16 weeks)</p>
+
+            <h3>2. Severe Hypertension is an Emergency</h3>
+            <p>SBP ≥160 or DBP ≥110 requires urgent treatment within 30-60 minutes to prevent maternal stroke</p>
+
+            <h3>3. Proteinuria Does Not Define Severity</h3>
+            <p>Severe features are defined by end-organ involvement, not degree of proteinuria</p>
+
+            <h3>4. Disease Can Progress Rapidly</h3>
+            <p>Especially in the antepartum and first 48-72 hours postpartum period. Maintain high vigilance</p>
+
+            <h3>5. Delivery Timing Requires Nuanced Decision-Making</h3>
+            <p>Balance gestational age, disease severity, trajectory, and maternal/fetal status. There is no "one size fits all"</p>
+
+            <h3>6. Long-Term Follow-Up is Critical</h3>
+            <p>Counsel patients about future cardiovascular risk and ensure appropriate screening and preventive care</p>
+
+            <div class="highlight" style="margin-top: 30px;">
+                <strong>Most Important:</strong> Effective management demands clinical judgment that integrates evidence, patient factors, and real-time disease evolution. Guidelines provide the framework, but each patient requires individualized care.
+            </div>
+        </div>
+
+        <!-- Slide 24: References -->
+        <div class="slide">
+            <span class="slide-number">24</span>
+            <h2>Key References and Guidelines</h2>
+            
+            <h3>Primary Guidelines</h3>
+            <ul>
+                <li>ACOG Practice Bulletin No. 222: Gestational Hypertension and Preeclampsia (2020)</li>
+                <li>ACOG Practice Bulletin No. 203: Chronic Hypertension in Pregnancy (2019, Reaffirmed 2021)</li>
+                <li>ACOG Committee Opinion No. 743: Low-Dose Aspirin Use During Pregnancy (2018, Reaffirmed 2023)</li>
+                <li>ACOG Committee Opinion No. 767: Emergent Therapy for Acute-Onset, Severe Hypertension During Pregnancy and the Postpartum Period (2019, Reaffirmed 2023)</li>
+            </ul>
+
+            <h3>Landmark Trials</h3>
+            <ul>
+                <li>CHAP Trial (Chronic Hypertension and Pregnancy): Treatment of mild chronic hypertension (NEJM 2022)</li>
+                <li>Magpie Trial: Magnesium sulfate for eclampsia prevention (Lancet 2002)</li>
+                <li>HYPITAT Trial: Delivery timing in hypertensive disorders (Lancet 2009)</li>
+                <li>ASPRE Trial: Aspirin for preeclampsia prevention (NEJM 2017)</li>
+            </ul>
+
+            <h3>Additional Resources</h3>
+            <ul>
+                <li>Society for Maternal-Fetal Medicine (SMFM) Consult Series and Publications</li>
+                <li>National Institute for Health and Care Excellence (NICE) Guideline: Hypertension in Pregnancy (2019, Updated 2023)</li>
+                <li>American Heart Association: Hypertensive Disorders of Pregnancy Scientific Statement (2022)</li>
+            </ul>
+        </div>
+
+        <!-- Slide 25: Final Slide -->
+        <div class="slide title-slide">
+            <h1 style="font-size: 2.8em;">Questions?</h1>
+            <p class="subtitle" style="margin-top: 40px;">Thank you for your attention</p>
+            <div class="highlight" style="margin-top: 50px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <p style="font-size: 1.1em; text-align: center;">
+                    <strong>Remember:</strong> Hypertensive disorders of pregnancy demand continuous reassessment, anticipation of progression, and timely decisions grounded in physiology, evidence, and clinical judgment.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+        <button id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+            
+            // Scroll to top of slide
+            slides[currentSlide].scrollTop = 0;
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            } else if (event.key === 'ArrowRight') {
+                changeSlide(1);
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

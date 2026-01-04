@@ -166,6 +166,41 @@
     .card.hidden {
       display: none;
     }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin-top: 48px;
+    }
+    .pagination button {
+      background: var(--panel);
+      border: 2px solid var(--line);
+      color: var(--fg);
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pagination button:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: rgba(53,208,255,.1);
+      transform: translateY(-2px);
+    }
+    .pagination button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .pagination .page-info {
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -194,6 +229,39 @@
     </div>
 
     <div class="presentations">
+      <div class="card">
+        <h2>Preterm Birth - Clinical Management</h2>
+        <p>Comprehensive clinical guide to preterm birth risk assessment, prevention strategies, and evidence-based management approaches for healthcare providers.</p>
+        <div>
+          <span class="tag">Preterm Birth</span>
+          <span class="tag">Prevention</span>
+          <span class="tag">Clinical Management</span>
+        </div>
+        <a href="decks/preterm-birth/preterm-birth.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Hypertensive Disorders in Pregnancy - Provider Guide</h2>
+        <p>Detailed clinical overview of hypertensive disorders in pregnancy, including classification, diagnosis, monitoring, and management strategies for obstetric providers.</p>
+        <div>
+          <span class="tag">Hypertensive Disorders</span>
+          <span class="tag">Preeclampsia</span>
+          <span class="tag">Clinical Management</span>
+        </div>
+        <a href="decks/hypertensive-disorders-doctors/hypertensive_disorders_pregnancy.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Fetal Neuroradiology</h2>
+        <p>Educational presentation on fetal brain imaging, neurological abnormalities, and interpretation of fetal neuroradiology findings in prenatal diagnosis.</p>
+        <div>
+          <span class="tag">Neuroradiology</span>
+          <span class="tag">Fetal Imaging</span>
+          <span class="tag">Diagnosis</span>
+        </div>
+        <a href="decks/fetal-neuroradiology/fetal-neuroradiology.html" class="btn">View Presentation</a>
+      </div>
+
       <div class="card">
         <h2>FGR + Absent End-Diastolic Flow at 35 Weeks</h2>
         <p>Clinical approach to late-preterm fetal growth restriction with absent umbilical artery end-diastolic velocity (AEDV).</p>
@@ -316,6 +384,12 @@
       </div>
     </div>
 
+    <div class="pagination">
+      <button id="prevBtn" aria-label="Previous page">← Previous</button>
+      <span class="page-info" id="pageInfo">Page 1 of 1</span>
+      <button id="nextBtn" aria-label="Next page">Next →</button>
+    </div>
+
     <div class="disclaimer">
       <strong>⚠️ Medical Disclaimer:</strong> These presentations are educational tools and do not constitute medical advice. 
       Clinical decisions should be individualized based on current evidence, local protocols, patient circumstances, and provider judgment. 
@@ -331,25 +405,24 @@
   </footer>
 
   <script>
-    // Search functionality
+    // Pagination and search functionality
     const searchBox = document.getElementById('searchBox');
     const searchResults = document.getElementById('searchResults');
-    const cards = document.querySelectorAll('.card');
-    const totalCards = cards.length;
+    const allCards = Array.from(document.querySelectorAll('.card'));
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const pageInfo = document.getElementById('pageInfo');
+    
+    const ITEMS_PER_PAGE = 10;
+    let currentPage = 1;
+    let filteredCards = [...allCards];
 
-    function performSearch() {
-      const searchTerm = searchBox.value.toLowerCase().trim();
-      
+    function getMatchingCards(searchTerm) {
       if (searchTerm === '') {
-        // Show all cards if search is empty
-        cards.forEach(card => card.classList.remove('hidden'));
-        searchResults.textContent = '';
-        return;
+        return allCards;
       }
 
-      let visibleCount = 0;
-
-      cards.forEach(card => {
+      return allCards.filter(card => {
         const title = card.querySelector('h2').textContent.toLowerCase();
         const description = card.querySelector('p').textContent.toLowerCase();
         const tags = Array.from(card.querySelectorAll('.tag'))
@@ -357,34 +430,72 @@
           .join(' ');
         
         const searchableText = `${title} ${description} ${tags}`;
-        
-        if (searchableText.includes(searchTerm)) {
-          card.classList.remove('hidden');
-          visibleCount++;
-        } else {
-          card.classList.add('hidden');
-        }
+        return searchableText.includes(searchTerm);
       });
-
-      // Update search results message
-      if (visibleCount === 0) {
-        searchResults.textContent = `No presentations found matching "${searchBox.value}"`;
-      } else if (visibleCount === totalCards) {
-        searchResults.textContent = `Showing all ${totalCards} presentations`;
-      } else {
-        searchResults.textContent = `Found ${visibleCount} of ${totalCards} presentations`;
-      }
     }
 
-    // Search on input with debouncing for better performance
+    function displayPage() {
+      // Hide all cards first
+      allCards.forEach(card => card.classList.add('hidden'));
+
+      const totalPages = Math.ceil(filteredCards.length / ITEMS_PER_PAGE);
+      const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+      const endIdx = startIdx + ITEMS_PER_PAGE;
+      
+      // Show cards for current page
+      const cardsToShow = filteredCards.slice(startIdx, endIdx);
+      cardsToShow.forEach(card => card.classList.remove('hidden'));
+
+      // Update pagination controls
+      pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage >= totalPages;
+
+      // Update search results message
+      const searchTerm = searchBox.value.trim();
+      if (searchTerm === '') {
+        searchResults.textContent = `Showing ${allCards.length} presentations (${cardsToShow.length} on this page)`;
+      } else if (filteredCards.length === 0) {
+        searchResults.textContent = `No presentations found matching "${searchBox.value}"`;
+      } else {
+        searchResults.textContent = `Found ${filteredCards.length} of ${allCards.length} presentations (${cardsToShow.length} on this page)`;
+      }
+
+      // Scroll to top of presentations
+      document.querySelector('.presentations').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function performSearch() {
+      const searchTerm = searchBox.value.toLowerCase().trim();
+      filteredCards = getMatchingCards(searchTerm);
+      currentPage = 1; // Reset to first page on new search
+      displayPage();
+    }
+
+    // Event listeners
     let searchTimeout;
     searchBox.addEventListener('input', () => {
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(performSearch, 150);
     });
 
-    // Initial state
-    searchResults.textContent = `Showing all ${totalCards} presentations`;
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        displayPage();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const totalPages = Math.ceil(filteredCards.length / ITEMS_PER_PAGE);
+      if (currentPage < totalPages) {
+        currentPage++;
+        displayPage();
+      }
+    });
+
+    // Initial display
+    displayPage();
   </script>
 </body>
 </html>

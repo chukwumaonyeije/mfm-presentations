@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preterm Birth: Prediction, Prevention, Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            scroll-snap-type: y mandatory;
+        }
+        
+        .slide {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            scroll-snap-align: start;
+            background: white;
+            padding: 60px 80px;
+            position: relative;
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            font-size: 14px;
+            color: #666;
+            font-weight: 300;
+        }
+        
+        h1 {
+            font-size: 56px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+        
+        h2 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
+        }
+        
+        h3 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .subtitle {
+            font-size: 24px;
+            color: #666;
+            font-weight: 300;
+            margin-top: 10px;
+        }
+        
+        .content {
+            max-width: 1000px;
+            width: 100%;
+        }
+        
+        .stat-box {
+            background: #f8f9fa;
+            border-left: 6px solid #8b1538;
+            padding: 30px 40px;
+            margin: 20px 0;
+            font-size: 28px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .key-point {
+            font-size: 32px;
+            font-weight: 500;
+            color: #1a1a2e;
+            line-height: 1.5;
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .emphasis {
+            color: #8b1538;
+            font-weight: 600;
+        }
+        
+        .evidence-badge {
+            display: inline-block;
+            background: #1a4d2e;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+        
+        .evidence-badge.level-b {
+            background: #2563eb;
+        }
+        
+        .evidence-badge.consensus {
+            background: #64748b;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            border-top: 4px solid #8b1538;
+        }
+        
+        .card h4 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+        
+        .card p {
+            font-size: 18px;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+        
+        .timeline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #cbd5e0;
+            z-index: 0;
+        }
+        
+        .timeline-point {
+            background: white;
+            border: 4px solid #8b1538;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .timeline-label {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            white-space: nowrap;
+        }
+        
+        .ga-range {
+            background: linear-gradient(135deg, #1a4d2e 0%, #2563eb 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .ga-range h3 {
+            color: white;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .ga-range p {
+            font-size: 22px;
+            line-height: 1.6;
+        }
+        
+        .intervention-list {
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .intervention-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 25px 0;
+            font-size: 20px;
+        }
+        
+        .intervention-item::before {
+            content: '→';
+            color: #8b1538;
+            font-weight: bold;
+            font-size: 28px;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-size: 18px;
+        }
+        
+        .comparison-table th {
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .comparison-table td {
+            padding: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            color: #2c3e50;
+        }
+        
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 6px solid #ff6b6b;
+            padding: 30px 40px;
+            margin: 30px 0;
+            font-size: 22px;
+            color: #2c3e50;
+        }
+        
+        .algorithm-box {
+            background: #e8f4f8;
+            border: 3px solid #2563eb;
+            padding: 35px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .algorithm-step {
+            font-size: 20px;
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .algorithm-step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            background: #2563eb;
+            border-radius: 50%;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        li {
+            font-size: 22px;
+            color: #2c3e50;
+            margin: 20px 0;
+            padding-left: 35px;
+            position: relative;
+        }
+        
+        li::before {
+            content: '•';
+            position: absolute;
+            left: 10px;
+            color: #8b1538;
+            font-weight: bold;
+            font-size: 28px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <div class="content" style="text-align: center;">
+                <h1>Preterm Birth</h1>
+                <p class="subtitle">Prediction, Prevention, and Management</p>
+                <div style="margin-top: 80px; font-size: 20px; color: #666;">
+                    Evidence-Based Approach for MFM Practice
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Core Concept -->
+        <div class="slide">
+            <div class="content">
+                <h2>Core Concept</h2>
+                <p class="key-point">Preterm birth is not a single disease—<br>it is a <span class="emphasis">final common pathway</span><br>for multiple biological processes</p>
+            </div>
+            <div class="slide-number">2</div>
+        </div>
+
+        <!-- Slide 3: Epidemiology -->
+        <div class="slide">
+            <div class="content">
+                <h2>Epidemiology</h2>
+                <div class="stat-box">
+                    ~10% of US births
+                </div>
+                <div class="grid-3" style="margin-top: 50px;">
+                    <div class="card">
+                        <h4>Spontaneous PTL</h4>
+                        <p>40–45%</p>
+                    </div>
+                    <div class="card">
+                        <h4>PPROM</h4>
+                        <p>25–30%</p>
+                    </div>
+                    <div class="card">
+                        <h4>Indicated</h4>
+                        <p>30–35%</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">3</div>
+        </div>
+
+        <!-- Slide 4: Multiple Pathways -->
+        <div class="slide">
+            <div class="content">
+                <h2>Five Biological Pathways</h2>
+                <div class="intervention-list">
+                    <div class="intervention-item">Decidual-membrane activation (infection, hemorrhage)</div>
+                    <div class="intervention-item">Cervical insufficiency (structural failure)</div>
+                    <div class="intervention-item">Uteroplacental dysfunction</div>
+                    <div class="intervention-item">Uterine overdistension</div>
+                    <div class="intervention-item">Maternal-fetal stress axis</div>
+                </div>
+            </div>
+            <div class="slide-number">4</div>
+        </div>
+
+        <!-- Slide 5: Reframe -->
+        <div class="slide">
+            <div class="content">
+                <h2>Conceptual Reframe</h2>
+                <p class="key-point">From acute event →<br><span class="emphasis">trajectory</span> beginning weeks to months earlier</p>
+                <p style="text-align: center; font-size: 22px; color: #666; margin-top: 40px;">
+                    Intervention works best before irreversibility
+                </p>
+            </div>
+            <div class="slide-number">5</div>
+        </div>
+
+        <!-- Slide 6: Strongest Risk Factor -->
+        <div class="slide">
+            <div class="content">
+                <h2>Strongest Predictor</h2>
+                <div class="stat-box">
+                    Prior spontaneous preterm birth
+                </div>
+                <div style="margin-top: 50px;">
+                    <p style="font-size: 24px; text-align: center; color: #2c3e50; line-height: 1.8;">
+                        Recurrence: 15–30% after one<br>
+                        30–45% after two or more
+                    </p>
+                </div>
+            </div>
+            <div class="slide-number">6</div>
+        </div>
+
+        <!-- Slide 7: Cervical Length -->
+        <div class="slide">
+            <div class="content">
+                <h2>Cervical Length</h2>
+                <p class="key-point">The cornerstone of prediction</p>
+                <div class="stat-box" style="margin-top: 40px;">
+                    Threshold: &lt;25 mm at 18–24 weeks
+                </div>
+                <p style="text-align: center; font-size: 20px; color: #666; margin-top: 30px;">
+                    Risk modifier, not definitive predictor
+                </p>
+            </div>
+            <div class="slide-number">7</div>
+        </div>
+
+        <!-- Slide 8: Who Gets TVCL -->
+        <div class="slide">
+            <div class="content">
+                <h2>TVCL Screening</h2>
+                <div class="grid-2">
+                    <div class="card" style="border-top-color: #1a4d2e;">
+                        <h4>Indicated</h4>
+                        <p>Prior sPTB &lt;37 weeks<br>
+                        History of LEEP/conization<br>
+                        Second-trimester loss</p>
+                    </div>
+                    <div class="card" style="border-top-color: #64748b;">
+                        <h4>Not Recommended</h4>
+                        <p>Universal screening in low-risk singleton pregnancies</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">8</div>
+        </div>
+
+        <!-- Slide 9: Biomarkers -->
+        <div class="slide">
+            <div class="content">
+                <h2>Fetal Fibronectin</h2>
+                <p class="key-point">Greatest value: <span class="emphasis">negative</span> predictive</p>
+                <div class="stat-box" style="margin-top: 40px;">
+                    &gt;95% will NOT deliver within 7–14 days if negative
+                </div>
+                <p style="text-align: center; font-size: 20px; color: #666; margin-top: 30px;">
+                    Triage tool in symptomatic patients—not for screening
+                </p>
+            </div>
+            <div class="slide-number">9</div>
+        </div>
+
+        <!-- Slide 10: Progesterone -->
+        <div class="slide">
+            <div class="content">
+                <h2>17-OHPC</h2>
+                <p style="font-size: 26px; color: #2c3e50; margin-bottom: 30px;">
+                    <strong>Indication:</strong> Singleton with prior sPTB &lt;37 weeks
+                    <span class="evidence-badge">Level A*</span>
+                </p>
+                <div class="intervention-list">
+                    <div class="intervention-item">250 mg IM weekly, 16–20 weeks through 36 weeks</div>
+                    <div class="intervention-item">Reduces recurrence ~30%</div>
+                </div>
+                <div class="warning-box">
+                    *Evidence under scrutiny following PROLONG trial
+                </div>
+            </div>
+            <div class="slide-number">10</div>
+        </div>
+
+        <!-- Slide 11: Vaginal Progesterone -->
+        <div class="slide">
+            <div class="content">
+                <h2>Vaginal Progesterone</h2>
+                <p style="font-size: 26px; color: #2c3e50; margin-bottom: 30px;">
+                    <strong>Indication:</strong> Singleton with CL &lt;25 mm at 18–24 weeks
+                    <span class="evidence-badge">Level A</span>
+                </p>
+                <div class="stat-box">
+                    90–200 mg daily
+                </div>
+                <p style="text-align: center; font-size: 22px; color: #2c3e50; margin-top: 40px;">
+                    Reduces PTB &lt;33 weeks by ~40%
+                </p>
+            </div>
+            <div class="slide-number">11</div>
+        </div>
+
+        <!-- Slide 12: Cerclage Types -->
+        <div class="slide">
+            <div class="content">
+                <h2>Cerclage Indications</h2>
+                <div class="intervention-list">
+                    <div class="intervention-item"><strong>History-indicated:</strong> ≥3 prior losses or sPTB &lt;24 weeks (Level B)</div>
+                    <div class="intervention-item"><strong>Ultrasound-indicated:</strong> Prior sPTB &lt;34 weeks + CL &lt;25 mm (Level B)</div>
+                    <div class="intervention-item"><strong>Physical exam (rescue):</strong> Dilation with visible membranes (Consensus)</div>
+                </div>
+            </div>
+            <div class="slide-number">12</div>
+        </div>
+
+        <!-- Slide 13: Not Recommended -->
+        <div class="slide">
+            <div class="content">
+                <h2>Not Recommended</h2>
+                <div class="warning-box">
+                    ✗ Cerclage in multifetal gestation (harmful)<br><br>
+                    ✗ Prophylactic bedrest<br><br>
+                    ✗ Prophylactic tocolysis
+                </div>
+            </div>
+            <div class="slide-number">13</div>
+        </div>
+
+        <!-- Slide 14: Acute Management Overview -->
+        <div class="slide">
+            <div class="content">
+                <h2>Threatened PTL: Principles</h2>
+                <div class="intervention-list">
+                    <div class="intervention-item">Confirm diagnosis (contractions + cervical change)</div>
+                    <div class="intervention-item">Rule out contraindications to prolongation</div>
+                    <div class="intervention-item">Administer evidence-based interventions</div>
+                    <div class="intervention-item">Transport to appropriate level of care</div>
+                </div>
+            </div>
+            <div class="slide-number">14</div>
+        </div>
+
+        <!-- Slide 15: Antenatal Corticosteroids -->
+        <div class="slide">
+            <div class="content">
+                <h2>Antenatal Corticosteroids</h2>
+                <p style="font-size: 26px; color: #2c3e50; margin-bottom: 30px;">
+                    24 0/7 to 33 6/7 weeks
+                    <span class="evidence-badge">Level A</span>
+                </p>
+                <div class="stat-box">
+                    Betamethasone 12 mg IM q24h × 2 doses (preferred)
+                </div>
+                <p style="text-align: center; font-size: 22px; color: #2c3e50; margin-top: 40px;">
+                    Maximum benefit: 24 hours to 7 days after completion
+                </p>
+            </div>
+            <div class="slide-number">15</div>
+        </div>
+
+        <!-- Slide 16: Late Preterm Steroids -->
+        <div class="slide">
+            <div class="content">
+                <h2>Late Preterm Steroids</h2>
+                <p style="font-size: 26px; color: #2c3e50; margin-bottom: 30px;">
+                    34 0/7 to 36 6/7 weeks
+                    <span class="evidence-badge">Level A</span>
+                </p>
+                <div class="algorithm-box">
+                    <div class="algorithm-step">Anticipated delivery within 7 days</div>
+                    <div class="algorithm-step">No prior steroids this pregnancy</div>
+                    <div class="algorithm-step">Monitor neonatal glucose closely</div>
+                </div>
+                <p style="text-align: center; font-size: 18px; color: #666; margin-top: 25px;">
+                    Based on ALPS trial (2016)
+                </p>
+            </div>
+            <div class="slide-number">16</div>
+        </div>
+
+        <!-- Slide 17: Magnesium Sulfate -->
+        <div class="slide">
+            <div class="content">
+                <h2>Magnesium Sulfate</h2>
+                <p style="font-size: 26px; color: #2c3e50; margin-bottom: 30px;">
+                    For fetal neuroprotection
+                    <span class="evidence-badge">Level A</span>
+                </p>
+                <div class="stat-box">
+                    Delivery anticipated within 24 hours at &lt;32 weeks
+                </div>
+                <p style="text-align: center; font-size: 22px; color: #2c3e50; margin-top: 40px;">
+                    Reduces cerebral palsy and motor dysfunction by ~30%
+                </p>
+            </div>
+            <div class="slide-number">17</div>
+        </div>
+
+        <!-- Slide 18: Tocolysis -->
+        <div class="slide">
+            <div class="content">
+                <h2>Tocolysis</h2>
+                <p class="key-point">Purpose: Allow time for steroids<br>and maternal transport</p>
+                <div class="warning-box" style="margin-top: 40px;">
+                    Does NOT improve perinatal outcomes beyond 48 hours
+                </div>
+            </div>
+            <div class="slide-number">18</div>
+        </div>
+
+        <!-- Slide 19: First-Line Tocolytics -->
+        <div class="slide">
+            <div class="content">
+                <h2>First-Line Tocolytics</h2>
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Nifedipine</h4>
+                        <p>20 mg PO loading<br>
+                        Then 10–20 mg q4–6h</p>
+                    </div>
+                    <div class="card">
+                        <h4>Indomethacin</h4>
+                        <p>Limit to &lt;32 weeks<br>
+                        &lt;48 hours duration</p>
+                    </div>
+                </div>
+                <p style="text-align: center; font-size: 20px; color: #666; margin-top: 40px;">
+                    Maximum duration: 48 hours
+                </p>
+            </div>
+            <div class="slide-number">19</div>
+        </div>
+
+        <!-- Slide 20: PPROM Diagnosis -->
+        <div class="slide">
+            <div class="content">
+                <h2>PPROM Diagnosis</h2>
+                <div class="intervention-list">
+                    <div class="intervention-item">Sterile speculum exam (pooling, nitrazine, ferning)</div>
+                    <div class="intervention-item">Avoid digital exams unless active labor</div>
+                    <div class="intervention-item">Ultrasound: AFI/DVP supports but not required</div>
+                </div>
+            </div>
+            <div class="slide-number">20</div>
+        </div>
+
+        <!-- Slide 21: PPROM Management Principle -->
+        <div class="slide">
+            <div class="content">
+                <h2>PPROM: Key Decision Point</h2>
+                <div class="ga-range">
+                    <h3>Deliver at 34 0/0 weeks</h3>
+                    <p>Reduces chorioamnionitis without increasing neonatal morbidity</p>
+                </div>
+                <p style="text-align: center; font-size: 18px; color: #666; margin-top: 25px;">
+                    Level A evidence (PPROMEXIL trials)
+                </p>
+            </div>
+            <div class="slide-number">21</div>
+        </div>
+
+        <!-- Slide 22: PPROM 24-33 weeks -->
+        <div class="slide">
+            <div class="content">
+                <h2>PPROM 24–33 6/7 Weeks</h2>
+                <div class="intervention-list">
+                    <div class="intervention-item"><strong>Latency antibiotics</strong> (Level A): ampicillin + erythromycin × 7 days</div>
+                    <div class="intervention-item"><strong>Antenatal corticosteroids</strong> (Level A)</div>
+                    <div class="intervention-item"><strong>MgSO₄</strong> if delivery imminent at &lt;32 weeks</div>
+                    <div class="intervention-item"><strong>No tocolysis</strong> (contraindicated)</div>
+                </div>
+            </div>
+            <div class="slide-number">22</div>
+        </div>
+
+        <!-- Slide 23: Avoid in PPROM -->
+        <div class="slide">
+            <div class="content">
+                <h2>PPROM: Do Not Use</h2>
+                <div class="warning-box">
+                    Amoxicillin-clavulanate<br><br>
+                    (Increased necrotizing enterocolitis risk)
+                </div>
+            </div>
+            <div class="slide-number">23</div>
+        </div>
+
+        <!-- Slide 24: Neonatal Outcomes by GA -->
+        <div class="slide">
+            <div class="content">
+                <h2>Survival by Gestational Age</h2>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Gestational Age</th>
+                        <th>Survival</th>
+                    </tr>
+                    <tr>
+                        <td>&lt;28 weeks</td>
+                        <td>40–70%</td>
+                    </tr>
+                    <tr>
+                        <td>28–31 weeks</td>
+                        <td>&gt;90%</td>
+                    </tr>
+                    <tr>
+                        <td>32–33 weeks</td>
+                        <td>&gt;95%</td>
+                    </tr>
+                    <tr>
+                        <td>34–36 weeks</td>
+                        <td>&gt;98%</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="slide-number">24</div>
+        </div>
+
+        <!-- Slide 25: Key Message -->
+        <div class="slide">
+            <div class="content">
+                <h2>Every Week Matters</h2>
+                <p class="key-point">Each additional week of gestation<br>significantly reduces morbidity and mortality</p>
+            </div>
+            <div class="slide-number">25</div>
+        </div>
+
+        <!-- Slide 26: Counseling Principles -->
+        <div class="slide">
+            <div class="content">
+                <h2>Counseling Principles</h2>
+                <div class="intervention-list">
+                    <div class="intervention-item">Emphasize ranges, not single predictions</div>
+                    <div class="intervention-item">Distinguish risk from certainty</div>
+                    <div class="intervention-item">Acknowledge evolving prognosis over time</div>
+                    <div class="intervention-item">Support shared decision-making</div>
+                </div>
+            </div>
+            <div class="slide-number">26</div>
+        </div>
+
+        <!-- Slide 27: Controversy - Progesterone -->
+        <div class="slide">
+            <div class="content">
+                <h2>Area of Controversy</h2>
+                <p style="font-size: 28px; color: #2c3e50; margin-bottom: 30px;">
+                    17-OHPC Efficacy
+                </p>
+                <div class="algorithm-box">
+                    <div class="algorithm-step">PROLONG trial (2019): no benefit vs placebo</div>
+                    <div class="algorithm-step">Contradicts prior trials</div>
+                    <div class="algorithm-step">ACOG continues to recommend (2024)</div>
+                    <div class="algorithm-step">FDA approval under review</div>
+                </div>
+                <p style="text-align: center; font-size: 18px; color: #666; margin-top: 25px;">
+                    Evidence quality: previously Level A, now uncertain
+                </p>
+            </div>
+            <div class="slide-number">27</div>
+        </div>
+
+        <!-- Slide 28: Controversy - Universal Screening -->
+        <div class="slide">
+            <div class="content">
+                <h2>Ongoing Debate</h2>
+                <p class="key-point">Universal cervical length screening<br>in low-risk singleton pregnancies</p>
+                <div class="stat-box" style="margin-top: 40px;">
+                    Current: Not recommended (insufficient evidence)
+                </div>
+                <p style="text-align: center; font-size: 20px; color: #666; margin-top: 30px;">
+                    Cost-effectiveness trials ongoing
+                </p>
+            </div>
+            <div class="slide-number">28</div>
+        </div>
+
+        <!-- Slide 29: Clinical Takeaway -->
+        <div class="slide">
+            <div class="content">
+                <h2>Clinical Approach</h2>
+                <p class="key-point">Preterm birth is best addressed through<br><span class="emphasis">anticipation</span>, not reaction</p>
+            </div>
+            <div class="slide-number">29</div>
+        </div>
+
+        <!-- Slide 30: Final Summary -->
+        <div class="slide">
+            <div class="content">
+                <h2>Summary</h2>
+                <div class="intervention-list">
+                    <div class="intervention-item">Risk stratification identifies modifiable factors</div>
+                    <div class="intervention-item">Targeted prevention: progesterone, cerclage</div>
+                    <div class="intervention-item">Acute management: steroids, MgSO₄, tocolysis</div>
+                    <div class="intervention-item">Evidence-based, individualized care</div>
+                </div>
+            </div>
+            <div class="slide-number">30</div>
+        </div>
+
+    </div>
+</body>
+</html>
