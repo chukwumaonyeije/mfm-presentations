@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hemoglobin Traits in Pregnancy: What You Need to Know</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #2d3748;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            min-height: 80vh;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #5a67d8;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 25px;
+            line-height: 1.3;
+        }
+
+        h3 {
+            color: #4c51bf;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            margin-top: 30px;
+        }
+
+        p {
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #4a5568;
+        }
+
+        .subtitle {
+            font-size: 1.4em;
+            color: #718096;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .info-box {
+            background: #ebf4ff;
+            border-left: 5px solid #4299e1;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .reassurance-box {
+            background: #f0fff4;
+            border-left: 5px solid #48bb78;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .action-box {
+            background: #fffaf0;
+            border-left: 5px solid #ed8936;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box {
+            background: #faf5ff;
+            border-left: 5px solid #9f7aea;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #4a5568;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            font-size: 1.1em;
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            margin: 30px 0;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-size: 1.2em;
+        }
+
+        .comparison-table td {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 1.15em;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f7fafc;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            p, li {
+                font-size: 1.1em;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+        }
+
+        .key-term {
+            color: #5a67d8;
+            font-weight: 600;
+        }
+
+        .emphasis {
+            background: linear-gradient(120deg, #fef3c7 0%, #fef3c7 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 85%;
+            padding: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Hemoglobin Traits in Pregnancy</h1>
+            <p class="subtitle">What You Need to Know About Hemoglobin S Trait and Hemoglobin C Trait</p>
+            
+            <div class="reassurance-box">
+                <h3>You're in the Right Place</h3>
+                <p>This presentation will help you understand your blood test results and what they mean for you and your baby.</p>
+                <p>We'll explain everything in plain language and answer your questions together.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>What We'll Cover</h3>
+                <ul>
+                    <li>What hemoglobin traits are</li>
+                    <li>The difference between a trait and a disease</li>
+                    <li>What this means for your pregnancy</li>
+                    <li>Why partner testing matters</li>
+                    <li>Your care plan going forward</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: What is Hemoglobin? -->
+        <div class="slide">
+            <h2>What Is Hemoglobin?</h2>
+            
+            <p><span class="key-term">Hemoglobin</span> is a protein inside your red blood cells. It carries oxygen from your lungs to the rest of your body.</p>
+
+            <p>Everyone inherits two hemoglobin genes—one from each parent.</p>
+
+            <div class="info-box">
+                <h3>Normal Hemoglobin</h3>
+                <p>Most people have two copies of hemoglobin A (the most common type).</p>
+                <p>This is written as "HbAA" or "normal hemoglobin."</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Hemoglobin Variants</h3>
+                <p>Some people inherit a different type of hemoglobin from one parent.</p>
+                <p>Common variants include:</p>
+                <ul>
+                    <li><strong>Hemoglobin S</strong> (associated with sickle cell)</li>
+                    <li><strong>Hemoglobin C</strong> (another variant)</li>
+                </ul>
+                <p>Having one variant gene means you have a <span class="emphasis">trait</span>, not a disease.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Trait vs Disease -->
+        <div class="slide">
+            <h2>Understanding the Difference: Trait vs. Disease</h2>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Trait (Carrier)</th>
+                    <th>Disease</th>
+                </tr>
+                <tr>
+                    <td>One variant gene + one normal gene</td>
+                    <td>Two variant genes</td>
+                </tr>
+                <tr>
+                    <td>Generally healthy, no symptoms</td>
+                    <td>Causes health problems</td>
+                </tr>
+                <tr>
+                    <td>Example: HbAS (S trait) or HbAC (C trait)</td>
+                    <td>Example: HbSS (sickle cell disease) or HbSC</td>
+                </tr>
+                <tr>
+                    <td>Most people don't know they have it</td>
+                    <td>Requires ongoing medical care</td>
+                </tr>
+            </table>
+
+            <div class="reassurance-box">
+                <h3>If You Have a Trait</h3>
+                <p><span class="emphasis">You are generally healthy.</span> Having a trait is not the same as having a disease.</p>
+                <p>Most people with traits have no symptoms and live normal, healthy lives.</p>
+                <p>The trait becomes important mainly for family planning—to understand what you might pass to your baby.</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Why Testing Matters -->
+        <div class="slide">
+            <h2>Why Were You Tested?</h2>
+
+            <p>We test all pregnant people for hemoglobin traits as part of routine prenatal care.</p>
+
+            <div class="info-box">
+                <h3>The Goal of Testing</h3>
+                <ul>
+                    <li>Identify if you carry a hemoglobin trait</li>
+                    <li>Determine if your partner should be tested</li>
+                    <li>Understand the chance your baby could inherit a disease</li>
+                    <li>Offer information and choices</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Who Gets Tested?</h3>
+                <p>Everyone should be offered testing, but it's especially recommended if you or your family are from:</p>
+                <ul>
+                    <li>Africa or African descent</li>
+                    <li>Mediterranean countries (Greece, Italy, Turkey)</li>
+                    <li>Middle East</li>
+                    <li>India or Southeast Asia</li>
+                    <li>Central or South America</li>
+                    <li>Caribbean</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 5: Hemoglobin S Trait -->
+        <div class="slide">
+            <h2>Hemoglobin S Trait (Sickle Cell Trait)</h2>
+
+            <p><span class="key-term">Hemoglobin S trait</span> means you have one gene for hemoglobin A (normal) and one gene for hemoglobin S.</p>
+            
+            <p>This is also called <span class="key-term">sickle cell trait</span> and is written as "HbAS."</p>
+
+            <div class="reassurance-box">
+                <h3>What This Means for Your Health</h3>
+                <p><span class="emphasis">You do not have sickle cell disease.</span></p>
+                <p>Most people with hemoglobin S trait:</p>
+                <ul>
+                    <li>Have no symptoms in daily life</li>
+                    <li>Don't need treatment</li>
+                    <li>Have normal life expectancy</li>
+                    <li>Can participate in all normal activities</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>Rare Considerations</h3>
+                <p>In rare situations (extreme dehydration, very high altitudes, intense physical stress), some people with S trait may have complications.</p>
+                <p>We'll monitor you carefully during pregnancy to prevent these situations.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: S Trait in Pregnancy -->
+        <div class="slide">
+            <h2>Hemoglobin S Trait During Pregnancy</h2>
+
+            <div class="reassurance-box">
+                <h3>Good News</h3>
+                <p>Most people with hemoglobin S trait have healthy, uncomplicated pregnancies.</p>
+                <p>Your trait does not increase the chance of common pregnancy complications like preeclampsia or preterm birth.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>What We Monitor</h3>
+                <p>People with S trait have a slightly higher chance of:</p>
+                <ul>
+                    <li><strong>Urinary tract infections (UTIs)</strong> during pregnancy</li>
+                    <li><strong>Bacteria in urine without symptoms</strong> (asymptomatic bacteriuria)</li>
+                </ul>
+                <p>We test your urine regularly during pregnancy to catch and treat these early.</p>
+            </div>
+
+            <div class="action-box">
+                <h3>What You Can Do</h3>
+                <ul>
+                    <li>Drink plenty of water every day (8-10 glasses)</li>
+                    <li>Don't ignore urinary symptoms (burning, frequency, urgency)</li>
+                    <li>Attend all your prenatal visits</li>
+                    <li>Take all medications as prescribed</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 7: Hemoglobin C Trait -->
+        <div class="slide">
+            <h2>Hemoglobin C Trait</h2>
+
+            <p><span class="key-term">Hemoglobin C trait</span> means you have one gene for hemoglobin A (normal) and one gene for hemoglobin C.</p>
+            
+            <p>This is written as "HbAC."</p>
+
+            <div class="reassurance-box">
+                <h3>What This Means for Your Health</h3>
+                <p><span class="emphasis">Hemoglobin C trait causes no health problems.</span></p>
+                <p>People with hemoglobin C trait:</p>
+                <ul>
+                    <li>Have no symptoms</li>
+                    <li>Don't need any treatment</li>
+                    <li>Have completely normal health</li>
+                    <li>Live normal lives with no restrictions</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>Why It Matters</h3>
+                <p>Hemoglobin C trait is important only for family planning.</p>
+                <p>If your partner also carries a hemoglobin variant, your baby could inherit two variant genes.</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: C Trait in Pregnancy -->
+        <div class="slide">
+            <h2>Hemoglobin C Trait During Pregnancy</h2>
+
+            <div class="reassurance-box">
+                <h3>Excellent News</h3>
+                <p><span class="emphasis">Hemoglobin C trait does not cause pregnancy complications.</span></p>
+                <p>You can expect a completely normal pregnancy.</p>
+                <p>No special monitoring or treatment is needed for the trait itself.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Your Prenatal Care</h3>
+                <p>Your prenatal care will be the same as anyone else's:</p>
+                <ul>
+                    <li>Regular prenatal visits</li>
+                    <li>Standard ultrasounds</li>
+                    <li>Routine blood tests</li>
+                    <li>Normal labor and delivery</li>
+                </ul>
+                <p>The trait doesn't change any aspect of your pregnancy care.</p>
+            </div>
+
+            <div class="action-box">
+                <h3>The Important Step</h3>
+                <p>The main action is to <span class="emphasis">have your partner tested</span> to understand what your baby might inherit.</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Why Partner Testing Matters -->
+        <div class="slide">
+            <h2>Why Partner Testing Matters</h2>
+
+            <p>Because you have a hemoglobin trait, we recommend testing your baby's other parent.</p>
+
+            <div class="highlight-box">
+                <h3>Understanding Inheritance</h3>
+                <p>Your baby will inherit one hemoglobin gene from you and one from your partner.</p>
+                <p>The combination determines whether your baby has:</p>
+                <ul>
+                    <li>Normal hemoglobin (HbAA)</li>
+                    <li>A trait (carrier like you)</li>
+                    <li>A disease (two variant genes)</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>If Your Partner Has Normal Hemoglobin (HbAA)</h3>
+                <p>Each baby has a:</p>
+                <ul>
+                    <li><strong>50% chance</strong> of having normal hemoglobin (HbAA)</li>
+                    <li><strong>50% chance</strong> of having a trait (carrier, like you)</li>
+                    <li><strong>0% chance</strong> of having a disease</li>
+                </ul>
+                <p><span class="emphasis">Your baby cannot have a hemoglobin disease if your partner has normal hemoglobin.</span></p>
+            </div>
+        </div>
+
+        <!-- Slide 10: If Both Parents Have Traits -->
+        <div class="slide">
+            <h2>If Both Parents Have Traits</h2>
+
+            <p>If your partner also has a hemoglobin trait (S, C, or another variant), each pregnancy has different possibilities.</p>
+
+            <div class="highlight-box">
+                <h3>When Both Parents Have S Trait (HbAS)</h3>
+                <p>Each baby has a:</p>
+                <ul>
+                    <li><strong>25% chance (1 in 4)</strong> of normal hemoglobin (HbAA)</li>
+                    <li><strong>50% chance (2 in 4)</strong> of sickle cell trait (HbAS)</li>
+                    <li><strong>25% chance (1 in 4)</strong> of sickle cell disease (HbSS)</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>When Both Parents Have C Trait (HbAC)</h3>
+                <p>Each baby has a:</p>
+                <ul>
+                    <li><strong>25% chance (1 in 4)</strong> of normal hemoglobin (HbAA)</li>
+                    <li><strong>50% chance (2 in 4)</strong> of hemoglobin C trait (HbAC)</li>
+                    <li><strong>25% chance (1 in 4)</strong> of hemoglobin C disease (HbCC)</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>When One Parent Has S Trait and One Has C Trait</h3>
+                <p>Each baby has a:</p>
+                <ul>
+                    <li><strong>25% chance (1 in 4)</strong> of normal hemoglobin (HbAA)</li>
+                    <li><strong>25% chance (1 in 4)</strong> of S trait (HbAS)</li>
+                    <li><strong>25% chance (1 in 4)</strong> of C trait (HbAC)</li>
+                    <li><strong>25% chance (1 in 4)</strong> of hemoglobin SC disease (HbSC)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 11: Options When Both Parents Carry Traits -->
+        <div class="slide">
+            <h2>Your Options If Both Parents Carry Traits</h2>
+
+            <p>If testing shows both you and your partner carry hemoglobin traits, we'll offer you genetic counseling to discuss your options.</p>
+
+            <div class="info-box">
+                <h3>Genetic Counseling</h3>
+                <p>A genetic counselor will:</p>
+                <ul>
+                    <li>Explain the specific chances for your baby</li>
+                    <li>Describe what each possible outcome means</li>
+                    <li>Review all available options</li>
+                    <li>Answer your questions</li>
+                    <li>Support you in making decisions that are right for your family</li>
+                </ul>
+            </div>
+
+            <div class="action-box">
+                <h3>Testing Options During Pregnancy</h3>
+                <p>If you want to know whether your baby has a disease, you can choose:</p>
+                <ul>
+                    <li><strong>Chorionic villus sampling (CVS)</strong> at 10-13 weeks</li>
+                    <li><strong>Amniocentesis</strong> at 15-20 weeks</li>
+                    <li><strong>Cell-free DNA testing</strong> (in some cases)</li>
+                </ul>
+                <p>These tests are optional. You decide what's right for you.</p>
+            </div>
+
+            <div class="reassurance-box">
+                <h3>No Wrong Choice</h3>
+                <p>Some families want testing. Others don't. Both choices are okay.</p>
+                <p>We're here to give you information and support—not to pressure you.</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Your Care Plan -->
+        <div class="slide">
+            <h2>Your Care Plan Going Forward</h2>
+
+            <div class="action-box">
+                <h3>Next Steps</h3>
+                <ul>
+                    <li><strong>Partner testing:</strong> We'll order a blood test for your baby's other parent</li>
+                    <li><strong>Follow-up visit:</strong> We'll discuss the results together</li>
+                    <li><strong>Genetic counseling:</strong> Offered if both partners have traits</li>
+                    <li><strong>Regular prenatal care:</strong> Continue all scheduled visits</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>During Your Pregnancy</h3>
+                <p>For hemoglobin S trait:</p>
+                <ul>
+                    <li>Urine testing at each visit to check for infections</li>
+                    <li>Emphasis on good hydration</li>
+                    <li>Prompt treatment of any urinary symptoms</li>
+                </ul>
+                <p>For hemoglobin C trait:</p>
+                <ul>
+                    <li>No special monitoring needed</li>
+                    <li>Standard prenatal care</li>
+                </ul>
+            </div>
+
+            <div class="reassurance-box">
+                <h3>You're Not Alone</h3>
+                <p>Millions of people carry hemoglobin traits.</p>
+                <p>Your healthcare team has experience caring for people with traits.</p>
+                <p>We're here to support you every step of the way.</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: What You Can Do -->
+        <div class="slide">
+            <h2>What You Can Do</h2>
+
+            <div class="action-box">
+                <h3>Action Steps</h3>
+                <ul>
+                    <li><strong>Stay hydrated:</strong> Drink 8-10 glasses of water daily (especially if you have S trait)</li>
+                    <li><strong>Attend appointments:</strong> Come to all prenatal visits</li>
+                    <li><strong>Report symptoms:</strong> Tell us about any urinary symptoms right away</li>
+                    <li><strong>Partner testing:</strong> Encourage your partner to get tested</li>
+                    <li><strong>Ask questions:</strong> Write down questions and bring them to visits</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>Information for Your Family</h3>
+                <p>Consider sharing this information with:</p>
+                <ul>
+                    <li>Your parents and siblings (they may also carry a trait)</li>
+                    <li>Your children (when they're older and planning families)</li>
+                    <li>Other family members who might benefit from testing</li>
+                </ul>
+                <p>Knowing your trait status helps your whole family make informed health decisions.</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Resources</h3>
+                <p>For more information:</p>
+                <ul>
+                    <li>Ask your healthcare provider for educational materials</li>
+                    <li>Request a genetic counseling appointment</li>
+                    <li>Visit reliable health websites (we can recommend specific ones)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 14: Questions to Ask -->
+        <div class="slide">
+            <h2>Questions to Ask Your Healthcare Team</h2>
+
+            <div class="info-box">
+                <h3>About Your Trait</h3>
+                <ul>
+                    <li>Which specific trait do I have?</li>
+                    <li>What do my test results show exactly?</li>
+                    <li>Are there any specific things I should watch for during pregnancy?</li>
+                    <li>Do I need any special care or monitoring?</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>About Partner Testing</h3>
+                <ul>
+                    <li>How and where does my partner get tested?</li>
+                    <li>When will we get the results?</li>
+                    <li>What happens after we get the results?</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>About Your Baby</h3>
+                <ul>
+                    <li>What is the chance my baby will have a trait or disease?</li>
+                    <li>If I want testing during pregnancy, what are my options?</li>
+                    <li>Will my baby be tested after birth?</li>
+                    <li>What does it mean if my baby has a trait?</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>About Genetic Counseling</h3>
+                <ul>
+                    <li>Should we see a genetic counselor?</li>
+                    <li>When should we schedule that appointment?</li>
+                    <li>What will the genetic counselor tell us?</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 15: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+
+            <div class="reassurance-box">
+                <h3>Remember</h3>
+                <p><span class="emphasis">Having a trait is not the same as having a disease.</span></p>
+                <p>You are generally healthy, and most people with traits have healthy pregnancies.</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>What Matters Most</h3>
+                <ul>
+                    <li><strong>Hemoglobin S trait:</strong> Generally healthy; small increased risk of urinary infections during pregnancy—easily monitored and treated</li>
+                    <li><strong>Hemoglobin C trait:</strong> No health problems; no pregnancy complications</li>
+                    <li><strong>Partner testing:</strong> Essential to understand what your baby might inherit</li>
+                    <li><strong>If both carry traits:</strong> Genetic counseling can explain your options</li>
+                </ul>
+            </div>
+
+            <div class="action-box">
+                <h3>Your Healthcare Team Is Here</h3>
+                <p>We're partners in your care.</p>
+                <p>Never hesitate to ask questions or share concerns.</p>
+                <p>Together, we'll ensure you have a healthy pregnancy and make informed decisions for your family.</p>
+            </div>
+
+            <div class="info-box" style="text-align: center; margin-top: 40px;">
+                <h3>Thank You</h3>
+                <p style="font-size: 1.2em;">We're here to support you through this journey.</p>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <div class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">15</span>
+            </div>
+            <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            if (n > totalSlides) {
+                currentSlide = totalSlides;
+            }
+            if (n < 1) {
+                currentSlide = 1;
+            }
+
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+
+            document.getElementById('currentSlide').textContent = currentSlide;
+
+            // Update progress bar
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Disable/enable buttons
+            prevBtn.disabled = currentSlide === 1;
+            nextBtn.disabled = currentSlide === totalSlides;
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+            } else if (e.key === 'ArrowRight') {
+                changeSlide(1);
+            }
+        });
+
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
