@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antenatal Pyelectasis & Hydronephrosis: Sonographic Diagnosis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            overflow-x: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            min-height: 100vh;
+            padding: 60px 80px;
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            position: relative;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 0.9rem;
+            color: #64b5f6;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: #64b5f6;
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            color: #64b5f6;
+            margin-bottom: 40px;
+            font-weight: 600;
+            border-bottom: 3px solid #e91e63;
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 2rem;
+            color: #81c784;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #90caf9;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .meta {
+            font-size: 1.3rem;
+            color: #aaa;
+            margin-top: 30px;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 5px solid #e91e63;
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .definition-box {
+            background: rgba(100, 181, 246, 0.1);
+            border-left: 5px solid #64b5f6;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .warning-box {
+            background: rgba(255, 167, 38, 0.1);
+            border-left: 5px solid #ffa726;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box {
+            background: rgba(129, 199, 132, 0.1);
+            border-left: 5px solid #81c784;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .large-text {
+            font-size: 2.2rem;
+            line-height: 1.6;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .medium-text {
+            font-size: 1.6rem;
+            line-height: 1.7;
+            color: #e0e0e0;
+            margin: 15px 0;
+        }
+
+        .measurement-display {
+            font-size: 3.5rem;
+            color: #e91e63;
+            font-weight: 700;
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(233, 30, 99, 0.1);
+            border-radius: 10px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid rgba(100, 181, 246, 0.3);
+        }
+
+        .card h4 {
+            color: #64b5f6;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .bullet-point {
+            font-size: 1.5rem;
+            line-height: 2;
+            color: #e0e0e0;
+            padding-left: 30px;
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .bullet-point:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #e91e63;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 1.4rem;
+        }
+
+        th {
+            background: rgba(100, 181, 246, 0.2);
+            color: #64b5f6;
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 3px solid #64b5f6;
+        }
+
+        td {
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .emphasis {
+            color: #e91e63;
+            font-weight: 600;
+        }
+
+        .control-panel {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 25px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: #64b5f6;
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #42a5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100, 181, 246, 0.4);
+        }
+
+        .nav-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #e91e63;
+            transition: width 0.3s ease;
+            z-index: 1001;
+        }
+
+        @media print {
+            .control-panel, .progress-bar { display: none; }
+            .slide-container { 
+                display: flex !important;
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide-container { padding: 40px 30px; }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 1.6rem; }
+            .large-text { font-size: 1.6rem; }
+            .medium-text { font-size: 1.2rem; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        }
+
+        .grade-table {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .grade-mild { background: rgba(129, 199, 132, 0.2); }
+        .grade-moderate { background: rgba(255, 167, 38, 0.2); }
+        .grade-severe { background: rgba(239, 83, 80, 0.2); }
+
+        .technique-step {
+            background: rgba(100, 181, 246, 0.08);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #64b5f6;
+        }
+
+        .technique-step strong {
+            color: #64b5f6;
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide-container active">
+        <div class="slide-number">1 / 25</div>
+        <h1>Antenatal Pyelectasis & Hydronephrosis</h1>
+        <div class="subtitle">Sonographic Diagnosis and Reporting</div>
+        <div class="meta">
+            <strong>Target Audience:</strong> Obstetric Sonographers<br>
+            <strong>Focus:</strong> Measurement Technique, Thresholds, Documentation
+        </div>
+    </div>
+
+    <!-- Slide 2: Learning Objectives -->
+    <div class="slide-container">
+        <div class="slide-number">2 / 25</div>
+        <h2>Learning Objectives</h2>
+        <div class="bullet-point">Define pyelectasis and hydronephrosis using standard criteria</div>
+        <div class="bullet-point">Perform accurate anteroposterior renal pelvis diameter measurements</div>
+        <div class="bullet-point">Apply gestational age-specific thresholds for abnormal findings</div>
+        <div class="bullet-point">Recognize associated anomalies requiring additional evaluation</div>
+        <div class="bullet-point">Document findings according to standardized reporting guidelines</div>
+    </div>
+
+    <!-- Slide 3: Terminology -->
+    <div class="slide-container">
+        <div class="slide-number">3 / 25</div>
+        <h2>Terminology</h2>
+        <div class="definition-box">
+            <h3>Pyelectasis</h3>
+            <p class="large-text">Mild dilation of the renal pelvis without visible calyceal involvement</p>
+        </div>
+        <div class="definition-box">
+            <h3>Hydronephrosis</h3>
+            <p class="large-text">Significant dilation involving renal pelvis AND calyces</p>
+        </div>
+        <div class="warning-box">
+            <p class="medium-text"><strong>Note:</strong> Terms often used interchangeably in literature; focus on measurement and grading rather than terminology</p>
+        </div>
+    </div>
+
+    <!-- Slide 4: Clinical Significance -->
+    <div class="slide-container">
+        <div class="slide-number">4 / 25</div>
+        <h2>Why It Matters</h2>
+        <div class="content-box">
+            <p class="large-text">Most common abnormality detected on antenatal ultrasound</p>
+            <p class="medium-text" style="margin-top: 20px;">Prevalence: 1-2% of all pregnancies</p>
+        </div>
+        <div class="highlight-box">
+            <p class="medium-text"><strong>Clinical Implications:</strong></p>
+            <div class="bullet-point">85-90% resolve spontaneously</div>
+            <div class="bullet-point">10-15% require postnatal urological follow-up</div>
+            <div class="bullet-point">May indicate structural anomaly or obstruction</div>
+            <div class="bullet-point">Can be marker for chromosomal abnormality</div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Normal Renal Anatomy -->
+    <div class="slide-container">
+        <div class="slide-number">5 / 25</div>
+        <h2>Normal Renal Sonographic Anatomy</h2>
+        <div class="grid-2">
+            <div class="card">
+                <h4>Renal Cortex</h4>
+                <p>Outer echogenic rim</p>
+                <p>Isoechoic to liver/spleen</p>
+            </div>
+            <div class="card">
+                <h4>Renal Pelvis</h4>
+                <p>Central anechoic collecting system</p>
+                <p>Should be minimal or not visible in 2nd trimester</p>
+            </div>
+        </div>
+        <div class="grid-2">
+            <div class="card">
+                <h4>Medullary Pyramids</h4>
+                <p>Hypoechoic triangular structures</p>
+                <p>Do NOT mistake for dilated calyces</p>
+            </div>
+            <div class="card">
+                <h4>Calyces</h4>
+                <p>Not normally visible until dilated</p>
+                <p>Cup-shaped anechoic spaces when enlarged</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Measurement Technique - Setup -->
+    <div class="slide-container">
+        <div class="slide-number">6 / 25</div>
+        <h2>Measurement Technique: Setup</h2>
+        <div class="technique-step">
+            <strong>Step 1: Patient Position</strong>
+            <p class="medium-text">Optimize fetal position for kidney visualization</p>
+        </div>
+        <div class="technique-step">
+            <strong>Step 2: Imaging Plane</strong>
+            <p class="medium-text">Obtain <span class="emphasis">transverse section</span> through kidney at level of renal pelvis</p>
+        </div>
+        <div class="technique-step">
+            <strong>Step 3: Orientation</strong>
+            <p class="medium-text">Ensure true transverse plane—avoid oblique angles</p>
+        </div>
+        <div class="warning-box">
+            <p class="medium-text"><strong>Critical:</strong> Longitudinal measurements are NOT standardized and should not be used</p>
+        </div>
+    </div>
+
+    <!-- Slide 7: APRPD Measurement -->
+    <div class="slide-container">
+        <div class="slide-number">7 / 25</div>
+        <h2>Anteroposterior Renal Pelvis Diameter (APRPD)</h2>
+        <div class="content-box">
+            <p class="large-text">Gold standard measurement for quantifying renal pelvic dilation</p>
+        </div>
+        <div class="technique-step">
+            <strong>Measurement Points</strong>
+            <p class="medium-text">• Place calipers at <span class="emphasis">inner-to-inner wall</span> of renal pelvis</p>
+            <p class="medium-text">• Measure in <span class="emphasis">anteroposterior dimension</span></p>
+            <p class="medium-text">• Perpendicular to long axis of renal pelvis</p>
+            <p class="medium-text">• At point of maximum dilation</p>
+        </div>
+        <div class="highlight-box">
+            <p class="medium-text"><strong>Key:</strong> Inner-to-inner wall (not outer-to-outer)</p>
+        </div>
+    </div>
+
+    <!-- Slide 8: Measurement Pitfalls -->
+    <div class="slide-container">
+        <div class="slide-number">8 / 25</div>
+        <h2>Common Measurement Errors</h2>
+        <div class="warning-box">
+            <h3>⚠ Avoid These Mistakes</h3>
+            <div class="bullet-point">Measuring in longitudinal plane</div>
+            <div class="bullet-point">Including renal parenchyma in measurement</div>
+            <div class="bullet-point">Measuring oblique angles instead of true AP diameter</div>
+            <div class="bullet-point">Placing calipers outside the fluid-filled pelvis</div>
+            <div class="bullet-point">Confusing medullary pyramids with dilated calyces</div>
+            <div class="bullet-point">Not measuring at point of maximum dilation</div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Gestational Age Thresholds -->
+    <div class="slide-container">
+        <div class="slide-number">9 / 25</div>
+        <h2>Gestational Age-Specific Thresholds</h2>
+        <table class="grade-table">
+            <thead>
+                <tr>
+                    <th>Gestational Age</th>
+                    <th>Normal</th>
+                    <th>Mild (Follow-up)</th>
+                    <th>Moderate-Severe (Refer)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>16-27 weeks</strong></td>
+                    <td>< 4 mm</td>
+                    <td class="grade-mild">4-7 mm</td>
+                    <td class="grade-severe">≥ 7 mm</td>
+                </tr>
+                <tr>
+                    <td><strong>28 weeks - term</strong></td>
+                    <td>< 7 mm</td>
+                    <td class="grade-mild">7-10 mm</td>
+                    <td class="grade-severe">≥ 10 mm</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="highlight-box">
+            <p class="medium-text"><strong>Reference:</strong> Society for Fetal Urology (SFU) / Urinary Tract Dilation (UTD) Classification System</p>
+        </div>
+    </div>
+
+    <!-- Slide 10: UTD Classification -->
+    <div class="slide-container">
+        <div class="slide-number">10 / 25</div>
+        <h2>UTD Classification System (Antenatal)</h2>
+        <div class="grid-3">
+            <div class="card grade-mild">
+                <h4>UTD A1 (Mild)</h4>
+                <p><strong>APRPD:</strong> 4-7 mm (< 28 wks) or 7-10 mm (≥ 28 wks)</p>
+                <p><strong>Calyces:</strong> Normal</p>
+                <p><strong>Parenchyma:</strong> Normal</p>
+            </div>
+            <div class="card grade-moderate">
+                <h4>UTD A2-1 (Moderate)</h4>
+                <p><strong>APRPD:</strong> ≥ 7 mm (< 28 wks) or ≥ 10 mm (≥ 28 wks)</p>
+                <p><strong>Calyces:</strong> Central or ≥ 1 peripheral</p>
+                <p><strong>Parenchyma:</strong> Normal</p>
+            </div>
+            <div class="card grade-severe">
+                <h4>UTD A2-2/A3 (Severe)</h4>
+                <p><strong>APRPD:</strong> ≥ 10 mm (< 28 wks) or ≥ 15 mm (≥ 28 wks)</p>
+                <p><strong>Calyces:</strong> Dilated peripheral</p>
+                <p><strong>Parenchyma:</strong> Thinned or abnormal</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Calyceal Assessment -->
+    <div class="slide-container">
+        <div class="slide-number">11 / 25</div>
+        <h2>Assessing Calyceal Dilation</h2>
+        <div class="definition-box">
+            <h3>Central Calyces</h3>
+            <p class="medium-text">Visible anechoic spaces adjacent to renal pelvis but not extending to cortex</p>
+        </div>
+        <div class="definition-box">
+            <h3>Peripheral Calyces</h3>
+            <p class="medium-text">Dilated cup-shaped structures reaching the corticomedullary junction</p>
+        </div>
+        <div class="highlight-box">
+            <p class="medium-text"><strong>Significance:</strong> Peripheral calyceal dilation indicates more severe hydronephrosis and higher likelihood of pathology</p>
+        </div>
+    </div>
+
+    <!-- Slide 12: Renal Parenchyma -->
+    <div class="slide-container">
+        <div class="slide-number">12 / 25</div>
+        <h2>Evaluating Renal Parenchyma</h2>
+        <div class="content-box">
+            <h3>Document the Following:</h3>
+            <div class="bullet-point">Cortical thickness and echogenicity</div>
+            <div class="bullet-point">Corticomedullary differentiation</div>
+            <div class="bullet-point">Presence of cysts or masses</div>
+            <div class="bullet-point">Renal size (compare to gestational age norms)</div>
+        </div>
+        <div class="warning-box">
+            <p class="medium-text"><strong>Red Flag:</strong> Increased cortical echogenicity or thinned parenchyma suggests dysplasia or chronic obstruction</p>
+        </div>
+    </div>
+
+    <!-- Slide 13: Bilateral vs Unilateral -->
+    <div class="slide-container">
+        <div class="slide-number">13 / 25</div>
+        <h2>Bilateral vs Unilateral Findings</h2>
+        <div class="grid-2">
+            <div class="card">
+                <h4>Unilateral Pyelectasis</h4>
+                <p><strong>Most common scenario (80%)</strong></p>
+                <p>Usually physiologic or UPJ obstruction</p>
+                <p>Lower risk of chromosomal abnormality</p>
+                <p>May resolve spontaneously</p>
+            </div>
+            <div class="card">
+                <h4>Bilateral Pyelectasis</h4>
+                <p><strong>Higher clinical concern</strong></p>
+                <p>Consider posterior urethral valves (males)</p>
+                <p>Higher association with chromosomal abnormalities</p>
+                <p>Assess bladder and amniotic fluid volume</p>
+            </div>
+        </div>
+        <div class="highlight-box">
+            <p class="medium-text"><strong>Action:</strong> Bilateral findings warrant detailed anatomic survey and consider genetic counseling referral</p>
+        </div>
+    </div>
+
+    <!-- Slide 14: Bladder Assessment -->
+    <div class="slide-container">
+        <div class="slide-number">14 / 25</div>
+        <h2>Bladder Evaluation</h2>
+        <div class="content-box">
+            <h3>Always Document:</h3>
+            <div class="bullet-point">Bladder size and shape</div>
+            <div class="bullet-point">Bladder wall thickness (normal < 3 mm)</div>
+            <div class="bullet-point">Evidence of bladder emptying over exam</div>
+            <div class="bullet-point">Ureterocele or bladder masses</div>
+        </div>
+        <div class="warning-box">
+            <p class="medium-text"><strong>Concerning:</strong> Persistently distended bladder + bilateral hydronephrosis + oligohydramnios = suspect lower urinary tract obstruction</p>
+        </div>
+    </div>
+
+    <!-- Slide 15: Amniotic Fluid Volume -->
+    <div class="slide-container">
+        <div class="slide-number">15 / 25</div>
+        <h2>Amniotic Fluid Assessment</h2>
+        <div class="definition-box">
+            <p class="large-text">Amniotic fluid volume reflects <span class="emphasis">fetal renal function</span> after 16-20 weeks</p>
+        </div>
+        <div class="grid-2">
+            <div class="card">
+                <h4>Normal AFI</h4>
+                <p>Suggests preserved renal function</p>
+                <p>Favorable prognosis even with hydronephrosis</p>
+            </div>
+            <div class="card">
+                <h4>Oligohydramnios</h4>
+                <p>Indicates significant bilateral renal dysfunction</p>
+                <p>Requires urgent MFM referral</p>
+            </div>
+        </div>
+        <div class="highlight-box">
+            <p class="medium-text"><strong>Document:</strong> Single deepest pocket (SDP) or amniotic fluid index (AFI)</p>
+        </div>
+    </div>
+
+    <!-- Slide 16: Associated Anomalies -->
+    <div class="slide-container">
+        <div class="slide-number">16 / 25</div>
+        <h2>Associated Anomalies to Evaluate</h2>
+        <div class="content-box">
+            <h3>Genitourinary</h3>
+            <div class="bullet-point">Renal agenesis or ectopia</div>
+            <div class="bullet-point">Multicystic dysplastic kidney</div>
+            <div class="bullet-point">Ureteral dilation (megaureter)</div>
+            <div class="bullet-point">Posterior urethral valves (males)</div>
+        </div>
+        <div class="content-box">
+            <h3>Extra-renal</h3>
+            <div class="bullet-point">Cardiac defects</div>
+            <div class="bullet-point">Central nervous system anomalies</div>
+            <div class="bullet-point">Skeletal dysplasias</div>
+            <div class="bullet-point">Other markers for aneuploidy</div>
+        </div>
+    </div>
+
+    <!-- Slide 17: When to Refer -->
+    <div class="slide-container">
+        <div class="slide-number">17 / 25</div>
+        <h2>Referral Criteria</h2>
+        <div class="warning-box">
+            <h3>Immediate MFM Referral Indicated:</h3>
+            <div class="bullet-point">APRPD ≥ 10 mm at any gestational age</div>
+            <div class="bullet-point">Bilateral moderate-severe hydronephrosis</div>
+            <div class="bullet-point">Associated structural anomalies</div>
+            <div class="bullet-point">Oligohydramnios</div>
+            <div class="bullet-point">Abnormal renal parenchyma</div>
+            <div class="bullet-point">Suspected lower tract obstruction</div>
+        </div>
+    </div>
+
+    <!-- Slide 18: Follow-up Protocol -->
+    <div class="slide-container">
+        <div class="slide-number">18 / 25</div>
+        <h2>Follow-up Imaging Protocol</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Severity</th>
+                    <th>Follow-up Interval</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="grade-mild">
+                    <td><strong>Mild (UTD A1)</strong></td>
+                    <td>Reassess at 32 weeks</td>
+                    <td>Routine follow-up</td>
+                </tr>
+                <tr class="grade-moderate">
+                    <td><strong>Moderate (UTD A2-1)</strong></td>
+                    <td>Every 4-6 weeks</td>
+                    <td>MFM consultation</td>
+                </tr>
+                <tr class="grade-severe">
+                    <td><strong>Severe (UTD A2-2/A3)</strong></td>
+                    <td>Every 2-4 weeks</td>
+                    <td>Urgent MFM referral + postnatal urology</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Slide 19: Technical Tips -->
+    <div class="slide-container">
+        <div class="slide-number">19 / 25</div>
+        <h2>Optimization Techniques</h2>
+        <div class="technique-step">
+            <strong>Maternal Hydration</strong>
+            <p class="medium-text">Well-hydrated maternal state may transiently increase renal pelvic diameter; ideally measure after normal fluid intake</p>
+        </div>
+        <div class="technique-step">
+            <strong>Maternal Bladder</strong>
+            <p class="medium-text">Moderately full maternal bladder improves visualization without causing fetal bladder overdistension</p>
+        </div>
+        <div class="technique-step">
+            <strong>Time of Day</strong>
+            <p class="medium-text">Renal pelvis diameter may vary throughout day; consistent timing improves serial comparison</p>
+        </div>
+    </div>
+
+    <!-- Slide 20: Pitfalls - Medullary Pyramids -->
+    <div class="slide-container">
+        <div class="slide-number">20 / 25</div>
+        <h2>Pitfall: Medullary Pyramids</h2>
+        <div class="warning-box">
+            <h3>⚠ Common Misdiagnosis</h3>
+            <p class="large-text">Prominent medullary pyramids can mimic hydronephrosis</p>
+        </div>
+        <div class="grid-2">
+            <div class="card">
+                <h4>Medullary Pyramids</h4>
+                <p>Hypoechoic (not anechoic)</p>
+                <p>Triangular shape</p>
+                <p>Do not communicate with renal pelvis</p>
+                <p>Symmetrically arranged</p>
+            </div>
+            <div class="card">
+                <h4>Dilated Calyces</h4>
+                <p>Anechoic (fluid-filled)</p>
+                <p>Rounded/cup-shaped</p>
+                <p>Continuous with renal pelvis</p>
+                <p>May be asymmetric</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 21: Pitfall - Extrarenal Pelvis -->
+    <div class="slide-container">
+        <div class="slide-number">21 / 25</div>
+        <h2>Pitfall: Extrarenal Pelvis</h2>
+        <div class="definition-box">
+            <p class="large-text">Normal anatomic variant where renal pelvis lies outside renal sinus</p>
+        </div>
+        <div class="highlight-box">
+            <h3>Key Features:</h3>
+            <div class="bullet-point">Pelvis appears more prominent due to location</div>
+            <div class="bullet-point">No calyceal dilation</div>
+            <div class="bullet-point">Normal renal parenchyma</div>
+            <div class="bullet-point">May measure larger but is not pathologic</div>
+        </div>
+        <div class="content-box">
+            <p class="medium-text"><strong>Management:</strong> Document as extrarenal pelvis; use caution interpreting isolated APRPD measurement</p>
+        </div>
+    </div>
+
+    <!-- Slide 22: Documentation Requirements -->
+    <div class="slide-container">
+        <div class="slide-number">22 / 25</div>
+        <h2>Essential Documentation</h2>
+        <div class="content-box">
+            <h3>Required Elements:</h3>
+            <div class="bullet-point">Laterality (right, left, or bilateral)</div>
+            <div class="bullet-point">APRPD measurement in millimeters</div>
+            <div class="bullet-point">Presence/absence of calyceal dilation (central vs peripheral)</div>
+            <div class="bullet-point">Renal parenchymal appearance</div>
+            <div class="bullet-point">Bladder appearance and size</div>
+            <div class="bullet-point">Amniotic fluid volume assessment</div>
+            <div class="bullet-point">Gestational age at time of measurement</div>
+        </div>
+    </div>
+
+    <!-- Slide 23: Standardized Reporting -->
+    <div class="slide-container">
+        <div class="slide-number">23 / 25</div>
+        <h2>Sample Report Language</h2>
+        <div class="content-box">
+            <p class="medium-text"><strong>Example 1 (Mild):</strong></p>
+            <p class="medium-text" style="font-style: italic;">"Mild left-sided pyelectasis with APRPD measuring 6 mm at 24 weeks gestation. No calyceal dilation. Normal renal parenchyma. Normal amniotic fluid volume. Recommend follow-up ultrasound at 32 weeks."</p>
+        </div>
+        <div class="content-box">
+            <p class="medium-text"><strong>Example 2 (Severe):</strong></p>
+            <p class="medium-text" style="font-style: italic;">"Bilateral severe hydronephrosis. Right APRPD 12 mm, left APRPD 14 mm at 30 weeks gestation. Peripheral calyceal dilation bilaterally. Renal parenchyma appears thinned. Distended bladder visualized. Amniotic fluid volume normal. MFM referral recommended."</p>
+        </div>
+    </div>
+
+    <!-- Slide 24: Key Takeaways -->
+    <div class="slide-container">
+        <div class="slide-number">24 / 25</div>
+        <h2>Key Takeaways</h2>
+        <div class="highlight-box">
+            <div class="bullet-point">Use standardized <span class="emphasis">APRPD measurement</span> in transverse plane</div>
+            <div class="bullet-point">Apply <span class="emphasis">gestational age-specific thresholds</span></div>
+            <div class="bullet-point">Document <span class="emphasis">UTD classification</span> (A1, A2-1, A2-2, A3)</div>
+            <div class="bullet-point">Assess <span class="emphasis">calyces, parenchyma, bladder, and amniotic fluid</span></div>
+            <div class="bullet-point">Refer moderate-severe cases to MFM</div>
+            <div class="bullet-point">Distinguish medullary pyramids from true hydronephrosis</div>
+        </div>
+    </div>
+
+    <!-- Slide 25: Summary -->
+    <div class="slide-container">
+        <div class="slide-number">25 / 25</div>
+        <h2>Summary</h2>
+        <div class="content-box">
+            <p class="large-text">Accurate sonographic diagnosis of pyelectasis and hydronephrosis requires:</p>
+        </div>
+        <div class="grid-2" style="margin-top: 40px;">
+            <div class="card">
+                <h4>Technical Precision</h4>
+                <p>Standardized measurement technique</p>
+                <p>Consistent imaging planes</p>
+                <p>Awareness of pitfalls</p>
+            </div>
+            <div class="card">
+                <h4>Clinical Context</h4>
+                <p>Gestational age-appropriate thresholds</p>
+                <p>Comprehensive urinary tract evaluation</p>
+                <p>Appropriate referral and follow-up</p>
+            </div>
+        </div>
+        <div class="highlight-box" style="margin-top: 40px;">
+            <p class="large-text" style="text-align: center;">Standardized approach improves diagnostic accuracy and patient outcomes</p>
+        </div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="control-panel">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+        const progressBar = document.getElementById('progressBar');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            // Update progress bar
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+            
+            // Update button states
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentSlide > 0) changeSlide(-1);
+            if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) changeSlide(1);
+            if (e.key === 'Home') showSlide(0);
+            if (e.key === 'End') showSlide(totalSlides - 1);
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50 && currentSlide < totalSlides - 1) changeSlide(1);
+            if (touchEndX > touchStartX + 50 && currentSlide > 0) changeSlide(-1);
+        }
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
