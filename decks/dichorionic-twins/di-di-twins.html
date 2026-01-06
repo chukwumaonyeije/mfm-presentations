@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Twin Pregnancy: Di-Di Twins Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #1a1a2e;
+            color: #f0f0f0;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            transition: transform 0.4s ease;
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #64b5f6;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            color: #81c784;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #ffb74d;
+            font-weight: 500;
+        }
+
+        p {
+            font-size: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.8;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #b0b0b0;
+            margin-bottom: 1rem;
+        }
+
+        .diagram {
+            margin: 2rem 0;
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .twin-box {
+            background: rgba(100, 181, 246, 0.15);
+            border: 3px solid #64b5f6;
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            min-width: 200px;
+        }
+
+        .twin-box h4 {
+            font-size: 1.8rem;
+            color: #64b5f6;
+            margin-bottom: 0.5rem;
+        }
+
+        .twin-box p {
+            font-size: 1.3rem;
+            color: #d0d0d0;
+        }
+
+        .highlight-box {
+            background: rgba(129, 199, 132, 0.15);
+            border-left: 5px solid #81c784;
+            padding: 1.5rem 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-around;
+            max-width: 1000px;
+            margin: 2rem auto;
+            flex-wrap: wrap;
+        }
+
+        .timeline-item {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .timeline-week {
+            font-size: 2rem;
+            color: #ffb74d;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-event {
+            font-size: 1.3rem;
+            color: #d0d0d0;
+        }
+
+        ul {
+            list-style: none;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            text-align: left;
+        }
+
+        li {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #81c784;
+            font-weight: bold;
+        }
+
+        .emphasis {
+            color: #ffb74d;
+            font-weight: 600;
+        }
+
+        .reassurance {
+            color: #81c784;
+            font-weight: 600;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #64b5f6;
+            width: 16px;
+            height: 16px;
+        }
+
+        .nav-instructions {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            font-size: 1rem;
+            color: #888;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 2rem auto;
+        }
+
+        .column-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: left;
+        }
+
+        .column-box h4 {
+            color: #ffb74d;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+
+        table {
+            margin: 2rem auto;
+            border-collapse: collapse;
+            max-width: 900px;
+            font-size: 1.3rem;
+        }
+
+        th, td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            color: #64b5f6;
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 1.6rem; }
+            p, li { font-size: 1.2rem; }
+            .slide { padding: 2rem; }
+            .diagram { flex-direction: column; gap: 1.5rem; }
+            .two-column { grid-template-columns: 1fr; }
+            .timeline { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-instructions">Use ← → arrow keys to navigate</div>
+    
+    <div class="slide-container" id="slideContainer">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <div class="icon">👶👶</div>
+            <h1>Your Twin Pregnancy</h1>
+            <p class="subtitle">A guide to di-di twin care</p>
+            <p>Understanding what to expect when you're expecting two</p>
+        </div>
+
+        <!-- Slide 2: What are di-di twins? -->
+        <div class="slide">
+            <h2>What Are Di-Di Twins?</h2>
+            <p><span class="emphasis">Di-di</span> stands for <span class="emphasis">dichorionic-diamniotic</span>.</p>
+            <p>This means your twins each have their own placenta and their own amniotic sac.</p>
+            <div class="diagram">
+                <div class="twin-box">
+                    <h4>Baby A</h4>
+                    <p>Own placenta<br>Own sac</p>
+                </div>
+                <div style="font-size: 3rem; color: #888;">+</div>
+                <div class="twin-box">
+                    <h4>Baby B</h4>
+                    <p>Own placenta<br>Own sac</p>
+                </div>
+            </div>
+            <p style="font-size: 1.3rem; color: #b0b0b0;">Think of them as neighbors in separate apartments.</p>
+        </div>
+
+        <!-- Slide 3: Why this matters -->
+        <div class="slide">
+            <h2>Why This Matters</h2>
+            <p><span class="reassurance">Di-di twins are the lowest-risk type of twin pregnancy.</span></p>
+            <div class="highlight-box">
+                <p style="margin-bottom: 0.5rem;">Because each baby has their own placenta:</p>
+                <ul>
+                    <li>They don't share blood supply</li>
+                    <li>They grow more independently</li>
+                    <li>Certain twin complications are less likely</li>
+                </ul>
+            </div>
+            <p>About 75% of twin pregnancies are di-di twins.</p>
+        </div>
+
+        <!-- Slide 4: Your monitoring schedule -->
+        <div class="slide">
+            <h2>Your Monitoring Schedule</h2>
+            <p>You'll have more ultrasounds than a singleton pregnancy.</p>
+            <p>This helps us watch both babies grow and stay healthy.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>When</th>
+                        <th>What We Do</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Every 4 weeks</td>
+                        <td>Ultrasound to check growth (until 28 weeks)</td>
+                    </tr>
+                    <tr>
+                        <td>Every 2-3 weeks</td>
+                        <td>Ultrasound to check growth (after 28 weeks)</td>
+                    </tr>
+                    <tr>
+                        <td>Starting at 32-34 weeks</td>
+                        <td>Weekly monitoring (NST or BPP)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 5: What we watch for -->
+        <div class="slide">
+            <h2>What We Watch For</h2>
+            <p>Twin pregnancies have some increased risks. Most can be managed well.</p>
+            <div class="two-column">
+                <div class="column-box">
+                    <h4>Most Common</h4>
+                    <ul>
+                        <li>Preterm birth (before 37 weeks)</li>
+                        <li>High blood pressure</li>
+                        <li>Gestational diabetes</li>
+                    </ul>
+                </div>
+                <div class="column-box">
+                    <h4>We Monitor</h4>
+                    <ul>
+                        <li>Each baby's growth</li>
+                        <li>Amniotic fluid levels</li>
+                        <li>Your blood pressure</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="font-size: 1.3rem; margin-top: 1.5rem;"><span class="reassurance">Regular visits help us catch and manage problems early.</span></p>
+        </div>
+
+        <!-- Slide 6: Growth differences -->
+        <div class="slide">
+            <h2>Growth Differences</h2>
+            <p>It's normal for twins to be different sizes.</p>
+            <p>We watch to make sure the difference isn't too large.</p>
+            <div class="highlight-box">
+                <p><strong>What's normal:</strong> Babies within 15-20% of each other's weight</p>
+                <p><strong>What we watch:</strong> If one baby is much smaller, we check more often</p>
+                <p><strong>Why it matters:</strong> Large differences might mean one placenta isn't working as well</p>
+            </div>
+            <p style="font-size: 1.3rem; color: #b0b0b0;">Your care team will explain your babies' measurements at each visit.</p>
+        </div>
+
+        <!-- Slide 7: When delivery happens -->
+        <div class="slide">
+            <h2>When Will Delivery Happen?</h2>
+            <p>Most di-di twin pregnancies deliver between 37-38 weeks.</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-week">37-38 weeks</div>
+                    <div class="timeline-event">Typical planned delivery</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-week">36-37 weeks</div>
+                    <div class="timeline-event">Average spontaneous labor</div>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p>Your provider will recommend delivery timing based on:</p>
+                <ul>
+                    <li>How both babies are growing</li>
+                    <li>Whether you've had complications</li>
+                    <li>Your pregnancy history</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Vaginal vs cesarean -->
+        <div class="slide">
+            <h2>How Will Delivery Happen?</h2>
+            <p><span class="reassurance">Many di-di twins can be delivered vaginally.</span></p>
+            <div class="two-column">
+                <div class="column-box">
+                    <h4>Vaginal Birth More Likely If:</h4>
+                    <ul>
+                        <li>Baby A is head-down</li>
+                        <li>No other complications</li>
+                        <li>You've had vaginal birth before</li>
+                    </ul>
+                </div>
+                <div class="column-box">
+                    <h4>Cesarean Recommended If:</h4>
+                    <ul>
+                        <li>Baby A is breech or sideways</li>
+                        <li>Placenta is blocking cervix</li>
+                        <li>Other medical reasons</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="margin-top: 1.5rem;">Your team will discuss the safest option for your specific situation.</p>
+        </div>
+
+        <!-- Slide 9: What you can do -->
+        <div class="slide">
+            <h2>What You Can Do</h2>
+            <ul>
+                <li><span class="emphasis">Attend all appointments:</span> Regular monitoring is key</li>
+                <li><span class="emphasis">Eat well:</span> You need extra nutrition for two babies</li>
+                <li><span class="emphasis">Rest when tired:</span> Your body is working harder</li>
+                <li><span class="emphasis">Stay active safely:</span> Walk, swim, or do prenatal yoga</li>
+                <li><span class="emphasis">Watch for warning signs:</span> Know when to call us</li>
+                <li><span class="emphasis">Ask questions:</span> We're here to support you</li>
+            </ul>
+        </div>
+
+        <!-- Slide 10: Nutrition needs -->
+        <div class="slide">
+            <h2>Nutrition for Twin Pregnancy</h2>
+            <p>Your body needs more calories and nutrients for two babies.</p>
+            <div class="highlight-box">
+                <p><strong>Extra calories:</strong> About 600 more per day (compared to singleton pregnancy)</p>
+                <p><strong>Protein:</strong> Aim for 150-175 grams daily</p>
+                <p><strong>Prenatal vitamins:</strong> Take daily as prescribed</p>
+                <p><strong>Hydration:</strong> Drink 10-12 glasses of water daily</p>
+            </div>
+            <p style="font-size: 1.3rem; margin-top: 1rem;">Your provider may recommend meeting with a nutritionist.</p>
+        </div>
+
+        <!-- Slide 11: When to call -->
+        <div class="slide">
+            <h2>When to Call Us</h2>
+            <p>Contact your care team right away if you notice:</p>
+            <ul style="max-width: 700px;">
+                <li>Vaginal bleeding or fluid leaking</li>
+                <li>Contractions (more than 4-6 per hour before 37 weeks)</li>
+                <li>Severe headache that won't go away</li>
+                <li>Vision changes or seeing spots</li>
+                <li>Sudden swelling of hands or face</li>
+                <li>Decreased movement from either baby</li>
+                <li>Severe abdominal pain</li>
+            </ul>
+            <p style="margin-top: 1.5rem;"><span class="reassurance">It's always better to call and check.</span></p>
+        </div>
+
+        <!-- Slide 12: Movement tracking -->
+        <div class="slide">
+            <h2>Tracking Baby Movement</h2>
+            <p>Starting around 28 weeks, pay attention to both babies' movement patterns.</p>
+            <div class="highlight-box">
+                <p><strong>What's normal:</strong> Each baby should have active periods every day</p>
+                <p><strong>How to check:</strong> Pick a time when babies are usually active (often after meals)</p>
+                <p><strong>What to expect:</strong> You should feel at least 10 movements from each baby in 2 hours</p>
+            </div>
+            <p style="margin-top: 1rem;">If you're not sure you're feeling both babies, call us.</p>
+        </div>
+
+        <!-- Slide 13: Preterm birth signs -->
+        <div class="slide">
+            <h2>Signs of Preterm Labor</h2>
+            <p>Twin pregnancies have higher risk of preterm birth. Know the warning signs.</p>
+            <div class="two-column">
+                <div class="column-box">
+                    <h4>Call Right Away:</h4>
+                    <ul>
+                        <li>Regular contractions</li>
+                        <li>Pelvic pressure</li>
+                        <li>Low backache</li>
+                        <li>Fluid leaking or gushing</li>
+                    </ul>
+                </div>
+                <div class="column-box">
+                    <h4>What We Can Do:</h4>
+                    <ul>
+                        <li>Medications to stop labor</li>
+                        <li>Steroids for baby's lungs</li>
+                        <li>Close monitoring</li>
+                        <li>Hospitalization if needed</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="margin-top: 1.5rem;">Early intervention can make a big difference.</p>
+        </div>
+
+        <!-- Slide 14: Your support system -->
+        <div class="slide">
+            <h2>Building Your Support System</h2>
+            <p>Twin pregnancy can be challenging. You don't have to do this alone.</p>
+            <ul style="max-width: 700px;">
+                <li>Talk to your partner, family, and friends about what you need</li>
+                <li>Consider joining a twins support group (online or in-person)</li>
+                <li>Plan for extra help after delivery</li>
+                <li>Ask your care team about resources</li>
+                <li>Take care of your mental health—it matters</li>
+            </ul>
+            <p style="margin-top: 1.5rem;"><span class="reassurance">Asking for help is a sign of strength, not weakness.</span></p>
+        </div>
+
+        <!-- Slide 15: Summary -->
+        <div class="slide">
+            <h2>Remember</h2>
+            <div class="highlight-box" style="font-size: 1.4rem;">
+                <p style="margin-bottom: 1rem;">✓ Di-di twins are the lowest-risk twin type</p>
+                <p style="margin-bottom: 1rem;">✓ Regular monitoring helps us keep both babies healthy</p>
+                <p style="margin-bottom: 1rem;">✓ Most complications can be managed with good care</p>
+                <p style="margin-bottom: 1rem;">✓ Your care team is your partner in this journey</p>
+                <p style="margin-bottom: 0;">✓ Don't hesitate to call with questions or concerns</p>
+            </div>
+            <p style="margin-top: 2rem; font-size: 1.6rem;"><span class="reassurance">We're here to support you every step of the way.</span></p>
+        </div>
+
+    </div>
+
+    <div class="navigation" id="navigation"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const container = document.getElementById('slideContainer');
+        const navigation = document.getElementById('navigation');
+
+        // Create navigation dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot';
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            navigation.appendChild(dot);
+        }
+
+        const dots = document.querySelectorAll('.nav-dot');
+
+        function updateSlide() {
+            container.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function goToSlide(n) {
+            currentSlide = Math.max(0, Math.min(n, totalSlides - 1));
+            updateSlide();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'Home') goToSlide(0);
+            if (e.key === 'End') goToSlide(totalSlides - 1);
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) nextSlide();
+            if (touchEndX - touchStartX > 50) prevSlide();
+        });
+    </script>
+</body>
+</html>

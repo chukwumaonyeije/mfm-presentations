@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Obesity in Pregnancy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slide-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 0.5em;
+            color: #4dd0e1;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.8em;
+            margin-bottom: 0.6em;
+            color: #4dd0e1;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+            color: #81c784;
+            line-height: 1.3;
+        }
+
+        p {
+            font-size: 1.8em;
+            line-height: 1.6;
+            margin-bottom: 0.8em;
+            color: #e8e8e8;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #b0bec5;
+            margin-bottom: 1em;
+        }
+
+        .highlight-box {
+            background: rgba(77, 208, 225, 0.1);
+            border-left: 6px solid #4dd0e1;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .info-box {
+            background: rgba(129, 199, 132, 0.1);
+            border-left: 6px solid #81c784;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .warning-box {
+            background: rgba(255, 183, 77, 0.1);
+            border-left: 6px solid #ffb74d;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            font-size: 1.6em;
+            line-height: 1.8;
+            margin-bottom: 0.8em;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #4dd0e1;
+            font-weight: bold;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid rgba(77, 208, 225, 0.3);
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2em;
+            color: #b0bec5;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 25px;
+            border-radius: 8px;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: #4dd0e1;
+            transition: width 0.3s ease;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-size: 1.5em;
+        }
+
+        th {
+            background: rgba(77, 208, 225, 0.2);
+            padding: 20px;
+            text-align: left;
+            color: #4dd0e1;
+            border-bottom: 3px solid #4dd0e1;
+        }
+
+        td {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .small-text {
+            font-size: 1.3em;
+            color: #b0bec5;
+            margin-top: 20px;
+        }
+
+        .emphasis {
+            color: #81c784;
+            font-weight: 600;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+            margin: 30px 0;
+        }
+
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #4dd0e1;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4dd0e1;
+            border: 4px solid #1a1a2e;
+        }
+
+        .timeline-item h3 {
+            margin-bottom: 10px;
+        }
+
+        .timeline-item p {
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="slide-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <div class="center">
+                <span class="icon">🤰</span>
+                <h1>Understanding Obesity<br>in Pregnancy</h1>
+                <p class="subtitle">Information to Help You Have a Healthy Pregnancy</p>
+                <p class="small-text">Press the right arrow key (→) to continue</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: What Is This? -->
+        <div class="slide">
+            <h2>What Does "Obesity" Mean in Pregnancy?</h2>
+            <div class="highlight-box">
+                <p><strong>Body Mass Index (BMI)</strong> is a number calculated from your height and weight before pregnancy.</p>
+            </div>
+            <ul>
+                <li>BMI 30–34.9 = Class I Obesity</li>
+                <li>BMI 35–39.9 = Class II Obesity</li>
+                <li>BMI 40 or higher = Class III Obesity</li>
+            </ul>
+            <p class="small-text">Your healthcare team uses this number to plan your pregnancy care.</p>
+        </div>
+
+        <!-- Slide 3: Why It Matters -->
+        <div class="slide">
+            <h2>Why Does This Matter?</h2>
+            <p>Higher BMI is <span class="emphasis">associated with</span> some pregnancy complications.</p>
+            <div class="info-box">
+                <p><strong>Important:</strong> This doesn't mean complications will happen—it means your care team will monitor you more closely.</p>
+            </div>
+            <p>Most women with obesity have healthy pregnancies and healthy babies.</p>
+        </div>
+
+        <!-- Slide 4: Possible Risks -->
+        <div class="slide">
+            <h2>What Could Happen?</h2>
+            <p class="subtitle">Your team watches for these conditions</p>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <h3>For You</h3>
+                    <ul>
+                        <li>High blood pressure</li>
+                        <li>Gestational diabetes</li>
+                        <li>Blood clots</li>
+                        <li>Longer labor</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>For Baby</h3>
+                    <ul>
+                        <li>Larger birth weight</li>
+                        <li>Preterm birth</li>
+                        <li>Birth defects (rare)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <p class="small-text">These are possibilities, not certainties. Your care is customized to prevent problems.</p>
+        </div>
+
+        <!-- Slide 5: Monitoring Plan -->
+        <div class="slide">
+            <h2>How We Monitor You</h2>
+            <p class="subtitle">Your personalized care plan includes</p>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Blood Pressure Checks</h3>
+                    <p>At every prenatal visit to watch for preeclampsia</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Diabetes Screening</h3>
+                    <p>Earlier testing (around 24-28 weeks or sooner)</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Ultrasound Exams</h3>
+                    <p>To check baby's growth and anatomy</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Fetal Heart Monitoring</h3>
+                    <p>May be done more frequently in the third trimester</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Special Tests -->
+        <div class="slide">
+            <h2>Additional Tests You May Need</h2>
+            
+            <table>
+                <tr>
+                    <th>Test</th>
+                    <th>When</th>
+                    <th>Why</th>
+                </tr>
+                <tr>
+                    <td>Early glucose test</td>
+                    <td>First trimester</td>
+                    <td>Check for pre-existing diabetes</td>
+                </tr>
+                <tr>
+                    <td>Detailed ultrasound</td>
+                    <td>18-22 weeks</td>
+                    <td>Better look at baby's anatomy</td>
+                </tr>
+                <tr>
+                    <td>Growth ultrasounds</td>
+                    <td>Third trimester</td>
+                    <td>Track baby's size</td>
+                </tr>
+                <tr>
+                    <td>Non-stress tests</td>
+                    <td>36+ weeks</td>
+                    <td>Check baby's heart rate patterns</td>
+                </tr>
+            </table>
+            
+            <p class="small-text">Not everyone needs all tests—your team decides based on your specific situation.</p>
+        </div>
+
+        <!-- Slide 7: What You Can Do -->
+        <div class="slide">
+            <h2>What You Can Do</h2>
+            <p class="subtitle">Ways to help yourself and your baby</p>
+            
+            <div class="info-box">
+                <h3>Weight Gain Goals</h3>
+                <p>For BMI ≥30: Aim for 11–20 pounds total during pregnancy</p>
+                <p class="small-text">This is a guideline, not a strict rule. Focus on healthy habits, not the scale.</p>
+            </div>
+            
+            <ul>
+                <li>Eat balanced meals with vegetables, protein, and whole grains</li>
+                <li>Stay active with walking or swimming (if safe for you)</li>
+                <li>Take prenatal vitamins with folic acid daily</li>
+                <li>Attend all prenatal appointments</li>
+                <li>Ask questions when something is unclear</li>
+            </ul>
+        </div>
+
+        <!-- Slide 8: Weight Loss During Pregnancy -->
+        <div class="slide">
+            <h2>Should I Try to Lose Weight?</h2>
+            
+            <div class="warning-box">
+                <p><strong>No.</strong> Pregnancy is not the time for weight-loss diets.</p>
+            </div>
+            
+            <p>Your baby needs nutrients to grow. Instead, focus on:</p>
+            
+            <ul>
+                <li>Healthy food choices</li>
+                <li>Regular physical activity</li>
+                <li>Managing weight gain</li>
+            </ul>
+            
+            <p class="small-text">After delivery, your healthcare team can help you reach a healthy weight safely.</p>
+        </div>
+
+        <!-- Slide 9: Delivery Timing -->
+        <div class="slide">
+            <h2>When Will I Deliver?</h2>
+            <p class="subtitle">ACOG recommendations for timing</p>
+            
+            <div class="highlight-box">
+                <h3>If pregnancy is uncomplicated:</h3>
+                <p>Delivery between <span class="emphasis">39 weeks 0 days and 40 weeks 6 days</span></p>
+            </div>
+            
+            <div class="info-box">
+                <h3>If complications develop:</h3>
+                <p>Timing depends on the specific condition and how you and baby are doing</p>
+                <p class="small-text">Your team will discuss the safest plan with you</p>
+            </div>
+            
+            <p>Most women with obesity deliver at term. Early delivery is only done when medically necessary.</p>
+        </div>
+
+        <!-- Slide 10: Labor and Delivery -->
+        <div class="slide">
+            <h2>What About Labor and Delivery?</h2>
+            
+            <ul>
+                <li><strong>IV access:</strong> May be started early (in case of emergency)</li>
+                <li><strong>Anesthesia consult:</strong> May meet with anesthesia team before labor</li>
+                <li><strong>Monitoring:</strong> Continuous fetal heart rate monitoring is common</li>
+                <li><strong>Cesarean birth:</strong> Slightly higher chance, but most women deliver vaginally</li>
+            </ul>
+            
+            <p class="small-text">Your team prepares for what might happen, not what will happen.</p>
+        </div>
+
+        <!-- Slide 11: After Delivery -->
+        <div class="slide">
+            <h2>After Your Baby Is Born</h2>
+            
+            <div class="info-box">
+                <p><strong>Special attention to:</strong></p>
+                <ul>
+                    <li>Blood clot prevention (walking, sometimes medication)</li>
+                    <li>Wound healing if you had a cesarean</li>
+                    <li>Blood pressure monitoring</li>
+                    <li>Breastfeeding support (obesity doesn't prevent breastfeeding)</li>
+                </ul>
+            </div>
+            
+            <p>Your postpartum care is just as important as your prenatal care.</p>
+        </div>
+
+        <!-- Slide 12: Future Pregnancies -->
+        <div class="slide">
+            <h2>Planning Future Pregnancies</h2>
+            
+            <p>If you're thinking about another baby someday:</p>
+            
+            <ul>
+                <li>Losing weight between pregnancies reduces risks</li>
+                <li>Even 5-10% weight loss can make a difference</li>
+                <li>Your healthcare team can help with safe weight management</li>
+                <li>Wait at least 18 months between pregnancies when possible</li>
+            </ul>
+            
+            <div class="highlight-box">
+                <p>Every pregnancy is different. Past pregnancies don't predict future ones.</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Common Questions -->
+        <div class="slide">
+            <h2>Common Questions</h2>
+            
+            <div class="card" style="margin-bottom: 30px;">
+                <h3>Will I need a cesarean birth?</h3>
+                <p>Not automatically. Many women with obesity deliver vaginally. Your delivery method depends on how labor goes and your baby's position.</p>
+            </div>
+            
+            <div class="card" style="margin-bottom: 30px;">
+                <h3>Can ultrasounds see my baby clearly?</h3>
+                <p>Usually yes. Sometimes we need a longer exam or a repeat visit, but we can almost always get the images we need.</p>
+            </div>
+            
+            <div class="card">
+                <h3>Will my baby be okay?</h3>
+                <p>Most babies born to mothers with obesity are completely healthy. That's why we monitor closely—to catch and treat any problems early.</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Your Care Team -->
+        <div class="slide">
+            <h2>Who's on Your Team?</h2>
+            
+            <p class="subtitle">You're not alone—these specialists may help with your care</p>
+            
+            <ul>
+                <li><strong>Obstetrician:</strong> Manages your pregnancy</li>
+                <li><strong>Maternal-Fetal Medicine specialist:</strong> If complications arise</li>
+                <li><strong>Diabetes educator:</strong> If you develop gestational diabetes</li>
+                <li><strong>Nutritionist:</strong> Helps with meal planning</li>
+                <li><strong>Anesthesiologist:</strong> Plans pain relief options</li>
+            </ul>
+            
+            <p class="small-text">You're the most important member of the team. Speak up with questions or concerns.</p>
+        </div>
+
+        <!-- Slide 15: When to Call -->
+        <div class="slide">
+            <h2>When to Call Your Provider</h2>
+            <p class="subtitle">Don't wait—call right away if you have:</p>
+            
+            <div class="warning-box">
+                <ul>
+                    <li>Severe headache that won't go away</li>
+                    <li>Vision changes (blurry vision, seeing spots)</li>
+                    <li>Severe belly pain</li>
+                    <li>Leg swelling with pain, warmth, or redness</li>
+                    <li>Decreased baby movement</li>
+                    <li>Sudden weight gain (more than 2 pounds in a week)</li>
+                    <li>Trouble breathing or chest pain</li>
+                </ul>
+            </div>
+            
+            <p>These symptoms need immediate attention. You're not bothering anyone by calling.</p>
+        </div>
+
+        <!-- Slide 16: The Bottom Line -->
+        <div class="slide">
+            <h2>The Bottom Line</h2>
+            
+            <div class="highlight-box">
+                <p style="font-size: 2em; line-height: 1.6;">
+                    <span class="emphasis">Obesity is one factor</span> in your pregnancy—not the only factor. 
+                    Your health, your actions, and your partnership with your care team matter more.
+                </p>
+            </div>
+            
+            <ul>
+                <li>Most women with obesity have healthy pregnancies</li>
+                <li>Close monitoring helps prevent complications</li>
+                <li>You have control over many aspects of your health</li>
+                <li>Your care team is here to support you, not judge you</li>
+            </ul>
+        </div>
+
+        <!-- Slide 17: Key Takeaways -->
+        <div class="slide">
+            <h2>Remember These Key Points</h2>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <span class="icon">📋</span>
+                    <h3>Attend All Appointments</h3>
+                    <p>Regular monitoring catches problems early</p>
+                </div>
+                <div class="card">
+                    <span class="icon">🥗</span>
+                    <h3>Focus on Nutrition</h3>
+                    <p>Healthy eating supports you and baby</p>
+                </div>
+                <div class="card">
+                    <span class="icon">🚶‍♀️</span>
+                    <h3>Stay Active</h3>
+                    <p>Safe exercise benefits pregnancy</p>
+                </div>
+                <div class="card">
+                    <span class="icon">💬</span>
+                    <h3>Ask Questions</h3>
+                    <p>Your care team is your partner</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Resources -->
+        <div class="slide">
+            <h2>Helpful Resources</h2>
+            
+            <div class="info-box">
+                <h3>Reliable Information Sources:</h3>
+                <ul>
+                    <li>American College of Obstetricians and Gynecologists (ACOG.org)</li>
+                    <li>Society for Maternal-Fetal Medicine (SMFM.org)</li>
+                    <li>Your healthcare provider's patient portal</li>
+                </ul>
+            </div>
+            
+            <p class="small-text">Avoid internet forums and unverified websites. When in doubt, ask your care team.</p>
+        </div>
+
+        <!-- Slide 19: Final Message -->
+        <div class="slide">
+            <div class="center">
+                <span class="icon">❤️</span>
+                <h1>You've Got This</h1>
+                <div class="highlight-box">
+                    <p style="font-size: 2em;">
+                        Pregnancy is a journey. Your care team is walking beside you every step of the way.
+                    </p>
+                </div>
+                <p class="subtitle">Questions? Write them down and bring them to your next appointment.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <span id="slideNumber">1</span> / <span id="totalSlides">19</span>
+        <span style="margin-left: 20px;">Use ← → arrow keys</span>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slideNumber = document.getElementById('slideNumber');
+        const totalSlidesSpan = document.getElementById('totalSlides');
+        const progressBar = document.getElementById('progressBar');
+
+        totalSlidesSpan.textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            slideNumber.textContent = currentSlide + 1;
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) prevSlide();
+        }
+
+        // Click navigation
+        document.addEventListener('click', (e) => {
+            const clickX = e.clientX;
+            const windowWidth = window.innerWidth;
+            
+            if (clickX > windowWidth * 0.7) {
+                nextSlide();
+            } else if (clickX < windowWidth * 0.3) {
+                prevSlide();
+            }
+        });
+
+        // Initialize progress bar
+        updateProgressBar();
+    </script>
+</body>
+</html>

@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregnancy After Age 35: What You Need to Know</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2332 0%, #2d3e50 100%);
+            color: #f0f4f8;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slide-container {
+            display: none;
+            height: 100vh;
+            padding: 3rem;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .slide-container.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide-content {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #ffd700;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            color: #87ceeb;
+            font-weight: 500;
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #98d8c8;
+            font-weight: 500;
+        }
+
+        p, li {
+            font-size: 1.8rem;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            color: #e8f0f8;
+        }
+
+        .subtitle {
+            font-size: 2rem;
+            color: #b8d4e8;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .highlight-box {
+            background: rgba(135, 206, 235, 0.15);
+            border-left: 5px solid #87ceeb;
+            padding: 1.8rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .reassurance-box {
+            background: rgba(152, 216, 200, 0.15);
+            border-left: 5px solid #98d8c8;
+            padding: 1.8rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 2rem 0;
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding-left: 2.5rem;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #87ceeb;
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .stat-box {
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ffd700;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.6rem;
+            color: #b8d4e8;
+        }
+
+        table {
+            width: 100%;
+            margin: 2rem 0;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1.2rem;
+            text-align: left;
+            border-bottom: 2px solid rgba(135, 206, 235, 0.3);
+        }
+
+        th {
+            background: rgba(135, 206, 235, 0.2);
+            color: #87ceeb;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        td {
+            font-size: 1.6rem;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-button {
+            background: rgba(135, 206, 235, 0.2);
+            border: 2px solid #87ceeb;
+            color: #87ceeb;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.4rem;
+            transition: all 0.3s;
+        }
+
+        .nav-button:hover {
+            background: rgba(135, 206, 235, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .slide-counter {
+            color: #b8d4e8;
+            font-size: 1.4rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .timeline:before {
+            content: "";
+            position: absolute;
+            top: 3rem;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: rgba(135, 206, 235, 0.3);
+        }
+
+        .timeline-item {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-marker {
+            width: 60px;
+            height: 60px;
+            background: #87ceeb;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1a2332;
+        }
+
+        .timeline-label {
+            font-size: 1.4rem;
+            color: #b8d4e8;
+        }
+
+        .question-box {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 5px solid #ffd700;
+            padding: 1.8rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .slide-container { padding: 2rem; }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            p, li { font-size: 1.4rem; }
+            .two-column { grid-template-columns: 1fr; gap: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Title -->
+    <div class="slide-container active">
+        <div class="slide-content">
+            <div class="icon">💙</div>
+            <h1>Pregnancy After Age 35</h1>
+            <p class="subtitle">What You Need to Know</p>
+            <div class="reassurance-box">
+                <p><strong>You're not alone.</strong> More than 1 in 5 babies in the U.S. are born to mothers age 35 and older.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: What Is Advanced Maternal Age? -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>What Does "Advanced Maternal Age" Mean?</h2>
+            <div class="highlight-box">
+                <p><strong>Advanced maternal age</strong> means you are 35 years or older when your baby is born.</p>
+            </div>
+            <p>This is just a medical term. It doesn't mean your pregnancy will have problems.</p>
+            <p>It means your care team will offer you extra monitoring and testing options.</p>
+        </div>
+    </div>
+
+    <!-- Slide 3: Why Age 35? -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Why Does Age 35 Matter?</h2>
+            <p>Age 35 is when certain risks begin to increase more noticeably.</p>
+            <div class="two-column">
+                <div>
+                    <h3>Chromosomal Changes</h3>
+                    <p>The chance of chromosomal differences (like Down syndrome) increases with age.</p>
+                </div>
+                <div>
+                    <h3>Pregnancy Conditions</h3>
+                    <p>Conditions like diabetes and high blood pressure become more common.</p>
+                </div>
+            </div>
+            <div class="reassurance-box">
+                <p><strong>Important:</strong> Increased risk doesn't mean certainty. Most pregnancies after 35 are healthy.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Chromosomal Risks by Age -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Understanding Chromosomal Risk</h2>
+            <p>The chance of Down syndrome (trisomy 21) increases gradually with age.</p>
+            <table>
+                <tr>
+                    <th>Your Age at Delivery</th>
+                    <th>Chance of Down Syndrome</th>
+                </tr>
+                <tr>
+                    <td>25 years</td>
+                    <td>1 in 1,250</td>
+                </tr>
+                <tr>
+                    <td>30 years</td>
+                    <td>1 in 952</td>
+                </tr>
+                <tr>
+                    <td>35 years</td>
+                    <td>1 in 378</td>
+                </tr>
+                <tr>
+                    <td>40 years</td>
+                    <td>1 in 106</td>
+                </tr>
+                <tr>
+                    <td>45 years</td>
+                    <td>1 in 30</td>
+                </tr>
+            </table>
+            <p style="font-size: 1.5rem; color: #b8d4e8; margin-top: 1rem;">Source: ACOG Practice Bulletin</p>
+        </div>
+    </div>
+
+    <!-- Slide 5: What This Means -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>What Do These Numbers Mean?</h2>
+            <div class="question-box">
+                <p>"If my risk is 1 in 100, what does that really mean?"</p>
+            </div>
+            <p>It means that out of 100 pregnancies at your age, 1 would have this condition and 99 would not.</p>
+            <div class="reassurance-box">
+                <p><strong>Remember:</strong> Even at age 40, your chance of NOT having a chromosomal condition is about 99 in 100.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Other Pregnancy Risks -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Other Conditions We Watch For</h2>
+            <p>Advanced maternal age is associated with higher rates of:</p>
+            <ul>
+                <li>Gestational diabetes (high blood sugar during pregnancy)</li>
+                <li>Preeclampsia (high blood pressure with protein in urine)</li>
+                <li>Preterm birth (baby born before 37 weeks)</li>
+                <li>Cesarean delivery</li>
+                <li>Miscarriage in early pregnancy</li>
+            </ul>
+            <div class="reassurance-box">
+                <p>These risks are manageable with good prenatal care and monitoring.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Screening Tests Available -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Screening Tests: What's Available?</h2>
+            <p>You have several options to check your baby's health.</p>
+            <div class="two-column">
+                <div>
+                    <h3>Non-Invasive Tests</h3>
+                    <ul>
+                        <li>First trimester screening (blood + ultrasound)</li>
+                        <li>Cell-free DNA test (blood test after 10 weeks)</li>
+                        <li>Quad screen (blood test at 15-20 weeks)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Diagnostic Tests</h3>
+                    <ul>
+                        <li>Chorionic villus sampling (CVS) at 10-13 weeks</li>
+                        <li>Amniocentesis at 15-20 weeks</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="font-size: 1.6rem; color: #98d8c8;">We'll discuss which tests are right for you.</p>
+        </div>
+    </div>
+
+    <!-- Slide 8: Screening vs Diagnostic -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Screening vs. Diagnostic Tests</h2>
+            <div class="two-column">
+                <div class="highlight-box">
+                    <h3>Screening Tests</h3>
+                    <p><strong>Purpose:</strong> Estimate your risk</p>
+                    <p><strong>Method:</strong> Blood tests and ultrasound</p>
+                    <p><strong>Risk:</strong> No risk to pregnancy</p>
+                    <p><strong>Results:</strong> "High risk" or "low risk"</p>
+                </div>
+                <div class="highlight-box">
+                    <h3>Diagnostic Tests</h3>
+                    <p><strong>Purpose:</strong> Give definite answers</p>
+                    <p><strong>Method:</strong> Testing placenta or fluid</p>
+                    <p><strong>Risk:</strong> Small miscarriage risk (~0.1-0.3%)</p>
+                    <p><strong>Results:</strong> "Yes" or "no"</p>
+                </div>
+            </div>
+            <p>All tests are optional. We'll help you decide what's right for you.</p>
+        </div>
+    </div>
+
+    <!-- Slide 9: Cell-Free DNA Testing -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Cell-Free DNA (cfDNA) Testing</h2>
+            <p>This is a blood test you can have after 10 weeks of pregnancy.</p>
+            <div class="highlight-box">
+                <h3>How It Works</h3>
+                <p>Your blood contains tiny pieces of placental DNA. We test this DNA to screen for chromosomal conditions.</p>
+            </div>
+            <div class="two-column">
+                <div>
+                    <h3>Benefits</h3>
+                    <ul>
+                        <li>Very accurate screening test</li>
+                        <li>No risk to pregnancy</li>
+                        <li>Results in 1-2 weeks</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>What It Screens For</h3>
+                    <ul>
+                        <li>Down syndrome (trisomy 21)</li>
+                        <li>Trisomy 18</li>
+                        <li>Trisomy 13</li>
+                        <li>Sex chromosome conditions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Understanding Results -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Understanding Your Test Results</h2>
+            <div class="question-box">
+                <p>"What does 'high risk' really mean?"</p>
+            </div>
+            <p>A "high risk" screening result means more testing is recommended. It does NOT mean your baby definitely has a condition.</p>
+            <div class="highlight-box">
+                <p>If screening shows high risk, we may recommend amniocentesis or CVS for a definite answer.</p>
+            </div>
+            <div class="reassurance-box">
+                <p><strong>You're in control:</strong> You can choose which tests to have and which to decline.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Timeline of Care -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Your Pregnancy Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">1st</div>
+                    <div class="timeline-label">
+                        <strong>First Trimester</strong><br>
+                        Screening options<br>
+                        CVS if chosen
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">2nd</div>
+                    <div class="timeline-label">
+                        <strong>Second Trimester</strong><br>
+                        Anatomy ultrasound<br>
+                        Amniocentesis if chosen
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">3rd</div>
+                    <div class="timeline-label">
+                        <strong>Third Trimester</strong><br>
+                        Growth monitoring<br>
+                        Closer visit schedule
+                    </div>
+                </div>
+            </div>
+            <p style="margin-top: 3rem;">We'll monitor your pregnancy more closely, but most visits are routine.</p>
+        </div>
+    </div>
+
+    <!-- Slide 12: Enhanced Monitoring -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Extra Monitoring During Pregnancy</h2>
+            <p>You may have additional tests to check your health and your baby's growth.</p>
+            <ul>
+                <li><strong>Glucose screening:</strong> Testing for gestational diabetes (usually at 24-28 weeks)</li>
+                <li><strong>Blood pressure checks:</strong> Watching for preeclampsia</li>
+                <li><strong>Growth ultrasounds:</strong> Checking baby's size in third trimester</li>
+                <li><strong>More frequent visits:</strong> Especially in the final weeks</li>
+            </ul>
+            <div class="reassurance-box">
+                <p>These appointments help us catch any problems early and keep you and your baby safe.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Gestational Diabetes -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Gestational Diabetes</h2>
+            <div class="highlight-box">
+                <p><strong>What it is:</strong> High blood sugar that starts during pregnancy.</p>
+            </div>
+            <p><strong>Why it matters:</strong> It can affect your baby's growth and delivery.</p>
+            <p><strong>What we do:</strong> Test you between 24-28 weeks. If present, we manage it with diet changes, monitoring, and sometimes medication.</p>
+            <div class="reassurance-box">
+                <p><strong>Good news:</strong> Most women with gestational diabetes have healthy pregnancies and healthy babies with proper management.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Preeclampsia -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Preeclampsia</h2>
+            <div class="highlight-box">
+                <p><strong>What it is:</strong> High blood pressure with protein in your urine, usually after 20 weeks.</p>
+            </div>
+            <p><strong>Warning signs to watch for:</strong></p>
+            <ul>
+                <li>Severe headache that won't go away</li>
+                <li>Vision changes (blurry, seeing spots)</li>
+                <li>Pain in upper right abdomen</li>
+                <li>Sudden swelling of face or hands</li>
+            </ul>
+            <div class="reassurance-box">
+                <p><strong>What to do:</strong> Call your doctor right away if you have these symptoms. We monitor closely and can treat this condition.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Third Trimester Monitoring -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Third Trimester: Closer Monitoring</h2>
+            <p>In the last few months, we may recommend:</p>
+            <div class="two-column">
+                <div>
+                    <h3>Antenatal Testing</h3>
+                    <ul>
+                        <li>Non-stress tests (monitoring baby's heart rate)</li>
+                        <li>Biophysical profiles (ultrasound + heart rate)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>When We Start</h3>
+                    <p>Usually around 36-37 weeks, or earlier if there are concerns.</p>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p>These tests help ensure your baby is doing well and getting enough oxygen and nutrients.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 16: Delivery Considerations -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Planning for Delivery</h2>
+            <p>Advanced maternal age alone is not a reason for cesarean delivery.</p>
+            <div class="highlight-box">
+                <p>Many women over 35 have vaginal deliveries. Your delivery method depends on your health, your baby's health, and your pregnancy course.</p>
+            </div>
+            <p><strong>We may recommend delivery by:</strong></p>
+            <ul>
+                <li>39-40 weeks if pregnancy is uncomplicated</li>
+                <li>Earlier if you develop complications</li>
+            </ul>
+            <div class="reassurance-box">
+                <p>We'll make a plan together based on your individual situation.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 17: What You Can Do -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>What You Can Do</h2>
+            <p>You have more control than you might think.</p>
+            <ul>
+                <li><strong>Attend all prenatal appointments</strong> – regular monitoring is key</li>
+                <li><strong>Take prenatal vitamins</strong> – especially folic acid</li>
+                <li><strong>Maintain a healthy lifestyle</strong> – balanced diet, regular activity</li>
+                <li><strong>Manage chronic conditions</strong> – if you have diabetes or high blood pressure</li>
+                <li><strong>Avoid smoking and alcohol</strong> – these increase risks at any age</li>
+                <li><strong>Know warning signs</strong> – and when to call your doctor</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 18: Nutrition and Activity -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Healthy Habits During Pregnancy</h2>
+            <div class="two-column">
+                <div>
+                    <h3>Nutrition</h3>
+                    <ul>
+                        <li>Eat a balanced diet with plenty of fruits and vegetables</li>
+                        <li>Choose whole grains and lean protein</li>
+                        <li>Stay hydrated</li>
+                        <li>Limit caffeine to 200mg/day</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Physical Activity</h3>
+                    <ul>
+                        <li>Aim for 30 minutes of moderate activity most days</li>
+                        <li>Walking, swimming, and prenatal yoga are great options</li>
+                        <li>Listen to your body</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="font-size: 1.6rem; color: #98d8c8; margin-top: 1rem;">Talk to your doctor before starting any new exercise program.</p>
+        </div>
+    </div>
+
+    <!-- Slide 19: When to Call Your Doctor -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>When to Call Your Doctor</h2>
+            <p><strong>Call right away if you have:</strong></p>
+            <ul>
+                <li>Vaginal bleeding</li>
+                <li>Severe abdominal pain</li>
+                <li>Severe headache or vision changes</li>
+                <li>Decreased baby movement after 28 weeks</li>
+                <li>Fluid leaking from your vagina</li>
+                <li>Signs of preterm labor (contractions, pressure)</li>
+            </ul>
+            <div class="highlight-box">
+                <p style="font-size: 1.7rem;"><strong>Never hesitate to call.</strong> We would rather check and reassure you than miss something important.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 20: Mental Health Matters -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Your Mental Health Matters Too</h2>
+            <p>Pregnancy can bring up many emotions, especially if you're worried about risks.</p>
+            <div class="highlight-box">
+                <p>It's normal to feel anxious, excited, worried, and happy all at once.</p>
+            </div>
+            <p><strong>Tell your doctor if you experience:</strong></p>
+            <ul>
+                <li>Persistent sadness or anxiety</li>
+                <li>Trouble sleeping or concentrating</li>
+                <li>Loss of interest in activities</li>
+                <li>Thoughts of harming yourself</li>
+            </ul>
+            <div class="reassurance-box">
+                <p>Mental health is part of your overall health. We can connect you with support and resources.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 21: Building Your Support Team -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Building Your Support Team</h2>
+            <p>You don't have to go through this alone.</p>
+            <div class="two-column">
+                <div>
+                    <h3>Your Medical Team</h3>
+                    <ul>
+                        <li>Obstetrician or midwife</li>
+                        <li>Maternal-fetal medicine specialist (if needed)</li>
+                        <li>Genetic counselor</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Personal Support</h3>
+                    <ul>
+                        <li>Partner, family, friends</li>
+                        <li>Support groups</li>
+                        <li>Mental health professionals</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="reassurance-box">
+                <p>Don't hesitate to ask questions or seek extra support. That's what we're here for.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 22: Genetic Counseling -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Genetic Counseling</h2>
+            <div class="highlight-box">
+                <p><strong>What is it?</strong> A genetic counselor helps you understand your risks and testing options.</p>
+            </div>
+            <p><strong>When it's helpful:</strong></p>
+            <ul>
+                <li>Understanding your age-related risks</li>
+                <li>Deciding which tests to have</li>
+                <li>Interpreting test results</li>
+                <li>Family history of genetic conditions</li>
+                <li>High-risk screening results</li>
+            </ul>
+            <p>We can refer you to a genetic counselor at any point in your pregnancy.</p>
+        </div>
+    </div>
+
+    <!-- Slide 23: Questions to Ask -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Questions to Ask Your Doctor</h2>
+            <p>Here are some questions you might want to discuss:</p>
+            <ul>
+                <li>"What screening tests do you recommend for me?"</li>
+                <li>"How will my age affect my prenatal care schedule?"</li>
+                <li>"What signs should I watch for?"</li>
+                <li>"Will I need any additional monitoring?"</li>
+                <li>"What can I do to have the healthiest pregnancy possible?"</li>
+                <li>"When should I call you with concerns?"</li>
+            </ul>
+            <div class="highlight-box">
+                <p>Write down your questions before appointments. No question is too small.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 24: The Reality -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>The Reality: Success Stories</h2>
+            <div class="stat-box">
+                <span class="stat-number">85-90%</span>
+                <span class="stat-label">of pregnancies in women over 35 result in healthy babies</span>
+            </div>
+            <div class="reassurance-box">
+                <p>Millions of women over 35 have healthy pregnancies and healthy babies every year.</p>
+                <p>With good prenatal care, close monitoring, and your active participation, your chances of a successful pregnancy are excellent.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 25: Common Misconceptions -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Common Misconceptions</h2>
+            <div class="two-column">
+                <div>
+                    <h3>❌ Myth</h3>
+                    <p>"I'll definitely need a C-section because of my age."</p>
+                </div>
+                <div>
+                    <h3>✓ Reality</h3>
+                    <p>Many women over 35 have vaginal deliveries. Your delivery method is based on individual factors.</p>
+                </div>
+            </div>
+            <div class="two-column">
+                <div>
+                    <h3>❌ Myth</h3>
+                    <p>"Something will definitely go wrong with my pregnancy."</p>
+                </div>
+                <div>
+                    <h3>✓ Reality</h3>
+                    <p>Most pregnancies after 35 are healthy. Increased risk means more monitoring, not guaranteed problems.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 26: Your Strengths -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Your Strengths as an Older Parent</h2>
+            <p>Being older when you have a baby comes with advantages:</p>
+            <ul>
+                <li>More life experience and emotional maturity</li>
+                <li>Often more financial stability</li>
+                <li>Strong support systems and relationships</li>
+                <li>Ability to make informed decisions about your care</li>
+                <li>Greater awareness of health and wellness</li>
+            </ul>
+            <div class="reassurance-box">
+                <p>You bring wisdom, stability, and readiness to parenthood. These are valuable gifts for your baby.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 27: Partnership in Care -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>We're Partners in Your Care</h2>
+            <div class="icon">🤝</div>
+            <p>This is a journey we take together.</p>
+            <div class="highlight-box">
+                <p><strong>You provide:</strong> Information about your body, questions, concerns, and your values and preferences.</p>
+            </div>
+            <div class="highlight-box">
+                <p><strong>We provide:</strong> Medical expertise, monitoring, testing options, and recommendations based on evidence.</p>
+            </div>
+            <div class="reassurance-box">
+                <p><strong>Together we make:</strong> Informed decisions that are right for you and your baby.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 28: Taking It One Step at a Time -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Taking It One Step at a Time</h2>
+            <p>Pregnancy can feel overwhelming. Here's how to approach it:</p>
+            <ul>
+                <li><strong>Focus on this moment:</strong> You don't need to worry about everything at once</li>
+                <li><strong>Make one decision at a time:</strong> Start with which screening tests you want</li>
+                <li><strong>Celebrate milestones:</strong> Each week and each appointment is progress</li>
+                <li><strong>Ask for help:</strong> From your medical team and your support system</li>
+                <li><strong>Trust the process:</strong> You're being well cared for</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 29: Key Takeaways -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <h2>Key Takeaways</h2>
+            <div class="highlight-box">
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 1.5rem; padding-left: 0;">
+                        <span style="color: #ffd700; font-size: 2rem;">1.</span>
+                        <span style="font-size: 1.8rem;"> Advanced maternal age means more monitoring, not guaranteed problems</span>
+                    </li>
+                    <li style="margin-bottom: 1.5rem; padding-left: 0;">
+                        <span style="color: #ffd700; font-size: 2rem;">2.</span>
+                        <span style="font-size: 1.8rem;"> You have excellent options for screening and testing</span>
+                    </li>
+                    <li style="margin-bottom: 1.5rem; padding-left: 0;">
+                        <span style="color: #ffd700; font-size: 2rem;">3.</span>
+                        <span style="font-size: 1.8rem;"> Most pregnancies after 35 result in healthy babies</span>
+                    </li>
+                    <li style="margin-bottom: 1.5rem; padding-left: 0;">
+                        <span style="color: #ffd700; font-size: 2rem;">4.</span>
+                        <span style="font-size: 1.8rem;"> You're an active partner in your prenatal care</span>
+                    </li>
+                    <li style="padding-left: 0;">
+                        <span style="color: #ffd700; font-size: 2rem;">5.</span>
+                        <span style="font-size: 1.8rem;"> Your medical team is here to support you every step</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 30: Final Message -->
+    <div class="slide-container">
+        <div class="slide-content">
+            <div class="icon">💙</div>
+            <h2>You've Got This</h2>
+            <div class="reassurance-box">
+                <p style="font-size: 2rem;">Your age is just one factor in your pregnancy story.</p>
+                <p style="font-size: 2rem;">With good care, close monitoring, and your active participation, you have every reason to be optimistic.</p>
+            </div>
+            <div class="highlight-box">
+                <p style="font-size: 1.9rem;"><strong>Remember:</strong> We're here to answer questions, address concerns, and support you throughout this journey.</p>
+            </div>
+            <p style="text-align: center; margin-top: 2rem; font-size: 1.8rem; color: #87ceeb;">Thank you for trusting us with your care.</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation">
+        <button class="nav-button" onclick="previousSlide()">← Previous</button>
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">30</span>
+        </div>
+        <button class="nav-button" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+        
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) previousSlide();
+        }
+    </script>
+
+</body>
+</html>
