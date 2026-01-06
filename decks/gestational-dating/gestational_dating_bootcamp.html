@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestational Dating Boot Camp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a2332;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            max-height: 800px;
+            padding: 3rem;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            color: #64b5f6;
+            border-bottom: 3px solid #64b5f6;
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            color: #81c784;
+        }
+
+        p, li {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            color: #e0e0e0;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #90caf9;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .author {
+            font-size: 1.5rem;
+            color: #b0bec5;
+            margin-top: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 2rem 0;
+            font-size: 1.3rem;
+        }
+
+        th {
+            background: #2d4263;
+            color: #64b5f6;
+            padding: 1.2rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #64b5f6;
+        }
+
+        td {
+            padding: 1.2rem;
+            border-bottom: 1px solid #37495e;
+            color: #e0e0e0;
+        }
+
+        tr:hover {
+            background: #253548;
+        }
+
+        .highlight-box {
+            background: #2d4263;
+            border-left: 5px solid #64b5f6;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background: #3d2d1f;
+            border-left: 5px solid #ff9800;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .success-box {
+            background: #1f3d2d;
+            border-left: 5px solid #4caf50;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: #2d4263;
+            padding: 2rem;
+            border-radius: 8px;
+            border-top: 4px solid #64b5f6;
+        }
+
+        .card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .card p {
+            font-size: 1.2rem;
+        }
+
+        ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+        }
+
+        .emphasis {
+            color: #64b5f6;
+            font-weight: 600;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-button {
+            background: #2d4263;
+            color: #64b5f6;
+            border: 2px solid #64b5f6;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .nav-button:hover {
+            background: #64b5f6;
+            color: #1a2332;
+        }
+
+        .slide-number {
+            color: #90caf9;
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .formula {
+            background: #253548;
+            padding: 1.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            text-align: center;
+            margin: 1.5rem 0;
+            border: 1px solid #37495e;
+        }
+
+        .case-header {
+            background: #4a148c;
+            color: #ffffff;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .finding {
+            background: #1f3d2d;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .reference-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #b0bec5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="slide-container">
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+        <h1>Accurate Gestational Dating</h1>
+        <p class="subtitle">When to Adjust the Estimated Due Date</p>
+        <div style="margin-top: 3rem;">
+            <p class="author">Sonographer Boot Camp</p>
+            <p class="author">Based on ACOG/SMFM Guidelines</p>
+        </div>
+    </div>
+
+    <!-- Slide 2: Learning Objectives -->
+    <div class="slide">
+        <h2>Learning Objectives</h2>
+        <div class="highlight-box">
+            <ul>
+                <li>Apply ACOG Committee Opinion #700 criteria</li>
+                <li>Distinguish when to adjust vs. maintain EDD</li>
+                <li>Master trimester-specific measurement standards</li>
+                <li>Recognize clinical decision thresholds</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 3: LMP Dating Assumptions -->
+    <div class="slide">
+        <h2>LMP Dating: Three Assumptions</h2>
+        <div class="three-column">
+            <div class="card">
+                <h3>Regular Cycle</h3>
+                <p>28 days ± 3 days</p>
+            </div>
+            <div class="card">
+                <h3>Ovulation Day</h3>
+                <p>Day 14 of cycle</p>
+            </div>
+            <div class="card">
+                <h3>Accurate Recall</h3>
+                <p>Patient knows first day</p>
+            </div>
+        </div>
+        <div class="warning-box">
+            <p><span class="emphasis">Reality:</span> Only 40-45% of patients meet all criteria</p>
+        </div>
+    </div>
+
+    <!-- Slide 4: LMP Limitations -->
+    <div class="slide">
+        <h2>Why LMP Fails</h2>
+        <div class="two-column">
+            <div>
+                <h3>Patient Factors</h3>
+                <ul>
+                    <li>Uncertain recall (30-40%)</li>
+                    <li>Irregular cycles</li>
+                    <li>Recent hormonal contraception</li>
+                    <li>Breastfeeding amenorrhea</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Physiologic Factors</h3>
+                <ul>
+                    <li>Implantation bleeding mistaken for LMP</li>
+                    <li>Early pregnancy loss</li>
+                    <li>Ovulation timing variation</li>
+                    <li>Long or short follicular phase</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Ultrasound Dating Hierarchy -->
+    <div class="slide">
+        <h2>Ultrasound Dating Methods</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Trimester</th>
+                    <th>Parameter</th>
+                    <th>Optimal Window</th>
+                    <th>Accuracy (±days)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>First</td>
+                    <td>Crown-Rump Length (CRL)</td>
+                    <td>8-13<sup>6/7</sup> weeks</td>
+                    <td>±5-7</td>
+                </tr>
+                <tr>
+                    <td>Second</td>
+                    <td>Biparietal Diameter (BPD)</td>
+                    <td>14-27<sup>6/7</sup> weeks</td>
+                    <td>±7-10</td>
+                </tr>
+                <tr>
+                    <td>Second</td>
+                    <td>Composite biometry</td>
+                    <td>14-21<sup>6/7</sup> weeks</td>
+                    <td>±10-14</td>
+                </tr>
+                <tr>
+                    <td>Third</td>
+                    <td>Not recommended</td>
+                    <td>≥28 weeks</td>
+                    <td>±21-28</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Slide 6: CRL Measurement Technique -->
+    <div class="slide">
+        <h2>CRL Measurement Standards</h2>
+        <div class="highlight-box">
+            <h3>Technical Requirements</h3>
+            <ul>
+                <li>Midsagittal plane of fetal long axis</li>
+                <li>Neutral flexion (neither extended nor flexed)</li>
+                <li>Calipers: crown to rump (exclude limbs, yolk sac)</li>
+                <li>Magnify: fetus fills 75% of image</li>
+            </ul>
+        </div>
+        <div class="success-box">
+            <p><span class="emphasis">Gold Standard:</span> CRL 8-13<sup>6/7</sup> weeks most accurate dating method</p>
+        </div>
+    </div>
+
+    <!-- Slide 7: ACOG Decision Algorithm - First Trimester -->
+    <div class="slide">
+        <h2>First Trimester Adjustment Rules</h2>
+        <div style="margin: 2rem 0;">
+            <h3>Gestational Age: Up to 13<sup>6/7</sup> weeks</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Discrepancy</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CRL vs. LMP agree</td>
+                        <td>≤5 days</td>
+                        <td><span class="emphasis">Use LMP</span></td>
+                    </tr>
+                    <tr>
+                        <td>CRL vs. LMP agree</td>
+                        <td>≤7 days</td>
+                        <td><span class="emphasis">Use LMP</span> (per ACOG 700)</td>
+                    </tr>
+                    <tr>
+                        <td>CRL vs. LMP differ</td>
+                        <td>>7 days</td>
+                        <td><span class="emphasis">Change to CRL</span></td>
+                    </tr>
+                    <tr>
+                        <td>Uncertain/unknown LMP</td>
+                        <td>Any</td>
+                        <td><span class="emphasis">Use CRL</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 8: ACOG Decision Algorithm - Second Trimester -->
+    <div class="slide">
+        <h2>Second Trimester Adjustment Rules</h2>
+        <div style="margin: 2rem 0;">
+            <h3>Gestational Age: 14<sup>0/7</sup> to 27<sup>6/7</sup> weeks</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Discrepancy</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>BPD/composite vs. LMP</td>
+                        <td>≤7 days</td>
+                        <td><span class="emphasis">Use LMP</span></td>
+                    </tr>
+                    <tr>
+                        <td>BPD/composite vs. LMP</td>
+                        <td>8-10 days</td>
+                        <td><span class="emphasis">Consider changing</span> to US</td>
+                    </tr>
+                    <tr>
+                        <td>BPD/composite vs. LMP</td>
+                        <td>>10 days</td>
+                        <td><span class="emphasis">Change to US</span></td>
+                    </tr>
+                    <tr>
+                        <td>Uncertain/unknown LMP</td>
+                        <td>Any</td>
+                        <td><span class="emphasis">Use ultrasound</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 9: Third Trimester Rule -->
+    <div class="slide">
+        <h2>Third Trimester Dating</h2>
+        <div class="warning-box" style="margin: 3rem 0;">
+            <h3 style="color: #ff9800; margin-bottom: 1.5rem;">Critical Rule</h3>
+            <p style="font-size: 1.8rem; line-height: 1.6;">
+                <span class="emphasis">Never adjust EDD based on third-trimester ultrasound</span>
+            </p>
+            <p style="margin-top: 1.5rem;">Gestational age ≥28 weeks: accuracy ±21-28 days</p>
+        </div>
+        <div class="highlight-box">
+            <p><span class="emphasis">Exception:</span> No prior dating available at all—use with extreme caution and document rationale</p>
+        </div>
+    </div>
+
+    <!-- Slide 10: Why Third Trimester Dating Fails -->
+    <div class="slide">
+        <h2>Third Trimester: Biological Variability</h2>
+        <div class="two-column">
+            <div class="card">
+                <h3>Constitutional Factors</h3>
+                <ul>
+                    <li>Maternal height/weight</li>
+                    <li>Ethnicity</li>
+                    <li>Parity</li>
+                    <li>Fetal sex</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Pathologic Factors</h3>
+                <ul>
+                    <li>Fetal growth restriction</li>
+                    <li>Macrosomia</li>
+                    <li>Genetic syndromes</li>
+                    <li>Placental insufficiency</li>
+                </ul>
+            </div>
+        </div>
+        <div class="warning-box">
+            <p><span class="emphasis">Result:</span> Growth assessments ≥28 weeks reflect size, not age</p>
+        </div>
+    </div>
+
+    <!-- Slide 11: Multiple Gestations -->
+    <div class="slide">
+        <h2>Special Case: Multiple Gestations</h2>
+        <div class="highlight-box">
+            <h3>Dating Rules</h3>
+            <ul>
+                <li>Use <span class="emphasis">larger fetus</span> CRL for dating</li>
+                <li>Measure both fetal CRLs separately</li>
+                <li>Document chorionicity and amnionicity</li>
+                <li>Apply same LMP vs. CRL discrepancy rules</li>
+            </ul>
+        </div>
+        <div class="success-box">
+            <p><span class="emphasis">Rationale:</span> Larger twin less likely to be growth restricted in first trimester</p>
+        </div>
+    </div>
+
+    <!-- Slide 12: ART Pregnancies -->
+    <div class="slide">
+        <h2>Assisted Reproductive Technology</h2>
+        <div class="two-column">
+            <div class="card">
+                <h3>IVF/ICSI Dating</h3>
+                <p>Base EDD on:</p>
+                <ul>
+                    <li>Retrieval date (day 0)</li>
+                    <li>Transfer date + embryo age</li>
+                    <li>Do NOT use LMP</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>First Trimester US</h3>
+                <p>Compare CRL to ART date</p>
+                <ul>
+                    <li>If >5-7 days off: early loss suspect</li>
+                    <li>Document discrepancy</li>
+                    <li>Consider aneuploidy</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Documentation Requirements -->
+    <div class="slide">
+        <h2>Required Documentation</h2>
+        <div class="highlight-box">
+            <h3>Every Dating Ultrasound Report Must Include</h3>
+            <ul>
+                <li>LMP date (if known) and certainty</li>
+                <li>Measurement parameters used</li>
+                <li>Gestational age by ultrasound</li>
+                <li>Gestational age by LMP</li>
+                <li><span class="emphasis">Final assigned gestational age</span></li>
+                <li><span class="emphasis">Final EDD</span></li>
+                <li>Rationale if EDD changed</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 14: Common Errors -->
+    <div class="slide">
+        <h2>Common Sonographer Errors</h2>
+        <div class="two-column">
+            <div class="warning-box">
+                <h3>Technical Errors</h3>
+                <ul>
+                    <li>CRL in flexed/extended position</li>
+                    <li>Including yolk sac or limbs</li>
+                    <li>Off-axis measurement</li>
+                    <li>Inadequate magnification</li>
+                </ul>
+            </div>
+            <div class="warning-box">
+                <h3>Interpretation Errors</h3>
+                <ul>
+                    <li>Changing EDD in third trimester</li>
+                    <li>Using wrong discrepancy thresholds</li>
+                    <li>Not documenting LMP certainty</li>
+                    <li>Multiple EDD changes</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Case Study 1 Header -->
+    <div class="slide">
+        <h2>Case Study 1</h2>
+        <div class="case-header">
+            Patient: Jessica, 28 y/o G1P0
+        </div>
+        <div class="highlight-box">
+            <h3>History</h3>
+            <p>Presents at 12 weeks by LMP. <span class="emphasis">Uncertain of exact LMP date.</span></p>
+        </div>
+        <div class="finding">
+            <h3>Ultrasound Findings</h3>
+            <p>CRL measurement: <span class="emphasis">10 weeks 3 days</span></p>
+            <p>Discrepancy: 12 days</p>
+        </div>
+    </div>
+
+    <!-- Slide 16: Case 1 Management -->
+    <div class="slide">
+        <h2>Case 1: Management</h2>
+        <div class="success-box">
+            <h3>Correct Action</h3>
+            <p style="font-size: 1.5rem;"><span class="emphasis">Adjust EDD to match CRL (10w3d)</span></p>
+        </div>
+        <div class="highlight-box">
+            <h3>Rationale</h3>
+            <ul>
+                <li>First trimester: discrepancy >7 days → use CRL</li>
+                <li>LMP uncertain increases CRL reliability</li>
+                <li>CRL most accurate dating parameter available</li>
+            </ul>
+        </div>
+        <div style="margin-top: 2rem;">
+            <p><span class="emphasis">Patient Communication:</span> "The ultrasound is more accurate than your period dates. Your baby is measuring 10 weeks 3 days."</p>
+        </div>
+    </div>
+
+    <!-- Slide 17: Case Study 2 Header -->
+    <div class="slide">
+        <h2>Case Study 2</h2>
+        <div class="case-header">
+            Patient: Sarah, 32 y/o G2P1
+        </div>
+        <div class="highlight-box">
+            <h3>History</h3>
+            <p>Presents at 9 weeks by LMP. <span class="emphasis">Certain LMP. Regular 28-day cycles.</span></p>
+        </div>
+        <div class="finding">
+            <h3>Ultrasound Findings</h3>
+            <p>CRL measurement: <span class="emphasis">9 weeks 1 day</span></p>
+            <p>Discrepancy: 6 days</p>
+        </div>
+    </div>
+
+    <!-- Slide 18: Case 2 Management -->
+    <div class="slide">
+        <h2>Case 2: Management</h2>
+        <div class="success-box">
+            <h3>Correct Action</h3>
+            <p style="font-size: 1.5rem;"><span class="emphasis">Keep LMP-based EDD (9 weeks)</span></p>
+        </div>
+        <div class="highlight-box">
+            <h3>Rationale</h3>
+            <ul>
+                <li>First trimester: discrepancy ≤7 days → use LMP</li>
+                <li>LMP certain and reliable</li>
+                <li>6-day difference within measurement error</li>
+                <li>Ultrasound confirms appropriate growth</li>
+            </ul>
+        </div>
+        <div style="margin-top: 2rem;">
+            <p><span class="emphasis">Patient Communication:</span> "The ultrasound confirms your dates. Everything is measuring right on track."</p>
+        </div>
+    </div>
+
+    <!-- Slide 19: Case Study 3 Header -->
+    <div class="slide">
+        <h2>Case Study 3</h2>
+        <div class="case-header">
+            Patient: Emily, 35 y/o G3P2
+        </div>
+        <div class="highlight-box">
+            <h3>History</h3>
+            <p>32 weeks by early ultrasound (CRL at 8 weeks: 8w2d). Uncertain LMP.</p>
+        </div>
+        <div class="finding">
+            <h3>Current Ultrasound (32 weeks)</h3>
+            <p>Composite biometry: <span class="emphasis">29 weeks 0 days</span></p>
+            <p>Concerning for fetal growth restriction</p>
+        </div>
+    </div>
+
+    <!-- Slide 20: Case 3 Management -->
+    <div class="slide">
+        <h2>Case 3: Management</h2>
+        <div class="warning-box">
+            <h3>Critical Decision</h3>
+            <p style="font-size: 1.5rem;"><span class="emphasis">Do NOT change EDD</span></p>
+        </div>
+        <div class="highlight-box">
+            <h3>Rationale</h3>
+            <ul>
+                <li>Early ultrasound (8 weeks) established reliable GA</li>
+                <li>Third trimester measurements reflect size, not age</li>
+                <li>29-week measurement suggests FGR, not dating error</li>
+                <li>Changing EDD would mask pathology</li>
+            </ul>
+        </div>
+        <div class="success-box">
+            <h3>Correct Action</h3>
+            <p>Diagnose FGR. Initiate appropriate surveillance. Maintain 32-week dating.</p>
+        </div>
+    </div>
+
+    <!-- Slide 21: Patient Communication Principles -->
+    <div class="slide">
+        <h2>Communicating Dating Changes</h2>
+        <div class="three-column">
+            <div class="card">
+                <h3>1. Explain</h3>
+                <p>Why ultrasound is more accurate for some patients</p>
+            </div>
+            <div class="card">
+                <h3>2. Reassure</h3>
+                <p>Date changes are common and expected</p>
+            </div>
+            <div class="card">
+                <h3>3. Partner</h3>
+                <p>Accurate dating helps plan optimal care</p>
+            </div>
+        </div>
+        <div class="highlight-box">
+            <p><span class="emphasis">Key Message:</span> "This is not a problem—it's normal for ultrasound to give us more precise information."</p>
+        </div>
+    </div>
+
+    <!-- Slide 22: When Dates Don't Add Up -->
+    <div class="slide">
+        <h2>Concerning Scenarios</h2>
+        <div class="warning-box">
+            <h3>CRL Smaller Than Expected</h3>
+            <ul>
+                <li>Consider early pregnancy failure if <2mm growth/week</li>
+                <li>Check fetal heart activity</li>
+                <li>Follow-up scan in 7-10 days</li>
+            </ul>
+        </div>
+        <div class="warning-box">
+            <h3>CRL Larger Than Expected</h3>
+            <ul>
+                <li>Less concerning than smaller</li>
+                <li>Document dating change clearly</li>
+                <li>Consider early ovulation vs. uncertain LMP</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 23: Quality Assurance -->
+    <div class="slide">
+        <h2>Quality Metrics</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Target</th>
+                    <th>Monitoring Method</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Dating US <14 weeks</td>
+                    <td>>80% of patients</td>
+                    <td>Chart review</td>
+                </tr>
+                <tr>
+                    <td>Appropriate EDD changes</td>
+                    <td>95% compliance with guidelines</td>
+                    <td>Peer review</td>
+                </tr>
+                <tr>
+                    <td>Third-trimester changes</td>
+                    <td><2% (should be rare)</td>
+                    <td>Audit flag</td>
+                </tr>
+                <tr>
+                    <td>Documentation completeness</td>
+                    <td>100%</td>
+                    <td>Template compliance</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Slide 24: Summary Algorithm -->
+    <div class="slide">
+        <h2>Decision Algorithm Summary</h2>
+        <div style="margin: 2rem 0;">
+            <div class="success-box">
+                <h3>First Trimester (≤13<sup>6/7</sup> weeks)</h3>
+                <p>CRL vs. LMP ≤7 days → <span class="emphasis">Use LMP</span></p>
+                <p>CRL vs. LMP >7 days → <span class="emphasis">Use CRL</span></p>
+            </div>
+            <div class="success-box" style="margin-top: 1.5rem;">
+                <h3>Second Trimester (14<sup>0/7</sup>-27<sup>6/7</sup> weeks)</h3>
+                <p>US vs. LMP ≤10 days → <span class="emphasis">Use LMP</span></p>
+                <p>US vs. LMP >10 days → <span class="emphasis">Use US</span></p>
+            </div>
+            <div class="warning-box" style="margin-top: 1.5rem;">
+                <h3>Third Trimester (≥28 weeks)</h3>
+                <p><span class="emphasis">Do NOT adjust EDD</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 25: Key Takeaways -->
+    <div class="slide">
+        <h2>Key Takeaways</h2>
+        <div class="highlight-box">
+            <ul style="font-size: 1.5rem;">
+                <li><span class="emphasis">First trimester CRL</span> is the gold standard</li>
+                <li><span class="emphasis">Trimester-specific thresholds</span> determine when to adjust</li>
+                <li><span class="emphasis">Never change third-trimester dates</span>—it masks pathology</li>
+                <li><span class="emphasis">Document rationale</span> for every EDD assignment</li>
+                <li><span class="emphasis">Early dating protects</span> patients from misclassification</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 26: Clinical Impact -->
+    <div class="slide">
+        <h2>Why Accurate Dating Matters</h2>
+        <div class="two-column">
+            <div class="card">
+                <h3>Too Early Dating</h3>
+                <ul>
+                    <li>Premature delivery</li>
+                    <li>Unnecessary NICU admission</li>
+                    <li>Respiratory distress</li>
+                    <li>Longer hospital stay</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Too Late Dating</h3>
+                <ul>
+                    <li>Delayed induction</li>
+                    <li>Stillbirth risk</li>
+                    <li>Placental insufficiency</li>
+                    <li>Meconium aspiration</li>
+                </ul>
+            </div>
+        </div>
+        <div class="warning-box">
+            <p><span class="emphasis">Stakes:</span> 1 week error affects timing of delivery, antenatal testing, corticosteroids, growth assessment</p>
+        </div>
+    </div>
+
+    <!-- Slide 27: References -->
+    <div class="slide">
+        <h2>References</h2>
+        <div class="reference-text">
+            <p><strong>1.</strong> American College of Obstetricians and Gynecologists. (2017). Committee Opinion No. 700: Methods for Estimating the Due Date. <em>Obstetrics & Gynecology</em>, 129(5), e150-e154.</p>
+            
+            <p style="margin-top: 1rem;"><strong>2.</strong> Butt, K., & Lim, K. (2014). Determination of gestational age by ultrasound. <em>Journal of Obstetrics and Gynaecology Canada</em>, 36(2), 171-181.</p>
+            
+            <p style="margin-top: 1rem;"><strong>3.</strong> Savitz, D. A., et al. (2002). Comparison of pregnancy dating by last menstrual period, ultrasound scanning, and their combination. <em>American Journal of Obstetrics and Gynecology</em>, 187(6), 1660-1666.</p>
+            
+            <p style="margin-top: 1rem;"><strong>4.</strong> Society for Maternal-Fetal Medicine. (2020). Electronic address: pubs@smfm.org. Ultrasound in pregnancy.</p>
+        </div>
+    </div>
+
+    <!-- Slide 28: Thank You -->
+    <div class="slide">
+        <h1>Questions?</h1>
+        <div style="margin-top: 3rem;">
+            <p class="subtitle">Accurate dating starts with you.</p>
+            <p class="subtitle">Your measurements guide every clinical decision.</p>
+        </div>
+    </div>
+
+</div>
+
+<div class="navigation">
+    <button class="nav-button" onclick="previousSlide()">← Previous</button>
+    <span class="slide-number"><span id="current-slide">1</span> / <span id="total-slides">28</span></span>
+    <button class="nav-button" onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    
+    document.getElementById('total-slides').textContent = totalSlides;
+    
+    function showSlide(n) {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (n + totalSlides) % totalSlides;
+        slides[currentSlide].classList.add('active');
+        document.getElementById('current-slide').textContent = currentSlide + 1;
+    }
+    
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+    
+    function previousSlide() {
+        showSlide(currentSlide - 1);
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'ArrowRight' || event.key === ' ') {
+            event.preventDefault();
+            nextSlide();
+        } else if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            previousSlide();
+        } else if (event.key === 'Home') {
+            event.preventDefault();
+            showSlide(0);
+        } else if (event.key === 'End') {
+            event.preventDefault();
+            showSlide(totalSlides - 1);
+        }
+    });
+    
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.addEventListener('touchstart', function(event) {
+        touchStartX = event.changedTouches[0].screenX;
+    }, false);
+    
+    document.addEventListener('touchend', function(event) {
+        touchEndX = event.changedTouches[0].screenX;
+        handleSwipe();
+    }, false);
+    
+    function handleSwipe() {
+        if (touchEndX < touchStartX - 50) {
+            nextSlide();
+        }
+        if (touchEndX > touchStartX + 50) {
+            previousSlide();
+        }
+    }
+</script>
+
+</body>
+</html>
