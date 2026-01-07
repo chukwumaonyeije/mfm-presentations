@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding 47,XYY (Jacobs Syndrome) - For Parents</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #f0f0f0;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slide-container {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+            height: 100vh;
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #64b5f6;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: #81c784;
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: #ffb74d;
+        }
+
+        p, li {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            max-width: 900px;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #b0b0b0;
+            font-style: italic;
+            margin-top: -1rem;
+            margin-bottom: 2rem;
+        }
+
+        .highlight-box {
+            background: rgba(100, 181, 246, 0.15);
+            border-left: 5px solid #64b5f6;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem auto;
+            max-width: 800px;
+            border-radius: 8px;
+        }
+
+        .reassurance-box {
+            background: rgba(129, 199, 132, 0.15);
+            border-left: 5px solid #81c784;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem auto;
+            max-width: 800px;
+            border-radius: 8px;
+        }
+
+        .action-box {
+            background: rgba(255, 183, 77, 0.15);
+            border-left: 5px solid #ffb74d;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem auto;
+            max-width: 800px;
+            border-radius: 8px;
+        }
+
+        .myth-box {
+            background: rgba(229, 115, 115, 0.15);
+            border: 3px solid #e57373;
+            padding: 2rem;
+            margin: 1.5rem auto;
+            max-width: 800px;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .comparison-table {
+            margin: 2rem auto;
+            border-collapse: collapse;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-size: 1.3rem;
+        }
+
+        .comparison-table th {
+            background: rgba(100, 181, 246, 0.3);
+            font-weight: 600;
+            color: #64b5f6;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        ul {
+            text-align: left;
+            max-width: 800px;
+            margin: 1rem auto;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-dot.active {
+            background: #64b5f6;
+            transform: scale(1.3);
+        }
+
+        .slide-number {
+            color: #b0b0b0;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .strong-emphasis {
+            color: #81c784;
+            font-weight: 700;
+        }
+
+        .stat {
+            font-size: 3rem;
+            color: #64b5f6;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        /* Visual diagram styles */
+        .visual-container {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem auto;
+            flex-wrap: wrap;
+        }
+
+        .karyotype-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid rgba(100, 181, 246, 0.3);
+        }
+
+        .chromosome-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            align-items: center;
+        }
+
+        .chromosome {
+            width: 30px;
+            height: 60px;
+            background: linear-gradient(180deg, #7986cb 0%, #5c6bc0 100%);
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .chromosome::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .chromosome.y-chromosome {
+            height: 45px;
+            background: linear-gradient(180deg, #ffb74d 0%, #ffa726 100%);
+        }
+
+        .chromosome.extra {
+            animation: pulse 2s ease-in-out infinite;
+            border: 2px solid #81c784;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .chromosome-label {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            margin-left: 0.5rem;
+        }
+
+        .features-diagram {
+            position: relative;
+            text-align: center;
+        }
+
+        .figure-outline {
+            width: 200px;
+            height: 400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .figure-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .feature-label {
+            background: rgba(100, 181, 246, 0.2);
+            border: 1px solid #64b5f6;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            color: #64b5f6;
+            position: absolute;
+            white-space: nowrap;
+            line-height: 1.4;
+        }
+
+        .feature-label.top { top: 10px; left: 50%; transform: translateX(-50%); }
+        .feature-label.eyes { top: 80px; right: -120px; }
+        .feature-label.height { top: 200px; left: -140px; }
+        .feature-label.hands { bottom: 120px; right: -120px; }
+        .feature-label.muscle { bottom: 180px; left: -140px; }
+
+        .feature-percentage {
+            font-size: 0.85rem;
+            color: #81c784;
+            display: block;
+            margin-top: 0.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem;
+            }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            h3 { font-size: 1.5rem; }
+            p, li { font-size: 1.2rem; }
+            .stat { font-size: 2rem; }
+            .visual-container {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .feature-label {
+                font-size: 0.9rem;
+                position: relative;
+                left: auto !important;
+                right: auto !important;
+                top: auto !important;
+                bottom: auto !important;
+                transform: none !important;
+                margin: 0.5rem;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container" id="slideContainer">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <div class="icon">👶</div>
+            <h1>Understanding 47,XYY</h1>
+            <p class="subtitle">(Also called Jacobs syndrome)</p>
+            <div class="reassurance-box">
+                <p><strong>You're not alone.</strong> This affects about 1 in 1,000 baby boys. Most boys with 47,XYY grow up healthy and live completely normal lives.</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: How we found it -->
+        <div class="slide">
+            <h2>How We Found This</h2>
+            <div class="highlight-box">
+                <p>Usually discovered through:</p>
+                <ul>
+                    <li><strong>Prenatal screening</strong> (like NIPT blood test)</li>
+                    <li><strong>Amniocentesis</strong> for other reasons</li>
+                    <li>Sometimes by chance during testing</li>
+                </ul>
+            </div>
+            <p>Finding this <em>before</em> birth is actually associated with <strong class="strong-emphasis">better outcomes</strong> than finding it later.</p>
+        </div>
+
+        <!-- Slide 3: What is 47,XYY? - NOW WITH VISUAL -->
+        <div class="slide">
+            <h2>What Is 47,XYY?</h2>
+            <p>Every person has chromosomes—packages of genetic information.</p>
+            
+            <div class="visual-container">
+                <div class="karyotype-section">
+                    <p style="font-size: 1.3rem; margin-bottom: 1rem; color: #64b5f6;"><strong>Typical Male (46,XY)</strong></p>
+                    <div class="chromosome-row">
+                        <div class="chromosome"></div>
+                        <div class="chromosome"></div>
+                        <span class="chromosome-label">44 regular chromosomes</span>
+                    </div>
+                    <div class="chromosome-row">
+                        <div class="chromosome"></div>
+                        <div class="chromosome y-chromosome"></div>
+                        <span class="chromosome-label">+ X and Y</span>
+                    </div>
+                </div>
+
+                <div style="font-size: 3rem; color: #ffb74d;">→</div>
+
+                <div class="karyotype-section">
+                    <p style="font-size: 1.3rem; margin-bottom: 1rem; color: #81c784;"><strong>47,XYY</strong></p>
+                    <div class="chromosome-row">
+                        <div class="chromosome"></div>
+                        <div class="chromosome"></div>
+                        <span class="chromosome-label">44 regular chromosomes</span>
+                    </div>
+                    <div class="chromosome-row">
+                        <div class="chromosome"></div>
+                        <div class="chromosome y-chromosome"></div>
+                        <div class="chromosome y-chromosome extra"></div>
+                        <span class="chromosome-label" style="color: #81c784;">+ X and <strong>two Y</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reassurance-box">
+                <p>This happened by chance during conception—<strong>nothing you did caused this.</strong></p>
+            </div>
+        </div>
+
+        <!-- Slide 4: The Big Picture -->
+        <div class="slide">
+            <h2>The Big Picture</h2>
+            <div class="icon">✓</div>
+            <p>Most boys with 47,XYY:</p>
+            <ul>
+                <li><strong class="strong-emphasis">Develop normally</strong> in many ways</li>
+                <li>Have <strong>intelligence in the normal range</strong></li>
+                <li>Will likely be <strong>taller than average</strong></li>
+                <li>Can have children of their own (most are fertile)</li>
+                <li>Live independent, fulfilling lives</li>
+            </ul>
+        </div>
+
+        <!-- Slide 5: Important - Debunking the Myth -->
+        <div class="slide">
+            <h2>An Old Myth We Need to Address</h2>
+            <div class="myth-box">
+                <h3 style="color: #e57373; text-align: center;">❌ FALSE MYTH ❌</h3>
+                <p style="text-align: center; font-size: 1.4rem; margin-top: 1rem;">Some very old research (from the 1960s) incorrectly linked 47,XYY to criminal behavior.</p>
+                <hr style="margin: 1.5rem 0; border-color: rgba(255,255,255,0.2);">
+                <p style="text-align: center; font-size: 1.6rem; color: #81c784;"><strong>This has been completely disproven.</strong></p>
+                <p style="text-align: center; margin-top: 1rem;">Modern studies of thousands of men with 47,XYY show <strong>no link to aggressive or criminal behavior</strong>.</p>
+            </div>
+            <p style="margin-top: 1.5rem;">If you hear this outdated information, please know it's <strong>not true</strong>.</p>
+        </div>
+
+        <!-- Slide 6: Physical Traits - NOW WITH VISUAL DIAGRAM -->
+        <div class="slide">
+            <h2>Physical Features</h2>
+            <p style="margin-bottom: 2rem;">Some common features based on research—<strong>none are medical problems</strong>:</p>
+            
+            <div class="visual-container">
+                <div class="features-diagram">
+                    <div class="figure-outline">
+                        <svg class="figure-svg" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Head -->
+                            <ellipse cx="100" cy="40" rx="35" ry="40" fill="#64b5f6" opacity="0.3" stroke="#64b5f6" stroke-width="2"/>
+                            
+                            <!-- Eyes (wider set) -->
+                            <circle cx="85" cy="35" r="4" fill="#fff"/>
+                            <circle cx="115" cy="35" r="4" fill="#fff"/>
+                            
+                            <!-- Body -->
+                            <rect x="70" y="80" width="60" height="120" rx="10" fill="#64b5f6" opacity="0.3" stroke="#64b5f6" stroke-width="2"/>
+                            
+                            <!-- Arms -->
+                            <rect x="30" y="90" width="35" height="15" rx="7" fill="#64b5f6" opacity="0.3" stroke="#64b5f6" stroke-width="2"/>
+                            <rect x="135" y="90" width="35" height="15" rx="7" fill="#64b5f6" opacity="0.3" stroke="#64b5f6" stroke-width="2"/>
+                            
+                            <!-- Hands -->
+                            <ellipse cx="25" cy="115" rx="12" ry="15" fill="#ffb74d" opacity="0.4" stroke="#ffb74d" stroke-width="2"/>
+                            <ellipse cx="175" cy="115" rx="12" ry="15" fill="#ffb74d" opacity="0.4" stroke="#ffb74d" stroke-width="2"/>
+                            
+                            <!-- Legs (tall) -->
+                            <rect x="75" y="200" width="20" height="180" rx="10" fill="#64b5f6" opacity="0.3" stroke="#64b5f6" stroke-width="2"/>
+                            <rect x="105" y="200" width="20" height="180" rx="10" fill="#64b5f6" opacity="0.3" stroke="#64b5f6" stroke-width="2"/>
+                            
+                            <!-- Height arrow -->
+                            <line x1="15" y1="40" x2="15" y2="380" stroke="#81c784" stroke-width="3" marker-end="url(#arrowhead)"/>
+                            <line x1="15" y1="40" x2="15" y2="40" stroke="#81c784" stroke-width="3" marker-start="url(#arrowhead)"/>
+                            
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                                    <polygon points="0 0, 10 5, 0 10" fill="#81c784"/>
+                                </marker>
+                            </defs>
+                        </svg>
+                        
+                        <!-- Labels positioned around figure -->
+                        <div class="feature-label top">
+                            Larger head<span class="feature-percentage">(33% of boys)</span>
+                        </div>
+                        <div class="feature-label eyes">
+                            Wide-set eyes<span class="feature-percentage">(59% of boys)</span>
+                        </div>
+                        <div class="feature-label height">
+                            Tall stature<span class="feature-percentage">(most common)</span>
+                        </div>
+                        <div class="feature-label hands">
+                            Curved pinky<span class="feature-percentage">(52% of boys)</span>
+                        </div>
+                        <div class="feature-label muscle">
+                            Low muscle tone<span class="feature-percentage">(63% of boys)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="max-width: 400px; text-align: left;">
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Feature</th>
+                            <th>What It Means</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Tall stature</strong></td>
+                            <td>Usually taller than average</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Low muscle tone</strong></td>
+                            <td>May feel "floppier" as a baby</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Wide-set eyes</strong></td>
+                            <td>More space between the eyes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Curved pinky</strong></td>
+                            <td>Slight curve in little finger</td>
+                        </tr>
+                    </table>
+                    <div class="reassurance-box" style="margin-top: 1rem;">
+                        <p style="font-size: 1.2rem;">These are usually mild and don't affect health or quality of life.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Development and Learning -->
+        <div class="slide">
+            <h2>Development and Learning</h2>
+            <p>Some boys with 47,XYY may experience:</p>
+            <ul>
+                <li><strong>Speech delays</strong> (may start talking a bit later)</li>
+                <li><strong>Motor delays</strong> (walking, coordination)</li>
+                <li><strong>Learning differences</strong> (may need extra support in school)</li>
+                <li><strong>Attention challenges</strong> (similar to ADHD)</li>
+            </ul>
+            <div class="action-box">
+                <p><strong>Good news:</strong> Early intervention (speech therapy, occupational therapy) is very effective. Many boys catch up or thrive with the right support.</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Prenatal vs. Postnatal -->
+        <div class="slide">
+            <h2>Why Finding This Early Matters</h2>
+            <p>Research shows boys diagnosed <em>before</em> birth do better than those diagnosed later:</p>
+            <table class="comparison-table">
+                <tr>
+                    <th>Outcome</th>
+                    <th>Found Before Birth</th>
+                </tr>
+                <tr>
+                    <td>Cognitive scores</td>
+                    <td><span class="strong-emphasis">Better performance</span></td>
+                </tr>
+                <tr>
+                    <td>Autism spectrum</td>
+                    <td><span class="strong-emphasis">Lower rates</span></td>
+                </tr>
+                <tr>
+                    <td>Overall development</td>
+                    <td><span class="strong-emphasis">More positive</span></td>
+                </tr>
+            </table>
+            <p style="margin-top: 1.5rem;">Why? Because families can prepare, connect with resources early, and avoid unnecessary worry.</p>
+        </div>
+
+        <!-- Slide 9: What Happens During Pregnancy -->
+        <div class="slide">
+            <h2>What Happens Next in Pregnancy</h2>
+            <div class="action-box">
+                <h3>We will:</h3>
+                <ul>
+                    <li><strong>Detailed ultrasound</strong> to look at baby's heart and body (usually everything looks normal)</li>
+                    <li><strong>Confirm the diagnosis</strong> with amniocentesis if you want certainty</li>
+                    <li><strong>Connect you with genetic counseling</strong> to answer your questions</li>
+                </ul>
+            </div>
+            <div class="reassurance-box">
+                <p><strong>Delivery:</strong> Standard birth plan. No need for C-section or special delivery based on 47,XYY alone.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: After Birth -->
+        <div class="slide">
+            <h2>After Your Baby Is Born</h2>
+            <p>Your pediatrician will:</p>
+            <ul>
+                <li>Monitor <strong>growth and development</strong> (height, milestones)</li>
+                <li>Watch for <strong>speech or motor delays</strong></li>
+                <li>Refer to <strong>early intervention</strong> if needed</li>
+                <li>Screen for <strong>learning differences</strong> when starting school</li>
+            </ul>
+            <div class="highlight-box">
+                <p><strong>Most medical care is routine.</strong> There's no special medical treatment needed just for 47,XYY.</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Fertility and Future -->
+        <div class="slide">
+            <h2>Fertility and the Future</h2>
+            <div class="icon">👨‍👩‍👦</div>
+            <div class="reassurance-box">
+                <p><strong>Good news about fertility:</strong></p>
+                <ul>
+                    <li>Most men with 47,XYY <strong>can have children</strong></li>
+                    <li>The extra Y chromosome is usually <strong>not passed to their children</strong></li>
+                    <li>Their children typically have normal chromosomes</li>
+                </ul>
+            </div>
+            <p>If fertility concerns arise in adulthood, options and support are available.</p>
+        </div>
+
+        <!-- Slide 12: What You Can Do Now -->
+        <div class="slide">
+            <h2>What You Can Do Now</h2>
+            <div class="action-box">
+                <h3>Practical Steps:</h3>
+                <ul>
+                    <li><strong>Ask questions</strong>—we're here to support you</li>
+                    <li><strong>Connect with genetic counseling</strong> for detailed information</li>
+                    <li><strong>Consider support groups</strong> for parents of children with 47,XYY</li>
+                    <li><strong>Focus on the pregnancy</strong>—take care of yourself</li>
+                </ul>
+            </div>
+            <div class="highlight-box">
+                <p><strong>Remember:</strong> You will be able to provide your child with love, support, and resources to help them thrive.</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Questions and Partnership -->
+        <div class="slide">
+            <h2>We're Partners in This</h2>
+            <div class="icon">🤝</div>
+            <p>This diagnosis brings uncertainty. That's normal.</p>
+            <div class="reassurance-box">
+                <p><strong>What we know:</strong> Most boys with 47,XYY live healthy, independent, meaningful lives.</p>
+                <p style="margin-top: 1rem;"><strong>What we'll do together:</strong> Monitor, support, and intervene early if your child needs extra help.</p>
+            </div>
+            <div class="action-box">
+                <p style="font-size: 1.6rem;"><strong>Your next step:</strong> Write down your questions. Let's talk through them together.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="navigation" id="navigation">
+        <span class="slide-number" id="slideNumber">1 / 13</span>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slideContainer = document.getElementById('slideContainer');
+        const slideNumber = document.getElementById('slideNumber');
+        const navigation = document.getElementById('navigation');
+
+        // Create navigation dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot';
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(index));
+            navigation.insertBefore(dot, slideNumber);
+        });
+
+        const dots = document.querySelectorAll('.nav-dot');
+
+        function updateSlide() {
+            slideContainer.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            slideNumber.textContent = `${currentSlide + 1} / ${totalSlides}`;
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function goToSlide(index) {
+            if (index >= 0 && index < totalSlides) {
+                currentSlide = index;
+                updateSlide();
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                goToSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                goToSlide(totalSlides - 1);
+            }
+        });
+
+        // Touch support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        slideContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        slideContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchStartX - touchEndX > 50) {
+                nextSlide();
+            }
+            if (touchEndX - touchStartX > 50) {
+                prevSlide();
+            }
+        }
+
+        // Mouse wheel support
+        let scrollTimeout;
+        slideContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                if (e.deltaY > 0) {
+                    nextSlide();
+                } else if (e.deltaY < 0) {
+                    prevSlide();
+                }
+            }, 50);
+        }, { passive: false });
+    </script>
+</body>
+</html>
