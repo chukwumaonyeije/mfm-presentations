@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetal Echocardiography: A Practical Sonography + MFM Workflow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e4e4e7;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        #slide-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            position: absolute;
+            width: 90%;
+            max-width: 1400px;
+            height: 85vh;
+            padding: 60px 80px;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            display: none;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            display: flex;
+        }
+
+        .slide.exit-left {
+            transform: translateX(-100px);
+            opacity: 0;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 35px;
+            color: #60a5fa;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #93c5fd;
+        }
+
+        ul {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        li {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            margin-bottom: 18px;
+            padding-left: 35px;
+            position: relative;
+        }
+
+        li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-size: 1.8rem;
+        }
+
+        .callout {
+            background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+            border-left: 5px solid #60a5fa;
+            padding: 20px 25px;
+            margin-top: auto;
+            border-radius: 8px;
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+
+        .callout strong {
+            color: #93c5fd;
+            font-weight: 600;
+        }
+
+        .callout.pitfall {
+            background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+            border-left-color: #fca5a5;
+        }
+
+        .callout.pitfall strong {
+            color: #fca5a5;
+        }
+
+        .diagram-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .diagram {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            height: 400px;
+        }
+
+        .diagram-box {
+            position: absolute;
+            border: 3px solid #60a5fa;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .diagram-circle {
+            position: absolute;
+            border: 3px solid #60a5fa;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .diagram-line {
+            position: absolute;
+            background: #60a5fa;
+            height: 3px;
+        }
+
+        .diagram-arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .diagram-label {
+            position: absolute;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #93c5fd;
+        }
+
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin: 30px 0;
+            flex: 1;
+        }
+
+        .flow-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .flow-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            border: 2px solid #3b82f6;
+            padding: 20px 30px;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: 500;
+            text-align: center;
+            min-width: 200px;
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .flow-box.decision {
+            background: linear-gradient(135deg, #713f12 0%, #854d0e 100%);
+            border-color: #fbbf24;
+            transform: rotate(0deg);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            padding: 30px 20px;
+        }
+
+        .flow-box.action {
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+            border-color: #34d399;
+        }
+
+        .flow-arrow-down {
+            font-size: 2.5rem;
+            color: #60a5fa;
+        }
+
+        .case-vignette {
+            background: linear-gradient(135deg, #422006 0%, #451a03 100%);
+            border: 2px solid #fbbf24;
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+            flex: 1;
+        }
+
+        .case-vignette h3 {
+            color: #fbbf24;
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+        }
+
+        .case-vignette p {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .checklist {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+            flex: 1;
+        }
+
+        .checklist-item {
+            background: rgba(59, 130, 246, 0.15);
+            border: 2px solid #3b82f6;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .checklist-item:before {
+            content: "☑";
+            color: #34d399;
+            font-size: 1.5rem;
+        }
+
+        #controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.95);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 2px solid #3b82f6;
+            z-index: 100;
+        }
+
+        button {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #slide-number {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #93c5fd;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        #presenter-notes {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.98);
+            border-top: 3px solid #3b82f6;
+            padding: 25px 40px;
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+            z-index: 99;
+            max-height: 30vh;
+            overflow-y: auto;
+        }
+
+        #presenter-notes.visible {
+            transform: translateY(0);
+        }
+
+        #presenter-notes h4 {
+            color: #60a5fa;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+
+        #presenter-notes ul {
+            list-style: disc;
+            margin-left: 20px;
+        }
+
+        #presenter-notes li {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            padding-left: 10px;
+        }
+
+        #presenter-notes li:before {
+            content: none;
+        }
+
+        #help-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+        }
+
+        #help-modal.visible {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 3px solid #3b82f6;
+            border-radius: 16px;
+            padding: 40px 50px;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .modal-content h2 {
+            border: none;
+            margin-bottom: 25px;
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 15px 30px;
+            margin-top: 20px;
+        }
+
+        .shortcut-key {
+            background: rgba(59, 130, 246, 0.2);
+            border: 2px solid #3b82f6;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .shortcut-desc {
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+
+        .title-slide h1 {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            text-align: center;
+            color: #93c5fd;
+            margin-bottom: 60px;
+        }
+
+        .title-slide .author-info {
+            text-align: center;
+            font-size: 1.4rem;
+            color: #9ca3af;
+            margin-top: auto;
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            .slide {
+                page-break-after: always;
+                position: relative;
+                opacity: 1;
+                transform: none;
+                display: flex;
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                min-height: 100vh;
+                padding: 40px;
+            }
+
+            #controls, #progress-bar, #presenter-notes {
+                display: none;
+            }
+
+            .callout {
+                border: 2px solid #333;
+                background: #f0f0f0;
+                color: #000;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            li {
+                font-size: 1.2rem;
+            }
+
+            .callout {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="progress-bar"></div>
+    
+    <div id="slide-container">
+        <!-- Slide 1: Title -->
+        <section class="slide title-slide active" data-notes="Welcome to this comprehensive fetal echo workflow.|Focus is practical, real-world scanning.|Audience: sonographers, MFM fellows, practicing MFM.">
+            <h1>Fetal Echocardiography</h1>
+            <p class="subtitle">A Practical Sonography + MFM Workflow</p>
+            <p class="author-info">
+                Comprehensive Guide to Indications, Technique, and Interpretation
+            </p>
+        </section>
+
+        <!-- Slide 2: Why Fetal Echo Matters -->
+        <section class="slide" data-notes="CHD affects 8-10 per 1000 births.|Detection improves outcomes: surgical planning, delivery location, neonatal readiness.|60% prenatal detection rate can be improved with systematic approach.">
+            <h2>Why Fetal Echocardiography Matters</h2>
+            <ul>
+                <li>Congenital heart disease affects 0.8–1% of live births</li>
+                <li>Prenatal detection enables delivery planning at specialized centers</li>
+                <li>Improves neonatal outcomes for critical ductal-dependent lesions</li>
+                <li>Reduces morbidity and mortality through coordinated care</li>
+                <li>Allows for parental counseling and informed decision-making</li>
+            </ul>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> Every hour saved in postnatal diagnosis of critical CHD can prevent irreversible shock and end-organ damage.
+            </div>
+        </section>
+
+        <!-- Slide 3: Indications Overview -->
+        <section class="slide" data-notes="Indications fall into three categories.|Maternal diabetes is most common indication.|Family history includes first-degree relative with CHD.">
+            <h2>Indications for Fetal Echocardiography</h2>
+            <ul>
+                <li><strong>Maternal:</strong> Pre-gestational diabetes, phenylketonuria, lupus with anti-Ro/La</li>
+                <li><strong>Fetal:</strong> Suspected cardiac anomaly on screening, extracardiac anomalies, arrhythmia, hydrops</li>
+                <li><strong>Familial:</strong> Previous child with CHD, first-degree relative with CHD, genetic syndromes</li>
+                <li><strong>Exposures:</strong> Teratogens (lithium, valproic acid, retinoic acid), IVF with ICSI</li>
+            </ul>
+            <div class="callout pitfall">
+                <strong>Pitfall:</strong> Normal anatomy scan does NOT rule out CHD. Four-chamber view alone misses 40% of significant cardiac lesions.
+            </div>
+        </section>
+
+        <!-- Slide 4: Timing Strategies -->
+        <section class="slide" data-notes="18-22 weeks is optimal balance of visualization and detection.|Early echo at 13-16 weeks for very high-risk groups.|Repeat if initial concern or evolving findings.">
+            <h2>Timing of Fetal Echocardiography</h2>
+            <ul>
+                <li><strong>Standard timing:</strong> 18–22 weeks (optimal cardiac visualization)</li>
+                <li><strong>Early echo (13–16 weeks):</strong> Monochorionic twins, prior child with CHD, genetic syndromes</li>
+                <li><strong>Late echo (>28 weeks):</strong> Evolving lesions (aortic stenosis, TOF), arrhythmias, function assessment</li>
+                <li><strong>Repeat scanning:</strong> Consider if initial suboptimal views, maternal condition changes, or fetal growth concerns</li>
+            </ul>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> Conotruncal anomalies may not be fully apparent until mid-second trimester. Schedule accordingly.
+            </div>
+        </section>
+
+        <!-- Slide 5: Machine Optimization & Safety -->
+        <section class="slide" data-notes="ALARA principle always applies.|Color Doppler has higher output than B-mode.|Keep TI < 1.0, minimize spectral Doppler time.">
+            <h2>Machine Optimization & Doppler Safety</h2>
+            <ul>
+                <li>Use highest frequency transducer with adequate penetration (5–7 MHz)</li>
+                <li>Optimize B-mode first: gain, focus, depth, frame rate</li>
+                <li>Color Doppler: reduce box size, lower velocity scale (20–30 cm/s)</li>
+                <li><strong>ALARA principle:</strong> Thermal Index (TI) < 1.0, minimize spectral Doppler duration</li>
+                <li>Avoid prolonged Doppler in first trimester</li>
+            </ul>
+            <div class="callout pitfall">
+                <strong>Pitfall:</strong> Excessive Doppler power or prolonged insonation can cause tissue heating. Use brief, targeted bursts only.
+            </div>
+        </section>
+
+        <!-- Slide 6: Sequential Segmental Analysis -->
+        <section class="slide" data-notes="Systematic approach prevents missed findings.|Follow the blood: situs, connections, relationships.|Segmental approach works even with complex anatomy.">
+            <h2>Sequential Segmental Analysis Framework</h2>
+            <ul>
+                <li><strong>Step 1:</strong> Determine atrial situs (systemic/pulmonary veins, stomach position)</li>
+                <li><strong>Step 2:</strong> Define atrioventricular connections (which atrium to which ventricle)</li>
+                <li><strong>Step 3:</strong> Assess ventriculoarterial connections (which ventricle to which great vessel)</li>
+                <li><strong>Step 4:</strong> Identify associated anomalies (septal defects, valve abnormalities, arch)</li>
+                <li>Describe what IS present, not just what's "normal"</li>
+            </ul>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> Segmental analysis is critical for complex CHD. Describe anatomy systematically, avoid premature diagnostic labels.
+            </div>
+        </section>
+
+        <!-- Slide 7: Cardiac Axis (with diagram) -->
+        <section class="slide" data-notes="Normal axis: 45 degrees left of midline.|Mesocardia or dextrocardia suggests structural anomaly or situs abnormality.|Measure angle carefully in transverse 4CH view.">
+            <h2>Cardiac Axis Assessment</h2>
+            <ul>
+                <li>Normal: 45° ± 20° to the left of midline</li>
+                <li>Assess in transverse four-chamber view</li>
+                <li>Abnormal axis may indicate heterotaxy, diaphragmatic hernia, or cardiac malposition</li>
+            </ul>
+            <div class="diagram-container">
+                <div class="diagram">
+                    <div class="diagram-line" style="top: 50%; left: 50%; width: 1px; height: 200px; transform: translate(-50%, -50%) rotate(90deg); background: #9ca3af;"></div>
+                    <div class="diagram-label" style="top: 5%; left: 52%; color: #9ca3af;">Midline</div>
+                    <div class="diagram-line" style="top: 50%; left: 50%; width: 180px; height: 1px; transform: translate(-50%, -50%) rotate(-45deg); background: #3b82f6;"></div>
+                    <div class="diagram-label" style="top: 20%; left: 65%; color: #60a5fa;">45° axis</div>
+                    <div class="diagram-circle" style="top: 50%; left: 50%; width: 80px; height: 80px; transform: translate(-50%, -50%); background: rgba(239, 68, 68, 0.3); border-color: #ef4444;">Heart</div>
+                    <div class="diagram-label" style="bottom: 10%; left: 10%;">Left</div>
+                    <div class="diagram-label" style="bottom: 10%; right: 10%;">Right</div>
+                </div>
+            </div>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> Use stomach position as anatomical left marker. Cardiac apex should point toward stomach.
+            </div>
+        </section>
+
+        <!-- Slide 8: Four-Chamber View (with diagram) -->
+        <section class="slide" data-notes="Gold standard screening view.|Check five key features systematically.|Foramen ovale flap should bow into LA.">
+            <h2>Four-Chamber View: The Foundation</h2>
+            <ul>
+                <li>Check: Size equality (1:1 ratio), intact ventricular septum, offset AV valves</li>
+                <li>Foramen ovale with visible flap, pericardium without effusion</li>
+                <li>Moderator band in RV, smooth LA wall confirms chamber identity</li>
+            </ul>
+            <div class="diagram-container">
+                <div class="diagram">
+                    <div class="diagram-box" style="top: 10%; left: 10%; width: 35%; height: 35%; background: rgba(59, 130, 246, 0.2);">RA</div>
+                    <div class="diagram-box" style="top: 10%; right: 10%; width: 35%; height: 35%; background: rgba(139, 92, 246, 0.2); border-color: #8b5cf6;">LA</div>
+                    <div class="diagram-box" style="bottom: 10%; left: 10%; width: 35%; height: 35%; background: rgba(239, 68, 68, 0.2); border-color: #ef4444;">RV</div>
+                    <div class="diagram-box" style="bottom: 10%; right: 10%; width: 35%; height: 35%; background: rgba(239, 68, 68, 0.3); border-color: #ef4444;">LV</div>
+                    <div class="diagram-line" style="top: 47.5%; left: 50%; width: 80%; height: 5%; transform: translate(-50%, -50%); background: #fbbf24;"></div>
+                    <div class="diagram-label" style="top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fbbf24; font-size: 0.9rem;">Septum</div>
+                    <div class="diagram-circle" style="top: 23%; left: 50%; width: 30px; height: 30px; transform: translateX(-50%); background: rgba(34, 197, 94, 0.3); border-color: #22c55e;"></div>
+                    <div class="diagram-label" style="top: 18%; left: 55%; font-size: 0.9rem;">FO</div>
+                </div>
+            </div>
+            <div class="callout pitfall">
+                <strong>Pitfall:</strong> Oblique imaging plane can falsely suggest VSD. Confirm in multiple planes before reporting septal defect.
+            </div>
+        </section>
+
+        <!-- Slide 9: LVOT/RVOT Views (with diagram) -->
+        <section class="slide" data-notes="LVOT: sweep anteriorly from 4CH to see continuity.|RVOT: further anterior tilt to see PA bifurcation.|Outflows should cross (normal relationship).">
+            <h2>Outflow Tract Views: LVOT & RVOT</h2>
+            <ul>
+                <li><strong>LVOT:</strong> Aorta arises from LV, mitral-aortic continuity, no VSD</li>
+                <li><strong>RVOT:</strong> Pulmonary artery from RV, crosses anterior to aorta, bifurcates</li>
+                <li>Normal: outflows cross at ~60° angle</li>
+                <li>Parallel outflows suggest transposition or double outlet ventricle</li>
+            </ul>
+            <div class="diagram-container">
+                <div class="diagram">
+                    <div class="diagram-box" style="bottom: 20%; left: 20%; width: 25%; height: 30%; background: rgba(239, 68, 68, 0.2); border-color: #ef4444;">LV</div>
+                    <div class="diagram-box" style="bottom: 20%; right: 20%; width: 25%; height: 30%; background: rgba(239, 68, 68, 0.2); border-color: #ef4444;">RV</div>
+                    <div class="diagram-box" style="top: 25%; left: 25%; width: 15%; height: 35%; background: rgba(34, 197, 94, 0.2); border-color: #22c55e; transform: rotate(-30deg);">Ao</div>
+                    <div class="diagram-box" style="top: 15%; right: 25%; width: 15%; height: 40%; background: rgba(59, 130, 246, 0.2); border-color: #60a5fa; transform: rotate(30deg);">PA</div>
+                    <div class="diagram-label" style="top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fbbf24; font-size: 1.5rem;">✕</div>
+                    <div class="diagram-label" style="bottom: 5%; left: 50%; transform: translateX(-50%);">Normal crossing</div>
+                </div>
+            </div>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> If outflows appear parallel, suspect D-TGA or DORV. Always confirm great artery relationships.
+            </div>
+        </section>
+
+        <!-- Slide 10: 3VV and 3VT Views (with diagram) -->
+        <section class="slide" data-notes="3VV: three vessels same size, V-shaped confluence.|3VT: aorta is leftmost, trachea rightmost.|Color Doppler confirms direction of flow.">
+            <h2>Three-Vessel View (3VV) & Tracheal View (3VT)</h2>
+            <ul>
+                <li><strong>3VV:</strong> PA, Ao, SVC in transverse plane—similar size, aligned, V-shaped confluence</li>
+                <li><strong>3VT:</strong> Adds trachea (to right of vessels), confirms sidedness</li>
+                <li>Abnormal 3VV: size discrepancy, absent/abnormal vessel, abnormal confluence</li>
+                <li>Detects coarctation, arch anomalies, vascular rings</li>
+            </ul>
+            <div class="diagram-container">
+                <div class="diagram">
+                    <div class="diagram-circle" style="top: 40%; left: 15%; width: 80px; height: 80px; background: rgba(59, 130, 246, 0.2); border-color: #60a5fa;">PA</div>
+                    <div class="diagram-circle" style="top: 40%; left: 42%; width: 70px; height: 70px; background: rgba(34, 197, 94, 0.2); border-color: #22c55e;">Ao</div>
+                    <div class="diagram-circle" style="top: 40%; right: 22%; width: 60px; height: 60px; background: rgba(139, 92, 246, 0.2); border-color: #8b5cf6;">SVC</div>
+                    <div class="diagram-box" style="top: 40%; right: 5%; width: 50px; height: 70px; background: transparent; border-color: #9ca3af; border-style: dashed;">T</div>
+                    <div class="diagram-label" style="bottom: 30%; left: 50%; transform: translateX(-50%); font-size: 1.4rem;">V-shaped confluence</div>
+                    <div class="diagram-label" style="bottom: 10%; left: 15%;">Left</div>
+                    <div class="diagram-label" style="bottom: 10%; right: 10%;">Right</div>
+                </div>
+            </div>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> In 3VT, trachea should be rightmost structure. If leftward, suspect right aortic arch.
+            </div>
+        </section>
+
+        <!-- Slide 11: Arch Views (with diagram) -->
+        <section class="slide" data-notes="Aortic arch: candy cane shape, head-neck vessels.|Ductal arch: hockey stick, continues to descending aorta.|Measure isthmus diameter relative to ascending aorta.">
+            <h2>Aortic and Ductal Arch Views</h2>
+            <ul>
+                <li><strong>Aortic arch:</strong> "Candy cane" shape, three head-neck vessels, left-sided (usually)</li>
+                <li><strong>Ductal arch:</strong> "Hockey stick" shape, ductus arteriosus connects PA to descending aorta</li>
+                <li>Assess arch sidedness, branching pattern, isthmus diameter</li>
+                <li>Coarctation signs: small isthmus, posterior shelf, discrepant flow</li>
+            </ul>
+            <div class="diagram-container">
+                <div class="diagram">
+                    <div style="position: absolute; left: 10%; top: 20%; width: 40%; height: 60%;">
+                        <div class="diagram-label" style="position: relative; margin-bottom: 10px; text-align: center;">Aortic Arch</div>
+                        <svg width="100%" height="100%" viewBox="0 0 200 200">
+                            <path d="M 30 150 Q 30 50, 100 30 Q 170 50, 170 150" stroke="#22c55e" stroke-width="6" fill="none"/>
+                            <text x="100" y="180" fill="#93c5fd" text-anchor="middle" font-size="18">Candy cane</text>
+                        </svg>
+                    </div>
+                    <div style="position: absolute; right: 10%; top: 20%; width: 40%; height: 60%;">
+                        <div class="diagram-label" style="position: relative; margin-bottom: 10px; text-align: center;">Ductal Arch</div>
+                        <svg width="100%" height="100%" viewBox="0 0 200 200">
+                            <path d="M 30 50 L 100 50 Q 150 50, 150 100 L 150 170" stroke="#60a5fa" stroke-width="6" fill="none"/>
+                            <text x="100" y="180" fill="#93c5fd" text-anchor="middle" font-size="18">Hockey stick</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="callout pitfall">
+                <strong>Pitfall:</strong> Right aortic arch occurs in 25% of TOF. Always check arch sidedness and branching.
+            </div>
+        </section>
+
+        <!-- Slide 12: Doppler Essentials -->
+        <section class="slide" data-notes="Color Doppler for direction and turbulence.|Spectral for velocity and waveform morphology.|Tricuspid regurgitation peak velocity estimates RV pressure.">
+            <h2>Doppler Echocardiography: Key Concepts</h2>
+            <ul>
+                <li><strong>Color Doppler:</strong> Confirms flow direction, identifies turbulence, detects regurgitation</li>
+                <li><strong>Pulsed-wave Doppler:</strong> Measures velocities across valves, ducts, arches</li>
+                <li><strong>Normal findings:</strong> Antegrade flow in outflows, low-velocity AV inflow, ductal right-to-left shunt</li>
+                <li><strong>Abnormal patterns:</strong> Retrograde diastolic flow (aortic regurg, coarct), monophasic umbilical vein</li>
+                <li>Assess for hydrops: TR jet velocity > 80 cm/s may indicate CHF</li>
+            </ul>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> High-velocity tricuspid regurgitation suggests elevated RV pressure—look for pulmonic stenosis or hypoplasia.
+            </div>
+        </section>
+
+        <!-- Slide 13: Function & Heart Failure Signs -->
+        <section class="slide" data-notes="Assess qualitative LV/RV function.|Hydrops suggests CHF or high-output state.|Pericardial effusion >2mm is concerning.">
+            <h2>Assessing Cardiac Function & Hydrops</h2>
+            <ul>
+                <li>Qualitative assessment: ventricular contractility, AV valve regurgitation, ejection</li>
+                <li><strong>Signs of heart failure:</strong> Cardiomegaly (>1/3 thoracic diameter), pericardial effusion, ascites, pleural effusion, scalp edema</li>
+                <li>Diastolic dysfunction: monophasic venous Doppler, reversed A-wave in ductus venosus</li>
+                <li>Arrhythmia-induced failure: sustained tachycardia or bradycardia</li>
+            </ul>
+            <div class="callout pitfall">
+                <strong>Pitfall:</strong> Hydrops has many etiologies. Always assess for anemia, infection, and structural heart disease concurrently.
+            </div>
+        </section>
+
+        <!-- Slide 14: Algorithm - Indications to Referral -->
+        <section class="slide" data-notes="Triage based on indication strength.|High-risk gets direct scheduling.|Suspicious views need MFM review before referral.">
+            <h2>Algorithm: Indications → Referral Pathway</h2>
+            <div class="flowchart">
+                <div class="flow-row">
+                    <div class="flow-box">Patient with Indication (maternal, fetal, familial)</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-arrow-down">↓</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-box decision">High-risk or abnormal screening?</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-arrow-down">↓</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-box action">YES → Direct fetal echo referral at 18–22 weeks</div>
+                    <div class="flow-box">NO → Standard anatomy scan, consider fetal echo if findings emerge</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-arrow-down">↓</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-box">Coordinate with MFM & pediatric cardiology</div>
+                </div>
+            </div>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> Early referral allows for optimal timing. Don't delay—cardiac structures evolve quickly.
+            </div>
+        </section>
+
+        <!-- Slide 15: Algorithm - Abnormal Finding Triage -->
+        <section class="slide" data-notes="Triage abnormal findings by urgency.|Critical findings need same-day MFM consultation.|Refer to center with pediatric cardiac surgery.">
+            <h2>Algorithm: Abnormal Finding → Triage</h2>
+            <div class="flowchart">
+                <div class="flow-row">
+                    <div class="flow-box">Abnormal screening view or suspected CHD</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-arrow-down">↓</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-box decision">Critical vs. non-critical?</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-arrow-down">↓</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-box action">CRITICAL: Suspected HLHS, TGA, TAPVR → Same-day MFM consult</div>
+                    <div class="flow-box">NON-CRITICAL: VSD, mild AS → Schedule fetal echo within 1–2 weeks</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-arrow-down">↓</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-box">Confirm anatomy, discuss prognosis, plan delivery at tertiary center</div>
+                </div>
+            </div>
+            <div class="callout pitfall">
+                <strong>Pitfall:</strong> Delaying referral for critical CHD can result in unplanned delivery without cardiac surgery backup.
+            </div>
+        </section>
+
+        <!-- Slide 16: Red Flags on Screening -->
+        <section class="slide" data-notes="Any one of these warrants full fetal echo.|Size discrepancy most common flag.|Always check axis and outflows.">
+            <h2>Red Flags on Screening Ultrasound</h2>
+            <ul>
+                <li>Asymmetric ventricles (>1.2:1 ratio) or single-appearing ventricle</li>
+                <li>Abnormal cardiac axis (<25° or >65°)</li>
+                <li>Pericardial effusion, cardiomegaly, hydrops</li>
+                <li>Absent or abnormal three-vessel view</li>
+                <li>Arrhythmia: sustained bradycardia (<110 bpm), tachycardia (>180 bpm), irregular rhythm</li>
+                <li>Extracardiac anomalies (increases CHD risk 5–10×)</li>
+            </ul>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> When in doubt, refer. Sonographers should have low threshold for requesting MFM or pediatric cardiology input.
+            </div>
+        </section>
+
+        <!-- Slide 17: Common CHD Patterns -->
+        <section class="slide" data-notes="Group by hemodynamic impact.|Left heart lesions often progress.|Right heart lesions may have good prognosis if mild.">
+            <h2>Common Congenital Heart Defects: Patterns</h2>
+            <ul>
+                <li><strong>Left heart obstructive:</strong> HLHS, critical AS, coarctation, interrupted aortic arch</li>
+                <li><strong>Right heart obstructive:</strong> Pulmonic stenosis, pulmonary atresia, Ebstein anomaly, TOF</li>
+                <li><strong>Mixing lesions:</strong> D-TGA, TAPVR, truncus arteriosus, single ventricle</li>
+                <li><strong>Septal defects:</strong> VSD (most common), ASD, AVSD (associated with trisomy 21)</li>
+                <li><strong>Valve abnormalities:</strong> Tricuspid or mitral regurgitation, dysplastic valves</li>
+            </ul>
+            <div class="callout pitfall">
+                <strong>Pitfall:</strong> Isolated small VSD often closes spontaneously. Avoid over-alarming families—counsel on natural history.
+            </div>
+        </section>
+
+        <!-- Slide 18: Algorithm - Arrhythmia Evaluation -->
+        <section class="slide" data-notes="M-mode is gold standard for rhythm diagnosis.|SVT >220 bpm, heart block <110 bpm.|Hydrops indicates urgent intervention needed.">
+            <h2>Algorithm: Fetal Arrhythmia Evaluation</h2>
+            <div class="flowchart">
+                <div class="flow-row">
+                    <div class="flow-box">Irregular or abnormal heart rate detected</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-arrow-down">↓</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-box decision">M-mode or Doppler: Bradycardia, tachycardia, or irregular?</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-arrow-down">↓</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-box action">BRADYCARDIA (<110 bpm): Check for heart block, assess for anti-Ro/La, rule out CHD</div>
+                    <div class="flow-box action">TACHYCARDIA (>180 bpm): SVT vs. atrial flutter—assess A:V ratio, check for hydrops</div>
+                    <div class="flow-box">IRREGULAR: PACs (benign) vs. bigeminy—document frequency</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-arrow-down">↓</div>
+                </div>
+                <div class="flow-row">
+                    <div class="flow-box">Serial monitoring, consider fetal treatment (digoxin, flecainide), plan delivery</div>
+                </div>
+            </div>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> Isolated PACs are benign and very common. Reassure parents—most resolve spontaneously.
+            </div>
+        </section>
+
+        <!-- Slide 19: Case Vignette 1 -->
+        <section class="slide" data-notes="Classic HLHS findings.|Urgent delivery planning needed.|Prostaglandin E1 at birth to maintain ductal patency.">
+            <h2>Case Vignette: Hypoplastic Left Heart</h2>
+            <div class="case-vignette">
+                <h3>Clinical Scenario</h3>
+                <p><strong>Patient:</strong> 21-week fetus, maternal age 32, no risk factors.</p>
+                <p><strong>Findings:</strong> Small left ventricle (3 mm vs. RV 12 mm), hypoplastic ascending aorta (2 mm), mitral atresia, retrograde flow in aortic arch, large RV with tricuspid regurgitation.</p>
+                <p><strong>Diagnosis:</strong> Hypoplastic left heart syndrome (HLHS).</p>
+                <p><strong>Next Steps:</strong> Confirm diagnosis with pediatric cardiology. Counsel on three-stage surgical palliation (Norwood, Glenn, Fontan) vs. transplant vs. comfort care. Plan delivery at tertiary center with immediate PGE1 infusion. Serial growth and Doppler assessment. Genetic testing offered.</p>
+            </div>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> HLHS is ductal-dependent. Delivery must occur at center with cardiac surgery—any delay risks cardiovascular collapse.
+            </div>
+        </section>
+
+        <!-- Slide 20: Case Vignette 2 -->
+        <section class="slide" data-notes="SVT can cause hydrops if sustained.|Fetal treatment options exist.|May resolve after delivery or need neonatal intervention.">
+            <h2>Case Vignette: Fetal Supraventricular Tachycardia</h2>
+            <div class="case-vignette">
+                <h3>Clinical Scenario</h3>
+                <p><strong>Patient:</strong> 28-week fetus, referred for irregular heart rate on screening.</p>
+                <p><strong>Findings:</strong> Heart rate 240 bpm, sustained, 1:1 A:V conduction on M-mode. Moderate tricuspid regurgitation, small pericardial effusion (3 mm), no ascites. Structurally normal heart.</p>
+                <p><strong>Diagnosis:</strong> Fetal supraventricular tachycardia (SVT) with early hydrops.</p>
+                <p><strong>Next Steps:</strong> Urgent MFM consultation. Consider transplacental antiarrhythmic therapy (digoxin vs. flecainide). Serial monitoring for resolution or worsening hydrops. Pediatric cardiology at delivery for rhythm management and possible cardioversion.</p>
+            </div>
+            <div class="callout pitfall">
+                <strong>Pitfall:</strong> SVT causing hydrops requires urgent treatment. Delayed therapy can lead to fetal demise or severe cardiac dysfunction.
+            </div>
+        </section>
+
+        <!-- Slide 21: Reporting Checklist -->
+        <section class="slide" data-notes="Structured report improves communication.|Include normal AND abnormal findings.|Always mention limitations (e.g., fetal position, maternal habitus).">
+            <h2>Fetal Echocardiography Reporting Checklist</h2>
+            <div class="checklist">
+                <div class="checklist-item">Fetal position, gestational age, indication</div>
+                <div class="checklist-item">Cardiac axis and position</div>
+                <div class="checklist-item">Situs (atrial, visceral)</div>
+                <div class="checklist-item">Four-chamber view (size, septum, AV valves)</div>
+                <div class="checklist-item">Outflow tracts (LVOT, RVOT, crossing)</div>
+                <div class="checklist-item">Three-vessel and tracheal views</div>
+                <div class="checklist-item">Aortic and ductal arches</div>
+                <div class="checklist-item">Systemic and pulmonary venous return</div>
+                <div class="checklist-item">Doppler assessment (color, spectral)</div>
+                <div class="checklist-item">Cardiac function, effusion, hydrops</div>
+                <div class="checklist-item">Rhythm assessment (rate, regularity)</div>
+                <div class="checklist-item">Limitations and recommendations</div>
+            </div>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> Document image quality and limitations. If suboptimal, state explicitly and recommend repeat study.
+            </div>
+        </section>
+
+        <!-- Slide 22: Limitations & Postnatal Confirmation -->
+        <section class="slide" data-notes="Fetal echo is not perfect.|Patent ductus and foramen ovale alter hemodynamics.|Some lesions progress or present postnatally.">
+            <h2>Limitations of Fetal Echocardiography</h2>
+            <ul>
+                <li>Detection rate ~60–80% for major CHD (operator- and setting-dependent)</li>
+                <li>Small defects (e.g., small VSD, ASD) may be missed</li>
+                <li>Some lesions evolve: coarctation, AS may worsen; others improve</li>
+                <li>Fetal circulation differs: patent ductus and foramen ovale alter flow patterns</li>
+                <li><strong>Postnatal confirmation:</strong> All suspected CHD requires neonatal echocardiography</li>
+                <li>False positives occur—balance sensitivity with parental anxiety</li>
+            </ul>
+            <div class="callout pitfall">
+                <strong>Pitfall:</strong> Normal fetal echo does NOT guarantee normal postnatal heart. Counsel families on need for newborn cardiac evaluation.
+            </div>
+        </section>
+
+        <!-- Slide 23: Counseling & Multidisciplinary Care -->
+        <section class="slide" data-notes="Coordinate with pediatric cardiology early.|Delivery planning is critical for critical CHD.|Offer genetic counseling and testing.">
+            <h2>Counseling & Multidisciplinary Planning</h2>
+            <ul>
+                <li>Provide clear, empathetic explanation of findings and prognosis</li>
+                <li>Involve pediatric cardiology early for co-counseling</li>
+                <li>Discuss delivery location: must have pediatric cardiac surgery for critical CHD</li>
+                <li>Offer genetic testing (microarray, exome) if syndromic features or complex CHD</li>
+                <li>Address parental concerns: natural history, surgical options, long-term outcomes</li>
+                <li>Support decision-making: continuation vs. termination (where legal)</li>
+            </ul>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> Multidisciplinary team approach improves outcomes and family satisfaction. Include neonatology, genetics, and social work.
+            </div>
+        </section>
+
+        <!-- Slide 24: Summary & Take-Home Points -->
+        <section class="slide" data-notes="Reinforce systematic approach.|Early detection changes outcomes.|Team-based care is essential.">
+            <h2>Summary: Key Take-Home Points</h2>
+            <ul>
+                <li>Systematic fetal echocardiography improves CHD detection and outcomes</li>
+                <li>Follow segmental analysis: situs → connections → relationships</li>
+                <li>Standard views (4CH, LVOT, RVOT, 3VV, arches) are essential—never skip</li>
+                <li>Red flags on screening: asymmetric ventricles, abnormal axis, arrhythmia</li>
+                <li>Use Doppler judiciously: ALARA principle, minimize duration</li>
+                <li>Coordinate care: MFM, pediatric cardiology, neonatology, genetics</li>
+                <li>Postnatal echo is mandatory—fetal findings evolve</li>
+            </ul>
+            <div class="callout">
+                <strong>Clinician Pearl:</strong> A reproducible, systematic approach to fetal echocardiography saves lives. Practice makes proficient.
+            </div>
+        </section>
+    </div>
+
+    <div id="controls">
+        <button id="prev-btn">← Previous</button>
+        <span id="slide-number">1 / 24</span>
+        <button id="next-btn">Next →</button>
+    </div>
+
+    <div id="presenter-notes">
+        <h4>Presenter Notes</h4>
+        <ul id="notes-content"></ul>
+    </div>
+
+    <div id="help-modal">
+        <div class="modal-content">
+            <h2>Keyboard Shortcuts</h2>
+            <div class="shortcut-grid">
+                <div class="shortcut-key">←</div>
+                <div class="shortcut-desc">Previous slide</div>
+                <div class="shortcut-key">→</div>
+                <div class="shortcut-desc">Next slide</div>
+                <div class="shortcut-key">Home</div>
+                <div class="shortcut-desc">First slide</div>
+                <div class="shortcut-key">End</div>
+                <div class="shortcut-desc">Last slide</div>
+                <div class="shortcut-key">F</div>
+                <div class="shortcut-desc">Toggle fullscreen</div>
+                <div class="shortcut-key">N</div>
+                <div class="shortcut-desc">Toggle presenter notes</div>
+                <div class="shortcut-key">?</div>
+                <div class="shortcut-desc">Show/hide this help</div>
+                <div class="shortcut-key">Esc</div>
+                <div class="shortcut-desc">Close help</div>
+            </div>
+            <button id="close-help" style="margin-top: 30px; width: 100%;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Slide management
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 0;
+
+        const progressBar = document.getElementById('progress-bar');
+        const slideNumber = document.getElementById('slide-number');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const presenterNotes = document.getElementById('presenter-notes');
+        const notesContent = document.getElementById('notes-content');
+        const helpModal = document.getElementById('help-modal');
+        const closeHelpBtn = document.getElementById('close-help');
+
+        // Update slide display
+        function showSlide(index) {
+            // Bounds checking
+            if (index < 0) index = 0;
+            if (index >= totalSlides) index = totalSlides - 1;
+
+            // Remove active class from current slide
+            slides.forEach((slide, i) => {
+                if (i === currentSlide) {
+                    slide.classList.add('exit-left');
+                    setTimeout(() => {
+                        slide.classList.remove('active', 'exit-left');
+                    }, 400);
+                }
+            });
+
+            // Update current slide index
+            currentSlide = index;
+
+            // Add active class to new slide
+            slides[currentSlide].classList.add('active');
+
+            // Update UI
+            updateUI();
+            updatePresenterNotes();
+        }
+
+        // Update UI elements
+        function updateUI() {
+            // Progress bar
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+
+            // Slide number
+            slideNumber.textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+            // Button states
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        // Update presenter notes
+        function updatePresenterNotes() {
+            const notes = slides[currentSlide].getAttribute('data-notes');
+            if (notes) {
+                const notesList = notes.split('|');
+                notesContent.innerHTML = notesList.map(note => `<li>${note.trim()}</li>`).join('');
+            } else {
+                notesContent.innerHTML = '<li>No presenter notes for this slide.</li>';
+            }
+        }
+
+        // Navigation functions
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        function firstSlide() {
+            showSlide(0);
+        }
+
+        function lastSlide() {
+            showSlide(totalSlides - 1);
+        }
+
+        // Toggle fullscreen
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Toggle presenter notes
+        function toggleNotes() {
+            presenterNotes.classList.toggle('visible');
+        }
+
+        // Toggle help modal
+        function toggleHelp() {
+            helpModal.classList.toggle('visible');
+        }
+
+        // Event listeners - Buttons
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+        closeHelpBtn.addEventListener('click', toggleHelp);
+
+        // Event listeners - Keyboard
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowRight':
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                    prevSlide();
+                    break;
+                case 'Home':
+                    firstSlide();
+                    break;
+                case 'End':
+                    lastSlide();
+                    break;
+                case 'f':
+                case 'F':
+                    toggleFullscreen();
+                    break;
+                case 'n':
+                case 'N':
+                    toggleNotes();
+                    break;
+                case '?':
+                    toggleHelp();
+                    break;
+                case 'Escape':
+                    if (helpModal.classList.contains('visible')) {
+                        toggleHelp();
+                    }
+                    break;
+            }
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + 50) {
+                prevSlide();
+            }
+        }
+
+        // Initialize
+        updateUI();
+        updatePresenterNotes();
+    </script>
+</body>
+</html>
