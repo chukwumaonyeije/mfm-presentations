@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Type 2 Diabetes in Pregnancy - Patient Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #4a9eff;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            color: #4a9eff;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #a8dadc;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .content {
+            font-size: 1.6rem;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .highlight {
+            color: #4a9eff;
+            font-weight: 600;
+        }
+
+        .reassurance {
+            color: #52b788;
+            font-weight: 600;
+        }
+
+        .action {
+            color: #ffb703;
+            font-weight: 600;
+        }
+
+        .box {
+            background: rgba(74, 158, 255, 0.1);
+            border-left: 4px solid #4a9eff;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+            max-width: 900px;
+        }
+
+        .info-card {
+            background: rgba(74, 158, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid #4a9eff;
+        }
+
+        .info-card h3 {
+            color: #4a9eff;
+            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .info-card p {
+            font-size: 1.4rem;
+            line-height: 1.6;
+        }
+
+        ul {
+            text-align: left;
+            font-size: 1.5rem;
+            line-height: 2;
+            max-width: 800px;
+            margin: 1.5rem auto;
+        }
+
+        ul li {
+            margin-bottom: 1rem;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: #4a9eff;
+            color: #1a1a2e;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #357abd;
+        }
+
+        .nav-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            font-size: 1.2rem;
+            color: #a8dadc;
+        }
+
+        table {
+            margin: 2rem auto;
+            border-collapse: collapse;
+            font-size: 1.4rem;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 1rem;
+            border: 1px solid #4a9eff;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(74, 158, 255, 0.2);
+            color: #4a9eff;
+            font-weight: 600;
+        }
+
+        .warning-box {
+            background: rgba(255, 183, 3, 0.1);
+            border-left: 4px solid #ffb703;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            .content {
+                font-size: 1.3rem;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container" id="slideContainer">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <h1>Type 2 Diabetes in Pregnancy</h1>
+            <p class="subtitle">A guide to managing your diabetes during pregnancy</p>
+            <div class="box">
+                <p class="content">You can have a healthy pregnancy with Type 2 diabetes. This presentation explains what to expect and how we'll work together.</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: What is Type 2 Diabetes? -->
+        <div class="slide">
+            <h2>What Is Type 2 Diabetes?</h2>
+            <div class="content">
+                <p>Type 2 diabetes means your body doesn't use insulin well. This is called <span class="highlight">insulin resistance</span>.</p>
+                <p style="margin-top: 1.5rem;">Your pancreas may still make insulin, but it can't keep up with what your body needs.</p>
+                <p style="margin-top: 1.5rem;">This causes blood sugar to rise higher than normal. Before pregnancy, you may have managed this with pills, insulin, or lifestyle changes.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Why It Matters in Pregnancy -->
+        <div class="slide">
+            <h2>Why It Matters in Pregnancy</h2>
+            <div class="content">
+                <p>Pregnancy hormones make insulin resistance worse. Your body needs more insulin than usual.</p>
+                <p style="margin-top: 1.5rem;">High blood sugar can affect your baby's growth and health.</p>
+                <div class="box" style="margin-top: 2rem;">
+                    <p><span class="reassurance">Good news:</span> With careful monitoring and treatment, most people with Type 2 diabetes have healthy pregnancies and healthy babies.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Medication Changes -->
+        <div class="slide">
+            <h2>Changes to Your Diabetes Medications</h2>
+            <div class="content">
+                <p><span class="action">Many diabetes pills are not safe during pregnancy.</span> Your care team will review all your medications.</p>
+                <div class="info-grid" style="margin-top: 2rem;">
+                    <div class="info-card">
+                        <h3>May be stopped</h3>
+                        <p>Most oral diabetes medications (pills) will be stopped before or early in pregnancy.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>May be started</h3>
+                        <p><span class="highlight">Insulin</span> is safe and may be needed. <span class="highlight">Metformin</span> may be continued or started in some cases.</p>
+                    </div>
+                </div>
+                <p style="margin-top: 2rem;">These changes protect your baby and help control your blood sugar safely.</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Starting Insulin -->
+        <div class="slide">
+            <h2>If You Need to Start Insulin</h2>
+            <div class="content">
+                <p>Many people with Type 2 diabetes need insulin during pregnancy. This doesn't mean your diabetes is worse.</p>
+                <div class="box" style="margin-top: 2rem;">
+                    <p><span class="reassurance">Insulin is the safest way to control blood sugar during pregnancy.</span> It doesn't cross the placenta, so it won't affect your baby directly.</p>
+                </div>
+                <p style="margin-top: 2rem;">A diabetes educator will teach you how to give insulin injections. Most people find it easier than they expected.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Blood Sugar Targets -->
+        <div class="slide">
+            <h2>Your Blood Sugar Targets</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Target Range</th>
+                </tr>
+                <tr>
+                    <td>Fasting (before eating)</td>
+                    <td>&lt; 95 mg/dL</td>
+                </tr>
+                <tr>
+                    <td>1 hour after meals</td>
+                    <td>&lt; 140 mg/dL</td>
+                </tr>
+                <tr>
+                    <td>2 hours after meals</td>
+                    <td>&lt; 120 mg/dL</td>
+                </tr>
+            </table>
+            <p class="content" style="margin-top: 2rem;">These targets are tighter than before pregnancy. Your care team will help you reach them safely.</p>
+        </div>
+
+        <!-- Slide 7: How Often to Check -->
+        <div class="slide">
+            <h2>How Often to Check Blood Sugar</h2>
+            <div class="content">
+                <p>You'll check your blood sugar several times daily:</p>
+                <ul>
+                    <li><span class="highlight">Before breakfast</span> (fasting)</li>
+                    <li><span class="highlight">1 or 2 hours after each meal</span> (3 times daily)</li>
+                    <li><span class="highlight">Before bed</span> if you take insulin</li>
+                    <li><span class="action">Anytime you feel symptoms</span> of high or low blood sugar</li>
+                </ul>
+                <p style="margin-top: 2rem;">Your doctor will tell you which times are most important for you. Keep a log to share at appointments.</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Healthy Eating -->
+        <div class="slide">
+            <h2>Eating Well During Pregnancy</h2>
+            <div class="content">
+                <p>A diabetes dietitian will create a meal plan that:</p>
+                <ul>
+                    <li>Provides nutrition for <span class="highlight">you and your baby</span></li>
+                    <li>Helps control <span class="highlight">blood sugar</span></li>
+                    <li>Includes the <span class="highlight">right amount of carbohydrates</span> at each meal</li>
+                    <li>Focuses on <span class="highlight">whole foods</span> like vegetables, lean proteins, and whole grains</li>
+                </ul>
+                <div class="box" style="margin-top: 1.5rem;">
+                    <p><span class="reassurance">You don't need a special "diabetic diet."</span> Focus on balanced, regular meals and healthy portion sizes.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Physical Activity -->
+        <div class="slide">
+            <h2>Staying Active</h2>
+            <div class="content">
+                <p>Regular physical activity helps control blood sugar and is safe for most pregnant people.</p>
+                <ul>
+                    <li>Aim for <span class="highlight">30 minutes most days</span> of the week</li>
+                    <li>Walking is a great choice</li>
+                    <li>Stay hydrated and don't overheat</li>
+                    <li>Stop if you feel dizzy, short of breath, or have contractions</li>
+                </ul>
+                <div class="box" style="margin-top: 1.5rem;">
+                    <p>Talk with your doctor before starting any exercise program. They'll help you choose safe activities.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Weight Gain -->
+        <div class="slide">
+            <h2>Healthy Weight Gain</h2>
+            <div class="content">
+                <p>Your care team will discuss healthy weight gain for your pregnancy based on your starting weight.</p>
+                <div class="box" style="margin-top: 2rem;">
+                    <p><span class="reassurance">Pregnancy is not a time to lose weight.</span> Your baby needs steady nutrition to grow and develop.</p>
+                </div>
+                <p style="margin-top: 2rem;">Focus on eating nutritious foods in appropriate portions rather than restricting calories.</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Monitoring Schedule -->
+        <div class="slide">
+            <h2>Your Prenatal Visit Schedule</h2>
+            <div class="content">
+                <p>You'll see your care team more often than standard prenatal care:</p>
+                <ul>
+                    <li><span class="highlight">Every 1-2 weeks</span> in the first and second trimester</li>
+                    <li><span class="highlight">Weekly</span> in the third trimester</li>
+                    <li><span class="highlight">Ultrasounds</span> to monitor baby's growth</li>
+                    <li><span class="highlight">Additional testing</span> in the third trimester (like non-stress tests)</li>
+                </ul>
+                <p style="margin-top: 2rem;">These visits help us keep you and your baby healthy.</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: What We're Watching For -->
+        <div class="slide">
+            <h2>What We're Monitoring</h2>
+            <div class="content">
+                <p>Your care team watches for conditions more common with diabetes:</p>
+                <ul>
+                    <li><span class="highlight">Preeclampsia</span> (high blood pressure in pregnancy)</li>
+                    <li><span class="highlight">Baby's growth</span> (making sure baby isn't growing too large)</li>
+                    <li><span class="highlight">Amniotic fluid levels</span></li>
+                    <li><span class="highlight">Your overall health</span> including blood pressure and kidney function</li>
+                </ul>
+                <div class="box" style="margin-top: 2rem;">
+                    <p><span class="reassurance">Close monitoring helps us catch and manage problems early.</span> Most issues can be managed with good diabetes control.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Your Care Team -->
+        <div class="slide">
+            <h2>Your Care Team</h2>
+            <div class="content">
+                <p>Managing Type 2 diabetes in pregnancy takes a team approach:</p>
+                <ul>
+                    <li><span class="highlight">Obstetrician</span> or Maternal-Fetal Medicine specialist</li>
+                    <li><span class="highlight">Endocrinologist</span> or diabetes specialist (if needed)</li>
+                    <li><span class="highlight">Diabetes educator</span></li>
+                    <li><span class="highlight">Dietitian</span> who specializes in pregnancy</li>
+                    <li><span class="highlight">You</span> – the most important member</li>
+                </ul>
+                <p style="margin-top: 2rem;">We work together to support you every step of the way.</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Low Blood Sugar -->
+        <div class="slide">
+            <h2>Managing Low Blood Sugar</h2>
+            <div class="content">
+                <p>If you take insulin or certain medications, you may experience low blood sugar (<span class="highlight">hypoglycemia</span> – below 70 mg/dL).</p>
+                <p style="margin-top: 1.5rem;"><span class="action">Symptoms:</span> Shaking, sweating, confusion, rapid heartbeat, dizziness.</p>
+                <div class="warning-box" style="margin-top: 2rem;">
+                    <p style="font-size: 1.5rem;"><strong>What to do:</strong></p>
+                    <p style="margin-top: 0.5rem;">Eat 15 grams of fast-acting carbs (juice, glucose tablets). Recheck in 15 minutes. Repeat if needed.</p>
+                </div>
+                <p style="margin-top: 1.5rem;">If you don't take insulin, low blood sugar is unlikely but still possible.</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Labor and Delivery -->
+        <div class="slide">
+            <h2>Planning for Labor and Delivery</h2>
+            <div class="content">
+                <p>Your care team will discuss:</p>
+                <ul>
+                    <li><span class="highlight">Timing of delivery</span> (often between 38-40 weeks, sometimes earlier)</li>
+                    <li><span class="highlight">Blood sugar management</span> during labor</li>
+                    <li><span class="highlight">Medication adjustments</span> after delivery</li>
+                    <li>Whether <span class="highlight">induction</span> is recommended based on baby's size</li>
+                </ul>
+                <div class="box" style="margin-top: 1.5rem;">
+                    <p><span class="reassurance">Many people with Type 2 diabetes have vaginal deliveries.</span> Your health and your baby's health guide these decisions.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: After Baby Arrives -->
+        <div class="slide">
+            <h2>After Your Baby Arrives</h2>
+            <div class="content">
+                <p>Your blood sugar usually improves after delivery. You may be able to return to your pre-pregnancy medications.</p>
+                <p style="margin-top: 1.5rem;">Your baby will be monitored for low blood sugar in the first hours after birth. This is routine and expected.</p>
+                <div class="box" style="margin-top: 2rem;">
+                    <p><span class="reassurance">Breastfeeding is safe and encouraged.</span> Some diabetes medications are safe during breastfeeding. Discuss this with your care team.</p>
+                </div>
+                <p style="margin-top: 1.5rem;">Continue to monitor your blood sugar as recommended after delivery.</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Long-Term Health -->
+        <div class="slide">
+            <h2>Your Long-Term Health</h2>
+            <div class="content">
+                <p>Having Type 2 diabetes during pregnancy increases your risk for Type 2 diabetes later in life (if not already diagnosed).</p>
+                <div class="box" style="margin-top: 2rem;">
+                    <p><span class="reassurance">You can lower this risk</span> with healthy lifestyle choices: regular physical activity, balanced eating, and maintaining a healthy weight.</p>
+                </div>
+                <p style="margin-top: 2rem;">Your doctor will recommend regular diabetes screening after pregnancy and in future years.</p>
+            </div>
+        </div>
+
+        <!-- Slide 18: What You Can Do -->
+        <div class="slide">
+            <h2>What You Can Do</h2>
+            <div class="content">
+                <ul>
+                    <li><span class="action">Check your blood sugar</span> as recommended</li>
+                    <li><span class="action">Take your medications</span> as prescribed</li>
+                    <li><span class="action">Keep all appointments</span> with your care team</li>
+                    <li><span class="action">Follow your meal plan</span> and stay active</li>
+                    <li><span class="action">Report symptoms</span> like vision changes, severe headaches, or decreased fetal movement right away</li>
+                    <li><span class="action">Ask questions</span> whenever something isn't clear</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 19: Questions to Ask -->
+        <div class="slide">
+            <h2>Questions to Ask Your Care Team</h2>
+            <div class="content">
+                <ul>
+                    <li>Which medications should I stop or start?</li>
+                    <li>What should I do if my blood sugar is out of range?</li>
+                    <li>How many times should I check my blood sugar each day?</li>
+                    <li>What symptoms should I watch for?</li>
+                    <li>Can I meet with a dietitian?</li>
+                    <li>What exercise is safe for me?</li>
+                    <li>When should I call you between appointments?</li>
+                </ul>
+                <div class="box" style="margin-top: 2rem;">
+                    <p><span class="reassurance">No question is too small.</span> Your care team is here to support you.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+            <div class="content">
+                <div class="box">
+                    <p style="font-size: 1.6rem; line-height: 1.8;">
+                        <span class="reassurance">You can have a healthy pregnancy with Type 2 diabetes.</span><br><br>
+                        Your medications may change, but this protects your baby.<br><br>
+                        Diet, activity, and blood sugar monitoring are your main tools.<br><br>
+                        <span class="action">Your efforts make a real difference</span> in your health and your baby's health.<br><br>
+                        We're here to support you every step of the way.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">20</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slideContainer = document.getElementById('slideContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentSlideSpan = document.getElementById('currentSlide');
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function updateSlide() {
+            slideContainer.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            currentSlideSpan.textContent = currentSlide + 1;
+            
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            const newSlide = currentSlide + direction;
+            if (newSlide >= 0 && newSlide < totalSlides) {
+                currentSlide = newSlide;
+                updateSlide();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'Home') {
+                currentSlide = 0;
+                updateSlide();
+            }
+            if (e.key === 'End') {
+                currentSlide = totalSlides - 1;
+                updateSlide();
+            }
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        slideContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        slideContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) changeSlide(1);
+            if (touchEndX > touchStartX + 50) changeSlide(-1);
+        }
+
+        updateSlide();
+    </script>
+</body>
+</html>
