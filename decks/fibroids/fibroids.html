@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fibroids During Pregnancy: Patient Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide-container {
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: none;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 2.8em;
+            margin-bottom: 25px;
+            font-weight: 600;
+            color: #a8d5ff;
+        }
+
+        h3 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #7cc8ff;
+            font-weight: 500;
+        }
+
+        p, li {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.8em;
+            color: #c8e6ff;
+            font-weight: 300;
+            margin-top: -15px;
+        }
+
+        .highlight {
+            color: #5ed4ff;
+            font-weight: 600;
+        }
+
+        .reassurance {
+            background: rgba(76, 175, 80, 0.2);
+            border-left: 5px solid #4caf50;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            font-size: 1.6em;
+        }
+
+        .action-box {
+            background: rgba(255, 152, 0, 0.2);
+            border-left: 5px solid #ff9800;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .info-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .info-card p {
+            font-size: 1.3em;
+        }
+
+        ul {
+            margin-left: 30px;
+            margin-top: 20px;
+        }
+
+        li {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .statistic {
+            font-size: 4em;
+            color: #5ed4ff;
+            font-weight: 700;
+            display: block;
+            margin: 20px 0;
+        }
+
+        .navigation {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            z-index: 0;
+        }
+
+        .timeline-item {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: #5ed4ff;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+        }
+
+        .timeline-item h4 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #5ed4ff;
+        }
+
+        .timeline-item p {
+            font-size: 1.1em;
+        }
+
+        .icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .slide-container {
+                padding: 40px;
+                height: 90vh;
+            }
+
+            h1 { font-size: 2.5em; }
+            h2 { font-size: 2em; }
+            h3 { font-size: 1.6em; }
+            p, li { font-size: 1.2em; }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .timeline {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .timeline::before {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Title -->
+    <div class="slide-container active">
+        <h1>Fibroids During Pregnancy</h1>
+        <p class="subtitle">Understanding what they are and how we monitor them together</p>
+        <div class="reassurance">
+            <strong>Good news:</strong> Most women with fibroids have healthy pregnancies and safe deliveries.
+        </div>
+    </div>
+
+    <!-- Slide 2: What Are Fibroids? -->
+    <div class="slide-container">
+        <h2>What Are Fibroids?</h2>
+        <p>Fibroids are <span class="highlight">non-cancerous growths</span> made of muscle tissue in or on your uterus.</p>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>Very Common</h3>
+                <span class="statistic">80%</span>
+                <p>of women develop fibroids by age 50</p>
+            </div>
+            <div class="info-card">
+                <h3>Not Dangerous</h3>
+                <p>They're benign (not cancerous) and very common in pregnancy</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: How Pregnancy Affects Fibroids -->
+    <div class="slide-container">
+        <h2>How Pregnancy Affects Fibroids</h2>
+        <p>Pregnancy hormones can cause changes in fibroids:</p>
+        <ul>
+            <li><strong>Some grow</strong> during pregnancy due to increased estrogen</li>
+            <li><strong>Many stay the same</strong> size throughout pregnancy</li>
+            <li><strong>Some even shrink</strong> after delivery</li>
+        </ul>
+        <div class="reassurance">
+            Changes in fibroid size don't predict problems—we monitor to stay informed.
+        </div>
+    </div>
+
+    <!-- Slide 4: What to Expect - Timeline -->
+    <div class="slide-container">
+        <h2>What to Expect: Your Care Timeline</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <h4>Early Pregnancy</h4>
+                <p>Ultrasound identifies fibroids and measures size</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <h4>Mid Pregnancy</h4>
+                <p>Regular monitoring at prenatal visits</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <h4>Late Pregnancy</h4>
+                <p>Discuss delivery plan based on baby's position</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Possible Effects -->
+    <div class="slide-container">
+        <h2>Possible Effects During Pregnancy</h2>
+        <p>Most fibroids cause no problems, but we watch for:</p>
+        <div class="info-grid">
+            <div class="info-card">
+                <span class="icon">💢</span>
+                <h3>Pain</h3>
+                <p>If a fibroid grows faster than its blood supply, it may cause temporary pain</p>
+            </div>
+            <div class="info-card">
+                <span class="icon">👶</span>
+                <h3>Baby Position</h3>
+                <p>Large fibroids may affect how baby positions near delivery</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Pain Management -->
+    <div class="slide-container">
+        <h2>If You Experience Pain</h2>
+        <p>Fibroid pain (called "red degeneration") can happen when a fibroid outgrows its blood supply.</p>
+        <div class="action-box">
+            <h3>What Helps:</h3>
+            <ul>
+                <li>Rest and hydration</li>
+                <li>Warm compresses</li>
+                <li>Pain medication (acetaminophen is safe in pregnancy)</li>
+                <li>Usually resolves within a few days</li>
+            </ul>
+        </div>
+        <p><strong>Call your provider</strong> if pain is severe or accompanied by bleeding or contractions.</p>
+    </div>
+
+    <!-- Slide 7: Delivery Considerations -->
+    <div class="slide-container">
+        <h2>Planning Your Delivery</h2>
+        <div class="reassurance">
+            <strong>Most women with fibroids deliver vaginally.</strong>
+        </div>
+        <p>A cesarean birth may be recommended if:</p>
+        <ul>
+            <li>A fibroid blocks the birth canal</li>
+            <li>Your baby is in a position that makes vaginal birth difficult</li>
+            <li>Other medical factors suggest it's safer</li>
+        </ul>
+        <p>Your care team will discuss the best plan for your specific situation as you approach your due date.</p>
+    </div>
+
+    <!-- Slide 8: Your Role in Care -->
+    <div class="slide-container">
+        <h2>Your Partnership Role</h2>
+        <div class="info-grid">
+            <div class="info-card">
+                <span class="icon">📅</span>
+                <h3>Attend Visits</h3>
+                <p>Regular prenatal appointments help us monitor changes</p>
+            </div>
+            <div class="info-card">
+                <span class="icon">📞</span>
+                <h3>Report Symptoms</h3>
+                <p>New pain, bleeding, or contractions—call promptly</p>
+            </div>
+            <div class="info-card">
+                <span class="icon">💬</span>
+                <h3>Ask Questions</h3>
+                <p>Understanding reduces anxiety—we're here to explain</p>
+            </div>
+            <div class="info-card">
+                <span class="icon">🤝</span>
+                <h3>Trust the Process</h3>
+                <p>We have experience managing fibroids successfully</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: What About After Birth? -->
+    <div class="slide-container">
+        <h2>What Happens After Birth?</h2>
+        <ul>
+            <li><strong>Fibroids often shrink</strong> after delivery as hormone levels drop</li>
+            <li><strong>They don't interfere</strong> with breastfeeding</li>
+            <li><strong>Future planning:</strong> Discuss long-term fibroid management at your postpartum visit if needed</li>
+        </ul>
+        <div class="reassurance">
+            Most women notice improvement in fibroid-related symptoms after pregnancy.
+        </div>
+    </div>
+
+    <!-- Slide 10: Key Takeaways -->
+    <div class="slide-container">
+        <h2>Key Takeaways</h2>
+        <div class="action-box">
+            <ul>
+                <li><strong>Fibroids are common</strong> and usually don't complicate pregnancy</li>
+                <li><strong>Monitoring is routine,</strong> not a sign of danger</li>
+                <li><strong>Most effects are manageable</strong> with simple interventions</li>
+                <li><strong>Your care team has experience</strong> supporting healthy pregnancies with fibroids</li>
+                <li><strong>Communication is key</strong>—always share concerns with your provider</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 11: Questions? -->
+    <div class="slide-container">
+        <h2>Questions to Ask Your Provider</h2>
+        <ul>
+            <li>How large are my fibroids and where are they located?</li>
+            <li>Will they affect my baby's position or my delivery?</li>
+            <li>What symptoms should I watch for?</li>
+            <li>How often will we monitor them with ultrasound?</li>
+            <li>What's the plan if I experience pain?</li>
+        </ul>
+        <div class="reassurance">
+            Your questions are important. This is a partnership—we're here to support you.
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">11</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-button" id="prev-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-button" id="next-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const currentSlideCounter = document.getElementById('current-slide');
+        const totalSlidesCounter = document.getElementById('total-slides');
+
+        totalSlidesCounter.textContent = totalSlides;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+            currentSlideCounter.textContent = index + 1;
+
+            // Update button states
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        // Touch navigation for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) previousSlide();
+        }
+
+        // Initialize
+        showSlide(0);
+    </script>
+
+</body>
+</html>
