@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding NIPT: Non-Invasive Prenatal Testing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a2332;
+            color: #e8eef5;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 6rem;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #4db8ff;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #7ec8ff;
+        }
+
+        p {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #a8c5e0;
+            font-weight: 300;
+            margin-top: -1rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #4db8ff;
+            padding: 2rem 2.5rem;
+            margin: 1.5rem 0;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .highlight-blue {
+            background: rgba(77, 184, 255, 0.15);
+            border-left: 4px solid #4db8ff;
+        }
+
+        .highlight-green {
+            background: rgba(102, 204, 153, 0.15);
+            border-left: 4px solid #66cc99;
+        }
+
+        .highlight-orange {
+            background: rgba(255, 159, 64, 0.15);
+            border-left: 4px solid #ff9f40;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            width: 100%;
+            margin: 2rem 0;
+        }
+
+        .column {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .icon-text {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            font-size: 1.4rem;
+        }
+
+        .icon {
+            font-size: 2.5rem;
+            margin-right: 1.5rem;
+            min-width: 50px;
+        }
+
+        .timeline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            max-width: 1200px;
+        }
+
+        .timeline-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .timeline-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #4db8ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-label {
+            font-size: 1.3rem;
+            color: #a8c5e0;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: #4db8ff;
+        }
+
+        table {
+            width: 100%;
+            max-width: 1000px;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 1.3rem;
+        }
+
+        th {
+            background: rgba(77, 184, 255, 0.2);
+            padding: 1.2rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #4db8ff;
+        }
+
+        td {
+            padding: 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .stat-box {
+            background: rgba(77, 184, 255, 0.1);
+            border: 2px solid #4db8ff;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 1rem;
+            min-width: 200px;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #4db8ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.3rem;
+            color: #a8c5e0;
+        }
+
+        .key-point {
+            font-size: 1.6rem;
+            margin: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .key-point:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #4db8ff;
+            font-size: 2rem;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .nav-button {
+            background: rgba(77, 184, 255, 0.2);
+            border: 2px solid #4db8ff;
+            color: #4db8ff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-button:hover {
+            background: rgba(77, 184, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            font-size: 1.2rem;
+            color: #a8c5e0;
+            z-index: 100;
+        }
+
+        .emphasis {
+            color: #4db8ff;
+            font-weight: 600;
+        }
+
+        .reassurance {
+            color: #66cc99;
+            font-weight: 600;
+        }
+
+        .action {
+            color: #ff9f40;
+            font-weight: 600;
+        }
+
+        ul {
+            list-style: none;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        li {
+            font-size: 1.5rem;
+            margin: 1.2rem 0;
+            padding-left: 2rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #4db8ff;
+        }
+
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            background: rgba(77, 184, 255, 0.15);
+            border: 2px solid #4db8ff;
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            font-size: 1.4rem;
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .flow-arrow {
+            font-size: 2rem;
+            color: #4db8ff;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem;
+            }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            p, li { font-size: 1.2rem; }
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container" id="slideContainer">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <h1>Understanding NIPT</h1>
+            <p class="subtitle">Non-Invasive Prenatal Testing</p>
+            <p style="margin-top: 3rem; font-size: 1.6rem;">A simple blood test that gives you information about your baby's health</p>
+        </div>
+
+        <!-- Slide 2: What is NIPT? -->
+        <div class="slide">
+            <h2>What Is NIPT?</h2>
+            <div class="content-box highlight-blue">
+                <p>A <span class="emphasis">blood test</span> that analyzes tiny pieces of your baby's DNA found in your bloodstream.</p>
+            </div>
+            <div class="icon-text">
+                <span class="icon">🩸</span>
+                <span>One blood draw from your arm</span>
+            </div>
+            <div class="icon-text">
+                <span class="icon">🔬</span>
+                <span>Lab analyzes cell-free DNA</span>
+            </div>
+            <div class="icon-text">
+                <span class="icon">📊</span>
+                <span>Results in 1-2 weeks</span>
+            </div>
+            <p style="margin-top: 2rem; color: #66cc99;">No risk to you or your baby</p>
+        </div>
+
+        <!-- Slide 3: When Is It Done? -->
+        <div class="slide">
+            <h2>When Can You Have NIPT?</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-number">9+</div>
+                    <div class="timeline-label">Weeks pregnant</div>
+                </div>
+                <span class="arrow">→</span>
+                <div class="timeline-item">
+                    <div class="timeline-number">1-2</div>
+                    <div class="timeline-label">Weeks for results</div>
+                </div>
+                <span class="arrow">→</span>
+                <div class="timeline-item">
+                    <div class="timeline-number">✓</div>
+                    <div class="timeline-label">Discuss with provider</div>
+                </div>
+            </div>
+            <div class="content-box highlight-green" style="margin-top: 3rem;">
+                <p>Usually offered between <span class="emphasis">10-13 weeks</span> of pregnancy.</p>
+                <p style="margin-top: 1rem;">Can be done any time after 9 weeks through delivery.</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: What Does NIPT Screen For? -->
+        <div class="slide">
+            <h2>What Does NIPT Screen For?</h2>
+            <table>
+                <tr>
+                    <th>Condition</th>
+                    <th>What It Means</th>
+                </tr>
+                <tr>
+                    <td><strong>Trisomy 21</strong> (Down syndrome)</td>
+                    <td>Extra copy of chromosome 21</td>
+                </tr>
+                <tr>
+                    <td><strong>Trisomy 18</strong> (Edwards syndrome)</td>
+                    <td>Extra copy of chromosome 18</td>
+                </tr>
+                <tr>
+                    <td><strong>Trisomy 13</strong> (Patau syndrome)</td>
+                    <td>Extra copy of chromosome 13</td>
+                </tr>
+                <tr>
+                    <td><strong>Sex chromosomes</strong></td>
+                    <td>Differences in X or Y chromosomes</td>
+                </tr>
+            </table>
+            <p style="margin-top: 2rem; font-size: 1.3rem; color: #a8c5e0;">Some tests can check for other chromosome conditions too.</p>
+        </div>
+
+        <!-- Slide 5: How Accurate Is NIPT? -->
+        <div class="slide">
+            <h2>How Accurate Is NIPT?</h2>
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                <div class="stat-box">
+                    <div class="stat-number">>99%</div>
+                    <div class="stat-label">Detection rate for<br>Down syndrome</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">~97%</div>
+                    <div class="stat-label">Detection rate for<br>Trisomy 18</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">~95%</div>
+                    <div class="stat-label">Detection rate for<br>Trisomy 13</div>
+                </div>
+            </div>
+            <div class="content-box highlight-blue" style="margin-top: 3rem;">
+                <p><span class="emphasis">NIPT is a screening test, not a diagnostic test.</span></p>
+                <p style="margin-top: 1rem;">This means it tells us the chance, but cannot give a definite yes or no answer.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Understanding Screening vs Diagnostic -->
+        <div class="slide">
+            <h2>Screening vs. Diagnostic Testing</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3 style="color: #4db8ff;">Screening Tests</h3>
+                    <p style="text-align: left; font-size: 1.4rem;">Tell us the <span class="emphasis">probability</span> of a condition</p>
+                    <ul style="margin-top: 1.5rem;">
+                        <li>NIPT (blood test)</li>
+                        <li>Ultrasound findings</li>
+                        <li>First trimester screen</li>
+                    </ul>
+                    <p style="margin-top: 1.5rem; color: #66cc99; text-align: left;">No risk to pregnancy</p>
+                </div>
+                <div class="column">
+                    <h3 style="color: #ff9f40;">Diagnostic Tests</h3>
+                    <p style="text-align: left; font-size: 1.4rem;">Give a <span class="action">definite</span> answer</p>
+                    <ul style="margin-top: 1.5rem;">
+                        <li>Amniocentesis</li>
+                        <li>CVS (chorionic villus sampling)</li>
+                    </ul>
+                    <p style="margin-top: 1.5rem; color: #ff9f40; text-align: left;">Small risk of pregnancy loss (~1 in 500)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: What Results Mean - Normal -->
+        <div class="slide">
+            <h2>Understanding Your Results</h2>
+            <div class="content-box highlight-green">
+                <h3 style="color: #66cc99;">Negative or Low-Risk Result</h3>
+                <p>The test found a <span class="reassurance">very low chance</span> of the screened conditions.</p>
+                <p style="margin-top: 1rem;">This is the result most people receive.</p>
+            </div>
+            <div class="key-point" style="margin-top: 2rem;">A low-risk result is very reassuring</div>
+            <div class="key-point">The screened conditions are unlikely</div>
+            <div class="key-point">Continue routine prenatal care</div>
+            <div class="key-point" style="color: #a8c5e0;">No test can guarantee a perfectly healthy baby</div>
+        </div>
+
+        <!-- Slide 8: What Results Mean - High Risk -->
+        <div class="slide">
+            <h2>High-Risk Results</h2>
+            <div class="content-box highlight-orange">
+                <h3 style="color: #ff9f40;">Positive or High-Risk Result</h3>
+                <p>The test found a <span class="action">higher chance</span> of one of the screened conditions.</p>
+            </div>
+            <div class="content-box highlight-blue" style="margin-top: 2rem;">
+                <p><span class="emphasis">A high-risk result does NOT mean your baby definitely has the condition.</span></p>
+                <p style="margin-top: 1rem;">It means more testing is recommended to know for sure.</p>
+            </div>
+            <div class="key-point" style="margin-top: 2rem;">Your doctor will discuss the findings with you</div>
+            <div class="key-point">You may be offered diagnostic testing (amniocentesis)</div>
+            <div class="key-point">You'll meet with genetic counselors for support</div>
+        </div>
+
+        <!-- Slide 9: Why False Positives Happen -->
+        <div class="slide">
+            <h2>Why Can Results Be Incorrect?</h2>
+            <p style="margin-bottom: 3rem;">NIPT analyzes DNA in your blood, but sometimes that DNA doesn't perfectly match your baby's.</p>
+            <div class="two-column">
+                <div class="column">
+                    <h3 style="font-size: 1.6rem;">Reasons for inaccuracy:</h3>
+                    <ul>
+                        <li>Confined placental mosaicism</li>
+                        <li>Vanishing twin</li>
+                        <li>Maternal chromosome variation</li>
+                        <li>Technical lab issues</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3 style="font-size: 1.6rem;">What this means:</h3>
+                    <p style="text-align: left; font-size: 1.4rem; line-height: 1.8;">The DNA in your blood may come from the placenta (not the baby) or from other sources.</p>
+                    <p style="text-align: left; font-size: 1.4rem; margin-top: 1rem; color: #4db8ff;">That's why diagnostic testing confirms results.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Test Failures -->
+        <div class="slide">
+            <h2>What If the Test Fails?</h2>
+            <div class="content-box highlight-blue">
+                <p>About <span class="emphasis">1-5%</span> of NIPT tests don't give a result the first time.</p>
+            </div>
+            <div style="margin-top: 3rem;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 2rem;">Common reasons:</h3>
+                <div class="key-point">Not enough fetal DNA in the blood sample</div>
+                <div class="key-point">Higher body weight (affects DNA concentration)</div>
+                <div class="key-point">Too early in pregnancy</div>
+                <div class="key-point">Technical lab issues</div>
+            </div>
+            <div class="content-box highlight-green" style="margin-top: 3rem;">
+                <p><span class="reassurance">Usually you can repeat the test</span> or choose a different screening option.</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Who Should Consider NIPT? -->
+        <div class="slide">
+            <h2>Who Should Consider NIPT?</h2>
+            <div class="content-box highlight-green">
+                <p><span class="reassurance">NIPT is available to all pregnant people</span>, regardless of age or risk factors.</p>
+            </div>
+            <div style="margin-top: 3rem;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 2rem;">Especially helpful for:</h3>
+                <div class="key-point">Anyone who wants reassurance about chromosome conditions</div>
+                <div class="key-point">Maternal age 35 or older at delivery</div>
+                <div class="key-point">Abnormal findings on ultrasound</div>
+                <div class="key-point">Abnormal first trimester screening results</div>
+                <div class="key-point">Previous pregnancy with chromosome condition</div>
+                <div class="key-point">Family history of genetic conditions</div>
+            </div>
+        </div>
+
+        <!-- Slide 12: What NIPT Cannot Tell You -->
+        <div class="slide">
+            <h2>What NIPT Cannot Tell You</h2>
+            <div class="content-box" style="border-left-color: #ff9f40;">
+                <p>NIPT does <span class="action">not</span> screen for:</p>
+            </div>
+            <div style="margin-top: 2rem;">
+                <div class="key-point">Neural tube defects (like spina bifida)</div>
+                <div class="key-point">Heart defects</div>
+                <div class="key-point">Most genetic syndromes</div>
+                <div class="key-point">Physical abnormalities</div>
+                <div class="key-point">Autism or developmental delays</div>
+                <div class="key-point">Single gene disorders (like cystic fibrosis)</div>
+            </div>
+            <div class="content-box highlight-blue" style="margin-top: 3rem;">
+                <p>NIPT is <span class="emphasis">one part</span> of prenatal care. Ultrasounds and other tests give additional information.</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Optional Information - Sex and Sex Chromosomes -->
+        <div class="slide">
+            <h2>Learning Your Baby's Sex</h2>
+            <div class="content-box highlight-blue">
+                <p>NIPT can tell you the <span class="emphasis">fetal sex</span> with high accuracy (>99%).</p>
+            </div>
+            <div style="margin-top: 3rem;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 2rem;">You can choose:</h3>
+                <div class="key-point">To learn the sex from NIPT results</div>
+                <div class="key-point">To wait for the anatomy ultrasound (18-22 weeks)</div>
+                <div class="key-point">To wait until birth</div>
+            </div>
+            <div class="content-box" style="margin-top: 3rem; border-left-color: #66cc99;">
+                <p style="color: #a8c5e0;">Some people also choose to test for <span class="emphasis">sex chromosome differences</span> (like Turner syndrome or Klinefelter syndrome). This is optional.</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Cost and Insurance -->
+        <div class="slide">
+            <h2>Cost and Insurance</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3 style="font-size: 1.6rem;">Insurance coverage:</h3>
+                    <ul>
+                        <li>Often covered if you're 35+ or have risk factors</li>
+                        <li>Coverage varies by insurance plan</li>
+                        <li>Check with your insurance company first</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3 style="font-size: 1.6rem;">Out-of-pocket costs:</h3>
+                    <ul>
+                        <li>Can range from $0 to $500+</li>
+                        <li>Many labs offer financial assistance</li>
+                        <li>Ask about payment plans</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content-box highlight-green" style="margin-top: 3rem;">
+                <p><span class="reassurance">Your healthcare team can help you understand costs</span> before you decide.</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Making Your Decision -->
+        <div class="slide">
+            <h2>Is NIPT Right for You?</h2>
+            <p style="margin-bottom: 3rem;">Only you can decide what's right for your pregnancy.</p>
+            <div style="margin-top: 2rem;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 2rem;">Questions to consider:</h3>
+                <div class="key-point">Would early information help you prepare?</div>
+                <div class="key-point">How would you use the results?</div>
+                <div class="key-point">Would you want diagnostic testing if NIPT is high-risk?</div>
+                <div class="key-point">What are your values and preferences?</div>
+            </div>
+            <div class="content-box highlight-green" style="margin-top: 3rem;">
+                <p><span class="reassurance">There's no wrong choice.</span> Your healthcare team is here to support your decision.</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: Next Steps After NIPT -->
+        <div class="slide">
+            <h2>What Happens Next?</h2>
+            <div class="flow-diagram">
+                <div class="flow-box">Blood draw<br>(1 tube)</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">Lab analysis<br>(7-14 days)</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">Results to<br>your doctor</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">Discussion<br>of findings</div>
+            </div>
+            <div class="content-box highlight-blue" style="margin-top: 3rem;">
+                <h3 style="color: #4db8ff; margin-bottom: 1rem;">If results are low-risk:</h3>
+                <p>Continue routine prenatal care and ultrasounds</p>
+            </div>
+            <div class="content-box highlight-orange" style="margin-top: 2rem;">
+                <h3 style="color: #ff9f40; margin-bottom: 1rem;">If results are high-risk:</h3>
+                <p>Meet with genetic counselor → Consider diagnostic testing → Make informed decisions</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Your Healthcare Team -->
+        <div class="slide">
+            <h2>You're Not Alone</h2>
+            <div class="content-box highlight-green">
+                <p>Your healthcare team is here to <span class="reassurance">support you</span> through every step.</p>
+            </div>
+            <div style="margin-top: 3rem;">
+                <div class="icon-text">
+                    <span class="icon">👨‍⚕️</span>
+                    <span><strong>Your OB provider:</strong> Guides your overall care and answers questions</span>
+                </div>
+                <div class="icon-text">
+                    <span class="icon">🧬</span>
+                    <span><strong>Genetic counselor:</strong> Explains results and helps with decision-making</span>
+                </div>
+                <div class="icon-text">
+                    <span class="icon">🏥</span>
+                    <span><strong>Maternal-fetal medicine:</strong> Specialists for high-risk situations</span>
+                </div>
+                <div class="icon-text">
+                    <span class="icon">🤝</span>
+                    <span><strong>Support services:</strong> Connect you with resources and community</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+            <div class="key-point" style="font-size: 1.6rem;">NIPT is a safe blood test that screens for chromosome conditions</div>
+            <div class="key-point" style="font-size: 1.6rem;">It's very accurate but is a screening test, not a diagnosis</div>
+            <div class="key-point" style="font-size: 1.6rem;">Most results are low-risk and very reassuring</div>
+            <div class="key-point" style="font-size: 1.6rem;">High-risk results need follow-up with diagnostic testing</div>
+            <div class="key-point" style="font-size: 1.6rem;">You choose whether NIPT is right for your pregnancy</div>
+            <div class="content-box highlight-green" style="margin-top: 3rem;">
+                <p style="font-size: 1.6rem;"><span class="reassurance">Your healthcare team partners with you</span> to make informed decisions about your care.</p>
+            </div>
+        </div>
+
+        <!-- Slide 19: Questions -->
+        <div class="slide">
+            <h2>Questions to Ask Your Provider</h2>
+            <ul style="max-width: 1100px;">
+                <li>Is NIPT recommended for my pregnancy?</li>
+                <li>What will insurance cover?</li>
+                <li>When would I get results?</li>
+                <li>How will results affect my care?</li>
+                <li>What happens if the test shows high risk?</li>
+                <li>Can I speak with a genetic counselor?</li>
+                <li>Are there other screening options I should consider?</li>
+            </ul>
+            <div class="content-box highlight-blue" style="margin-top: 3rem;">
+                <p>Write down your questions and bring them to your next appointment.</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Resources -->
+        <div class="slide">
+            <h2>Reliable Resources</h2>
+            <div style="margin-top: 2rem;">
+                <div class="content-box" style="margin: 1.5rem 0;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">American College of Obstetricians and Gynecologists (ACOG)</h3>
+                    <p style="font-size: 1.3rem; color: #a8c5e0;">Patient education materials on prenatal testing</p>
+                </div>
+                <div class="content-box" style="margin: 1.5rem 0;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Society for Maternal-Fetal Medicine (SMFM)</h3>
+                    <p style="font-size: 1.3rem; color: #a8c5e0;">Evidence-based information for patients</p>
+                </div>
+                <div class="content-box" style="margin: 1.5rem 0;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">National Society of Genetic Counselors</h3>
+                    <p style="font-size: 1.3rem; color: #a8c5e0;">Find a genetic counselor in your area</p>
+                </div>
+            </div>
+            <p style="margin-top: 3rem; color: #66cc99;">Your healthcare provider is your best source of personalized information.</p>
+        </div>
+
+        <!-- Slide 21: Thank You -->
+        <div class="slide">
+            <h1>Thank You</h1>
+            <p style="font-size: 1.8rem; margin-top: 3rem;">We're here to support you and your growing family.</p>
+            <div class="content-box highlight-green" style="margin-top: 4rem;">
+                <p style="font-size: 1.6rem;">Questions? Don't hesitate to reach out to your care team.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="slide-number" id="slideNumber">1 / 21</div>
+    
+    <div class="navigation">
+        <button class="nav-button" onclick="previousSlide()">← Previous</button>
+        <button class="nav-button" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const container = document.getElementById('slideContainer');
+        const slideNumber = document.getElementById('slideNumber');
+
+        function updateSlide() {
+            container.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            slideNumber.textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                currentSlide = 0;
+                updateSlide();
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                currentSlide = totalSlides - 1;
+                updateSlide();
+            }
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + 50) {
+                previousSlide();
+            }
+        }
+
+        // Initialize
+        updateSlide();
+    </script>
+</body>
+</html>
