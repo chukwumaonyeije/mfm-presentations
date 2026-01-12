@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Hypo-Coiled Umbilical Cord</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slides-container {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+            height: 100vh;
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: #64b5f6;
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            color: #81c784;
+        }
+
+        p {
+            font-size: 1.8rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: #b0b0b0;
+            margin-top: -1rem;
+        }
+
+        .highlight {
+            color: #64b5f6;
+            font-weight: 600;
+        }
+
+        .reassurance {
+            color: #81c784;
+            font-weight: 600;
+        }
+
+        .action {
+            color: #ffb74d;
+            font-weight: 600;
+        }
+
+        .visual-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #64b5f6;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            max-width: 800px;
+        }
+
+        .cord-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 2rem 0;
+            gap: 3rem;
+        }
+
+        .cord-visual {
+            text-align: center;
+        }
+
+        .cord-line {
+            width: 200px;
+            height: 8px;
+            background: #e0e0e0;
+            margin: 1rem auto;
+            border-radius: 4px;
+        }
+
+        .cord-line.coiled {
+            background: repeating-linear-gradient(
+                90deg,
+                #e0e0e0,
+                #e0e0e0 10px,
+                transparent 10px,
+                transparent 15px
+            );
+            height: 40px;
+            width: 200px;
+            clip-path: polygon(0 50%, 10% 20%, 20% 50%, 30% 80%, 40% 50%, 50% 20%, 60% 50%, 70% 80%, 80% 50%, 90% 20%, 100% 50%);
+        }
+
+        .monitoring-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+            max-width: 900px;
+        }
+
+        .monitoring-item {
+            background: rgba(100, 181, 246, 0.1);
+            border-left: 4px solid #64b5f6;
+            padding: 1.5rem;
+            text-align: left;
+            border-radius: 8px;
+        }
+
+        .monitoring-item h4 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            color: #64b5f6;
+        }
+
+        .monitoring-item p {
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            text-align: left;
+            font-size: 1.6rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 1rem auto;
+        }
+
+        li {
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 6px;
+            background: #64b5f6;
+            transition: width 0.4s ease-in-out;
+            z-index: 1000;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            font-size: 1.2rem;
+            color: #b0b0b0;
+            z-index: 1000;
+        }
+
+        .question-label {
+            display: inline-block;
+            background: rgba(100, 181, 246, 0.2);
+            color: #64b5f6;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            p {
+                font-size: 1.4rem;
+            }
+            .monitoring-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slides-container" id="slidesContainer">
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <h1>Understanding<br>Hypo-Coiled Umbilical Cord</h1>
+            <p class="subtitle">Information for expecting parents at 23 weeks</p>
+        </div>
+
+        <!-- Slide 2: What is this? -->
+        <div class="slide">
+            <span class="question-label">What is this?</span>
+            <h2>The Umbilical Cord's Shape</h2>
+            <p>Your baby's umbilical cord normally has a <span class="highlight">spiral or twisted pattern</span>, like a phone cord.</p>
+            <p>A hypo-coiled cord has <span class="highlight">fewer twists than usual</span>.</p>
+        </div>
+
+        <!-- Slide 3: Visual comparison -->
+        <div class="slide">
+            <span class="question-label">What is this?</span>
+            <h2>Visual Comparison</h2>
+            <div class="cord-diagram">
+                <div class="cord-visual">
+                    <div class="cord-line coiled"></div>
+                    <p>Typical Cord<br>(Coiled)</p>
+                </div>
+                <div class="cord-visual">
+                    <div class="cord-line"></div>
+                    <p>Hypo-Coiled Cord<br>(Fewer Twists)</p>
+                </div>
+            </div>
+            <p style="font-size: 1.5rem; color: #b0b0b0;">This shape forms naturally in early pregnancy.</p>
+        </div>
+
+        <!-- Slide 4: Why does it matter? -->
+        <div class="slide">
+            <span class="question-label">Why does it matter?</span>
+            <h2>Why Your Team Is Watching</h2>
+            <p>The spiral pattern normally helps protect blood vessels from pressure.</p>
+            <p>Fewer twists means we'll <span class="reassurance">monitor your baby more closely</span> to ensure healthy growth and blood flow.</p>
+        </div>
+
+        <!-- Slide 5: What it's associated with -->
+        <div class="slide">
+            <span class="question-label">Why does it matter?</span>
+            <h2>What We're Watching For</h2>
+            <div class="visual-box">
+                <p>This finding is <span class="highlight">associated with</span> a higher chance of:</p>
+                <ul>
+                    <li>Slower baby growth (we check this with ultrasounds)</li>
+                    <li>Earlier delivery (many babies still arrive full-term)</li>
+                    <li>Closer monitoring during labor</li>
+                </ul>
+            </div>
+            <p style="font-size: 1.4rem; color: #b0b0b0;">Most babies do well with appropriate monitoring.</p>
+        </div>
+
+        <!-- Slide 6: What happens next? -->
+        <div class="slide">
+            <span class="question-label">What happens next?</span>
+            <h2>Your Monitoring Plan</h2>
+            <p><span class="reassurance">Your healthcare team will create a protective plan</span> with extra check-ins.</p>
+        </div>
+
+        <!-- Slide 7: Detailed monitoring -->
+        <div class="slide">
+            <span class="question-label">What happens next?</span>
+            <h2>Extra Ultrasounds & Tests</h2>
+            <div class="monitoring-grid">
+                <div class="monitoring-item">
+                    <h4>📊 Growth Scans</h4>
+                    <p>Ultrasounds every 3-4 weeks to measure baby's size</p>
+                </div>
+                <div class="monitoring-item">
+                    <h4>🔍 Anatomy Check</h4>
+                    <p>Detailed scan to check baby's development</p>
+                </div>
+                <div class="monitoring-item">
+                    <h4>💓 Heart Monitoring</h4>
+                    <p>Weekly tests starting around 32-34 weeks</p>
+                </div>
+                <div class="monitoring-item">
+                    <h4>👶 Movement Tracking</h4>
+                    <p>You'll count kicks in the third trimester</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: During labor -->
+        <div class="slide">
+            <span class="question-label">What happens next?</span>
+            <h2>During Labor</h2>
+            <p>Your baby's heart rate will be <span class="highlight">monitored continuously</span> during labor.</p>
+            <p>This lets your team respond quickly if the cord experiences any pressure.</p>
+            <p style="font-size: 1.5rem; color: #b0b0b0;">Many people deliver safely with careful monitoring.</p>
+        </div>
+
+        <!-- Slide 9: What can I do? -->
+        <div class="slide">
+            <span class="question-label">What can I do?</span>
+            <h2>Your Role as a Partner</h2>
+            <div class="visual-box">
+                <ul>
+                    <li><span class="action">Attend all scheduled ultrasounds</span> — they track growth patterns over time</li>
+                    <li><span class="action">Track baby's movements</span> daily in the third trimester</li>
+                    <li><span class="action">Report changes</span> in movement patterns to your provider</li>
+                    <li><span class="action">Ask questions</span> at every appointment</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 10: Reassurance -->
+        <div class="slide">
+            <span class="question-label">What can I do?</span>
+            <h2>Remember</h2>
+            <div class="icon">🤝</div>
+            <p><span class="reassurance">You and your healthcare team are working together</span> to give your baby the best start.</p>
+            <p>This finding means <span class="highlight">careful attention</span>, not certainty of complications.</p>
+        </div>
+
+        <!-- Slide 11: Summary -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+            <div class="visual-box">
+                <ul>
+                    <li>A hypo-coiled cord has <span class="highlight">fewer twists than typical</span></li>
+                    <li>It means <span class="reassurance">closer monitoring</span>, not guaranteed problems</li>
+                    <li>Your team will track growth with <span class="action">extra ultrasounds</span></li>
+                    <li>Careful monitoring during labor keeps baby safe</li>
+                    <li><span class="reassurance">Most pregnancies proceed well</span> with this plan</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Questions -->
+        <div class="slide">
+            <div class="icon">💬</div>
+            <h2>Questions for Your Provider?</h2>
+            <p>Write them down and bring them to your next visit.</p>
+            <p style="font-size: 1.5rem; color: #b0b0b0;">Your questions help us care for you better.</p>
+        </div>
+    </div>
+
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="navigation" id="navigation">Use arrow keys or swipe to navigate</div>
+
+    <script>
+        let currentSlide = 0;
+        const slidesContainer = document.getElementById('slidesContainer');
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const progressBar = document.getElementById('progressBar');
+
+        function updateSlide() {
+            const offset = -currentSlide * 100;
+            slidesContainer.style.transform = `translateX(${offset}vw)`;
+            
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Touch navigation
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchStartX - touchEndX > 50) {
+                nextSlide();
+            }
+            if (touchEndX - touchStartX > 50) {
+                prevSlide();
+            }
+        }
+
+        // Click navigation
+        document.addEventListener('click', (e) => {
+            const clickX = e.clientX;
+            const windowWidth = window.innerWidth;
+            
+            if (clickX > windowWidth * 0.7) {
+                nextSlide();
+            } else if (clickX < windowWidth * 0.3) {
+                prevSlide();
+            }
+        });
+
+        // Initialize
+        updateSlide();
+    </script>
+</body>
+</html>
