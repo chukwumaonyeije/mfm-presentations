@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Fetal Growth Restriction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+        .slide-container {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+            height: 100vh;
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            color: #4fc3f7;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            color: #4fc3f7;
+            font-weight: 400;
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #81c784;
+            font-weight: 400;
+        }
+
+        p {
+            font-size: 1.8rem;
+            max-width: 900px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            color: #ffd54f;
+            font-weight: 500;
+        }
+
+        .reassurance {
+            color: #81c784;
+            font-weight: 500;
+        }
+
+        .definition {
+            background: rgba(79, 195, 247, 0.1);
+            border-left: 4px solid #4fc3f7;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            text-align: left;
+            font-size: 1.6rem;
+        }
+
+        table {
+            margin: 2rem auto;
+            border-collapse: collapse;
+            font-size: 1.4rem;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        th {
+            background: #2d4059;
+            padding: 1rem;
+            text-align: left;
+            color: #4fc3f7;
+            font-weight: 500;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #4fc3f7;
+            z-index: 0;
+        }
+
+        .timeline-item {
+            background: #2d4059;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            z-index: 1;
+            font-size: 1.4rem;
+            min-width: 150px;
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .key-point {
+            background: rgba(129, 199, 132, 0.15);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem auto;
+            max-width: 800px;
+            font-size: 1.6rem;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            font-size: 1rem;
+            color: #888;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.8rem 1.2rem;
+            border-radius: 5px;
+        }
+
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #4fc3f7;
+            transition: width 0.3s ease;
+        }
+
+        ul {
+            text-align: left;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            font-size: 1.6rem;
+            list-style-position: inside;
+        }
+
+        li {
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 2rem auto;
+        }
+
+        .comparison-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-size: 1.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: #aaa;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress" id="progress"></div>
+    
+    <div class="slide-container" id="slideContainer">
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <h1>Understanding Fetal Growth Restriction</h1>
+            <p class="subtitle">A guide for expectant parents</p>
+            <p style="font-size: 1.4rem; color: #888; margin-top: 3rem;">Use arrow keys to navigate →</p>
+        </div>
+
+        <!-- Slide 2: What is this? -->
+        <div class="slide">
+            <div class="icon">🤰</div>
+            <h2>What Is Fetal Growth Restriction?</h2>
+            <p>Your baby's estimated weight is below the 10th percentile.</p>
+            <p>This means your baby is smaller than <span class="highlight">90 out of 100 babies</span> at this stage of pregnancy.</p>
+        </div>
+
+        <!-- Slide 3: Definition -->
+        <div class="slide">
+            <h2>Two Different Situations</h2>
+            <div class="comparison">
+                <div class="comparison-item">
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Constitutionally Small</h3>
+                    <p style="font-size: 1.4rem;">Baby is naturally small but healthy. Placenta is working well.</p>
+                </div>
+                <div class="comparison-item">
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Growth Restriction</h3>
+                    <p style="font-size: 1.4rem;">Baby isn't getting enough nutrients. Placenta needs monitoring.</p>
+                </div>
+            </div>
+            <p class="reassurance" style="margin-top: 2rem;">Our job is to figure out which one and monitor closely.</p>
+        </div>
+
+        <!-- Slide 4: Why does it matter? -->
+        <div class="slide">
+            <div class="icon">❤️</div>
+            <h2>Why Does This Matter?</h2>
+            <p>The placenta delivers oxygen and nutrients to your baby.</p>
+            <p>When growth is restricted, we need to check if the placenta is <span class="highlight">working hard enough</span>.</p>
+        </div>
+
+        <!-- Slide 5: The Balance -->
+        <div class="slide">
+            <h2>Our Goal: Finding Balance</h2>
+            <div class="key-point">
+                <p style="font-size: 1.8rem;">We balance two things:</p>
+                <p style="margin-top: 1rem;">✓ Giving baby more time to grow inside</p>
+                <p>✓ Ensuring baby stays safe and healthy</p>
+            </div>
+            <p class="reassurance" style="margin-top: 2rem;">We monitor carefully to make the safest choice.</p>
+        </div>
+
+        <!-- Slide 6: What happens next - monitoring -->
+        <div class="slide">
+            <h2>What Happens Next?</h2>
+            <h3>Regular Monitoring Begins</h3>
+            <table>
+                <tr>
+                    <th>Test</th>
+                    <th>How Often</th>
+                    <th>What It Shows</th>
+                </tr>
+                <tr>
+                    <td>Growth Ultrasound</td>
+                    <td>Every 3-4 weeks</td>
+                    <td>Baby's size and growth pattern</td>
+                </tr>
+                <tr>
+                    <td>Doppler Ultrasound</td>
+                    <td>Every 1-2 weeks</td>
+                    <td>Blood flow through placenta</td>
+                </tr>
+                <tr>
+                    <td>Non-Stress Test</td>
+                    <td>1-2 times per week</td>
+                    <td>Baby's heart rate and movement</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 7: Doppler explained -->
+        <div class="slide">
+            <div class="icon">🩺</div>
+            <h2>Understanding Doppler Ultrasound</h2>
+            <p>This special ultrasound measures blood flow in the umbilical cord.</p>
+            <div class="definition">
+                <strong>Umbilical Artery:</strong> The blood vessel that carries blood from baby to placenta. High resistance means the placenta is working harder.
+            </div>
+            <p class="reassurance">Normal Doppler = placenta is keeping up well</p>
+        </div>
+
+        <!-- Slide 8: Timeline of care -->
+        <div class="slide">
+            <h2>Your Monitoring Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <strong>Diagnosis</strong><br>
+                    EFW &lt;10%
+                </div>
+                <div class="timeline-item">
+                    <strong>Monitoring</strong><br>
+                    Weekly tests
+                </div>
+                <div class="timeline-item">
+                    <strong>Assessment</strong><br>
+                    Placenta function
+                </div>
+                <div class="timeline-item">
+                    <strong>Decision</strong><br>
+                    Timing delivery
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: When might delivery happen? -->
+        <div class="slide">
+            <h2>When Might Delivery Happen?</h2>
+            <p>Timing depends on how the placenta is functioning.</p>
+            <p class="highlight">The goal: deliver when it's safer outside than inside.</p>
+        </div>
+
+        <!-- Slide 10: Delivery scenarios -->
+        <div class="slide">
+            <h2>Delivery Timing Scenarios</h2>
+            <table>
+                <tr>
+                    <th>Situation</th>
+                    <th>Typical Timing</th>
+                    <th>Why</th>
+                </tr>
+                <tr>
+                    <td>Growth restriction with normal blood flow</td>
+                    <td>38-39 weeks</td>
+                    <td>Near full-term with monitoring</td>
+                </tr>
+                <tr>
+                    <td>Severe growth restriction</td>
+                    <td>37 weeks</td>
+                    <td>Earlier delivery reduces risk</td>
+                </tr>
+                <tr>
+                    <td>Abnormal placental blood flow</td>
+                    <td>33-37 weeks</td>
+                    <td>Placenta showing strain</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 11: Early delivery support -->
+        <div class="slide">
+            <h2>If Early Delivery Is Needed</h2>
+            <div class="key-point">
+                <p><strong class="highlight">Steroid Injections:</strong> Help baby's lungs mature before birth</p>
+                <p style="margin-top: 1rem;"><strong class="highlight">NICU Support:</strong> Specialized care ready if baby arrives early</p>
+                <p style="margin-top: 1rem;"><strong class="highlight">Continuous Monitoring:</strong> Close watch during labor</p>
+            </div>
+            <p class="reassurance" style="margin-top: 2rem;">We prepare for early arrival to keep baby safe.</p>
+        </div>
+
+        <!-- Slide 12: What can you do? -->
+        <div class="slide">
+            <div class="icon">💪</div>
+            <h2>What Can You Do?</h2>
+            <ul>
+                <li><span class="reassurance">Attend all monitoring appointments</span> — this is how we track safety</li>
+                <li><span class="reassurance">Rest when possible</span> — lying on your left side may help blood flow</li>
+                <li><span class="reassurance">Eat nutritious meals</span> — though supplements won't fix FGR</li>
+                <li><span class="reassurance">Track baby's movements</span> — report changes immediately</li>
+            </ul>
+        </div>
+
+        <!-- Slide 13: What doesn't help -->
+        <div class="slide">
+            <h2>What Research Shows</h2>
+            <p>Some things <span class="highlight">do not</span> improve fetal growth restriction:</p>
+            <div class="key-point">
+                <p>✗ Nutritional supplements or extra vitamins</p>
+                <p>✗ Bed rest (though rest is still good for you)</p>
+                <p>✗ Blood thinners (unless prescribed for another reason)</p>
+            </div>
+            <p style="margin-top: 2rem; font-size: 1.4rem;">The most effective intervention is <span class="reassurance">close monitoring and timely delivery</span>.</p>
+        </div>
+
+        <!-- Slide 14: Labor and delivery -->
+        <div class="slide">
+            <h2>Labor and Delivery</h2>
+            <p><span class="reassurance">Vaginal delivery is often possible</span> with growth restriction.</p>
+            <p>You'll have continuous heart rate monitoring during labor.</p>
+            <p style="margin-top: 2rem;">C-section is recommended only if:</p>
+            <ul style="margin-top: 1rem; font-size: 1.5rem;">
+                <li>Baby is breech or other position concerns</li>
+                <li>Baby shows signs of distress</li>
+                <li>Severe placental problems exist</li>
+            </ul>
+        </div>
+
+        <!-- Slide 15: Questions to ask -->
+        <div class="slide">
+            <h2>Questions to Ask Your Team</h2>
+            <ul style="font-size: 1.6rem;">
+                <li>What percentile is my baby measuring at?</li>
+                <li>What do the Doppler studies show?</li>
+                <li>How often will I need monitoring?</li>
+                <li>When might we consider delivery?</li>
+                <li>What signs should I watch for at home?</li>
+            </ul>
+            <p class="reassurance" style="margin-top: 2rem;">We're partners in keeping your baby safe.</p>
+        </div>
+
+        <!-- Slide 16: Remember -->
+        <div class="slide">
+            <div class="icon">🌟</div>
+            <h2>Remember</h2>
+            <div class="key-point" style="font-size: 1.8rem;">
+                <p>Most babies with growth restriction are <span class="reassurance">born healthy</span>.</p>
+                <p style="margin-top: 1.5rem;">Close monitoring helps us catch problems early.</p>
+                <p style="margin-top: 1.5rem;">We make decisions together based on what's safest for you and your baby.</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Summary -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+            <div class="definition" style="text-align: center; font-size: 1.6rem;">
+                <p>✓ FGR means baby is smaller than expected</p>
+                <p style="margin-top: 1rem;">✓ We monitor placenta function closely</p>
+                <p style="margin-top: 1rem;">✓ Delivery timing depends on how baby is doing</p>
+                <p style="margin-top: 1rem;">✓ Your healthcare team is here to support you</p>
+            </div>
+            <p class="reassurance" style="margin-top: 2rem; font-size: 1.8rem;">Questions are always welcome.</p>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <span id="slideNumber">1</span> / <span id="totalSlides">17</span> | Use ← → arrow keys
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slideContainer = document.getElementById('slideContainer');
+        const progress = document.getElementById('progress');
+        const slideNumber = document.getElementById('slideNumber');
+        const totalSlidesSpan = document.getElementById('totalSlides');
+
+        totalSlidesSpan.textContent = totalSlides;
+
+        function updateSlide() {
+            slideContainer.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            progress.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+            slideNumber.textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) prevSlide();
+        }
+
+        // Click support
+        document.addEventListener('click', (e) => {
+            const clickX = e.clientX;
+            const windowWidth = window.innerWidth;
+            
+            if (clickX > windowWidth * 0.7) {
+                nextSlide();
+            } else if (clickX < windowWidth * 0.3) {
+                prevSlide();
+            }
+        });
+
+        updateSlide();
+    </script>
+</body>
+</html>
