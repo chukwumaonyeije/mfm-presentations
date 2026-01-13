@@ -222,9 +222,72 @@ When the user provides an infographic (PNG or JPEG) for a presentation:
    - Include co-author attribution: `Co-Authored-By: Warp <agent@warp.dev>`
    - Push to GitHub
 
+## GitHub Pages Deployment
+
+This repository is deployed to GitHub Pages using a custom GitHub Actions workflow (not Jekyll).
+
+### Critical Files for Deployment
+
+1. **`.nojekyll`** (empty file at root)
+   - **Purpose**: Tells GitHub Pages to skip Jekyll processing
+   - **Why it matters**: Without this, Jekyll would:
+     - Strip CDN links (like Reveal.js from jsdelivr.net)
+     - Ignore files/folders starting with underscores
+     - Process liquid template syntax `{{ }}` incorrectly
+   - **Never delete this file**
+
+2. **`.github/workflows/deploy.yml`** (GitHub Actions workflow)
+   - **Purpose**: Controls how the site is built and deployed
+   - **Key feature**: `cancel-in-progress: true` prevents deployment queue backups
+   - **Triggers**: Runs automatically on every push to `main` branch
+
+### Deployment Settings
+
+**GitHub Repository Settings** (https://github.com/chukwumaonyeije/mfm-presentations/settings/pages):
+- **Source**: Must be set to **"GitHub Actions"** (not "Deploy from a branch")
+- **Branch**: Main (this is where the workflow reads from)
+- **Custom Domain**: None (uses default github.io URL)
+
+### Troubleshooting Deployment Issues
+
+**Problem**: Deployments stuck in "queued" status
+- **Cause**: GitHub Pages concurrency limits (only one deployment at a time)
+- **Solution**: The workflow's `cancel-in-progress: true` handles this automatically
+- **Manual fix**: Cancel stuck workflows at https://github.com/chukwumaonyeije/mfm-presentations/actions
+
+**Problem**: Pages not updating after push
+- **Check**: Visit Actions tab to see if workflow completed successfully
+- **Check**: Verify the workflow file exists at `.github/workflows/deploy.yml`
+- **Check**: Ensure Pages source is set to "GitHub Actions" in repository settings
+
+**Problem**: 404 errors or missing files
+- **Check**: Verify `.nojekyll` file exists at repository root
+- **Check**: File paths in index.html match actual file locations (case-sensitive)
+- **Check**: CDN links are not being stripped by Jekyll (should be prevented by `.nojekyll`)
+
+### Testing Deployments Locally
+
+Since there's no build step:
+1. Open `index.html` directly in a browser
+2. Test all presentation links work
+3. Verify infographic links open correctly
+4. Check that external CDN resources load (Reveal.js, etc.)
+
+### Deployment Workflow
+
+The typical deployment process:
+1. Make changes locally (add presentations, update index.html, etc.)
+2. Commit with descriptive message + co-author attribution
+3. Push to `main` branch
+4. GitHub Actions automatically deploys (takes ~1-2 minutes)
+5. Site updates at https://chukwumaonyeije.github.io/mfm-presentations/
+
+**No manual deployment steps required** - the workflow handles everything.
+
 ## Notes
 
 - The `shared/` directory is currently empty but reserved for future modular components (CSS, JS, images)
 - The `decks/` directory is empty; presentations currently live in topic-named folders
 - No package.json or build system by design—presentations are deployment-ready as-is
 - Presentations are optimized for 16:9 or 16:10 displays (typical conference projectors)
+- **Deployment is automated via GitHub Actions** - see "GitHub Pages Deployment" section above
