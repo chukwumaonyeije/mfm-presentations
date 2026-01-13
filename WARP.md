@@ -176,6 +176,52 @@ Since there's no test suite, manual testing checklist:
 - Use `.ok` for reassuring findings (green)
 - Use `.warn` for caution items (yellow)
 
+## Adding Infographics to Presentations
+
+When the user provides an infographic (PNG or JPEG) for a presentation:
+
+1. **Save the Image File**
+   - Location: Save to the appropriate deck folder (e.g., `decks/[topic-name]/`)
+   - Naming: Use descriptive naming like `[topic]-infographic.png` or `.jpg`
+   - Example: `decks/external-cephalic-version-breech/breech-infographic.png`
+
+2. **Update index.html Card**
+   - Add `has-infographic` class to the card `<div>` element
+   - Add the infographic badge before other tags:
+     ```html
+     <span class="infographic-badge">Infographic Available</span>
+     ```
+   - Wrap the buttons in a button group:
+     ```html
+     <div class="button-group">
+       <a href="path/to/presentation.html" class="btn">View Presentation</a>
+       <a href="path/to/infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+     </div>
+     ```
+
+3. **Complete Example Structure**
+   ```html
+   <div class="card has-infographic">
+     <h2>Title</h2>
+     <p>Description</p>
+     <div>
+       <span class="infographic-badge">Infographic Available</span>
+       <span class="tag">Tag1</span>
+       <span class="tag">Tag2</span>
+     </div>
+     <div class="button-group">
+       <a href="decks/topic/presentation.html" class="btn">View Presentation</a>
+       <a href="decks/topic/infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+     </div>
+   </div>
+   ```
+
+4. **Commit and Push**
+   - Stage both the image file and index.html
+   - Commit with descriptive message
+   - Include co-author attribution: `Co-Authored-By: Warp <agent@warp.dev>`
+   - Push to GitHub
+
 ## Notes
 
 - The `shared/` directory is currently empty but reserved for future modular components (CSS, JS, images)
