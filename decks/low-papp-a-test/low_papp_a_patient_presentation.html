@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low PAPP-A in Pregnancy - Patient Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+            color: #f0f4f8;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slide-container {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            padding: 4rem 6rem;
+            position: relative;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #a8daff;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #90cdf4;
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .content {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+            max-width: 1000px;
+        }
+
+        .content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 5px solid #4fd1c5;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .reassurance-box {
+            background: rgba(72, 187, 120, 0.15);
+            border-left: 5px solid #48bb78;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .action-box {
+            background: rgba(237, 137, 54, 0.15);
+            border-left: 5px solid #ed8936;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            padding: 2rem 0;
+        }
+
+        .timeline-item {
+            text-align: center;
+            flex: 1;
+            padding: 0 1rem;
+        }
+
+        .timeline-week {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4fd1c5;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-event {
+            font-size: 1.2rem;
+            color: #cbd5e0;
+        }
+
+        .bullet-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .bullet-list li {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+
+        .bullet-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #4fd1c5;
+            font-weight: bold;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4fd1c5;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            color: #cbd5e0;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #4fd1c5;
+            color: #ffffff;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-button:hover {
+            background: rgba(79, 209, 197, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            font-size: 1rem;
+            color: #90cdf4;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .center-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .key-point {
+            background: rgba(66, 153, 225, 0.2);
+            padding: 1.2rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            font-size: 1.3rem;
+            border-left: 4px solid #4299e1;
+        }
+
+        @media (max-width: 768px) {
+            .slide-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .content {
+                font-size: 1.1rem;
+            }
+            
+            .timeline {
+                flex-direction: column;
+            }
+            
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide-container active" data-slide="1">
+    <div class="center-content">
+        <h1>Low PAPP-A in Pregnancy</h1>
+        <div class="subtitle">A Guide for Patients</div>
+        <div class="content" style="margin-top: 3rem; font-size: 1.3rem;">
+            <p>This presentation will help you understand what a low PAPP-A result means and how we'll work together to monitor your pregnancy.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 2: What is PAPP-A? -->
+<div class="slide-container" data-slide="2">
+    <div class="icon">🧬</div>
+    <h2>What is PAPP-A?</h2>
+    <div class="content">
+        <p><strong>PAPP-A</strong> stands for Pregnancy-Associated Plasma Protein-A.</p>
+        
+        <div class="highlight-box">
+            <p><strong>In simple terms:</strong> PAPP-A is a protein made by the placenta during early pregnancy. It helps the placenta grow and attach to the uterus.</p>
+        </div>
+        
+        <p>We measure PAPP-A levels in your blood during the first trimester (around 11-13 weeks). This is part of routine pregnancy screening.</p>
+        
+        <div class="key-point">
+            PAPP-A levels tell us how the placenta is developing in early pregnancy.
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: What does LOW PAPP-A mean? -->
+<div class="slide-container" data-slide="3">
+    <div class="icon">🔍</div>
+    <h2>What Does a Low PAPP-A Mean?</h2>
+    <div class="content">
+        <p>A <strong>low PAPP-A</strong> means your level is below the 5th percentile for your stage of pregnancy.</p>
+        
+        <div class="highlight-box">
+            <p><strong>This is a marker, not a diagnosis.</strong> It tells us the placenta might need extra attention, but it doesn't mean something is definitely wrong.</p>
+        </div>
+        
+        <p><strong>What it can indicate:</strong></p>
+        <ul class="bullet-list">
+            <li>The placenta may not be attaching as deeply as expected</li>
+            <li>Slightly higher chance of genetic conditions (if not already tested)</li>
+            <li>Possible risk for growth or blood pressure issues later</li>
+        </ul>
+        
+        <div class="reassurance-box">
+            <p><strong>Important:</strong> Many pregnancies with low PAPP-A progress normally with careful monitoring.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: Is something wrong with my baby? -->
+<div class="slide-container" data-slide="4">
+    <div class="icon">👶</div>
+    <h2>Is Something Wrong With My Baby?</h2>
+    <div class="content">
+        <p><strong>Not necessarily.</strong> A low PAPP-A means we'll watch your pregnancy more carefully.</p>
+        
+        <div class="reassurance-box">
+            <p><strong>If your genetic screening (NIPT/cfDNA) was normal:</strong><br>
+            We're not worried about chromosomal conditions. Our focus is on placental function and growth.</p>
+        </div>
+        
+        <p><strong>If you haven't had genetic testing yet:</strong></p>
+        <ul class="bullet-list">
+            <li>We may recommend cell-free DNA testing or diagnostic testing</li>
+            <li>This helps us rule out chromosomal causes</li>
+            <li>Once genetics are confirmed normal, we focus entirely on monitoring</li>
+        </ul>
+        
+        <div class="key-point">
+            Low PAPP-A is about risk assessment, not a current problem with your baby.
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: Additional Testing & Monitoring -->
+<div class="slide-container" data-slide="5">
+    <div class="icon">🏥</div>
+    <h2>How We'll Monitor Your Pregnancy</h2>
+    <div class="content">
+        <p><strong>Our monitoring plan includes:</strong></p>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-week">18-22 weeks</div>
+                <div class="timeline-event">Detailed anatomy scan</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-week">28 weeks</div>
+                <div class="timeline-event">Growth ultrasound #1</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-week">32 weeks</div>
+                <div class="timeline-event">Growth ultrasound #2</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-week">36 weeks</div>
+                <div class="timeline-event">Growth ultrasound #3</div>
+            </div>
+        </div>
+        
+        <div class="highlight-box">
+            <p><strong>What we're checking:</strong></p>
+            <ul class="bullet-list">
+                <li>Baby's estimated weight and growth pattern</li>
+                <li>Amniotic fluid levels</li>
+                <li>Blood flow through the umbilical cord (if needed)</li>
+            </ul>
+        </div>
+        
+        <p>If growth stays normal, we continue routine prenatal care.</p>
+    </div>
+</div>
+
+<!-- Slide 6: What can I do? -->
+<div class="slide-container" data-slide="6">
+    <div class="icon">💪</div>
+    <h2>What Can You Do?</h2>
+    <div class="content">
+        <div class="action-box">
+            <p><strong>1. Attend all monitoring appointments</strong><br>
+            These ultrasounds are how we catch any changes early.</p>
+        </div>
+        
+        <div class="action-box">
+            <p><strong>2. Consider low-dose aspirin</strong><br>
+            If you have other risk factors (like being over 35 or having high blood pressure), we may recommend baby aspirin (81mg daily) before 16 weeks to support placental health.</p>
+        </div>
+        
+        <div class="action-box">
+            <p><strong>3. Report any concerns promptly</strong><br>
+            Let us know if you notice decreased movement, bleeding, or severe headaches.</p>
+        </div>
+        
+        <div class="action-box">
+            <p><strong>4. Continue healthy pregnancy habits</strong><br>
+            Good nutrition, staying hydrated, avoiding smoking, and managing any medical conditions all support your baby's growth.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: Will I need early delivery? -->
+<div class="slide-container" data-slide="7">
+    <div class="icon">📅</div>
+    <h2>Will I Need Early Delivery?</h2>
+    <div class="content">
+        <p><strong>Most patients do not need early delivery.</strong></p>
+        
+        <div class="reassurance-box">
+            <p>If your baby continues to grow well on ultrasounds, we'll plan for a normal delivery around your due date.</p>
+        </div>
+        
+        <p><strong>We consider earlier delivery only if:</strong></p>
+        <ul class="bullet-list">
+            <li>Baby's growth slows significantly (growth restriction)</li>
+            <li>Blood flow patterns become abnormal</li>
+            <li>You develop preeclampsia (high blood pressure with protein in urine)</li>
+            <li>Other complications arise that make delivery safer than continuing pregnancy</li>
+        </ul>
+        
+        <div class="highlight-box">
+            <p><strong>Our goal:</strong> Balance giving your baby time to grow with delivering before any problems become serious. We'll discuss timing together if needed.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: Future Pregnancies -->
+<div class="slide-container" data-slide="8">
+    <div class="icon">🔄</div>
+    <h2>What About Future Pregnancies?</h2>
+    <div class="content">
+        <p>Low PAPP-A in one pregnancy <strong>does not necessarily repeat</strong> in future pregnancies.</p>
+        
+        <div class="highlight-box">
+            <p><strong>For future pregnancies:</strong></p>
+            <ul class="bullet-list">
+                <li>Let your provider know you had low PAPP-A before</li>
+                <li>You may have closer monitoring from the start</li>
+                <li>Early aspirin therapy may be recommended</li>
+                <li>First-trimester screening will be important again</li>
+            </ul>
+        </div>
+        
+        <div class="key-point">
+            Each pregnancy is different. Having low PAPP-A once doesn't mean you'll have complications in future pregnancies.
+        </div>
+    </div>
+</div>
+
+<!-- Slide 9: Should I worry? -->
+<div class="slide-container" data-slide="9">
+    <div class="icon">💙</div>
+    <h2>Should You Worry?</h2>
+    <div class="content">
+        <div class="reassurance-box">
+            <p style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">
+                Worry is natural, but not necessary.
+            </p>
+            <p>Low PAPP-A is one piece of information that helps us provide better care. It doesn't mean your pregnancy will have problems—it means we're paying attention.</p>
+        </div>
+        
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">Many pregnancies with low PAPP-A</div>
+                <div class="stat-number">Progress normally</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Early monitoring helps us</div>
+                <div class="stat-number">Catch issues early</div>
+            </div>
+        </div>
+        
+        <div class="highlight-box">
+            <p><strong>You're not in this alone.</strong> Our team will monitor your pregnancy closely and make decisions together with you every step of the way.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10: Key Takeaways -->
+<div class="slide-container" data-slide="10">
+    <div class="icon">✓</div>
+    <h2>Key Takeaways</h2>
+    <div class="content">
+        <div class="key-point">
+            <strong>1. Low PAPP-A is a marker, not a diagnosis</strong><br>
+            It tells us to watch your pregnancy more carefully.
+        </div>
+        
+        <div class="key-point">
+            <strong>2. If genetics are normal, we focus on growth</strong><br>
+            Extra ultrasounds help us monitor how your baby develops.
+        </div>
+        
+        <div class="key-point">
+            <strong>3. Most pregnancies progress well</strong><br>
+            Close monitoring is about prevention and early detection.
+        </div>
+        
+        <div class="key-point">
+            <strong>4. We're partners in your care</strong><br>
+            You'll be involved in every decision about your pregnancy.
+        </div>
+        
+        <div class="reassurance-box" style="margin-top: 2rem;">
+            <p><strong>Questions?</strong> Please don't hesitate to reach out to our team anytime. We're here to support you throughout your pregnancy journey.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="slide-number">
+    <span id="current-slide">1</span> / <span id="total-slides">10</span>
+</div>
+
+<div class="navigation">
+    <button class="nav-button" onclick="previousSlide()">← Previous</button>
+    <button class="nav-button" onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+    let currentSlide = 1;
+    const totalSlides = document.querySelectorAll('.slide-container').length;
+    
+    document.getElementById('total-slides').textContent = totalSlides;
+    
+    function showSlide(n) {
+        const slides = document.querySelectorAll('.slide-container');
+        
+        if (n > totalSlides) {
+            currentSlide = totalSlides;
+        }
+        if (n < 1) {
+            currentSlide = 1;
+        }
+        
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+        });
+        
+        slides[currentSlide - 1].classList.add('active');
+        document.getElementById('current-slide').textContent = currentSlide;
+    }
+    
+    function nextSlide() {
+        currentSlide++;
+        if (currentSlide > totalSlides) {
+            currentSlide = totalSlides;
+        }
+        showSlide(currentSlide);
+    }
+    
+    function previousSlide() {
+        currentSlide--;
+        if (currentSlide < 1) {
+            currentSlide = 1;
+        }
+        showSlide(currentSlide);
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+            previousSlide();
+        } else if (e.key === 'Home') {
+            currentSlide = 1;
+            showSlide(currentSlide);
+        } else if (e.key === 'End') {
+            currentSlide = totalSlides;
+            showSlide(currentSlide);
+        }
+    });
+    
+    // Touch/swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    document.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+    
+    function handleSwipe() {
+        if (touchEndX < touchStartX - 50) {
+            nextSlide();
+        }
+        if (touchEndX > touchStartX + 50) {
+            previousSlide();
+        }
+    }
+</script>
+
+</body>
+</html>
