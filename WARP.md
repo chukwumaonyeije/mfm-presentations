@@ -284,6 +284,19 @@ The typical deployment process:
 
 **No manual deployment steps required** - the workflow handles everything.
 
+## Presentation Ordering in index.html
+
+**IMPORTANT**: When adding new presentations or updating existing ones:
+
+1. **New Presentations**: Always add the card for a new presentation at the **very top** of the `<div class="presentations">` section in index.html (immediately after the opening tag)
+2. **Amended Presentations**: When significantly updating an existing presentation, move its card to the **very top** of the presentations list
+3. **Rationale**: This ensures the most recent and relevant content appears on the first page of results, making it immediately visible to users
+
+**Implementation**:
+- Place new/updated presentation cards at line ~320-325 (right after `<div class="presentations">`)
+- Remove any duplicate entries if moving an existing presentation to the top
+- Maintain consistent formatting and card structure
+
 ## Notes
 
 - The `shared/` directory is currently empty but reserved for future modular components (CSS, JS, images)
