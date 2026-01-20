@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronic Hypertension in Pregnancy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            overflow: hidden;
+        }
+
+        .slides-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            color: #00d9ff;
+            letter-spacing: -0.02em;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            color: #00d9ff;
+            letter-spacing: -0.01em;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            color: #64dfdf;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #aaa;
+            font-weight: 300;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .content {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            max-width: 1200px;
+            color: #ddd;
+        }
+
+        .highlight {
+            color: #00d9ff;
+            font-weight: 500;
+        }
+
+        .warning {
+            color: #ff6b6b;
+            font-weight: 500;
+        }
+
+        .success {
+            color: #51cf66;
+            font-weight: 500;
+        }
+
+        table {
+            width: 100%;
+            max-width: 1100px;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 1.3rem;
+        }
+
+        th {
+            background: #2d3561;
+            padding: 1.2rem;
+            text-align: left;
+            color: #00d9ff;
+            font-weight: 500;
+            border-bottom: 2px solid #00d9ff;
+        }
+
+        td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid #333;
+        }
+
+        tr:hover {
+            background: #252947;
+        }
+
+        .key-point {
+            background: #2d3561;
+            padding: 2rem;
+            border-left: 5px solid #00d9ff;
+            margin: 1.5rem 0;
+            font-size: 1.4rem;
+            line-height: 1.7;
+        }
+
+        .evidence-box {
+            background: #1e2749;
+            padding: 2rem;
+            border-left: 5px solid #51cf66;
+            margin: 2rem 0;
+            font-size: 1.3rem;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .column-box {
+            background: #2d3561;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .small-text {
+            font-size: 1.1rem;
+            color: #999;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .reference {
+            font-size: 1rem;
+            color: #777;
+            font-style: italic;
+            margin-top: 1rem;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #00d9ff;
+            font-size: 1.5rem;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .nav-help {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .stat-large {
+            font-size: 4rem;
+            color: #00d9ff;
+            font-weight: 300;
+            margin: 1rem 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: #2d3561;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .card-title {
+            color: #00d9ff;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .card-content {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .protocol-step {
+            background: #252947;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid #00d9ff;
+            font-size: 1.3rem;
+        }
+
+        .protocol-number {
+            color: #00d9ff;
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="slides-container" id="slidesContainer">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <h1>Chronic Hypertension in Pregnancy</h1>
+            <div class="subtitle">Evidence-Based Management for MFM Providers</div>
+            <div class="subtitle" style="margin-top: 3rem; font-size: 1.2rem;">ACOG Practice Bulletin No. 203 (2019)<br>ACOG Practice Advisory (April 2022)<br>SMFM Statement (2022)</div>
+            <div class="nav-help">Use arrow keys to navigate</div>
+            <div class="slide-number">1</div>
+        </div>
+
+        <!-- Slide 2: Definition -->
+        <div class="slide">
+            <h2>Definition</h2>
+            <div class="content">
+                <div class="key-point">
+                    Hypertension diagnosed <span class="highlight">before pregnancy</span> or <span class="highlight">before 20 weeks of gestation</span>
+                </div>
+                <div class="key-point" style="margin-top: 2rem;">
+                    Blood pressure threshold:<br>
+                    <span class="stat-large">≥140/90 mmHg</span>
+                </div>
+                <div class="small-text">Hypertension diagnosed for first time during pregnancy that does not resolve postpartum also classified as chronic hypertension</div>
+            </div>
+            <div class="slide-number">2</div>
+        </div>
+
+        <!-- Slide 3: Epidemiology -->
+        <div class="slide">
+            <h2>Epidemiology</h2>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column-box">
+                        <h3>Prevalence</h3>
+                        <div class="stat-large">0.9-1.5%</div>
+                        <p style="margin-top: 1rem;">of all pregnancies</p>
+                    </div>
+                    <div class="column-box">
+                        <h3>Trend</h3>
+                        <div class="stat-large">↑67%</div>
+                        <p style="margin-top: 1rem;">from 2000 to 2009</p>
+                    </div>
+                </div>
+                <div class="key-point" style="margin-top: 2rem;">
+                    Increasing prevalence driven by obesity epidemic and advancing maternal age
+                </div>
+                <div class="reference">ACOG Practice Bulletin No. 203, 2019</div>
+            </div>
+            <div class="slide-number">3</div>
+        </div>
+
+        <!-- Slide 4: Adverse Outcomes -->
+        <div class="slide">
+            <h2>Adverse Maternal Outcomes</h2>
+            <div class="content">
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-title">Primary Mediator</div>
+                        <div class="card-content"><span class="warning">Superimposed Preeclampsia</span></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Cardiovascular</div>
+                        <div class="card-content">Malignant HTN<br>Cerebrovascular accident<br>Cardiac decompensation</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Renal</div>
+                        <div class="card-content">Acute kidney injury<br>Renal insufficiency<br>Renal failure</div>
+                    </div>
+                </div>
+                <div class="key-point" style="margin-top: 2rem;">
+                    Severity and duration of hypertension plus organ involvement determine risk magnitude
+                </div>
+            </div>
+            <div class="slide-number">4</div>
+        </div>
+
+        <!-- Slide 5: Perinatal Outcomes -->
+        <div class="slide">
+            <h2>Adverse Perinatal Outcomes</h2>
+            <div class="content">
+                <table>
+                    <tr>
+                        <th>Outcome</th>
+                        <th>Clinical Significance</th>
+                    </tr>
+                    <tr>
+                        <td><span class="warning">Preterm Birth</span></td>
+                        <td>Substantially increased vs normotensive pregnancies</td>
+                    </tr>
+                    <tr>
+                        <td><span class="warning">Fetal Growth Restriction</span></td>
+                        <td>Associated with reduced uteroplacental perfusion</td>
+                    </tr>
+                    <tr>
+                        <td><span class="warning">Placental Abruption</span></td>
+                        <td>Increased risk with severe/uncontrolled HTN</td>
+                    </tr>
+                    <tr>
+                        <td><span class="warning">Perinatal Mortality</span></td>
+                        <td>Elevated risk, especially with superimposed preeclampsia</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="slide-number">5</div>
+        </div>
+
+        <!-- Slide 6: CHAP Trial -->
+        <div class="slide">
+            <h2>CHAP Trial (2022)</h2>
+            <div class="content">
+                <div class="evidence-box">
+                    <h3 style="color: #51cf66; margin-bottom: 1rem;">Landmark Multicenter RCT</h3>
+                    <p><span class="highlight">2,408 patients</span> with singleton gestation and mild chronic HTN (BP &lt;160/110)</p>
+                    <p style="margin-top: 1rem;"><strong>Intervention:</strong> Antihypertensive therapy at ≥140/90 mmHg</p>
+                    <p style="margin-top: 1rem;"><strong>Control:</strong> No treatment unless BP ≥160/105 mmHg</p>
+                </div>
+                <div class="key-point">
+                    Primary outcome reduced from <span class="warning">37%</span> to <span class="success">30.2%</span><br>
+                    <span style="font-size: 1.1rem; color: #aaa;">(Adjusted RR 0.82; 95% CI 0.74-0.92)</span>
+                </div>
+                <div class="reference">Tita et al. N Engl J Med 2022; 386:1781-1792</div>
+            </div>
+            <div class="slide-number">6</div>
+        </div>
+
+        <!-- Slide 7: CHAP Primary Outcome -->
+        <div class="slide">
+            <h2>CHAP Trial: Primary Outcome</h2>
+            <div class="content">
+                <div class="key-point" style="background: #1e2749;">
+                    <h3 style="color: #51cf66;">Composite Primary Outcome Components</h3>
+                    <ul style="margin-top: 1.5rem; font-size: 1.3rem;">
+                        <li>Preeclampsia with severe features</li>
+                        <li>Medically indicated preterm birth &lt;35 weeks</li>
+                        <li>Placental abruption</li>
+                        <li>Fetal or neonatal death</li>
+                    </ul>
+                </div>
+                <div class="key-point" style="margin-top: 2rem;">
+                    <span class="highlight">Number needed to treat: 14.7</span><br>
+                    <span style="font-size: 1.1rem;">to prevent one adverse outcome</span>
+                </div>
+                <div class="small-text">Birthweight &lt;10th percentile similar between groups (no increased FGR with treatment)</div>
+            </div>
+            <div class="slide-number">7</div>
+        </div>
+
+        <!-- Slide 8: Updated Guidelines -->
+        <div class="slide">
+            <h2>Current Treatment Recommendations</h2>
+            <div class="content">
+                <div class="evidence-box">
+                    <h3 style="color: #51cf66;">ACOG Practice Advisory (April 2022)</h3>
+                    <p style="font-size: 1.4rem; margin-top: 1rem;">
+                        Utilize <span class="highlight">140/90 mmHg</span> as threshold for initiation or titration of antihypertensive therapy
+                    </p>
+                </div>
+                <div class="evidence-box" style="margin-top: 2rem;">
+                    <h3 style="color: #51cf66;">SMFM Statement (2022)</h3>
+                    <p style="font-size: 1.4rem; margin-top: 1rem;">
+                        Treatment goal: BP <span class="highlight">&lt;140/90 mmHg</span>
+                    </p>
+                </div>
+                <div class="key-point" style="margin-top: 2rem;">
+                    Previous threshold of 160/110 mmHg is <span class="warning">no longer recommended</span>
+                </div>
+            </div>
+            <div class="slide-number">8</div>
+        </div>
+
+        <!-- Slide 9: Baseline Evaluation -->
+        <div class="slide">
+            <h2>Preconception & Baseline Assessment</h2>
+            <div class="content">
+                <div class="two-column">
+                    <div>
+                        <h3>History & Physical</h3>
+                        <ul>
+                            <li>Age of onset</li>
+                            <li>Previous evaluation results</li>
+                            <li>Severity and duration</li>
+                            <li>End-organ involvement</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Baseline Laboratory</h3>
+                        <ul>
+                            <li>Serum creatinine, BUN</li>
+                            <li>Urine protein-to-creatinine ratio</li>
+                            <li>CBC, platelet count</li>
+                            <li>Liver function tests</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="key-point" style="margin-top: 2rem;">
+                    Ideally evaluate <span class="highlight">before pregnancy</span> to identify reversible causes and assess organ damage
+                </div>
+            </div>
+            <div class="slide-number">9</div>
+        </div>
+
+        <!-- Slide 10: Extended Workup -->
+        <div class="slide">
+            <h2>Extended Evaluation</h2>
+            <div class="content">
+                <table>
+                    <tr>
+                        <th>Clinical Indication</th>
+                        <th>Additional Testing</th>
+                    </tr>
+                    <tr>
+                        <td>Longstanding HTN (several years)</td>
+                        <td>ECG, echocardiography, ophthalmologic exam, renal ultrasound</td>
+                    </tr>
+                    <tr>
+                        <td>Paroxysmal HTN, "crises", anxiety attacks</td>
+                        <td>24-hour urine metanephrines or unconjugated catecholamines (pheochromocytoma screen)</td>
+                    </tr>
+                    <tr>
+                        <td>Type 2 diabetes with HTN</td>
+                        <td>Doppler flow studies or MRA for renal artery stenosis</td>
+                    </tr>
+                    <tr>
+                        <td>Severe HTN on ≥2 medications, hypokalemia</td>
+                        <td>Secondary hypertension workup</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="slide-number">10</div>
+        </div>
+
+        <!-- Slide 11: First-Line Medications -->
+        <div class="slide">
+            <h2>First-Line Antihypertensives</h2>
+            <div class="content">
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-title">Labetalol</div>
+                        <div class="card-content">
+                            <p>200-800 mg BID-TID</p>
+                            <p style="margin-top: 1rem; font-size: 1rem; color: #aaa;">Contraindications: asthma, heart disease, CHF</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Nifedipine XL</div>
+                        <div class="card-content">
+                            <p>30-60 mg daily</p>
+                            <p style="margin-top: 1rem; font-size: 1rem; color: #aaa;">Calcium channel blocker</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Methyldopa</div>
+                        <div class="card-content">
+                            <p>250-1000 mg BID-TID</p>
+                            <p style="margin-top: 1rem; font-size: 1rem; color: #aaa;">Watch for supply shortages</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="key-point" style="margin-top: 2rem; background: #3d1f1f; border-left-color: #ff6b6b;">
+                    <span class="warning">ACE inhibitors and ARBs are CONTRAINDICATED</span><br>
+                    <span style="font-size: 1.1rem;">Risk of fetal/neonatal renal failure</span>
+                </div>
+                <div class="small-text">Switch from ACE-I/ARB prior to conception or with viable pregnancy confirmation</div>
+            </div>
+            <div class="slide-number">11</div>
+        </div>
+
+        <!-- Slide 12: Aspirin Prophylaxis -->
+        <div class="slide">
+            <h2>Preeclampsia Prevention</h2>
+            <div class="content">
+                <div class="key-point" style="background: #1f3d2b; border-left-color: #51cf66;">
+                    <h3 style="color: #51cf66;">Low-Dose Aspirin Prophylaxis</h3>
+                    <p style="font-size: 1.5rem; margin-top: 1.5rem;">
+                        <span class="highlight">81 mg daily</span>
+                    </p>
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">1</span>
+                    Initiate between <span class="highlight">12-28 weeks</span> gestation
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">2</span>
+                    Optimal timing: <span class="highlight">before 16 weeks</span>
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">3</span>
+                    Continue until <span class="highlight">delivery</span>
+                </div>
+                <div class="reference" style="text-align: center; margin-top: 2rem;">ACOG Committee Opinion No. 743, Low-Dose Aspirin Use During Pregnancy</div>
+            </div>
+            <div class="slide-number">12</div>
+        </div>
+
+        <!-- Slide 13: Medication Management -->
+        <div class="slide">
+            <h2>Medication Management in Pregnancy</h2>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column-box">
+                        <h3>Already on Medications</h3>
+                        <p style="margin-top: 1rem;">Continue established therapy or switch to pregnancy-compatible regimen</p>
+                        <p style="margin-top: 1rem; color: #51cf66;">Do NOT discontinue and wait for severe range</p>
+                    </div>
+                    <div class="column-box">
+                        <h3>New Diagnosis in Pregnancy</h3>
+                        <p style="margin-top: 1rem;">Initiate therapy at BP ≥140/90 mmHg</p>
+                        <p style="margin-top: 1rem; color: #00d9ff;">Regardless of complicating factors</p>
+                    </div>
+                </div>
+                <div class="key-point" style="margin-top: 2rem;">
+                    Goal: BP <span class="highlight">&lt;140/90 mmHg</span> (not a lower threshold established for FGR risk)
+                </div>
+                <div class="small-text">Monitor for medication side effects: dizziness, fatigue, orthostatic hypotension</div>
+            </div>
+            <div class="slide-number">13</div>
+        </div>
+
+        <!-- Slide 14: Distinguishing Superimposed Preeclampsia -->
+        <div class="slide">
+            <h2>Chronic HTN vs Superimposed Preeclampsia</h2>
+            <div class="content">
+                <div class="key-point">
+                    Distinction can be challenging in third trimester when physiologic BP changes occur
+                </div>
+                <table style="margin-top: 2rem;">
+                    <tr>
+                        <th>Laboratory Test</th>
+                        <th>Clinical Application</th>
+                    </tr>
+                    <tr>
+                        <td>Serum Creatinine</td>
+                        <td>Compare to baseline from early pregnancy</td>
+                    </tr>
+                    <tr>
+                        <td>Liver Function Tests</td>
+                        <td>Assess for HELLP syndrome features</td>
+                    </tr>
+                    <tr>
+                        <td>Platelet Count</td>
+                        <td>Monitor for thrombocytopenia</td>
+                    </tr>
+                    <tr>
+                        <td>Hematocrit</td>
+                        <td>Evaluate for hemoconcentration</td>
+                    </tr>
+                    <tr>
+                        <td>Proteinuria Assessment</td>
+                        <td>New or worsening proteinuria vs baseline</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="slide-number">14</div>
+        </div>
+
+        <!-- Slide 15: Antepartum Surveillance -->
+        <div class="slide">
+            <h2>Antepartum Surveillance</h2>
+            <div class="content">
+                <div class="two-column">
+                    <div class="column-box">
+                        <h3>Maternal Monitoring</h3>
+                        <ul style="margin-top: 1rem;">
+                            <li>BP at every prenatal visit</li>
+                            <li>Home BP monitoring as indicated</li>
+                            <li>Serial laboratory assessment</li>
+                            <li>Symptoms review (headache, visual changes, epigastric pain)</li>
+                        </ul>
+                    </div>
+                    <div class="column-box">
+                        <h3>Fetal Surveillance</h3>
+                        <ul style="margin-top: 1rem;">
+                            <li>Serial growth ultrasounds (third trimester)</li>
+                            <li>Antenatal testing starting at <span class="highlight">32 weeks</span></li>
+                            <li>Earlier if complications develop</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="key-point" style="margin-top: 2rem;">
+                    No consensus on optimal test type or interval—<span class="highlight">individualize based on severity</span>
+                </div>
+                <div class="reference">ACOG Committee Opinion No. 828, Indications for Outpatient Antenatal Fetal Surveillance</div>
+            </div>
+            <div class="slide-number">15</div>
+        </div>
+
+        <!-- Slide 16: Timing of Delivery -->
+        <div class="slide">
+            <h2>Timing of Delivery</h2>
+            <div class="content">
+                <table>
+                    <tr>
+                        <th>Clinical Scenario</th>
+                        <th>Recommended Delivery Timing</th>
+                    </tr>
+                    <tr>
+                        <td><span class="success">Controlled without medications</span></td>
+                        <td><span class="highlight">38.0-39.6 weeks</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="success">Controlled with medications</span></td>
+                        <td><span class="highlight">37.0-39.6 weeks</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="warning">Uncontrolled on medications</span></td>
+                        <td><span class="highlight">36.0-37.6 weeks</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="warning">Superimposed preeclampsia with severe features</span></td>
+                        <td><span class="highlight">Individualized based on gestational age and maternal/fetal status</span></td>
+                    </tr>
+                </table>
+                <div class="small-text" style="margin-top: 2rem;">Delivery prior to 37 weeks should be avoided in absence of complications</div>
+            </div>
+            <div class="slide-number">16</div>
+        </div>
+
+        <!-- Slide 17: Intrapartum Management -->
+        <div class="slide">
+            <h2>Intrapartum Considerations</h2>
+            <div class="content">
+                <div class="protocol-step">
+                    <span class="protocol-number">1</span>
+                    Continuous fetal monitoring throughout labor
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">2</span>
+                    Maintain antihypertensive therapy during labor
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">3</span>
+                    Monitor for severe-range BP (≥160/110 mmHg)
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">4</span>
+                    Treat severe hypertension urgently (within 30-60 minutes)
+                </div>
+                <div class="key-point" style="margin-top: 2rem;">
+                    Nulliparous patients with chronic HTN may have <span class="highlight">longer first stage of labor</span>
+                </div>
+            </div>
+            <div class="slide-number">17</div>
+        </div>
+
+        <!-- Slide 18: Acute Severe Hypertension -->
+        <div class="slide">
+            <h2>Acute Treatment: Severe HTN</h2>
+            <div class="content">
+                <div class="key-point" style="background: #3d1f1f; border-left-color: #ff6b6b;">
+                    <span class="warning">Severe Hypertension:</span> SBP ≥160 or DBP ≥110 mmHg
+                </div>
+                <div class="grid-3" style="margin-top: 2rem;">
+                    <div class="card">
+                        <div class="card-title">Labetalol IV</div>
+                        <div class="card-content">
+                            <p>20 mg initial</p>
+                            <p style="margin-top: 0.5rem;">Then 40-80 mg q10min</p>
+                            <p style="margin-top: 0.5rem;">Max: 220 mg total</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Hydralazine IV</div>
+                        <div class="card-content">
+                            <p>5-10 mg initial</p>
+                            <p style="margin-top: 0.5rem;">Then 10 mg q20min</p>
+                            <p style="margin-top: 0.5rem;">Max: 30 mg total</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Nifedipine PO</div>
+                        <div class="card-content">
+                            <p>10-20 mg immediate release</p>
+                            <p style="margin-top: 0.5rem;">Repeat in 20 min PRN</p>
+                            <p style="margin-top: 0.5rem;">Max: 50 mg/hour</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="key-point" style="margin-top: 2rem;">
+                    Goal: BP &lt;160/110 mmHg within <span class="highlight">30-60 minutes</span>
+                </div>
+            </div>
+            <div class="slide-number">18</div>
+        </div>
+
+        <!-- Slide 19: Postpartum Management -->
+        <div class="slide">
+            <h2>Postpartum Management</h2>
+            <div class="content">
+                <div class="key-point">
+                    Blood pressure often <span class="warning">increases</span> in weeks after delivery
+                </div>
+                <div class="protocol-step" style="margin-top: 2rem;">
+                    <span class="protocol-number">1</span>
+                    Continue home BP monitoring for <span class="highlight">1-2 weeks postpartum</span>
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">2</span>
+                    <span class="highlight">Follow-up within 72 hours</span> if severe HTN during hospitalization
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">3</span>
+                    Resume or adjust antihypertensive medications as needed
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">4</span>
+                    Ensure medications are <span class="highlight">compatible with breastfeeding</span>
+                </div>
+                <div class="small-text" style="margin-top: 2rem;">Do not discontinue medications without provider consultation</div>
+            </div>
+            <div class="slide-number">19</div>
+        </div>
+
+        <!-- Slide 20: Long-Term Cardiovascular Risk -->
+        <div class="slide">
+            <h2>Long-Term Cardiovascular Risk</h2>
+            <div class="content">
+                <div class="key-point">
+                    Chronic HTN in pregnancy associated with heightened risk of future cardiovascular disease
+                </div>
+                <div class="two-column" style="margin-top: 2rem;">
+                    <div class="column-box">
+                        <h3>Increased Risk For</h3>
+                        <ul style="margin-top: 1rem;">
+                            <li>Persistent hypertension</li>
+                            <li>Ischemic heart disease</li>
+                            <li>Heart failure</li>
+                            <li>Stroke</li>
+                        </ul>
+                    </div>
+                    <div class="column-box">
+                        <h3>Postpartum Care</h3>
+                        <ul style="margin-top: 1rem;">
+                            <li>Cardiovascular risk assessment</li>
+                            <li>Lifestyle modification counseling</li>
+                            <li>Long-term BP management</li>
+                            <li>Regular primary care follow-up</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="reference" style="margin-top: 2rem;">Countouris et al. Circulation 2025; 151:490-507</div>
+            </div>
+            <div class="slide-number">20</div>
+        </div>
+
+        <!-- Slide 21: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Clinical Takeaways</h2>
+            <div class="content">
+                <div class="protocol-step">
+                    <span class="protocol-number">1</span>
+                    Treat chronic HTN at <span class="highlight">≥140/90 mmHg</span> threshold based on CHAP trial
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">2</span>
+                    First-line agents: <span class="highlight">labetalol, nifedipine, methyldopa</span>
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">3</span>
+                    Initiate <span class="highlight">aspirin 81 mg daily</span> between 12-28 weeks (ideally &lt;16 weeks)
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">4</span>
+                    Antenatal testing from <span class="highlight">32 weeks</span>; serial growth ultrasounds
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">5</span>
+                    Deliver at <span class="highlight">37-39.6 weeks</span> based on control status
+                </div>
+                <div class="protocol-step">
+                    <span class="protocol-number">6</span>
+                    Close postpartum monitoring for <span class="highlight">BP exacerbation</span>
+                </div>
+            </div>
+            <div class="slide-number">21</div>
+        </div>
+
+        <!-- Slide 22: References -->
+        <div class="slide">
+            <h2>Key References</h2>
+            <div class="content" style="font-size: 1.1rem; line-height: 1.6;">
+                <p>1. ACOG Practice Bulletin No. 203: Chronic Hypertension in Pregnancy. Obstet Gynecol 2019;133:e26-50.</p>
+                <p style="margin-top: 1rem;">2. ACOG Practice Advisory: Clinical Guidance for the Integration of the Findings of the Chronic Hypertension and Pregnancy (CHAP) Study. April 2022.</p>
+                <p style="margin-top: 1rem;">3. SMFM Statement: Antihypertensive therapy for mild chronic hypertension in pregnancy—The Chronic Hypertension and Pregnancy trial. Am J Obstet Gynecol 2022;227:B24-B27.</p>
+                <p style="margin-top: 1rem;">4. Tita AT, Szychowski JM, Boggess K, et al. Treatment for Mild Chronic Hypertension during Pregnancy. N Engl J Med 2022;386:1781-1792.</p>
+                <p style="margin-top: 1rem;">5. ACOG Committee Opinion No. 828: Indications for Outpatient Antenatal Fetal Surveillance. Obstet Gynecol 2021;137:e177-e197.</p>
+                <p style="margin-top: 1rem;">6. Countouris M, et al. Hypertension in Pregnancy and Postpartum: Current Standards and Opportunities to Improve Care. Circulation 2025;151:490-507.</p>
+            </div>
+            <div class="slide-number">22</div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slidesContainer = document.getElementById('slidesContainer');
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateSlidePosition() {
+            slidesContainer.style.transform = `translateX(-${currentSlide * 100}vw)`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlidePosition();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlidePosition();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                currentSlide = 0;
+                updateSlidePosition();
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                currentSlide = totalSlides - 1;
+                updateSlidePosition();
+            }
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) prevSlide();
+        }
+
+        // Click navigation
+        document.addEventListener('click', (e) => {
+            const clickX = e.clientX;
+            const screenWidth = window.innerWidth;
+            
+            if (clickX > screenWidth * 0.66) {
+                nextSlide();
+            } else if (clickX < screenWidth * 0.33) {
+                prevSlide();
+            }
+        });
+    </script>
+</body>
+</html>
