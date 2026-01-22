@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asthma During Pregnancy – Patient Education</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #f0f4f8;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slide-container {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100vh;
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #ffffff;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            color: #a8d5ff;
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            color: #c8e0ff;
+        }
+
+        p, li {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            max-width: 900px;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #a8d5ff;
+            margin-bottom: 3rem;
+        }
+
+        .highlight {
+            color: #ffd580;
+            font-weight: 600;
+        }
+
+        .reassurance {
+            color: #90ee90;
+            font-weight: 600;
+        }
+
+        .action {
+            color: #ffb380;
+            font-weight: 600;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 2rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .card p {
+            font-size: 1.3rem;
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            text-align: left;
+            list-style: none;
+            max-width: 800px;
+        }
+
+        ul li {
+            padding-left: 2rem;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        ul li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #ffd580;
+            font-weight: bold;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 1000px;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .timeline:before {
+            content: "";
+            position: absolute;
+            top: 2.5rem;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            z-index: 0;
+        }
+
+        .timeline-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-dot {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ffd580;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #1e3c72;
+            font-size: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            max-width: 900px;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.3rem;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            color: #ffd580;
+        }
+
+        .progress {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 1000;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+        }
+
+        .progress-dot.active {
+            background: #ffd580;
+            transform: scale(1.3);
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            p, li {
+                font-size: 1.2rem;
+            }
+
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .timeline {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .timeline:before {
+                display: none;
+            }
+        }
+
+        .big-number {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #ffd580;
+            margin: 1rem 0;
+        }
+
+        .visual-box {
+            background: rgba(255, 255, 255, 0.08);
+            border-left: 5px solid #90ee90;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            max-width: 800px;
+        }
+
+        .warning-box {
+            background: rgba(255, 180, 128, 0.15);
+            border-left: 5px solid #ffb380;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container" id="slideContainer">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <h1>Asthma During Pregnancy</h1>
+            <p class="subtitle">A guide to breathing well for you and your baby</p>
+        </div>
+
+        <!-- Slide 2: What is Asthma? -->
+        <div class="slide">
+            <h2>What Is Asthma?</h2>
+            <div class="icon">🫁</div>
+            <p>Asthma is a condition where airways (breathing tubes) become narrow and swollen.</p>
+            <p style="margin-top: 2rem;">This makes it harder to breathe and can cause coughing, wheezing, or chest tightness.</p>
+        </div>
+
+        <!-- Slide 3: How Common? -->
+        <div class="slide">
+            <h2>You're Not Alone</h2>
+            <div class="big-number">1 in 12</div>
+            <p>About 8% of pregnant women have asthma.</p>
+            <p style="margin-top: 2rem;">It's one of the most common medical conditions during pregnancy.</p>
+        </div>
+
+        <!-- Slide 4: How Pregnancy Affects Asthma -->
+        <div class="slide">
+            <h2>How Pregnancy Affects Your Asthma</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="icon">📊</div>
+                    <h3>33% Better</h3>
+                    <p>Some women notice improvement</p>
+                </div>
+                <div class="card">
+                    <div class="icon">➡️</div>
+                    <h3>33% Same</h3>
+                    <p>No change in symptoms</p>
+                </div>
+                <div class="card">
+                    <div class="icon">📈</div>
+                    <h3>33% Worse</h3>
+                    <p>More symptoms during pregnancy</p>
+                </div>
+            </div>
+            <p style="margin-top: 2rem; font-size: 1.3rem; color: #a8d5ff;">We can't predict which group you'll be in, so we monitor everyone closely.</p>
+        </div>
+
+        <!-- Slide 5: Why Control Matters -->
+        <div class="slide">
+            <h2>Why Asthma Control Matters</h2>
+            <div class="visual-box">
+                <p><span class="reassurance">Well-controlled asthma:</span> Pregnancy outcomes are similar to women without asthma.</p>
+            </div>
+            <div class="warning-box" style="margin-top: 2rem;">
+                <p><span class="action">Uncontrolled asthma:</span> May be associated with higher risk of preterm birth or low birth weight.</p>
+            </div>
+            <p style="margin-top: 2rem; font-size: 1.4rem;"><span class="highlight">Good news:</span> Control is achievable with safe medications and monitoring.</p>
+        </div>
+
+        <!-- Slide 6: Your Baby Needs Oxygen -->
+        <div class="slide">
+            <h2>Your Baby Needs Oxygen</h2>
+            <div class="icon">💨➡️👶</div>
+            <p>When you breathe well, your baby gets enough oxygen to grow.</p>
+            <p style="margin-top: 2rem;">When asthma is uncontrolled, less oxygen reaches your baby.</p>
+            <p style="margin-top: 2rem;"><span class="reassurance">Keeping your asthma controlled protects your baby.</span></p>
+        </div>
+
+        <!-- Slide 7: Medications Are Safe -->
+        <div class="slide">
+            <h2>Are Asthma Medications Safe?</h2>
+            <div class="icon">✅</div>
+            <div class="visual-box">
+                <p style="font-size: 1.6rem;"><span class="reassurance">Yes.</span> Most asthma medications are safe during pregnancy.</p>
+            </div>
+            <p style="margin-top: 2rem;">The risk of uncontrolled asthma is <span class="highlight">greater</span> than the risk from medications.</p>
+            <p style="margin-top: 1.5rem; font-size: 1.3rem; color: #a8d5ff;">Don't stop your medications without talking to your doctor first.</p>
+        </div>
+
+        <!-- Slide 8: Common Medications -->
+        <div class="slide">
+            <h2>Common Asthma Medications</h2>
+            <table>
+                <tr>
+                    <th>Type</th>
+                    <th>Purpose</th>
+                    <th>Safe in Pregnancy?</th>
+                </tr>
+                <tr>
+                    <td><strong>Rescue inhalers</strong><br>(albuterol)</td>
+                    <td>Quick relief during symptoms</td>
+                    <td style="color: #90ee90;">✓ Safe</td>
+                </tr>
+                <tr>
+                    <td><strong>Controller inhalers</strong><br>(inhaled steroids)</td>
+                    <td>Prevent symptoms daily</td>
+                    <td style="color: #90ee90;">✓ Safe</td>
+                </tr>
+                <tr>
+                    <td><strong>Other medications</strong></td>
+                    <td>Additional control if needed</td>
+                    <td style="color: #90ee90;">✓ Most are safe</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 9: What Happens Next - Monitoring -->
+        <div class="slide">
+            <h2>What Happens Next?</h2>
+            <h3 style="color: #ffd580;">Regular Monitoring</h3>
+            <ul>
+                <li>Continue seeing your asthma doctor (pulmonologist or allergist)</li>
+                <li>We'll ask about symptoms at each prenatal visit</li>
+                <li>May check lung function with simple breathing tests</li>
+                <li>Adjust medications if needed as pregnancy progresses</li>
+            </ul>
+        </div>
+
+        <!-- Slide 10: Timeline -->
+        <div class="slide">
+            <h2>Asthma Through Pregnancy</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">1st</div>
+                    <h3>First Trimester</h3>
+                    <p>Review medications, establish baseline</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">2nd</div>
+                    <h3>Second Trimester</h3>
+                    <p>Monitor symptoms, adjust as needed</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">3rd</div>
+                    <h3>Third Trimester</h3>
+                    <p>Peak monitoring, plan for labor</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">PP</div>
+                    <h3>After Birth</h3>
+                    <p>Asthma usually returns to pre-pregnancy state</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: What Can You Do? -->
+        <div class="slide">
+            <h2>What Can You Do?</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="icon">💊</div>
+                    <h3>Take Your Medications</h3>
+                    <p>Use controller inhalers daily, even when feeling well</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🚫</div>
+                    <h3>Avoid Triggers</h3>
+                    <p>Smoke, dust, pets, cold air, infections</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🩺</div>
+                    <h3>Track Symptoms</h3>
+                    <p>Note when you use rescue inhaler or have symptoms</p>
+                </div>
+                <div class="card">
+                    <div class="icon">💬</div>
+                    <h3>Communicate</h3>
+                    <p>Tell us if symptoms worsen or change</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: When to Call -->
+        <div class="slide">
+            <h2>When to Call Your Doctor</h2>
+            <div class="warning-box" style="text-align: left;">
+                <p style="font-size: 1.4rem; margin-bottom: 1.5rem;"><strong>Call right away if you have:</strong></p>
+                <ul style="margin-left: 0;">
+                    <li>Rescue inhaler needed more than twice per week</li>
+                    <li>Waking up at night with asthma symptoms</li>
+                    <li>Asthma limits daily activities</li>
+                    <li>Peak flow readings dropping (if you use a meter)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 13: Emergency Signs -->
+        <div class="slide">
+            <h2>Emergency Warning Signs</h2>
+            <div class="icon">🚨</div>
+            <div class="warning-box" style="background: rgba(255, 100, 100, 0.2);">
+                <p style="font-size: 1.5rem;"><strong>Call 911 or go to the ER if:</strong></p>
+                <ul style="margin-top: 1rem; margin-left: 0;">
+                    <li>Severe trouble breathing or talking</li>
+                    <li>Lips or fingernails turning blue</li>
+                    <li>Rescue inhaler doesn't help within minutes</li>
+                    <li>Feeling confused or very drowsy</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 14: Labor and Delivery -->
+        <div class="slide">
+            <h2>What About Labor and Delivery?</h2>
+            <div class="visual-box">
+                <p><span class="reassurance">Most women with asthma have normal vaginal deliveries.</span></p>
+            </div>
+            <ul style="margin-top: 2rem;">
+                <li>Continue your controller medications through labor</li>
+                <li>Bring your rescue inhaler to the hospital</li>
+                <li>Epidural anesthesia is safe and may help breathing</li>
+                <li>Asthma attacks during labor are uncommon</li>
+            </ul>
+        </div>
+
+        <!-- Slide 15: Breastfeeding -->
+        <div class="slide">
+            <h2>Breastfeeding With Asthma</h2>
+            <div class="icon">🤱</div>
+            <div class="visual-box">
+                <p><span class="reassurance">You can safely breastfeed while taking asthma medications.</span></p>
+            </div>
+            <p style="margin-top: 2rem;">Most asthma medications pass into breast milk in very small amounts.</p>
+            <p style="margin-top: 1rem;">The benefits of breastfeeding outweigh any minimal risks.</p>
+        </div>
+
+        <!-- Slide 16: Working Together -->
+        <div class="slide">
+            <h2>We're Partners in Your Care</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="icon">🫁</div>
+                    <h3>Your Asthma Doctor</h3>
+                    <p>Manages medications and lung function</p>
+                </div>
+                <div class="card">
+                    <div class="icon">👶</div>
+                    <h3>Your OB Team</h3>
+                    <p>Monitors pregnancy and baby's growth</p>
+                </div>
+                <div class="card">
+                    <div class="icon">💪</div>
+                    <h3>You</h3>
+                    <p>Take medications, track symptoms, communicate</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+            <ul>
+                <li><span class="reassurance">Well-controlled asthma has excellent pregnancy outcomes</span></li>
+                <li><span class="highlight">Your medications are safer than uncontrolled asthma</span></li>
+                <li>Keep taking your controller medications every day</li>
+                <li>Avoid triggers when possible</li>
+                <li>Tell us right away if symptoms worsen</li>
+            </ul>
+        </div>
+
+        <!-- Slide 18: Reassurance -->
+        <div class="slide">
+            <h2>You Can Do This</h2>
+            <div class="icon">✨</div>
+            <p style="font-size: 1.8rem; line-height: 1.8;">Thousands of women with asthma have healthy pregnancies every year.</p>
+            <p style="margin-top: 2rem; font-size: 1.6rem;">With good control and teamwork, you and your baby will thrive.</p>
+            <p style="margin-top: 3rem; color: #ffd580; font-size: 1.4rem;">We're here to support you every step of the way.</p>
+        </div>
+
+        <!-- Slide 19: Questions -->
+        <div class="slide">
+            <h2>Questions?</h2>
+            <div class="icon">💬</div>
+            <p>We're here to answer any questions you have about asthma and pregnancy.</p>
+            <p style="margin-top: 2rem;">Don't hesitate to reach out between visits if concerns come up.</p>
+        </div>
+
+    </div>
+
+    <div class="progress" id="progress"></div>
+    <div class="navigation">Use arrow keys or swipe to navigate</div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const container = document.getElementById('slideContainer');
+        const progressContainer = document.getElementById('progress');
+
+        // Create progress dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'progress-dot';
+            if (i === 0) dot.classList.add('active');
+            progressContainer.appendChild(dot);
+        }
+
+        const progressDots = document.querySelectorAll('.progress-dot');
+
+        function updateSlide() {
+            container.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            progressDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Touch/swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        container.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        container.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchStartX - touchEndX > 50) {
+                nextSlide();
+            }
+            if (touchEndX - touchStartX > 50) {
+                prevSlide();
+            }
+        }
+
+        // Click navigation (left/right halves)
+        container.addEventListener('click', (e) => {
+            const clickX = e.clientX;
+            const windowWidth = window.innerWidth;
+            
+            if (clickX > windowWidth / 2) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        });
+
+        // Progress dot click navigation
+        progressDots.forEach((dot, index) => {
+            dot.addEventListener('click', (e) => {
+                e.stopPropagation();
+                currentSlide = index;
+                updateSlide();
+            });
+            dot.style.cursor = 'pointer';
+        });
+    </script>
+</body>
+</html>
