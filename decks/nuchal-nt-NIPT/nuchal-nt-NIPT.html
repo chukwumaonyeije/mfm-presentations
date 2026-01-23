@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Trimester Screening: NT & NIPT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #e4e4e4;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slide-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            transition: transform 0.4s ease;
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #4a9eff;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            color: #4a9eff;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #7cb8ff;
+            font-weight: 500;
+        }
+
+        p {
+            font-size: 1.8rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: #b8b8b8;
+            margin-bottom: 1rem;
+        }
+
+        .emphasis {
+            color: #4a9eff;
+            font-weight: 600;
+        }
+
+        .reassurance {
+            color: #5fda7d;
+            font-weight: 600;
+        }
+
+        .action {
+            color: #ff9d5c;
+            font-weight: 600;
+        }
+
+        .box {
+            background: rgba(74, 158, 255, 0.1);
+            border: 2px solid #4a9eff;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            max-width: 800px;
+        }
+
+        .green-box {
+            background: rgba(95, 218, 125, 0.1);
+            border-color: #5fda7d;
+        }
+
+        .orange-box {
+            background: rgba(255, 157, 92, 0.1);
+            border-color: #ff9d5c;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            width: 100%;
+            margin: 2rem 0;
+        }
+
+        .column {
+            text-align: left;
+        }
+
+        ul {
+            text-align: left;
+            font-size: 1.6rem;
+            line-height: 1.8;
+            margin-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 1rem;
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            font-size: 1.2rem;
+            color: #7cb8ff;
+            background: rgba(26, 26, 46, 0.9);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #4a9eff;
+        }
+
+        .progress {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            font-size: 1.2rem;
+            color: #7cb8ff;
+            background: rgba(26, 26, 46, 0.9);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #4a9eff;
+        }
+
+        .small-text {
+            font-size: 1.4rem;
+            color: #b8b8b8;
+            margin-top: 1rem;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 2rem auto;
+            font-size: 1.5rem;
+            max-width: 900px;
+        }
+
+        th, td {
+            border: 1px solid #4a9eff;
+            padding: 1.2rem;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(74, 158, 255, 0.2);
+            color: #4a9eff;
+            font-weight: 600;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #4a9eff;
+            z-index: 0;
+        }
+
+        .timeline-item {
+            background: #1a1a2e;
+            border: 3px solid #4a9eff;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            position: relative;
+        }
+
+        .timeline-week {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #4a9eff;
+        }
+
+        .timeline-label {
+            font-size: 1.2rem;
+            color: #b8b8b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container" id="slideContainer">
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <h1>First Trimester Screening</h1>
+            <p class="subtitle">Understanding Your Options for NT and NIPT</p>
+            <div class="box green-box" style="margin-top: 3rem;">
+                <p style="margin: 0;">Information to help you make the best choice for you and your baby.</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Overview -->
+        <div class="slide">
+            <h2>What We'll Cover Today</h2>
+            <div class="box">
+                <ul>
+                    <li>Two screening options in early pregnancy</li>
+                    <li>What these tests can and cannot tell us</li>
+                    <li>Benefits and limitations of each</li>
+                    <li>How to decide what's right for you</li>
+                </ul>
+            </div>
+            <p class="reassurance" style="margin-top: 2rem;">These tests are optional. We'll help you decide together.</p>
+        </div>
+
+        <!-- Slide 3: What is screening? -->
+        <div class="slide">
+            <h2>What Does "Screening" Mean?</h2>
+            <div class="icon">🔍</div>
+            <p><span class="emphasis">Screening tests</span> check for possible risk of certain conditions.</p>
+            <p>They don't diagnose problems—they help us understand if more testing might be helpful.</p>
+            <div class="box green-box">
+                <p style="margin: 0;">Most screening results show <span class="reassurance">low risk</span> and provide reassurance.</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Timing -->
+        <div class="slide">
+            <h2>When Are These Tests Done?</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-week">11-14</div>
+                    <div class="timeline-label">weeks</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-week">NT</div>
+                    <div class="timeline-label">ultrasound</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-week">10+</div>
+                    <div class="timeline-label">weeks</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-week">NIPT</div>
+                    <div class="timeline-label">blood test</div>
+                </div>
+            </div>
+            <p style="margin-top: 3rem;">Both are done in the <span class="emphasis">first trimester</span> (first three months).</p>
+        </div>
+
+        <!-- Slide 5: What is NT? -->
+        <div class="slide">
+            <h2>Nuchal Translucency (NT)</h2>
+            <h3>What Is It?</h3>
+            <p>An <span class="emphasis">ultrasound measurement</span> of fluid at the back of baby's neck.</p>
+            <p>Done between 11 and 14 weeks of pregnancy.</p>
+            <div class="box">
+                <p style="margin: 0;"><span class="emphasis">Nuchal</span> = back of neck<br>
+                <span class="emphasis">Translucency</span> = clear fluid space</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: How NT works -->
+        <div class="slide">
+            <h2>How NT Screening Works</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>The Measurement</h3>
+                    <p>We measure the fluid space using ultrasound.</p>
+                    <p>All babies have some fluid—we're looking at the thickness.</p>
+                </div>
+                <div class="column">
+                    <h3>Combined with Blood</h3>
+                    <p>Often combined with a blood test for better accuracy.</p>
+                    <p>Together, they estimate risk for chromosome differences.</p>
+                </div>
+            </div>
+            <p class="small-text">Takes about 20 minutes during ultrasound visit</p>
+        </div>
+
+        <!-- Slide 7: What is NIPT? -->
+        <div class="slide">
+            <h2>NIPT Testing</h2>
+            <h3>What Is It?</h3>
+            <p><span class="emphasis">Non-Invasive Prenatal Testing</span> uses your blood to analyze baby's DNA.</p>
+            <p>Can be done as early as 10 weeks of pregnancy.</p>
+            <div class="box">
+                <p style="margin: 0;">Also called: cell-free DNA testing or cfDNA</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: How NIPT works -->
+        <div class="slide">
+            <h2>How NIPT Works</h2>
+            <div class="icon">💉</div>
+            <p>A simple blood draw from your arm.</p>
+            <p>Small amounts of baby's DNA circulate in your bloodstream.</p>
+            <p>The lab analyzes this DNA to screen for chromosome differences.</p>
+            <div class="box green-box">
+                <p style="margin: 0;">Results typically ready in 7-10 days.</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: What they screen for -->
+        <div class="slide">
+            <h2>What These Tests Screen For</h2>
+            <table>
+                <tr>
+                    <th>Condition</th>
+                    <th>What It Means</th>
+                </tr>
+                <tr>
+                    <td><span class="emphasis">Trisomy 21</span></td>
+                    <td>Down syndrome (extra chromosome 21)</td>
+                </tr>
+                <tr>
+                    <td><span class="emphasis">Trisomy 18</span></td>
+                    <td>Edwards syndrome (extra chromosome 18)</td>
+                </tr>
+                <tr>
+                    <td><span class="emphasis">Trisomy 13</span></td>
+                    <td>Patau syndrome (extra chromosome 13)</td>
+                </tr>
+            </table>
+            <p class="small-text">NIPT can screen for additional conditions depending on the test chosen</p>
+        </div>
+
+        <!-- Slide 10: Benefits comparison -->
+        <div class="slide">
+            <h2>Benefits of Each Test</h2>
+            <div class="two-column">
+                <div class="column">
+                    <div class="box">
+                        <h3 style="color: #4a9eff; margin-bottom: 1rem;">NT Ultrasound</h3>
+                        <ul>
+                            <li>See baby on ultrasound</li>
+                            <li>Check baby's anatomy</li>
+                            <li>Confirm due date</li>
+                            <li>Covered by insurance</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="box">
+                        <h3 style="color: #4a9eff; margin-bottom: 1rem;">NIPT Blood Test</h3>
+                        <ul>
+                            <li>More accurate screening</li>
+                            <li>Earlier timing possible</li>
+                            <li>Can learn sex if desired</li>
+                            <li>Just a blood draw</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Accuracy -->
+        <div class="slide">
+            <h2>How Accurate Are They?</h2>
+            <div class="two-column">
+                <div class="column">
+                    <div class="box">
+                        <h3 style="color: #4a9eff;">NT + Blood</h3>
+                        <p><span class="emphasis">Detection rate:</span><br>About 85% for Down syndrome</p>
+                        <p><span class="emphasis">False positive rate:</span><br>About 5%</p>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="box">
+                        <h3 style="color: #4a9eff;">NIPT</h3>
+                        <p><span class="emphasis">Detection rate:</span><br>Over 99% for Down syndrome</p>
+                        <p><span class="emphasis">False positive rate:</span><br>Less than 1%</p>
+                    </div>
+                </div>
+            </div>
+            <p class="reassurance" style="margin-top: 2rem;">Both are screening tests, not diagnostic tests.</p>
+        </div>
+
+        <!-- Slide 12: Limitations -->
+        <div class="slide">
+            <h2>Important Limitations</h2>
+            <div class="box orange-box">
+                <h3>What These Tests Cannot Do</h3>
+                <ul>
+                    <li>They don't diagnose—only screen for risk</li>
+                    <li>They don't check for all birth differences</li>
+                    <li>NIPT occasionally gives unclear results</li>
+                    <li>Neither test can predict severity</li>
+                </ul>
+            </div>
+            <p>Abnormal screening results need <span class="emphasis">diagnostic testing</span> to confirm.</p>
+        </div>
+
+        <!-- Slide 13: Risks -->
+        <div class="slide">
+            <h2>Are There Risks?</h2>
+            <div class="icon">✓</div>
+            <div class="box green-box">
+                <p><span class="reassurance">Both tests are very safe.</span></p>
+                <p>NT screening: Standard ultrasound—no risks to you or baby.</p>
+                <p>NIPT: Standard blood draw—minimal risk of bruising.</p>
+            </div>
+            <p class="small-text">Neither test increases risk of miscarriage</p>
+        </div>
+
+        <!-- Slide 14: Emotional considerations -->
+        <div class="slide">
+            <h2>Considerations Beyond Medical</h2>
+            <p>A screen showing <span class="emphasis">higher risk</span> can cause worry.</p>
+            <p>You may face decisions about further testing.</p>
+            <div class="box">
+                <p style="margin: 0;">Think about: What would you do with the information? Would knowing help you prepare?</p>
+            </div>
+            <p class="reassurance" style="margin-top: 2rem;">There's no "right" choice—only what's right for you.</p>
+        </div>
+
+        <!-- Slide 15: Alternatives -->
+        <div class="slide">
+            <h2>Your Alternatives</h2>
+            <div class="box">
+                <h3>Option 1: Decline Screening</h3>
+                <p>You can choose not to have any first trimester screening.</p>
+                <p>We'll still monitor your pregnancy with standard ultrasounds.</p>
+            </div>
+            <div class="box" style="margin-top: 2rem;">
+                <h3>Option 2: Diagnostic Testing</h3>
+                <p>Go directly to <span class="emphasis">amniocentesis</span> or <span class="emphasis">CVS</span>—tests that give definite answers.</p>
+                <p class="small-text">These involve small needles and carry slight risks; we can discuss if interested.</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: Understanding results -->
+        <div class="slide">
+            <h2>Understanding Your Results</h2>
+            <table>
+                <tr>
+                    <th>Result</th>
+                    <th>What It Means</th>
+                </tr>
+                <tr>
+                    <td><span class="reassurance">Low Risk / Negative</span></td>
+                    <td>Very unlikely baby has screened conditions. Most results are low risk.</td>
+                </tr>
+                <tr>
+                    <td><span class="action">High Risk / Positive</span></td>
+                    <td>Increased chance, but NOT a diagnosis. We discuss diagnostic testing options.</td>
+                </tr>
+                <tr>
+                    <td><span class="emphasis">Inconclusive</span></td>
+                    <td>Test didn't give clear answer. May need to repeat or try different test.</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 17: Next steps after high risk -->
+        <div class="slide">
+            <h2>If Results Show Higher Risk</h2>
+            <div class="box orange-box">
+                <h3>We'll Work Together</h3>
+                <ul>
+                    <li>Meet with maternal-fetal medicine specialist</li>
+                    <li>Discuss diagnostic testing (amniocentesis or CVS)</li>
+                    <li>Review all options with genetic counselor</li>
+                    <li>Take time you need to make decisions</li>
+                </ul>
+            </div>
+            <p class="reassurance" style="margin-top: 2rem;">You're not alone. Our team supports you through every step.</p>
+        </div>
+
+        <!-- Slide 18: ACOG/SMFM guidance -->
+        <div class="slide">
+            <h2>What Medical Guidelines Say</h2>
+            <div class="box">
+                <h3>ACOG & SMFM Recommendations</h3>
+                <p><span class="emphasis">All pregnant people</span> should be offered screening or diagnostic testing, regardless of age.</p>
+                <p>Both NT and NIPT are <span class="emphasis">acceptable first-line screening</span> options.</p>
+                <p>NIPT has higher accuracy but may not be covered by all insurance.</p>
+            </div>
+            <p class="small-text">ACOG = American College of Obstetricians and Gynecologists<br>
+            SMFM = Society for Maternal-Fetal Medicine</p>
+        </div>
+
+        <!-- Slide 19: Insurance coverage -->
+        <div class="slide">
+            <h2>Cost and Coverage</h2>
+            <div class="two-column">
+                <div class="column">
+                    <div class="box green-box">
+                        <h3 style="color: #5fda7d;">NT Screening</h3>
+                        <p>Usually covered by insurance as part of routine prenatal care.</p>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="box">
+                        <h3 style="color: #4a9eff;">NIPT</h3>
+                        <p>Coverage varies. Many insurers cover for higher-risk pregnancies.</p>
+                        <p>Some labs offer self-pay pricing if not covered.</p>
+                    </div>
+                </div>
+            </div>
+            <p class="action" style="margin-top: 2rem;">Check with your insurance before deciding.</p>
+        </div>
+
+        <!-- Slide 20: Making your choice -->
+        <div class="slide">
+            <h2>Making Your Decision</h2>
+            <div class="box orange-box">
+                <h3>Questions to Consider</h3>
+                <ul>
+                    <li>How would screening results affect your pregnancy?</li>
+                    <li>Do you want information early for planning?</li>
+                    <li>Which test accuracy matters most to you?</li>
+                    <li>What does your insurance cover?</li>
+                </ul>
+            </div>
+            <p style="margin-top: 2rem;">Take time to discuss with your partner, family, or our team.</p>
+        </div>
+
+        <!-- Slide 21: What you can do -->
+        <div class="slide">
+            <h2>Your Next Steps</h2>
+            <div class="icon">🤝</div>
+            <div class="box green-box">
+                <ul>
+                    <li>Ask us any questions—there are no wrong questions</li>
+                    <li>Check your insurance coverage for both tests</li>
+                    <li>Decide which option feels right for you</li>
+                    <li>Let us know your choice—we'll schedule accordingly</li>
+                </ul>
+            </div>
+            <p class="action" style="margin-top: 2rem;">We're here to support whatever you decide.</p>
+        </div>
+
+        <!-- Slide 22: Key takeaways -->
+        <div class="slide">
+            <h2>Key Points to Remember</h2>
+            <div class="box">
+                <ul>
+                    <li><span class="emphasis">Both tests are screening tools</span>—they assess risk, not diagnose</li>
+                    <li><span class="reassurance">Both are safe</span> with no risk to your pregnancy</li>
+                    <li>NIPT is more accurate; NT includes ultrasound anatomy check</li>
+                    <li><span class="action">The choice is yours</span>—we support any decision</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 23: Summary -->
+        <div class="slide">
+            <h2>We're Partners in Your Care</h2>
+            <div class="icon">💙</div>
+            <p>First trimester screening gives you options and information.</p>
+            <p>Whether you choose NT, NIPT, both, or neither—<span class="reassurance">we're with you</span>.</p>
+            <div class="box green-box" style="margin-top: 2rem;">
+                <p style="margin: 0; font-size: 1.6rem;">Our goal: help you make informed choices that feel right for your family.</p>
+            </div>
+        </div>
+
+        <!-- Slide 24: Questions -->
+        <div class="slide">
+            <h1>Questions?</h1>
+            <p style="font-size: 2rem; margin-top: 2rem;">Let's discuss what would work best for you.</p>
+            <div class="box green-box" style="margin-top: 3rem;">
+                <p style="margin: 0;">We're here to answer anything on your mind.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        ← → to navigate
+    </div>
+    <div class="progress">
+        <span id="currentSlide">1</span> / <span id="totalSlides">24</span>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const container = document.getElementById('slideContainer');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const totalSlidesEl = document.getElementById('totalSlides');
+
+        totalSlidesEl.textContent = totalSlides;
+
+        function updateSlide() {
+            container.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            currentSlideEl.textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Touch support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchStartX - touchEndX > 50) {
+                nextSlide();
+            }
+            if (touchEndX - touchStartX > 50) {
+                prevSlide();
+            }
+        }
+
+        // Click to advance (right side of screen)
+        document.addEventListener('click', (e) => {
+            if (e.clientX > window.innerWidth / 2) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        });
+    </script>
+</body>
+</html>
