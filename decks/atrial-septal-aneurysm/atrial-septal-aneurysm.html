@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Your Baby's Atrial Septal Aneurysm</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a3a 0%, #2d4356 100%);
+            color: #e8f4f8;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slide-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: #7dd3fc;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #7dd3fc;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #93c5fd;
+            font-weight: 500;
+        }
+
+        p {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #bfdbfe;
+            margin-bottom: 2rem;
+        }
+
+        .highlight {
+            color: #7dd3fc;
+            font-weight: 600;
+        }
+
+        .reassurance {
+            background: rgba(34, 197, 94, 0.15);
+            border-left: 4px solid #22c55e;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 8px;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.15);
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .action-box {
+            background: rgba(249, 115, 22, 0.15);
+            border-left: 4px solid #f97316;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 8px;
+        }
+
+        ul {
+            text-align: left;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #7dd3fc;
+            font-weight: bold;
+        }
+
+        .heart-chambers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem auto;
+            max-width: 700px;
+        }
+
+        .chamber {
+            background: rgba(59, 130, 246, 0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid #3b82f6;
+        }
+
+        .chamber-title {
+            font-size: 1.3rem;
+            color: #93c5fd;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            max-width: 900px;
+            margin: 2rem auto;
+            position: relative;
+            align-items: center;
+        }
+
+        .timeline:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            right: 5%;
+            height: 3px;
+            background: #3b82f6;
+            z-index: 0;
+        }
+
+        .timeline-point {
+            background: rgba(26, 42, 58, 0.9);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 3px solid #3b82f6;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            margin: 0 0.5rem;
+        }
+
+        .timeline-label {
+            font-size: 1.2rem;
+            color: #7dd3fc;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-text {
+            font-size: 1.1rem;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: rgba(59, 130, 246, 0.3);
+            border: 2px solid #3b82f6;
+            color: #e8f4f8;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(59, 130, 246, 0.5);
+            transform: scale(1.05);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            font-size: 1.2rem;
+            color: #bfdbfe;
+            z-index: 100;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+
+        .column-header {
+            font-size: 1.6rem;
+            color: #7dd3fc;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            p, li {
+                font-size: 1.2rem;
+            }
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .timeline {
+                flex-direction: column;
+            }
+            .timeline:before {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container" id="slideContainer">
+        <!-- Slide 1: Welcome -->
+        <div class="slide active">
+            <h1>Understanding Your Baby's Heart Finding</h1>
+            <p class="subtitle">Atrial Septal Aneurysm (ASA)</p>
+            <div class="reassurance">
+                <p>We found something on your baby's ultrasound that we want to explain to you.</p>
+                <p>Most of the time, this finding is not harmful and goes away on its own.</p>
+            </div>
+            <p style="margin-top: 3rem; font-size: 1.3rem; color: #bfdbfe;">Let's walk through this together →</p>
+        </div>
+
+        <!-- Slide 2: What We Found -->
+        <div class="slide">
+            <h2>What We Found</h2>
+            <div class="heart-chambers">
+                <div class="chamber">
+                    <div class="chamber-title">Right Atrium</div>
+                    <p style="font-size: 1.2rem;">Upper right chamber</p>
+                </div>
+                <div class="chamber">
+                    <div class="chamber-title">Left Atrium</div>
+                    <p style="font-size: 1.2rem;">Upper left chamber</p>
+                </div>
+            </div>
+            <p>Between these two chambers is a thin wall with a small opening.</p>
+            <p>The <span class="highlight">atrial septal aneurysm</span> means this wall bulges more than usual.</p>
+        </div>
+
+        <!-- Slide 3: What This Is -->
+        <div class="slide">
+            <h2>What Is an Atrial Septal Aneurysm?</h2>
+            <p>Before birth, babies have a natural opening between the upper heart chambers.</p>
+            <p>This opening is called the <span class="highlight">foramen ovale</span>.</p>
+            <p>Sometimes the flap covering this opening moves back and forth more than expected.</p>
+            <div class="info-box">
+                <p><strong>Think of it like this:</strong> The flap is more flexible and moves with each heartbeat—like a sail catching the wind.</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Why It Happens -->
+        <div class="slide">
+            <h2>Why Does This Happen?</h2>
+            <p>This is usually part of normal heart development before birth.</p>
+            <p>It happens because:</p>
+            <ul>
+                <li>Blood flows differently before birth than after birth</li>
+                <li>The opening between chambers is supposed to be there</li>
+                <li>Some babies have more flexible tissue than others</li>
+            </ul>
+            <div class="reassurance">
+                <p><strong>Important:</strong> You did nothing to cause this. It's not related to anything you did or didn't do during pregnancy.</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: What This Means -->
+        <div class="slide">
+            <h2>What This Means for Your Baby</h2>
+            <div class="two-column">
+                <div>
+                    <div class="column-header">Most Common (Over 90%)</div>
+                    <ul style="margin: 0;">
+                        <li>The finding is isolated</li>
+                        <li>No other problems</li>
+                        <li>Goes away after birth</li>
+                        <li>Baby is healthy</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="column-header">What We Watch For</div>
+                    <ul style="margin: 0;">
+                        <li>Irregular heartbeats</li>
+                        <li>Blood flow changes</li>
+                        <li>Heart rhythm patterns</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Heart Rhythm -->
+        <div class="slide">
+            <h2>Why We Monitor the Heart Rhythm</h2>
+            <p>Sometimes the moving flap can trigger extra heartbeats.</p>
+            <p>These are called <span class="highlight">premature atrial contractions</span> (PACs).</p>
+            <div class="info-box">
+                <p><strong>PACs are common:</strong></p>
+                <p>Many babies have occasional extra heartbeats. Most are harmless and don't need treatment.</p>
+            </div>
+            <p>We check the rhythm to make sure everything stays stable.</p>
+        </div>
+
+        <!-- Slide 7: Blood Flow Monitoring -->
+        <div class="slide">
+            <h2>Why We Check Blood Flow</h2>
+            <p>In rare cases, the bulging flap can partially block blood flow.</p>
+            <p>This happens if the flap gets very close to the valve below it.</p>
+            <div class="info-box">
+                <p><strong>What we do:</strong></p>
+                <ul style="margin-top: 1rem;">
+                    <li>Use ultrasound to measure blood flow</li>
+                    <li>Check that the lower chamber fills properly</li>
+                    <li>Monitor growth of the left side of the heart</li>
+                </ul>
+            </div>
+            <p>If we see any concerns, we have ways to help.</p>
+        </div>
+
+        <!-- Slide 8: What Happens Next -->
+        <div class="slide">
+            <h2>Your Monitoring Plan</h2>
+            <div class="timeline">
+                <div class="timeline-point">
+                    <div class="timeline-label">Now</div>
+                    <div class="timeline-text">Detailed ultrasound today</div>
+                </div>
+                <div class="timeline-point">
+                    <div class="timeline-label">Every 2-4 Weeks</div>
+                    <div class="timeline-text">Check heart rhythm and blood flow</div>
+                </div>
+                <div class="timeline-point">
+                    <div class="timeline-label">After Birth</div>
+                    <div class="timeline-text">Heart check by pediatric cardiologist</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: During Pregnancy -->
+        <div class="slide">
+            <h2>What We're Looking For</h2>
+            <p>At each ultrasound visit, we will:</p>
+            <ul>
+                <li>Count your baby's heart rate and rhythm</li>
+                <li>Watch the flap movement with ultrasound</li>
+                <li>Measure blood flow through the heart valves</li>
+                <li>Check that both sides of the heart are growing well</li>
+            </ul>
+            <div class="reassurance">
+                <p>These are all routine checks. We're being thorough, not because something is wrong.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: After Birth -->
+        <div class="slide">
+            <h2>What Happens After Your Baby Is Born</h2>
+            <p>When your baby takes their first breath, blood flow changes immediately.</p>
+            <p>The opening between the chambers usually closes within hours to days.</p>
+            <div class="info-box">
+                <p><strong>Postnatal care:</strong></p>
+                <ul style="margin-top: 1rem;">
+                    <li>Pediatric cardiologist will do an echocardiogram</li>
+                    <li>This checks that the opening has closed</li>
+                    <li>Most babies need no further treatment</li>
+                    <li>Some babies may need occasional follow-up</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 11: If Rhythm Issues Develop -->
+        <div class="slide">
+            <h2>If We Notice Irregular Heartbeats</h2>
+            <p>Occasional extra beats (PACs) are very common and usually harmless.</p>
+            <div class="action-box">
+                <p><strong>We watch more closely if:</strong></p>
+                <ul style="margin-top: 1rem;">
+                    <li>The heart rate becomes very fast (over 200 beats per minute)</li>
+                    <li>The irregular rhythm lasts a long time</li>
+                    <li>We see fluid buildup around the baby</li>
+                </ul>
+            </div>
+            <p>If this happens, we have safe and effective treatments available.</p>
+        </div>
+
+        <!-- Slide 12: Your Questions Matter -->
+        <div class="slide">
+            <h2>Working Together</h2>
+            <p>Your role is important in monitoring your baby.</p>
+            <div class="info-box">
+                <p><strong>Things to notice:</strong></p>
+                <ul style="margin-top: 1rem;">
+                    <li>How your baby moves and kicks</li>
+                    <li>Any changes in movement patterns</li>
+                    <li>How you're feeling overall</li>
+                </ul>
+            </div>
+            <p>Always call us if you notice decreased movement or have any concerns.</p>
+        </div>
+
+        <!-- Slide 13: Delivery Planning -->
+        <div class="slide">
+            <h2>Planning for Delivery</h2>
+            <p>Most babies with an isolated ASA can be born in a regular delivery room.</p>
+            <div class="two-column">
+                <div>
+                    <div class="column-header">Standard Plan</div>
+                    <ul style="margin: 0;">
+                        <li>Deliver at your chosen hospital</li>
+                        <li>Normal labor and delivery</li>
+                        <li>Pediatric team aware of heart finding</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="column-header">If Needed</div>
+                    <ul style="margin: 0;">
+                        <li>Cardiologist available if rhythm issues</li>
+                        <li>We may recommend a hospital with a NICU nearby</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Things to Remember</h2>
+            <ul>
+                <li>This is a common finding on detailed ultrasounds</li>
+                <li>Most cases are isolated and resolve after birth</li>
+                <li>We monitor to ensure everything stays stable</li>
+                <li>Treatment is rarely needed</li>
+                <li>Your baby will likely have a normal, healthy heart after birth</li>
+            </ul>
+            <div class="reassurance" style="margin-top: 3rem;">
+                <p><strong>Bottom line:</strong> We're watching closely, but we expect a good outcome.</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Questions and Support -->
+        <div class="slide">
+            <h2>You're Not Alone</h2>
+            <p>This information can feel overwhelming at first.</p>
+            <p>That's completely normal.</p>
+            <div class="action-box">
+                <p><strong>Resources for you:</strong></p>
+                <ul style="margin-top: 1rem;">
+                    <li>Write down questions as they come up</li>
+                    <li>Bring your partner or support person to appointments</li>
+                    <li>Call our office anytime you need clarification</li>
+                    <li>We'll review everything again at your next visit</li>
+                </ul>
+            </div>
+            <p style="margin-top: 2rem;">We're partners in your baby's care. We're here for you.</p>
+        </div>
+
+        <!-- Slide 16: Closing -->
+        <div class="slide">
+            <h1>Thank You</h1>
+            <p class="subtitle">We'll see you at your next ultrasound appointment</p>
+            <div class="info-box" style="margin-top: 3rem;">
+                <p style="text-align: center;"><strong>Questions before then?</strong></p>
+                <p style="text-align: center; margin-top: 1rem;">Call our office: We're available to talk through any concerns.</p>
+            </div>
+            <p style="margin-top: 3rem; font-size: 1.3rem; color: #22c55e;">You and your baby are in good hands.</p>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">16</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn">← Previous</button>
+        <button class="nav-btn" id="nextBtn">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[n].classList.add('active');
+            document.getElementById('currentSlide').textContent = n + 1;
+            
+            prevBtn.disabled = n === 0;
+            nextBtn.disabled = n === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        prevBtn.addEventListener('click', previousSlide);
+        nextBtn.addEventListener('click', nextSlide);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) previousSlide();
+        }
+
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
