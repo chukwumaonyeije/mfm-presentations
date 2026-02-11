@@ -9,6 +9,30 @@ This repository serves as a curated collection of clinical presentations coverin
 - Preeclampsia management
 - IUGR surveillance and delivery timing
 - Evidence-based approaches to high-risk obstetric conditions
+- Interactive microsites with dual-audience content (patients and clinicians)
+
+## 🌐 Interactive Microsites
+
+Comprehensive, multi-page educational resources designed for both patients and clinicians, featuring interactive content, documentation templates, and evidence-based counseling tools.
+
+### Vitamin K Deficiency Bleeding (VKDB)
+**Path:** `microsites/vitamin-k-deficiency-bleeding/`
+
+**Summary:** Dual-audience microsite covering neonatal Vitamin K prophylaxis with separate interfaces for parents and clinicians.
+
+**Patient-Facing Content:**
+- Why newborns need Vitamin K
+- Safety information and what to expect
+- Common myths and evidence-based responses
+- FAQ and printable handouts
+
+**Clinician Toolkit:**
+- 60-second counseling script
+- Evidence framing for common social media claims
+- Documentation templates for informed consent/refusal
+- Safety-netting and follow-up guidance
+
+**Target Audience:** Parents, pediatricians, family medicine, OB providers, nursing staff
 
 ## 📚 Available Presentations
 
@@ -46,12 +70,26 @@ These presentations follow a **high-contrast, minimal-text** design:
 
 ## 🚀 Usage
 
+### Main Landing Page
+
+Start at `index.html` to browse all presentations and microsites:
+- Search functionality to find topics by keyword
+- Categorized presentations with badges (video, infographic, PDF available)
+- Direct links to interactive microsites
+- Pagination for easy browsing
+
 ### Viewing Presentations
 
 1. **Local viewing:**
    ```bash
-   # Open any presentation in your browser
+   # Open the main landing page
+   open index.html
+   
+   # Or open any specific presentation
    open decks/fgr-ua-aedv-35w/index.html
+   
+   # Or open a microsite
+   open microsites/vitamin-k-deficiency-bleeding/index.html
    ```
 
 2. **Serve with a local server:**
@@ -59,8 +97,15 @@ These presentations follow a **high-contrast, minimal-text** design:
    # Python 3
    python -m http.server 8000
    
-   # Then visit http://localhost:8000/decks/
+   # Then visit http://localhost:8000/
    ```
+
+### Navigation
+
+- **Main page → Presentations:** Click any presentation card
+- **Main page → Microsites:** Scroll to "Interactive Microsites" section
+- **Microsite → Main page:** Click "← All Presentations" in the navigation bar
+- **Patient ↔ Clinician views:** Use navigation links within microsites
 
 ### Navigation Controls
 
@@ -108,10 +153,17 @@ See `__tests__/README.md` for detailed testing documentation.
 
 ```
 mfm-presentations/
-├── decks/                          # Individual presentation decks
+├── index.html                      # Main landing page with search and navigation
+├── decks/                          # Individual presentation decks (70+ topics)
 │   ├── fgr-ua-aedv-35w/           # FGR with AEDV at 35 weeks
 │   ├── iugr-and-doppler/          # IUGR and Doppler overview
-│   └── preeclampsia/              # Preeclampsia management
+│   ├── preeclampsia/              # Preeclampsia management
+│   └── ...                        # Many more clinical presentations
+├── microsites/                     # Interactive multi-page microsites
+│   └── vitamin-k-deficiency-bleeding/
+│       ├── index.html             # Patient-facing content
+│       ├── clinicians.html        # Clinician toolkit
+│       └── assets/                # Microsite-specific styles
 ├── shared/                         # Shared assets and utilities
 │   ├── css/                       # Shared stylesheets
 │   ├── images/                    # Shared images
