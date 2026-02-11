@@ -20,11 +20,18 @@ mfm-presentations/
 ├── [Topic Name]/
 │   └── [topic-name].html    # Self-contained presentation
 ├── decks/                    # (currently empty, potential future location)
+├── microsites/               # Interactive, multi-section web experiences
+│   └── [microsite-name]/
+│       ├── index.html
+│       ├── css/
+│       ├── js/
+│       ├── images/
+│       └── assets/
 ├── shared/                   # (currently empty, reserved for future shared assets)
 │   ├── css/
 │   ├── images/
 │   └── js/
-├── index.html                # (currently empty)
+├── index.html                # Main presentations and microsites gallery
 └── README.md
 ```
 
@@ -297,10 +304,54 @@ The typical deployment process:
 - Remove any duplicate entries if moving an existing presentation to the top
 - Maintain consistent formatting and card structure
 
+## Microsites
+
+Microsites are a new content type that complements presentations. While presentations are linear, slide-based learning experiences, microsites are interactive, multi-section web experiences designed for deeper exploration of topics.
+
+### Key Differences from Presentations
+
+- **Presentations**: Linear (slides), one point per slide, keyboard/click navigation, oral teaching, single HTML file
+- **Microsites**: Non-linear (sections), rich multi-paragraph content, tabbed/menu navigation, self-guided learning, multiple files
+
+### Creating a Microsite
+
+1. Create a folder: `microsites/[microsite-name]/`
+2. Set up subdirectories: `css/`, `js/`, `images/`, `assets/`
+3. Create `index.html` (main entry point)
+4. Create `css/style.css` (styling)
+5. Create `js/script.js` (navigation logic)
+6. Add card to main `index.html` with microsite link
+
+For complete template code and detailed instructions, see `MICROSITES_GUIDE.md`
+
+### Microsite Template Files
+
+Each microsite should include:
+- `index.html`: Self-contained entry point with HTML structure and semantic markup
+- `css/style.css`: Theme-consistent styling using CSS custom properties
+- `js/script.js`: Navigation between sections with keyboard support
+- `README.md`: Documentation explaining microsite content
+
+### Styling Consistency
+
+Microsites use the same color theme as presentations:
+- CSS custom properties: `--bg`, `--fg`, `--accent`, `--accent2`, `--ok`, `--warn`
+- Ensures visual consistency across the entire site
+
+### Navigation Requirements
+
+All microsites must include:
+1. **Back link** to main presentations page (`../index.html`)
+2. **Section navigation** via top menu or sidebar
+3. **Keyboard support** (arrow keys, Home/End for accessibility)
+4. **Responsive design** for mobile, tablet, and desktop
+
 ## Notes
 
 - The `shared/` directory is currently empty but reserved for future modular components (CSS, JS, images)
 - The `decks/` directory is empty; presentations currently live in topic-named folders
-- No package.json or build system by design—presentations are deployment-ready as-is
+- The `microsites/` directory contains interactive, multi-section educational content
+- No package.json or build system by design—presentations and microsites are deployment-ready as-is
 - Presentations are optimized for 16:9 or 16:10 displays (typical conference projectors)
+- Microsites are fully responsive and work on all modern devices
 - **Deployment is automated via GitHub Actions** - see "GitHub Pages Deployment" section above
