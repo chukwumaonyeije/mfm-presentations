@@ -1333,7 +1333,9 @@
     // Pagination and search functionality
     const searchBox = document.getElementById('searchBox');
     const searchResults = document.getElementById('searchResults');
-    const allCards = Array.from(document.querySelectorAll('.card'));
+    // Only select cards from the main presentations section, exclude microsites
+    const presentationsContainer = document.querySelector('.presentations:not(#microsites-container)');
+    const allCards = Array.from(presentationsContainer.querySelectorAll('.card'));
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const pageInfo = document.getElementById('pageInfo');
@@ -1387,7 +1389,9 @@
       }
 
       // Scroll to top of presentations
-      document.querySelector('.presentations').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (presentationsContainer) {
+        presentationsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
 
     function performSearch() {
