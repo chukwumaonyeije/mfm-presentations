@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Mental Health Matters During Pregnancy</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sage: #7A9E7E;
+    --sage-light: #B8D4BB;
+    --sage-pale: #EEF4EF;
+    --blush: #E8C4B8;
+    --blush-deep: #C9896E;
+    --charcoal: #2C3030;
+    --warm-white: #FAFAF7;
+    --accent: #D4735A;
+    --text-muted: #6B7272;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--charcoal);
+    color: var(--charcoal);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Decorative background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(122,158,126,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 10% 90%, rgba(232,196,184,0.2) 0%, transparent 60%),
+      var(--charcoal);
+    pointer-events: none;
+  }
+
+  .slideshow {
+    position: relative;
+    width: min(860px, 96vw);
+    height: min(560px, 94vh);
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 52px 60px;
+    opacity: 0;
+    transform: translateX(60px) scale(0.97);
+    transition: opacity 0.55s cubic-bezier(.4,0,.2,1), transform 0.55s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    pointer-events: all;
+  }
+
+  .slide.exit {
+    opacity: 0;
+    transform: translateX(-60px) scale(0.97);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  /* Slide themes */
+  .slide-1 { background: var(--warm-white); }
+  .slide-2 { background: var(--sage-pale); }
+  .slide-3 { background: var(--warm-white); }
+  .slide-4 { background: #FDF3EF; }
+  .slide-5 { background: var(--sage-pale); }
+  .slide-6 { background: var(--warm-white); }
+  .slide-7 { background: var(--charcoal); color: var(--warm-white); }
+
+  /* Decorative corner elements */
+  .slide::before {
+    content: '';
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    opacity: 0.12;
+    pointer-events: none;
+  }
+  .slide-1::before { background: var(--sage); top: -60px; right: -60px; }
+  .slide-2::before { background: var(--blush-deep); bottom: -60px; left: -60px; }
+  .slide-3::before { background: var(--sage); top: -60px; right: -40px; }
+  .slide-4::before { background: var(--accent); bottom: -50px; right: -50px; }
+  .slide-5::before { background: var(--sage); top: -70px; left: -40px; }
+  .slide-6::before { background: var(--blush-deep); bottom: -60px; right: -40px; }
+  .slide-7::before { background: var(--sage-light); top: -50px; right: -50px; opacity: 0.08; }
+
+  .slide-tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 18px;
+  }
+
+  .slide-7 .slide-tag { color: var(--sage-light); }
+
+  h1.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.18;
+    color: var(--charcoal);
+    margin-bottom: 20px;
+    max-width: 580px;
+  }
+
+  h2.slide-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3.2vw, 32px);
+    line-height: 1.25;
+    margin-bottom: 20px;
+    max-width: 560px;
+  }
+
+  .slide-7 h2.slide-title { color: var(--warm-white); }
+
+  p.body-text {
+    font-size: clamp(14px, 1.8vw, 17px);
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 580px;
+  }
+
+  .slide-7 p.body-text { color: rgba(255,255,255,0.72); }
+
+  .hero-sub {
+    font-size: clamp(14px, 1.8vw, 17px);
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 540px;
+  }
+
+  .stat-block {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    margin: 28px 0 22px;
+    flex-wrap: wrap;
+  }
+
+  .big-stat {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 8vw, 88px);
+    line-height: 0.9;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .stat-label {
+    font-size: clamp(13px, 1.7vw, 16px);
+    line-height: 1.4;
+    color: var(--text-muted);
+    max-width: 260px;
+    padding-bottom: 8px;
+  }
+
+  .pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .pill {
+    background: white;
+    border: 1.5px solid var(--sage-light);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-size: 14px;
+    color: var(--charcoal);
+    font-weight: 400;
+  }
+
+  .pill.risk {
+    border-color: var(--blush);
+    background: #FDF3EF;
+  }
+
+  .card-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 26px;
+  }
+
+  .info-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px 22px;
+    border-left: 4px solid var(--sage);
+  }
+
+  .info-card.accent-card { border-left-color: var(--accent); }
+
+  .info-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: var(--charcoal);
+  }
+
+  .info-card p {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .quote-block {
+    border-left: 3px solid var(--sage);
+    padding: 16px 24px;
+    margin: 24px 0 20px;
+    background: rgba(122,158,126,0.07);
+    border-radius: 0 10px 10px 0;
+    max-width: 580px;
+  }
+
+  .quote-block p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(14px, 1.8vw, 17px);
+    line-height: 1.65;
+    color: var(--charcoal);
+  }
+
+  .quote-attribution {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 10px;
+  }
+
+  .action-list {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 560px;
+  }
+
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: white;
+    border-radius: 12px;
+    padding: 16px 20px;
+  }
+
+  .action-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--sage-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 17px;
+  }
+
+  .action-text h4 {
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 3px;
+  }
+
+  .action-text p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Resource box for last slide */
+  .resource-box {
+    margin-top: 28px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 22px 28px;
+    max-width: 560px;
+  }
+
+  .resource-box h3 {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sage-light);
+    margin-bottom: 14px;
+  }
+
+  .resource-box ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .resource-box li {
+    font-size: 14.5px;
+    color: rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .resource-box li::before {
+    content: '→';
+    color: var(--sage-light);
+    font-weight: 500;
+  }
+
+  /* Navigation */
+  .nav {
+    position: absolute;
+    bottom: 28px;
+    left: 60px;
+    right: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(44,48,48,0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .slide-7 .dot { background: rgba(255,255,255,0.25); }
+
+  .dot.active {
+    background: var(--sage);
+    width: 22px;
+    border-radius: 4px;
+  }
+
+  .nav-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(44,48,48,0.2);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--charcoal);
+    transition: all 0.25s ease;
+  }
+
+  .slide-7 .nav-btn {
+    border-color: rgba(255,255,255,0.25);
+    color: white;
+  }
+
+  .nav-btn:hover {
+    background: var(--sage);
+    border-color: var(--sage);
+    color: white;
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .nav-btn:disabled:hover {
+    background: transparent;
+    border-color: rgba(44,48,48,0.2);
+    color: var(--charcoal);
+  }
+
+  .slide-counter {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .slide-7 .slide-counter { color: rgba(255,255,255,0.45); }
+
+  /* Decorative line accent */
+  .line-accent {
+    width: 44px;
+    height: 3px;
+    background: var(--sage);
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .slide { padding: 36px 30px 70px; }
+    .nav { left: 30px; right: 30px; }
+    .card-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slideshow" id="slideshow">
+
+  <!-- Slide 1: Title -->
+  <div class="slide slide-1 active" id="slide-1">
+    <div class="line-accent"></div>
+    <div class="slide-tag">Mental Health &amp; Pregnancy · 2026 Research</div>
+    <h1 class="hero-title">Your mental health medication matters — especially during pregnancy.</h1>
+    <p class="hero-sub">New research shows that stopping antidepressants during pregnancy can significantly increase the risk of a mental health crisis. Here's what you need to know.</p>
+    <div class="nav">
+      <span class="slide-counter">1 / 7</span>
+      <div class="nav-dots">
+        <div class="dot active" onclick="goTo(0)"></div>
+        <div class="dot" onclick="goTo(1)"></div>
+        <div class="dot" onclick="goTo(2)"></div>
+        <div class="dot" onclick="goTo(3)"></div>
+        <div class="dot" onclick="goTo(4)"></div>
+        <div class="dot" onclick="goTo(5)"></div>
+        <div class="dot" onclick="goTo(6)"></div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn" id="prev-1" onclick="prev()" disabled>‹</button>
+        <button class="nav-btn" onclick="next()">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: The Study -->
+  <div class="slide slide-2" id="slide-2">
+    <div class="slide-tag">About the Research</div>
+    <h2 class="slide-title">What did researchers find?</h2>
+    <p class="body-text">Scientists at the University of Pennsylvania studied nearly <strong>4,000 pregnant patients</strong> who all had a diagnosis of depression or anxiety and were taking an antidepressant (SSRI or SNRI) before pregnancy.</p>
+    <div class="pill-list">
+      <div class="pill">🏥 University of Pennsylvania</div>
+      <div class="pill">👩 3,983 patients studied</div>
+      <div class="pill">📅 Published February 2026</div>
+      <div class="pill">🔬 SMFM Annual Meeting</div>
+    </div>
+    <div class="nav">
+      <span class="slide-counter">2 / 7</span>
+      <div class="nav-dots">
+        <div class="dot" onclick="goTo(0)"></div>
+        <div class="dot active" onclick="goTo(1)"></div>
+        <div class="dot" onclick="goTo(2)"></div>
+        <div class="dot" onclick="goTo(3)"></div>
+        <div class="dot" onclick="goTo(4)"></div>
+        <div class="dot" onclick="goTo(5)"></div>
+        <div class="dot" onclick="goTo(6)"></div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn" onclick="prev()">‹</button>
+        <button class="nav-btn" onclick="next()">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: The Key Finding -->
+  <div class="slide slide-3" id="slide-3">
+    <div class="slide-tag">Key Finding</div>
+    <h2 class="slide-title">The risk is nearly double.</h2>
+    <div class="stat-block">
+      <div class="big-stat">2×</div>
+      <div class="stat-label">higher risk of a mental health emergency for patients who stopped their antidepressant during pregnancy</div>
+    </div>
+    <p class="body-text">Risk was highest in the <strong>1st</strong> and <strong>9th months</strong> of pregnancy — times that are already emotionally intense for many people.</p>
+    <div class="nav">
+      <span class="slide-counter">3 / 7</span>
+      <div class="nav-dots">
+        <div class="dot" onclick="goTo(0)"></div>
+        <div class="dot" onclick="goTo(1)"></div>
+        <div class="dot active" onclick="goTo(2)"></div>
+        <div class="dot" onclick="goTo(3)"></div>
+        <div class="dot" onclick="goTo(4)"></div>
+        <div class="dot" onclick="goTo(5)"></div>
+        <div class="dot" onclick="goTo(6)"></div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn" onclick="prev()">‹</button>
+        <button class="nav-btn" onclick="next()">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Risks of untreated depression -->
+  <div class="slide slide-4" id="slide-4">
+    <div class="slide-tag">Why It Matters</div>
+    <h2 class="slide-title">Untreated depression during pregnancy carries real risks — for you and your baby.</h2>
+    <div class="card-row">
+      <div class="info-card accent-card">
+        <h3>For you</h3>
+        <p>Increased risk of suicide, hospitalization, and other mental health crises during and after pregnancy.</p>
+      </div>
+      <div class="info-card">
+        <h3>For your baby</h3>
+        <p>Untreated depression is linked to preterm birth, preeclampsia, and low birth weight.</p>
+      </div>
+    </div>
+    <p class="body-text" style="margin-top:18px;">Mental health disorders are the <strong>leading cause of maternal death</strong> in the United States. Your mental health is not separate from your pregnancy health — it <em>is</em> your pregnancy health.</p>
+    <div class="nav">
+      <span class="slide-counter">4 / 7</span>
+      <div class="nav-dots">
+        <div class="dot" onclick="goTo(0)"></div>
+        <div class="dot" onclick="goTo(1)"></div>
+        <div class="dot" onclick="goTo(2)"></div>
+        <div class="dot active" onclick="goTo(3)"></div>
+        <div class="dot" onclick="goTo(4)"></div>
+        <div class="dot" onclick="goTo(5)"></div>
+        <div class="dot" onclick="goTo(6)"></div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn" onclick="prev()">‹</button>
+        <button class="nav-btn" onclick="next()">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Safety of SSRIs -->
+  <div class="slide slide-5" id="slide-5">
+    <div class="slide-tag">Safety Information</div>
+    <h2 class="slide-title">Are antidepressants safe to take during pregnancy?</h2>
+    <p class="body-text">Current evidence shows that SSRI and SNRI antidepressants are <strong>not associated</strong> with:</p>
+    <div class="pill-list" style="margin-top:16px;">
+      <div class="pill">✓ Birth defects</div>
+      <div class="pill">✓ Fetal growth problems</div>
+      <div class="pill">✓ Long-term developmental issues</div>
+    </div>
+    <p class="body-text" style="margin-top:20px;">Every pregnancy is different. Talk openly with your doctor about the risks and benefits <em>for you specifically</em>. This is a shared decision — and you should be fully part of it.</p>
+    <div class="nav">
+      <span class="slide-counter">5 / 7</span>
+      <div class="nav-dots">
+        <div class="dot" onclick="goTo(0)"></div>
+        <div class="dot" onclick="goTo(1)"></div>
+        <div class="dot" onclick="goTo(2)"></div>
+        <div class="dot" onclick="goTo(3)"></div>
+        <div class="dot active" onclick="goTo(4)"></div>
+        <div class="dot" onclick="goTo(5)"></div>
+        <div class="dot" onclick="goTo(6)"></div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn" onclick="prev()">‹</button>
+        <button class="nav-btn" onclick="next()">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Expert Quote -->
+  <div class="slide slide-6" id="slide-6">
+    <div class="slide-tag">From the Experts</div>
+    <h2 class="slide-title">A message from the researchers</h2>
+    <div class="quote-block">
+      <p>"This work underscores the need to take pregnant patients' mental health seriously and to offer the full range of treatment options — including medications when clinically appropriate."</p>
+      <p class="quote-attribution">— Dr. Kelly B. Zafman, MD, MSCR<br>Maternal-Fetal Medicine, Hospital of the University of Pennsylvania</p>
+    </div>
+    <p class="body-text">You deserve to have every option available to you. Stopping medication should never feel like something you <em>have</em> to do just because you're pregnant — talk to your provider first.</p>
+    <div class="nav">
+      <span class="slide-counter">6 / 7</span>
+      <div class="nav-dots">
+        <div class="dot" onclick="goTo(0)"></div>
+        <div class="dot" onclick="goTo(1)"></div>
+        <div class="dot" onclick="goTo(2)"></div>
+        <div class="dot" onclick="goTo(3)"></div>
+        <div class="dot" onclick="goTo(4)"></div>
+        <div class="dot active" onclick="goTo(5)"></div>
+        <div class="dot" onclick="goTo(6)"></div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn" onclick="prev()">‹</button>
+        <button class="nav-btn" onclick="next()">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: What to do -->
+  <div class="slide slide-7" id="slide-7">
+    <div class="slide-tag">Your Next Steps</div>
+    <h2 class="slide-title">What can you do right now?</h2>
+    <div class="action-list">
+      <div class="action-item">
+        <div class="action-icon">🩺</div>
+        <div class="action-text">
+          <h4>Talk to your OB or MFM specialist</h4>
+          <p>Never stop or change your medication without guidance from your healthcare team.</p>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon">💬</div>
+        <div class="action-text">
+          <h4>Be honest about how you're feeling</h4>
+          <p>Tell your provider if you're feeling low, anxious, or overwhelmed — even between appointments.</p>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon">🤝</div>
+        <div class="action-text">
+          <h4>Ask about all your options</h4>
+          <p>Medication, therapy, and other supports can often be used together. You don't have to choose.</p>
+        </div>
+      </div>
+    </div>
+    <div class="resource-box">
+      <h3>If you need support now</h3>
+      <ul>
+        <li>Postpartum Support International: 1-800-944-4773</li>
+        <li>988 Suicide &amp; Crisis Lifeline: Call or text 988</li>
+        <li>Crisis Text Line: Text HOME to 741741</li>
+      </ul>
+    </div>
+    <div class="nav">
+      <span class="slide-counter">7 / 7</span>
+      <div class="nav-dots">
+        <div class="dot" onclick="goTo(0)"></div>
+        <div class="dot" onclick="goTo(1)"></div>
+        <div class="dot" onclick="goTo(2)"></div>
+        <div class="dot" onclick="goTo(3)"></div>
+        <div class="dot" onclick="goTo(4)"></div>
+        <div class="dot" onclick="goTo(5)"></div>
+        <div class="dot active" onclick="goTo(6)"></div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn" onclick="prev()">‹</button>
+        <button class="nav-btn" id="next-7" onclick="next()" disabled>›</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let current = 0;
+  const total = 7;
+  const slides = document.querySelectorAll('.slide');
+
+  function goTo(index) {
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit');
+    setTimeout(() => slides[current].classList.remove('exit'), 500);
+    current = index;
+    slides[current].classList.add('active');
+    updateNav();
+  }
+
+  function next() {
+    if (current < total - 1) goTo(current + 1);
+  }
+
+  function prev() {
+    if (current > 0) goTo(current - 1);
+  }
+
+  function updateNav() {
+    // handled via HTML disabled attributes per slide, but let's also manage keyboard
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prev();
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.querySelector('.slideshow').addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+  });
+  document.querySelector('.slideshow').addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) diff > 0 ? next() : prev();
+  });
+</script>
+</body>
+</html>
