@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Understanding Your Baby's Ultrasound Findings</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
+
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: rgba(255,255,255,0.08);
+    --text: #e8edf5;
+    --text-muted: #8a9ab5;
+    --blue: #4da6ff;
+    --blue-dim: rgba(77,166,255,0.15);
+    --green: #3dd68c;
+    --green-dim: rgba(61,214,140,0.12);
+    --orange: #ffb347;
+    --orange-dim: rgba(255,179,71,0.12);
+    --red: #ff6b6b;
+    --red-dim: rgba(255,107,107,0.12);
+    --purple: #b48eff;
+    --purple-dim: rgba(180,142,255,0.12);
+    --accent: #4da6ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    user-select: none;
+  }
+
+  /* ── SLIDE WRAPPER ── */
+  #deck {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 64px;
+    opacity: 0;
+    transform: translateX(80px);
+    transition: opacity 0.45s cubic-bezier(.4,0,.2,1), transform 0.45s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+  }
+  .slide.exit {
+    opacity: 0;
+    transform: translateX(-80px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  /* ── GRID BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(77,166,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(77,166,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .slide { z-index: 1; }
+
+  /* ── PROGRESS BAR ── */
+  #progress-bar {
+    position: fixed;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--green));
+    transition: width 0.4s ease;
+    z-index: 100;
+    border-radius: 0 2px 0 0;
+  }
+
+  /* ── NAV ── */
+  #nav {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 100;
+    background: rgba(17,24,39,0.85);
+    backdrop-filter: blur(12px);
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+  }
+  .nav-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  #slide-counter {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  /* ── DOTS ── */
+  #dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .dot.active { background: var(--blue); width: 18px; border-radius: 3px; }
+
+  /* ── SLIDE SECTION LABEL ── */
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--text-muted);
+  }
+
+  /* ── TYPOGRAPHY ── */
+  .slide-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 52px);
+    line-height: 1.15;
+    text-align: center;
+    margin-bottom: 24px;
+    max-width: 900px;
+  }
+  .slide-subtitle {
+    font-size: clamp(14px, 1.8vw, 20px);
+    color: var(--text-muted);
+    text-align: center;
+    max-width: 680px;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .highlight-blue { color: var(--blue); }
+  .highlight-green { color: var(--green); }
+  .highlight-orange { color: var(--orange); }
+  .highlight-purple { color: var(--purple); }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 12px;
+  }
+  .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .card.blue::before { background: var(--blue); }
+  .card.green::before { background: var(--green); }
+  .card.orange::before { background: var(--orange); }
+  .card.purple::before { background: var(--purple); }
+  .card.red::before { background: var(--red); }
+
+  .card-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .card-title.blue { color: var(--blue); }
+  .card-title.green { color: var(--green); }
+  .card-title.orange { color: var(--orange); }
+  .card-title.purple { color: var(--purple); }
+  .card-title.red { color: var(--red); }
+
+  .card-body {
+    font-size: clamp(13px, 1.4vw, 15px);
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .card-body strong { color: var(--text); font-weight: 500; }
+
+  /* ── TITLE SLIDE ── */
+  .title-badge {
+    background: var(--blue-dim);
+    border: 1px solid rgba(77,166,255,0.3);
+    color: var(--blue);
+    border-radius: 50px;
+    padding: 6px 18px;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 28px;
+  }
+  .title-main {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 5.5vw, 68px);
+    text-align: center;
+    line-height: 1.1;
+    max-width: 900px;
+    margin-bottom: 20px;
+  }
+  .title-sub {
+    font-size: clamp(14px, 1.8vw, 18px);
+    color: var(--text-muted);
+    text-align: center;
+    max-width: 600px;
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+  .title-meta {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .meta-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ── ANATOMY DIAGRAM ── */
+  .anatomy-wrap {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 16px;
+  }
+  .anatomy-svg-box {
+    flex-shrink: 0;
+    width: 260px;
+    height: 280px;
+  }
+  .anatomy-labels {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .anat-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .anat-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .anat-text { font-size: 14px; line-height: 1.5; }
+  .anat-text strong { display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .anat-text span { color: var(--text-muted); font-size: 12px; font-weight: 300; }
+
+  /* ── PATHWAY ── */
+  .pathway {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    max-width: 960px;
+    margin-top: 20px;
+  }
+  .pathway-step {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .pathway-arrow {
+    font-size: 20px;
+    color: var(--text-muted);
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+  .pathway-num {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .pathway-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .pathway-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    max-width: 980px;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: clamp(11px, 1.2vw, 13px);
+  }
+  .compare-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-table th:first-child { color: var(--text-muted); }
+  .compare-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-muted);
+    line-height: 1.4;
+    vertical-align: top;
+  }
+  .compare-table td:first-child { color: var(--text); font-weight: 500; font-size: 12px; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .badge {
+    display: inline-block;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge.high { background: var(--red-dim); color: var(--red); }
+  .badge.low { background: var(--green-dim); color: var(--green); }
+  .badge.mod { background: var(--orange-dim); color: var(--orange); }
+
+  /* ── PILL LIST ── */
+  .pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+    max-width: 760px;
+  }
+  .pill {
+    border-radius: 50px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .pill.blue { background: var(--blue-dim); border-color: rgba(77,166,255,0.3); color: var(--blue); }
+  .pill.green { background: var(--green-dim); border-color: rgba(61,214,140,0.3); color: var(--green); }
+  .pill.orange { background: var(--orange-dim); border-color: rgba(255,179,71,0.3); color: var(--orange); }
+  .pill.purple { background: var(--purple-dim); border-color: rgba(180,142,255,0.3); color: var(--purple); }
+
+  /* ── VENTRICULOMEGALY SCALE ── */
+  .vm-scale {
+    width: 100%;
+    max-width: 780px;
+    margin-top: 20px;
+  }
+  .vm-bar-wrap { margin-bottom: 16px; }
+  .vm-bar-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    font-size: 13px;
+  }
+  .vm-bar-label span:first-child { font-weight: 500; }
+  .vm-bar {
+    height: 10px;
+    border-radius: 5px;
+    position: relative;
+    overflow: visible;
+  }
+  .vm-tick {
+    position: absolute;
+    top: -20px;
+    font-size: 10px;
+    color: var(--text-muted);
+    transform: translateX(-50%);
+  }
+
+  /* ── REASSURANCE BOX ── */
+  .reassurance-box {
+    background: var(--green-dim);
+    border: 1px solid rgba(61,214,140,0.25);
+    border-radius: 16px;
+    padding: 24px 32px;
+    text-align: center;
+    max-width: 720px;
+    margin-top: 20px;
+  }
+  .reassurance-box .r-icon { font-size: 32px; margin-bottom: 10px; }
+  .reassurance-box .r-title { font-size: 14px; font-weight: 600; color: var(--green); margin-bottom: 8px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .reassurance-box .r-body { font-size: 15px; color: var(--text); font-weight: 300; line-height: 1.7; }
+
+  /* ── TWO COLUMN ── */
+  .two-col { display: flex; gap: 24px; width: 100%; max-width: 960px; margin-top: 16px; }
+  .col { flex: 1; }
+
+  /* ── ICON ROW ── */
+  .icon-row { display: flex; gap: 16px; margin-top: 20px; flex-wrap: wrap; justify-content: center; max-width: 860px; }
+  .icon-item {
+    flex: 1; min-width: 140px; max-width: 200px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .icon-item .ii-icon { font-size: 32px; margin-bottom: 10px; }
+  .icon-item .ii-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .icon-item .ii-sub { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ── CLOSING SLIDE ── */
+  .closing-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    max-width: 720px;
+  }
+  .closing-icon { font-size: 56px; }
+  .closing-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 48px);
+    line-height: 1.2;
+  }
+  .closing-body {
+    font-size: 16px;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+  .support-chips {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 8px;
+  }
+  .support-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* ── WHAT IS ─ BODY DIAGRAM ── */
+  .body-diagram {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 940px;
+    margin-top: 12px;
+  }
+
+  /* full-width title variant */
+  .slide-title.sm { font-size: clamp(22px, 3vw, 36px); margin-bottom: 14px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .slide { padding: 32px 24px; }
+    .card-grid-3 { grid-template-columns: 1fr; }
+    .card-grid-2 { grid-template-columns: 1fr; }
+    .pathway { flex-direction: column; }
+    .pathway-arrow { transform: rotate(90deg); padding: 4px 0; }
+    .anatomy-wrap { flex-direction: column; }
+    .two-col { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- ══════════════════ SLIDE 1 – TITLE ══════════════════ -->
+  <div class="slide active" id="s0">
+    <div class="title-badge">Patient Education · Maternal-Fetal Medicine</div>
+    <h1 class="title-main">Understanding Your<br><span class="highlight-blue">Baby's Ultrasound Findings</span></h1>
+    <p class="title-sub">Your 18-week scan showed several findings. This guide explains what was seen, what it may mean, and exactly what comes next — together with your care team.</p>
+    <div class="title-meta">
+      <div class="meta-item"><div class="meta-dot" style="background:var(--blue)"></div>Brain findings</div>
+      <div class="meta-item"><div class="meta-dot" style="background:var(--orange)"></div>Abdominal wall finding</div>
+      <div class="meta-item"><div class="meta-dot" style="background:var(--green)"></div>Clear next steps</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 2 – WHAT WAS FOUND ══════════════════ -->
+  <div class="slide" id="s1">
+    <div class="section-label">What Was Found</div>
+    <h2 class="slide-title sm">Four findings were identified on ultrasound</h2>
+    <div class="card-grid card-grid-2" style="max-width:860px;">
+      <div class="card blue">
+        <span class="card-icon">🧠</span>
+        <div class="card-title blue">Ventriculomegaly</div>
+        <div class="card-body">The fluid-filled spaces inside the brain (<strong>ventricles</strong>) appear larger than usual.</div>
+      </div>
+      <div class="card purple">
+        <span class="card-icon">🔬</span>
+        <div class="card-title purple">Dilated Third Ventricle</div>
+        <div class="card-body">A specific chamber deeper in the brain (<strong>third ventricle</strong>) is wider than expected.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-icon">🫁</span>
+        <div class="card-title orange">Absent Cavum Septum Pellucidum</div>
+        <div class="card-body">A small midline brain structure (<strong>CSP</strong>) that normally appears between 18–37 weeks was not visible.</div>
+      </div>
+      <div class="card red">
+        <span class="card-icon">🩺</span>
+        <div class="card-title red">Abdominal Wall Defect</div>
+        <div class="card-body">A gap in the baby's belly wall where abdominal organs may protrude (<strong>possibly omphalocele</strong>).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 3 – THE BRAIN ══════════════════ -->
+  <div class="slide" id="s2">
+    <div class="section-label">Brain Anatomy</div>
+    <h2 class="slide-title sm">What do these brain structures normally do?</h2>
+    <div class="anatomy-wrap">
+      <!-- SVG brain diagram -->
+      <svg class="anatomy-svg-box" viewBox="0 0 260 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- skull outline -->
+        <ellipse cx="130" cy="120" rx="105" ry="110" fill="rgba(77,166,255,0.05)" stroke="rgba(77,166,255,0.25)" stroke-width="1.5"/>
+        <!-- lateral ventricles -->
+        <path d="M70 100 Q90 80 130 85 Q170 80 190 100 Q195 115 185 125 Q170 130 130 128 Q90 130 75 125 Q65 115 70 100Z" fill="rgba(77,166,255,0.18)" stroke="var(--blue)" stroke-width="1.5"/>
+        <!-- corpus callosum -->
+        <path d="M80 95 Q130 70 180 95" stroke="var(--purple)" stroke-width="2.5" stroke-dasharray="6 3" fill="none"/>
+        <!-- CSP (small box) -->
+        <rect x="112" y="88" width="36" height="14" rx="3" fill="rgba(255,179,71,0.25)" stroke="var(--orange)" stroke-width="1.5"/>
+        <text x="130" y="98" fill="var(--orange)" font-size="8" text-anchor="middle" font-family="DM Sans">CSP</text>
+        <!-- third ventricle -->
+        <ellipse cx="130" cy="148" rx="16" ry="20" fill="rgba(180,142,255,0.2)" stroke="var(--purple)" stroke-width="1.5"/>
+        <text x="130" y="152" fill="var(--purple)" font-size="7" text-anchor="middle" font-family="DM Sans">3V</text>
+        <!-- aqueduct arrow -->
+        <line x1="130" y1="168" x2="130" y2="195" stroke="rgba(255,107,107,0.5)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <polygon points="125,195 135,195 130,205" fill="rgba(255,107,107,0.5)"/>
+        <!-- labels -->
+        <text x="55" y="118" fill="var(--blue)" font-size="9" font-family="DM Sans">Lateral</text>
+        <text x="55" y="129" fill="var(--blue)" font-size="9" font-family="DM Sans">Ventricles</text>
+        <text x="148" y="75" fill="var(--purple)" font-size="9" font-family="DM Sans">Corpus</text>
+        <text x="148" y="86" fill="var(--purple)" font-size="9" font-family="DM Sans">Callosum</text>
+        <text x="148" y="150" fill="var(--purple)" font-size="9" font-family="DM Sans">3rd</text>
+        <text x="148" y="161" fill="var(--purple)" font-size="9" font-family="DM Sans">Ventricle</text>
+        <text x="100" y="215" fill="rgba(255,107,107,0.7)" font-size="9" font-family="DM Sans" text-anchor="middle">Aqueduct</text>
+      </svg>
+      <div class="anatomy-labels">
+        <div class="anat-label">
+          <div class="anat-dot" style="background:var(--blue)"></div>
+          <div class="anat-text">
+            <strong style="color:var(--blue)">Lateral Ventricles</strong>
+            <span>Fluid-filled chambers that cushion and nourish the brain. Normally &lt;10 mm wide at 18 weeks.</span>
+          </div>
+        </div>
+        <div class="anat-label">
+          <div class="anat-dot" style="background:var(--orange)"></div>
+          <div class="anat-text">
+            <strong style="color:var(--orange)">Cavum Septum Pellucidum (CSP)</strong>
+            <span>A small midline space between two brain membranes. Its presence confirms normal midline brain development.</span>
+          </div>
+        </div>
+        <div class="anat-label">
+          <div class="anat-dot" style="background:var(--purple)"></div>
+          <div class="anat-text">
+            <strong style="color:var(--purple)">Third Ventricle</strong>
+            <span>A deeper chamber between the two halves of the brain. Dilation may signal a blockage of the passageway below it.</span>
+          </div>
+        </div>
+        <div class="anat-label">
+          <div class="anat-dot" style="background:rgba(255,107,107,0.7)"></div>
+          <div class="anat-text">
+            <strong style="color:var(--red)">Cerebral Aqueduct</strong>
+            <span>The narrow channel that drains fluid downward. Blockage here explains dilation above it.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 4 – WHY ABSENT CSP MATTERS ══════════════════ -->
+  <div class="slide" id="s3">
+    <div class="section-label">Why It Matters</div>
+    <h2 class="slide-title sm">The absent CSP is a <span class="highlight-blue">screening marker</span> — not a diagnosis</h2>
+    <p class="slide-subtitle" style="margin-bottom:20px">Its absence prompts a deeper look. Three conditions are being considered:</p>
+    <div class="card-grid card-grid-3">
+      <div class="card blue">
+        <span class="card-icon">🔀</span>
+        <div class="card-title blue">Holoprosencephaly</div>
+        <div class="card-body">The brain's two halves didn't fully separate. May range from <strong>mild to severe</strong>. Often associated with facial and body midline differences.</div>
+      </div>
+      <div class="card purple">
+        <span class="card-icon">🔗</span>
+        <div class="card-title purple">Absent Corpus Callosum</div>
+        <div class="card-body">The bridge connecting the brain's two halves is <strong>missing or incomplete</strong>. The third ventricle may be elevated and enlarged.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-icon">👁️</span>
+        <div class="card-title orange">Septo-Optic Dysplasia</div>
+        <div class="card-body">The CSP and optic nerves <strong>did not develop fully</strong>. Can affect vision and hormones after birth.</div>
+      </div>
+    </div>
+    <div class="reassurance-box" style="margin-top:16px; padding:16px 24px;">
+      <div class="r-body" style="font-size:13px;">Additional imaging and testing will help distinguish between these possibilities. No diagnosis has been made yet.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 5 – ABDOMINAL WALL ══════════════════ -->
+  <div class="slide" id="s4">
+    <div class="section-label">Abdominal Wall Finding</div>
+    <h2 class="slide-title sm">Two types of abdominal wall defects — <span class="highlight-orange">very different implications</span></h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th style="color:var(--red)">Omphalocele</th>
+          <th style="color:var(--blue)">Gastroschisis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Location</td>
+          <td>Midline — at the belly button</td>
+          <td>To the right of the belly button</td>
+        </tr>
+        <tr>
+          <td>Covering membrane</td>
+          <td>✅ Organs are covered (protective sac)</td>
+          <td>❌ Organs are exposed in fluid</td>
+        </tr>
+        <tr>
+          <td>Associated chromosomal conditions</td>
+          <td><span class="badge high">Up to 50%</span></td>
+          <td><span class="badge low">Rare (&lt;1%)</span></td>
+        </tr>
+        <tr>
+          <td>Co-occurrence with brain findings</td>
+          <td>Common (especially Trisomy 13 &amp; 18)</td>
+          <td>Very uncommon</td>
+        </tr>
+        <tr>
+          <td>Most likely finding in your baby</td>
+          <td>✅ Based on midline location and other findings</td>
+          <td>Less likely</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════ SLIDE 6 – CHROMOSOMAL RISK ══════════════════ -->
+  <div class="slide" id="s5">
+    <div class="section-label">Genetic Risk</div>
+    <h2 class="slide-title sm">When brain + body findings appear together, <br><span class="highlight-blue">chromosomal evaluation is essential</span></h2>
+    <div class="two-col">
+      <div class="card blue" style="flex:1">
+        <span class="card-icon">🧬</span>
+        <div class="card-title blue">Trisomy 13 (Patau Syndrome)</div>
+        <div class="card-body">
+          An extra copy of chromosome 13. Frequently associated with:
+          <br><br>
+          <strong>• Holoprosencephaly</strong><br>
+          <strong>• Omphalocele</strong><br>
+          <strong>• Midline structural differences</strong>
+        </div>
+      </div>
+      <div class="card purple" style="flex:1">
+        <span class="card-icon">🧬</span>
+        <div class="card-title purple">Trisomy 18 (Edwards Syndrome)</div>
+        <div class="card-body">
+          An extra copy of chromosome 18. May present with:
+          <br><br>
+          <strong>• Brain structural changes</strong><br>
+          <strong>• Abdominal wall defects</strong><br>
+          <strong>• Multiple organ differences</strong>
+        </div>
+      </div>
+      <div class="card orange" style="flex:1">
+        <span class="card-icon">🔎</span>
+        <div class="card-title orange">Chromosomal Microarray (CMA)</div>
+        <div class="card-body">
+          A detailed genetic test that finds changes <strong>too small</strong> for standard chromosomal testing. Done via amniocentesis. Provides the most complete picture.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 7 – VENTRICULOMEGALY SCALE ══════════════════ -->
+  <div class="slide" id="s6">
+    <div class="section-label">Brain Fluid Scale</div>
+    <h2 class="slide-title sm">Ventriculomegaly is graded by <span class="highlight-blue">measurement in millimeters</span></h2>
+    <p class="slide-subtitle">Your care team will determine the exact measurement. This scale shows what each level generally means.</p>
+    <div class="vm-scale">
+      <!-- Normal -->
+      <div class="vm-bar-wrap">
+        <div class="vm-bar-label">
+          <span style="color:var(--green)">Normal</span>
+          <span style="color:var(--text-muted); font-size:12px">Below 10 mm</span>
+        </div>
+        <div class="vm-bar" style="background: linear-gradient(90deg, var(--green), rgba(61,214,140,0.2)); width:33%;"></div>
+      </div>
+      <!-- Mild -->
+      <div class="vm-bar-wrap">
+        <div class="vm-bar-label">
+          <span style="color:var(--blue)">Mild ventriculomegaly</span>
+          <span style="color:var(--text-muted); font-size:12px">10 – 12 mm</span>
+        </div>
+        <div class="vm-bar" style="background: linear-gradient(90deg, rgba(61,214,140,0.3), var(--blue), rgba(77,166,255,0.2)); width:50%;"></div>
+      </div>
+      <!-- Moderate -->
+      <div class="vm-bar-wrap">
+        <div class="vm-bar-label">
+          <span style="color:var(--orange)">Moderate ventriculomegaly</span>
+          <span style="color:var(--text-muted); font-size:12px">13 – 15 mm</span>
+        </div>
+        <div class="vm-bar" style="background: linear-gradient(90deg, rgba(77,166,255,0.3), var(--orange), rgba(255,179,71,0.2)); width:70%;"></div>
+      </div>
+      <!-- Severe -->
+      <div class="vm-bar-wrap">
+        <div class="vm-bar-label">
+          <span style="color:var(--red)">Severe ventriculomegaly</span>
+          <span style="color:var(--text-muted); font-size:12px">16 mm or more</span>
+        </div>
+        <div class="vm-bar" style="background: linear-gradient(90deg, rgba(255,179,71,0.3), var(--red)); width:100%;"></div>
+      </div>
+    </div>
+    <div class="reassurance-box" style="margin-top:20px; padding:14px 24px;">
+      <div class="r-body" style="font-size:13px; color:var(--text-muted)">Severity of ventriculomegaly — combined with the underlying cause — guides the overall prognosis. <span style="color:var(--text)">Fetal MRI gives the clearest measurement.</span></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 8 – WHAT HAPPENS NEXT ══════════════════ -->
+  <div class="slide" id="s7">
+    <div class="section-label">What Happens Next</div>
+    <h2 class="slide-title sm">A step-by-step care plan is already underway</h2>
+    <div class="pathway">
+      <div class="pathway-step">
+        <div class="pathway-num" style="color:var(--blue)">Step 1</div>
+        <div class="pathway-title">Genetic Counseling</div>
+        <div class="pathway-desc">Meet with a specialist to review your family history and understand testing options before any decisions.</div>
+      </div>
+      <div class="pathway-arrow">→</div>
+      <div class="pathway-step">
+        <div class="pathway-num" style="color:var(--orange)">Step 2</div>
+        <div class="pathway-title">Amniocentesis</div>
+        <div class="pathway-desc">A small sample of amniotic fluid is taken to test the baby's chromosomes. CMA + standard karyotype.</div>
+      </div>
+      <div class="pathway-arrow">→</div>
+      <div class="pathway-step">
+        <div class="pathway-num" style="color:var(--purple)">Step 3</div>
+        <div class="pathway-title">Fetal MRI</div>
+        <div class="pathway-desc">Detailed brain imaging that goes beyond ultrasound to define the brain structure more precisely.</div>
+      </div>
+      <div class="pathway-arrow">→</div>
+      <div class="pathway-step">
+        <div class="pathway-num" style="color:var(--green)">Step 4</div>
+        <div class="pathway-title">Detailed Ultrasound</div>
+        <div class="pathway-desc">A targeted neurosonogram to clarify brain anatomy and confirm the type of abdominal finding.</div>
+      </div>
+    </div>
+    <div class="reassurance-box" style="margin-top:20px; padding:14px 28px;">
+      <div class="r-body" style="font-size:13px;">Each test adds a piece to the picture. You will not be asked to make decisions before you have answers.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 9 – WHAT THE TESTS TELL US ══════════════════ -->
+  <div class="slide" id="s8">
+    <div class="section-label">Understanding the Tests</div>
+    <h2 class="slide-title sm">What each test looks for</h2>
+    <div class="card-grid card-grid-2" style="max-width:860px;">
+      <div class="card blue">
+        <span class="card-icon">🧪</span>
+        <div class="card-title blue">Chromosomal Microarray (CMA)</div>
+        <div class="card-body">Examines all 46 chromosomes for <strong>extra, missing, or rearranged</strong> genetic material — including changes too small for standard testing. Most complete chromosomal analysis available.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-icon">📊</span>
+        <div class="card-title orange">Standard Karyotype</div>
+        <div class="card-body">Counts chromosomes and checks for <strong>large-scale rearrangements</strong> like balanced translocations. Together with CMA, provides the fullest genetic picture.</div>
+      </div>
+      <div class="card purple">
+        <span class="card-icon">🧲</span>
+        <div class="card-title purple">Fetal MRI</div>
+        <div class="card-body">Uses magnetic fields (no radiation). Offers <strong>superior detail</strong> for brain structure, cortical development, and posterior fossa — especially when ultrasound is limited by fetal position.</div>
+      </div>
+      <div class="card green">
+        <span class="card-icon">📡</span>
+        <div class="card-title green">Targeted Neurosonogram</div>
+        <div class="card-body">A specialized, extended ultrasound of the brain performed by a maternal-fetal medicine specialist. Evaluates frontal horn shape, optic chiasm, and midline anatomy in greater detail.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 10 – PROGNOSIS OVERVIEW ══════════════════ -->
+  <div class="slide" id="s9">
+    <div class="section-label">Looking Ahead</div>
+    <h2 class="slide-title sm">Prognosis depends on <span class="highlight-blue">three key factors</span></h2>
+    <div class="icon-row">
+      <div class="icon-item">
+        <div class="ii-icon">📏</div>
+        <div class="ii-title" style="color:var(--blue)">Severity of ventriculomegaly</div>
+        <div class="ii-sub">Mild cases often have very favorable neurodevelopmental outcomes. Severe cases carry greater risk.</div>
+      </div>
+      <div class="icon-item">
+        <div class="ii-icon">🧬</div>
+        <div class="ii-title" style="color:var(--orange)">Underlying cause</div>
+        <div class="ii-sub">Chromosomal conditions, structural syndromes, and isolated findings each have different implications.</div>
+      </div>
+      <div class="icon-item">
+        <div class="ii-icon">🔗</div>
+        <div class="ii-title" style="color:var(--purple)">Number of findings</div>
+        <div class="ii-sub">Multiple anomalies together increase the likelihood of a syndrome and affect planning for delivery and care.</div>
+      </div>
+      <div class="icon-item">
+        <div class="ii-icon">🏥</div>
+        <div class="ii-title" style="color:var(--green)">Specialist involvement</div>
+        <div class="ii-sub">Early coordination with neonatology, pediatric surgery, and genetics improves preparation and outcomes.</div>
+      </div>
+    </div>
+    <div class="reassurance-box">
+      <div class="r-body">Many families navigate complex prenatal diagnoses and find strength they didn't know they had — with the right team by their side.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 11 – YOUR ROLE ══════════════════ -->
+  <div class="slide" id="s10">
+    <div class="section-label">Your Role as a Partner</div>
+    <h2 class="slide-title sm">You are an active partner in this process</h2>
+    <div class="card-grid card-grid-3">
+      <div class="card green">
+        <span class="card-icon">❓</span>
+        <div class="card-title green">Ask questions</div>
+        <div class="card-body">There is no such thing as a question that is too small. Write them down before each appointment. Bring a support person with you.</div>
+      </div>
+      <div class="card blue">
+        <span class="card-icon">📋</span>
+        <div class="card-title blue">Understand your options</div>
+        <div class="card-body">Testing is a choice. Your team will explain the <strong>benefits and limitations</strong> of each test clearly before you decide.</div>
+      </div>
+      <div class="card orange">
+        <span class="card-icon">🤝</span>
+        <div class="card-title orange">Lean on support</div>
+        <div class="card-body">Social work, genetics counselors, and support groups are available. You do <strong>not</strong> have to process this alone.</div>
+      </div>
+    </div>
+    <div class="pill-list">
+      <div class="pill green">📅 Attend all follow-up appointments</div>
+      <div class="pill blue">📝 Keep a list of your questions</div>
+      <div class="pill orange">💬 Share concerns with your care team</div>
+      <div class="pill purple">🧘 Care for your own wellbeing too</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SLIDE 12 – CLOSING ══════════════════ -->
+  <div class="slide" id="s11">
+    <div class="closing-wrap">
+      <div class="closing-icon">🫶</div>
+      <h2 class="closing-title">You have a team.<br><span class="highlight-green">You are not alone.</span></h2>
+      <p class="closing-body">This is a complex situation — and it is also one where modern medicine, genetics, and compassionate care can offer meaningful answers. Every step forward brings more clarity.</p>
+      <div class="support-chips">
+        <div class="support-chip">🧬 <span>Genetic Counselor</span></div>
+        <div class="support-chip">🏥 <span>Maternal-Fetal Medicine Specialist</span></div>
+        <div class="support-chip">👶 <span>Neonatologist</span></div>
+        <div class="support-chip">💼 <span>Social Worker</span></div>
+      </div>
+      <div class="reassurance-box" style="width:100%; margin-top:4px;">
+        <div class="r-icon">📌</div>
+        <div class="r-title">Key Reminder</div>
+        <div class="r-body">No decisions are required today. Information comes first.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#deck -->
+
+<!-- ── NAVIGATION UI ── -->
+<div id="progress-bar" style="width: 8.33%"></div>
+
+<div id="nav">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>‹</button>
+  <div id="dots"></div>
+  <span id="slide-counter">1 / 12</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">›</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let isAnimating = false;
+
+  // Build dots
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  }
+
+  function goTo(n) {
+    if (isAnimating || n === current) return;
+    isAnimating = true;
+    const dir = n > current ? 1 : -1;
+
+    slides[current].classList.add('exit');
+    slides[current].classList.remove('active');
+
+    setTimeout(() => {
+      slides[current].classList.remove('exit');
+      slides[current].style.transform = '';
+      current = n;
+      slides[current].style.transform = `translateX(${dir * 80}px)`;
+      slides[current].style.opacity = '0';
+      slides[current].classList.add('active');
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          slides[current].style.transform = '';
+          slides[current].style.opacity = '';
+          updateUI();
+          setTimeout(() => { isAnimating = false; }, 450);
+        });
+      });
+    }, 350);
+  }
+
+  function changeSlide(dir) { goTo(current + dir); }
+
+  function updateUI() {
+    document.getElementById('slide-counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      if (current < total - 1) changeSlide(1);
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (current > 0) changeSlide(-1);
+    }
+  });
+
+  // Touch / swipe
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
+  });
+
+  updateUI();
+</script>
+</body>
+</html>
