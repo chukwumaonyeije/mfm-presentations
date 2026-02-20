@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pre-Gestational Type 2 Diabetes in Pregnancy — MFM Clinical Presentation</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface2:  #21262d;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --blue:      #58a6ff;
+      --teal:      #39d353;
+      --amber:     #f0883e;
+      --red:       #f85149;
+      --purple:    #bc8cff;
+      --cyan:      #56d364;
+      --accent:    #1f6feb;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Deck & Slides ── */
+    .deck {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 4rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Navigation ── */
+    .nav {
+      position: fixed; bottom: 1.6rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1.2rem;
+      z-index: 100;
+    }
+    .nav button {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); padding: 0.5rem 1.2rem;
+      border-radius: 6px; cursor: pointer; font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .nav button:hover { background: var(--accent); border-color: var(--blue); }
+    .nav .counter { color: var(--muted); font-size: 0.9rem; min-width: 60px; text-align: center; }
+
+    /* ── Progress Bar ── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--blue); transition: width 0.4s ease;
+      z-index: 200;
+    }
+
+    /* ── Slide Number ── */
+    .slide-num {
+      position: fixed; top: 1rem; right: 1.5rem;
+      font-size: 0.8rem; color: var(--muted);
+      z-index: 100;
+    }
+
+    /* ── Typography ── */
+    h1 { font-size: clamp(2.2rem, 4vw, 3.6rem); font-weight: 300; line-height: 1.15; text-align: center; }
+    h2 { font-size: clamp(1.6rem, 2.8vw, 2.4rem); font-weight: 400; line-height: 1.2; text-align: center; margin-bottom: 1.6rem; }
+    h3 { font-size: clamp(1rem, 1.8vw, 1.4rem); font-weight: 500; color: var(--blue); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
+    p  { font-size: clamp(1rem, 1.6vw, 1.25rem); line-height: 1.65; color: var(--muted); text-align: center; max-width: 780px; }
+
+    .subtitle {
+      font-size: clamp(1rem, 1.8vw, 1.4rem);
+      color: var(--muted); text-align: center; margin-top: 0.6rem;
+    }
+    .label {
+      font-size: 0.78rem; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .tag {
+      display: inline-block; padding: 0.25rem 0.75rem;
+      border-radius: 20px; font-size: 0.82rem;
+      font-weight: 600; letter-spacing: 0.04em;
+    }
+    .tag-blue   { background: rgba(88,166,255,0.15); color: var(--blue); border: 1px solid rgba(88,166,255,0.3); }
+    .tag-amber  { background: rgba(240,136,62,0.15); color: var(--amber); border: 1px solid rgba(240,136,62,0.3); }
+    .tag-red    { background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid rgba(248,81,73,0.3); }
+    .tag-teal   { background: rgba(57,211,83,0.15); color: var(--teal); border: 1px solid rgba(57,211,83,0.3); }
+    .tag-purple { background: rgba(188,140,255,0.15); color: var(--purple); border: 1px solid rgba(188,140,255,0.3); }
+
+    /* ── Layout Helpers ── */
+    .row    { display: flex; gap: 1.5rem; align-items: flex-start; justify-content: center; flex-wrap: wrap; width: 100%; }
+    .col    { display: flex; flex-direction: column; gap: 0.8rem; }
+    .center { text-align: center; align-items: center; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.2rem 1.5rem;
+    }
+    .card-title {
+      font-size: 0.85rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--blue);
+      margin-bottom: 0.5rem; font-weight: 600;
+    }
+    .card-body {
+      font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+      color: var(--text); line-height: 1.5;
+    }
+
+    /* ── Tables ── */
+    table {
+      border-collapse: collapse; width: 100%;
+      font-size: clamp(0.82rem, 1.3vw, 1rem);
+    }
+    th {
+      background: var(--surface2); color: var(--blue);
+      padding: 0.65rem 1rem; text-align: left;
+      font-weight: 600; font-size: 0.82rem;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 0.6rem 1rem; border-bottom: 1px solid var(--border);
+      color: var(--text); vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.03); }
+
+    /* ── Timeline ── */
+    .timeline {
+      display: flex; align-items: center; gap: 0;
+      width: 100%; max-width: 820px; margin: 1.5rem auto 0;
+    }
+    .tl-node {
+      display: flex; flex-direction: column; align-items: center;
+      flex: 1;
+    }
+    .tl-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--blue); border: 2px solid var(--bg);
+      box-shadow: 0 0 0 2px var(--blue);
+      margin-bottom: 0.5rem;
+    }
+    .tl-dot.amber { background: var(--amber); box-shadow: 0 0 0 2px var(--amber); }
+    .tl-dot.teal  { background: var(--teal);  box-shadow: 0 0 0 2px var(--teal); }
+    .tl-dot.red   { background: var(--red);   box-shadow: 0 0 0 2px var(--red); }
+    .tl-line {
+      flex: 1; height: 2px; background: var(--border);
+      margin-bottom: 1.1rem;
+    }
+    .tl-label { font-size: 0.78rem; color: var(--muted); text-align: center; line-height: 1.3; }
+    .tl-week  { font-size: 0.68rem; color: var(--blue); font-weight: 600; margin-top: 0.2rem; }
+
+    /* ── Icon Grid ── */
+    .icon-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem; width: 100%; max-width: 900px;
+    }
+    .icon-cell {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.2rem 1rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+      text-align: center;
+    }
+    .icon-cell .icon { font-size: 2rem; }
+    .icon-cell .icon-label {
+      font-size: 0.82rem; color: var(--text); line-height: 1.35;
+    }
+    .icon-cell .icon-num {
+      font-size: 1.4rem; font-weight: 700; color: var(--blue);
+    }
+
+    /* ── Gauge / Bar ── */
+    .gauge-row {
+      display: flex; flex-direction: column; gap: 0.55rem;
+      width: 100%; max-width: 640px;
+    }
+    .gauge-item { display: flex; align-items: center; gap: 0.8rem; }
+    .gauge-label { font-size: 0.82rem; color: var(--muted); width: 120px; text-align: right; flex-shrink: 0; }
+    .gauge-bar-wrap {
+      flex: 1; height: 14px; background: var(--surface2);
+      border-radius: 7px; overflow: hidden;
+    }
+    .gauge-bar { height: 100%; border-radius: 7px; }
+    .gauge-val { font-size: 0.8rem; color: var(--text); width: 50px; flex-shrink: 0; }
+
+    /* ── Balance Scale ── */
+    .balance {
+      display: flex; align-items: flex-start; gap: 2rem;
+      justify-content: center; width: 100%; max-width: 760px;
+    }
+    .balance-side {
+      flex: 1; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.2rem;
+    }
+    .balance-side h3 { margin-bottom: 0.6rem; }
+    .balance-side ul { list-style: none; padding: 0; }
+    .balance-side ul li {
+      font-size: 0.9rem; color: var(--text);
+      padding: 0.3rem 0; border-bottom: 1px solid var(--border);
+      line-height: 1.4;
+    }
+    .balance-side ul li:last-child { border-bottom: none; }
+    .balance-vs {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 700; color: var(--muted);
+      padding-top: 3rem;
+    }
+
+    /* ── Pill List ── */
+    .pill-list {
+      display: flex; flex-direction: column; gap: 0.6rem;
+      width: 100%; max-width: 680px;
+    }
+    .pill-item {
+      display: flex; align-items: center; gap: 0.8rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.7rem 1rem;
+      font-size: clamp(0.88rem, 1.3vw, 1rem);
+    }
+    .pill-item .bullet {
+      width: 8px; height: 8px; border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 60px; height: 3px;
+      background: var(--blue); border-radius: 2px;
+      margin: 0.8rem auto 1.4rem;
+    }
+
+    /* ── Specific slide backgrounds ── */
+    .slide-title { background: radial-gradient(ellipse at 60% 40%, rgba(31,111,235,0.12) 0%, transparent 70%), var(--bg); }
+    .slide-warn  { background: radial-gradient(ellipse at 40% 60%, rgba(248,81,73,0.08) 0%, transparent 70%), var(--bg); }
+    .slide-action{ background: radial-gradient(ellipse at 50% 50%, rgba(57,211,83,0.06) 0%, transparent 70%), var(--bg); }
+
+    /* ── Footer ── */
+    .slide-footer {
+      position: absolute; bottom: 3.5rem; left: 0; right: 0;
+      text-align: center; font-size: 0.72rem;
+      color: var(--muted); letter-spacing: 0.06em;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .slide { padding: 2rem 1.5rem; }
+      .balance { flex-direction: column; }
+      .icon-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/zYpgpXBPssmi4bJmCqt_hfKxStBErH-v9CPNDocnVbqeEr4IraT8iEtKu5tglN0ZqCxg7-3wVYNV3B1zs0NQjJW2nNONta8KZLRsInfYDdTNUYQNjN7yDaA6jhzuUN15ZoTYRTUG_2bsnEK4CfsiiDm6Urlgg7FdnyJCCtXf5BdwPtL3nHcIBKtm-qfhOLYpufZthWAwk4YdixOzcJ92N1WMqVc7sAYvP0TATDAQ94-Og5UeOpkFr2Yos2Cyf1K10rvRgyRdbbDh7PHq16OydVc01VYK_uBkmD84wX5kLFYlS3PbPyqNiSFdII2sFqOOFaDH6DSGyBIeELkrBFZFhvm9qyqPGAayoVtDzVwDeT05fKd6Sfn3qgHiVVwNSUB_yoiJT5k7k5cLTWCvOQh20O8UTfFQSYV6D6h6QQ6VI2PRR8ucSEXiVWs8M5U_XnePWUa2-uRgJzPqHQwPKGDBMZW4EHsCLnzR59fBoGXYSjpSoCSqnDD1C1mJyEmG4bgH1zlIpDyT63FZbQ_O9EVc7JrO0SyjsspoLF2apvatZnGnPRK7AcdzAp_GZ4KjCCmpqRLvtv7qOMWTZqF1uYwfgL8IUbXTpS8D2uRbYFNA_opioBissusdCezAhJdR4eoFhl2aHu8_Fbu2ug08mRJDSRsPF8A3ZsBsosEvAw0Q-zOTyqwfekQiE6BzkZrK1mzxWxN96_j_wF5AOWeh8-yEzZc95VZyPWyQSpPffj5rTFOgnUXTOHjdMBqVALbNPAY4U9BCdEornutZNVbRk0np5JBO3wnnZCeVI4A-Pa1cJP1Yef7uUyA-L0IgooXAffRwhEg7JAcdXLckp6rSJf-qzholYhpLsmUQYM-xheOxLxBp_w1XSJRKnTsunT2AAC-J1gGAqTtSNXDrfUqoA-f3s0xAVCgF-DfT8gEyY-xwMfSshfRiu6Y2IqlU2NxYxkGFbPmptpgbagL_HBsXDDm7LAeeKY6IG1hWYnYGiAyXCgAzKV19jUHWFAP-qRfi6FYpPSGQosCDl8DWjhiKCBa3aZ6kTyeXBJYC_1Vzg8-7pYfx6ddHU9A9-LV9Q8RN6oX-SNLLdS-K7DiM5ZSmYJpHz2TWXYmVvEHAcOvqtenwck9seVKaoAaq2K_0B24kFbVRDZ2w9y6rQ-2jwCERL0sSq7nDWVwtfcqXjGY2Up8SwTh5zGkBBfVVI8aEqd1Ksdnda4CKUE4eQZjctVxgOu76tBEAeH3qhx8enbO1O5vbwWsXJIMV0-8H5E87iiVysdRU7ULtsMKfMNDhQyLI8Ontb90s_Z-iKm6DjKuudW2J7EVDNvRmHguwoX0-9DThpZDY82WP5DeyqrKv_k8a5CcqZUa4yZWWxC_V5Fk-j_WmJCKXG5bCBZJvibXLV1tKaafqClyHW_uR-lD4sT5peIlppJviRbzGKqLHgdWkLCiJpa-rEj1Aq5QImYBDlxWJnf2tVCtb77iKMfW0fY1qJ5F98bv94u5dshq-5nSVQX7inFSNClktCBY9NEQnNpBxg5gBXkMu8EOrLyf9iatvRPrZPWOmn48nRkQtXKYw4BMd9w3AgJzKoWkZqHd4j40KptOJCDZNwGCNiSxTsE-oNMsy-xTqD1sI3QpY818E2dnch8RjrJ1p_QOl0GHS-Ek5Py4tSjwbiquyOt50eqs7L-68JGr-Rz6N6IctshRky1P34qd-kw'></script></head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-num" id="slideNum"></div>
+
+<div class="deck" id="deck">
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 1 — Title
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-title active" id="s1">
+    <div class="label">Maternal-Fetal Medicine · Clinical Presentation</div>
+    <h1>Pre-Gestational<br>Type 2 Diabetes<br>in Pregnancy</h1>
+    <div class="divider"></div>
+    <p class="subtitle">Clinical Management · Pharmacology · Surveillance</p>
+    <div style="margin-top:2rem; display:flex; gap:0.8rem; flex-wrap:wrap; justify-content:center;">
+      <span class="tag tag-blue">ACOG</span>
+      <span class="tag tag-blue">SMFM</span>
+      <span class="tag tag-amber">Endocrine Society 2024–2025</span>
+      <span class="tag tag-teal">Evidence-Based Practice</span>
+    </div>
+    <div class="slide-footer">Use ← → arrow keys or buttons below to navigate</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 2 — Why It Matters
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-warn" id="s2">
+    <h2>Early Hyperglycemia Drives Congenital Risk</h2>
+    <div class="divider"></div>
+    <p style="margin-bottom:1.8rem;">Organogenesis occurs weeks 3–8. First-trimester HbA1c is the primary determinant of major congenital anomaly risk.</p>
+    <div class="gauge-row">
+      <div class="gauge-item">
+        <div class="gauge-label">HbA1c &lt; 6.5%</div>
+        <div class="gauge-bar-wrap"><div class="gauge-bar" style="width:18%; background:var(--teal);"></div></div>
+        <div class="gauge-val" style="color:var(--teal);">Low</div>
+      </div>
+      <div class="gauge-item">
+        <div class="gauge-label">HbA1c 6.5–8%</div>
+        <div class="gauge-bar-wrap"><div class="gauge-bar" style="width:42%; background:var(--amber);"></div></div>
+        <div class="gauge-val" style="color:var(--amber);">Moderate</div>
+      </div>
+      <div class="gauge-item">
+        <div class="gauge-label">HbA1c 8–10%</div>
+        <div class="gauge-bar-wrap"><div class="gauge-bar" style="width:68%; background:var(--red);"></div></div>
+        <div class="gauge-val" style="color:var(--red);">High</div>
+      </div>
+      <div class="gauge-item">
+        <div class="gauge-label">HbA1c &gt; 10%</div>
+        <div class="gauge-bar-wrap"><div class="gauge-bar" style="width:92%; background:#c0392b;"></div></div>
+        <div class="gauge-val" style="color:#c0392b;">Very High</div>
+      </div>
+    </div>
+    <p style="margin-top:1.2rem; font-size:0.82rem;">Relative congenital anomaly risk gradient by first-trimester HbA1c</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 3 — Diagnosis: Pre-Gestational vs. GDM
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide" id="s3">
+    <h2>Diagnosis Before 15 Weeks = Pre-Gestational T2DM</h2>
+    <div class="divider"></div>
+    <div class="row" style="margin-bottom:1.6rem;">
+      <div class="card" style="min-width:200px; border-color:var(--blue);">
+        <div class="card-title">HbA1c</div>
+        <div class="card-body" style="font-size:1.5rem; font-weight:700; color:var(--blue);">≥ 6.5%</div>
+      </div>
+      <div class="card" style="min-width:200px; border-color:var(--amber);">
+        <div class="card-title">Fasting Plasma Glucose</div>
+        <div class="card-body" style="font-size:1.5rem; font-weight:700; color:var(--amber);">≥ 126 mg/dL</div>
+      </div>
+      <div class="card" style="min-width:200px; border-color:var(--purple);">
+        <div class="card-title">2-hr 75g OGTT</div>
+        <div class="card-body" style="font-size:1.5rem; font-weight:700; color:var(--purple);">≥ 200 mg/dL</div>
+      </div>
+    </div>
+    <!-- Timeline -->
+    <div class="timeline">
+      <div class="tl-node">
+        <div class="tl-dot"></div>
+        <div class="tl-label">Conception<br><span class="tl-week">0 wks</span></div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-node">
+        <div class="tl-dot amber"></div>
+        <div class="tl-label">Pre-gestational<br>T2DM window<br><span class="tl-week">&lt; 15 wks</span></div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-node">
+        <div class="tl-dot" style="background:var(--muted); box-shadow:0 0 0 2px var(--muted);"></div>
+        <div class="tl-label">GDM Screen<br><span class="tl-week">24–28 wks</span></div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-node">
+        <div class="tl-dot teal"></div>
+        <div class="tl-label">Delivery<br><span class="tl-week">39 wks</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 4 — Preconception Targets
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide" id="s4">
+    <h2>HbA1c &lt; 6.5% Before Conception Reduces Anomaly Risk</h2>
+    <div class="divider"></div>
+    <div class="row">
+      <div class="card" style="max-width:320px; border-color:var(--teal);">
+        <div class="card-title" style="color:var(--teal);">Preconception Target</div>
+        <div class="card-body" style="font-size:2rem; font-weight:700; color:var(--teal);">HbA1c &lt; 6.5%</div>
+        <div class="card-body" style="margin-top:0.5rem; font-size:0.9rem; color:var(--muted);">Reduces spontaneous abortion &amp; major congenital anomalies</div>
+      </div>
+      <div class="card" style="max-width:320px; border-color:var(--amber);">
+        <div class="card-title" style="color:var(--amber);">Caution Below 6.0%</div>
+        <div class="card-body" style="font-size:2rem; font-weight:700; color:var(--amber);">HbA1c &lt; 6.0%</div>
+        <div class="card-body" style="margin-top:0.5rem; font-size:0.9rem; color:var(--muted);">Increased maternal hypoglycemia risk — balance is essential</div>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem;">Preconception counseling and optimization are the most impactful interventions available.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 5 — Glycemic Targets in Pregnancy
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide" id="s5">
+    <h2>Stringent Targets Prevent Macrosomia &amp; Neonatal Hypoglycemia</h2>
+    <div class="divider"></div>
+    <table style="max-width:640px;">
+      <thead>
+        <tr>
+          <th>Measurement</th>
+          <th>Target (mg/dL)</th>
+          <th>Target (mmol/L)</th>
+          <th>Clinical Goal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Fasting</td>
+          <td style="color:var(--blue); font-weight:600;">&lt; 95</td>
+          <td style="color:var(--muted);">5.3</td>
+          <td>Prevent overnight hyperglycemia</td>
+        </tr>
+        <tr>
+          <td>1-hr Postprandial</td>
+          <td style="color:var(--amber); font-weight:600;">&lt; 140</td>
+          <td style="color:var(--muted);">7.8</td>
+          <td>Limit postmeal glucose excursion</td>
+        </tr>
+        <tr>
+          <td>2-hr Postprandial</td>
+          <td style="color:var(--purple); font-weight:600;">&lt; 120</td>
+          <td style="color:var(--muted);">6.7</td>
+          <td>Confirm glucose return to baseline</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:1.2rem; font-size:0.85rem;">Source: ACOG Practice Bulletin · Endocrine Society Clinical Practice Guideline</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 6 — Insulin: First-Line
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-action" id="s6">
+    <h2>Insulin Does Not Cross the Placenta — First-Line Choice</h2>
+    <div class="divider"></div>
+    <div class="row" style="align-items:stretch;">
+      <!-- Placenta barrier visual -->
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.5rem; min-width:160px;">
+        <div style="font-size:3rem;">💉</div>
+        <div style="font-size:0.75rem; color:var(--blue); text-transform:uppercase; letter-spacing:0.08em;">Insulin</div>
+        <div style="font-size:1.6rem; color:var(--muted);">↓</div>
+        <div style="background:var(--surface2); border:2px dashed var(--border); border-radius:8px; padding:0.5rem 1rem; font-size:0.75rem; color:var(--muted);">Placenta</div>
+        <div style="font-size:1.6rem; color:var(--red);">✕</div>
+        <div style="font-size:0.75rem; color:var(--muted);">No transfer</div>
+      </div>
+      <div class="col" style="flex:1; max-width:480px;">
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--teal);"></div>
+          No placental transfer — no direct fetal drug exposure
+        </div>
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--teal);"></div>
+          Reduces macrosomia and large-for-gestational-age (LGA) infants
+        </div>
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--teal);"></div>
+          Robust safety profile across all trimesters
+        </div>
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--amber);"></div>
+          Multiple daily injections required; hypoglycemia risk — educate patients
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:1.2rem;">
+      <span class="tag tag-teal">ACOG First-Line</span>&nbsp;
+      <span class="tag tag-blue">SMFM Endorsed</span>&nbsp;
+      <span class="tag tag-blue">Endocrine Society 2024–2025</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 7 — Metformin: Clinical Debate
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-warn" id="s7">
+    <h2>Metformin Crosses the Placenta — Benefits vs. Risks Must Be Weighed</h2>
+    <div class="divider"></div>
+    <div class="balance">
+      <div class="balance-side" style="border-color:var(--teal);">
+        <h3 style="color:var(--teal);">Benefits</h3>
+        <ul>
+          <li>↓ Total daily insulin dose</li>
+          <li>↓ Maternal weight gain</li>
+          <li>↓ LGA infants (MiTy trial)</li>
+          <li>Potential ↓ cesarean delivery rate</li>
+        </ul>
+      </div>
+      <div class="balance-vs">⚖</div>
+      <div class="balance-side" style="border-color:var(--red);">
+        <h3 style="color:var(--red);">Risks</h3>
+        <ul>
+          <li>Readily crosses placenta</li>
+          <li>↑ SGA infants (MiTy trial)</li>
+          <li>Altered offspring body composition</li>
+          <li>Long-term childhood metabolic effects uncertain</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:1.4rem; background:rgba(248,81,73,0.1); border:1px solid rgba(248,81,73,0.3); border-radius:8px; padding:0.7rem 1.2rem; max-width:680px; text-align:center;">
+      <span style="color:var(--red); font-weight:600; font-size:0.9rem;">Endocrine Society 2024–2025:</span>
+      <span style="font-size:0.9rem; color:var(--text);"> Do <strong>not</strong> routinely add metformin to insulin in pre-gestational T2DM</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 8 — Insulin vs. Metformin Comparison Table
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide" id="s8">
+    <h2>Guideline Preference Is Clear — Insulin Remains Mainstay</h2>
+    <div class="divider"></div>
+    <table style="max-width:820px;">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th style="color:var(--teal);">Insulin</th>
+          <th style="color:var(--amber);">Metformin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Placental Transfer</td>
+          <td style="color:var(--teal);">None</td>
+          <td style="color:var(--red);">Readily crosses</td>
+        </tr>
+        <tr>
+          <td>Guideline Status</td>
+          <td style="color:var(--teal);">First-line / Mainstay</td>
+          <td style="color:var(--amber);">Not routine in T2DM</td>
+        </tr>
+        <tr>
+          <td>Primary Fetal Risk</td>
+          <td style="color:var(--teal);">↓ Macrosomia / LGA</td>
+          <td style="color:var(--red);">↑ SGA potential</td>
+        </tr>
+        <tr>
+          <td>Maternal Benefit</td>
+          <td>Precise dose titration</td>
+          <td>↓ Weight gain · ↓ Insulin dose</td>
+        </tr>
+        <tr>
+          <td>Key Trial Evidence</td>
+          <td>Multiple RCTs; established safety</td>
+          <td>MiTy trial (T2DM-specific)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 9 — GLP-1 RAs: Discontinue
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-warn" id="s9">
+    <h2>GLP-1 Receptor Agonists Must Be Stopped Before or at Conception</h2>
+    <div class="divider"></div>
+    <div class="row" style="align-items:center; gap:2rem;">
+      <div style="text-align:center;">
+        <div style="font-size:4rem;">🚫</div>
+        <div style="font-size:0.8rem; color:var(--red); text-transform:uppercase; letter-spacing:0.1em; margin-top:0.4rem;">GLP-1 RA</div>
+      </div>
+      <div class="pill-list" style="max-width:500px;">
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--red);"></div>
+          Insufficient fetal safety data — teratogenicity cannot be excluded
+        </div>
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--red);"></div>
+          Discontinue prior to conception or immediately upon confirmation
+        </div>
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--amber);"></div>
+          Transition to insulin under MFM / endocrinology guidance
+        </div>
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--blue);"></div>
+          Metformin: safe regarding malformation risk in first trimester
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 10 — Monitoring Complications
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide" id="s10">
+    <h2>Pregnancy Can Worsen Pre-Existing Diabetic Complications</h2>
+    <div class="divider"></div>
+    <div class="row">
+      <div class="card" style="min-width:240px; border-color:var(--blue);">
+        <div class="card-title">👁 Retinopathy</div>
+        <div class="card-body" style="font-size:0.9rem;">
+          Baseline ophthalmology evaluation at first visit.<br><br>
+          Rapid progression possible during pregnancy — monitor each trimester.
+        </div>
+      </div>
+      <div class="card" style="min-width:240px; border-color:var(--purple);">
+        <div class="card-title">🫘 Nephropathy</div>
+        <div class="card-body" style="font-size:0.9rem;">
+          Baseline creatinine, GFR, and urine protein/creatinine ratio.<br><br>
+          Nephropathy significantly elevates preeclampsia risk.
+        </div>
+      </div>
+      <div class="card" style="min-width:240px; border-color:var(--amber);">
+        <div class="card-title">❤ Cardiovascular</div>
+        <div class="card-body" style="font-size:0.9rem;">
+          Baseline ECG if longstanding T2DM.<br><br>
+          Hypertension management critical throughout gestation.
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:1.2rem; font-size:0.85rem;">Evaluate all end-organ complications at the first prenatal visit</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 11 — Preeclampsia Prophylaxis
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-action" id="s11">
+    <h2>Low-Dose Aspirin from 12 Weeks Is Standard of Care</h2>
+    <div class="divider"></div>
+    <div class="row" style="align-items:center; gap:2.5rem;">
+      <div style="text-align:center;">
+        <div style="font-size:4rem;">💊</div>
+        <div style="font-size:1.6rem; font-weight:700; color:var(--teal); margin-top:0.3rem;">150 mg/day</div>
+        <div style="font-size:0.8rem; color:var(--muted);">Low-dose aspirin</div>
+      </div>
+      <div class="pill-list" style="max-width:480px;">
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--red);"></div>
+          Pre-gestational T2DM = high preeclampsia risk category
+        </div>
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--teal);"></div>
+          Initiate at 12 weeks gestation
+        </div>
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--teal);"></div>
+          Continue until 36–37 weeks per ACOG/SMFM guidance
+        </div>
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--blue);"></div>
+          Evening dosing preferred for maximal efficacy
+        </div>
+      </div>
+    </div>
+    <!-- Mini timeline -->
+    <div class="timeline" style="margin-top:1.8rem;">
+      <div class="tl-node">
+        <div class="tl-dot" style="background:var(--muted); box-shadow:0 0 0 2px var(--muted);"></div>
+        <div class="tl-label">First visit<br><span class="tl-week">8–10 wks</span></div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-node">
+        <div class="tl-dot teal"></div>
+        <div class="tl-label">Start aspirin<br><span class="tl-week">12 wks</span></div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-node">
+        <div class="tl-dot amber"></div>
+        <div class="tl-label">Stop aspirin<br><span class="tl-week">36–37 wks</span></div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-node">
+        <div class="tl-dot teal"></div>
+        <div class="tl-label">Delivery<br><span class="tl-week">39 wks</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 12 — Fetal Surveillance
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide" id="s12">
+    <h2>Serial Growth Ultrasounds Detect Both Macrosomia and Growth Restriction</h2>
+    <div class="divider"></div>
+    <table style="max-width:720px;">
+      <thead>
+        <tr>
+          <th>Surveillance</th>
+          <th>Timing</th>
+          <th>Indication</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Anatomy ultrasound</td>
+          <td>18–22 weeks</td>
+          <td>Congenital anomaly screening</td>
+        </tr>
+        <tr>
+          <td>Serial growth ultrasound</td>
+          <td>Every 4 weeks from 28 wks</td>
+          <td>Macrosomia and growth restriction</td>
+        </tr>
+        <tr>
+          <td>Increased growth frequency</td>
+          <td>Every 2–3 weeks</td>
+          <td>If metformin used (SGA risk)</td>
+        </tr>
+        <tr>
+          <td>NST / BPP</td>
+          <td>Weekly from 32–36 wks</td>
+          <td>Vascular complications or poor control</td>
+        </tr>
+        <tr>
+          <td>Umbilical artery Doppler</td>
+          <td>As indicated</td>
+          <td>Suspected growth restriction</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:1rem; font-size:0.85rem;">Surveillance intensity individualized based on glycemic control and complication status</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 13 — Delivery Timing
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide" id="s13">
+    <h2>Well-Controlled T2DM: Deliver at 39<sup>0/7</sup>–39<sup>6/7</sup> Weeks</h2>
+    <div class="divider"></div>
+    <div class="timeline" style="margin-bottom:1.8rem;">
+      <div class="tl-node">
+        <div class="tl-dot" style="background:var(--muted); box-shadow:0 0 0 2px var(--muted);"></div>
+        <div class="tl-label">36 wks<br><span class="tl-week">Stop aspirin</span></div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-node">
+        <div class="tl-dot amber"></div>
+        <div class="tl-label">37–38 wks<br><span class="tl-week">Earlier if complications</span></div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-node">
+        <div class="tl-dot teal"></div>
+        <div class="tl-label">39<sup>0/7</sup>–39<sup>6/7</sup><br><span class="tl-week">Well-controlled</span></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card" style="min-width:260px; border-color:var(--teal);">
+        <div class="card-title" style="color:var(--teal);">Well-Controlled, No Complications</div>
+        <div class="card-body" style="font-size:0.9rem;">Deliver 39<sup>0/7</sup>–39<sup>6/7</sup> weeks. Individualize mode of delivery.</div>
+      </div>
+      <div class="card" style="min-width:260px; border-color:var(--red);">
+        <div class="card-title" style="color:var(--red);">Vascular Complications / Poor Control</div>
+        <div class="card-body" style="font-size:0.9rem;">Earlier delivery indicated. Timing per MFM/obstetric team assessment.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 14 — Postpartum Insulin Management
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide" id="s14">
+    <h2>Insulin Requirements Drop Precipitously After Placental Delivery</h2>
+    <div class="divider"></div>
+    <div class="row" style="align-items:center; gap:2.5rem;">
+      <!-- Schematic graph -->
+      <div style="text-align:center; min-width:180px;">
+        <svg viewBox="0 0 180 120" width="180" height="120" style="overflow:visible;">
+          <!-- axes -->
+          <line x1="20" y1="10" x2="20" y2="100" stroke="#30363d" stroke-width="1.5"/>
+          <line x1="20" y1="100" x2="170" y2="100" stroke="#30363d" stroke-width="1.5"/>
+          <!-- insulin curve -->
+          <polyline points="20,20 80,22 100,90 160,70" fill="none" stroke="#58a6ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- delivery marker -->
+          <line x1="100" y1="10" x2="100" y2="100" stroke="#f85149" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="102" y="18" fill="#f85149" font-size="9" font-family="sans-serif">Delivery</text>
+          <!-- labels -->
+          <text x="8" y="24" fill="#8b949e" font-size="8" font-family="sans-serif" text-anchor="middle">High</text>
+          <text x="8" y="94" fill="#8b949e" font-size="8" font-family="sans-serif" text-anchor="middle">Low</text>
+          <text x="20" y="112" fill="#8b949e" font-size="8" font-family="sans-serif">Antepartum</text>
+          <text x="130" y="112" fill="#8b949e" font-size="8" font-family="sans-serif">Postpartum</text>
+          <text x="95" y="112" fill="#58a6ff" font-size="7" font-family="sans-serif">↓</text>
+        </svg>
+        <div style="font-size:0.72rem; color:var(--muted);">Insulin dose over time</div>
+      </div>
+      <div class="pill-list" style="max-width:480px;">
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--red);"></div>
+          Placental delivery removes insulin resistance — doses drop immediately
+        </div>
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--amber);"></div>
+          Significant dose reduction required; monitor closely for hypoglycemia
+        </div>
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--teal);"></div>
+          Breastfeeding further lowers insulin requirements
+        </div>
+        <div class="pill-item">
+          <div class="bullet" style="background:var(--blue);"></div>
+          Resume or adjust pre-pregnancy regimen; endocrinology follow-up essential
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 15 — Summary: Five Pillars
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-title" id="s15">
+    <h2>Five Pillars of Pre-Gestational T2DM Management</h2>
+    <div class="divider"></div>
+    <div class="icon-grid" style="max-width:860px;">
+      <div class="icon-cell">
+        <div class="icon-num">1</div>
+        <div class="icon">🎯</div>
+        <div class="icon-label">Optimize HbA1c<br><strong>&lt; 6.5%</strong> before conception</div>
+      </div>
+      <div class="icon-cell">
+        <div class="icon-num">2</div>
+        <div class="icon">💉</div>
+        <div class="icon-label">Insulin first-line;<br>metformin <strong>not routine</strong> in T2DM</div>
+      </div>
+      <div class="icon-cell">
+        <div class="icon-num">3</div>
+        <div class="icon">📊</div>
+        <div class="icon-label">Stringent glucose targets<br>throughout pregnancy</div>
+      </div>
+      <div class="icon-cell">
+        <div class="icon-num">4</div>
+        <div class="icon">💊</div>
+        <div class="icon-label">Low-dose aspirin<br>from <strong>12 weeks</strong></div>
+      </div>
+      <div class="icon-cell">
+        <div class="icon-num">5</div>
+        <div class="icon">🔍</div>
+        <div class="icon-label">Serial surveillance +<br>individualized delivery planning</div>
+      </div>
+    </div>
+    <div style="margin-top:1.6rem; display:flex; gap:0.8rem; flex-wrap:wrap; justify-content:center;">
+      <span class="tag tag-blue">ACOG</span>
+      <span class="tag tag-blue">SMFM</span>
+      <span class="tag tag-amber">Endocrine Society 2024–2025</span>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prevSlide()">&#8592; Prev</button>
+  <span class="counter" id="counter">1 / 15</span>
+  <button onclick="nextSlide()">Next &#8594;</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total  = slides.length;
+  const bar    = document.getElementById('progressBar');
+  const num    = document.getElementById('slideNum');
+  const ctr    = document.getElementById('counter');
+
+  function showSlide(idx) {
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    const pct = ((idx + 1) / total) * 100;
+    bar.style.width = pct + '%';
+    num.textContent = (idx + 1) + ' / ' + total;
+    ctr.textContent = (idx + 1) + ' / ' + total;
+  }
+
+  function nextSlide() {
+    current = (current + 1) % total;
+    showSlide(current);
+  }
+
+  function prevSlide() {
+    current = (current - 1 + total) % total;
+    showSlide(current);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) > 40) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  showSlide(current);
+</script>
+</body>
+</html>
