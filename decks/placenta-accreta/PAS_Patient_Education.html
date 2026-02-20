@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Placenta Accreta Spectrum — Patient Education</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --blue:      #58a6ff;
+      --blue-dim:  #1f3a5f;
+      --green:     #3fb950;
+      --green-dim: #1a3a25;
+      --orange:    #f0883e;
+      --orange-dim:#3d2208;
+      --red:       #f85149;
+      --purple:    #bc8cff;
+      --teal:      #39d0d8;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Deck & Slides ── */
+    .deck {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Slide counter ── */
+    #counter {
+      position: fixed; bottom: 1.4rem; right: 2rem;
+      font-size: 0.85rem; color: var(--muted);
+      z-index: 100;
+    }
+
+    /* ── Nav arrows ── */
+    .nav-btn {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      width: 2.6rem; height: 2.6rem;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, color 0.2s;
+      z-index: 100;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,0.14); color: var(--text); }
+    #btn-prev { left: 1.2rem; }
+    #btn-next { right: 1.2rem; }
+
+    /* ── Progress bar ── */
+    #progress-bar {
+      position: fixed; bottom: 0; left: 0;
+      height: 3px; background: var(--blue);
+      transition: width 0.4s ease;
+      z-index: 100;
+    }
+
+    /* ── Typography ── */
+    .slide-title {
+      font-size: clamp(2rem, 4.5vw, 3.8rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      text-align: center;
+      margin-bottom: 1.2rem;
+    }
+    .slide-subtitle {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      color: var(--muted);
+      text-align: center;
+      font-weight: 300;
+    }
+    .slide-body {
+      font-size: clamp(0.95rem, 1.8vw, 1.35rem);
+      line-height: 1.7;
+      text-align: center;
+      max-width: 820px;
+      color: #c9d1d9;
+    }
+
+    /* ── Accent chips ── */
+    .chip {
+      display: inline-block;
+      padding: 0.25em 0.85em;
+      border-radius: 2em;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .chip-blue   { background: var(--blue-dim);   color: var(--blue); }
+    .chip-green  { background: var(--green-dim);  color: var(--green); }
+    .chip-orange { background: var(--orange-dim); color: var(--orange); }
+
+    /* ── Divider ── */
+    .divider {
+      width: 60px; height: 3px;
+      background: var(--blue);
+      border-radius: 2px;
+      margin: 1rem auto 1.4rem;
+    }
+
+    /* ── Cards ── */
+    .card-row {
+      display: flex; gap: 1.2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.2rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      min-width: 180px; max-width: 240px;
+      text-align: center;
+    }
+    .card .card-icon { font-size: 2.2rem; margin-bottom: 0.6rem; }
+    .card .card-label {
+      font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.4rem;
+    }
+    .card .card-value {
+      font-size: 1.05rem; color: var(--text); line-height: 1.4;
+    }
+
+    /* ── Grade table ── */
+    .grade-table {
+      border-collapse: collapse;
+      width: 100%; max-width: 760px;
+      margin-top: 1.2rem;
+      font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+    }
+    .grade-table th {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.7em 1.2em;
+      text-align: left;
+      font-weight: 600;
+      color: var(--blue);
+      letter-spacing: 0.04em;
+    }
+    .grade-table td {
+      border: 1px solid var(--border);
+      padding: 0.7em 1.2em;
+      vertical-align: middle;
+    }
+    .grade-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+    .grade-dot {
+      display: inline-block;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5em;
+      vertical-align: middle;
+    }
+
+    /* ── Risk bar chart ── */
+    .risk-bars { width: 100%; max-width: 640px; margin-top: 1.2rem; }
+    .risk-row {
+      display: flex; align-items: center;
+      gap: 1rem; margin-bottom: 0.9rem;
+    }
+    .risk-label { width: 160px; font-size: 0.95rem; color: var(--muted); flex-shrink: 0; text-align: right; }
+    .risk-track {
+      flex: 1; height: 28px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 6px; overflow: hidden;
+    }
+    .risk-fill {
+      height: 100%; border-radius: 6px;
+      display: flex; align-items: center; padding-left: 0.7em;
+      font-size: 0.9rem; font-weight: 700; color: #fff;
+      transition: width 1s ease;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      display: flex; align-items: flex-start;
+      gap: 0; margin-top: 1.4rem;
+      max-width: 820px; width: 100%;
+    }
+    .tl-item {
+      flex: 1; text-align: center; position: relative;
+    }
+    .tl-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 18px; left: 50%; right: -50%;
+      height: 2px; background: var(--border);
+      z-index: 0;
+    }
+    .tl-dot {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--surface); border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 0.6rem;
+      font-size: 1rem; position: relative; z-index: 1;
+    }
+    .tl-dot.active-tl { border-color: var(--blue); background: var(--blue-dim); }
+    .tl-week { font-size: 0.85rem; font-weight: 700; color: var(--blue); }
+    .tl-desc { font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem; line-height: 1.4; }
+
+    /* ── Team grid ── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 1.2rem;
+      max-width: 760px; width: 100%;
+    }
+    .team-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 0.8rem;
+      text-align: center;
+    }
+    .team-card .t-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .team-card .t-name { font-size: 0.8rem; color: var(--muted); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+
+    /* ── Checklist ── */
+    .checklist { list-style: none; max-width: 680px; width: 100%; margin-top: 1rem; }
+    .checklist li {
+      display: flex; align-items: flex-start;
+      gap: 0.9rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1.2rem;
+      margin-bottom: 0.7rem;
+      font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+      line-height: 1.5;
+    }
+    .checklist li .ci { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.05em; }
+
+    /* ── Stat callout ── */
+    .stat-row {
+      display: flex; gap: 1.4rem; justify-content: center;
+      flex-wrap: wrap; margin-top: 1.2rem;
+    }
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 2rem;
+      text-align: center; min-width: 160px;
+    }
+    .stat-num { font-size: 2.6rem; font-weight: 300; color: var(--blue); line-height: 1; }
+    .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; letter-spacing: 0.05em; text-transform: uppercase; }
+
+    /* ── Footer ── */
+    .slide-footer {
+      position: absolute; bottom: 1.6rem;
+      font-size: 0.75rem; color: var(--muted);
+      letter-spacing: 0.04em; text-align: center;
+    }
+
+    /* ── Highlight text ── */
+    .hl-blue   { color: var(--blue); }
+    .hl-green  { color: var(--green); }
+    .hl-orange { color: var(--orange); }
+    .hl-purple { color: var(--purple); }
+    .hl-teal   { color: var(--teal); }
+
+    /* ── Anatomy diagram (SVG inline) ── */
+    .anatomy-row {
+      display: flex; gap: 3rem; align-items: center;
+      justify-content: center; margin-top: 1rem;
+    }
+    .anatomy-label {
+      font-size: 0.85rem; color: var(--muted);
+      text-align: center; margin-top: 0.5rem;
+    }
+
+    /* ── Reassurance banner ── */
+    .reassurance {
+      background: var(--green-dim);
+      border: 1px solid var(--green);
+      border-radius: 10px;
+      padding: 0.9rem 1.6rem;
+      font-size: clamp(0.85rem, 1.4vw, 1rem);
+      color: var(--green);
+      max-width: 720px;
+      text-align: center;
+      margin-top: 1.2rem;
+      line-height: 1.6;
+    }
+
+    /* ── Diagnostic row ── */
+    .diag-row {
+      display: flex; gap: 1.2rem; justify-content: center;
+      flex-wrap: wrap; margin-top: 1.2rem; max-width: 820px; width: 100%;
+    }
+    .diag-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.3rem 1.5rem;
+      flex: 1; min-width: 200px; max-width: 260px;
+      text-align: center;
+    }
+    .diag-card .d-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .diag-card .d-title { font-size: 0.85rem; font-weight: 700; color: var(--blue); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .diag-card .d-body { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── Slide 1 accent line ── */
+    .title-accent {
+      width: 80px; height: 4px;
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+      border-radius: 2px;
+      margin: 1.2rem auto;
+    }
+  </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/KG1zDC9OTBWXOeq6lmvuBsvLapcRJ8zE42EbZeAazo7qZGDS5FQuNl_vhvfVnyk08O5DwWL_h1uRjaBghtq6AZZbRqiTEQT8b5CdvQ1_ZC4LuJVhc51Y-f_Z6oo_sRneiBWmM88XHC4OL1AcLT5XeIMFqozM0okG7mwXDaJXgQSi2K5mv1H11OJkcJKu2vtK3SW-aRzGX1aKaWCkhtLLcc1fa4R53PpDmaLbVN9KgkQFrifNxDPQ_12ThwkSWpY8PWMeCVYAN3HUmtE5qMt-j9V6zG8b3RXZNckddG7w_zqUl6Eiy-wZjXqRgiee2EDEVbOzUZUP86jbGFWuUhpERoPVCx0Y4YevoZhx5kRdMtdl2SbFsgFRTfrrieRZcuUCwgrTVJsBNeokxsyc-sIa2uMJR3C-0lMcQfMkDutfuGUHTsXd-AW2N9EefDpaQ4hRzmAPf_Rn6D04Cd0QYAMMhMmJoY4CrLzfHpsHJ7-ThJP25cQEEZvsY1djwL_EJWF2LRXPem8QrEQ70594hDpdUxZgXK6Ttp9m65kGRAeRCtD7fjjG7GwNn4IeENBjL63RNhQKP5aT1NnmGYTww1Kia5kO4dRgHwV-2mNBoPxoAKAAhLnPax6V5Il7v-2mAl0tAcO_h9oMJqabtMZ2pl7zjYRyfzJXVuEB-g0u2WlQi1PDvOspjI1YcsJCaHUEfNWM4lC0f1p1vfDm90gyisorCRyassybiUA3KYMCXZ2Xmb4uWfIHOugdHVfZSOUsFyRTIU01JMDCSIPEh-ht3vcVqKVKqfRyz6yFXHzurER4RdJNrsA7wy0PQtzLlLaIt3dmRfc0PHI4KR-i-vUH3ZzdRpZm61MA9eMGh89mzYlgYdmkHBGiI4um84Jghw5XhB_c2wNWdpJqoc4z4PE9y9Z0dhoxvUFcuXYx9IvBpt4zXblqZIWbalHEEkNvdRPFyxYJuZdm1sogXtW8M-o2YBOFX51MWPjnB5LFZ1g3M6ZeqAWehiyai66693e_GYaLFRlqGAWkXuMKbAeS6DMCi1Bxru9yRJhrnyLqjCeZfXf0jHnnCNRJMnsg4Ii7tvwr4kjaoEi6FVdw3xMuQr6QdKZbNpzFmKcOayxzyPmLwmWECH8YIyb2UqqO77dtZpJdXw8NX0hhv9lvjwl1rjLAKm3VYzyJYgDiwBV9qFfdlv2Xm9z7xw1KNuBIPfJE8lE5FnGXGk2_oxCdtA0oPeCgWBAioWz8QTJMSXr136_pXkpGmtPE2tYqOF2n8_oG3GSI2P6H0QVroWHjv76PrLVtmaAmWgJSpWu1176a-nFmysqczi3ATHhUP4blaLPsP84Fn1LZVssyA055yc-ikPMhOI0BC6kdIBkjhCEiepBH5eMAclpQGn4TsDBjnPUORPOnS5xpeBMZ36aEaA-eywpCm9gz8PkhV8nAXWjIu6FMtsHAlUIe7ktuluaDl5hlfoC3mKxO_-E-M-l3G7O_mBY480aiP6g6Lrd-x_7OxEaJqk8DSesJzSO7yeOIkGDi0Y9wImyTfbXwYF1LB9ubQI1LwjX2tVZO-IEHkp-9pFxquSg9lXgaQ2k69fNZGyYkQki_rxkrurvi7WuPirizmKAS3w9LzDKysyKeiqD3vhL_GEbFcMBax7pV_e6bxcqFpQYTSWyn7tN8ZdgTusQJl0XVXx4tVuCMN8JjwQ'></script></head>
+<body>
+
+<div class="deck">
+
+  <!-- ─── SLIDE 1: Title ─── -->
+  <div class="slide active" id="slide-1">
+    <div class="chip chip-blue">Maternal-Fetal Medicine</div>
+    <h1 class="slide-title">Placenta Accreta<br>Spectrum <span class="hl-blue">(PAS)</span></h1>
+    <div class="title-accent"></div>
+    <p class="slide-subtitle">Understanding Your Diagnosis</p>
+    <p class="slide-footer">Your Maternal-Fetal Medicine Team &nbsp;·&nbsp; Based on ACOG &amp; SMFM Guidelines</p>
+  </div>
+
+  <!-- ─── SLIDE 2: What Is PAS? ─── -->
+  <div class="slide" id="slide-2">
+    <div class="chip chip-blue">What Is This?</div>
+    <h2 class="slide-title">Your placenta has attached<br>more deeply than usual</h2>
+    <div class="divider"></div>
+    <div class="anatomy-row">
+      <!-- Normal uterus SVG -->
+      <div>
+        <svg width="130" height="160" viewBox="0 0 130 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Uterine wall -->
+          <ellipse cx="65" cy="90" rx="55" ry="65" fill="#1f3a5f" stroke="#58a6ff" stroke-width="2"/>
+          <!-- Myometrium layer -->
+          <ellipse cx="65" cy="90" rx="44" ry="54" fill="#0d1117" stroke="#30363d" stroke-width="1.5"/>
+          <!-- Placenta (normal) -->
+          <rect x="30" y="55" width="70" height="18" rx="6" fill="#3fb950" opacity="0.85"/>
+          <text x="65" y="67" text-anchor="middle" font-size="9" fill="#fff" font-family="sans-serif">Placenta</text>
+          <!-- Arrow stays above -->
+          <line x1="65" y1="73" x2="65" y2="80" stroke="#3fb950" stroke-width="1.5" marker-end="url(#arrowG)"/>
+          <defs>
+            <marker id="arrowG" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#3fb950"/>
+            </marker>
+          </defs>
+        </svg>
+        <p class="anatomy-label hl-green">Normal<br>Attachment</p>
+      </div>
+      <!-- PAS uterus SVG -->
+      <div>
+        <svg width="130" height="160" viewBox="0 0 130 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="65" cy="90" rx="55" ry="65" fill="#1f3a5f" stroke="#58a6ff" stroke-width="2"/>
+          <ellipse cx="65" cy="90" rx="44" ry="54" fill="#0d1117" stroke="#30363d" stroke-width="1.5"/>
+          <!-- Placenta invading -->
+          <rect x="28" y="52" width="74" height="28" rx="6" fill="#f85149" opacity="0.85"/>
+          <text x="65" y="68" text-anchor="middle" font-size="9" fill="#fff" font-family="sans-serif">Placenta (PAS)</text>
+          <!-- Invasion arrows -->
+          <line x1="50" y1="80" x2="50" y2="92" stroke="#f85149" stroke-width="1.5" marker-end="url(#arrowR)"/>
+          <line x1="65" y1="80" x2="65" y2="92" stroke="#f85149" stroke-width="1.5" marker-end="url(#arrowR)"/>
+          <line x1="80" y1="80" x2="80" y2="92" stroke="#f85149" stroke-width="1.5" marker-end="url(#arrowR)"/>
+          <defs>
+            <marker id="arrowR" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#f85149"/>
+            </marker>
+          </defs>
+        </svg>
+        <p class="anatomy-label hl-blue">PAS<br>Attachment</p>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1rem;">In PAS, the placenta grows into — or through — the uterine wall, making separation at delivery more complex.</p>
+  </div>
+
+  <!-- ─── SLIDE 3: Three Grades ─── -->
+  <div class="slide" id="slide-3">
+    <div class="chip chip-blue">What Is This?</div>
+    <h2 class="slide-title">PAS ranges from mild<br>to more involved</h2>
+    <div class="divider"></div>
+    <table class="grade-table">
+      <thead>
+        <tr>
+          <th>Grade</th>
+          <th>Name</th>
+          <th>What It Means</th>
+          <th>Depth</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td><span class="grade-dot" style="background:#f0883e;"></span><span class="hl-orange">Accreta</span></td>
+          <td>Placenta attaches to the muscle</td>
+          <td>Surface layer</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td><span class="grade-dot" style="background:#f85149;"></span><span style="color:#f85149;">Increta</span></td>
+          <td>Placenta grows into the muscle</td>
+          <td>Deeper layer</td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td><span class="grade-dot" style="background:#bc8cff;"></span><span class="hl-purple">Percreta</span></td>
+          <td>Placenta grows through the wall</td>
+          <td>Full thickness</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="reassurance">Your care team will tell you which grade applies to you — and what it means for your plan.</div>
+  </div>
+
+  <!-- ─── SLIDE 4: Why Does This Happen? ─── -->
+  <div class="slide" id="slide-4">
+    <div class="chip chip-blue">Why Does It Matter?</div>
+    <h2 class="slide-title">Prior uterine surgery is<br>the most common cause</h2>
+    <div class="divider"></div>
+    <div class="card-row">
+      <div class="card">
+        <div class="card-icon">🔪</div>
+        <div class="card-label">Primary Cause</div>
+        <div class="card-value">Cesarean section scar tissue</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔬</div>
+        <div class="card-label">Other Causes</div>
+        <div class="card-value">Uterine surgery, D&amp;C, ablation, IVF</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📍</div>
+        <div class="card-label">Key Factor</div>
+        <div class="card-value">Low-lying placenta (previa) over a scar</div>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1.2rem;">Scar tissue disrupts the normal boundary between the placenta and uterine wall, allowing deeper attachment.</p>
+  </div>
+
+  <!-- ─── SLIDE 5: Risk in Numbers ─── -->
+  <div class="slide" id="slide-5">
+    <div class="chip chip-blue">Why Does It Matter?</div>
+    <h2 class="slide-title">Risk rises with each<br>prior cesarean delivery</h2>
+    <div class="divider"></div>
+    <div class="risk-bars">
+      <div class="risk-row">
+        <div class="risk-label">1 prior C-section</div>
+        <div class="risk-track">
+          <div class="risk-fill" style="width:11%; background: linear-gradient(90deg,#f0883e,#f0883e99);">11%</div>
+        </div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-label">2 prior C-sections</div>
+        <div class="risk-track">
+          <div class="risk-fill" style="width:40%; background: linear-gradient(90deg,#f85149,#f8514999);">40%</div>
+        </div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-label">3+ prior C-sections</div>
+        <div class="risk-track">
+          <div class="risk-fill" style="width:61%; background: linear-gradient(90deg,#bc8cff,#bc8cff99);">61%</div>
+        </div>
+      </div>
+    </div>
+    <div class="reassurance" style="margin-top:1.4rem;">These figures apply to patients who also have placenta previa. Many patients with risk factors do <strong>not</strong> develop PAS.</div>
+  </div>
+
+  <!-- ─── SLIDE 6: Diagnosis ─── -->
+  <div class="slide" id="slide-6">
+    <div class="chip chip-blue">How Is It Found?</div>
+    <h2 class="slide-title">Ultrasound is the first<br>and most important test</h2>
+    <div class="divider"></div>
+    <div class="diag-row">
+      <div class="diag-card">
+        <div class="d-icon">🔊</div>
+        <div class="d-title">Ultrasound</div>
+        <div class="d-body">Primary screening tool. Performed between 18–24 weeks. Looks for specific placental features.</div>
+      </div>
+      <div class="diag-card">
+        <div class="d-icon">🧲</div>
+        <div class="d-title">MRI</div>
+        <div class="d-body">Added when ultrasound findings are unclear, or if deeper invasion is suspected.</div>
+      </div>
+      <div class="diag-card">
+        <div class="d-icon">🔬</div>
+        <div class="d-title">Confirmation</div>
+        <div class="d-body">Final diagnosis confirmed at delivery or by pathology after birth.</div>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1rem;">Early diagnosis allows your team to plan the safest possible delivery for you and your baby.</p>
+  </div>
+
+  <!-- ─── SLIDE 7: Your Care Team ─── -->
+  <div class="slide" id="slide-7">
+    <div class="chip chip-green">What Happens Next?</div>
+    <h2 class="slide-title">You will be cared for<br>by a specialized team</h2>
+    <div class="divider"></div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="t-icon">👩‍⚕️</div>
+        <div class="t-name">MFM Specialist</div>
+      </div>
+      <div class="team-card">
+        <div class="t-icon">🏥</div>
+        <div class="t-name">Gynecologic Surgeon</div>
+      </div>
+      <div class="team-card">
+        <div class="t-icon">💉</div>
+        <div class="t-name">Anesthesiologist</div>
+      </div>
+      <div class="team-card">
+        <div class="t-icon">🩸</div>
+        <div class="t-name">Blood Bank Team</div>
+      </div>
+      <div class="team-card">
+        <div class="t-icon">👶</div>
+        <div class="t-name">Neonatologist</div>
+      </div>
+      <div class="team-card">
+        <div class="t-icon">🫀</div>
+        <div class="t-name">Intensivist / ICU</div>
+      </div>
+      <div class="team-card">
+        <div class="t-icon">🧠</div>
+        <div class="t-name">Mental Health</div>
+      </div>
+      <div class="team-card">
+        <div class="t-icon">🏛️</div>
+        <div class="t-name">Tertiary Center</div>
+      </div>
+    </div>
+    <div class="reassurance">PAS is managed at specialized centers — every member of your team has prepared for this.</div>
+  </div>
+
+  <!-- ─── SLIDE 8: Delivery Timing ─── -->
+  <div class="slide" id="slide-8">
+    <div class="chip chip-green">What Happens Next?</div>
+    <h2 class="slide-title">Delivery is planned between<br><span class="hl-blue">34 – 36 weeks</span></h2>
+    <div class="divider"></div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">🔍</div>
+        <div class="tl-week">18–24 wks</div>
+        <div class="tl-desc">Specialized ultrasound screening</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">💊</div>
+        <div class="tl-week">~28–32 wks</div>
+        <div class="tl-desc">Steroid shots for baby's lung maturity</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot active-tl">🏥</div>
+        <div class="tl-week">34–36 wks</div>
+        <div class="tl-desc">Planned cesarean delivery</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">👶</div>
+        <div class="tl-week">After birth</div>
+        <div class="tl-desc">Neonatal care &amp; maternal recovery</div>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1.2rem;">Scheduling delivery before labor begins significantly reduces the risk of emergency bleeding.</p>
+  </div>
+
+  <!-- ─── SLIDE 9: What to Expect at Delivery ─── -->
+  <div class="slide" id="slide-9">
+    <div class="chip chip-green">What Happens Next?</div>
+    <h2 class="slide-title">A planned cesarean —<br>with the placenta left in place</h2>
+    <div class="divider"></div>
+    <div class="card-row">
+      <div class="card" style="max-width:280px;">
+        <div class="card-icon">🍼</div>
+        <div class="card-label">Step 1</div>
+        <div class="card-value">Baby is delivered through a cesarean incision</div>
+      </div>
+      <div class="card" style="max-width:280px;">
+        <div class="card-icon">🔗</div>
+        <div class="card-label">Step 2</div>
+        <div class="card-value">Placenta is left in place — not manually removed</div>
+      </div>
+      <div class="card" style="max-width:280px;">
+        <div class="card-icon">🏥</div>
+        <div class="card-label">Step 3</div>
+        <div class="card-value">Hysterectomy is performed to prevent hemorrhage</div>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1rem;">This approach — planned cesarean hysterectomy — is the safest, most effective treatment for most patients with PAS.</p>
+  </div>
+
+  <!-- ─── SLIDE 10: Blood Loss ─── -->
+  <div class="slide" id="slide-10">
+    <div class="chip chip-green">What Happens Next?</div>
+    <h2 class="slide-title">Blood transfusion is common —<br>your team prepares in advance</h2>
+    <div class="divider"></div>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">~50%</div>
+        <div class="stat-label">of patients receive a transfusion</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">2–8L</div>
+        <div class="stat-label">average estimated blood loss range</div>
+      </div>
+    </div>
+    <div class="reassurance" style="margin-top:1.4rem;">
+      Your surgical team will have blood products ready before the first incision. Massive transfusion protocols and cell salvage techniques are part of the plan.
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11: Fertility ─── -->
+  <div class="slide" id="slide-11">
+    <div class="chip chip-blue">What Happens Next?</div>
+    <h2 class="slide-title">Hysterectomy ends future pregnancies —<br>but your options matter</h2>
+    <div class="divider"></div>
+    <div class="card-row">
+      <div class="card" style="max-width:300px; border-color: var(--blue);">
+        <div class="card-icon">🏥</div>
+        <div class="card-label">Standard Approach</div>
+        <div class="card-value">Planned hysterectomy — most effective, safest for most patients</div>
+      </div>
+      <div class="card" style="max-width:300px; border-color: var(--orange);">
+        <div class="card-icon">🌱</div>
+        <div class="card-label">Fertility-Preserving Option</div>
+        <div class="card-value">Placenta left in place or partial resection — carries additional risks</div>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1rem;">If preserving fertility is important to you, please discuss this openly with your MFM team — there are options to explore together.</p>
+  </div>
+
+  <!-- ─── SLIDE 12: Emotional Wellbeing ─── -->
+  <div class="slide" id="slide-12">
+    <div class="chip chip-green">Your Whole Health</div>
+    <h2 class="slide-title">Your emotional health<br>is part of your care</h2>
+    <div class="divider"></div>
+    <div class="card-row">
+      <div class="card" style="border-color: var(--green);">
+        <div class="card-icon">💚</div>
+        <div class="card-label">Common Experiences</div>
+        <div class="card-value">Anxiety, grief, and PTSD are frequently reported after PAS</div>
+      </div>
+      <div class="card" style="border-color: var(--green);">
+        <div class="card-icon">🤝</div>
+        <div class="card-label">Support Available</div>
+        <div class="card-value">Mental health specialists are part of your care team</div>
+      </div>
+      <div class="card" style="border-color: var(--green);">
+        <div class="card-icon">👥</div>
+        <div class="card-label">Community</div>
+        <div class="card-value">Support groups for PAS patients and families exist</div>
+      </div>
+    </div>
+    <div class="reassurance">You do not have to face this alone. Asking for emotional support is a sign of strength, not weakness.</div>
+  </div>
+
+  <!-- ─── SLIDE 13: What Can You Do? ─── -->
+  <div class="slide" id="slide-13">
+    <div class="chip chip-orange">What Can You Do?</div>
+    <h2 class="slide-title">Four steps you can<br>take right now</h2>
+    <div class="divider"></div>
+    <ul class="checklist">
+      <li><span class="ci">1️⃣</span> Ask your team which <strong>grade of PAS</strong> you have and what it means for your plan.</li>
+      <li><span class="ci">2️⃣</span> Confirm your delivery center has a <strong>dedicated PAS team</strong> and experience.</li>
+      <li><span class="ci">3️⃣</span> Ask about <strong>blood donation options</strong> and how your team prepares for blood loss.</li>
+      <li><span class="ci">4️⃣</span> Connect with a <strong>counselor or support group</strong> — emotional preparation matters.</li>
+    </ul>
+  </div>
+
+  <!-- ─── SLIDE 14: Your Questions Matter ─── -->
+  <div class="slide" id="slide-14">
+    <div class="chip chip-blue">Partnership in Care</div>
+    <h2 class="slide-title">No question<br>is too small</h2>
+    <div class="divider"></div>
+    <div class="card-row">
+      <div class="card" style="max-width:260px;">
+        <div class="card-icon">📝</div>
+        <div class="card-label">Before Your Visit</div>
+        <div class="card-value">Write down your questions — bring your list to every appointment</div>
+      </div>
+      <div class="card" style="max-width:260px;">
+        <div class="card-icon">👫</div>
+        <div class="card-label">Bring Support</div>
+        <div class="card-value">A trusted person can help you listen and remember information</div>
+      </div>
+      <div class="card" style="max-width:260px;">
+        <div class="card-icon">🔁</div>
+        <div class="card-label">Ask Again</div>
+        <div class="card-value">It is always okay to ask your team to repeat or clarify anything</div>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1rem;">Your care team is here to guide you — every step, every question, every concern.</p>
+  </div>
+
+  <!-- ─── SLIDE 15: Closing ─── -->
+  <div class="slide" id="slide-15">
+    <div class="chip chip-green">Partnership in Care</div>
+    <h1 class="slide-title" style="font-size:clamp(2rem,4vw,3.2rem);">You are not alone<br>in this</h1>
+    <div class="title-accent"></div>
+    <p class="slide-body">PAS is a complex condition — but it is manageable with the right team, the right center, and the right plan.</p>
+    <div class="reassurance" style="margin-top:1.4rem; font-size:1.05rem;">
+      We are your partners in this journey. Together, we will prepare for the safest possible delivery for you and your baby.
+    </div>
+    <p class="slide-footer">Maternal-Fetal Medicine Patient Education &nbsp;·&nbsp; ACOG &amp; SMFM Guidelines &nbsp;·&nbsp; For informational purposes — always discuss your specific situation with your physician.</p>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- Navigation buttons -->
+<button class="nav-btn" id="btn-prev" onclick="prevSlide()" title="Previous (←)">&#8592;</button>
+<button class="nav-btn" id="btn-next" onclick="nextSlide()" title="Next (→)">&#8594;</button>
+
+<!-- Slide counter -->
+<div id="counter">1 / 15</div>
+
+<!-- Progress bar -->
+<div id="progress-bar"></div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progress-bar');
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    counter.textContent = (index + 1) + ' / ' + total;
+    progressBar.style.width = ((index + 1) / total * 100) + '%';
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % total;
+    showSlide(currentSlide);
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + total) % total;
+    showSlide(currentSlide);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
