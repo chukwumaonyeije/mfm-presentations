@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LGA Patient Counseling — MFM</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface2:  #1f2937;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent:    #58a6ff;
+      --green:     #3fb950;
+      --orange:    #f0883e;
+      --red:       #f85149;
+      --teal:      #39d3c3;
+      --purple:    #bc8cff;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Deck ── */
+    .deck {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Navigation ── */
+    .nav {
+      position: fixed; bottom: 1.6rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1.2rem;
+      z-index: 100;
+    }
+    .nav button {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); border-radius: 50%;
+      width: 2.6rem; height: 2.6rem;
+      font-size: 1.1rem; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav button:hover { background: var(--accent); color: #000; }
+    .nav-counter {
+      font-size: 0.85rem; color: var(--muted);
+      min-width: 4rem; text-align: center;
+    }
+
+    /* ── Progress Bar ── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0;
+      height: 3px; background: var(--accent);
+      transition: width 0.4s ease;
+      z-index: 200;
+    }
+
+    /* ── Typography ── */
+    .slide-label {
+      font-size: 0.75rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    h1 { font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 300; line-height: 1.15; }
+    h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 300; line-height: 1.2; }
+    h3 { font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 400; }
+    .subtitle { font-size: clamp(1rem, 1.8vw, 1.4rem); color: var(--muted); margin-top: 0.8rem; }
+    .body-text { font-size: clamp(1rem, 1.6vw, 1.3rem); line-height: 1.65; max-width: 780px; text-align: center; }
+    .highlight { color: var(--accent); font-weight: 600; }
+    .green { color: var(--green); }
+    .orange { color: var(--orange); }
+    .red-text { color: var(--red); }
+    .muted { color: var(--muted); }
+    .source-note { font-size: 0.75rem; color: var(--muted); margin-top: 1.2rem; letter-spacing: 0.04em; }
+
+    /* ── Cards & Surfaces ── */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.4rem 2rem;
+    }
+    .card-grid {
+      display: grid; gap: 1.2rem;
+      width: 100%; max-width: 900px;
+    }
+    .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+    /* ── Tables ── */
+    table {
+      border-collapse: collapse; width: 100%; max-width: 820px;
+      font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+    }
+    th {
+      background: var(--surface2); color: var(--accent);
+      padding: 0.8rem 1.2rem; text-align: left;
+      font-weight: 600; letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--accent);
+    }
+    td {
+      padding: 0.75rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.025); }
+
+    /* ── Checklist ── */
+    .checklist { list-style: none; text-align: left; max-width: 680px; width: 100%; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 0.9rem;
+      padding: 0.65rem 0; font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+      border-bottom: 1px solid var(--border);
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .check-icon { color: var(--green); font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+    /* ── Timeline ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; max-width: 720px; width: 100%; }
+    .tl-item {
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      padding: 0.6rem 0;
+    }
+    .tl-num {
+      width: 2rem; height: 2rem; border-radius: 50%;
+      background: var(--accent); color: #000;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+    }
+    .tl-text { font-size: clamp(0.9rem, 1.4vw, 1.1rem); padding-top: 0.3rem; }
+    .tl-connector {
+      width: 2rem; display: flex; justify-content: center;
+      flex-shrink: 0;
+    }
+    .tl-connector-line {
+      width: 2px; height: 1.4rem; background: var(--border); margin: 0 auto;
+    }
+
+    /* ── Pathway Diagram ── */
+    .pathway {
+      display: flex; align-items: center; gap: 0;
+      flex-wrap: wrap; justify-content: center;
+      max-width: 860px;
+    }
+    .pathway-box {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem 1.4rem;
+      text-align: center; min-width: 160px;
+      font-size: clamp(0.85rem, 1.3vw, 1rem);
+    }
+    .pathway-box .pb-icon { font-size: 2rem; margin-bottom: 0.4rem; }
+    .pathway-box .pb-label { font-weight: 600; }
+    .pathway-box .pb-sub { color: var(--muted); font-size: 0.8rem; margin-top: 0.2rem; }
+    .pathway-arrow {
+      font-size: 1.8rem; color: var(--accent); padding: 0 0.4rem;
+    }
+
+    /* ── Warning Banner ── */
+    .warning-banner {
+      background: rgba(248, 81, 73, 0.12);
+      border: 1px solid var(--red);
+      border-left: 4px solid var(--red);
+      border-radius: 8px; padding: 1rem 1.6rem;
+      max-width: 820px; width: 100%;
+      font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+    }
+    .warning-banner .warn-title {
+      color: var(--red); font-weight: 700;
+      font-size: 0.75rem; letter-spacing: 0.12em;
+      text-transform: uppercase; margin-bottom: 0.4rem;
+    }
+
+    /* ── Info Banner ── */
+    .info-banner {
+      background: rgba(88, 166, 255, 0.1);
+      border: 1px solid var(--accent);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px; padding: 1rem 1.6rem;
+      max-width: 820px; width: 100%;
+      font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+    }
+    .info-banner .info-title {
+      color: var(--accent); font-weight: 700;
+      font-size: 0.75rem; letter-spacing: 0.12em;
+      text-transform: uppercase; margin-bottom: 0.4rem;
+    }
+
+    /* ── Percentile Visual ── */
+    .percentile-bar-wrap { max-width: 640px; width: 100%; margin-top: 1rem; }
+    .percentile-track {
+      height: 28px; border-radius: 14px;
+      background: linear-gradient(to right, #1f6feb 0%, #1f6feb 89%, #f85149 89%, #f85149 100%);
+      position: relative; overflow: visible;
+    }
+    .percentile-marker {
+      position: absolute; top: -10px;
+      width: 4px; height: 48px;
+      background: #fff; border-radius: 2px;
+      left: 89%;
+    }
+    .percentile-labels {
+      display: flex; justify-content: space-between;
+      font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem;
+    }
+    .percentile-tag {
+      position: absolute; top: -2.4rem; left: 87%;
+      background: var(--red); color: #fff;
+      padding: 0.2rem 0.6rem; border-radius: 6px;
+      font-size: 0.8rem; font-weight: 700; white-space: nowrap;
+    }
+
+    /* ── Two-Column Layout ── */
+    .two-col {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2rem; max-width: 900px; width: 100%;
+    }
+    .col-header {
+      font-size: 0.75rem; letter-spacing: 0.12em;
+      text-transform: uppercase; margin-bottom: 0.8rem;
+      padding-bottom: 0.4rem; border-bottom: 2px solid;
+    }
+    .col-header.mom { color: var(--teal); border-color: var(--teal); }
+    .col-header.baby { color: var(--purple); border-color: var(--purple); }
+    .risk-item {
+      display: flex; align-items: flex-start; gap: 0.7rem;
+      padding: 0.5rem 0; font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+      border-bottom: 1px solid var(--border);
+    }
+    .risk-item:last-child { border-bottom: none; }
+    .risk-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 0.45rem; }
+
+    /* ── Closing Slide ── */
+    .closing-ring {
+      width: 180px; height: 180px; border-radius: 50%;
+      border: 4px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem; margin-bottom: 1.6rem;
+      background: rgba(88,166,255,0.06);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .slide { padding: 2rem 1.5rem; }
+      .card-grid.cols-2, .two-col { grid-template-columns: 1fr; }
+      .card-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+      .pathway { flex-direction: column; }
+      .pathway-arrow { transform: rotate(90deg); }
+    }
+  </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/TUCYEWfpWuo1v6rOGgd8pD7-pqpP1y6_SbDIrRNMf0eAWE3rqzcAkA9mFVVK1pa7CBc16oiH4PoM1QaNkRoa9ZmDUB9NJvfxHGbr0Zx4l-gGM8hQIJtxdYWz3iuBUNQjY09tufg__uPcPXaSVU1zYCMvWmy7QG1RgA5fBzwVWVZG5BwEMuNbmE7K8yUQ8DTfnUeVKoVCPYG27KgtLj-ofWnIgNp91ssp0qdltbsafNCsWbIru-yFrBkrRRqJDU37UnJAl2CnmLAAwsJyBiAgaEbezkSq-365JpWL_SJixN8l9RJGveC35gDjvjQmcWcKPyO2C8-6K28XSM4a6v7skbZ7nGpqHZPX8aYEMJnjtaVU5lY5btENuVs6yySaBVKaNp6fI17_SKCcwnxjgBdJn9zxvUaA9kN4JGkdc-etOipn2myi9UFMttOX90qpo0VhEAZxiD7SXOCF5hwEXozZHJHzytfQDKQVQOfUZPLdrATxFfgdcM_ngngZFMPhcDF8mOg86AiwRQV8Z2_6oHsyhDhZLq45VFRvRN3mE-uEjOXS8Fa1J4sVS0xZWu481cIXRTE9eo0ndK79zjUrtDZXtH3hakcb_qt2QK5GVlJjfbd-0YFooAIA1StN7m2uhH4GTTMK1sYb5DGnwnNvVyQ_iq7reXZhILbJ7yFBR2DSgXwtHdxauR77fb9XaA2TAiZL8D28n4PWcq_-Asbh-XXuiN0RP3Qe9ubPo7B_yhdVT5VL3eDQO9NXwxVhs17YoFyT9qEBFJPaGOIFpfID61e-o2nF5CPo9hewvpbS-0rcPiPMhmFyyya1QOi67dA11D4AiP12Ac1sMIniBf3F3sqB3znych-Fvw8uNhnFRSVgFFLL-fYkUAc0SNGJZODapGhLuWyqd-zwdYxqJLq8rxqoo3sGuONRQQXuOBoHqTjhtJU1yev7JKEflZ6-1QZpA6v9WPpSsMnHmuBbNQY-vTRayyWfO7xZbmW9wNO3uH8MMGpPHKxBPatLL02NAfidKwKws8ZdZmo2Lzv4jRyzzOde6wvfvYrnrDEONsiwtiPzsqPn2PrFbGZZ3xxgNqnnHocpF4VO9rJ1FhQDcdjT7JBfNbzAVT64SIJTvlZ3xXrTffgdLv49eHqNhcZ9HGCJcC6M3_AXjfVPgovBjhx92GjUW-nH4s76qTelod4rCHi8pHLFx3GQA673EMBdJQygceYrJybTTsF-1Ezsz0FM0elKwhmEdtgON8Q3GoJZEQK3C-VedCyumwPNPVfSsuaQv2vc7KPEApadrCyJp8OMIPsAX_ee6Atlq2QE4wGri5lhRzpOC5y6zzh2n_tzaJrahoFbPf9iEuS9gGzPQRSf8rFyyMhp9P5nCLND8DAICyd0dvm76UbQGRhE5rvo564nuxbWvStbADs2XrzKsenq6ffs44BjENsO0Itp1zM_cnSPSUFaSNpiB36Y_PWxWij-Bkk5qYq9DQteUCXSqLJ9sszL29KfrNRPSFkFBJZHJYkHNJc3Up1txtvIgV0iNEm2NATRI5cVffHTHrppPHlXLXq0GwdUl6v05N54Zo4t3wmjvkJFKb-7iHEyEP8L3OZeiAFkr3cAahqSzOzDMohMKIPHR_43wrZa3P5sxYIonRsZ-gc-9KxuI3fac70GXEHTRcpRqw'></script></head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck">
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 1 — Title
+  ══════════════════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="slide-label">MFM Patient Counseling</div>
+    <h1 style="text-align:center; max-width:800px;">
+      Your Baby Is Growing <span class="highlight">Big</span>
+    </h1>
+    <p class="subtitle">Understanding Large for Gestational Age (LGA)</p>
+    <div style="margin-top:2.5rem; display:flex; gap:2rem; flex-wrap:wrap; justify-content:center;">
+      <div style="display:flex;align-items:center;gap:0.5rem;color:var(--muted);font-size:0.9rem;">
+        <span>&#9679;</span> ACOG Practice Bulletin
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem;color:var(--muted);font-size:0.9rem;">
+        <span>&#9679;</span> SMFM Guidelines
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem;color:var(--muted);font-size:0.9rem;">
+        <span>&#9679;</span> A conversation with your MFM care team
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 2 — What Is LGA?
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="slide-label">The Diagnosis</div>
+    <h2 style="text-align:center; margin-bottom:1.6rem;">What Is <span class="highlight">LGA</span>?</h2>
+
+    <p class="body-text" style="margin-bottom:1.8rem;">
+      Your baby's estimated weight is at or above the
+      <span class="highlight">90th percentile</span> for this stage of pregnancy.
+    </p>
+
+    <div class="percentile-bar-wrap">
+      <div class="percentile-track">
+        <div class="percentile-marker"></div>
+        <div class="percentile-tag">≥ 90th %ile = LGA</div>
+      </div>
+      <div class="percentile-labels">
+        <span>1st %ile</span>
+        <span>50th %ile</span>
+        <span>90th %ile</span>
+        <span>99th %ile</span>
+      </div>
+    </div>
+
+    <p class="source-note" style="margin-top:1.8rem;">Definition per ACOG Practice Bulletin &amp; SMFM</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 3 — How Is It Measured?
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="slide-label">Diagnosis</div>
+    <h2 style="text-align:center; margin-bottom:1.4rem;">How We <span class="highlight">Measure</span> Your Baby's Size</h2>
+
+    <div class="card-grid cols-2" style="max-width:760px;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:3rem; margin-bottom:0.6rem;">🔊</div>
+        <h3 style="color:var(--accent); margin-bottom:0.5rem;">Ultrasound</h3>
+        <p style="font-size:0.95rem; color:var(--muted); line-height:1.5;">
+          Measures head, abdomen &amp; femur to estimate fetal weight (EFW)
+        </p>
+      </div>
+      <div class="card" style="text-align:center; border-color:var(--orange);">
+        <div style="font-size:3rem; margin-bottom:0.6rem;">⚖️</div>
+        <h3 style="color:var(--orange); margin-bottom:0.5rem;">Margin of Error</h3>
+        <p style="font-size:0.95rem; color:var(--muted); line-height:1.5;">
+          EFW can be off by <strong style="color:var(--orange);">±10–15%</strong> — especially in late pregnancy
+        </p>
+      </div>
+    </div>
+
+    <div class="info-banner" style="margin-top:1.6rem;">
+      <div class="info-title">Key Point</div>
+      The weight on the screen is an <strong>estimate</strong>, not a certainty. We use it as a guide, not a verdict.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 4 — Risk Factors
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="slide-label">Risk Factors</div>
+    <h2 style="text-align:center; margin-bottom:1.6rem;">What <span class="highlight">Causes</span> a Large Baby?</h2>
+
+    <div class="card-grid cols-2" style="max-width:820px;">
+      <div class="card" style="display:flex; gap:1rem; align-items:flex-start;">
+        <span style="font-size:2rem; flex-shrink:0;">⚖️</span>
+        <div>
+          <div style="font-weight:600; margin-bottom:0.3rem;">Pre-pregnancy Obesity</div>
+          <div style="color:var(--muted); font-size:0.9rem;">Strongest modifiable risk factor (Adj. OR 2.73)</div>
+        </div>
+      </div>
+      <div class="card" style="display:flex; gap:1rem; align-items:flex-start;">
+        <span style="font-size:2rem; flex-shrink:0;">🩸</span>
+        <div>
+          <div style="font-weight:600; margin-bottom:0.3rem;">Diabetes in Pregnancy</div>
+          <div style="color:var(--muted); font-size:0.9rem;">Gestational or pre-gestational diabetes</div>
+        </div>
+      </div>
+      <div class="card" style="display:flex; gap:1rem; align-items:flex-start;">
+        <span style="font-size:2rem; flex-shrink:0;">📈</span>
+        <div>
+          <div style="font-weight:600; margin-bottom:0.3rem;">Excessive Weight Gain</div>
+          <div style="color:var(--muted); font-size:0.9rem;">Gaining more than recommended during pregnancy</div>
+        </div>
+      </div>
+      <div class="card" style="display:flex; gap:1rem; align-items:flex-start;">
+        <span style="font-size:2rem; flex-shrink:0;">👶</span>
+        <div>
+          <div style="font-weight:600; margin-bottom:0.3rem;">Prior Large Baby</div>
+          <div style="color:var(--muted); font-size:0.9rem;">History of delivering a large infant (multiparity)</div>
+        </div>
+      </div>
+    </div>
+    <p class="source-note">ACOG Practice Bulletin | SMFM Consult Series</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 5 — The Glucose Connection
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="slide-label">Pathophysiology</div>
+    <h2 style="text-align:center; margin-bottom:1.8rem;">Blood Sugar <span class="highlight">Drives</span> Growth</h2>
+
+    <div class="pathway">
+      <div class="pathway-box">
+        <div class="pb-icon">🍬</div>
+        <div class="pb-label" style="color:var(--orange);">High Maternal<br>Blood Sugar</div>
+        <div class="pb-sub">Crosses the placenta</div>
+      </div>
+      <div class="pathway-arrow">→</div>
+      <div class="pathway-box">
+        <div class="pb-icon">💉</div>
+        <div class="pb-label" style="color:var(--accent);">Baby Makes<br>Extra Insulin</div>
+        <div class="pb-sub">Fetal hyperinsulinemia</div>
+      </div>
+      <div class="pathway-arrow">→</div>
+      <div class="pathway-box">
+        <div class="pb-icon">🏋️</div>
+        <div class="pb-label" style="color:var(--red);">Extra Fat<br>Deposits</div>
+        <div class="pb-sub">Shoulders &amp; abdomen</div>
+      </div>
+      <div class="pathway-arrow">→</div>
+      <div class="pathway-box">
+        <div class="pb-icon">📏</div>
+        <div class="pb-label" style="color:var(--green);">LGA Growth<br>Pattern</div>
+        <div class="pb-sub">Late-pregnancy surge</div>
+      </div>
+    </div>
+
+    <div class="info-banner" style="margin-top:1.8rem; max-width:720px;">
+      <div class="info-title">Most Powerful Tool</div>
+      Controlling blood sugar is the single most effective way to slow excessive fetal growth.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 6 — Risks
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="slide-label">Clinical Risks</div>
+    <h2 style="text-align:center; margin-bottom:1.4rem;">Potential Risks — <span class="highlight">For You &amp; Baby</span></h2>
+
+    <div class="two-col" style="max-width:820px;">
+      <div>
+        <div class="col-header mom">For You</div>
+        <div class="risk-item">
+          <div class="risk-dot" style="background:var(--teal);"></div>
+          Cesarean delivery
+        </div>
+        <div class="risk-item">
+          <div class="risk-dot" style="background:var(--teal);"></div>
+          Severe perineal lacerations (3rd/4th degree)
+        </div>
+        <div class="risk-item">
+          <div class="risk-dot" style="background:var(--teal);"></div>
+          Postpartum hemorrhage (PPH)
+        </div>
+      </div>
+      <div>
+        <div class="col-header baby">For Baby</div>
+        <div class="risk-item">
+          <div class="risk-dot" style="background:var(--purple);"></div>
+          Shoulder dystocia
+        </div>
+        <div class="risk-item">
+          <div class="risk-dot" style="background:var(--purple);"></div>
+          Brachial plexus injury
+        </div>
+        <div class="risk-item">
+          <div class="risk-dot" style="background:var(--purple);"></div>
+          Low blood sugar at birth (neonatal hypoglycemia)
+        </div>
+      </div>
+    </div>
+
+    <div class="info-banner" style="margin-top:1.4rem; max-width:820px;">
+      <div class="info-title">Reassurance</div>
+      Our team monitors for each of these. Most LGA pregnancies deliver safely.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 7 — Shoulder Dystocia
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="slide-label">Birth Safety</div>
+    <h2 style="text-align:center; margin-bottom:1.2rem;">What Is <span class="highlight">Shoulder Dystocia</span>?</h2>
+
+    <div style="display:flex; gap:2.5rem; align-items:flex-start; max-width:880px; flex-wrap:wrap; justify-content:center;">
+      <!-- SVG diagram -->
+      <svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+        <!-- Pelvis outline -->
+        <ellipse cx="110" cy="160" rx="90" ry="50" stroke="#30363d" stroke-width="3" fill="#161b22"/>
+        <!-- Baby head (delivered) -->
+        <circle cx="110" cy="90" r="38" fill="#1f2937" stroke="#58a6ff" stroke-width="2.5"/>
+        <text x="110" y="95" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="sans-serif">HEAD</text>
+        <!-- Shoulder block indicator -->
+        <rect x="68" y="128" width="84" height="20" rx="6" fill="rgba(248,81,73,0.25)" stroke="#f85149" stroke-width="2"/>
+        <text x="110" y="142" text-anchor="middle" fill="#f85149" font-size="10" font-family="sans-serif">SHOULDER IMPACTED</text>
+        <!-- Arrows indicating maneuvers -->
+        <path d="M40 160 Q20 140 40 120" stroke="#3fb950" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+        <path d="M180 160 Q200 140 180 120" stroke="#3fb950" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+        <text x="110" y="200" text-anchor="middle" fill="#3fb950" font-size="10" font-family="sans-serif">Trained maneuvers resolve this</text>
+      </svg>
+
+      <div style="flex:1; min-width:260px;">
+        <div class="card" style="margin-bottom:1rem;">
+          <div style="font-weight:600; color:var(--accent); margin-bottom:0.4rem;">What happens</div>
+          <div style="font-size:0.95rem; color:var(--muted); line-height:1.55;">
+            After the head delivers, the baby's shoulder becomes briefly impacted against the pelvis.
+          </div>
+        </div>
+        <div class="card" style="border-color:var(--green);">
+          <div style="font-weight:600; color:var(--green); margin-bottom:0.4rem;">Our response</div>
+          <div style="font-size:0.95rem; color:var(--muted); line-height:1.55;">
+            Our team trains regularly in proven maneuvers to safely deliver your baby. <strong style="color:var(--green);">You are in expert hands.</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 8 — Induction Warning
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="slide-label">Delivery Planning</div>
+    <h2 style="text-align:center; margin-bottom:1.4rem;">"Should We Deliver <span class="highlight">Early</span>?"</h2>
+
+    <div style="display:flex; gap:1.6rem; max-width:860px; flex-wrap:wrap; justify-content:center; margin-bottom:1.4rem;">
+      <div class="card" style="flex:1; min-width:240px; border-color:var(--red); text-align:center;">
+        <div style="font-size:2.5rem; margin-bottom:0.5rem;">❌</div>
+        <div style="font-weight:600; color:var(--red); margin-bottom:0.5rem;">Early Induction</div>
+        <div style="font-size:0.9rem; color:var(--muted); line-height:1.5;">
+          Does <strong>not</strong> reduce cesarean rate<br>
+          Does <strong>not</strong> reduce shoulder dystocia<br>
+          May increase risk of failed induction
+        </div>
+      </div>
+      <div class="card" style="flex:1; min-width:240px; border-color:var(--green); text-align:center;">
+        <div style="font-size:2.5rem; margin-bottom:0.5rem;">✅</div>
+        <div style="font-weight:600; color:var(--green); margin-bottom:0.5rem;">Monitor &amp; Plan</div>
+        <div style="font-size:0.9rem; color:var(--muted); line-height:1.5;">
+          Continued growth surveillance<br>
+          Optimize glucose control<br>
+          Individualized birth planning
+        </div>
+      </div>
+    </div>
+
+    <div class="warning-banner">
+      <div class="warn-title">⚠ ACOG Guideline</div>
+      Suspected macrosomia alone is <strong>NOT</strong> an indication for induction before <strong>39 weeks 0 days</strong>. Earlier delivery increases neonatal morbidity without improving outcomes.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 9 — When C-Section Is Recommended
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-9">
+    <div class="slide-label">Delivery Planning</div>
+    <h2 style="text-align:center; margin-bottom:1.6rem;">When We Recommend a <span class="highlight">Cesarean</span></h2>
+
+    <table style="max-width:680px;">
+      <thead>
+        <tr>
+          <th>Clinical Situation</th>
+          <th>EFW Threshold</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--teal); margin-right:0.6rem; vertical-align:middle;"></span>
+            No diabetes
+          </td>
+          <td><strong style="color:var(--orange);">&gt; 5,000 g</strong></td>
+        </tr>
+        <tr>
+          <td>
+            <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--red); margin-right:0.6rem; vertical-align:middle;"></span>
+            Diabetes present
+          </td>
+          <td><strong style="color:var(--red);">&gt; 4,500 g</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-banner" style="margin-top:1.6rem; max-width:680px;">
+      <div class="info-title">Shared Decision-Making</div>
+      These are guideline-based thresholds — not automatic decisions. We discuss your individual situation together.
+    </div>
+    <p class="source-note">ACOG Practice Bulletin on Fetal Macrosomia</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 10 — What You Can Do
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-10">
+    <div class="slide-label">Your Role</div>
+    <h2 style="text-align:center; margin-bottom:1.6rem;">Your Role in Your Baby's <span class="highlight">Health</span></h2>
+
+    <ul class="checklist">
+      <li>
+        <span class="check-icon">✓</span>
+        <span>Attend all scheduled <strong>growth scan</strong> appointments</span>
+      </li>
+      <li>
+        <span class="check-icon">✓</span>
+        <span>Monitor and log <strong>blood sugars</strong> as recommended</span>
+      </li>
+      <li>
+        <span class="check-icon">✓</span>
+        <span>Follow your <strong>nutrition plan</strong> — consistent meals, limit refined carbohydrates</span>
+      </li>
+      <li>
+        <span class="check-icon">✓</span>
+        <span>Report any <strong>decreased fetal movement</strong> promptly</span>
+      </li>
+      <li>
+        <span class="check-icon">✓</span>
+        <span>Know your <strong>signs of labor</strong> and when to go to the hospital</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 11 — After Delivery
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-11">
+    <div class="slide-label">Postpartum</div>
+    <h2 style="text-align:center; margin-bottom:1.6rem;">After Your Baby <span class="highlight">Arrives</span></h2>
+
+    <div class="two-col" style="max-width:820px;">
+      <div>
+        <div class="col-header baby">For Baby</div>
+        <div class="risk-item">
+          <span style="font-size:1.4rem;">🩸</span>
+          <div>
+            <div style="font-weight:600; margin-bottom:0.2rem;">Heel-Stick Blood Sugar Checks</div>
+            <div style="font-size:0.85rem; color:var(--muted);">Routine monitoring for neonatal hypoglycemia</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <span style="font-size:1.4rem;">👁️</span>
+          <div>
+            <div style="font-weight:600; margin-bottom:0.2rem;">Close Nursing Observation</div>
+            <div style="font-size:0.85rem; color:var(--muted);">Feeding support and temperature regulation</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="col-header mom">For You</div>
+        <div class="risk-item">
+          <span style="font-size:1.4rem;">🩺</span>
+          <div>
+            <div style="font-weight:600; margin-bottom:0.2rem;">Monitoring for Heavy Bleeding</div>
+            <div style="font-size:0.85rem; color:var(--muted);">Uterine tone assessment for PPH prevention</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <span style="font-size:1.4rem;">💊</span>
+          <div>
+            <div style="font-weight:600; margin-bottom:0.2rem;">Uterotonic Medications</div>
+            <div style="font-size:0.85rem; color:var(--muted);">Routine precaution to support uterine contraction</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-banner" style="margin-top:1.4rem; max-width:820px;">
+      <div class="info-title">Reassurance</div>
+      These are <strong>routine precautions</strong> — not emergencies. Our team is prepared and watching.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 12 — Long-Term Outlook
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-12">
+    <div class="slide-label">Looking Ahead</div>
+    <h2 style="text-align:center; margin-bottom:1.4rem;">Your Child's <span class="highlight">Long-Term Health</span></h2>
+
+    <!-- Simple SVG growth arc -->
+    <svg width="560" height="110" viewBox="0 0 560 110" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:1.2rem;">
+      <!-- Arc line -->
+      <path d="M40 90 Q280 10 520 90" stroke="#58a6ff" stroke-width="2.5" fill="none" stroke-dasharray="6 3"/>
+      <!-- Baby icon -->
+      <circle cx="40" cy="90" r="18" fill="#1f2937" stroke="#58a6ff" stroke-width="2"/>
+      <text x="40" y="95" text-anchor="middle" fill="#58a6ff" font-size="16">👶</text>
+      <!-- Child icon -->
+      <circle cx="280" cy="50" r="18" fill="#1f2937" stroke="#3fb950" stroke-width="2"/>
+      <text x="280" y="55" text-anchor="middle" fill="#3fb950" font-size="16">🧒</text>
+      <!-- Adult icon -->
+      <circle cx="520" cy="90" r="18" fill="#1f2937" stroke="#bc8cff" stroke-width="2"/>
+      <text x="520" y="95" text-anchor="middle" fill="#bc8cff" font-size="16">🧑</text>
+      <!-- Labels -->
+      <text x="40" y="108" text-anchor="middle" fill="#8b949e" font-size="10" font-family="sans-serif">Birth</text>
+      <text x="280" y="28" text-anchor="middle" fill="#3fb950" font-size="10" font-family="sans-serif">Healthy Habits</text>
+      <text x="520" y="108" text-anchor="middle" fill="#8b949e" font-size="10" font-family="sans-serif">Adulthood</text>
+    </svg>
+
+    <div class="card-grid cols-2" style="max-width:760px;">
+      <div class="card" style="border-color:var(--orange);">
+        <div style="font-weight:600; color:var(--orange); margin-bottom:0.4rem;">Higher Risk Without Action</div>
+        <div style="font-size:0.9rem; color:var(--muted); line-height:1.5;">
+          Insulin resistance, obesity, and early cardiovascular disease in children born LGA
+        </div>
+      </div>
+      <div class="card" style="border-color:var(--green);">
+        <div style="font-weight:600; color:var(--green); margin-bottom:0.4rem;">Healthy Habits Change the Story</div>
+        <div style="font-size:0.9rem; color:var(--muted); line-height:1.5;">
+          Active lifestyle, balanced nutrition, and regular pediatric check-ups make a real difference
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 13 — Next Steps
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-13">
+    <div class="slide-label">Action Plan</div>
+    <h2 style="text-align:center; margin-bottom:1.6rem;">What Happens <span class="highlight">Next</span></h2>
+
+    <div class="timeline" style="max-width:680px;">
+      <div class="tl-item">
+        <div class="tl-num">1</div>
+        <div class="tl-text">Continued <strong>growth ultrasounds</strong> as clinically indicated</div>
+      </div>
+      <div class="tl-item" style="padding:0 0 0.2rem 0;">
+        <div class="tl-connector"><div class="tl-connector-line"></div></div>
+        <div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">2</div>
+        <div class="tl-text"><strong>Glucose monitoring</strong> review at your next visit</div>
+      </div>
+      <div class="tl-item" style="padding:0 0 0.2rem 0;">
+        <div class="tl-connector"><div class="tl-connector-line"></div></div>
+        <div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">3</div>
+        <div class="tl-text"><strong>Birth plan discussion</strong> at 36–37 weeks gestation</div>
+      </div>
+      <div class="tl-item" style="padding:0 0 0.2rem 0;">
+        <div class="tl-connector"><div class="tl-connector-line"></div></div>
+        <div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">4</div>
+        <div class="tl-text">Know your <strong>labor warning signs</strong> — when to call, when to go in</div>
+      </div>
+      <div class="tl-item" style="padding:0 0 0.2rem 0;">
+        <div class="tl-connector"><div class="tl-connector-line"></div></div>
+        <div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">5</div>
+        <div class="tl-text">Call us with <strong>any questions</strong> — no question is too small</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 14 — Closing / Partnership
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-14">
+    <div class="closing-ring">🤝</div>
+    <div class="slide-label">Partnership</div>
+    <h2 style="text-align:center; max-width:700px; margin-bottom:1rem;">
+      You Are <span class="highlight">Not Alone</span> in This
+    </h2>
+    <p class="body-text" style="margin-bottom:1.6rem;">
+      Our team is with you every step of the way.<br>
+      <strong>Ask questions. Share concerns. We plan together.</strong>
+    </p>
+    <div style="display:flex; gap:2rem; flex-wrap:wrap; justify-content:center; margin-top:0.5rem;">
+      <div style="text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.3rem;">📞</div>
+        <div style="font-size:0.85rem; color:var(--muted);">Call your care team</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.3rem;">📅</div>
+        <div style="font-size:0.85rem; color:var(--muted);">Attend every appointment</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.3rem;">💬</div>
+        <div style="font-size:0.85rem; color:var(--muted);">Ask all your questions</div>
+      </div>
+    </div>
+    <p class="source-note" style="margin-top:2rem;">MFM Care Team · ACOG &amp; SMFM Guideline-Based Counseling</p>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prevSlide()" title="Previous (←)">&#8592;</button>
+  <span class="nav-counter" id="navCounter">1 / 14</span>
+  <button onclick="nextSlide()" title="Next (→)">&#8594;</button>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const counter = document.getElementById('navCounter');
+  const progressBar = document.getElementById('progressBar');
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    counter.textContent = (index + 1) + ' / ' + total;
+    progressBar.style.width = ((index + 1) / total * 100) + '%';
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % total;
+    showSlide(currentSlide);
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + total) % total;
+    showSlide(currentSlide);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>

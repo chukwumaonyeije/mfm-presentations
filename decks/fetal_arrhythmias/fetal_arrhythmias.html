@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetal Arrhythmias – Chukwuma I. Onyeije, MD</title>
+    <style>
+        /* ── Reset & Base ── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:        #0d1117;
+            --surface:   #161b22;
+            --surface2:  #1c2330;
+            --border:    #30363d;
+            --text:      #e6edf3;
+            --muted:     #8b949e;
+            --accent:    #58a6ff;
+            --green:     #3fb950;
+            --orange:    #d29922;
+            --red:       #f85149;
+            --teal:      #39d0d8;
+            --purple:    #bc8cff;
+        }
+
+        html, body {
+            width: 100%; height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        /* ── Deck / Slide ── */
+        .deck { width: 100%; height: 100%; position: relative; }
+
+        .slide {
+            width: 100%; height: 100%;
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 3rem 5rem;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.45s ease;
+        }
+        .slide.active { opacity: 1; visibility: visible; }
+
+        /* ── Typography ── */
+        .slide-label {
+            font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--muted); margin-bottom: 0.6rem;
+        }
+        h1 { font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 300; line-height: 1.15; }
+        h2 { font-size: clamp(1.6rem, 3.2vw, 2.6rem); font-weight: 300; line-height: 1.2; }
+        h3 { font-size: clamp(1rem, 2vw, 1.5rem); font-weight: 500; }
+        p, li { font-size: clamp(0.9rem, 1.5vw, 1.15rem); line-height: 1.65; }
+
+        .accent  { color: var(--accent); }
+        .green   { color: var(--green); }
+        .orange  { color: var(--orange); }
+        .red     { color: var(--red); }
+        .teal    { color: var(--teal); }
+        .muted   { color: var(--muted); }
+
+        /* ── Divider ── */
+        .rule {
+            width: 60px; height: 3px; border-radius: 2px;
+            background: var(--accent); margin: 1rem auto;
+        }
+        .rule.green  { background: var(--green); }
+        .rule.orange { background: var(--orange); }
+        .rule.red    { background: var(--red); }
+        .rule.teal   { background: var(--teal); }
+
+        /* ── Layout helpers ── */
+        .cols { display: flex; gap: 3rem; width: 100%; align-items: flex-start; }
+        .col  { flex: 1; }
+        .center { text-align: center; }
+        .stack  { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+
+        /* ── Cards ── */
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 10px; padding: 1.4rem 1.8rem;
+        }
+        .card.accent-left  { border-left: 4px solid var(--accent); }
+        .card.green-left   { border-left: 4px solid var(--green); }
+        .card.orange-left  { border-left: 4px solid var(--orange); }
+        .card.red-left     { border-left: 4px solid var(--red); }
+        .card.teal-left    { border-left: 4px solid var(--teal); }
+        .card.purple-left  { border-left: 4px solid var(--purple); }
+
+        /* ── Stat badge ── */
+        .stat-badge {
+            display: inline-flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            background: var(--surface2); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.2rem 2rem;
+            min-width: 140px;
+        }
+        .stat-badge .num {
+            font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700;
+            line-height: 1;
+        }
+        .stat-badge .lbl {
+            font-size: 0.78rem; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--muted); margin-top: 0.3rem;
+        }
+
+        /* ── Table ── */
+        table { width: 100%; border-collapse: collapse; font-size: clamp(0.8rem, 1.3vw, 1rem); }
+        th {
+            background: var(--surface2); color: var(--muted);
+            font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+            padding: 0.7rem 1rem; text-align: left; border-bottom: 1px solid var(--border);
+        }
+        td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+        tr:last-child td { border-bottom: none; }
+
+        /* ── ECG SVG ── */
+        .ecg-wrap { width: 100%; overflow: hidden; border-radius: 8px; }
+
+        /* ── Heart rate bar ── */
+        .hr-bar-wrap { width: 100%; }
+        .hr-bar-track {
+            position: relative; height: 14px; border-radius: 7px;
+            background: var(--surface2); border: 1px solid var(--border);
+            overflow: visible; margin: 0.5rem 0;
+        }
+        .hr-bar-fill {
+            height: 100%; border-radius: 7px;
+            transition: width 0.6s ease;
+        }
+        .hr-marker {
+            position: absolute; top: -22px;
+            transform: translateX(-50%);
+            font-size: 0.72rem; color: var(--muted);
+        }
+        .hr-tick {
+            position: absolute; bottom: -18px;
+            transform: translateX(-50%);
+            font-size: 0.72rem; color: var(--muted);
+        }
+
+        /* ── Pill tags ── */
+        .pill {
+            display: inline-block; padding: 0.25rem 0.75rem;
+            border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+        .pill.green  { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+        .pill.orange { background: rgba(210,153,34,0.15); color: var(--orange); border: 1px solid rgba(210,153,34,0.3); }
+        .pill.red    { background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid rgba(248,81,73,0.3); }
+        .pill.accent { background: rgba(88,166,255,0.12); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+        .pill.teal   { background: rgba(57,208,216,0.12); color: var(--teal); border: 1px solid rgba(57,208,216,0.3); }
+
+        /* ── Flow diagram ── */
+        .flow-box {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; padding: 0.9rem 1.4rem;
+            text-align: center; font-size: clamp(0.8rem, 1.3vw, 1rem);
+        }
+        .flow-arrow {
+            text-align: center; font-size: 1.4rem; color: var(--muted);
+            line-height: 1.2;
+        }
+
+        /* ── Navigation ── */
+        #nav {
+            position: fixed; bottom: 1.4rem; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 1rem;
+            background: rgba(22,27,34,0.92); border: 1px solid var(--border);
+            border-radius: 40px; padding: 0.55rem 1.2rem;
+            backdrop-filter: blur(8px); z-index: 100;
+        }
+        #nav button {
+            background: none; border: none; cursor: pointer;
+            color: var(--muted); font-size: 1.1rem; padding: 0.2rem 0.5rem;
+            border-radius: 6px; transition: color 0.2s, background 0.2s;
+        }
+        #nav button:hover { color: var(--text); background: var(--surface2); }
+        #slide-counter { font-size: 0.8rem; color: var(--muted); min-width: 50px; text-align: center; }
+
+        /* ── Progress bar ── */
+        #progress {
+            position: fixed; top: 0; left: 0; height: 3px;
+            background: var(--accent); transition: width 0.4s ease;
+            z-index: 200;
+        }
+
+        /* ── Slide-specific backgrounds ── */
+        .slide-title { background: radial-gradient(ellipse at 70% 50%, #0d2340 0%, var(--bg) 65%); }
+        .slide-pac   { background: radial-gradient(ellipse at 30% 50%, #1a1a0d 0%, var(--bg) 65%); }
+        .slide-tachy { background: radial-gradient(ellipse at 70% 30%, #200d0d 0%, var(--bg) 65%); }
+        .slide-brady { background: radial-gradient(ellipse at 30% 70%, #0d1a20 0%, var(--bg) 65%); }
+        .slide-dx    { background: radial-gradient(ellipse at 50% 50%, #150d20 0%, var(--bg) 65%); }
+        .slide-close { background: radial-gradient(ellipse at 50% 50%, #0d2018 0%, var(--bg) 65%); }
+    </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/zONxSA-WrWUGoSJG4jzwW3WEMVNNRdxmx80cI8DOki72Iesoh-7av4bPejc1wm1A4cN0BFM7Bozi1_T7N18dffcEOsf8WmJxTtx2hX7UUrviGqxP_2BtTCXEoDtZ75a-2MrRMwF9A5mTfb6Pl_zrlIzrJqnEJxk20OaVw4fMK5-4C6zb7T_A6Dh3uQtCLyzWfd1Qktgt1HaPqUWgfXPe1LuyNSFG5ptwp4_N_0Y26RzyR3Y7sDnGQiR8uTCUQUmZxmkW_ymKWtEMFSWClZVwrB8LL3ZnWLfWtMIv56dHueQ9uXkMJSWQAY561Kap9EAVNtBU2RXUM3RqVpMjYTueXx6lDFvgEIUm5LwGulXn3CNYaM48V-Y0XYmLA1_88E0OB6ZEDTNYj-RyWaBeLn3cC9Sj4m68Ma4eR_hspozYg0dC9in0pq0tTSsnKiAYvzLzqgAumEkh7dWEcdbck9jklypP2IfI3ByAqptCMMgidK_5DtIs8f0sYD6QmQ9_X4M7eo2fi2xkVFYxLvUo25Bjjfik2nxXnWDmy0YwP9V_sbqjjjLhut5yBNSmQFbN7ZgxVs_aE0TmNaUxv92dlFJ0EXwodifwooMnEhaYSbwS25EE_bLi7GRwGYOEPxl6Z9OeO78epu7fxP9qc6XZrAA9fDK2VTtNPCzD-GQRI1GZnSjK3yd-i85vALrdcjrQCHMgQC-LTZEFkYCI-8OirhyT5gsgz097YS3DCOurAvTN9AjWMlCUKu5QkX9S3IB-imRm-wVV5ZeEpl6BTD8zzqhX9W53JQ3-j1_YHHpjN56wsJj_a4hPoh4F2nO3gLsAZAffd6rfv0nLbqar0QVsI_Cx_7Cam9iy6Ql2-bv68Xlu8IWwY40j1inZb5FpkjM8B6x_Ge7E8MqG-xCKxT7BiWgLZb7bNXGCCIO2qT-KTFe_oMDtqFX4nBdnmQPKctFwKKZSwO20GMEcQjVqTS4ff13XELGVROzGK6yogr2H2tzvtMbV9Rplt6pN6YBBHhm07ngFUin1CaY9HTuS1jqNqcEJj5VoR1ukEEIoJel3POq_LZongZHqgUMr4xwQhznAf0_QXuNOyAPvrfuarnDvI7zBAEM9oWrfTBYQvVrJeg8Om_wlzdOdWvXuOXrTEBIg2odT8s9-bD-y8Bt1clS5ceaBmPG5iMBVqXvfxGBGHi-6l8jgJ19QIWhLfH7R9rtNS0lDUD-Wist-BMdTXIBLsgOYucEoZZ-LkU0tnIRgh9UzM0N3_jNPhU2bhyxuhvZhiaZktSoCosVGMy3YJDjdy_Zz1iIjxr2dHOWciH_tHDzfLxcYlqaHUhG7yJXFl7iXY8ydT_BNIXJMW5DV9dzLG41Ga1JvQUM3QR9AY8wYjKRIzg0xkT14JamCaEncBWEi4rFTALO7ntiiDHh08IaNwUDepVy7U_cc_wynoL6XogrJQ840QH7iwhlSCj7Nr3YinkrVp5SqLDROo8ESBNYIBiuSw9aUf6BUDnZgbONA69SJupGZU3a3mmCLyv-BL2o-TMEl3xGIVa9xvmOGUEEut7M3IJBBu1jckGGfTSGqik6f-OMBsJrwGV6Yj8C_taxZftMM0V7dpZrwqndjOmCaj1MzBDkBNotejujkg-PhWhMVXNtDUd1SuQnEyqqxO2DMsVk7Sg0JdFSZP0ih0gx3ntN_WRAE-5t0PwBoYvdwP2747FbaFw'></script></head>
+<body>
+
+<div id="progress"></div>
+
+<div class="deck">
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 1 – TITLE
+    ══════════════════════════════════════════ -->
+    <div class="slide slide-title center active">
+        <div class="stack" style="align-items:center; max-width:700px;">
+            <div class="slide-label">Maternal-Fetal Medicine · Patient Education</div>
+            <h1>Fetal<br><span class="accent">Arrhythmias</span></h1>
+            <div class="rule"></div>
+            <p class="muted" style="font-size:1.1rem;">Understanding irregular heartbeats during pregnancy</p>
+            <p style="margin-top:1.5rem; font-size:0.95rem; color:var(--muted);">
+                Chukwuma I. Onyeije, MD &nbsp;·&nbsp; Maternal-Fetal Medicine
+            </p>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 2 – WHAT IS A FETAL ARRHYTHMIA?
+    ══════════════════════════════════════════ -->
+    <div class="slide center">
+        <div class="stack" style="align-items:center; max-width:780px;">
+            <div class="slide-label">Overview</div>
+            <h2>What is a Fetal Arrhythmia?</h2>
+            <div class="rule"></div>
+            <p>Any deviation from the normal fetal heart rate — in rate, regularity, or both.</p>
+
+            <!-- Heart rate spectrum bar -->
+            <div style="width:100%; margin-top:2rem;">
+                <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--muted); margin-bottom:0.4rem;">
+                    <span>Bradycardia</span>
+                    <span>Normal Range</span>
+                    <span>Tachycardia</span>
+                </div>
+                <div style="position:relative; height:28px; border-radius:14px; overflow:hidden; background:var(--surface2); border:1px solid var(--border);">
+                    <!-- Brady zone -->
+                    <div style="position:absolute; left:0; top:0; width:22%; height:100%; background:rgba(88,166,255,0.35);"></div>
+                    <!-- Normal zone -->
+                    <div style="position:absolute; left:22%; top:0; width:44%; height:100%; background:rgba(63,185,80,0.35);"></div>
+                    <!-- Tachy zone -->
+                    <div style="position:absolute; left:66%; top:0; width:34%; height:100%; background:rgba(248,81,73,0.35);"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--muted); margin-top:0.4rem;">
+                    <span>&lt;110 bpm</span>
+                    <span class="green" style="font-weight:600;">110 – 160 bpm</span>
+                    <span>&gt;160 bpm</span>
+                </div>
+            </div>
+
+            <p style="margin-top:1.2rem;" class="muted">
+                Arrhythmias may arise from structural heart defects or primary electrical conduction issues in a structurally normal heart.
+            </p>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 3 – HOW COMMON?
+    ══════════════════════════════════════════ -->
+    <div class="slide center">
+        <div class="stack" style="align-items:center; max-width:720px;">
+            <div class="slide-label">Epidemiology</div>
+            <h2>How Common Are They?</h2>
+            <div class="rule green"></div>
+
+            <div style="display:flex; gap:2rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+                <div class="stat-badge">
+                    <span class="num accent">1–2%</span>
+                    <span class="lbl">of all pregnancies</span>
+                </div>
+                <div class="stat-badge">
+                    <span class="num green">~90%</span>
+                    <span class="lbl">are benign PACs</span>
+                </div>
+                <div class="stat-badge">
+                    <span class="num orange">~10%</span>
+                    <span class="lbl">require evaluation</span>
+                </div>
+            </div>
+
+            <div class="card green-left" style="margin-top:1.8rem; text-align:left;">
+                <p>
+                    <strong class="green">Reassuring perspective:</strong> The vast majority of fetal arrhythmias detected during routine prenatal care are premature atrial contractions — benign, self-limited, and requiring only monitoring.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 4 – CLASSIFICATION
+    ══════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="stack" style="max-width:900px; width:100%;">
+            <div class="center">
+                <div class="slide-label">Classification</div>
+                <h2>Types of Fetal Arrhythmias</h2>
+                <div class="rule accent"></div>
+            </div>
+
+            <table style="margin-top:0.5rem;">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Heart Rate</th>
+                        <th>Common Examples</th>
+                        <th>Clinical Risk</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="pill orange">Irregular</span></td>
+                        <td>Normal baseline with extra beats</td>
+                        <td>Premature Atrial Contractions (PACs)</td>
+                        <td><span class="green">Very low (&lt;1% progression)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="pill red">Tachyarrhythmia</span></td>
+                        <td>Persistently &gt;160–180 bpm</td>
+                        <td>SVT, Atrial Flutter</td>
+                        <td><span class="orange">Moderate–high; hydrops risk</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="pill accent">Bradyarrhythmia</span></td>
+                        <td>Persistently &lt;110 bpm</td>
+                        <td>Complete AV Block (CAVB)</td>
+                        <td><span class="orange">Variable; immune-mediated</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 5 – PACs: WHAT ARE THEY?
+    ══════════════════════════════════════════ -->
+    <div class="slide slide-pac">
+        <div class="cols" style="max-width:1000px; width:100%; align-items:center;">
+            <!-- ECG diagram -->
+            <div class="col" style="flex:1.1;">
+                <div class="slide-label">Irregular Rhythm</div>
+                <h2>Premature Atrial<br><span class="orange">Contractions</span></h2>
+                <div class="rule orange"></div>
+                <p style="margin-top:0.8rem;">
+                    An extra heartbeat that originates in the upper chambers (atria) and fires <em>earlier</em> than expected — creating a brief irregularity in the rhythm.
+                </p>
+                <div style="margin-top:1.2rem; display:flex; gap:0.7rem; flex-wrap:wrap;">
+                    <span class="pill green">Most common arrhythmia</span>
+                    <span class="pill orange">Extra "early" beat</span>
+                    <span class="pill green">Structurally normal heart</span>
+                </div>
+            </div>
+
+            <!-- SVG ECG comparison -->
+            <div class="col" style="flex:1.2;">
+                <!-- PAC ECG -->
+                <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1rem; margin-bottom:1rem;">
+                    <div style="font-size:0.72rem; color:var(--orange); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.5rem;">PAC Pattern</div>
+                    <svg viewBox="0 0 400 80" width="100%" style="display:block;">
+                        <rect width="400" height="80" fill="none"/>
+                        <!-- Grid lines -->
+                        <line x1="0" y1="40" x2="400" y2="40" stroke="#30363d" stroke-width="0.5"/>
+                        <!-- Normal beat 1 -->
+                        <polyline points="10,40 30,40 35,20 40,60 45,40 60,40" fill="none" stroke="#3fb950" stroke-width="1.5"/>
+                        <!-- Normal beat 2 -->
+                        <polyline points="80,40 100,40 105,20 110,60 115,40 130,40" fill="none" stroke="#3fb950" stroke-width="1.5"/>
+                        <!-- PAC (early, smaller) -->
+                        <polyline points="148,40 158,40 162,28 166,52 170,40 182,40" fill="none" stroke="#d29922" stroke-width="2" stroke-dasharray="none"/>
+                        <text x="155" y="16" fill="#d29922" font-size="9" text-anchor="middle">PAC</text>
+                        <!-- Compensatory pause -->
+                        <polyline points="182,40 220,40" fill="none" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="4,3"/>
+                        <!-- Normal beat 3 -->
+                        <polyline points="220,40 240,40 245,20 250,60 255,40 270,40" fill="none" stroke="#3fb950" stroke-width="1.5"/>
+                        <!-- Normal beat 4 -->
+                        <polyline points="290,40 310,40 315,20 320,60 325,40 340,40" fill="none" stroke="#3fb950" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <!-- Normal ECG -->
+                <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1rem;">
+                    <div style="font-size:0.72rem; color:var(--green); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.5rem;">Normal Sinus Rhythm</div>
+                    <svg viewBox="0 0 400 80" width="100%" style="display:block;">
+                        <rect width="400" height="80" fill="none"/>
+                        <line x1="0" y1="40" x2="400" y2="40" stroke="#30363d" stroke-width="0.5"/>
+                        <polyline points="10,40 30,40 35,20 40,60 45,40 60,40" fill="none" stroke="#3fb950" stroke-width="1.5"/>
+                        <polyline points="80,40 100,40 105,20 110,60 115,40 130,40" fill="none" stroke="#3fb950" stroke-width="1.5"/>
+                        <polyline points="150,40 170,40 175,20 180,60 185,40 200,40" fill="none" stroke="#3fb950" stroke-width="1.5"/>
+                        <polyline points="220,40 240,40 245,20 250,60 255,40 270,40" fill="none" stroke="#3fb950" stroke-width="1.5"/>
+                        <polyline points="290,40 310,40 315,20 320,60 325,40 340,40" fill="none" stroke="#3fb950" stroke-width="1.5"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 6 – PACs: PROGNOSIS & MANAGEMENT
+    ══════════════════════════════════════════ -->
+    <div class="slide slide-pac">
+        <div class="stack" style="max-width:900px; width:100%;">
+            <div class="center">
+                <div class="slide-label">PACs – Management</div>
+                <h2>What Happens with PACs?</h2>
+                <div class="rule orange"></div>
+            </div>
+
+            <div class="cols" style="margin-top:0.5rem;">
+                <div class="col stack">
+                    <div class="card green-left">
+                        <h3 class="green" style="margin-bottom:0.4rem;">Natural Course</h3>
+                        <p>PACs resolve spontaneously in the vast majority of cases as the fetal conduction system matures — often before or shortly after birth.</p>
+                    </div>
+                    <div class="card orange-left">
+                        <h3 class="orange" style="margin-bottom:0.4rem;">Small Risk of Progression</h3>
+                        <p>Approximately <strong>0.4%</strong> of fetuses with PACs may develop a sustained tachyarrhythmia such as SVT or atrial flutter.</p>
+                    </div>
+                </div>
+                <div class="col stack">
+                    <div class="card accent-left">
+                        <h3 class="accent" style="margin-bottom:0.4rem;">Monitoring Plan</h3>
+                        <p>Weekly fetal heart rate assessment — via auscultation or ultrasound — until the rhythm resolves or delivery.</p>
+                    </div>
+                    <div class="card" style="border-left:4px solid var(--muted);">
+                        <h3 style="margin-bottom:0.4rem; color:var(--muted);">Associated Findings</h3>
+                        <p>Occasionally associated with a redundant foramen ovale flap. Rarely linked to congenital heart defects (CHD).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 7 – TACHYARRHYTHMIAS: OVERVIEW
+    ══════════════════════════════════════════ -->
+    <div class="slide slide-tachy">
+        <div class="cols" style="max-width:1000px; width:100%; align-items:center;">
+            <div class="col">
+                <div class="slide-label">Fast Rhythms</div>
+                <h2>Fetal<br><span class="red">Tachyarrhythmias</span></h2>
+                <div class="rule red"></div>
+                <p style="margin-top:0.8rem;">
+                    A sustained fetal heart rate exceeding <strong>160–180 bpm</strong>. Persistent tachycardia can impair cardiac output and lead to fetal heart failure.
+                </p>
+                <div style="margin-top:1.5rem;" class="stack">
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:0.8rem 1.2rem;">
+                        <span style="font-size:0.85rem;">Supraventricular Tachycardia (SVT)</span>
+                        <span class="pill red">220–260 bpm</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:0.8rem 1.2rem;">
+                        <span style="font-size:0.85rem;">Atrial Flutter</span>
+                        <span class="pill red">300–500 bpm atrial</span>
+                    </div>
+                </div>
+            </div>
+            <!-- SVG fast ECG -->
+            <div class="col">
+                <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.2rem;">
+                    <div style="font-size:0.72rem; color:var(--red); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.5rem;">Tachycardia Pattern (&gt;180 bpm)</div>
+                    <svg viewBox="0 0 400 80" width="100%" style="display:block;">
+                        <rect width="400" height="80" fill="none"/>
+                        <line x1="0" y1="40" x2="400" y2="40" stroke="#30363d" stroke-width="0.5"/>
+                        <!-- Rapid beats -->
+                        <polyline points="5,40 15,40 18,18 21,62 24,40 34,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                        <polyline points="34,40 44,40 47,18 50,62 53,40 63,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                        <polyline points="63,40 73,40 76,18 79,62 82,40 92,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                        <polyline points="92,40 102,40 105,18 108,62 111,40 121,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                        <polyline points="121,40 131,40 134,18 137,62 140,40 150,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                        <polyline points="150,40 160,40 163,18 166,62 169,40 179,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                        <polyline points="179,40 189,40 192,18 195,62 198,40 208,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                        <polyline points="208,40 218,40 221,18 224,62 227,40 237,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                        <polyline points="237,40 247,40 250,18 253,62 256,40 266,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                        <polyline points="266,40 276,40 279,18 282,62 285,40 295,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                        <polyline points="295,40 305,40 308,18 311,62 314,40 324,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                        <polyline points="324,40 334,40 337,18 340,62 343,40 353,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                        <polyline points="353,40 363,40 366,18 369,62 372,40 382,40" fill="none" stroke="#f85149" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <div class="card red-left" style="margin-top:1rem;">
+                    <p style="font-size:0.9rem;">
+                        SVT occurs in approximately <strong>1 in 2,000 pregnancies</strong> and is the most clinically significant fetal tachyarrhythmia.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 8 – TACHYARRHYTHMIAS: HYDROPS RISK
+    ══════════════════════════════════════════ -->
+    <div class="slide slide-tachy">
+        <div class="stack" style="max-width:860px; width:100%;">
+            <div class="center">
+                <div class="slide-label">Tachyarrhythmias – Risk</div>
+                <h2>Why Does Sustained Tachycardia Matter?</h2>
+                <div class="rule red"></div>
+            </div>
+
+            <div class="cols" style="margin-top:0.5rem; align-items:stretch;">
+                <div class="col stack">
+                    <div class="card red-left" style="flex:1;">
+                        <h3 class="red" style="margin-bottom:0.5rem;">Hydrops Fetalis</h3>
+                        <p>Persistent rapid heart rate reduces cardiac output, causing fluid to accumulate in fetal body cavities (abdomen, chest, skin). This is a serious complication requiring urgent intervention.</p>
+                    </div>
+                </div>
+                <div class="col stack">
+                    <div class="card orange-left" style="flex:1;">
+                        <h3 class="orange" style="margin-bottom:0.5rem;">SVT vs. Atrial Flutter</h3>
+                        <p>SVT features 1:1 AV conduction at 220–260 bpm. Atrial flutter has atrial rates of 300–500 bpm with variable AV block (often 2:1), resulting in a ventricular rate of ~150–250 bpm.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card green-left" style="margin-top:0.5rem;">
+                <h3 class="green" style="margin-bottom:0.4rem;">Treatment Is Highly Effective</h3>
+                <p>
+                    Transplacental antiarrhythmic therapy — using medications such as <strong>digoxin</strong>, <strong>flecainide</strong>, or <strong>sotalol</strong> — is highly effective, particularly when initiated before the onset of hydrops.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 9 – BRADYARRHYTHMIAS: OVERVIEW
+    ══════════════════════════════════════════ -->
+    <div class="slide slide-brady">
+        <div class="cols" style="max-width:1000px; width:100%; align-items:center;">
+            <div class="col">
+                <div class="slide-label">Slow Rhythms</div>
+                <h2>Fetal<br><span class="accent">Bradyarrhythmias</span></h2>
+                <div class="rule accent"></div>
+                <p style="margin-top:0.8rem;">
+                    A sustained fetal heart rate below <strong>110 bpm</strong>. The most severe form is <strong>Complete Atrioventricular Block (CAVB)</strong>, in which the atria and ventricles beat independently.
+                </p>
+                <div style="margin-top:1.2rem;" class="stack">
+                    <div class="card accent-left">
+                        <p style="font-size:0.9rem;">
+                            CAVB occurs in approximately <strong>1 in 20,000</strong> live births. Approximately <strong>50%</strong> of cases are associated with maternal autoimmune antibodies.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- SVG slow ECG -->
+            <div class="col">
+                <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.2rem;">
+                    <div style="font-size:0.72rem; color:var(--accent); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.5rem;">Bradycardia Pattern (&lt;110 bpm)</div>
+                    <svg viewBox="0 0 400 80" width="100%" style="display:block;">
+                        <rect width="400" height="80" fill="none"/>
+                        <line x1="0" y1="40" x2="400" y2="40" stroke="#30363d" stroke-width="0.5"/>
+                        <!-- Slow beats with independent P waves (CAVB) -->
+                        <!-- P waves (atrial, faster) -->
+                        <polyline points="10,40 20,40 23,32 26,40 36,40 39,32 42,40 52,40 55,32 58,40 68,40 71,32 74,40 84,40 87,32 90,40 100,40 103,32 106,40 116,40 119,32 122,40 132,40 135,32 138,40 148,40 151,32 154,40 164,40 167,32 170,40 180,40 183,32 186,40 196,40 199,32 202,40 212,40 215,32 218,40 228,40 231,32 234,40 244,40 247,32 250,40 260,40 263,32 266,40 276,40 279,32 282,40 292,40 295,32 298,40 308,40 311,32 314,40 324,40 327,32 330,40 340,40 343,32 346,40 356,40 359,32 362,40 372,40 375,32 378,40 390,40" fill="none" stroke="rgba(88,166,255,0.5)" stroke-width="1"/>
+                        <!-- Ventricular beats (slow, independent) -->
+                        <polyline points="50,40 70,40 75,12 80,68 85,40 110,40" fill="none" stroke="#58a6ff" stroke-width="2"/>
+                        <polyline points="180,40 200,40 205,12 210,68 215,40 240,40" fill="none" stroke="#58a6ff" stroke-width="2"/>
+                        <polyline points="310,40 330,40 335,12 340,68 345,40 370,40" fill="none" stroke="#58a6ff" stroke-width="2"/>
+                        <!-- Labels -->
+                        <text x="75" y="10" fill="rgba(88,166,255,0.7)" font-size="8" text-anchor="middle">V</text>
+                        <text x="205" y="10" fill="rgba(88,166,255,0.7)" font-size="8" text-anchor="middle">V</text>
+                        <text x="335" y="10" fill="rgba(88,166,255,0.7)" font-size="8" text-anchor="middle">V</text>
+                    </svg>
+                    <p style="font-size:0.72rem; color:var(--muted); margin-top:0.4rem;">Atrial (P) and ventricular (V) activity are dissociated in CAVB</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 10 – BRADYARRHYTHMIAS: CAUSE & MANAGEMENT
+    ══════════════════════════════════════════ -->
+    <div class="slide slide-brady">
+        <div class="stack" style="max-width:900px; width:100%;">
+            <div class="center">
+                <div class="slide-label">Bradyarrhythmias – Cause &amp; Management</div>
+                <h2>What Causes CAVB?</h2>
+                <div class="rule teal"></div>
+            </div>
+
+            <!-- Flow diagram -->
+            <div style="display:flex; gap:0.5rem; align-items:center; margin-top:0.5rem; flex-wrap:wrap; justify-content:center;">
+                <div class="flow-box" style="border-color:var(--teal); flex:1; min-width:160px;">
+                    <div style="font-size:0.72rem; color:var(--teal); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.3rem;">Maternal</div>
+                    Anti-Ro (SS-A) &amp;<br>Anti-La (SS-B)<br>antibodies
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box" style="flex:1; min-width:160px;">
+                    Cross placenta<br>to fetal circulation
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box" style="border-color:var(--accent); flex:1; min-width:160px;">
+                    Inflammation &amp;<br>fibrosis of fetal<br>AV conduction system
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box" style="border-color:var(--red); flex:1; min-width:160px;">
+                    <div style="font-size:0.72rem; color:var(--red); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.3rem;">Result</div>
+                    Complete AV Block
+                </div>
+            </div>
+
+            <div class="cols" style="margin-top:1rem;">
+                <div class="col card teal-left">
+                    <h3 class="teal" style="margin-bottom:0.4rem;">Monitoring</h3>
+                    <p>Serial fetal echocardiography to assess cardiac function, ventricular rate, and signs of hydrops.</p>
+                </div>
+                <div class="col card accent-left">
+                    <h3 class="accent" style="margin-bottom:0.4rem;">Treatment Considerations</h3>
+                    <p>Fluorinated corticosteroids (e.g., dexamethasone) are used in immune-mediated cases. Efficacy remains under evaluation in ongoing clinical trials.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 11 – DIAGNOSTIC TOOLS
+    ══════════════════════════════════════════ -->
+    <div class="slide slide-dx">
+        <div class="stack" style="max-width:920px; width:100%;">
+            <div class="center">
+                <div class="slide-label">Diagnosis</div>
+                <h2>How We Evaluate Fetal Arrhythmias</h2>
+                <div class="rule" style="background:var(--purple);"></div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-top:0.5rem;">
+                <!-- M-Mode -->
+                <div class="card" style="border-top:3px solid var(--accent);">
+                    <div style="font-size:1.8rem; margin-bottom:0.5rem;">📡</div>
+                    <h3 class="accent" style="margin-bottom:0.4rem; font-size:1rem;">M-Mode Echo</h3>
+                    <p style="font-size:0.85rem;">Simultaneous visualization of atrial and ventricular wall motion — determines the relationship between contractions.</p>
+                </div>
+                <!-- Doppler -->
+                <div class="card" style="border-top:3px solid var(--teal);">
+                    <div style="font-size:1.8rem; margin-bottom:0.5rem;">🔊</div>
+                    <h3 class="teal" style="margin-bottom:0.4rem; font-size:1rem;">Doppler Ultrasound</h3>
+                    <p style="font-size:0.85rem;">Evaluates blood flow in the superior vena cava and ascending aorta to measure AV intervals and mechanical conduction times.</p>
+                </div>
+                <!-- fMCG -->
+                <div class="card" style="border-top:3px solid var(--purple);">
+                    <div style="font-size:1.8rem; margin-bottom:0.5rem;">🧲</div>
+                    <h3 style="color:var(--purple); margin-bottom:0.4rem; font-size:1rem;">Fetal MCG</h3>
+                    <p style="font-size:0.85rem;">Non-invasive recording of magnetic fields from fetal cardiac electrical activity — provides more precise electrophysiological data than ultrasound alone.</p>
+                </div>
+            </div>
+
+            <div class="card red-left" style="margin-top:0.8rem;">
+                <p style="font-size:0.9rem;">
+                    <strong class="red">Important:</strong> Any fetus with a sustained tachyarrhythmia or bradyarrhythmia requires urgent referral to a tertiary care center for specialized echocardiography and potential intrauterine therapy.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 12 – MANAGEMENT OVERVIEW
+    ══════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="stack" style="max-width:900px; width:100%;">
+            <div class="center">
+                <div class="slide-label">Management</div>
+                <h2>How Are Fetal Arrhythmias Managed?</h2>
+                <div class="rule green"></div>
+            </div>
+
+            <table style="margin-top:0.5rem;">
+                <thead>
+                    <tr>
+                        <th>Arrhythmia</th>
+                        <th>Primary Approach</th>
+                        <th>Medications / Interventions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="pill orange">PACs</span></td>
+                        <td>Weekly FHR monitoring; reassurance</td>
+                        <td>No medication required in most cases</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pill red">SVT / Atrial Flutter</span></td>
+                        <td>Transplacental antiarrhythmic therapy</td>
+                        <td>Digoxin, Flecainide, Sotalol (maternal administration)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pill accent">CAVB</span></td>
+                        <td>Serial fetal echocardiography</td>
+                        <td>Dexamethasone (immune-mediated); neonatal pacemaker if indicated</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="card green-left" style="margin-top:0.8rem;">
+                <p style="font-size:0.9rem;">
+                    Management depends on arrhythmia type, gestational age at diagnosis, and the presence or absence of fetal hydrops. A multidisciplinary team — including MFM specialists and pediatric cardiologists — guides all treatment decisions.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 13 – CLOSING / PARTNERSHIP
+    ══════════════════════════════════════════ -->
+    <div class="slide slide-close center">
+        <div class="stack" style="align-items:center; max-width:720px;">
+            <div class="slide-label">Summary</div>
+            <h2>Key Takeaways</h2>
+            <div class="rule green"></div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:0.5rem; text-align:left; width:100%;">
+                <div class="card green-left">
+                    <h3 class="green" style="font-size:0.95rem; margin-bottom:0.3rem;">Most Are Benign</h3>
+                    <p style="font-size:0.85rem;">The majority of fetal arrhythmias are PACs — benign and self-resolving.</p>
+                </div>
+                <div class="card accent-left">
+                    <h3 class="accent" style="font-size:0.95rem; margin-bottom:0.3rem;">Monitoring Matters</h3>
+                    <p style="font-size:0.85rem;">Regular surveillance allows early detection of any progression.</p>
+                </div>
+                <div class="card orange-left">
+                    <h3 class="orange" style="font-size:0.95rem; margin-bottom:0.3rem;">Treatment Works</h3>
+                    <p style="font-size:0.85rem;">Tachyarrhythmias respond well to transplacental medication therapy.</p>
+                </div>
+                <div class="card teal-left">
+                    <h3 class="teal" style="font-size:0.95rem; margin-bottom:0.3rem;">Your Team Is Here</h3>
+                    <p style="font-size:0.85rem;">MFM specialists and pediatric cardiologists work together for your baby.</p>
+                </div>
+            </div>
+
+            <p style="margin-top:1.5rem; color:var(--muted); font-size:0.9rem;">
+                Questions are always welcome. Your care team is your partner throughout this journey.
+            </p>
+            <p style="margin-top:0.8rem; font-size:0.8rem; color:var(--muted);">
+                Chukwuma I. Onyeije, MD &nbsp;·&nbsp; Maternal-Fetal Medicine
+            </p>
+        </div>
+    </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div id="nav">
+    <button onclick="prevSlide()" title="Previous (←)">&#8592;</button>
+    <span id="slide-counter">1 / 13</span>
+    <button onclick="nextSlide()" title="Next (→)">&#8594;</button>
+</div>
+
+<script>
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slide-counter');
+    const progress = document.getElementById('progress');
+    const total = slides.length;
+
+    function showSlide(idx) {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === idx);
+        });
+        counter.textContent = (idx + 1) + ' / ' + total;
+        progress.style.width = ((idx + 1) / total * 100) + '%';
+    }
+
+    function nextSlide() {
+        current = (current + 1) % total;
+        showSlide(current);
+    }
+
+    function prevSlide() {
+        current = (current - 1 + total) % total;
+        showSlide(current);
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+    }, { passive: true });
+
+    showSlide(0);
+</script>
+</body>
+</html>
