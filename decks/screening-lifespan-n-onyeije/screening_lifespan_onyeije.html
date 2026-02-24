@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preventive Screening Across the Female Lifespan | Nwaozichi Onyeije, CNM</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --bg2:       #161b22;
+      --bg3:       #1c2333;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent1:   #58a6ff;   /* blue  – adolescence */
+      --accent2:   #3fb950;   /* green – early/middle adulthood */
+      --accent3:   #d29922;   /* amber – perimenopause */
+      --accent4:   #f78166;   /* coral – menopause */
+      --teal:      #39d353;
+      --purple:    #bc8cff;
+      --pink:      #ff7b72;
+      --grade-a:   #3fb950;
+      --grade-b:   #58a6ff;
+      --grade-c:   #d29922;
+      --grade-i:   #8b949e;
+    }
+
+    html, body {
+      height: 100%; width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── DECK ── */
+    .deck { position: relative; width: 100vw; height: 100vh; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity .45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── HEADER BAR ── */
+    .slide-header {
+      position: absolute; top: 0; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .6rem 2rem;
+      border-bottom: 1px solid var(--border);
+      font-size: .72rem; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .slide-header .presenter { color: var(--text); font-weight: 500; }
+    .slide-header .section-tag {
+      padding: .2rem .7rem; border-radius: 20px;
+      font-size: .65rem; font-weight: 600; letter-spacing: .1em;
+    }
+
+    /* ── FOOTER ── */
+    .slide-footer {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      display: flex; justify-content: center; align-items: center; gap: 1rem;
+      padding: .6rem 2rem;
+      border-top: 1px solid var(--border);
+      font-size: .68rem; color: var(--muted);
+    }
+    .slide-footer .source { font-style: italic; }
+
+    /* ── NAVIGATION ── */
+    .nav {
+      position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: .5rem;
+      background: rgba(22,27,34,.9); border: 1px solid var(--border);
+      border-radius: 30px; padding: .4rem .9rem;
+      z-index: 100; backdrop-filter: blur(8px);
+    }
+    .nav button {
+      background: none; border: none; cursor: pointer;
+      color: var(--text); font-size: 1rem; padding: .3rem .6rem;
+      border-radius: 6px; transition: background .2s;
+    }
+    .nav button:hover { background: var(--bg3); }
+    .nav .counter { font-size: .75rem; color: var(--muted); min-width: 4rem; text-align: center; }
+
+    /* ── TYPOGRAPHY ── */
+    h1 { font-size: clamp(2.2rem, 4vw, 3.8rem); font-weight: 300; line-height: 1.15; }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.6rem); font-weight: 300; line-height: 1.2; }
+    h3 { font-size: clamp(1rem, 1.8vw, 1.4rem); font-weight: 500; }
+    p, li { font-size: clamp(.85rem, 1.3vw, 1.05rem); line-height: 1.6; }
+    .subtitle { font-size: clamp(.9rem, 1.5vw, 1.2rem); color: var(--muted); margin-top: .5rem; }
+    .divider { width: 3rem; height: 2px; background: var(--accent1); margin: 1rem auto; }
+    .tag {
+      display: inline-block; padding: .25rem .8rem; border-radius: 20px;
+      font-size: .65rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; margin-bottom: 1rem;
+    }
+
+    /* ── CARDS ── */
+    .card-grid {
+      display: grid; gap: 1.2rem; width: 100%; max-width: 1000px;
+    }
+    .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .card-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+    .card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.2rem 1.4rem;
+    }
+    .card .card-label {
+      font-size: .65rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; margin-bottom: .5rem;
+    }
+    .card h3 { margin-bottom: .4rem; }
+    .card p, .card li { font-size: .85rem; color: var(--muted); }
+    .card ul { padding-left: 1.1rem; }
+    .card ul li { margin-bottom: .2rem; }
+    .card .grade-badge {
+      display: inline-block; padding: .15rem .55rem; border-radius: 4px;
+      font-size: .65rem; font-weight: 700; margin-top: .5rem;
+    }
+
+    /* ── STAT BOXES ── */
+    .stat-row {
+      display: flex; gap: 1.5rem; justify-content: center;
+      flex-wrap: wrap; width: 100%; max-width: 900px;
+    }
+    .stat-box {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.2rem 1.8rem;
+      text-align: center; flex: 1; min-width: 140px;
+    }
+    .stat-box .stat-num {
+      font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; line-height: 1;
+    }
+    .stat-box .stat-label { font-size: .78rem; color: var(--muted); margin-top: .3rem; }
+
+    /* ── TABLE ── */
+    .data-table {
+      width: 100%; max-width: 1000px; border-collapse: collapse;
+      font-size: .82rem;
+    }
+    .data-table th {
+      background: var(--bg3); color: var(--muted);
+      font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
+      padding: .6rem 1rem; text-align: left; border-bottom: 1px solid var(--border);
+    }
+    .data-table td {
+      padding: .65rem 1rem; border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: var(--bg3); }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      display: flex; align-items: flex-start; gap: 0;
+      width: 100%; max-width: 900px; position: relative;
+    }
+    .timeline::before {
+      content: ''; position: absolute; top: 2rem; left: 2rem; right: 2rem;
+      height: 2px; background: var(--border); z-index: 0;
+    }
+    .tl-item {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; text-align: center; position: relative; z-index: 1;
+    }
+    .tl-dot {
+      width: 3.5rem; height: 3.5rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700; border: 2px solid var(--border);
+      background: var(--bg2); margin-bottom: .7rem;
+    }
+    .tl-title { font-size: .85rem; font-weight: 600; margin-bottom: .2rem; }
+    .tl-sub { font-size: .72rem; color: var(--muted); }
+
+    /* ── TWO-COLUMN ── */
+    .two-col {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+      width: 100%; max-width: 1000px;
+    }
+    .col-panel {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.4rem 1.6rem;
+    }
+    .col-panel h3 { margin-bottom: .8rem; }
+    .col-panel ul { padding-left: 1.1rem; }
+    .col-panel li { font-size: .85rem; color: var(--muted); margin-bottom: .35rem; }
+
+    /* ── GRADE LEGEND ── */
+    .grade-legend {
+      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      margin-top: .8rem;
+    }
+    .grade-item {
+      display: flex; align-items: center; gap: .4rem;
+      font-size: .72rem; color: var(--muted);
+    }
+    .grade-dot { width: .7rem; height: .7rem; border-radius: 50%; }
+
+    /* ── SECTION DIVIDER SLIDE ── */
+    .section-slide { text-align: center; }
+    .section-slide .section-num {
+      font-size: .7rem; font-weight: 700; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: .5rem;
+    }
+    .section-slide h1 { font-size: clamp(2rem, 5vw, 4rem); }
+    .section-slide .section-desc { font-size: 1rem; color: var(--muted); margin-top: .8rem; }
+
+    /* ── CLOSING ── */
+    .closing { text-align: center; }
+    .closing .icon { font-size: 3rem; margin-bottom: 1rem; }
+
+    /* ── COLORS ── */
+    .c-blue   { color: var(--accent1); }
+    .c-green  { color: var(--accent2); }
+    .c-amber  { color: var(--accent3); }
+    .c-coral  { color: var(--accent4); }
+    .c-purple { color: var(--purple); }
+    .c-teal   { color: var(--teal); }
+    .c-muted  { color: var(--muted); }
+
+    .bg-blue   { background: rgba(88,166,255,.12); border-color: rgba(88,166,255,.3); }
+    .bg-green  { background: rgba(63,185,80,.12);  border-color: rgba(63,185,80,.3); }
+    .bg-amber  { background: rgba(210,153,34,.12); border-color: rgba(210,153,34,.3); }
+    .bg-coral  { background: rgba(247,129,102,.12);border-color: rgba(247,129,102,.3); }
+    .bg-purple { background: rgba(188,140,255,.12);border-color: rgba(188,140,255,.3); }
+
+    .tag-blue   { background: rgba(88,166,255,.15);  color: var(--accent1); }
+    .tag-green  { background: rgba(63,185,80,.15);   color: var(--accent2); }
+    .tag-amber  { background: rgba(210,153,34,.15);  color: var(--accent3); }
+    .tag-coral  { background: rgba(247,129,102,.15); color: var(--accent4); }
+    .tag-purple { background: rgba(188,140,255,.15); color: var(--purple); }
+    .tag-muted  { background: var(--bg3); color: var(--muted); }
+
+    .grade-a-bg { background: rgba(63,185,80,.2);  color: var(--grade-a); }
+    .grade-b-bg { background: rgba(88,166,255,.2); color: var(--grade-b); }
+    .grade-c-bg { background: rgba(210,153,34,.2); color: var(--grade-c); }
+    .grade-i-bg { background: rgba(139,148,158,.2);color: var(--grade-i); }
+
+    .border-blue   { border-left: 3px solid var(--accent1) !important; }
+    .border-green  { border-left: 3px solid var(--accent2) !important; }
+    .border-amber  { border-left: 3px solid var(--accent3) !important; }
+    .border-coral  { border-left: 3px solid var(--accent4) !important; }
+    .border-purple { border-left: 3px solid var(--purple) !important; }
+
+    /* ── ICON ROW ── */
+    .icon-row {
+      display: flex; gap: 2rem; justify-content: center;
+      flex-wrap: wrap; width: 100%; max-width: 900px;
+    }
+    .icon-item { text-align: center; flex: 1; min-width: 120px; }
+    .icon-item .icon-circle {
+      width: 3.5rem; height: 3.5rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin: 0 auto .6rem;
+    }
+    .icon-item .icon-title { font-size: .85rem; font-weight: 600; margin-bottom: .2rem; }
+    .icon-item .icon-sub { font-size: .72rem; color: var(--muted); }
+
+    /* ── IMPLICATIONS BOX ── */
+    .implication-list { width: 100%; max-width: 900px; }
+    .implication-item {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: .8rem 1rem; border-radius: 8px;
+      background: var(--bg2); border: 1px solid var(--border);
+      margin-bottom: .6rem;
+    }
+    .implication-item .imp-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: .1rem; }
+    .implication-item .imp-text h4 { font-size: .9rem; margin-bottom: .2rem; }
+    .implication-item .imp-text p { font-size: .8rem; color: var(--muted); }
+
+    /* ── COMPARISON ── */
+    .compare-table {
+      width: 100%; max-width: 1000px; border-collapse: collapse; font-size: .82rem;
+    }
+    .compare-table th {
+      padding: .7rem 1rem; text-align: left;
+      font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); border-bottom: 2px solid var(--border);
+    }
+    .compare-table td {
+      padding: .65rem 1rem; border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: var(--bg3); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .slide { padding: 2rem 1.5rem; }
+      .card-grid.cols-3, .card-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+      .timeline { flex-direction: column; align-items: flex-start; }
+      .timeline::before { display: none; }
+    }
+  </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/tW_ouj7Z8n2tpYOmVwG25Qu3ATvLpGUDPUp5shGyHTd5mQPxtCPsP4jaqivd6ALCr6QYu1T78q_FjgrgEdu04gcXVWUlZNYM71xTxAOC2UABVC-E5UukP-hQJxFkAqf3UuTqP35FHZLxZuL43NzcV5lJ_BIeEP68e7qHWC06rlohfvDmC3R9MfitJvife7kOzi0RTMZrKxRdoUUx-COa3SBgZ1aP5X76v0epVh-gFqHFNESaFUxLdsJkonj-_s_YV718VI6VyMXTs-2M0l0cwGWkIi6H3ykpl6LT_KSxeNSWyJgtpjisagCJJUbB4C7kuNN_ojUwxZ4X6XiyLM6mYjAWynfcnzl4i4AQwr9xRqTJe9Oe1qsBH1ri8mIP8ix9GOXAnhrhf5VhIb0ZyXb4OAAtxN8usT531QhDDi3StgQfUfndBaCUAuWgcNO7jbOn4IU6RRWLYIGF07ySflLVwFzZGvjQy92PhmhYf5euLMfnVYMbwekR4t2qtDGuUSgkgA5ZXW35rLoS2_8PLxgJE2z-r71moD-oHLKTEgR_UGtKhdtPmWY8DlxZm6xP1WZ4EMzOxPYagPMPpVnIvFpPgzGFzInEyo8mCKkG67fiim859g7eT2ZIA6bPjxc8YIR-IxSMd609hVX8qj4e6vE6lLlTPk4fI9iIDlVbPehPx1PiY9A-ztHHyX8M2s__waX71AT913MDwQZohG1JbsdB85GxY8IKazasDGFEyBUKyPOTEp3ssLsZm0hka68uD6MksfwRzrDJ_1NScM3tZ2uQrfKoxw1Cnk1jGM_OMeaQHD_3tnhexU_uYrTD8YU09e9ZMl4yKTVdnC2-S0opA7-05eCDawKCT5rBnt2waI-Ngf55q8LAa8NVnB1o-vo99Ru1u1x-rADgI7OI9U4jzGo11AWPfnaSOYuoTh35075XWwPi5QyD5wX8v8pTaM97o7d9qmorcSeibs3znuSWOoQh4prqq9fZtIC2EV4nADLkMTVqx6GCQsTK4DKCmxpg14rD0pjbHPTL3ayt1Rr8ydBl6nUact8dg4jsilg4XixjjWx1z1kQg0cTIRrXrFYb3hpc8dzPJhHy53bp1ZAeR7CdmOie-TBN1PdrFe9ddHo5OFnLZqCoz2-jmDuMUHKj5z5B5lK7OA3Kw_4y2KAJ8ugG9pyqv6BCABfS2WlMdWs6o3uw9uoUNZL81Ab6vXGKW9DpgYwekYp4JdfXCiq4ycM6dC_1ELHjGNl_xx7oqvhivaK7rHyP1wIrOml9WluChsK-1EHSh5_FOg82ylH8sEH1iP1smhUsVVobLw6UNC_6ydog25e27tejtB_Bsj9Ya_1KnghRk7wwMpnUSXMiSkpcoi_5r22VNFNalapXNl8InBICWdVu6ZQswkeW38jCO2FEKU0rdOtmorKjKf_qH80WVFVLeBXG62HwaSuSqz35s6vFL7UXwSlZPhITwXXccwsARIxG-lhgzH4RzSQV0jdvtOfn0jO3DIBD1hK6cMe-S-b8PGQaOJ0IAC6Waut5SnfiSwZAKRXu3peMYlFE9__3v5dZhwTf_xshoA150sU8b-gSi2mnYcBmaxuQ6KC8LPAuWWWNz6vpLn9Tx5Q1LhTK8DewDEb8sE2mTckIHGJ57jStGQlUEB0LAjnS2ttKXokqjIjd6Oy5'></script></head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide active" id="s1">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-muted">Evidence-Based Clinical Education</span>
+    </div>
+    <div style="text-align:center; max-width:800px;">
+      <div class="tag tag-blue" style="margin-bottom:1.2rem;">Annual Preventive Screening</div>
+      <h1>Women's Health Screening<br><span class="c-blue">Across the Lifespan</span></h1>
+      <div class="divider" style="background:var(--accent1);"></div>
+      <p class="subtitle">Adolescence · Middle Age · Perimenopause · Menopause</p>
+      <p class="subtitle" style="margin-top:.4rem; font-size:.9rem;">Nwaozichi Onyeije, CNM &nbsp;|&nbsp; Current Evidence Review 2024–2025</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 2 — LEARNING OBJECTIVES
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s2">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-muted">Objectives</span>
+    </div>
+    <h2 style="margin-bottom:1.5rem;">Learning Objectives</h2>
+    <div class="card-grid cols-2" style="max-width:860px;">
+      <div class="card bg-blue border-blue">
+        <div class="card-label c-blue">01 · Adolescence</div>
+        <h3>Ages 13–21</h3>
+        <p>Identify screening priorities for mental health, STIs, and cervical dysplasia in the adolescent female.</p>
+      </div>
+      <div class="card bg-green border-green">
+        <div class="card-label c-green">02 · Adulthood</div>
+        <h3>Ages 22–49</h3>
+        <p>Apply guidelines for cervical cancer, breast cancer, and cardiometabolic risk screening in reproductive-age women.</p>
+      </div>
+      <div class="card bg-amber border-amber">
+        <div class="card-label c-amber">03 · Perimenopause</div>
+        <h3>Ages 40–54</h3>
+        <p>Recognize emerging screening needs as hormonal transition begins, including bone health and cardiovascular risk.</p>
+      </div>
+      <div class="card bg-coral border-coral">
+        <div class="card-label c-coral">04 · Menopause</div>
+        <h3>Ages 55+</h3>
+        <p>Detail osteoporosis, colorectal, and lung cancer screening; understand the clinical implications of each.</p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF · ACOG · WPSI/HRSA · AAP Bright Futures · CDC</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 3 — EVIDENCE GRADING PRIMER
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s3">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-muted">Evidence Framework</span>
+    </div>
+    <h2 style="margin-bottom:.5rem;">USPSTF Evidence Grading</h2>
+    <p class="subtitle" style="margin-bottom:1.5rem;">Understanding the strength behind each recommendation</p>
+    <div class="card-grid cols-4" style="max-width:1000px;">
+      <div class="card" style="border-top:3px solid var(--grade-a); text-align:center;">
+        <div style="font-size:2rem; font-weight:700; color:var(--grade-a);">A</div>
+        <h3 style="margin:.4rem 0; font-size:.9rem;">High Certainty</h3>
+        <p>Substantial net benefit. Offer or provide the service.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--grade-b); text-align:center;">
+        <div style="font-size:2rem; font-weight:700; color:var(--grade-b);">B</div>
+        <h3 style="margin:.4rem 0; font-size:.9rem;">Moderate Certainty</h3>
+        <p>Moderate to substantial net benefit. Offer or provide.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--grade-c); text-align:center;">
+        <div style="font-size:2rem; font-weight:700; color:var(--grade-c);">C</div>
+        <h3 style="margin:.4rem 0; font-size:.9rem;">Small Net Benefit</h3>
+        <p>Offer selectively based on individual circumstances.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--grade-i); text-align:center;">
+        <div style="font-size:2rem; font-weight:700; color:var(--grade-i);">I</div>
+        <h3 style="margin:.4rem 0; font-size:.9rem;">Insufficient Evidence</h3>
+        <p>Balance benefits and harms; clinical judgment required.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.2rem; font-size:.8rem; color:var(--muted);">A & B recommendations are mandated without cost-sharing under the ACA (Section 2713)</p>
+    <div class="slide-footer">
+      <span class="source">USPSTF Grading System · ACA Section 2713</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 4 — LIFESPAN OVERVIEW TIMELINE
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s4">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-muted">Lifespan Overview</span>
+    </div>
+    <h2 style="margin-bottom:1.5rem;">Screening Across the Female Lifespan</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(88,166,255,.15); border-color:var(--accent1); color:var(--accent1);">13</div>
+        <div class="tl-title c-blue">Adolescence</div>
+        <div class="tl-sub">Ages 13–21<br>Mental health<br>STIs · HPV</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(63,185,80,.15); border-color:var(--accent2); color:var(--accent2);">22</div>
+        <div class="tl-title c-green">Early Adulthood</div>
+        <div class="tl-sub">Ages 22–39<br>Cervical · STIs<br>Cardiometabolic</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(63,185,80,.15); border-color:var(--accent2); color:var(--accent2);">40</div>
+        <div class="tl-title c-green">Middle Age</div>
+        <div class="tl-sub">Ages 40–49<br>Mammography<br>BP · Lipids · DM</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(210,153,34,.15); border-color:var(--accent3); color:var(--accent3);">50</div>
+        <div class="tl-title c-amber">Perimenopause</div>
+        <div class="tl-sub">Ages 45–55<br>Colorectal<br>Bone density</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(247,129,102,.15); border-color:var(--accent4); color:var(--accent4);">65</div>
+        <div class="tl-title c-coral">Menopause</div>
+        <div class="tl-sub">Ages 55–75+<br>DEXA · Lung CT<br>Falls prevention</div>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem; font-size:.8rem; color:var(--muted);">Annual well-woman visit recommended across all age groups · WPSI/HRSA</p>
+    <div class="slide-footer">
+      <span class="source">ACOG · WPSI · USPSTF 2024–2025</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 5 — SECTION DIVIDER: ADOLESCENCE
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide section-slide" id="s5">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-blue">Section 1</span>
+    </div>
+    <div class="section-num">Section 1</div>
+    <h1><span class="c-blue">Adolescence</span></h1>
+    <div class="divider" style="background:var(--accent1);"></div>
+    <p class="section-desc">Ages 13–21 · Establishing the foundation for lifelong health</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 6 — ADOLESCENT WELL-WOMAN VISIT
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s6">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-blue">Adolescence</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">The Initial Reproductive Health Visit</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">ACOG recommends first visit between ages 13–15</p>
+    <div class="card-grid cols-3" style="max-width:900px;">
+      <div class="card bg-blue border-blue">
+        <div class="card-label c-blue">Purpose</div>
+        <ul>
+          <li>Establish patient-provider relationship</li>
+          <li>Confidential history-taking</li>
+          <li>Counseling on puberty &amp; development</li>
+          <li>No pelvic exam required at first visit</li>
+        </ul>
+      </div>
+      <div class="card bg-blue border-blue">
+        <div class="card-label c-blue">Screening Initiated</div>
+        <ul>
+          <li>Blood pressure measurement</li>
+          <li>BMI &amp; weight assessment</li>
+          <li>Anxiety &amp; depression screening</li>
+          <li>Substance use (CRAFFT tool)</li>
+          <li>Intimate partner violence</li>
+        </ul>
+      </div>
+      <div class="card bg-blue border-blue">
+        <div class="card-label c-blue">Immunizations</div>
+        <ul>
+          <li>HPV vaccine series (age 11–12, catch-up to 26)</li>
+          <li>Tdap booster</li>
+          <li>Meningococcal vaccine</li>
+          <li>Annual influenza</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">ACOG Committee Opinion #811 · AAP Bright Futures 2024</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 7 — MENTAL HEALTH SCREENING (ADOLESCENCE)
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s7">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-blue">Adolescence · Mental Health</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Mental Health Screening</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Depression and anxiety are the leading mental health conditions in adolescent females</p>
+    <div class="two-col">
+      <div class="col-panel bg-blue border-blue">
+        <h3 class="c-blue">Depression (MDD)</h3>
+        <ul>
+          <li>Screening: Ages 12–18 annually</li>
+          <li>Tool: PHQ-A (Patient Health Questionnaire — Adolescent)</li>
+          <li>Prevalence: ~17% of adolescent females</li>
+          <li>USPSTF Grade <strong>B</strong></li>
+          <li>Must have adequate systems for diagnosis, treatment, and follow-up</li>
+        </ul>
+      </div>
+      <div class="col-panel bg-blue border-blue">
+        <h3 class="c-blue">Anxiety Disorders</h3>
+        <ul>
+          <li>Screening: Ages 8–18 (USPSTF); Ages 13+ (WPSI)</li>
+          <li>Tools: GAD-7, SCARED, MASC</li>
+          <li>Prevalence: ~32% lifetime risk in females</li>
+          <li>USPSTF Grade <strong>B</strong></li>
+          <li>Includes generalized anxiety, social anxiety, panic disorder</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF Oct 2022 · WPSI Anxiety Recommendation 2020 · ACOG</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 8 — STI SCREENING (ADOLESCENCE)
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s8">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-blue">Adolescence · STIs</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Sexually Transmitted Infection Screening</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Highest STI burden occurs in women aged 15–24</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Infection</th>
+          <th>Who to Screen</th>
+          <th>Interval</th>
+          <th>Method</th>
+          <th>Grade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Chlamydia</strong></td>
+          <td>All sexually active women &lt;25</td>
+          <td>Annually</td>
+          <td>NAAT (urine or vaginal swab)</td>
+          <td><span class="grade-badge grade-a-bg">A</span></td>
+        </tr>
+        <tr>
+          <td><strong>Gonorrhea</strong></td>
+          <td>All sexually active women &lt;25</td>
+          <td>Annually</td>
+          <td>NAAT (urine or vaginal swab)</td>
+          <td><span class="grade-badge grade-b-bg">B</span></td>
+        </tr>
+        <tr>
+          <td><strong>HIV</strong></td>
+          <td>All women 15–65; high-risk from age 13</td>
+          <td>At least once; annually if high-risk</td>
+          <td>4th-generation Ag/Ab combination test</td>
+          <td><span class="grade-badge grade-a-bg">A</span></td>
+        </tr>
+        <tr>
+          <td><strong>Syphilis</strong></td>
+          <td>Persons at increased risk</td>
+          <td>Annually if high-risk</td>
+          <td>RPR or VDRL (treponemal confirmation)</td>
+          <td><span class="grade-badge grade-a-bg">A</span></td>
+        </tr>
+        <tr>
+          <td><strong>Hepatitis B</strong></td>
+          <td>Adolescents &amp; adults at increased risk</td>
+          <td>As indicated by risk</td>
+          <td>HBsAg, anti-HBc, anti-HBs</td>
+          <td><span class="grade-badge grade-b-bg">B</span></td>
+        </tr>
+        <tr>
+          <td><strong>Hepatitis C</strong></td>
+          <td>Adults 18–79 years</td>
+          <td>Once; more if high-risk</td>
+          <td>Anti-HCV antibody</td>
+          <td><span class="grade-badge grade-b-bg">B</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-footer">
+      <span class="source">USPSTF · CDC STI Treatment Guidelines 2021 · WPSI</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 9 — CERVICAL CANCER SCREENING BEGINS (21)
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s9">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-blue">Adolescence · Cervical Cancer</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Cervical Cancer Screening: Age 21</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Screening begins at age 21 regardless of sexual history</p>
+    <div class="two-col">
+      <div class="col-panel bg-blue border-blue">
+        <h3 class="c-blue">Why Not Before Age 21?</h3>
+        <ul>
+          <li>HPV infections in adolescents are almost universally transient</li>
+          <li>Cervical cancer is exceedingly rare &lt;21 years</li>
+          <li>Early screening leads to overtreatment of benign lesions</li>
+          <li>LEEP/CKC may impair future cervical competence</li>
+          <li>Harms outweigh benefits before age 21</li>
+        </ul>
+      </div>
+      <div class="col-panel bg-blue border-blue">
+        <h3 class="c-blue">Age 21–29: Cytology Only</h3>
+        <ul>
+          <li>Pap smear (cervical cytology) every <strong>3 years</strong></li>
+          <li>HPV co-testing NOT recommended &lt;30 years</li>
+          <li>High-risk HPV prevalence is high in this age group but mostly clears spontaneously</li>
+          <li>USPSTF Grade <strong>A</strong></li>
+          <li>Abnormal results managed per ASCCP 2019 guidelines</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF 2018 · ACOG Practice Bulletin · ASCCP 2019 Guidelines</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 10 — SECTION DIVIDER: EARLY/MIDDLE ADULTHOOD
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide section-slide" id="s10">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-green">Section 2</span>
+    </div>
+    <div class="section-num">Section 2</div>
+    <h1><span class="c-green">Early &amp; Middle Adulthood</span></h1>
+    <div class="divider" style="background:var(--accent2);"></div>
+    <p class="section-desc">Ages 22–49 · Cancer screening, cardiometabolic health, and reproductive wellness</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 11 — CERVICAL CANCER SCREENING AGE 30–65
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s11">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-green">Adulthood · Cervical Cancer</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Cervical Cancer Screening: Ages 30–65</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Updated WPSI/HRSA guidelines effective 2027 — primary hrHPV preferred</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Strategy</th>
+          <th>Interval</th>
+          <th>Rationale</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Primary hrHPV testing</strong></td>
+          <td>Every 5 years</td>
+          <td>More sensitive than cytology; detects high-risk HPV types 16/18 and 12 others</td>
+          <td><span class="tag tag-green" style="font-size:.65rem;">Preferred (2027)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Co-testing</strong> (hrHPV + Pap)</td>
+          <td>Every 5 years</td>
+          <td>High sensitivity and specificity; well-validated in large cohorts</td>
+          <td><span class="tag tag-blue" style="font-size:.65rem;">Acceptable</span></td>
+        </tr>
+        <tr>
+          <td><strong>Cytology alone</strong> (Pap)</td>
+          <td>Every 3 years</td>
+          <td>Acceptable if hrHPV testing unavailable; lower sensitivity</td>
+          <td><span class="tag tag-muted" style="font-size:.65rem;">Alternative</span></td>
+        </tr>
+        <tr>
+          <td><strong>Self-collected hrHPV</strong></td>
+          <td>Every 5 years</td>
+          <td>New 2026 HRSA update; improves access and uptake; non-inferior to clinician-collected</td>
+          <td><span class="tag tag-amber" style="font-size:.65rem;">New Option 2027</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:.8rem; font-size:.78rem; color:var(--muted);">Discontinue at age 65 with adequate prior negative screening · USPSTF Grade A</p>
+    <div class="slide-footer">
+      <span class="source">USPSTF 2018 · WPSI/HRSA Jan 2026 Update · ASCCP 2019</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 12 — BREAST CANCER SCREENING
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s12">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-green">Adulthood · Breast Cancer</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Breast Cancer Screening</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Updated USPSTF 2024: Screening begins at age 40 for all women</p>
+    <div class="card-grid cols-3" style="max-width:900px;">
+      <div class="card bg-green border-green">
+        <div class="card-label c-green">Who &amp; When</div>
+        <ul>
+          <li>All women: begin at <strong>age 40</strong></li>
+          <li>Biennial mammography through age 74</li>
+          <li>WPSI: initiate no earlier than 40, no later than 50; annual or biennial</li>
+          <li>Continue beyond 74 based on individual health status</li>
+        </ul>
+        <div class="grade-badge grade-b-bg">USPSTF Grade B (2024)</div>
+      </div>
+      <div class="card bg-green border-green">
+        <div class="card-label c-green">Why It Matters</div>
+        <ul>
+          <li>Breast cancer: leading cancer diagnosis in women</li>
+          <li>Mammography reduces breast cancer mortality by ~20–40%</li>
+          <li>Earlier initiation (40 vs. 50) prevents ~1.3 additional deaths per 1,000 women</li>
+          <li>Shared decision-making for 40–49 age group</li>
+        </ul>
+      </div>
+      <div class="card bg-green border-green">
+        <div class="card-label c-green">High-Risk Considerations</div>
+        <ul>
+          <li>BRCA1/2 mutation: annual MRI + mammogram from age 25–30</li>
+          <li>Prior chest radiation: annual MRI + mammogram from age 25</li>
+          <li>Lifetime risk ≥20%: supplemental MRI recommended</li>
+          <li>Dense breasts: consider supplemental ultrasound or MRI</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF Apr 2024 · WPSI Breast Cancer Screening · ACOG Practice Bulletin 179</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 13 — BRCA RISK ASSESSMENT
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s13">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-green">Adulthood · Genetic Risk</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">BRCA-Related Cancer Risk Assessment</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Identify women who may benefit from genetic counseling and testing</p>
+    <div class="two-col">
+      <div class="col-panel bg-green border-green">
+        <h3 class="c-green">Who to Refer for Genetic Counseling</h3>
+        <ul>
+          <li>Personal or family history of breast, ovarian, tubal, or peritoneal cancer</li>
+          <li>Breast cancer diagnosed ≤50 years</li>
+          <li>Male breast cancer in family</li>
+          <li>Ashkenazi Jewish ancestry with any breast/ovarian cancer</li>
+          <li>Positive risk assessment tool (e.g., Ontario Family History Assessment Tool, Manchester Scoring System)</li>
+        </ul>
+        <div class="grade-badge grade-b-bg" style="margin-top:.8rem;">USPSTF Grade B</div>
+      </div>
+      <div class="col-panel bg-green border-green">
+        <h3 class="c-green">Clinical Implications</h3>
+        <ul>
+          <li>BRCA1/2 carriers: lifetime breast cancer risk 50–72%</li>
+          <li>BRCA1: lifetime ovarian cancer risk 44–46%</li>
+          <li>BRCA2: lifetime ovarian cancer risk 17–23%</li>
+          <li>Risk-reducing options: prophylactic salpingo-oophorectomy, mastectomy, chemoprevention</li>
+          <li>Enhanced surveillance with MRI + mammogram annually</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF 2019 · ACOG Practice Bulletin #182 · NCCN Guidelines</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 14 — CARDIOMETABOLIC SCREENING
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s14">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-green">Adulthood · Cardiometabolic</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Cardiometabolic Screening</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Cardiovascular disease remains the leading cause of death in women</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Test</th>
+          <th>Age / Population</th>
+          <th>Interval</th>
+          <th>Rationale</th>
+          <th>Grade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Blood Pressure</strong></td>
+          <td>All adults ≥18</td>
+          <td>Annually ≥40; every 3–5 yrs if normal 18–39</td>
+          <td>Hypertension is the leading modifiable CVD risk factor; often asymptomatic</td>
+          <td><span class="grade-badge grade-a-bg">A</span></td>
+        </tr>
+        <tr>
+          <td><strong>Lipid Panel</strong></td>
+          <td>Women ≥45 at increased CVD risk; AHA: begin at 20</td>
+          <td>Every 5 years if normal</td>
+          <td>Dyslipidemia is a major modifiable risk factor for atherosclerotic CVD</td>
+          <td><span class="grade-badge grade-b-bg">B</span></td>
+        </tr>
+        <tr>
+          <td><strong>Diabetes (Type 2)</strong></td>
+          <td>Adults 35–70 with overweight or obesity (BMI ≥25)</td>
+          <td>Every 3 years if normal</td>
+          <td>Early detection prevents microvascular and macrovascular complications</td>
+          <td><span class="grade-badge grade-b-bg">B</span></td>
+        </tr>
+        <tr>
+          <td><strong>BMI / Obesity</strong></td>
+          <td>All adults</td>
+          <td>Annually</td>
+          <td>Obesity is a risk factor for DM, HTN, CVD, and multiple cancers</td>
+          <td><span class="grade-badge grade-b-bg">B</span></td>
+        </tr>
+        <tr>
+          <td><strong>Statin Use</strong></td>
+          <td>Adults 40–75 with ≥1 CVD risk factor + 10-yr risk ≥10%</td>
+          <td>Individualized</td>
+          <td>Preventive statin therapy reduces CVD events in intermediate-risk patients</td>
+          <td><span class="grade-badge grade-b-bg">B</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-footer">
+      <span class="source">USPSTF 2021 · AHA/ACC 2019 · ACOG · WPSI</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 15 — DEPRESSION & ANXIETY (ADULTS)
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s15">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-green">Adulthood · Mental Health</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Mental Health Screening: Adulthood</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Women are twice as likely as men to experience depression and anxiety</p>
+    <div class="card-grid cols-2" style="max-width:860px;">
+      <div class="card bg-green border-green">
+        <div class="card-label c-green">Depression Screening</div>
+        <ul>
+          <li>All adults ≥18, including pregnant and postpartum persons</li>
+          <li>Tools: PHQ-2 (initial), PHQ-9 (follow-up)</li>
+          <li>Must have adequate systems for diagnosis, treatment, and follow-up</li>
+          <li>Peripartum depression: screen at multiple time points</li>
+        </ul>
+        <div class="grade-badge grade-b-bg" style="margin-top:.6rem;">USPSTF Grade B</div>
+      </div>
+      <div class="card bg-green border-green">
+        <div class="card-label c-green">Anxiety Screening</div>
+        <ul>
+          <li>All women ≥13, including pregnant and postpartum (WPSI)</li>
+          <li>Adults ≤64 years (USPSTF)</li>
+          <li>Tools: GAD-7, GAD-2, PRIME-MD</li>
+          <li>Frequency: at least annually; clinical judgment for rescreening</li>
+        </ul>
+        <div class="grade-badge grade-b-bg" style="margin-top:.6rem;">USPSTF Grade B</div>
+      </div>
+      <div class="card bg-purple border-purple">
+        <div class="card-label c-purple">Intimate Partner Violence (IPV)</div>
+        <ul>
+          <li>Screen all women of reproductive age annually (WPSI)</li>
+          <li>Tools: HITS, HARK, PVS</li>
+          <li>Provide or refer to intervention services when positive</li>
+        </ul>
+        <div class="grade-badge grade-b-bg" style="margin-top:.6rem;">USPSTF Grade B</div>
+      </div>
+      <div class="card bg-purple border-purple">
+        <div class="card-label c-purple">Unhealthy Alcohol Use</div>
+        <ul>
+          <li>Screen all adults ≥18 in primary care settings</li>
+          <li>Tool: AUDIT-C (3 questions)</li>
+          <li>Brief behavioral counseling for risky/hazardous drinkers</li>
+        </ul>
+        <div class="grade-badge grade-b-bg" style="margin-top:.6rem;">USPSTF Grade B</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF 2023 · WPSI 2020 · ACOG · SAMHSA</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 16 — COLORECTAL CANCER SCREENING BEGINS 45
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s16">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-green">Adulthood · Colorectal Cancer</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Colorectal Cancer Screening</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Screening now begins at age 45 — updated USPSTF 2021</p>
+    <div class="card-grid cols-3" style="max-width:900px;">
+      <div class="card bg-green border-green">
+        <div class="card-label c-green">Who &amp; When</div>
+        <ul>
+          <li>Average-risk adults: <strong>begin at age 45</strong></li>
+          <li>Continue through age 75 (Grade A)</li>
+          <li>Ages 45–49: Grade B (moderate certainty)</li>
+          <li>Ages 76–85: individualized decision</li>
+          <li>High-risk (FH, IBD): earlier and more frequent</li>
+        </ul>
+      </div>
+      <div class="card bg-green border-green">
+        <div class="card-label c-green">Stool-Based Tests</div>
+        <ul>
+          <li><strong>FIT (fecal immunochemical test)</strong>: annually</li>
+          <li><strong>gFOBT</strong>: annually (high-sensitivity)</li>
+          <li><strong>Stool DNA (Cologuard)</strong>: every 1–3 years</li>
+          <li>Non-invasive; high patient acceptance</li>
+          <li>Positive result requires colonoscopy</li>
+        </ul>
+      </div>
+      <div class="card bg-green border-green">
+        <div class="card-label c-green">Structural Tests</div>
+        <ul>
+          <li><strong>Colonoscopy</strong>: every 10 years (gold standard)</li>
+          <li><strong>CT colonography</strong>: every 5 years</li>
+          <li><strong>Flexible sigmoidoscopy</strong>: every 5 years</li>
+          <li>Allows direct visualization and polypectomy</li>
+          <li>Preferred for high-risk patients</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF May 2021 · ACG 2021 · ACOG · ACS</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 17 — SECTION DIVIDER: PERIMENOPAUSE
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide section-slide" id="s17">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-amber">Section 3</span>
+    </div>
+    <div class="section-num">Section 3</div>
+    <h1><span class="c-amber">Perimenopause</span></h1>
+    <div class="divider" style="background:var(--accent3);"></div>
+    <p class="section-desc">Ages 40–54 · Hormonal transition and emerging chronic disease risk</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 18 — PERIMENOPAUSE OVERVIEW
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s18">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-amber">Perimenopause · Overview</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">The Perimenopausal Transition</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">A critical window for preventive intervention</p>
+    <div class="stat-row" style="margin-bottom:1.4rem;">
+      <div class="stat-box">
+        <div class="stat-num c-amber">2–8</div>
+        <div class="stat-label">Years of perimenopausal transition on average</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num c-amber">51</div>
+        <div class="stat-label">Median age of final menstrual period (US)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num c-amber">75%</div>
+        <div class="stat-label">Women experiencing vasomotor symptoms</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num c-amber">↑ CVD</div>
+        <div class="stat-label">Cardiovascular risk accelerates post-menopause</div>
+      </div>
+    </div>
+    <p style="font-size:.85rem; color:var(--muted); max-width:800px; text-align:center;">
+      Perimenopause is an opportune time to intensify screening for cardiometabolic disease, bone health, and cancer — before the accelerated risk of the postmenopausal period.
+    </p>
+    <div class="slide-footer">
+      <span class="source">SWAN Study · STRAW+10 Staging System · IMS White Paper 2024</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 19 — BONE HEALTH / OSTEOPOROSIS RISK
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s19">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-amber">Perimenopause · Bone Health</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Osteoporosis Screening: Early Identification</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Up to 20% of trabecular bone lost in the first 5 years post-menopause</p>
+    <div class="two-col">
+      <div class="col-panel bg-amber border-amber">
+        <h3 class="c-amber">USPSTF 2025 Recommendations</h3>
+        <ul>
+          <li><strong>Women ≥65:</strong> Screen all with DEXA scan (Grade B)</li>
+          <li><strong>Postmenopausal women &lt;65:</strong> Screen if risk factors present (Grade B)</li>
+          <li>Risk assessment tools: FRAX, SCORE, OST</li>
+          <li>FRAX score ≥9.3% (10-yr hip fracture risk) triggers DEXA in younger women</li>
+        </ul>
+      </div>
+      <div class="col-panel bg-amber border-amber">
+        <h3 class="c-amber">Risk Factors Warranting Early Screening</h3>
+        <ul>
+          <li>Low body weight (BMI &lt;20)</li>
+          <li>Current smoking or excessive alcohol use</li>
+          <li>Parental history of hip fracture</li>
+          <li>Glucocorticoid use ≥3 months</li>
+          <li>Rheumatoid arthritis</li>
+          <li>Prior fragility fracture</li>
+          <li>Premature ovarian insufficiency (POI)</li>
+          <li>Malabsorption syndromes (celiac, IBD)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF Jan 2025 · JAMA 2025 · NOF · ISCD</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 20 — DEXA INTERPRETATION
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s20">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-amber">Perimenopause · DEXA</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">DEXA Scan: Interpretation &amp; Implications</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Dual-energy X-ray absorptiometry — the gold standard for BMD measurement</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>T-Score</th>
+          <th>Diagnosis</th>
+          <th>Fracture Risk</th>
+          <th>Clinical Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>≥ −1.0</strong></td>
+          <td>Normal BMD</td>
+          <td>Baseline</td>
+          <td>Lifestyle counseling; repeat DEXA in 15 years if low risk</td>
+        </tr>
+        <tr>
+          <td><strong>−1.0 to −2.5</strong></td>
+          <td><span class="c-amber">Osteopenia (Low BMD)</span></td>
+          <td>Moderately elevated</td>
+          <td>Calcium + Vit D supplementation; weight-bearing exercise; repeat DEXA in 1–5 years</td>
+        </tr>
+        <tr>
+          <td><strong>≤ −2.5</strong></td>
+          <td><span class="c-coral">Osteoporosis</span></td>
+          <td>Substantially elevated</td>
+          <td>Pharmacotherapy (bisphosphonates, denosumab, romosozumab); MHT if symptomatic &lt;60</td>
+        </tr>
+        <tr>
+          <td><strong>≤ −2.5 + fracture</strong></td>
+          <td><span class="c-coral">Severe Osteoporosis</span></td>
+          <td>Very high</td>
+          <td>Urgent pharmacotherapy; fall prevention; orthogeriatric co-management</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:.8rem; font-size:.78rem; color:var(--muted);">Sites measured: lumbar spine (L1–L4), femoral neck, total hip · Use lowest T-score for diagnosis</p>
+    <div class="slide-footer">
+      <span class="source">WHO Diagnostic Criteria · ISCD 2019 · NOF Clinician's Guide · USPSTF 2025</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 21 — CARDIOVASCULAR RISK IN PERIMENOPAUSE
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s21">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-amber">Perimenopause · Cardiovascular</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Cardiovascular Screening in Perimenopause</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">CVD risk accelerates with estrogen decline — the perimenopausal window is critical</p>
+    <div class="card-grid cols-2" style="max-width:860px;">
+      <div class="card bg-amber border-amber">
+        <div class="card-label c-amber">Intensified Screening</div>
+        <ul>
+          <li><strong>Blood pressure:</strong> Annually from age 40</li>
+          <li><strong>Fasting lipid panel:</strong> Every 5 years (sooner if abnormal)</li>
+          <li><strong>Fasting glucose / HbA1c:</strong> Every 3 years if BMI ≥25</li>
+          <li><strong>BMI &amp; waist circumference:</strong> Annually</li>
+          <li><strong>10-year ASCVD risk:</strong> Calculate at each visit (PCE)</li>
+        </ul>
+      </div>
+      <div class="card bg-amber border-amber">
+        <div class="card-label c-amber">Female-Specific CVD Risk Factors</div>
+        <ul>
+          <li>History of preeclampsia (2× lifetime CVD risk)</li>
+          <li>History of gestational diabetes</li>
+          <li>Premature menopause (&lt;40 years)</li>
+          <li>Autoimmune disease (SLE, RA)</li>
+          <li>Polycystic ovary syndrome (PCOS)</li>
+          <li>History of preterm birth or IUGR</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:.8rem; font-size:.78rem; color:var(--muted);">AHA/ACC 2019: Female-specific risk factors should be incorporated into ASCVD risk assessment</p>
+    <div class="slide-footer">
+      <span class="source">AHA/ACC 2019 · USPSTF 2021 · ACOG · IMS White Paper 2024</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 22 — THYROID & OTHER PERIMENOPAUSE SCREENS
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s22">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-amber">Perimenopause · Additional Screens</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Additional Screening in Perimenopause</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Conditions that mimic or compound menopausal symptoms</p>
+    <div class="card-grid cols-3" style="max-width:900px;">
+      <div class="card bg-amber border-amber">
+        <div class="card-label c-amber">Thyroid Disease</div>
+        <ul>
+          <li>Hypothyroidism prevalence: 5–10% in women &gt;50</li>
+          <li>Symptoms overlap with menopause: fatigue, weight gain, mood changes</li>
+          <li>USPSTF: Insufficient evidence (Grade I) for universal screening</li>
+          <li>Screen if symptomatic or high-risk (autoimmune disease, prior thyroid disease, family history)</li>
+          <li>Test: TSH (serum)</li>
+        </ul>
+      </div>
+      <div class="card bg-amber border-amber">
+        <div class="card-label c-amber">Urinary Incontinence</div>
+        <ul>
+          <li>WPSI: Screen all women annually</li>
+          <li>Affects 25–45% of perimenopausal women</li>
+          <li>Ask: "Do you experience urine leakage? Does it affect your activities?"</li>
+          <li>Types: stress, urgency, mixed</li>
+          <li>Refer for pelvic floor PT, urogynecology if indicated</li>
+        </ul>
+      </div>
+      <div class="card bg-amber border-amber">
+        <div class="card-label c-amber">Obesity Prevention</div>
+        <ul>
+          <li>WPSI: Counsel women 40–60 with normal/overweight BMI to prevent obesity</li>
+          <li>Perimenopausal weight gain: average 1.5 kg/year</li>
+          <li>Visceral fat accumulation increases CVD and DM risk</li>
+          <li>Individualized counseling: diet, physical activity</li>
+          <li>Refer to intensive behavioral intervention if BMI ≥30</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">WPSI 2020 · USPSTF · ATA · ACOG</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 23 — SECTION DIVIDER: MENOPAUSE
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide section-slide" id="s23">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-coral">Section 4</span>
+    </div>
+    <div class="section-num">Section 4</div>
+    <h1><span class="c-coral">Menopause</span></h1>
+    <div class="divider" style="background:var(--accent4);"></div>
+    <p class="section-desc">Ages 55+ · Chronic disease prevention and quality of life</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 24 — OSTEOPOROSIS SCREENING (MENOPAUSE)
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s24">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-coral">Menopause · Osteoporosis</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Osteoporosis: Universal Screening at 65</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">USPSTF 2025: Grade B recommendation for all women ≥65</p>
+    <div class="stat-row" style="margin-bottom:1.4rem;">
+      <div class="stat-box">
+        <div class="stat-num c-coral">1 in 2</div>
+        <div class="stat-label">Women &gt;50 will have an osteoporosis-related fracture</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num c-coral">20%</div>
+        <div class="stat-label">Trabecular bone lost in first 5 years post-menopause</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num c-coral">30%</div>
+        <div class="stat-label">1-year mortality after hip fracture in women &gt;65</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num c-coral">$57B</div>
+        <div class="stat-label">Annual US cost of osteoporotic fractures</div>
+      </div>
+    </div>
+    <p style="font-size:.85rem; color:var(--muted); max-width:800px; text-align:center;">
+      DEXA screening is the single most impactful preventive intervention in postmenopausal women. Early identification allows pharmacologic intervention before fracture occurs.
+    </p>
+    <div class="slide-footer">
+      <span class="source">USPSTF Jan 2025 · JAMA 2025 · NOF · ISCD · Cosman et al.</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 25 — COLORECTAL CANCER (MENOPAUSE)
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s25">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-coral">Menopause · Colorectal Cancer</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Colorectal Cancer Screening: Ages 50–75</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Grade A recommendation — highest evidence level for this age group</p>
+    <div class="two-col">
+      <div class="col-panel bg-coral border-coral">
+        <h3 class="c-coral">Why Screening Saves Lives</h3>
+        <ul>
+          <li>CRC is the 2nd leading cause of cancer death in women</li>
+          <li>Incidence rises sharply after age 50</li>
+          <li>Colonoscopy detects and removes adenomatous polyps before malignant transformation</li>
+          <li>FIT annually reduces CRC mortality by 15–33%</li>
+          <li>Colonoscopy every 10 years reduces CRC incidence by 60–90%</li>
+        </ul>
+        <div class="grade-badge grade-a-bg" style="margin-top:.8rem;">USPSTF Grade A (50–75)</div>
+      </div>
+      <div class="col-panel bg-coral border-coral">
+        <h3 class="c-coral">Discontinuation &amp; High-Risk Management</h3>
+        <ul>
+          <li>Ages 76–85: individualized decision (Grade C)</li>
+          <li>Discontinue if life expectancy &lt;10 years</li>
+          <li>High-risk: Lynch syndrome, FAP, IBD — colonoscopy every 1–2 years</li>
+          <li>Prior adenoma: surveillance per ACG/USMSTF guidelines</li>
+          <li>Positive stool test always requires colonoscopy follow-up</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF 2021 · ACG 2021 · USMSTF · ACS</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 26 — LUNG CANCER SCREENING
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s26">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-coral">Menopause · Lung Cancer</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Lung Cancer Screening</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Lung cancer is the leading cause of cancer death in women</p>
+    <div class="card-grid cols-2" style="max-width:860px;">
+      <div class="card bg-coral border-coral">
+        <div class="card-label c-coral">USPSTF 2021 Recommendation</div>
+        <ul>
+          <li>Annual low-dose CT (LDCT) of the chest</li>
+          <li>Ages <strong>50–80 years</strong></li>
+          <li>≥20 pack-year smoking history</li>
+          <li>Currently smoke <strong>OR</strong> quit within the past 15 years</li>
+          <li>Discontinue if &gt;15 years since quitting or if health limits curative treatment</li>
+        </ul>
+        <div class="grade-badge grade-b-bg" style="margin-top:.6rem;">USPSTF Grade B</div>
+      </div>
+      <div class="card bg-coral border-coral">
+        <div class="card-label c-coral">Clinical Implications</div>
+        <ul>
+          <li>NLST trial: LDCT reduced lung cancer mortality by 20% vs. chest X-ray</li>
+          <li>NELSON trial: 24% mortality reduction in women (higher than men)</li>
+          <li>Women have higher lung cancer risk per pack-year than men</li>
+          <li>Shared decision-making required: discuss benefits, harms (false positives, radiation), and smoking cessation</li>
+          <li>Cessation counseling must accompany screening referral</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF Mar 2021 · NLST · NELSON Trial · ACS 2023</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 27 — FALLS PREVENTION & VISION/HEARING
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s27">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-coral">Menopause · Falls &amp; Sensory</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Falls Prevention &amp; Sensory Screening</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Falls are the leading cause of injury death in women ≥65</p>
+    <div class="card-grid cols-3" style="max-width:900px;">
+      <div class="card bg-coral border-coral">
+        <div class="card-label c-coral">Falls Prevention</div>
+        <ul>
+          <li>Offer exercise interventions to community-dwelling adults ≥65 at increased fall risk</li>
+          <li>USPSTF Grade B</li>
+          <li>Risk factors: prior fall, gait instability, polypharmacy, osteoporosis, visual impairment</li>
+          <li>Tools: Timed Up and Go (TUG), 30-second chair stand</li>
+          <li>Vitamin D supplementation: Grade D for fall prevention alone</li>
+        </ul>
+      </div>
+      <div class="card bg-coral border-coral">
+        <div class="card-label c-coral">Vision Screening</div>
+        <ul>
+          <li>No USPSTF recommendation for routine screening in asymptomatic adults</li>
+          <li>AAO recommends comprehensive eye exam every 1–2 years ≥65</li>
+          <li>Screen for: glaucoma, macular degeneration, cataracts, diabetic retinopathy</li>
+          <li>Impaired vision significantly increases fall risk</li>
+        </ul>
+      </div>
+      <div class="card bg-coral border-coral">
+        <div class="card-label c-coral">Hearing Screening</div>
+        <ul>
+          <li>USPSTF: Insufficient evidence (Grade I) for routine hearing screening in adults ≥50</li>
+          <li>Hearing loss affects ~1 in 3 adults ≥65</li>
+          <li>Associated with cognitive decline, depression, social isolation</li>
+          <li>Ask: "Do you have difficulty hearing in conversations?"</li>
+          <li>Refer to audiology if positive</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF 2018 · AAO · AARP · CDC Falls Data</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 28 — COGNITIVE DECLINE & DEMENTIA
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s28">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-coral">Menopause · Cognition</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Cognitive Health in the Postmenopausal Woman</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Women account for nearly two-thirds of all Alzheimer's disease cases</p>
+    <div class="two-col">
+      <div class="col-panel bg-coral border-coral">
+        <h3 class="c-coral">Current Screening Guidance</h3>
+        <ul>
+          <li>USPSTF: Insufficient evidence (Grade I) for routine cognitive screening in asymptomatic adults</li>
+          <li>Assess cognitive function if patient or family reports concerns</li>
+          <li>Tools: Mini-Cog, MMSE, MoCA</li>
+          <li>Annual Medicare Wellness Visit includes cognitive assessment</li>
+          <li>Distinguish normal aging from MCI and dementia</li>
+        </ul>
+      </div>
+      <div class="col-panel bg-coral border-coral">
+        <h3 class="c-coral">Modifiable Risk Factors to Address</h3>
+        <ul>
+          <li>Hypertension (midlife) — strongest modifiable risk factor</li>
+          <li>Type 2 diabetes — 2× dementia risk</li>
+          <li>Depression — bidirectional relationship</li>
+          <li>Physical inactivity, obesity, smoking</li>
+          <li>Hearing loss — treat early</li>
+          <li>Social isolation</li>
+          <li>Sleep disorders (OSA, insomnia)</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:.8rem; font-size:.78rem; color:var(--muted);">Lancet Commission 2024: 14 modifiable risk factors account for ~45% of dementia cases</p>
+    <div class="slide-footer">
+      <span class="source">USPSTF · Lancet Commission 2024 · Alzheimer's Association 2024</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 29 — COMPREHENSIVE SCREENING SUMMARY TABLE
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s29">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-muted">Summary</span>
+    </div>
+    <h2 style="margin-bottom:1rem;">Comprehensive Screening Summary</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Screening Test</th>
+          <th style="color:var(--accent1);">Adolescence<br>13–21</th>
+          <th style="color:var(--accent2);">Adulthood<br>22–49</th>
+          <th style="color:var(--accent3);">Perimenopause<br>40–54</th>
+          <th style="color:var(--accent4);">Menopause<br>55+</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Blood Pressure</strong></td>
+          <td>✓ Annually</td>
+          <td>✓ Annually ≥40; q3–5y if normal</td>
+          <td>✓ Annually</td>
+          <td>✓ Annually</td>
+        </tr>
+        <tr>
+          <td><strong>Cervical Cancer (Pap/HPV)</strong></td>
+          <td>Begins at 21</td>
+          <td>✓ q3y (Pap) or q5y (HPV/co-test)</td>
+          <td>✓ Continue through 65</td>
+          <td>Stop at 65 if adequate history</td>
+        </tr>
+        <tr>
+          <td><strong>Breast Cancer (Mammogram)</strong></td>
+          <td>—</td>
+          <td>✓ Begins at 40; biennial</td>
+          <td>✓ Biennial (annual if high-risk)</td>
+          <td>✓ Continue through 74+</td>
+        </tr>
+        <tr>
+          <td><strong>Colorectal Cancer</strong></td>
+          <td>—</td>
+          <td>✓ Begins at 45</td>
+          <td>✓ Continue</td>
+          <td>✓ Through 75; individualized 76–85</td>
+        </tr>
+        <tr>
+          <td><strong>Osteoporosis (DEXA)</strong></td>
+          <td>—</td>
+          <td>—</td>
+          <td>✓ If risk factors present</td>
+          <td>✓ All women ≥65</td>
+        </tr>
+        <tr>
+          <td><strong>Diabetes (HbA1c/FPG)</strong></td>
+          <td>—</td>
+          <td>✓ 35–70 if overweight/obese</td>
+          <td>✓ Continue</td>
+          <td>✓ Continue</td>
+        </tr>
+        <tr>
+          <td><strong>Lung Cancer (LDCT)</strong></td>
+          <td>—</td>
+          <td>—</td>
+          <td>✓ If ≥20 pack-year history (50+)</td>
+          <td>✓ Through 80</td>
+        </tr>
+        <tr>
+          <td><strong>Depression / Anxiety</strong></td>
+          <td>✓ Annually</td>
+          <td>✓ Annually</td>
+          <td>✓ Annually</td>
+          <td>✓ Annually</td>
+        </tr>
+        <tr>
+          <td><strong>STIs (Chlamydia/Gonorrhea)</strong></td>
+          <td>✓ Annually if sexually active</td>
+          <td>✓ &lt;25 annually; ≥25 if high-risk</td>
+          <td>If high-risk</td>
+          <td>If high-risk</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-footer">
+      <span class="source">USPSTF · ACOG · WPSI/HRSA · CDC · ACS 2024–2025</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 30 — CLINICAL IMPLICATIONS: ADOLESCENCE
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s30">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-blue">Implications · Adolescence</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Clinical Implications: Adolescent Screening</h2>
+    <p class="subtitle" style="margin-bottom:1.2rem;">Why these tests matter — and what to do with results</p>
+    <div class="implication-list">
+      <div class="implication-item">
+        <div class="imp-icon">🧠</div>
+        <div class="imp-text">
+          <h4>Mental Health: Early Detection Changes Trajectories</h4>
+          <p>Untreated adolescent depression and anxiety predict adult psychiatric disorders, substance use, and academic failure. Screening creates an entry point for CBT, SSRIs, and school-based support — interventions with strong evidence of efficacy.</p>
+        </div>
+      </div>
+      <div class="implication-item">
+        <div class="imp-icon">🔬</div>
+        <div class="imp-text">
+          <h4>STI Screening: Prevents Sequelae and Transmission</h4>
+          <p>Undetected chlamydia leads to PID, tubal factor infertility, and ectopic pregnancy. Annual NAAT screening in sexually active women &lt;25 is the most cost-effective intervention in reproductive health. Treatment prevents transmission and long-term morbidity.</p>
+        </div>
+      </div>
+      <div class="implication-item">
+        <div class="imp-icon">💉</div>
+        <div class="imp-text">
+          <h4>HPV Vaccination: Primary Prevention of Cervical Cancer</h4>
+          <p>The 9-valent HPV vaccine prevents 90% of cervical cancers. Vaccination at ages 11–12 (before sexual debut) provides the highest immunogenicity. Catch-up vaccination through age 26 is recommended; shared decision-making for ages 27–45.</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">ACOG · CDC · USPSTF · AAP</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 31 — CLINICAL IMPLICATIONS: ADULTHOOD
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s31">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-green">Implications · Adulthood</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Clinical Implications: Adulthood Screening</h2>
+    <p class="subtitle" style="margin-bottom:1.2rem;">Screening in the reproductive years shapes long-term health outcomes</p>
+    <div class="implication-list">
+      <div class="implication-item">
+        <div class="imp-icon">🔴</div>
+        <div class="imp-text">
+          <h4>Cervical Cancer Screening: Interval Matters</h4>
+          <p>The shift to primary hrHPV testing every 5 years (preferred from 2027) reflects superior sensitivity (96% vs. 53% for cytology alone) for detecting CIN2+ lesions. Extending intervals reduces overtreatment while maintaining cancer prevention. Adherence to ASCCP 2019 guidelines for abnormal results is essential.</p>
+        </div>
+      </div>
+      <div class="implication-item">
+        <div class="imp-icon">🩻</div>
+        <div class="imp-text">
+          <h4>Mammography at 40: A Paradigm Shift</h4>
+          <p>The 2024 USPSTF update lowering the start age to 40 (from 50) is projected to prevent an additional 1.3 deaths per 1,000 women screened. Clinicians must counsel on false-positive rates (~60% over 10 years of biennial screening) and the rare risk of overdiagnosis to support informed decision-making.</p>
+        </div>
+      </div>
+      <div class="implication-item">
+        <div class="imp-icon">❤️</div>
+        <div class="imp-text">
+          <h4>Cardiometabolic Screening: Female-Specific Risk Factors</h4>
+          <p>Pregnancy complications (preeclampsia, GDM) are now recognized as independent CVD risk factors. Women with these histories warrant earlier and more intensive cardiometabolic screening. The PCE calculator underestimates CVD risk in women — supplement with female-specific risk enhancers.</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF 2024 · AHA/ACC 2019 · ASCCP 2019 · ACOG</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 32 — CLINICAL IMPLICATIONS: PERIMENOPAUSE & MENOPAUSE
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s32">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-amber">Implications · Peri/Menopause</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Clinical Implications: Peri- &amp; Menopausal Screening</h2>
+    <p class="subtitle" style="margin-bottom:1.2rem;">The postmenopausal period demands a proactive, multisystem approach</p>
+    <div class="implication-list">
+      <div class="implication-item">
+        <div class="imp-icon">🦴</div>
+        <div class="imp-text">
+          <h4>Osteoporosis: Screen Before the Fracture</h4>
+          <p>The first fracture is often the first clinical sign of osteoporosis. DEXA screening at age 65 (or earlier with risk factors) identifies women who benefit from bisphosphonates, denosumab, or romosozumab — agents that reduce fracture risk by 30–70%. MHT is an effective alternative for women &lt;60 with concurrent VMS.</p>
+        </div>
+      </div>
+      <div class="implication-item">
+        <div class="imp-icon">🫁</div>
+        <div class="imp-text">
+          <h4>Lung Cancer LDCT: Women Benefit More Than Men</h4>
+          <p>The NELSON trial demonstrated a 24% lung cancer mortality reduction in women (vs. 6% in men) with LDCT screening. Women develop lung cancer at lower cumulative tobacco exposures. Clinicians should actively identify eligible women and integrate screening with smoking cessation counseling.</p>
+        </div>
+      </div>
+      <div class="implication-item">
+        <div class="imp-icon">🧬</div>
+        <div class="imp-text">
+          <h4>Colorectal Cancer: Adherence is the Challenge</h4>
+          <p>Despite Grade A evidence, CRC screening adherence remains below 70% in the US. Offering patient choice among equivalent strategies (FIT, colonoscopy, Cologuard) significantly improves uptake. Stool-based tests are particularly valuable for patients with mobility limitations or colonoscopy aversion.</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF 2021 &amp; 2025 · NELSON Trial · NLST · ACG 2021</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 33 — SHARED DECISION-MAKING
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s33">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-purple">Shared Decision-Making</span>
+    </div>
+    <h2 style="margin-bottom:.4rem;">Shared Decision-Making in Preventive Screening</h2>
+    <p class="subtitle" style="margin-bottom:1.4rem;">Evidence-based screening requires patient-centered communication</p>
+    <div class="card-grid cols-2" style="max-width:860px;">
+      <div class="card bg-purple border-purple">
+        <div class="card-label c-purple">When SDM is Essential</div>
+        <ul>
+          <li>Grade C recommendations (small net benefit)</li>
+          <li>Grade B with significant tradeoffs (mammography 40–49)</li>
+          <li>Competing screening strategies (CRC modalities)</li>
+          <li>High-risk individuals (BRCA, Lynch syndrome)</li>
+          <li>Patients with limited life expectancy</li>
+          <li>Patients with prior false-positive results</li>
+        </ul>
+      </div>
+      <div class="card bg-purple border-purple">
+        <div class="card-label c-purple">Key Communication Principles</div>
+        <ul>
+          <li>Communicate absolute risk reduction (not just relative)</li>
+          <li>Discuss harms: false positives, overdiagnosis, procedural risks</li>
+          <li>Elicit patient values and preferences</li>
+          <li>Use decision aids when available</li>
+          <li>Document the conversation</li>
+          <li>Revisit decisions at subsequent visits</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:.8rem; font-size:.78rem; color:var(--muted);">SDM does not mean offering less — it means offering more thoughtful, individualized care</p>
+    <div class="slide-footer">
+      <span class="source">ACOG · USPSTF · AHRQ Decision Aids · Stacey et al., Cochrane 2017</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 34 — KEY TAKEAWAYS
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide" id="s34">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-muted">Key Takeaways</span>
+    </div>
+    <h2 style="margin-bottom:1.2rem;">Key Takeaways</h2>
+    <div class="card-grid cols-2" style="max-width:860px;">
+      <div class="card bg-blue border-blue">
+        <div class="card-label c-blue">Adolescence</div>
+        <p>Mental health screening (depression, anxiety) and STI screening are the highest-yield interventions. HPV vaccination is primary cancer prevention. Cervical screening begins at 21.</p>
+      </div>
+      <div class="card bg-green border-green">
+        <div class="card-label c-green">Adulthood</div>
+        <p>Mammography now begins at 40. Primary hrHPV testing (preferred from 2027) is more sensitive than cytology. Female-specific CVD risk factors must be incorporated into cardiometabolic screening.</p>
+      </div>
+      <div class="card bg-amber border-amber">
+        <div class="card-label c-amber">Perimenopause</div>
+        <p>A critical window for intensifying cardiometabolic and bone health screening. Thyroid disease and urinary incontinence mimic menopausal symptoms and should be actively screened.</p>
+      </div>
+      <div class="card bg-coral border-coral">
+        <div class="card-label c-coral">Menopause</div>
+        <p>DEXA at 65 is universal. Colorectal cancer screening (Grade A) through age 75 saves lives. LDCT for lung cancer benefits women disproportionately. Falls prevention is an underutilized intervention.</p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="source">USPSTF · ACOG · WPSI/HRSA · CDC · ACS 2024–2025</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SLIDE 35 — THANK YOU / CLOSING
+  ═══════════════════════════════════════════════════ -->
+  <div class="slide closing" id="s35">
+    <div class="slide-header">
+      <span class="presenter">Nwaozichi Onyeije, CNM</span>
+      <span class="section-tag tag-muted">Closing</span>
+    </div>
+    <div class="icon" style="font-size:3rem;">🌿</div>
+    <h1 style="margin-bottom:.5rem;">Thank You</h1>
+    <div class="divider" style="background:var(--accent1);"></div>
+    <p style="font-size:1.1rem; margin-bottom:.4rem;">Questions &amp; Discussion</p>
+    <div class="card" style="margin-top:1.5rem; max-width:460px; text-align:center; background:var(--bg2);">
+      <h3 style="margin-bottom:.3rem;">Nwaozichi Onyeije, CNM</h3>
+      <p style="color:var(--muted);">Evidence-Based Women's Health · Preventive Care Across the Lifespan</p>
+    </div>
+    <p style="margin-top:1.5rem; font-size:.72rem; color:var(--muted);">Slides prepared using current literature (2021–2025) · For educational purposes · USPSTF · ACOG · WPSI/HRSA · CDC · ACS</p>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- ── NAVIGATION ── -->
+<div class="nav">
+  <button id="btn-prev" title="Previous (←)">←</button>
+  <span class="counter" id="counter">1 / 35</span>
+  <button id="btn-next" title="Next (→)">→</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const total = slides.length;
+
+  function showSlide(n) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === n);
+    });
+    counter.textContent = (n + 1) + ' / ' + total;
+  }
+
+  document.getElementById('btn-next').addEventListener('click', () => {
+    current = (current + 1) % total;
+    showSlide(current);
+  });
+  document.getElementById('btn-prev').addEventListener('click', () => {
+    current = (current - 1 + total) % total;
+    showSlide(current);
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      current = (current + 1) % total;
+      showSlide(current);
+    } else if (e.key === 'ArrowLeft') {
+      current = (current - 1 + total) % total;
+      showSlide(current);
+    } else if (e.key === 'Home') {
+      current = 0; showSlide(current);
+    } else if (e.key === 'End') {
+      current = total - 1; showSlide(current);
+    }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) {
+      if (dx < 0) { current = (current + 1) % total; }
+      else { current = (current - 1 + total) % total; }
+      showSlide(current);
+    }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
