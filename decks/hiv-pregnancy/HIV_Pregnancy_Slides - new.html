@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HIV &amp; Pregnancy | Patient Education</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0d1117;
+      --surface:    #161b22;
+      --border:     #30363d;
+      --text:       #e6edf3;
+      --muted:      #8b949e;
+      --accent:     #58a6ff;   /* blue  – info / highlight */
+      --green:      #3fb950;   /* green – reassurance      */
+      --orange:     #f0883e;   /* orange – action          */
+      --red:        #f85149;   /* red   – caution          */
+      --teal:       #39d353;
+      --font-main:  'Segoe UI', system-ui, sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      overflow: hidden;
+    }
+
+    /* ── Deck & Slides ── */
+    .deck {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 4rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Navigation ── */
+    .nav {
+      position: fixed; bottom: 1.6rem; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1rem;
+      z-index: 100;
+    }
+    .nav button {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); padding: .5rem 1.4rem; border-radius: 6px;
+      font-size: 1rem; cursor: pointer; transition: background .2s;
+    }
+    .nav button:hover { background: var(--border); }
+    .nav .counter { font-size: .9rem; color: var(--muted); min-width: 5rem; text-align: center; }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--accent); transition: width .4s ease;
+      z-index: 200;
+    }
+
+    /* ── Typography ── */
+    .slide-label {
+      font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .75rem;
+    }
+    h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 300; line-height: 1.15; text-align: center; }
+    h2 { font-size: clamp(1.6rem, 3.5vw, 2.6rem); font-weight: 400; line-height: 1.2; text-align: center; }
+    h3 { font-size: clamp(1.1rem, 2.2vw, 1.6rem); font-weight: 600; }
+    p  { font-size: clamp(.95rem, 1.8vw, 1.25rem); line-height: 1.65; text-align: center; max-width: 780px; }
+
+    .accent  { color: var(--accent); }
+    .green   { color: var(--green); }
+    .orange  { color: var(--orange); }
+    .muted   { color: var(--muted); }
+
+    /* ── Stat badge ── */
+    .stat-big {
+      font-size: clamp(3.5rem, 10vw, 7rem); font-weight: 700;
+      line-height: 1; color: var(--green);
+    }
+    .stat-label { font-size: clamp(.9rem, 1.8vw, 1.2rem); color: var(--muted); margin-top: .4rem; }
+
+    /* ── Transmission cards ── */
+    .card-row {
+      display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; margin-top: 1.5rem;
+    }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.4rem 1.8rem;
+      display: flex; flex-direction: column; align-items: center; gap: .6rem;
+      min-width: 160px; max-width: 200px;
+    }
+    .card .icon { font-size: 2.4rem; }
+    .card .card-title { font-size: .95rem; font-weight: 600; text-align: center; }
+
+    /* ── Comparison table ── */
+    .compare-table {
+      border-collapse: collapse; width: 100%; max-width: 680px; margin-top: 1.4rem;
+      font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    }
+    .compare-table th, .compare-table td {
+      border: 1px solid var(--border); padding: .75rem 1.1rem; text-align: center;
+    }
+    .compare-table thead th { background: var(--surface); color: var(--muted); font-weight: 600; }
+    .compare-table .highlight-row td:first-child { color: var(--green); font-weight: 700; }
+    .compare-table .dim-row td:first-child { color: var(--red); }
+
+    /* ── Timeline ── */
+    .timeline {
+      display: flex; flex-direction: column; gap: 1rem;
+      width: 100%; max-width: 700px; margin-top: 1.2rem;
+    }
+    .tl-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .tl-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0; margin-top: .35rem;
+    }
+    .tl-dot.green { background: var(--green); }
+    .tl-dot.orange { background: var(--orange); }
+    .tl-content { flex: 1; }
+    .tl-content strong { display: block; font-size: 1rem; color: var(--text); }
+    .tl-content span { font-size: .9rem; color: var(--muted); }
+
+    /* ── Pill list ── */
+    .pill-list {
+      display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; margin-top: 1.2rem;
+    }
+    .pill {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 999px; padding: .45rem 1.1rem;
+      font-size: clamp(.8rem, 1.5vw, .95rem); color: var(--text);
+    }
+    .pill.accent { border-color: var(--accent); color: var(--accent); }
+    .pill.green  { border-color: var(--green);  color: var(--green);  }
+    .pill.orange { border-color: var(--orange); color: var(--orange); }
+
+    /* ── Delivery split ── */
+    .delivery-split {
+      display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; justify-content: center;
+    }
+    .delivery-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.4rem 1.8rem;
+      flex: 1; min-width: 240px; max-width: 320px;
+    }
+    .delivery-box .box-label {
+      font-size: .75rem; letter-spacing: .1em; text-transform: uppercase;
+      margin-bottom: .6rem;
+    }
+    .delivery-box h3 { font-size: 1.1rem; margin-bottom: .5rem; }
+    .delivery-box p  { font-size: .9rem; text-align: left; color: var(--muted); }
+
+    /* ── Baby care steps ── */
+    .step-list {
+      display: flex; flex-direction: column; gap: .9rem;
+      width: 100%; max-width: 640px; margin-top: 1.2rem;
+    }
+    .step-item {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: .9rem 1.2rem;
+    }
+    .step-num {
+      width: 2rem; height: 2rem; border-radius: 50%;
+      background: var(--accent); color: #000;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .9rem; flex-shrink: 0;
+    }
+    .step-text { font-size: clamp(.85rem, 1.6vw, 1rem); }
+
+    /* ── Takeaway grid ── */
+    .takeaway-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem;
+      width: 100%; max-width: 800px; margin-top: 1.4rem;
+    }
+    .takeaway-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.4rem 1rem;
+      display: flex; flex-direction: column; align-items: center; gap: .7rem; text-align: center;
+    }
+    .takeaway-card .icon { font-size: 2rem; }
+    .takeaway-card p { font-size: .9rem; color: var(--muted); }
+
+    /* ── Title slide decoration ── */
+    .ribbon {
+      display: inline-block; background: var(--accent);
+      color: #000; font-size: .75rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .3rem .9rem; border-radius: 4px; margin-bottom: 1.2rem;
+    }
+    .subtitle { font-size: clamp(1rem, 2vw, 1.4rem); color: var(--muted); margin-top: .8rem; }
+
+    /* ── Divider ── */
+    hr.divider {
+      border: none; border-top: 1px solid var(--border);
+      width: 60px; margin: 1rem auto;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .slide { padding: 2rem 1.5rem; }
+      .takeaway-grid { grid-template-columns: 1fr 1fr; }
+      .delivery-split { flex-direction: column; }
+    }
+  </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/3vHVFXD0J3m0u1oGVlPnKwJHNy4fSz5GX7Q4-qDS_8lwOAR7K5f1Cy7LXzsdb_ZYicVKrLpx4s8MnSgFZNmqjlUrXcb9FiGhCPtYPb0cU3SJTPCo1-UR7IU0cba9ch8eY3YZpobIAhL2HpVsY-DTT04gT0bmJlmcf_Aq_AonaOtBTrBei5-8NwgdZBprJ8svjXPkZv1uh5iyrHMc_SYHu0p3k_hzBkdIEjBUKCIM0MxaZ6qNxNlbedopY6oly0dnCKVzvrdaj-aOr_LN0kDYrmGYlbRvF6I5W0VPT3PdMIRNjx_52-BRi0ruMVOY0ci5Bu1qWJs8FPCzZD7nLEzBo3ZkrEYLMK6Z0EEdlEcq-W78pTbx1dYzdnV40JcaM7GI9j92h0YCXpx77blMX1i7ddCkXAsmpoSxJ5cv-KB9dWuq7GX1Sq90AEUMVbMEZZJUsDjvcvQNkUWj6KTaK_Oh4u2nQKMb9iSaHVCUx1xnTCIrdc92zW8s8OW2luQS50EFL6YY31qcohb6AV6s8vO_1QLPPReGBR0WxZ0NfENRTrDIMFf73IdICHOBGiPCqcIMimpZtv0SXYf5MC4GuArKR2Xv-8LbcS0ICG4CdosVEO12Uvevx0avcBJv8HlmTpnY6V7KHRdL7MxhQHc2sfjd8OxaAFxMzF5WvtbEU160kwAaadAiosv30AuIEr-7-UJi9Dm5-RDm_sMWq9fxGARLjQ8RQzzck5rxgY_orYjMM_J_sVmHPhfhBC6-jmngR0gLskEVd7OkJnPt2Q9WyewtiK0z5pH3hslKr7sVrO-FCebTJavF4dQ7old31QdIce3A3_HQ5XVosgaDyCwnZBrgmLByA3RZthcg8BzfS8c1Bc-Td6HsmyeQM4dLF64P-6US3Q0S1dklxxhimaiGqOslabI08-jLhnc9FvYASwLBlCUNiNi3KK7v23Htri7VenTs4-nOMv-_1vWWPAnFwyujoAxoXBP0MgQFVukvQrFox9k5St4EhSGcsm5Woj2BcCeZEE4IU8D0MTYeI87MEM91uFLwm_jm1g9xddzn7NAKG7yEWBXPkMoyWeG3hjlgsbUs_aPwvzlELYeFi9zeR2tEEi091kGFY40V04vIuZ4mbX4BOtaxhi_1RN9IpXSfS7pDY2MJHTl7IyIqOnzMlbNkVARMCWCQ_oi8FJPJNZnZHwppri9_JNdDh75-su7KZTiAKUbHFVu1exxOvbi_JBz9RQg1gVBwSWwXbAwmig301s6quMJlE5GQHuvh9rubbjjYXp7hrzhpQ9Cg4_V5uVGLpGukxnzymrCxxLagVfFeM0x2uXHWdFLec-eKyz7tQ_XWeUnFbbg8K9yT6jhNk8qheYbkgoimT7HWGY0T9eQYLbwxoamHGUfMzjZTTReuIWXxyrjWPxR2gg_EYEHhl2W54Z0GGcKe0vi4agEW98A5IR0kEHDdmGPh3lgZO_9a4ci86IQ_-wfE-0wNjxf6C2IBc8zJ876ERjDhNfLhU_0GoZU1o21GjS190VVT0tzV_RBKh2HIdKczTreSnJteEaWs-icB0_jnHhckTgtoJTlw5mphL3cGrnzhANpVM4VNW3q2WOlQqlCSO0FmIW7a9F75HeymzmGoO7XVHWsQFijeLmSCmQ'></script></head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck" id="deck">
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 1 · TITLE
+  ══════════════════════════════════════════════ -->
+  <div class="slide active">
+    <span class="ribbon">Patient Education</span>
+    <h1>HIV &amp; Your Pregnancy</h1>
+    <p class="subtitle">What you need to know — and why there is reason for hope</p>
+    <hr class="divider" />
+    <p class="muted" style="font-size:.9rem;">Use arrow keys or the buttons below to navigate</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 2 · REASSURANCE STAT
+  ══════════════════════════════════════════════ -->
+  <div class="slide">
+    <span class="slide-label">The Bottom Line</span>
+    <div class="stat-big">&gt;99%</div>
+    <div class="stat-label">of babies born to mothers with HIV — with treatment — will <strong>not</strong> have HIV</div>
+    <hr class="divider" />
+    <p>With proper medical care, the risk of passing HIV to your baby can be reduced to <span class="green">less than 1%</span>.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 3 · HOW HIV CAN BE PASSED
+  ══════════════════════════════════════════════ -->
+  <div class="slide">
+    <span class="slide-label">Understanding the Risk</span>
+    <h2>How HIV Can Be Passed to a Baby</h2>
+    <div class="card-row">
+      <div class="card">
+        <div class="icon">🤰</div>
+        <div class="card-title">During Pregnancy</div>
+      </div>
+      <div class="card">
+        <div class="icon">🏥</div>
+        <div class="card-title">During Labor &amp; Delivery</div>
+      </div>
+      <div class="card">
+        <div class="icon">🍼</div>
+        <div class="card-title">Through Breastfeeding</div>
+      </div>
+    </div>
+    <hr class="divider" />
+    <p><span class="green">Treatment dramatically reduces all three risks.</span></p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 4 · TREATMENT vs. NO TREATMENT
+  ══════════════════════════════════════════════ -->
+  <div class="slide">
+    <span class="slide-label">Why Treatment Matters</span>
+    <h2>Transmission Risk: With vs. Without Treatment</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th>Transmission Risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="dim-row">
+          <td>No treatment</td>
+          <td>15 – 30 out of 100 babies</td>
+        </tr>
+        <tr>
+          <td>Treatment started in pregnancy</td>
+          <td>1 – 2 out of 100 babies</td>
+        </tr>
+        <tr class="highlight-row">
+          <td>Undetectable viral load at delivery</td>
+          <td>&lt;1 out of 100 babies</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 5 · ART EXPLAINED
+  ══════════════════════════════════════════════ -->
+  <div class="slide">
+    <span class="slide-label">Your Treatment</span>
+    <h2>Antiretroviral Therapy (ART)</h2>
+    <p>ART is a combination of medicines that <span class="accent">control HIV</span> in your body.</p>
+    <div class="pill-list" style="margin-top:1.5rem;">
+      <div class="pill accent">Lowers your viral load</div>
+      <div class="pill green">Keeps your immune system strong</div>
+      <div class="pill orange">Protects your baby</div>
+    </div>
+    <hr class="divider" />
+    <p style="font-size:.95rem; color:var(--muted);">Most HIV medicines are safe during pregnancy. Your doctor will choose the right combination for you.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 6 · UNDETECTABLE = UNTRANSMITTABLE
+  ══════════════════════════════════════════════ -->
+  <div class="slide">
+    <span class="slide-label">Your Goal</span>
+    <h2>Undetectable = Untransmittable</h2>
+    <p>"Viral load" is the amount of HIV in your blood.</p>
+    <hr class="divider" />
+    <div style="background:var(--surface); border:1px solid var(--green); border-radius:12px; padding:1.4rem 2rem; max-width:600px; margin-top:.5rem; text-align:center;">
+      <h3 style="color:var(--green); font-size:1.6rem;">U = U</h3>
+      <p style="margin-top:.6rem;">When your viral load is <strong>undetectable</strong>, the risk of passing HIV to your baby is <strong>essentially zero</strong>.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 7 · PRENATAL MONITORING TIMELINE
+  ══════════════════════════════════════════════ -->
+  <div class="slide">
+    <span class="slide-label">Your Pregnancy Journey</span>
+    <h2>What to Expect at Prenatal Visits</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <strong>Viral Load Check</strong>
+          <span>Every 1 – 3 months throughout pregnancy</span>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green"></div>
+        <div class="tl-content">
+          <strong>Medicine Review</strong>
+          <span>Confirm ART is working and well-tolerated</span>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot orange"></div>
+        <div class="tl-content">
+          <strong>Coordinated Care</strong>
+          <span>Your OB and HIV specialist work together as a team</span>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <strong>Delivery Planning</strong>
+          <span>Finalized based on your viral load near delivery</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 8 · MEDICINE REMINDER
+  ══════════════════════════════════════════════ -->
+  <div class="slide">
+    <span class="slide-label">Staying on Track</span>
+    <h2>Take Your Medicine Every Day</h2>
+    <div style="background:var(--surface); border:1px solid var(--orange); border-radius:12px; padding:1.6rem 2rem; max-width:620px; margin-top:1rem; text-align:center;">
+      <div style="font-size:2.5rem; margin-bottom:.6rem;">💊</div>
+      <p>Do <strong>not</strong> stop taking your HIV medicines during pregnancy — even if you feel well.</p>
+      <p style="margin-top:.8rem; color:var(--muted); font-size:.9rem;">Your medicines protect both you and your baby.</p>
+    </div>
+    <hr class="divider" />
+    <p>The best protection comes from starting ART <span class="accent">before</span> or as early as possible in pregnancy.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 9 · DELIVERY PLANNING
+  ══════════════════════════════════════════════ -->
+  <div class="slide">
+    <span class="slide-label">Planning for Delivery</span>
+    <h2>Your Delivery Plan</h2>
+    <div class="delivery-split">
+      <div class="delivery-box" style="border-color:var(--green);">
+        <div class="box-label" style="color:var(--green);">Viral Load &lt; 1,000 copies/mL</div>
+        <h3>Vaginal Delivery</h3>
+        <p>Usually safe and recommended when viral load is well controlled.</p>
+      </div>
+      <div class="delivery-box" style="border-color:var(--orange);">
+        <div class="box-label" style="color:var(--orange);">Viral Load ≥ 1,000 copies/mL</div>
+        <h3>Scheduled C-Section</h3>
+        <p>Recommended at 38 weeks. IV zidovudine (AZT) given during delivery for added protection.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 10 · BABY'S CARE AFTER BIRTH
+  ══════════════════════════════════════════════ -->
+  <div class="slide">
+    <span class="slide-label">After Your Baby Is Born</span>
+    <h2>Your Baby's First Weeks</h2>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-text">HIV medicine started within <strong>6 hours</strong> of birth for best protection</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-text">Baby takes medicine for <strong>4 – 6 weeks</strong> (sometimes longer)</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-text">HIV tests at scheduled intervals to confirm baby is <strong>HIV-negative</strong></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-text">Close follow-up with a <strong>pediatrician</strong> experienced in HIV-exposed infants</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 11 · FEEDING
+  ══════════════════════════════════════════════ -->
+  <div class="slide">
+    <span class="slide-label">Feeding Your Baby</span>
+    <h2>Infant Feeding Recommendation</h2>
+    <div style="display:flex; gap:1.5rem; flex-wrap:wrap; justify-content:center; margin-top:1.5rem;">
+      <div class="card" style="border-color:var(--green); max-width:240px;">
+        <div class="icon">🍶</div>
+        <div class="card-title" style="color:var(--green);">Formula Feeding</div>
+        <p style="font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem;">Recommended in the United States — completely eliminates HIV transmission through milk</p>
+      </div>
+      <div class="card" style="border-color:var(--border); max-width:240px;">
+        <div class="icon">🤱</div>
+        <div class="card-title" style="color:var(--muted);">Breastfeeding</div>
+        <p style="font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem;">Not recommended in the U.S. — HIV can be passed through breast milk even with undetectable viral load</p>
+      </div>
+    </div>
+    <hr class="divider" />
+    <p style="font-size:.9rem; color:var(--muted);">Your care team will support your feeding decision and provide resources.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 12 · KEY TAKEAWAYS
+  ══════════════════════════════════════════════ -->
+  <div class="slide">
+    <span class="slide-label">Summary</span>
+    <h2>Key Takeaways</h2>
+    <div class="takeaway-grid">
+      <div class="takeaway-card">
+        <div class="icon">💊</div>
+        <h3 style="font-size:1rem; color:var(--accent);">Take Your Medicine</h3>
+        <p>Every day, as prescribed — this is the most important step.</p>
+      </div>
+      <div class="takeaway-card">
+        <div class="icon">📅</div>
+        <h3 style="font-size:1rem; color:var(--accent);">Attend All Visits</h3>
+        <p>Regular monitoring keeps you and your baby safe.</p>
+      </div>
+      <div class="takeaway-card">
+        <div class="icon">🤝</div>
+        <h3 style="font-size:1rem; color:var(--accent);">Partner with Your Team</h3>
+        <p>Your OB and HIV specialist are here to support you.</p>
+      </div>
+      <div class="takeaway-card">
+        <div class="icon">🎯</div>
+        <h3 style="font-size:1rem; color:var(--green);">Goal: Undetectable</h3>
+        <p>U = U — undetectable viral load means near-zero transmission risk.</p>
+      </div>
+      <div class="takeaway-card">
+        <div class="icon">👶</div>
+        <h3 style="font-size:1rem; color:var(--green);">Your Baby Can Be Healthy</h3>
+        <p>With treatment, &gt;99% of babies will not have HIV.</p>
+      </div>
+      <div class="takeaway-card">
+        <div class="icon">💬</div>
+        <h3 style="font-size:1rem; color:var(--orange);">Ask Questions</h3>
+        <p>No question is too small. We are here for you.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 13 · QUESTIONS
+  ══════════════════════════════════════════════ -->
+  <div class="slide">
+    <div style="font-size:3rem; margin-bottom:1rem;">💬</div>
+    <h2>Questions &amp; Discussion</h2>
+    <hr class="divider" />
+    <p>We are here to support you every step of the way.</p>
+    <p style="margin-top:1rem; color:var(--muted); font-size:.95rem;">Please ask us anything — no question is too small.</p>
+    <div class="pill-list" style="margin-top:1.8rem;">
+      <div class="pill accent">Your OB Provider</div>
+      <div class="pill green">HIV Specialist</div>
+      <div class="pill orange">Social Work &amp; Support</div>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prevSlide()">&#8592; Prev</button>
+  <span class="counter" id="counter">1 / 13</span>
+  <button onclick="nextSlide()">Next &#8594;</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+
+  function updateUI() {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === current);
+    });
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+    progressBar.style.width = ((current + 1) / slides.length * 100) + '%';
+  }
+
+  function nextSlide() {
+    current = (current + 1) % slides.length;
+    updateUI();
+  }
+
+  function prevSlide() {
+    current = (current - 1 + slides.length) % slides.length;
+    updateUI();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  updateUI();
+</script>
+</body>
+</html>

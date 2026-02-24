@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anemia in Pregnancy | MFM Patient Education</title>
+    <style>
+        /* ─── Reset & Base ─────────────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── Deck & Slides ─────────────────────────────────────────────────── */
+        .deck {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 4rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease, transform 0.45s ease;
+            transform: translateX(60px);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .slide.exit {
+            opacity: 0;
+            transform: translateX(-60px);
+        }
+
+        /* ─── Navigation Bar ────────────────────────────────────────────────── */
+        .nav-bar {
+            background: #161b22;
+            border-top: 1px solid #30363d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 0.7rem 2rem;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #e6edf3;
+            padding: 0.45rem 1.4rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover { background: #30363d; }
+
+        .slide-counter {
+            font-size: 0.85rem;
+            color: #8b949e;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #30363d;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+
+        .dot.active { background: #58a6ff; }
+
+        /* ─── Typography ────────────────────────────────────────────────────── */
+        h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 300; letter-spacing: -0.02em; line-height: 1.15; }
+        h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 300; letter-spacing: -0.01em; line-height: 1.2; }
+        h3 { font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 500; }
+        p, li { font-size: clamp(1rem, 1.8vw, 1.25rem); line-height: 1.65; }
+
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            color: #8b949e;
+            margin-top: 0.5rem;
+        }
+
+        .label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.6rem;
+        }
+
+        /* ─── Color Tokens ──────────────────────────────────────────────────── */
+        .c-blue   { color: #58a6ff; }
+        .c-green  { color: #3fb950; }
+        .c-orange { color: #f0883e; }
+        .c-red    { color: #ff7b72; }
+        .c-purple { color: #bc8cff; }
+        .c-teal   { color: #39d353; }
+        .c-muted  { color: #8b949e; }
+
+        .bg-blue   { background: rgba(88,166,255,0.12); border: 1px solid rgba(88,166,255,0.3); }
+        .bg-green  { background: rgba(63,185,80,0.12);  border: 1px solid rgba(63,185,80,0.3); }
+        .bg-orange { background: rgba(240,136,62,0.12); border: 1px solid rgba(240,136,62,0.3); }
+        .bg-red    { background: rgba(255,123,114,0.12);border: 1px solid rgba(255,123,114,0.3); }
+        .bg-purple { background: rgba(188,140,255,0.12);border: 1px solid rgba(188,140,255,0.3); }
+        .bg-dark   { background: #161b22; border: 1px solid #30363d; }
+
+        /* ─── Layout Helpers ────────────────────────────────────────────────── */
+        .center { text-align: center; }
+        .content-wrap { max-width: 900px; width: 100%; }
+        .spacer { margin-top: 1.5rem; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.2rem;
+            width: 100%;
+            max-width: 960px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 1rem;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .card {
+            border-radius: 10px;
+            padding: 1.4rem 1.6rem;
+        }
+
+        /* ─── Icon Circles ──────────────────────────────────────────────────── */
+        .icon-circle {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 0.8rem;
+        }
+
+        /* ─── Divider ───────────────────────────────────────────────────────── */
+        .divider {
+            width: 60px;
+            height: 3px;
+            border-radius: 2px;
+            margin: 1rem auto;
+        }
+
+        /* ─── Table ─────────────────────────────────────────────────────────── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: clamp(0.8rem, 1.4vw, 1rem);
+        }
+
+        th {
+            background: #21262d;
+            color: #58a6ff;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #30363d;
+        }
+
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #21262d;
+            vertical-align: top;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+        /* ─── Timeline ──────────────────────────────────────────────────────── */
+        .timeline {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+        }
+
+        .timeline-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #30363d;
+            z-index: 0;
+        }
+
+        .timeline-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            z-index: 1;
+            position: relative;
+        }
+
+        .timeline-label {
+            margin-top: 0.6rem;
+            font-size: 0.8rem;
+            text-align: center;
+            color: #8b949e;
+            max-width: 90px;
+        }
+
+        .timeline-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 0.3rem;
+        }
+
+        /* ─── Pill / Badge ──────────────────────────────────────────────────── */
+        .pill {
+            display: inline-block;
+            padding: 0.25rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        /* ─── List Styles ───────────────────────────────────────────────────── */
+        .check-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .check-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.8rem;
+            position: relative;
+        }
+
+        .check-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #3fb950;
+            font-weight: 700;
+        }
+
+        .warn-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .warn-list li {
+            padding: 0.4rem 0;
+            padding-left: 1.8rem;
+            position: relative;
+        }
+
+        .warn-list li::before {
+            content: '!';
+            position: absolute;
+            left: 0;
+            color: #f0883e;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* ─── Source Badge ──────────────────────────────────────────────────── */
+        .source-badge {
+            position: absolute;
+            bottom: 1rem;
+            right: 1.5rem;
+            font-size: 0.65rem;
+            color: #484f58;
+            letter-spacing: 0.05em;
+        }
+
+        /* ─── Slide-specific accent lines ───────────────────────────────────── */
+        .accent-line {
+            width: 80px;
+            height: 4px;
+            border-radius: 2px;
+            margin: 1rem 0;
+        }
+
+        /* ─── Big Stat ──────────────────────────────────────────────────────── */
+        .big-stat {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 200;
+            line-height: 1;
+        }
+
+        /* ─── Responsive tweaks ─────────────────────────────────────────────── */
+        @media (max-width: 700px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .slide { padding: 1.5rem; }
+        }
+    </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/6Fuv7I9ZAUsz9vqCzS7nYvW2Qb6iM_mN64-h7xZuYgH9Fnn2aud7Is_6xmvKNEP4pbmVDnaoGcQUg4USGY09zjInMxYlZC-r9YhSTK0uqyUd7gnxaUOygSQTIgx17JZciY6nLb3LzfF6RDSgbikEDuToGIigfojiz9Aaq1T9qsGQYet2Yf8SHizJBUYLBhQufXV2VKOtTxHMmFpaVbhkjrgBkabz0Ve72QMgPq1jlLDkwwhhCZw7bO8lJYclF6BBgEPq3NPjyb_T5Z3fA9DY3UEEQJhvl7Xyjhu0CYGwj4ppSuMcGbA59S-DNAjJx923Ih1Rxo91B_NKi5NPP4ixZYnVoN2WDXKDPRkN8_0A8NBpo7eaa2T61lLmOzt4GEybpkWrRFTtkUHe8FhIeY6Q1A3HXfLEI1cv23i8CMQMXAeg0jTry62aGlJL5zDob3KJgUis6itM4tA65bFw-g9YSSazw7pKXnjloz5Ini6ve4HBH95yUxcXaadPVaP1CFwDGG4VCrCWiHkcTRlKB8Oi268bGIUvipapYXrxw-SDbwruXa-Bav0H_77TkbEfw7NPLeQpw_8azCYnGgaiZ8zU3buTKVCmd3kJ-o9WHSUhg_2EU_BmZMgrVN9lrYom4q9mXasVXjBvscYTW1O7EDdcP4dbcVxdGMji96wl5RxyPBDnSgLmt0rX-aumwyfvYeVJU5ptz0nltMVELD2hvEylj9FBOAQbdTzF9m2kLNiRaYsKEXV2CoIJQDnWH57nFTytUbHPaIuzj61wPItCyzdHKe9so4u4Ta_cbNHbfAECq5X25hBGl6gUH9AxJ7Kg9atlmyXTcCpJinkSpHGC-OQg8yH8qoXkzDqsLq1-zXdG7iX10O08AWbwHY2fhKqoih_C6LzvPAnEmNKdKptEyEOfdj0MRrpor9cqZm_gq6nvwWI30ruz4WIm61ouOUzGGP6vgsw7ac2v-ODizeg4-n4VRW9EmpmGxqPfVksOMn5fpMSOMxzBhEDj7bktiMrjxAMGzyhLEZRdBmLQnBP1QtyxZeVY2hfpjsbQfvocGIsNzB2g_157cdXDdtFap5BioEfG3RG2hu4TJ7KvGVbmMJvwGDBK4JCFfCqINJwuLJEe23khOUZNGk4hJDnjBFGRPY7j4jDYz0Js0E0ybt_dIZy8JJbqF6Qn9Rn_m67NGfXgIKoUWQMszJzWSiO8OsjItNsp_xIzKJPXqrZnHuxhX-a18DFkoRh7zw-EGycVaDkCliGEFfOUZD72vZL7BZgAcz0Au7otaKuMbdPkErmI2lXGWRwNA_SZbJvo9db8uGuMo62-uGY4AlzTejbCsBz08_hvo3jbDwO5PeGf6eislQbY_C_W-2SBW3nwGcKQlLUTAn7qkdA78tdaK0goSfd95xxXPHyR6zGeXgv3Dg3ZOcMrkeei6ev9XGEOBAg0LqD8HwH7JsHftLZ49KLWKm20RXUuMILKhqx3q1ivtT68dDg447ux9-O_NBuV70ZT_YWSwhZ8hV9yMGqYp-YMlOilwf5PCEJcMCfI9nzGdDk6t2DeALBq_yWCr9xLhCPekKqZNGExIMtfFPsCvkM8NdWj68kmxcgenuHSVhsYfwr9ZwHE4pOyeQHdoB2o8_zM32JpfP2M'></script></head>
+<body>
+
+<div class="deck">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 1 — Title
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide active" id="slide-1">
+        <div class="center content-wrap">
+            <div style="font-size:4rem; margin-bottom:1rem;">🩸</div>
+            <h1 class="c-blue">Anemia in Pregnancy</h1>
+            <div class="divider" style="background:#58a6ff;"></div>
+            <p class="subtitle">What you need to know — and what we can do together</p>
+            <div class="spacer"></div>
+            <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+                <span class="pill bg-blue c-blue">Patient Education</span>
+                <span class="pill bg-green c-green">ACOG Guideline-Based</span>
+                <span class="pill bg-purple c-purple">MFM Specialist Care</span>
+            </div>
+        </div>
+        <div class="source-badge">ACOG Practice Bulletin · SMFM Guidelines · FIGO 2025</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 2 — What is Anemia?
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-2">
+        <div class="center content-wrap">
+            <p class="label c-blue">Understanding the Basics</p>
+            <h2>What is Anemia?</h2>
+            <div class="divider" style="background:#58a6ff;"></div>
+        </div>
+        <div class="grid-2" style="max-width:820px; margin-top:1.5rem;">
+            <div class="card bg-dark center">
+                <div class="icon-circle" style="background:rgba(88,166,255,0.15);">🔴</div>
+                <h3 class="c-blue">Red Blood Cells</h3>
+                <p style="font-size:1rem; margin-top:0.5rem;">Carry oxygen from your lungs to your body and baby</p>
+            </div>
+            <div class="card bg-dark center">
+                <div class="icon-circle" style="background:rgba(255,123,114,0.15);">📉</div>
+                <h3 class="c-red">Anemia</h3>
+                <p style="font-size:1rem; margin-top:0.5rem;">Too few red blood cells, or too little hemoglobin to carry enough oxygen</p>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="card bg-blue center" style="max-width:600px; padding:1rem 2rem;">
+            <p style="font-size:1rem;"><strong>Diagnosed when hemoglobin &lt; 11.0 g/dL</strong><br>
+            <span class="c-muted" style="font-size:0.9rem;">A routine blood test at your prenatal visit</span></p>
+        </div>
+        <div class="source-badge">ACOG Practice Bulletin No. 233</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 3 — How Common Is It?
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-3">
+        <div class="center content-wrap">
+            <p class="label c-green">Prevalence</p>
+            <h2>You Are Not Alone</h2>
+            <div class="divider" style="background:#3fb950;"></div>
+        </div>
+        <div style="display:flex; gap:3rem; align-items:center; justify-content:center; margin-top:1.5rem; flex-wrap:wrap;">
+            <div class="center">
+                <div class="big-stat c-blue">32M</div>
+                <p class="c-muted" style="font-size:0.95rem; margin-top:0.4rem;">pregnant women affected<br>globally each year</p>
+            </div>
+            <div style="width:2px; height:80px; background:#30363d;"></div>
+            <div class="center">
+                <div class="big-stat c-orange">~50%</div>
+                <p class="c-muted" style="font-size:0.95rem; margin-top:0.4rem;">of pregnant women<br>worldwide</p>
+            </div>
+            <div style="width:2px; height:80px; background:#30363d;"></div>
+            <div class="center">
+                <div class="big-stat c-green">40%</div>
+                <p class="c-muted" style="font-size:0.95rem; margin-top:0.4rem;">of cases caused by<br>iron deficiency</p>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="card bg-green center" style="max-width:620px; padding:1rem 2rem;">
+            <p style="font-size:1rem;">Anemia is <strong>very common</strong> in pregnancy — and <strong>very treatable</strong>.</p>
+        </div>
+        <div class="source-badge">WHO Global Nutrition Report · SMFM Consult Series</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 4 — Why Does Pregnancy Increase Risk?
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-4">
+        <div class="center content-wrap">
+            <p class="label c-purple">Pathophysiology</p>
+            <h2>Why Pregnancy Increases Risk</h2>
+            <div class="divider" style="background:#bc8cff;"></div>
+        </div>
+        <div class="timeline" style="margin-top:2rem;">
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:rgba(88,166,255,0.2); border:2px solid #58a6ff;">🩺</div>
+                <div class="timeline-title c-blue">Blood Volume ↑</div>
+                <div class="timeline-label">Plasma expands faster than red cells</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:rgba(188,140,255,0.2); border:2px solid #bc8cff;">👶</div>
+                <div class="timeline-title c-purple">Baby's Needs ↑</div>
+                <div class="timeline-label">Fetus draws iron for growth and development</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:rgba(240,136,62,0.2); border:2px solid #f0883e;">🍽️</div>
+                <div class="timeline-title c-orange">Dietary Demands ↑</div>
+                <div class="timeline-label">Diet alone often cannot meet increased needs</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:rgba(255,123,114,0.2); border:2px solid #ff7b72;">📉</div>
+                <div class="timeline-title c-red">Iron Stores ↓</div>
+                <div class="timeline-label">Ferritin levels fall as stores are depleted</div>
+            </div>
+        </div>
+        <div class="source-badge">ACOG Practice Bulletin No. 233 · FIGO 2025</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 5 — Types of Anemia
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-5">
+        <div class="center content-wrap">
+            <p class="label c-blue">Classification</p>
+            <h2>Types of Anemia in Pregnancy</h2>
+            <div class="divider" style="background:#58a6ff;"></div>
+        </div>
+        <div class="grid-3" style="margin-top:1.5rem;">
+            <div class="card bg-dark center">
+                <div class="icon-circle" style="background:rgba(255,123,114,0.15);">🔩</div>
+                <h3 class="c-red" style="font-size:1.1rem;">Iron Deficiency</h3>
+                <p style="font-size:0.9rem; margin-top:0.5rem; color:#8b949e;">Most common type<br>~40% of cases</p>
+                <span class="pill bg-red c-red" style="margin-top:0.8rem; font-size:0.7rem;">Most Common</span>
+            </div>
+            <div class="card bg-dark center">
+                <div class="icon-circle" style="background:rgba(188,140,255,0.15);">🧬</div>
+                <h3 class="c-purple" style="font-size:1.1rem;">Folate / B₁₂ Deficiency</h3>
+                <p style="font-size:0.9rem; margin-top:0.5rem; color:#8b949e;">Megaloblastic anemia<br>Prevented by prenatal vitamins</p>
+                <span class="pill bg-purple c-purple" style="margin-top:0.8rem; font-size:0.7rem;">Preventable</span>
+            </div>
+            <div class="card bg-dark center">
+                <div class="icon-circle" style="background:rgba(88,166,255,0.15);">🧪</div>
+                <h3 class="c-blue" style="font-size:1.1rem;">Hemoglobinopathies</h3>
+                <p style="font-size:0.9rem; margin-top:0.5rem; color:#8b949e;">Sickle cell disease<br>Thalassemia syndromes</p>
+                <span class="pill bg-blue c-blue" style="margin-top:0.8rem; font-size:0.7rem;">Specialist Care</span>
+            </div>
+        </div>
+        <div class="source-badge">ACOG Practice Bulletin No. 233 · SMFM Consult Series</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 6 — Symptoms
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-6">
+        <div class="center content-wrap">
+            <p class="label c-orange">Recognizing Anemia</p>
+            <h2>How Anemia May Feel</h2>
+            <div class="divider" style="background:#f0883e;"></div>
+        </div>
+        <div class="grid-4" style="margin-top:1.5rem;">
+            <div class="card bg-dark center" style="padding:1.2rem 1rem;">
+                <div style="font-size:2.2rem;">😴</div>
+                <h3 style="font-size:1rem; margin-top:0.5rem;">Fatigue &amp; Weakness</h3>
+            </div>
+            <div class="card bg-dark center" style="padding:1.2rem 1rem;">
+                <div style="font-size:2.2rem;">💫</div>
+                <h3 style="font-size:1rem; margin-top:0.5rem;">Dizziness</h3>
+            </div>
+            <div class="card bg-dark center" style="padding:1.2rem 1rem;">
+                <div style="font-size:2.2rem;">💨</div>
+                <h3 style="font-size:1rem; margin-top:0.5rem;">Shortness of Breath</h3>
+            </div>
+            <div class="card bg-dark center" style="padding:1.2rem 1rem;">
+                <div style="font-size:2.2rem;">💓</div>
+                <h3 style="font-size:1rem; margin-top:0.5rem;">Rapid Heartbeat</h3>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="card bg-orange center" style="max-width:680px; padding:1rem 2rem;">
+            <p style="font-size:1rem;">Many women have <strong>no symptoms at all</strong> — which is why routine screening matters.</p>
+        </div>
+        <div class="source-badge">ACOG Practice Bulletin No. 233</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 7 — Why It Matters (Risks)
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-7">
+        <div class="center content-wrap">
+            <p class="label c-red">Clinical Significance</p>
+            <h2>Why Treatment Matters</h2>
+            <div class="divider" style="background:#ff7b72;"></div>
+        </div>
+        <div class="grid-2" style="margin-top:1.5rem; max-width:860px;">
+            <div>
+                <p class="label c-red" style="margin-bottom:0.8rem;">For Mother</p>
+                <ul class="warn-list">
+                    <li>Increased risk of postpartum hemorrhage</li>
+                    <li>Greater fatigue during labor and recovery</li>
+                    <li>Higher chance of needing a blood transfusion</li>
+                    <li>Increased risk of cesarean delivery</li>
+                </ul>
+            </div>
+            <div>
+                <p class="label c-orange" style="margin-bottom:0.8rem;">For Baby</p>
+                <ul class="warn-list" style="--warn-color:#f0883e;">
+                    <li style="--c:#f0883e;">Preterm birth (before 37 weeks)</li>
+                    <li>Low birth weight (&lt; 2,500 g)</li>
+                    <li>Reduced oxygen during labor</li>
+                    <li>Premature rupture of membranes</li>
+                </ul>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="card bg-green center" style="max-width:680px; padding:0.9rem 2rem;">
+            <p style="font-size:1rem;">✓ With early treatment, most of these risks can be <strong>significantly reduced</strong>.</p>
+        </div>
+        <div class="source-badge">Meta-analysis 2025 · ACOG Practice Bulletin No. 233</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 8 — Screening
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-8">
+        <div class="center content-wrap">
+            <p class="label c-blue">Monitoring</p>
+            <h2>When Will I Be Screened?</h2>
+            <div class="divider" style="background:#58a6ff;"></div>
+        </div>
+        <div class="timeline" style="margin-top:2.5rem; max-width:860px;">
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:rgba(88,166,255,0.2); border:2px solid #58a6ff; font-size:0.85rem; font-weight:700; color:#58a6ff;">1st</div>
+                <div class="timeline-title c-blue">First Visit</div>
+                <div class="timeline-label">CBC + Ferritin<br>Baseline hemoglobin</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:rgba(188,140,255,0.2); border:2px solid #bc8cff; font-size:0.85rem; font-weight:700; color:#bc8cff;">24–28</div>
+                <div class="timeline-title c-purple">Weeks 24–28</div>
+                <div class="timeline-label">Repeat CBC<br>Routine re-screening</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:rgba(240,136,62,0.2); border:2px solid #f0883e; font-size:0.85rem; font-weight:700; color:#f0883e;">Rx</div>
+                <div class="timeline-title c-orange">If Treated</div>
+                <div class="timeline-label">Follow-up CBC<br>~4 weeks after starting treatment</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:rgba(63,185,80,0.2); border:2px solid #3fb950; font-size:0.85rem; font-weight:700; color:#3fb950;">PP</div>
+                <div class="timeline-title c-green">Postpartum</div>
+                <div class="timeline-label">Continue iron<br>6 weeks after delivery</div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="card bg-blue center" style="max-width:620px; padding:0.9rem 2rem;">
+            <p style="font-size:1rem;">Ferritin &lt; 30 µg/L indicates depleted iron stores — even before hemoglobin falls.</p>
+        </div>
+        <div class="source-badge">ACOG Practice Bulletin No. 233 · FIGO 2025</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 9 — Oral Iron Treatment
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-9">
+        <div class="center content-wrap">
+            <p class="label c-green">First-Line Treatment</p>
+            <h2>Oral Iron Therapy</h2>
+            <div class="divider" style="background:#3fb950;"></div>
+        </div>
+        <div class="grid-2" style="margin-top:1.5rem; max-width:860px;">
+            <div class="card bg-dark">
+                <p class="label c-green">How to Take It</p>
+                <ul class="check-list" style="font-size:0.95rem;">
+                    <li>Take in the morning on an <strong>empty stomach</strong></li>
+                    <li>Take with <strong>vitamin C</strong> (e.g., orange juice) to boost absorption</li>
+                    <li>60–120 mg elemental iron daily</li>
+                    <li>Every-other-day dosing may reduce side effects</li>
+                </ul>
+            </div>
+            <div class="card bg-dark">
+                <p class="label c-orange">What to Avoid</p>
+                <ul class="warn-list" style="font-size:0.95rem;">
+                    <li>Calcium supplements at the same time</li>
+                    <li>Coffee, tea, or milk within 1–2 hours</li>
+                    <li>Antacids taken together with iron</li>
+                </ul>
+                <div style="margin-top:1rem; padding:0.6rem 1rem; background:rgba(63,185,80,0.1); border-radius:6px; border:1px solid rgba(63,185,80,0.3);">
+                    <p style="font-size:0.85rem; color:#8b949e;">Dark or black stools are <strong class="c-green">normal</strong> when taking iron.</p>
+                </div>
+            </div>
+        </div>
+        <div class="source-badge">FIGO 2025 · ACOG Practice Bulletin No. 233</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 10 — IV Iron
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-10">
+        <div class="center content-wrap">
+            <p class="label c-purple">When Oral Iron Is Not Enough</p>
+            <h2>Intravenous (IV) Iron</h2>
+            <div class="divider" style="background:#bc8cff;"></div>
+        </div>
+        <div class="grid-2" style="margin-top:1.5rem; max-width:860px;">
+            <div class="card bg-dark">
+                <p class="label c-purple">When IV Iron Is Recommended</p>
+                <ul class="check-list" style="font-size:0.95rem;">
+                    <li>Oral iron not tolerated (nausea, constipation)</li>
+                    <li>No hemoglobin rise after 2–4 weeks of oral therapy</li>
+                    <li>Severe anemia requiring rapid correction</li>
+                    <li>Within 4–6 weeks of your due date</li>
+                    <li>Preferred in the 3rd trimester (after 32 weeks)</li>
+                </ul>
+            </div>
+            <div class="card bg-dark">
+                <p class="label c-blue">What to Expect</p>
+                <ul class="check-list" style="font-size:0.95rem;">
+                    <li>Given as a short infusion in a clinical setting</li>
+                    <li>Bypasses the stomach — no GI side effects</li>
+                    <li>Safe and effective after the first trimester</li>
+                    <li>Corrects anemia more quickly than oral iron</li>
+                </ul>
+            </div>
+        </div>
+        <div class="source-badge">FIGO 2025 · ACOG Practice Bulletin No. 233</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 11 — Oral vs IV Comparison Table
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-11">
+        <div class="center content-wrap">
+            <p class="label c-blue">Treatment Comparison</p>
+            <h2>Oral vs. IV Iron at a Glance</h2>
+            <div class="divider" style="background:#58a6ff;"></div>
+        </div>
+        <div style="width:100%; max-width:860px; margin-top:1.5rem; overflow-x:auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>💊 Oral Iron</th>
+                        <th>💉 IV Iron</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="c-muted">Best For</td>
+                        <td>Mild to moderate anemia</td>
+                        <td>Severe anemia or oral intolerance</td>
+                    </tr>
+                    <tr>
+                        <td class="c-muted">Dose</td>
+                        <td>60–120 mg elemental iron/day</td>
+                        <td>Calculated by your doctor (Ganzoni formula)</td>
+                    </tr>
+                    <tr>
+                        <td class="c-muted">Side Effects</td>
+                        <td>Nausea, constipation, dark stools</td>
+                        <td>Minimal; infusion site reactions (rare)</td>
+                    </tr>
+                    <tr>
+                        <td class="c-muted">Speed</td>
+                        <td>Gradual (weeks)</td>
+                        <td>Faster correction</td>
+                    </tr>
+                    <tr>
+                        <td class="c-muted">Timing</td>
+                        <td>Any trimester through postpartum</td>
+                        <td>Preferred after 32 weeks</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="source-badge">FIGO 2025 · ACOG Practice Bulletin No. 233</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 12 — Folate & B12
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-12">
+        <div class="center content-wrap">
+            <p class="label c-purple">Other Types of Anemia</p>
+            <h2>Folate &amp; Vitamin B₁₂</h2>
+            <div class="divider" style="background:#bc8cff;"></div>
+        </div>
+        <div class="grid-2" style="margin-top:1.5rem; max-width:860px;">
+            <div class="card bg-dark">
+                <div style="font-size:2rem; margin-bottom:0.6rem;">🥦</div>
+                <h3 class="c-purple">Folate (Folic Acid)</h3>
+                <p style="font-size:0.95rem; margin-top:0.5rem; color:#8b949e;">Essential for red cell production and baby's neural tube development.</p>
+                <ul class="check-list" style="font-size:0.9rem; margin-top:0.8rem;">
+                    <li>At least 400 mcg daily in prenatal vitamin</li>
+                    <li>Start <em>before</em> conception if possible</li>
+                    <li>Leafy greens, citrus, beans, fortified cereals</li>
+                </ul>
+            </div>
+            <div class="card bg-dark">
+                <div style="font-size:2rem; margin-bottom:0.6rem;">🥩</div>
+                <h3 class="c-blue">Vitamin B₁₂</h3>
+                <p style="font-size:0.95rem; margin-top:0.5rem; color:#8b949e;">Needed for healthy red blood cells. More common in vegetarian/vegan diets or after weight-loss surgery.</p>
+                <ul class="check-list" style="font-size:0.9rem; margin-top:0.8rem;">
+                    <li>Included in most prenatal vitamins</li>
+                    <li>Meat, fish, eggs, dairy — or fortified foods</li>
+                    <li>Injections available if absorption is impaired</li>
+                </ul>
+            </div>
+        </div>
+        <div class="source-badge">ACOG Practice Bulletin No. 233 · SMFM Consult Series</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 13 — Diet & Food Sources
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-13">
+        <div class="center content-wrap">
+            <p class="label c-orange">Nutritional Support</p>
+            <h2>Iron-Rich Foods</h2>
+            <div class="divider" style="background:#f0883e;"></div>
+        </div>
+        <div class="grid-2" style="margin-top:1.5rem; max-width:860px;">
+            <div class="card bg-dark">
+                <p class="label c-orange">Heme Iron (Best Absorbed)</p>
+                <p style="font-size:0.9rem; color:#8b949e; margin-bottom:0.8rem;">From animal sources — absorbed 2–3× more efficiently</p>
+                <ul class="check-list" style="font-size:0.95rem;">
+                    <li>Lean beef, chicken, turkey</li>
+                    <li>Fish and shellfish (cooked)</li>
+                    <li>Organ meats (liver — in moderation)</li>
+                </ul>
+            </div>
+            <div class="card bg-dark">
+                <p class="label c-green">Non-Heme Iron</p>
+                <p style="font-size:0.9rem; color:#8b949e; margin-bottom:0.8rem;">From plant sources — pair with vitamin C to boost absorption</p>
+                <ul class="check-list" style="font-size:0.95rem;">
+                    <li>Lentils, beans, chickpeas</li>
+                    <li>Fortified cereals and breads</li>
+                    <li>Spinach, tofu, pumpkin seeds</li>
+                </ul>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="card bg-orange center" style="max-width:680px; padding:0.8rem 2rem;">
+            <p style="font-size:0.95rem;">Diet alone <strong>cannot</strong> fully meet pregnancy's iron demands — supplements remain essential.</p>
+        </div>
+        <div class="source-badge">ACOG Practice Bulletin No. 233 · FIGO 2025</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 14 — When to Call Your Doctor
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-14">
+        <div class="center content-wrap">
+            <p class="label c-red">When to Seek Care</p>
+            <h2>Call Your Care Team If You Have…</h2>
+            <div class="divider" style="background:#ff7b72;"></div>
+        </div>
+        <div class="grid-2" style="margin-top:1.5rem; max-width:820px;">
+            <div class="card bg-red">
+                <ul class="warn-list" style="font-size:1rem;">
+                    <li>Severe fatigue or weakness</li>
+                    <li>Dizziness or fainting</li>
+                    <li>Rapid or irregular heartbeat</li>
+                </ul>
+            </div>
+            <div class="card bg-red">
+                <ul class="warn-list" style="font-size:1rem;">
+                    <li>Severe shortness of breath</li>
+                    <li>Chest pain or pressure</li>
+                    <li>Intolerable side effects from supplements</li>
+                </ul>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="card bg-blue center" style="max-width:680px; padding:0.9rem 2rem;">
+            <p style="font-size:1rem;">Do not wait for your next appointment — <strong>contact us right away</strong>.</p>
+        </div>
+        <div class="source-badge">ACOG Practice Bulletin No. 233</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 15 — Prevention
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-15">
+        <div class="center content-wrap">
+            <p class="label c-green">Prevention</p>
+            <h2>Staying Ahead of Anemia</h2>
+            <div class="divider" style="background:#3fb950;"></div>
+        </div>
+        <div class="grid-3" style="margin-top:1.5rem;">
+            <div class="card bg-dark center">
+                <div class="icon-circle" style="background:rgba(63,185,80,0.15);">💊</div>
+                <h3 style="font-size:1rem;">Take Your Prenatal Vitamin</h3>
+                <p style="font-size:0.85rem; color:#8b949e; margin-top:0.4rem;">Every day — it contains iron, folate, and B₁₂</p>
+            </div>
+            <div class="card bg-dark center">
+                <div class="icon-circle" style="background:rgba(88,166,255,0.15);">🥗</div>
+                <h3 style="font-size:1rem;">Eat a Balanced Diet</h3>
+                <p style="font-size:0.85rem; color:#8b949e; margin-top:0.4rem;">Include iron-rich, folate-rich, and B₁₂-rich foods</p>
+            </div>
+            <div class="card bg-dark center">
+                <div class="icon-circle" style="background:rgba(240,136,62,0.15);">📅</div>
+                <h3 style="font-size:1rem;">Attend All Prenatal Visits</h3>
+                <p style="font-size:0.85rem; color:#8b949e; margin-top:0.4rem;">Routine screening catches anemia early</p>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="card bg-green center" style="max-width:680px; padding:0.9rem 2rem;">
+            <p style="font-size:1rem;">Tell your doctor about any dietary restrictions, surgeries, or conditions that may affect absorption.</p>
+        </div>
+        <div class="source-badge">ACOG Practice Bulletin No. 233 · SMFM Consult Series</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SLIDE 16 — Partnership & Closing
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-16">
+        <div class="center content-wrap">
+            <div style="font-size:3.5rem; margin-bottom:1rem;">🤝</div>
+            <h2>We Are in This Together</h2>
+            <div class="divider" style="background:#3fb950; margin:1rem auto;"></div>
+            <p style="max-width:640px; font-size:1.15rem; color:#8b949e; line-height:1.7;">
+                Anemia is <strong class="c-green">common</strong>, <strong class="c-blue">detectable</strong>, and <strong class="c-orange">treatable</strong>.<br>
+                Most women see improvement within a few weeks of starting treatment.
+            </p>
+            <div class="spacer"></div>
+            <div class="grid-3" style="max-width:700px;">
+                <div class="card bg-dark center" style="padding:1rem;">
+                    <div style="font-size:1.8rem;">🩺</div>
+                    <p style="font-size:0.85rem; margin-top:0.4rem; color:#8b949e;">Regular monitoring</p>
+                </div>
+                <div class="card bg-dark center" style="padding:1rem;">
+                    <div style="font-size:1.8rem;">💊</div>
+                    <p style="font-size:0.85rem; margin-top:0.4rem; color:#8b949e;">Consistent treatment</p>
+                </div>
+                <div class="card bg-dark center" style="padding:1rem;">
+                    <div style="font-size:1.8rem;">❤️</div>
+                    <p style="font-size:0.85rem; margin-top:0.4rem; color:#8b949e;">Healthy outcomes</p>
+                </div>
+            </div>
+            <div class="spacer"></div>
+            <p style="font-size:0.9rem; color:#484f58;">Always follow your doctor's recommendations about supplements and follow-up testing.</p>
+        </div>
+        <div class="source-badge">MFM Patient Education · ACOG · SMFM</div>
+    </div>
+
+</div><!-- /.deck -->
+
+<!-- ─── Navigation Bar ─────────────────────────────────────────────────────── -->
+<div class="nav-bar">
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()">&#8592; Prev</button>
+    <div class="progress-dots" id="dots"></div>
+    <span class="slide-counter" id="counter">1 / 16</span>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next &#8594;</button>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    const counter = document.getElementById('counter');
+    const dotsContainer = document.getElementById('dots');
+
+    // Build dots
+    slides.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(d);
+    });
+
+    function updateUI() {
+        counter.textContent = (currentSlide + 1) + ' / ' + total;
+        document.querySelectorAll('.dot').forEach((d, i) => {
+            d.classList.toggle('active', i === currentSlide);
+        });
+    }
+
+    function goToSlide(index) {
+        if (index === currentSlide) return;
+        slides[currentSlide].classList.remove('active');
+        slides[currentSlide].classList.add('exit');
+        setTimeout(() => slides[currentSlide < index ? currentSlide : currentSlide].classList.remove('exit'), 450);
+        currentSlide = index;
+        slides[currentSlide].classList.add('active');
+        updateUI();
+    }
+
+    function showSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.remove('active', 'exit');
+            if (i === index) s.classList.add('active');
+        });
+        updateUI();
+    }
+
+    function nextSlide() {
+        const next = (currentSlide + 1) % total;
+        showSlide(next);
+        currentSlide = next;
+    }
+
+    function prevSlide() {
+        const prev = (currentSlide - 1 + total) % total;
+        showSlide(prev);
+        currentSlide = prev;
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    // Touch / swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+    });
+
+    showSlide(0);
+</script>
+</body>
+</html>
