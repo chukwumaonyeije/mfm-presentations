@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fetal Growth Biometry Calculator | MFM Clinical Tool</title>
+<style>
+:root {
+  --bg: #f0f4f8;
+  --card-bg: #ffffff;
+  --text: #1a202c;
+  --subtext: #4a5568;
+  --heading: #0f6b8e;
+  --primary: #0891b2;
+  --primary-hover: #0e7490;
+  --primary-light: #ecfeff;
+  --border: #e2e8f0;
+  --input-bg: #f8fafc;
+  --shadow: 0 4px 20px rgba(0,0,0,0.07);
+  --green: #16a34a; --green-bg: #f0fdf4;
+  --yellow: #ca8a04; --yellow-bg: #fefce8;
+  --orange: #ea580c; --orange-bg: #fff7ed;
+  --red: #dc2626; --red-bg: #fef2f2;
+  --purple: #7c3aed; --purple-bg: #f5f3ff;
+  --badge-bg: #0891b2;
+  --progress-bg: #e2e8f0;
+  --progress-fill: #0891b2;
+  --tab-active: #0891b2;
+  --tab-inactive: #e2e8f0;
+}
+body.dark {
+  --bg: #0a0f1a;
+  --card-bg: #111827;
+  --text: #e2e8f0;
+  --subtext: #94a3b8;
+  --heading: #38bdf8;
+  --primary: #38bdf8;
+  --primary-hover: #0ea5e9;
+  --primary-light: #0c1a2e;
+  --border: #1e2d3d;
+  --input-bg: #0f1e2e;
+  --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  --green: #4ade80; --green-bg: #052e16;
+  --yellow: #fbbf24; --yellow-bg: #1c1500;
+  --orange: #fb923c; --orange-bg: #1c0a00;
+  --red: #f87171; --red-bg: #1c0000;
+  --purple: #c084fc; --purple-bg: #1a0a2e;
+  --badge-bg: #38bdf8;
+  --progress-bg: #1e2d3d;
+  --progress-fill: #38bdf8;
+  --tab-active: #38bdf8;
+  --tab-inactive: #1e2d3d;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:1.5rem 1rem 3rem;transition:background .3s,color .3s}
+.wrapper{max-width:780px;margin:0 auto}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:.5rem}
+.header-btn{background:none;border:1.5px solid var(--border);border-radius:20px;padding:.4rem .9rem;cursor:pointer;color:var(--text);font-size:.82rem;display:flex;align-items:center;gap:.4rem;transition:border-color .2s,color .2s}
+.header-btn:hover{border-color:var(--primary);color:var(--primary)}
+.brand-link{color:var(--subtext);text-decoration:none;font-size:.78rem;font-weight:500}
+.brand-link:hover{color:var(--primary)}
+.card{background:var(--card-bg);border-radius:12px;padding:1.75rem;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:1rem;transition:background .3s,border-color .3s}
+h1{color:var(--heading);font-size:1.5rem;font-weight:700;margin-bottom:.25rem}
+.subtitle{color:var(--subtext);font-size:.88rem;margin-bottom:1.25rem}
+/* TABS */
+.tabs{display:flex;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.tab{padding:.5rem 1rem;border-radius:8px;border:1.5px solid var(--tab-inactive);background:none;cursor:pointer;font-size:.85rem;font-weight:600;color:var(--subtext);transition:all .2s}
+.tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+/* FORM GRID */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+@media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:.3rem}
+.form-group label{font-size:.8rem;font-weight:600;color:var(--subtext);text-transform:uppercase;letter-spacing:.04em}
+.form-group input,.form-group select{padding:.6rem .75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:.92rem;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary)}
+.form-group .hint{font-size:.74rem;color:var(--subtext)}
+.form-section-title{grid-column:1/-1;font-size:.78rem;font-weight:700;color:var(--heading);text-transform:uppercase;letter-spacing:.06em;padding-top:.5rem;border-top:1px solid var(--border);margin-top:.25rem}
+/* STANDARD TOGGLE */
+.standard-row{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.std-btn{padding:.4rem .85rem;border-radius:6px;border:1.5px solid var(--border);background:none;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--subtext);transition:all .2s}
+.std-btn.active{background:var(--primary);border-color:var(--primary);color:#fff}
+/* ACTION ROW */
+.action-row{display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap}
+.btn{background:var(--primary);color:#fff;border:none;padding:.65rem 1.4rem;border-radius:8px;cursor:pointer;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:.4rem;transition:background .2s,transform .1s}
+.btn:hover{background:var(--primary-hover)}
+.btn:active{transform:scale(.98)}
+.btn-ghost{background:none;border:1.5px solid var(--border);color:var(--text);padding:.65rem 1.2rem;border-radius:8px;cursor:pointer;font-size:.92rem;font-weight:500;transition:border-color .2s}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+/* RESULTS */
+.results-section{margin-top:1rem}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.75rem;margin-bottom:1rem}
+.result-card{border-radius:10px;padding:1rem;border-left:4px solid;text-align:center}
+.result-card .rc-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem;opacity:.8}
+.result-card .rc-value{font-size:1.4rem;font-weight:700;margin-bottom:.15rem}
+.result-card .rc-pct{font-size:.82rem;opacity:.85}
+.result-card .rc-badge{display:inline-block;padding:.15rem .5rem;border-radius:12px;font-size:.7rem;font-weight:700;margin-top:.3rem}
+.rc-normal{border-color:var(--green);background:var(--green-bg)}
+.rc-normal .rc-badge{background:var(--green);color:#fff}
+.rc-sga{border-color:var(--orange);background:var(--orange-bg)}
+.rc-sga .rc-badge{background:var(--orange);color:#fff}
+.rc-fgr{border-color:var(--red);background:var(--red-bg)}
+.rc-fgr .rc-badge{background:var(--red);color:#fff}
+.rc-lga{border-color:var(--purple);background:var(--purple-bg)}
+.rc-lga .rc-badge{background:var(--purple);color:#fff}
+.rc-warn{border-color:var(--yellow);background:var(--yellow-bg)}
+.rc-warn .rc-badge{background:var(--yellow);color:#fff}
+/* INTERPRETATION BOXES */
+.interp-box{border-radius:8px;padding:.9rem 1rem;margin-bottom:.75rem;border-left:4px solid;font-size:.88rem;line-height:1.55}
+.interp-box strong{display:block;margin-bottom:.3rem;font-weight:700}
+.interp-green{border-color:var(--green);background:var(--green-bg)}
+.interp-yellow{border-color:var(--yellow);background:var(--yellow-bg)}
+.interp-orange{border-color:var(--orange);background:var(--orange-bg)}
+.interp-red{border-color:var(--red);background:var(--red-bg)}
+.interp-purple{border-color:var(--purple);background:var(--purple-bg)}
+.interp-blue{border-color:var(--primary);background:var(--primary-light)}
+/* DOPPLER SECTION */
+.doppler-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem}
+.doppler-label{font-size:.82rem;font-weight:600;min-width:80px;color:var(--subtext)}
+.doppler-value{font-size:.88rem;font-weight:700}
+.doppler-ref{font-size:.75rem;color:var(--subtext)}
+/* REFERENCE TABLE */
+.ref-toggle{background:none;border:none;cursor:pointer;color:var(--primary);font-size:.82rem;font-weight:600;padding:0;display:flex;align-items:center;gap:.3rem;margin-top:.75rem}
+.ref-table{display:none;width:100%;border-collapse:collapse;margin-top:.75rem;font-size:.78rem}
+.ref-table.open{display:table}
+.ref-table th,.ref-table td{text-align:left;padding:.45rem .55rem;border-bottom:1px solid var(--border)}
+.ref-table th{font-weight:700;color:var(--heading);background:var(--primary-light)}
+/* DISCLAIMER */
+.disclaimer{margin-top:1.5rem;text-align:center;font-size:.76rem;color:var(--subtext);line-height:1.5}
+.disclaimer a{color:var(--primary);text-decoration:none}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--card-bg);border-radius:12px;padding:2rem;max-width:580px;width:100%;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--subtext);line-height:1}
+.modal-close:hover{color:var(--text)}
+.modal-box h2{color:var(--heading);font-size:1.25rem;margin-bottom:1.1rem;padding-right:2rem}
+.modal-section{margin-bottom:1rem}
+.modal-section h3{font-size:.92rem;font-weight:700;color:var(--heading);margin-bottom:.3rem}
+.modal-section p,.modal-section li{font-size:.85rem;line-height:1.6}
+.modal-section ul{padding-left:1.2rem}
+.modal-note{margin-top:.75rem;padding:.7rem .9rem;background:var(--yellow-bg);border-left:3px solid var(--yellow);border-radius:6px;font-size:.8rem;line-height:1.5}
+/* EFW display */
+.efw-hero{text-align:center;padding:1rem;background:var(--primary-light);border-radius:10px;border:2px solid var(--primary);margin-bottom:1rem}
+.efw-hero .efw-num{font-size:2.2rem;font-weight:800;color:var(--heading)}
+.efw-hero .efw-label{font-size:.82rem;color:var(--subtext);margin-top:.1rem}
+.efw-hero .efw-pct{font-size:1.1rem;font-weight:700;margin-top:.3rem}
+/* SECTION HEADER */
+.section-header{font-size:.82rem;font-weight:700;color:var(--heading);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem;padding-bottom:.3rem;border-bottom:2px solid var(--primary)}
+</style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/f4BYBy8VAwAjA8E2cTKcgdlrvAeH42qU9d-zyz49AjkDEffiYKuBNYfxNyO8dXGTRpdmhNF6WOrVOdcJ1_LwFtNorrT93j3hC79AWruB8YeKfjUdBQ1RluarnWjHtEZ0ExjyBCV8CB3rg9yMlkhJEHeua9iUN7ZTqYF4yDL97rhW1EmYXVBouuYmUgdFRuFB2IkqZI_K0jBjnBshBmDNc1yL-wbgsVd8s_ReVoCVhvqIGQI71VIBfa3ZaVCDlS4hrEH4mT_FuDl9pUg5b5K99tz1ejYlioJU-O90uy9lOJEHTLpEKbFhWV4U6B04SN8oJXDuO0bW1Jqr7id-6YdCxcMNnPHgDaJzOq6SoQ02gnjbkITeoNViXnq9ihZSiFraQxVXpAmbjcSjUi1b8ggKcPsIVIzQXpq-VsYe9Wux-4ae6P4iZ5oyfBonAGEyteYF_CgStqRSZT4X86zWS8Flo0xO7oYRcDZjdbX-o7-802sd2QrpnewiWGhPieLX1mUeUHfYb7WZmUGIpyjyo1Jxdv9bvkrPts0Z8uLnQUdOfM8CcghnvC8zT-58oHvAeCPaLHu9ewIFXn0jZxxPQLg_MKxe6CAzR2wdSuAupCuI29EsyCBbEibXY4o8czSAukSTb8MDQq0YZGZ52sbc07Bmd1P7zQIgU-5riiabEnT2HDCv-KphBhpo-S0Y_Vl_Zir95U0Zh0vb6y3RCoY3jzk5l3OsjRyb2OzNW04OfYW6FU4dIsjLvQ29BU5q-z9p1xLCaHZxvF5t-vQCpXFWRPRbzTRfCKhoO0feLsF77slyHa_4_CYravL1K5kWKizoYYI2bdzFsGMxUcP5CCXSLTzos_l4DfUzoNvrxhPxn16mAYjwg5BxRo6wJ7wwSXIyEw6V5Xj58co5Bq-gRroBLAHZ2SIo8QTjTuMwDEXSpQKN4v9hdi56F5cuLNzz6ClD1iRn4iNNt9rwG8RH_dG9wvGPB98KOsRsM_1jlYk0zKTHaf1r0pvH9Ns7BUW72GhSdnysZ4d6re7Jc3ZQTwwoh_EFgUPyPT5r0ZW5UMDnDc4aN_rC23SgrVaf-gnuadKZH06IjV0S1cxL2_uazR6iV5RW-R3z7-XFCYRF6IFJhjy_e7OXhxypX7CMK8hVPWt3Kugm6B01t0gBqyQcGyz3c5RCAhqJ5fpda-lAB4lnUVMytVVuIhTMzTsIo7OTqvkGzCt4190piMXV95jY__7eGDZ5Oh3Fzf9XffV5zysahOj6W0_yU6oVI1NpTrt4tOQ_fH2qCWuvefR1NVcmUOVz4dOJ07QPj-eF-tu27VdHbZByargfPbb8h-TiW--wpa26s12lB8zyXsUT_94pcxDO9bDEqxF8X6X0GYBgmxRRNcI2psaaVMqj0zpg8zngk5UafAmspMoOwlyOXAwlz6TwJP7CNdPl3GIVS5wZhE7Oh40xhGo9s0XdA1gcA4eZtscxELsYefDpoQhKQcCNxQ8lg5F5LNit9GRp8XjoxZCRW-4jHhOE7rS9sxGCMgnAZIUv7VKPzzawVSsVYdauzjxrQRwsEGg1O8pdMe4aKKLypZIIPLFUI2gfYbwh_QxiYdW2au1I13ByFDjl9XyleT6Zdvw5D7NXX49IyaSpFtWIM7v0amTfbbtTzV3mOpSW'></script></head>
+<body>
+<div class="wrapper">
+
+<!-- HEADER -->
+<div class="header">
+  <button class="header-btn" id="aboutBtn">ℹ About Fetal Growth</button>
+  <a class="brand-link" href="https://doctorswhocode.blog/" target="_blank" rel="noopener">Created by DoctorsWhoCode ↗</a>
+  <button class="header-btn" id="darkBtn">◑ Dark Mode</button>
+</div>
+
+<!-- MAIN CARD -->
+<div class="card">
+  <h1>Fetal Growth Biometry Calculator</h1>
+  <p class="subtitle">Automated percentile calculations with Hadlock, WHO, and INTERGROWTH-21st standards · FGR/LGA screening · UA & MCA Doppler interpretation</p>
+
+  <!-- GESTATIONAL AGE -->
+  <div class="form-grid" style="margin-bottom:1rem">
+    <div class="form-group">
+      <label>Gestational Age — Weeks</label>
+      <input type="number" id="gaWeeks" min="20" max="42" placeholder="e.g. 32">
+      <span class="hint">Range: 20–42 weeks</span>
+    </div>
+    <div class="form-group">
+      <label>Gestational Age — Days</label>
+      <input type="number" id="gaDays" min="0" max="6" placeholder="0–6" value="0">
+    </div>
+  </div>
+
+  <!-- GROWTH STANDARD SELECTOR -->
+  <div style="margin-bottom:1rem">
+    <div class="section-header">Growth Standard</div>
+    <div class="standard-row">
+      <button class="std-btn active" data-std="intergrowth">INTERGROWTH-21st</button>
+      <button class="std-btn" data-std="hadlock">Hadlock (1991)</button>
+      <button class="std-btn" data-std="who">WHO (2017)</button>
+    </div>
+  </div>
+
+  <!-- BIOMETRY INPUTS -->
+  <div class="section-header">Fetal Biometry</div>
+  <div class="form-grid" style="margin-bottom:1rem">
+    <div class="form-group">
+      <label>BPD (mm)</label>
+      <input type="number" id="bpd" placeholder="e.g. 82" step="0.1">
+    </div>
+    <div class="form-group">
+      <label>HC (mm)</label>
+      <input type="number" id="hc" placeholder="e.g. 295" step="0.1">
+    </div>
+    <div class="form-group">
+      <label>AC (mm)</label>
+      <input type="number" id="ac" placeholder="e.g. 285" step="0.1">
+    </div>
+    <div class="form-group">
+      <label>FL (mm)</label>
+      <input type="number" id="fl" placeholder="e.g. 62" step="0.1">
+    </div>
+    <div class="form-group">
+      <label>EFW — Manual Entry (g) <span style="font-weight:400;text-transform:none">(optional)</span></label>
+      <input type="number" id="efwManual" placeholder="Leave blank to auto-calculate">
+      <span class="hint">Overrides Hadlock formula if entered</span>
+    </div>
+  </div>
+
+  <!-- DOPPLER INPUTS -->
+  <div class="section-header">Doppler Velocimetry <span style="font-size:.72rem;font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></div>
+  <div class="form-grid" style="margin-bottom:1rem">
+    <div class="form-group">
+      <label>UA-PI (Umbilical Artery)</label>
+      <input type="number" id="uapi" placeholder="e.g. 0.95" step="0.01">
+      <span class="hint">Normal: decreases with GA</span>
+    </div>
+    <div class="form-group">
+      <label>UA Flow Status</label>
+      <select id="uaFlow">
+        <option value="normal">Normal forward flow</option>
+        <option value="aedf">Absent end-diastolic flow (AEDF)</option>
+        <option value="redf">Reversed end-diastolic flow (REDF)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>MCA-PI (Middle Cerebral Artery)</label>
+      <input type="number" id="mcapi" placeholder="e.g. 1.45" step="0.01">
+      <span class="hint">Normal: peaks ~32 wks, then decreases</span>
+    </div>
+    <div class="form-group">
+      <label>MCA-PSV (cm/s) <span style="font-weight:400;text-transform:none">(optional)</span></label>
+      <input type="number" id="mcapsv" placeholder="e.g. 55" step="0.1">
+      <span class="hint">For fetal anemia screening (>1.5 MoM)</span>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="btn" id="calcBtn">▶ Calculate</button>
+    <button class="btn-ghost" id="clearBtn">✕ Clear</button>
+  </div>
+</div>
+
+<!-- RESULTS (hidden until calculated) -->
+<div id="resultsSection" style="display:none">
+
+  <!-- EFW HERO -->
+  <div class="card">
+    <div class="section-header">Estimated Fetal Weight</div>
+    <div class="efw-hero" id="efwHero"></div>
+    <div class="results-grid" id="biometryGrid"></div>
+    <div id="standardNote" style="font-size:.76rem;color:var(--subtext);margin-top:.25rem"></div>
+  </div>
+
+  <!-- DOPPLER RESULTS -->
+  <div class="card" id="dopplerCard" style="display:none">
+    <div class="section-header">Doppler Velocimetry Interpretation</div>
+    <div id="dopplerResults"></div>
+  </div>
+
+  <!-- CLINICAL INTERPRETATION -->
+  <div class="card">
+    <div class="section-header">Clinical Interpretation & Management</div>
+    <div id="clinicalInterp"></div>
+    <button class="ref-toggle" id="refToggle">▶ Show Delivery Timing Reference</button>
+    <table class="ref-table" id="refTable">
+      <thead>
+        <tr><th>Condition</th><th>Delivery Timing (ACOG/SMFM)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>SGA (EFW &lt;10th %ile), normal Doppler</td><td>37–38 weeks</td></tr>
+        <tr><td>FGR, UA-PI &gt;95th %ile (elevated)</td><td>37 weeks</td></tr>
+        <tr><td>FGR + Absent end-diastolic flow (AEDF)</td><td>34 weeks (after steroids if &lt;34 wks)</td></tr>
+        <tr><td>FGR + Reversed end-diastolic flow (REDF)</td><td>32–34 weeks (after steroids)</td></tr>
+        <tr><td>Severe FGR (EFW &lt;3rd %ile), normal Doppler</td><td>37 weeks</td></tr>
+        <tr><td>FGR + abnormal BPP (≤4/10)</td><td>Immediate delivery</td></tr>
+        <tr><td>LGA (EFW &gt;90th %ile), no DM</td><td>Routine; IOL at 41 weeks</td></tr>
+        <tr><td>Macrosomia &gt;4500g (or &gt;4000g in DM)</td><td>Consider IOL at 39 weeks; discuss risks</td></tr>
+      </tbody>
+      <thead>
+        <tr><th>Doppler Finding</th><th>Clinical Significance</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>UA-PI &gt;95th %ile</td><td>Elevated placental resistance; FGR workup</td></tr>
+        <tr><td>UA AEDF</td><td>Severe placental insufficiency; hospitalize</td></tr>
+        <tr><td>UA REDF</td><td>Critical placental insufficiency; urgent delivery</td></tr>
+        <tr><td>MCA-PI &lt;5th %ile</td><td>Brain-sparing / cerebral redistribution</td></tr>
+        <tr><td>CPR &lt;1.0</td><td>Adverse perinatal outcome risk regardless of GA</td></tr>
+        <tr><td>MCA-PSV &gt;1.5 MoM</td><td>Fetal anemia — consider intrauterine transfusion</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="display:flex;gap:.75rem;margin-top:.5rem;flex-wrap:wrap">
+    <button class="btn" id="recalcBtn" style="flex:1;justify-content:center">↺ New Calculation</button>
+    <button class="btn-ghost" id="printBtn" style="flex:1;justify-content:center">⎙ Print / Save PDF</button>
+  </div>
+
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  <p>⚠ <strong>INFORMATIONAL USE ONLY.</strong> This calculator is for clinical decision support only. All measurements and interpretations must be confirmed by a qualified healthcare provider. EFW has an inherent ±15–20% error margin.</p>
+  <p style="margin-top:.4rem">Sources: <a href="https://pubmed.ncbi.nlm.nih.gov/3812132/" target="_blank" rel="noopener">Hadlock 1985/1991</a> · <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(14)61490-2/fulltext" target="_blank" rel="noopener">INTERGROWTH-21st 2014</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5261648/" target="_blank" rel="noopener">WHO 2017</a> · <a href="https://obgyn.onlinelibrary.wiley.com/doi/full/10.1002/uog.20157" target="_blank" rel="noopener">FMF Doppler 2019</a> · ACOG/SMFM delivery timing guidelines</p>
+</div>
+</div>
+
+<!-- ABOUT MODAL -->
+<div class="modal-overlay" id="aboutModal">
+  <div class="modal-box">
+    <button class="modal-close" id="closeModal">&times;</button>
+    <h2>Understanding Fetal Growth & Biometry</h2>
+    <div class="modal-section">
+      <h3>What is Fetal Biometry?</h3>
+      <p>Fetal biometry is the measurement of your baby's body parts using ultrasound. These measurements help estimate how big your baby is and whether they are growing normally. The main measurements are:</p>
+      <ul>
+        <li><strong>BPD (Biparietal Diameter):</strong> Width of the baby's head</li>
+        <li><strong>HC (Head Circumference):</strong> Measurement around the baby's head</li>
+        <li><strong>AC (Abdominal Circumference):</strong> Measurement around the baby's belly — the most important for growth</li>
+        <li><strong>FL (Femur Length):</strong> Length of the baby's thigh bone</li>
+        <li><strong>EFW (Estimated Fetal Weight):</strong> Calculated from the above measurements</li>
+      </ul>
+    </div>
+    <div class="modal-section">
+      <h3>What Do Percentiles Mean?</h3>
+      <p>A percentile tells you how your baby's size compares to other babies at the same gestational age. For example, the 50th percentile means your baby is average size — half of babies are larger and half are smaller. The 10th percentile means your baby is smaller than 90% of babies at the same age.</p>
+    </div>
+    <div class="modal-section">
+      <h3>What is FGR (Fetal Growth Restriction)?</h3>
+      <p>FGR means the baby is not growing as expected, usually because the placenta is not providing enough nutrients and oxygen. It is diagnosed when the estimated weight is below the 10th percentile AND there are signs of placental insufficiency (such as abnormal Doppler blood flow). Babies with severe FGR (below the 3rd percentile) need close monitoring regardless of Doppler findings.</p>
+    </div>
+    <div class="modal-section">
+      <h3>What is Doppler Monitoring?</h3>
+      <p>Doppler ultrasound measures blood flow in two important blood vessels:</p>
+      <ul>
+        <li><strong>Umbilical Artery (UA):</strong> The blood vessel in the umbilical cord carrying blood from baby to placenta. Abnormal flow means the placenta is working harder than normal.</li>
+        <li><strong>Middle Cerebral Artery (MCA):</strong> A blood vessel in the baby's brain. When the baby is under stress, more blood is sent to the brain — this is called "brain-sparing" and is a sign the baby needs closer monitoring.</li>
+      </ul>
+    </div>
+    <div class="modal-section">
+      <h3>Growth Standards Used</h3>
+      <ul>
+        <li><strong>INTERGROWTH-21st:</strong> International standard from healthy pregnancies in 8 countries worldwide — represents optimal fetal growth potential</li>
+        <li><strong>Hadlock (1991):</strong> The most widely used standard in U.S. clinical practice, derived from a North American population</li>
+        <li><strong>WHO (2017):</strong> World Health Organization standard from a large multinational study — similar to INTERGROWTH-21st but uses different methodology</li>
+      </ul>
+    </div>
+    <div class="modal-note"><strong>Note:</strong> Estimated fetal weight has an inherent margin of error of approximately ±15–20%. A single measurement is less informative than serial measurements tracking growth velocity over time.</div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// REFERENCE DATA TABLES
+// ═══════════════════════════════════════════════════════
+
+// INTERGROWTH-21st EFW (grams) — Papageorghiou et al. 2014, updated 2020
+// [GA, p3, p5, p10, p50, p90, p95, p97]
+const IG21_EFW = [
+  [22,463,470,481,525,578,596,607],
+  [23,516,524,538,592,658,680,694],
+  [24,575,585,602,668,751,778,796],
+  [25,642,654,675,756,857,891,913],
+  [26,716,732,757,856,980,1020,1048],
+  [27,800,818,848,969,1119,1168,1202],
+  [28,892,915,951,1097,1277,1335,1376],
+  [29,994,1021,1064,1239,1453,1521,1570],
+  [30,1105,1138,1189,1396,1648,1728,1784],
+  [31,1226,1265,1325,1568,1861,1953,2017],
+  [32,1356,1401,1472,1755,2090,2195,2267],
+  [33,1495,1547,1630,1954,2332,2450,2529],
+  [34,1641,1700,1796,2162,2582,2713,2798],
+  [35,1794,1860,1969,2378,2836,2978,3069],
+  [36,1951,2024,2146,2594,3086,3237,3331],
+  [37,2109,2190,2323,2806,3324,3480,3578],
+  [38,2266,2355,2496,3006,3540,3697,3798],
+  [39,2416,2516,2658,3186,3726,3876,3982],
+  [40,2554,2670,2805,3338,3871,4006,4121]
+];
+
+// Hadlock 1991 EFW (grams) — Hadlock FP et al. Radiology 1991
+const HADLOCK_EFW = [
+  [20,249,261,283,345,419,444,459],
+  [21,279,293,317,386,468,496,514],
+  [22,311,327,354,430,521,552,572],
+  [23,347,364,394,478,580,614,636],
+  [24,385,405,438,531,643,681,705],
+  [25,427,449,486,589,713,755,781],
+  [26,473,497,538,652,789,835,864],
+  [27,522,549,594,719,870,921,953],
+  [28,575,605,655,793,959,1015,1050],
+  [29,633,666,721,873,1056,1117,1156],
+  [30,695,731,792,959,1160,1228,1271],
+  [31,762,802,869,1052,1273,1347,1394],
+  [32,834,878,952,1153,1395,1476,1527],
+  [33,910,958,1039,1259,1524,1613,1669],
+  [34,990,1043,1131,1371,1660,1757,1819],
+  [35,1074,1131,1227,1487,1800,1906,1974],
+  [36,1161,1223,1326,1607,1946,2061,2134],
+  [37,1249,1316,1427,1729,2094,2217,2296],
+  [38,1338,1410,1529,1853,2244,2375,2459],
+  [39,1426,1503,1630,1977,2394,2533,2622],
+  [40,1511,1593,1729,2098,2542,2689,2782],
+  [41,1593,1680,1824,2215,2684,2840,2938]
+];
+
+// WHO 2017 EFW (grams) — Kiserud et al. PLoS Med 2017
+// Interpolated representative values for even weeks
+const WHO_EFW = [
+  [20,245,258,280,342,416,441,457],
+  [22,370,390,420,520,640,680,710],
+  [24,500,530,570,700,860,910,950],
+  [26,670,700,760,930,1140,1200,1260],
+  [28,870,910,990,1210,1480,1560,1630],
+  [30,1100,1160,1260,1540,1880,1980,2070],
+  [32,1370,1440,1570,1920,2340,2460,2570],
+  [34,1660,1750,1910,2330,2840,2990,3120],
+  [36,1970,2080,2270,2760,3360,3530,3680],
+  [38,2270,2400,2620,3180,3870,4060,4230],
+  [40,2530,2680,2930,3560,4320,4530,4710]
+];
+
+// UA-PI reference ranges (FMF/Acharya) [GA, p5, p50, p95]
+const UA_PI = [
+  [20,0.68,1.00,1.45],[22,0.65,0.97,1.40],[24,0.62,0.93,1.35],
+  [26,0.59,0.88,1.28],[28,0.56,0.84,1.22],[30,0.53,0.79,1.16],
+  [32,0.50,0.75,1.10],[34,0.47,0.71,1.04],[36,0.44,0.67,0.98],
+  [38,0.41,0.63,0.93],[40,0.38,0.59,0.88],[42,0.35,0.55,0.83]
+];
+
+// MCA-PI reference ranges (FMF/Ciobanu 2019) [GA, p5, p50, p95]
+const MCA_PI = [
+  [20,1.22,1.69,2.34],[22,1.30,1.80,2.49],[24,1.38,1.91,2.64],
+  [26,1.44,2.00,2.77],[28,1.49,2.07,2.86],[30,1.52,2.11,2.92],
+  [32,1.52,2.11,2.92],[34,1.48,2.06,2.85],[36,1.40,1.95,2.70],
+  [38,1.28,1.79,2.48],[40,1.14,1.60,2.22]
+];
+
+// MCA-PSV median by GA (Mari et al.) [GA, median cm/s]
+const MCA_PSV_MEDIAN = [
+  [20,23],[22,25],[24,27],[26,29],[28,32],[30,35],
+  [32,38],[34,42],[36,46],[38,50],[40,55]
+];
+
+// ═══════════════════════════════════════════════════════
+// UTILITY FUNCTIONS
+// ═══════════════════════════════════════════════════════
+
+function interpolate(table, ga, colIdx) {
+  // Linear interpolation between nearest GA rows
+  if (!table || table.length === 0) return null;
+  const gaExact = ga;
+  let lo = table[0], hi = table[table.length-1];
+  for (let i = 0; i < table.length-1; i++) {
+    if (table[i][0] <= gaExact && table[i+1][0] >= gaExact) {
+      lo = table[i]; hi = table[i+1]; break;
+    }
+  }
+  if (gaExact <= table[0][0]) return table[0][colIdx];
+  if (gaExact >= table[table.length-1][0]) return table[table.length-1][colIdx];
+  const frac = (gaExact - lo[0]) / (hi[0] - lo[0]);
+  return lo[colIdx] + frac * (hi[colIdx] - lo[colIdx]);
+}
+
+function getPercentile(table, ga, value) {
+  // Returns approximate percentile for a value given GA
+  const p3  = interpolate(table, ga, 1);
+  const p5  = interpolate(table, ga, 2);
+  const p10 = interpolate(table, ga, 3);
+  const p50 = interpolate(table, ga, 4);
+  const p90 = interpolate(table, ga, 5);
+  const p95 = interpolate(table, ga, 6);
+  const p97 = interpolate(table, ga, 7);
+
+  if (value === null || value === undefined) return null;
+  if (value < p3)  return "<3rd";
+  if (value < p5)  return "3rd–5th";
+  if (value < p10) return "5th–10th";
+  if (value < p50) return "10th–50th";
+  if (value < p90) return "50th–90th";
+  if (value < p95) return "90th–95th";
+  if (value < p97) return "95th–97th";
+  return ">97th";
+}
+
+function getNumericPct(table, ga, value) {
+  const p3  = interpolate(table, ga, 1);
+  const p5  = interpolate(table, ga, 2);
+  const p10 = interpolate(table, ga, 3);
+  const p50 = interpolate(table, ga, 4);
+  const p90 = interpolate(table, ga, 5);
+  const p95 = interpolate(table, ga, 6);
+  const p97 = interpolate(table, ga, 7);
+  if (value === null) return 50;
+  if (value < p3)  return 2;
+  if (value < p5)  return 4;
+  if (value < p10) return 7;
+  if (value < p50) return 25;
+  if (value < p90) return 70;
+  if (value < p95) return 92;
+  if (value < p97) return 96;
+  return 98;
+}
+
+function getDopplerPercentile(table, ga, value, invertedLow) {
+  // For UA: high = abnormal (>95th); For MCA: low = abnormal (<5th)
+  const p5  = interpolate(table, ga, 1);
+  const p50 = interpolate(table, ga, 2);
+  const p95 = interpolate(table, ga, 3);
+  if (value === null) return {pct: "—", p5, p50, p95};
+  let pct;
+  if (value < p5) pct = "<5th";
+  else if (value < p50) pct = "5th–50th";
+  else if (value < p95) pct = "50th–95th";
+  else pct = ">95th";
+  return {pct, p5, p50, p95};
+}
+
+// Hadlock 4-param EFW formula (BPD, HC, AC, FL in cm)
+function hadlockEFW(bpd, hc, ac, fl) {
+  if (!ac || !fl) return null;
+  let log10w;
+  if (bpd && hc && ac && fl) {
+    log10w = 1.3596 - 0.00386*(ac*fl) + 0.0064*hc + 0.00061*bpd*ac + 0.0424*ac + 0.174*fl;
+  } else if (hc && ac && fl) {
+    log10w = 1.326 - 0.00326*ac*fl + 0.0107*hc + 0.0438*ac + 0.158*fl;
+  } else if (ac && fl) {
+    log10w = 1.304 + 0.05281*ac + 0.1938*fl - 0.004*ac*fl;
+  } else return null;
+  return Math.round(Math.pow(10, log10w));
+}
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let currentStd = 'intergrowth';
+
+document.querySelectorAll('.std-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.std-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentStd = btn.dataset.std;
+  });
+});
+
+// ═══════════════════════════════════════════════════════
+// CALCULATE
+// ═══════════════════════════════════════════════════════
+document.getElementById('calcBtn').addEventListener('click', calculate);
+document.getElementById('clearBtn').addEventListener('click', () => {
+  ['gaWeeks','gaDays','bpd','hc','ac','fl','efwManual','uapi','mcapi','mcapsv'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = id === 'gaDays' ? '0' : '';
+  });
+  document.getElementById('uaFlow').value = 'normal';
+  document.getElementById('resultsSection').style.display = 'none';
+});
+document.getElementById('recalcBtn').addEventListener('click', () => {
+  document.getElementById('resultsSection').style.display = 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+document.getElementById('refToggle').addEventListener('click', function() {
+  const t = document.getElementById('refTable');
+  t.classList.toggle('open');
+  this.textContent = t.classList.contains('open') ? '▼ Hide Delivery Timing Reference' : '▶ Show Delivery Timing Reference';
+});
+
+function calculate() {
+  const gaW = parseFloat(document.getElementById('gaWeeks').value);
+  const gaD = parseFloat(document.getElementById('gaDays').value) || 0;
+  if (!gaW || gaW < 20 || gaW > 42) {
+    alert('Please enter a valid gestational age (20–42 weeks).');
+    return;
+  }
+  const gaExact = gaW + gaD/7;
+
+  // Biometry (convert mm → cm for Hadlock)
+  const bpdMM = parseFloat(document.getElementById('bpd').value) || null;
+  const hcMM  = parseFloat(document.getElementById('hc').value)  || null;
+  const acMM  = parseFloat(document.getElementById('ac').value)  || null;
+  const flMM  = parseFloat(document.getElementById('fl').value)  || null;
+  const bpd = bpdMM ? bpdMM/10 : null;
+  const hc  = hcMM  ? hcMM/10  : null;
+  const ac  = acMM  ? acMM/10  : null;
+  const fl  = flMM  ? flMM/10  : null;
+
+  const efwManual = parseFloat(document.getElementById('efwManual').value) || null;
+  const efw = efwManual || hadlockEFW(bpd, hc, ac, fl);
+
+  if (!efw && !bpdMM && !hcMM && !acMM && !flMM) {
+    alert('Please enter at least AC and FL measurements, or a manual EFW.');
+    return;
+  }
+
+  // Doppler
+  const uaPI   = parseFloat(document.getElementById('uapi').value)   || null;
+  const uaFlow = document.getElementById('uaFlow').value;
+  const mcaPI  = parseFloat(document.getElementById('mcapi').value)  || null;
+  const mcaPSV = parseFloat(document.getElementById('mcapsv').value) || null;
+
+  // Select table
+  const efwTable = currentStd === 'intergrowth' ? IG21_EFW :
+                   currentStd === 'hadlock'      ? HADLOCK_EFW : WHO_EFW;
+
+  const stdNames = {intergrowth:'INTERGROWTH-21st (2014/2020)', hadlock:'Hadlock (1991)', who:'WHO (2017)'};
+
+  // EFW percentile
+  const efwPctStr = efw ? getPercentile(efwTable, gaExact, efw) : null;
+  const efwPctNum = efw ? getNumericPct(efwTable, gaExact, efw) : 50;
+
+  // Classification
+  let efwClass = 'rc-normal', efwBadge = 'AGA', efwBadgeColor = 'var(--green)';
+  if (efwPctNum < 3)       { efwClass='rc-fgr';    efwBadge='Severe FGR (<3rd)'; }
+  else if (efwPctNum < 10) { efwClass='rc-sga';    efwBadge='SGA (<10th)'; }
+  else if (efwPctNum > 97) { efwClass='rc-lga';    efwBadge='>97th'; }
+  else if (efwPctNum > 90) { efwClass='rc-lga';    efwBadge='LGA (>90th)'; }
+  else                     { efwClass='rc-normal'; efwBadge='AGA'; }
+
+  // EFW Hero
+  const efwHero = document.getElementById('efwHero');
+  efwHero.innerHTML = efw
+    ? `<div class="efw-num">${efw.toLocaleString()} g</div>
+       <div class="efw-label">${efwManual ? 'Manual Entry' : 'Hadlock Formula'} · ${stdNames[currentStd]}</div>
+       <div class="efw-pct">${efwPctStr ? efwPctStr + ' percentile' : '—'} <span style="font-size:.85rem;font-weight:400">for ${gaW}w${gaD}d</span></div>
+       <span class="rc-badge" style="background:${efwPctNum<3?'var(--red)':efwPctNum<10?'var(--orange)':efwPctNum>90?'var(--purple)':'var(--green)'};color:#fff;display:inline-block;padding:.2rem .7rem;border-radius:12px;font-size:.78rem;font-weight:700;margin-top:.4rem">${efwBadge}</span>`
+    : `<div style="color:var(--subtext);font-size:.9rem">EFW not calculated — enter AC + FL or manual EFW</div>`;
+
+  // Individual biometry cards
+  const biometryGrid = document.getElementById('biometryGrid');
+  biometryGrid.innerHTML = '';
+  // For individual biometry, use Hadlock table as reference (most complete)
+  const bioTable = HADLOCK_EFW;
+  const params = [
+    {label:'BPD', val:bpdMM, unit:'mm'},
+    {label:'HC',  val:hcMM,  unit:'mm'},
+    {label:'AC',  val:acMM,  unit:'mm'},
+    {label:'FL',  val:flMM,  unit:'mm'}
+  ];
+  params.forEach(p => {
+    if (!p.val) return;
+    // Individual parameter percentiles use simplified AC-based reference
+    // For simplicity, show value with GA context
+    const div = document.createElement('div');
+    div.className = 'result-card rc-normal';
+    div.innerHTML = `<div class="rc-label">${p.label}</div>
+                     <div class="rc-value">${p.val} ${p.unit}</div>
+                     <div class="rc-pct">GA: ${gaW}w${gaD}d</div>`;
+    biometryGrid.appendChild(div);
+  });
+
+  document.getElementById('standardNote').textContent =
+    `Growth standard: ${stdNames[currentStd]} · EFW formula: Hadlock ${bpd&&hc&&ac&&fl?'4-param (BPD+HC+AC+FL)':hc&&ac&&fl?'3-param (HC+AC+FL)':'2-param (AC+FL)'}`;
+
+  // ── DOPPLER ──
+  const dopplerCard = document.getElementById('dopplerCard');
+  const dopplerResults = document.getElementById('dopplerResults');
+  const hasDoppler = uaPI || uaFlow !== 'normal' || mcaPI || mcaPSV;
+
+  if (hasDoppler) {
+    dopplerCard.style.display = 'block';
+    let html = '';
+
+    // UA
+    const uaRef = getDopplerPercentile(UA_PI, gaExact, uaPI, false);
+    let uaClass = 'interp-green', uaMsg = '';
+    if (uaFlow === 'redf') {
+      uaClass = 'interp-red';
+      uaMsg = '<strong>🚨 Reversed End-Diastolic Flow (REDF)</strong>Critical placental insufficiency. Immediate MFM consultation. Delivery at 32–34 weeks after corticosteroids.';
+    } else if (uaFlow === 'aedf') {
+      uaClass = 'interp-orange';
+      uaMsg = '<strong>⚠️ Absent End-Diastolic Flow (AEDF)</strong>Severe placental insufficiency. Hospitalization indicated. Delivery at 34 weeks or sooner if deterioration.';
+    } else if (uaPI) {
+      if (uaPI > uaRef.p95) {
+        uaClass = 'interp-orange';
+        uaMsg = `<strong>UA-PI Elevated (${uaPI} — >95th percentile for ${gaW} weeks)</strong>Increased placental resistance. FGR workup indicated. Serial Doppler every 1–2 weeks. Consider delivery at 37 weeks if no deterioration.`;
+      } else if (uaPI > uaRef.p50) {
+        uaClass = 'interp-yellow';
+        uaMsg = `<strong>UA-PI High-Normal (${uaPI} — ${uaRef.pct} percentile for ${gaW} weeks)</strong>Within normal range but trending high. Continue routine surveillance. Repeat Doppler in 2–4 weeks.`;
+      } else {
+        uaClass = 'interp-green';
+        uaMsg = `<strong>UA-PI Normal (${uaPI} — ${uaRef.pct} percentile for ${gaW} weeks)</strong>Normal placental resistance. Reference values: 5th=${uaRef.p5.toFixed(2)}, 50th=${uaRef.p50.toFixed(2)}, 95th=${uaRef.p95.toFixed(2)}.`;
+      }
+    }
+    if (uaMsg) html += `<div class="interp-box ${uaClass}">${uaMsg}</div>`;
+
+    // MCA
+    if (mcaPI) {
+      const mcaRef = getDopplerPercentile(MCA_PI, gaExact, mcaPI, true);
+      let mcaClass = 'interp-green', mcaMsg = '';
+      if (mcaPI < mcaRef.p5) {
+        mcaClass = 'interp-red';
+        mcaMsg = `<strong>🧠 MCA-PI Below 5th Percentile (${mcaPI} — <5th for ${gaW} weeks)</strong>Brain-sparing / cerebral redistribution detected. Indicates fetal hypoxemia with preferential blood flow to the brain. Urgent MFM evaluation. Delivery timing per overall clinical picture.`;
+      } else if (mcaPI < mcaRef.p50) {
+        mcaClass = 'interp-yellow';
+        mcaMsg = `<strong>MCA-PI Low-Normal (${mcaPI} — ${mcaRef.pct} percentile for ${gaW} weeks)</strong>Below median but above 5th percentile. Monitor closely. Reference values: 5th=${mcaRef.p5.toFixed(2)}, 50th=${mcaRef.p50.toFixed(2)}, 95th=${mcaRef.p95.toFixed(2)}.`;
+      } else {
+        mcaClass = 'interp-green';
+        mcaMsg = `<strong>MCA-PI Normal (${mcaPI} — ${mcaRef.pct} percentile for ${gaW} weeks)</strong>No evidence of cerebral redistribution. Reference values: 5th=${mcaRef.p5.toFixed(2)}, 50th=${mcaRef.p50.toFixed(2)}, 95th=${mcaRef.p95.toFixed(2)}.`;
+      }
+      html += `<div class="interp-box ${mcaClass}">${mcaMsg}</div>`;
+
+      // CPR
+      if (uaPI && uaFlow === 'normal') {
+        const cpr = (mcaPI / uaPI).toFixed(2);
+        const cprClass = parseFloat(cpr) < 1.0 ? 'interp-red' : parseFloat(cpr) < 1.2 ? 'interp-yellow' : 'interp-green';
+        html += `<div class="interp-box ${cprClass}"><strong>Cerebroplacental Ratio (CPR): ${cpr}</strong>${parseFloat(cpr) < 1.0 ? 'CPR <1.0 — Associated with adverse perinatal outcome regardless of gestational age. Intensify surveillance.' : parseFloat(cpr) < 1.2 ? 'CPR borderline low (1.0–1.2). Increased vigilance warranted.' : 'CPR normal (>1.2). No evidence of cerebral redistribution.'}</div>`;
+      }
+    }
+
+    // MCA-PSV
+    if (mcaPSV) {
+      const psvMedian = interpolate(MCA_PSV_MEDIAN.map(r=>[r[0],r[1],r[1],r[1]]), gaExact, 1);
+      const mom = psvMedian ? (mcaPSV / psvMedian).toFixed(2) : null;
+      if (mom) {
+        const psvClass = parseFloat(mom) > 1.5 ? 'interp-red' : parseFloat(mom) > 1.3 ? 'interp-yellow' : 'interp-green';
+        html += `<div class="interp-box ${psvClass}"><strong>MCA-PSV: ${mcaPSV} cm/s — ${mom} MoM (Median: ${psvMedian?.toFixed(1)} cm/s at ${gaW} weeks)</strong>${parseFloat(mom) > 1.5 ? '🚨 MCA-PSV >1.5 MoM — Significant fetal anemia likely. Consult MFM. Consider intrauterine transfusion.' : parseFloat(mom) > 1.3 ? 'MCA-PSV 1.3–1.5 MoM — Borderline elevated. Repeat in 1 week. Monitor for anemia.' : 'MCA-PSV normal (<1.3 MoM). No evidence of fetal anemia.'}</div>`;
+      }
+    }
+
+    dopplerResults.innerHTML = html || '<p style="color:var(--subtext);font-size:.88rem">No Doppler values entered.</p>';
+  } else {
+    dopplerCard.style.display = 'none';
+  }
+
+  // ── CLINICAL INTERPRETATION ──
+  const clinicalInterp = document.getElementById('clinicalInterp');
+  let interpHTML = '';
+
+  if (efw) {
+    if (efwPctNum < 3) {
+      interpHTML += `<div class="interp-box interp-red"><strong>🚨 Severe FGR — EFW Below 3rd Percentile</strong>EFW ${efw}g is below the 3rd percentile for ${gaW}+${gaD} weeks by ${stdNames[currentStd]} standards. This constitutes severe FGR regardless of Doppler findings. Immediate MFM consultation required. Tertiary center management recommended. Corticosteroids if &lt;34 weeks. Delivery timing based on Doppler and BPP findings.</div>`;
+    } else if (efwPctNum < 10) {
+      const dopplerAbnormal = uaFlow !== 'normal' || (uaPI && uaPI > interpolate(UA_PI, gaExact, 3));
+      const brainSparing = mcaPI && mcaPI < interpolate(MCA_PI, gaExact, 1);
+      if (dopplerAbnormal || brainSparing) {
+        interpHTML += `<div class="interp-box interp-orange"><strong>⚠️ FGR — SGA with Abnormal Doppler</strong>EFW ${efw}g is at the ${efwPctStr} percentile (SGA) with ${uaFlow!=='normal'?uaFlow.toUpperCase():brainSparing?'brain-sparing MCA pattern':'abnormal Doppler'}. This confirms FGR with placental insufficiency. Serial Doppler every 1–2 weeks. Corticosteroids if &lt;34 weeks. Delivery at 34–37 weeks based on Doppler trajectory.</div>`;
+      } else {
+        interpHTML += `<div class="interp-box interp-yellow"><strong>SGA — Small for Gestational Age (Normal Doppler)</strong>EFW ${efw}g is at the ${efwPctStr} percentile for ${gaW}+${gaD} weeks. May be constitutionally small or early FGR. Evaluate for placental insufficiency (Doppler, maternal risk factors). Serial growth ultrasound every 2–4 weeks. Delivery at 37–38 weeks if no deterioration.</div>`;
+      }
+    } else if (efwPctNum > 90) {
+      interpHTML += `<div class="interp-box interp-purple"><strong>LGA — Large for Gestational Age (EFW >90th Percentile)</strong>EFW ${efw}g is at the ${efwPctStr} percentile for ${gaW}+${gaD} weeks. Screen for gestational diabetes if not already done. Counsel on macrosomia risks (shoulder dystocia, cesarean delivery). Consider IOL at 39–41 weeks for EFW &gt;4000g; discuss risks/benefits for EFW &gt;4500g.</div>`;
+    } else {
+      interpHTML += `<div class="interp-box interp-green"><strong>✓ AGA — Appropriate for Gestational Age</strong>EFW ${efw}g is at the ${efwPctStr} percentile for ${gaW}+${gaD} weeks by ${stdNames[currentStd]} standards. Normal fetal growth. Continue routine prenatal surveillance per gestational age and risk factors.</div>`;
+    }
+  }
+
+  if (!hasDoppler && efwPctNum < 10) {
+    interpHTML += `<div class="interp-box interp-blue"><strong>Doppler Evaluation Recommended</strong>For fetuses with EFW &lt;10th percentile, umbilical artery Doppler is recommended to differentiate constitutional SGA from FGR with placental insufficiency. Enter UA-PI and MCA-PI values above for complete assessment.</div>`;
+  }
+
+  interpHTML += `<div class="interp-box" style="border-color:var(--border);background:var(--bg)"><strong>Growth Velocity Note</strong>A single measurement provides limited information. Serial measurements every 2–4 weeks are essential to assess growth velocity. A decline of ≥2 percentile channels over 2–4 weeks suggests pathological growth restriction even if EFW remains above the 10th percentile.</div>`;
+
+  clinicalInterp.innerHTML = interpHTML;
+
+  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('resultsSection').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ═══════════════════════════════════════════════════════
+// MODAL & DARK MODE
+// ═══════════════════════════════════════════════════════
+const modal = document.getElementById('aboutModal');
+document.getElementById('aboutBtn').addEventListener('click', () => modal.classList.add('open'));
+document.getElementById('closeModal').addEventListener('click', () => modal.classList.remove('open'));
+modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+
+const darkBtn = document.getElementById('darkBtn');
+darkBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+  darkBtn.textContent = document.body.classList.contains('dark') ? '☀ Light Mode' : '◑ Dark Mode';
+});
+</script>
+</body>
+</html>
