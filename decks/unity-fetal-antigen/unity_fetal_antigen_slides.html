@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UNITY Fetal Antigen Tests — Provider Education</title>
+  <style>
+    /* ─── Reset & Base ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0d1117;
+      --surface:    #161b22;
+      --surface2:   #21262d;
+      --border:     #30363d;
+      --text:       #e6edf3;
+      --muted:      #8b949e;
+      --accent:     #58a6ff;
+      --accent2:    #3fb950;
+      --warn:       #f0883e;
+      --danger:     #f85149;
+      --gold:       #d29922;
+      --unity:      #58a6ff;
+      --hdfn:       #3fb950;
+      --fnait:      #bc8cff;
+      --radius:     12px;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ─── Deck & Slide ──────────────────────────────────────────── */
+    #deck {
+      width: 100vw; height: 100vh;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ─── Typography ────────────────────────────────────────────── */
+    .eyebrow {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    h1 { font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 300; line-height: 1.15; }
+    h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 300; line-height: 1.2; }
+    h3 { font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 600; }
+    .lead {
+      font-size: clamp(1rem, 1.8vw, 1.35rem);
+      line-height: 1.65; color: var(--muted);
+      max-width: 820px; text-align: center; margin-top: 1rem;
+    }
+    .stat-val {
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 700; line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.9rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    /* ─── Accent Colors ─────────────────────────────────────────── */
+    .c-accent  { color: var(--accent); }
+    .c-green   { color: var(--accent2); }
+    .c-warn    { color: var(--warn); }
+    .c-danger  { color: var(--danger); }
+    .c-gold    { color: var(--gold); }
+    .c-purple  { color: var(--fnait); }
+    .c-muted   { color: var(--muted); }
+
+    /* ─── Cards ─────────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.8rem;
+    }
+    .card-grid {
+      display: grid;
+      gap: 1.2rem;
+      width: 100%; max-width: 960px;
+    }
+    .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    /* ─── Divider ───────────────────────────────────────────────── */
+    .divider {
+      width: 60px; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin: 1rem auto;
+    }
+
+    /* ─── Tag / Badge ───────────────────────────────────────────── */
+    .tag {
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.25em 0.75em;
+      border-radius: 4px;
+      margin-bottom: 0.8rem;
+    }
+    .tag-new    { background: #1f4a2e; color: var(--accent2); border: 1px solid #2ea043; }
+    .tag-study  { background: #1a2d4a; color: var(--accent);  border: 1px solid #388bfd; }
+    .tag-guide  { background: #3d2b1a; color: var(--warn);    border: 1px solid #d29922; }
+    .tag-warn   { background: #3d1a1a; color: var(--danger);  border: 1px solid #f85149; }
+
+    /* ─── Table ─────────────────────────────────────────────────── */
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th {
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.6rem 1rem; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface2); }
+
+    /* ─── Antigen Chip ──────────────────────────────────────────── */
+    .chip-row {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      justify-content: center; margin-top: 0.6rem;
+    }
+    .chip {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 2.6rem; height: 2.6rem;
+      border-radius: 50%;
+      font-weight: 700; font-size: 0.85rem;
+      border: 2px solid;
+    }
+    .chip-orig  { background: #1a2d4a; border-color: var(--accent); color: var(--accent); }
+    .chip-new   { background: #1f4a2e; border-color: var(--accent2); color: var(--accent2); }
+
+    /* ─── Timeline ──────────────────────────────────────────────── */
+    .timeline {
+      display: flex; gap: 0; align-items: flex-start;
+      width: 100%; max-width: 1000px; position: relative;
+    }
+    .tl-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      position: relative;
+    }
+    .tl-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 1rem; left: 50%;
+      width: 100%; height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .tl-dot {
+      width: 2rem; height: 2rem;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 700; color: var(--accent);
+      position: relative; z-index: 1;
+    }
+    .tl-year {
+      font-size: 0.7rem; font-weight: 700; color: var(--accent);
+      margin-top: 0.4rem;
+    }
+    .tl-text {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin-top: 0.3rem; padding: 0 0.3rem;
+      line-height: 1.4;
+    }
+
+    /* ─── Quote Block ───────────────────────────────────────────── */
+    .quote-block {
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.5rem;
+      background: var(--surface);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      max-width: 820px;
+      font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+      line-height: 1.7;
+      color: var(--text);
+      font-style: italic;
+    }
+    .quote-source {
+      font-size: 0.78rem; color: var(--muted);
+      margin-top: 0.5rem; font-style: normal;
+    }
+
+    /* ─── Stat Row ──────────────────────────────────────────────── */
+    .stat-row {
+      display: flex; gap: 3rem; align-items: flex-start;
+      justify-content: center; flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+
+    /* ─── Progress Bar ──────────────────────────────────────────── */
+    .bar-wrap { width: 100%; background: var(--surface2); border-radius: 6px; height: 1.4rem; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 0.6rem;
+                font-size: 0.78rem; font-weight: 700; }
+
+    /* ─── Navigation ────────────────────────────────────────────── */
+    #nav {
+      position: fixed; bottom: 1.4rem; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1rem;
+      background: rgba(22,27,34,0.92);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      padding: 0.5rem 1.2rem;
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    #nav button {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 1.1rem; padding: 0.3rem 0.5rem;
+      border-radius: 6px; transition: color 0.2s, background 0.2s;
+    }
+    #nav button:hover { color: var(--text); background: var(--surface2); }
+    #slide-counter { font-size: 0.82rem; color: var(--muted); min-width: 4rem; text-align: center; }
+
+    /* ─── Progress Dots ─────────────────────────────────────────── */
+    #dots {
+      position: fixed; bottom: 4.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 0.4rem; z-index: 100;
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--border); cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .dot.active { background: var(--accent); transform: scale(1.4); }
+
+    /* ─── Slide-specific backgrounds ───────────────────────────── */
+    .slide-title   { background: radial-gradient(ellipse at 30% 60%, #0d2137 0%, var(--bg) 70%); }
+    .slide-problem { background: radial-gradient(ellipse at 70% 40%, #1a1a0d 0%, var(--bg) 70%); }
+    .slide-study   { background: radial-gradient(ellipse at 20% 70%, #0d1f2d 0%, var(--bg) 70%); }
+    .slide-guide   { background: radial-gradient(ellipse at 80% 30%, #1f1a0d 0%, var(--bg) 70%); }
+    .slide-product { background: radial-gradient(ellipse at 50% 50%, #0d1f0d 0%, var(--bg) 70%); }
+    .slide-fnait   { background: radial-gradient(ellipse at 60% 40%, #1a0d2d 0%, var(--bg) 70%); }
+    .slide-perf    { background: radial-gradient(ellipse at 40% 60%, #0d2137 0%, var(--bg) 70%); }
+    .slide-warn    { background: radial-gradient(ellipse at 50% 50%, #2d1a0d 0%, var(--bg) 70%); }
+    .slide-close   { background: radial-gradient(ellipse at 50% 50%, #0d1f0d 0%, var(--bg) 70%); }
+
+    /* ─── Icon SVG helpers ──────────────────────────────────────── */
+    .icon-lg { width: 3rem; height: 3rem; margin-bottom: 0.5rem; }
+
+    /* ─── Keyboard hint ─────────────────────────────────────────── */
+    #hint {
+      position: fixed; top: 1rem; right: 1.5rem;
+      font-size: 0.7rem; color: var(--border);
+      z-index: 100;
+    }
+
+    /* ─── Responsive ────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .slide { padding: 2rem 1.5rem; }
+      .card-grid.cols-2,
+      .card-grid.cols-3 { grid-template-columns: 1fr; }
+      .stat-row { gap: 1.5rem; }
+      .timeline { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .tl-item:not(:last-child)::after { display: none; }
+    }
+  </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/W2xudlrcMjFXhw1CGXfWHHIm6xdOTdwhtXDtF4BC2AVYCfRVG4nEJenDnIS5dGfjCx1zIaQcA9k9XfZJ4kFw3mq6ef0p6c35ab9FH81CNXnJlPbFxKZWDCjY4-bF5FQnAtb4gUNB4Z-cjH7bB60A2NwD4cnq4kk6Y4i7j8NbGMhBuheTEOxSZ_uY51RrrAWpn-d6L80BQSgL5BhxPm9ooJZvm_UQkq7Y81Pe8PhnWyT9B4tVnADKUrXrnwxGp1WGoWxoMxdbiv3lKyW_QIdXkgPwK8cSf8tMt0uU_bjNFLR4kFIyPN40QMyt5Lwe88HIL9xb3xBj9-vQ6A6IAolr4WCky5tVGaVc2oz-3WiihSNXfI0Cqxsgfjl1zgKbmLydnhGOSHMxn8ALLyMq1KkEB4L8SYZrLXswi8p6DpgRpuDPDw9ujv1yJbxKag7S5_HlDkTNaAhS50m-XwBuNIRL3qT5zBBQ-dYWLbtMQMeCaVAdAliNwOZnvVJHqgwz-6JAM250I72H2QsOSO_kttYegjYeaWsh9hPTLqesPqJfGsCIjaWyLLkiFHdKl4KdA--K_F2u6UqPPl5wKVOgfCXrkyqjxlPBXh8vrVM6HsAq5QLBWlDEyM09YHuRGNQolDosDF0aXNcnoRNtxF3PN9cxYSA2aoHI03pw_FG1HByifAOdkayO8G5hdPhCkx1YKz1Y9BJg5o4JnMZNCYru3RG7oUH91VoJl7eI5XqINHJoUJCi5l5vJB8QWRR5TttuwtFLyFDlHJwWdwGN-_xcDjWhxXIrihMKW6f1FG5L5LrXQjb4dtPlnKazyUDXxqfTvykMyx3kktMaC82O7zoDDFUlOIbXowIDuAhF53ZZSxJyNdOj3VZWW80zZPP-OdQUAGflvRIRREpnfYmcH-am8ntQUFjIqWq1ZxHfEj7f7_YA71PCFBX1f4PicEKAyqDpBmpUOD7gxkMwz0G3jNqlNMIQ9CN0kwTQ-D5Lnm7UBFpOhgYO0ymeRGTjCCIfjceZZnzxnaXJrlxBe98oZTFh5Xn6fptv9U2dMRdN1tHO46QNmXhFq-FL3CL0Z1Mb5x2_-UxNc_jS8PtXpZ_AppUX8Uck3mBHakQFHyktVlHX3pq82whzt_D28zeDdAPWN93LfPvcWSXdKQVP5nY6ihcpGE6g0ZenbHnW72V-eYLaDBu3bp_Hg4KH_T0Ym8Q7IFvbPEUWARrC1hAMAzduL3uWKVu79TObZxFH8ARiJuDszGNjn9CbNVAhcQSdrDEyk4rkuZnOcelAWB8hXQ9rGNMXLSbRn3dW-BZjE6RBL5RADxOLCEh14qFqfzWI0vgnBYgI0SJvcUUvF-t5H9iSZfinKz3EYPoMN6J4fhxlCdX1cllFJA-lqLpNRANCaN5bv4nOpwwUrGCCHaHowZLqE5EvWIGrp4DmCLromTDGamaiMFqAWP_2bASZ3WFIKswhCnIDJE6DBJMZeifIKVVp5P1RLI72MxkXeAE5g_iwMXnQ_IRyfmz-xFwUywt7oJMFn53J6aFjZTrvRHEPirWBT99hs5Tyy6y4VWUJRe21WpSlIpeMMYU6hM7Pzp4-khJ0SysB1alJVjLcxEotSj_0kiZTEY8DGeR71G5a6awFZldxu-XJRwnAIZjScIux_h8nxEw5FiV5MEPAMp2k5DyytoOnde9fsarA4u5e6yLlkTF6RA'></script></head>
+<body>
+
+<div id="hint">← → or Space to navigate</div>
+
+<div id="deck">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-title active" id="s1">
+    <div style="text-align:center; max-width:900px;">
+      <div class="eyebrow">Provider Education · BillionToOne</div>
+      <h1>UNITY Fetal Antigen<sup style="font-size:0.45em">™</sup> Tests</h1>
+      <div class="divider"></div>
+      <p class="lead">The New Standard in Prenatal Care<br>
+        <span style="font-size:0.9em;">First-and-only fetal antigen testing from cell-free DNA</span>
+      </p>
+      <div style="margin-top:2.5rem; display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap;">
+        <div class="tag tag-new">RBC Fetal Antigen NIPT</div>
+        <div class="tag tag-study">Platelet Fetal Antigen NIPT</div>
+      </div>
+      <p style="margin-top:2rem; font-size:0.78rem; color:var(--muted);">
+        Based on clinical evidence from <em>Pregnancy</em> (2025) &amp; <em>JAMA Network Open</em> (2025)
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 2 — THE CLINICAL PROBLEM
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-problem" id="s2">
+    <div style="text-align:center; max-width:900px;">
+      <div class="eyebrow">The Clinical Problem</div>
+      <h2>Alloimmunization: <span class="c-warn">Managed with Indirect Tools</span></h2>
+      <div class="divider" style="background:var(--warn);"></div>
+      <div class="card-grid cols-3" style="margin-top:1.8rem;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:2rem; margin-bottom:0.5rem;">🔄</div>
+          <h3 style="font-size:1rem; color:var(--warn);">Serial Titers</h3>
+          <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem;">Indirect proxy for fetal risk; do not reflect actual fetal antigen status</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:2rem; margin-bottom:0.5rem;">🧬</div>
+          <h3 style="font-size:1rem; color:var(--warn);">Partner Testing</h3>
+          <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem;">Incomplete; paternity uncertainty, zygosity ambiguity</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:2rem; margin-bottom:0.5rem;">⚕️</div>
+          <h3 style="font-size:1rem; color:var(--warn);">Invasive Procedures</h3>
+          <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem;">Amniocentesis carries procedural risk; not ideal for surveillance</p>
+        </div>
+      </div>
+      <p class="lead" style="margin-top:1.5rem; font-size:1rem;">
+        These methods persist not because they are ideal, but because <strong>no better option existed</strong>.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 3 — THE CRITICAL STUDY
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-study" id="s3">
+    <div style="text-align:center; max-width:900px;">
+      <div class="tag tag-study">New Clinical Study · Pregnancy Journal 2025</div>
+      <h2>Critical &amp; Rising Titers in <span class="c-accent">Antigen-Negative</span> Fetuses</h2>
+      <div class="divider"></div>
+      <div style="margin-top:1.5rem; display:flex; gap:2rem; justify-content:center; flex-wrap:wrap; align-items:flex-start;">
+        <div class="stat-item">
+          <div class="stat-val c-warn">~70%</div>
+          <div class="stat-label">of alloimmunized pregnancies<br>reached critical titers</div>
+        </div>
+        <div style="width:2px; background:var(--border); align-self:stretch; min-height:80px;"></div>
+        <div style="max-width:440px; text-align:left;">
+          <p style="font-size:1rem; line-height:1.7; color:var(--text);">
+            Titers escalated to critical thresholds <strong>regardless of fetal RBC antigen status</strong> — even when the fetus carried <em>no risk</em> of hemolytic disease.
+          </p>
+          <p style="font-size:0.9rem; color:var(--muted); margin-top:0.8rem;">
+            Ashimi Balogun O, et al. <em>Pregnancy</em> 1.6 (2025): e70113.
+          </p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1.5rem; border-color:var(--warn);">
+        <p style="font-size:1rem; color:var(--warn); font-weight:600;">
+          Clinical Implication: Titer thresholds alone cannot distinguish true fetal risk from maternal immune response.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 4 — JAMA GUIDELINE
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-guide" id="s4">
+    <div style="text-align:center; max-width:900px;">
+      <div class="tag tag-guide">New Clinical Guidance · JAMA Network Open 2025</div>
+      <h2>Clinical Practice Guideline:<br><span class="c-gold">RBC Alloimmunization Management</span></h2>
+      <div class="divider" style="background:var(--gold);"></div>
+      <div class="quote-block" style="margin-top:1.5rem; border-color:var(--gold);">
+        "The use of cell-free fetal DNA (cffDNA) to accurately determine fetal red blood cell antigen status."
+        <div class="quote-source">Moise KJ Jr, et al. JAMA Network Open. 2025;8(11):e2544649.</div>
+      </div>
+      <div class="quote-block" style="margin-top:1rem; border-color:var(--accent2);">
+        "If cffDNA testing reveals an antigen-negative fetus, <strong>no further surveillance</strong> — including repeat titers or MCA Doppler measurements — is indicated for the remainder of the pregnancy."
+        <div class="quote-source">Moise KJ Jr, et al. JAMA Network Open. 2025;8(11):e2544649.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 5 — SURVEILLANCE DE-ESCALATION ALGORITHM
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s5">
+    <div style="text-align:center; max-width:860px;">
+      <div class="eyebrow">Clinical Decision Framework</div>
+      <h2>Fetal Antigen Status <span class="c-accent">Drives Surveillance</span></h2>
+      <div class="divider"></div>
+      <div style="margin-top:1.5rem; display:flex; flex-direction:column; gap:0.8rem; align-items:center; width:100%;">
+        <!-- Step 1 -->
+        <div class="card" style="width:100%; max-width:700px; border-color:var(--accent); text-align:left; display:flex; align-items:center; gap:1rem;">
+          <div style="background:var(--accent); color:var(--bg); width:2rem; height:2rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">1</div>
+          <div>
+            <h3 style="font-size:1rem;">Maternal Antibody Screen Positive</h3>
+            <p style="font-size:0.85rem; color:var(--muted);">Clinically significant alloantibody identified</p>
+          </div>
+        </div>
+        <div style="color:var(--muted); font-size:1.2rem;">↓</div>
+        <!-- Step 2 -->
+        <div class="card" style="width:100%; max-width:700px; border-color:var(--accent); text-align:left; display:flex; align-items:center; gap:1rem;">
+          <div style="background:var(--accent); color:var(--bg); width:2rem; height:2rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">2</div>
+          <div>
+            <h3 style="font-size:1rem;">Order UNITY Fetal Antigen NIPT (cfDNA)</h3>
+            <p style="font-size:0.85rem; color:var(--muted);">Available from 9 weeks gestation via UNITY Aneuploidy Screen</p>
+          </div>
+        </div>
+        <div style="color:var(--muted); font-size:1.2rem;">↓</div>
+        <!-- Branch -->
+        <div style="display:flex; gap:1.5rem; width:100%; max-width:700px; flex-wrap:wrap;">
+          <div class="card" style="flex:1; border-color:var(--accent2); text-align:center;">
+            <div style="font-size:1.5rem; margin-bottom:0.3rem;">✅</div>
+            <h3 style="font-size:0.95rem; color:var(--accent2);">Antigen-Negative Fetus</h3>
+            <p style="font-size:0.8rem; color:var(--muted); margin-top:0.3rem;">No further titers, no MCA Doppler. Routine prenatal care.</p>
+          </div>
+          <div class="card" style="flex:1; border-color:var(--warn); text-align:center;">
+            <div style="font-size:1.5rem; margin-bottom:0.3rem;">⚠️</div>
+            <h3 style="font-size:0.95rem; color:var(--warn);">Antigen-Positive Fetus</h3>
+            <p style="font-size:0.8rem; color:var(--muted); margin-top:0.3rem;">Focused surveillance: serial titers + MCA Doppler per protocol.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 6 — RBC FETAL ANTIGEN NIPT
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-product" id="s6">
+    <div style="text-align:center; max-width:960px;">
+      <div class="tag tag-new">RBC Fetal Antigen NIPT</div>
+      <h2>Closing Gaps in <span class="c-green">RBC Alloimmunization</span></h2>
+      <div class="divider" style="background:var(--accent2);"></div>
+      <p class="lead" style="font-size:1rem; margin-bottom:1.2rem;">
+        Determines fetal antigen status for up to <strong>16 RBC antigens</strong> — covering 99% of antigens associated with HDFN.
+      </p>
+      <div style="margin-bottom:0.6rem;">
+        <span style="font-size:0.78rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em;">Core Panel</span>
+        <div class="chip-row">
+          <div class="chip chip-orig" title="D antigen">D</div>
+          <div class="chip chip-orig" title="C antigen">C</div>
+          <div class="chip chip-orig" title="c antigen">c</div>
+          <div class="chip chip-orig" title="E antigen">E</div>
+          <div class="chip chip-orig" title="K antigen">K</div>
+          <div class="chip chip-orig" title="Fya antigen">Fyᵃ</div>
+        </div>
+      </div>
+      <div style="margin-top:0.8rem;">
+        <span style="font-size:0.78rem; color:var(--accent2); text-transform:uppercase; letter-spacing:0.1em;">Newly Added (2026)</span>
+        <div class="chip-row">
+          <div class="chip chip-new" title="e antigen">e</div>
+          <div class="chip chip-new" title="k antigen">k</div>
+          <div class="chip chip-new" title="Fyb antigen">Fyᵇ</div>
+          <div class="chip chip-new" title="Jka antigen">Jkᵃ</div>
+          <div class="chip chip-new" title="Jkb antigen">Jkᵇ</div>
+          <div class="chip chip-new" title="M antigen">M*</div>
+          <div class="chip chip-new" title="N antigen">N*</div>
+          <div class="chip chip-new" title="S antigen">S</div>
+          <div class="chip chip-new" title="s antigen">s</div>
+          <div class="chip chip-new" title="U antigen">U</div>
+        </div>
+        <p style="font-size:0.72rem; color:var(--muted); margin-top:0.4rem;">*M and N must be selected at time of order; cannot be added post-submission.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 7 — HDFN OVERVIEW
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s7">
+    <div style="text-align:center; max-width:900px;">
+      <div class="eyebrow">Pathophysiology</div>
+      <h2>Hemolytic Disease of the Fetus &amp; Newborn <span class="c-accent">(HDFN)</span></h2>
+      <div class="divider"></div>
+      <div class="card-grid cols-2" style="margin-top:1.5rem;">
+        <div class="card">
+          <h3 style="font-size:1rem; color:var(--accent); margin-bottom:0.6rem;">Mechanism</h3>
+          <p style="font-size:0.88rem; color:var(--muted); line-height:1.6;">
+            Maternal IgG antibodies cross the placenta and bind to fetal RBCs bearing the target antigen, causing immune-mediated hemolysis.
+          </p>
+        </div>
+        <div class="card">
+          <h3 style="font-size:1rem; color:var(--warn); margin-bottom:0.6rem;">Clinical Spectrum</h3>
+          <table style="font-size:0.82rem;">
+            <tr><td style="color:var(--accent2);">Mild</td><td style="color:var(--muted);">Neonatal jaundice</td></tr>
+            <tr><td style="color:var(--warn);">Moderate</td><td style="color:var(--muted);">Anemia requiring transfusion</td></tr>
+            <tr><td style="color:var(--danger);">Severe</td><td style="color:var(--muted);">Hydrops fetalis, stillbirth</td></tr>
+          </table>
+        </div>
+        <div class="card" style="grid-column:1/-1;">
+          <div style="display:flex; align-items:center; gap:2rem; justify-content:center; flex-wrap:wrap;">
+            <div class="stat-item">
+              <div class="stat-val c-accent" style="font-size:2.5rem;">~1%</div>
+              <div class="stat-label">of all pregnancies affected</div>
+            </div>
+            <div style="width:1px; background:var(--border); height:60px;"></div>
+            <p style="font-size:0.9rem; color:var(--muted); max-width:420px; text-align:left; line-height:1.6;">
+              Risk is <strong>only present</strong> when the fetus inherits the target antigen from the father. Antigen-negative fetuses carry <strong>no risk</strong> of HDFN from maternal antibody.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 8 — PLATELET FETAL ANTIGEN NIPT
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-fnait" id="s8">
+    <div style="text-align:center; max-width:900px;">
+      <div class="tag" style="background:#2d1a4a; color:var(--fnait); border:1px solid var(--fnait);">First-and-Only · Platelet Fetal Antigen NIPT</div>
+      <h2>Creating a New Path for <span class="c-purple">FNAIT</span></h2>
+      <div class="divider" style="background:var(--fnait);"></div>
+      <div class="card-grid cols-2" style="margin-top:1.5rem;">
+        <div class="card" style="border-color:var(--fnait);">
+          <h3 style="font-size:1rem; color:var(--fnait); margin-bottom:0.6rem;">What is FNAIT?</h3>
+          <p style="font-size:0.88rem; color:var(--muted); line-height:1.6;">
+            Fetal/Neonatal Alloimmune Thrombocytopenia — maternal antibodies against fetal platelet antigens cause severe fetal thrombocytopenia.
+          </p>
+        </div>
+        <div class="card" style="border-color:var(--danger);">
+          <h3 style="font-size:1rem; color:var(--danger); margin-bottom:0.6rem;">Catastrophic Consequences</h3>
+          <ul style="font-size:0.88rem; color:var(--muted); line-height:1.8; list-style:none; padding:0;">
+            <li>⚡ Severe fetal thrombocytopenia</li>
+            <li>🧠 Intracranial hemorrhage</li>
+            <li>💔 Fetal loss</li>
+          </ul>
+        </div>
+        <div class="card" style="grid-column:1/-1; border-color:var(--fnait); text-align:left;">
+          <div style="display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap;">
+            <div style="flex:1; min-width:200px;">
+              <h3 style="font-size:1rem; color:var(--fnait); margin-bottom:0.4rem;">UNITY Platelet Fetal Antigen NIPT</h3>
+              <p style="font-size:0.88rem; color:var(--muted); line-height:1.6;">
+                The <strong>first-and-only</strong> non-invasive test to determine platelet fetal antigen status via cfDNA in the US. Designed for pregnancies at-risk or with a history of FNAIT.
+              </p>
+            </div>
+            <div style="text-align:center; flex-shrink:0;">
+              <div class="stat-val c-purple" style="font-size:2rem;">cfDNA</div>
+              <div class="stat-label">Non-Invasive<br>Platelet Typing</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 9 — WORKFLOW / ACCESS
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-product" id="s9">
+    <div style="text-align:center; max-width:900px;">
+      <div class="eyebrow">Clinical Workflow</div>
+      <h2>Seamless Integration into <span class="c-green">Prenatal Care</span></h2>
+      <div class="divider" style="background:var(--accent2);"></div>
+      <div class="card-grid cols-3" style="margin-top:1.5rem;">
+        <div class="card" style="text-align:center; border-color:var(--accent2);">
+          <div style="font-size:2.5rem; margin-bottom:0.5rem;">🗓️</div>
+          <h3 style="font-size:1rem; color:var(--accent2);">As Early as 9 Weeks</h3>
+          <p style="font-size:0.82rem; color:var(--muted); margin-top:0.4rem;">Added to UNITY Aneuploidy™ Screen at any point during pregnancy</p>
+        </div>
+        <div class="card" style="text-align:center; border-color:var(--accent2);">
+          <div style="font-size:2.5rem; margin-bottom:0.5rem;">🩸</div>
+          <h3 style="font-size:1rem; color:var(--accent2);">No Additional Blood Draw</h3>
+          <p style="font-size:0.82rem; color:var(--muted); margin-top:0.4rem;">Uses the same cfDNA sample collected for aneuploidy screening</p>
+        </div>
+        <div class="card" style="text-align:center; border-color:var(--accent2);">
+          <div style="font-size:2.5rem; margin-bottom:0.5rem;">📋</div>
+          <h3 style="font-size:1rem; color:var(--accent2);">No Separate Order</h3>
+          <p style="font-size:0.82rem; color:var(--muted); margin-top:0.4rem;">Add-on to existing UNITY Aneuploidy Screen order</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1.2rem; border-color:var(--accent); text-align:left; display:flex; align-items:center; gap:1rem;">
+        <div style="font-size:2rem; flex-shrink:0;">ℹ️</div>
+        <p style="font-size:0.9rem; color:var(--muted); line-height:1.6;">
+          Available exclusively through the <strong style="color:var(--accent);">UNITY Aneuploidy™ Screen</strong> platform. Contact: <strong>support@unityscreen.com</strong> · 650.460.2551
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 10 — PERFORMANCE DATA
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-perf" id="s10">
+    <div style="text-align:center; max-width:900px;">
+      <div class="eyebrow">Analytical Performance</div>
+      <h2>Exceptional <span class="c-accent">Accuracy</span> Across Studies</h2>
+      <div class="divider"></div>
+      <div class="stat-row" style="margin-top:1.5rem;">
+        <div class="stat-item">
+          <div class="stat-val c-accent">&gt;99.9%</div>
+          <div class="stat-label">Sensitivity</div>
+        </div>
+        <div style="width:1px; background:var(--border); height:80px; align-self:center;"></div>
+        <div class="stat-item">
+          <div class="stat-val c-green">&gt;99.9%</div>
+          <div class="stat-label">Specificity</div>
+        </div>
+        <div style="width:1px; background:var(--border); height:80px; align-self:center;"></div>
+        <div class="stat-item">
+          <div class="stat-val c-gold">100%</div>
+          <div class="stat-label">Concordance with<br>Neonatal Outcomes</div>
+        </div>
+      </div>
+      <div class="card-grid cols-2" style="margin-top:1.5rem;">
+        <div class="card">
+          <div class="tag tag-study" style="font-size:0.68rem;">Obstetrics &amp; Gynecology · July 2024</div>
+          <p style="font-size:0.85rem; color:var(--muted); line-height:1.6;">
+            465 neonatal outcomes collected. <strong style="color:var(--text);">100% concordance</strong> for fetal RBC antigen genotyping via cfDNA.
+          </p>
+        </div>
+        <div class="card">
+          <div class="tag tag-study" style="font-size:0.68rem;">Nature Scientific Reports · August 2023</div>
+          <p style="font-size:0.85rem; color:var(--muted); line-height:1.6;">
+            Validation for RhD, C, c, E, K, Fyᵃ antigens. <strong style="color:var(--text);">&gt;99.9% sensitivity, specificity, and reproducibility.</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 11 — GUIDELINE RECOGNITION
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-guide" id="s11">
+    <div style="text-align:center; max-width:900px;">
+      <div class="eyebrow">Guideline Recognition</div>
+      <h2>ACOG &amp; SMFM: <span class="c-gold">cfDNA Now Recommended</span></h2>
+      <div class="divider" style="background:var(--gold);"></div>
+      <div class="card-grid cols-2" style="margin-top:1.5rem;">
+        <div class="card" style="border-color:var(--gold);">
+          <div class="tag tag-guide" style="font-size:0.68rem;">ACOG · 2024</div>
+          <p style="font-size:0.88rem; color:var(--muted); line-height:1.6;">
+            Two guideline updates supporting the use of cfDNA to determine fetal RhD and fetal antigen status, citing UNITY clinical data as supporting evidence.
+          </p>
+        </div>
+        <div class="card" style="border-color:var(--gold);">
+          <div class="tag tag-guide" style="font-size:0.68rem;">JAMA Network Open · 2025</div>
+          <p style="font-size:0.88rem; color:var(--muted); line-height:1.6;">
+            Clinical practice guideline recommends cfDNA for fetal antigen testing in alloimmunized pregnancies, citing UNITY data as primary evidence.
+          </p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1.2rem; border-color:var(--accent2); text-align:left; display:flex; gap:1rem; align-items:center;">
+        <div style="font-size:2rem; flex-shrink:0;">📈</div>
+        <p style="font-size:0.9rem; color:var(--muted); line-height:1.6;">
+          UNITY has contributed evidence to <strong style="color:var(--accent2);">three clinical guideline updates</strong> and surpassed <strong style="color:var(--accent2);">1,000,000 tests ordered</strong> as of 2025.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 12 — COMPANY MILESTONES TIMELINE
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s12">
+    <div style="text-align:center; max-width:1000px; width:100%;">
+      <div class="eyebrow">BillionToOne · Platform Evolution</div>
+      <h2>A Track Record of <span class="c-accent">Clinical Innovation</span></h2>
+      <div class="divider"></div>
+      <div class="timeline" style="margin-top:2rem;">
+        <div class="tl-item">
+          <div class="tl-dot">19</div>
+          <div class="tl-year">2019</div>
+          <div class="tl-text">UNITY Fetal Risk™ Screen — first NIPT for recessive conditions without partner testing</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">20</div>
+          <div class="tl-year">2020</div>
+          <div class="tl-text">UNITY Aneuploidy™ Screen &amp; Fetal RhD™ NIPT launched</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">22</div>
+          <div class="tl-year">2022</div>
+          <div class="tl-text">UNITY Fetal Antigen™ NIPT — first NIPT for RBC antigen status in HDFN</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">24</div>
+          <div class="tl-year">2024</div>
+          <div class="tl-text">Two ACOG guideline updates cite UNITY data; 1M+ tests ordered</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="border-color:var(--accent2); color:var(--accent2);">26</div>
+          <div class="tl-year" style="color:var(--accent2);">2026</div>
+          <div class="tl-text" style="color:var(--accent2);">Expanded RBC panel (16 antigens) + first-and-only Platelet Fetal Antigen NIPT</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 13 — COMPARISON TABLE
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s13">
+    <div style="text-align:center; max-width:900px; width:100%;">
+      <div class="eyebrow">Comparative Overview</div>
+      <h2>Traditional Monitoring vs. <span class="c-accent">cfDNA-Based Testing</span></h2>
+      <div class="divider"></div>
+      <div class="card" style="margin-top:1.5rem; padding:0; overflow:hidden;">
+        <table>
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th style="color:var(--warn);">Traditional Approach</th>
+              <th style="color:var(--accent2);">UNITY cfDNA Testing</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Fetal antigen determination</td>
+              <td style="color:var(--warn);">Indirect (partner testing, titers)</td>
+              <td style="color:var(--accent2);">Direct from fetal cfDNA</td>
+            </tr>
+            <tr>
+              <td>Invasive procedure required</td>
+              <td style="color:var(--warn);">Sometimes (amniocentesis)</td>
+              <td style="color:var(--accent2);">Never — maternal blood draw only</td>
+            </tr>
+            <tr>
+              <td>Gestational age at testing</td>
+              <td style="color:var(--warn);">Variable; often delayed</td>
+              <td style="color:var(--accent2);">As early as 9 weeks</td>
+            </tr>
+            <tr>
+              <td>Surveillance for antigen-neg fetus</td>
+              <td style="color:var(--warn);">Continued (titers, MCA Doppler)</td>
+              <td style="color:var(--accent2);">Discontinued per guideline</td>
+            </tr>
+            <tr>
+              <td>Sensitivity / Specificity</td>
+              <td style="color:var(--warn);">Variable; not standardized</td>
+              <td style="color:var(--accent2);">&gt;99.9% / &gt;99.9%</td>
+            </tr>
+            <tr>
+              <td>Neonatal outcome concordance</td>
+              <td style="color:var(--warn);">Not directly measured</td>
+              <td style="color:var(--accent2);">100% (465 neonates)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 14 — IMPORTANT LIMITATIONS
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-warn" id="s14">
+    <div style="text-align:center; max-width:900px;">
+      <div class="tag tag-warn">Clinical Considerations</div>
+      <h2>Important <span class="c-warn">Limitations &amp; Caveats</span></h2>
+      <div class="divider" style="background:var(--warn);"></div>
+      <div class="card-grid cols-2" style="margin-top:1.5rem;">
+        <div class="card" style="border-color:var(--warn); text-align:left;">
+          <h3 style="font-size:1rem; color:var(--warn); margin-bottom:0.5rem;">Screening, Not Diagnostic</h3>
+          <p style="font-size:0.85rem; color:var(--muted); line-height:1.6;">
+            False positive and false negative results may occur. Results must be interpreted in the full clinical context by a qualified provider.
+          </p>
+        </div>
+        <div class="card" style="border-color:var(--warn); text-align:left;">
+          <h3 style="font-size:1rem; color:var(--warn); margin-bottom:0.5rem;">Not FDA-Approved</h3>
+          <p style="font-size:0.85rem; color:var(--muted); line-height:1.6;">
+            Laboratory-developed test (LDT) performed in a CLIA-certified, CAP-accredited laboratory. Not an FDA-approved test.
+          </p>
+        </div>
+        <div class="card" style="border-color:var(--muted); text-align:left;">
+          <h3 style="font-size:1rem; color:var(--muted); margin-bottom:0.5rem;">Variable Performance Factors</h3>
+          <p style="font-size:0.85rem; color:var(--muted); line-height:1.6;">
+            Test performance may vary based on fetal fraction, maternal age, zygosity, and other clinical factors.
+          </p>
+        </div>
+        <div class="card" style="border-color:var(--muted); text-align:left;">
+          <h3 style="font-size:1rem; color:var(--muted); margin-bottom:0.5rem;">M &amp; N Antigen Ordering</h3>
+          <p style="font-size:0.85rem; color:var(--muted); line-height:1.6;">
+            M and N antigens must be selected at the time of ordering. They cannot be added after the test has been submitted.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 15 — REFERENCES
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s15">
+    <div style="text-align:center; max-width:900px; width:100%;">
+      <div class="eyebrow">Supporting Literature</div>
+      <h2>Key <span class="c-accent">References</span></h2>
+      <div class="divider"></div>
+      <div class="card" style="margin-top:1.5rem; padding:0; overflow:hidden;">
+        <table>
+          <thead>
+            <tr><th>#</th><th>Citation</th><th>Key Finding</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:var(--accent); font-weight:700;">1</td>
+              <td style="font-size:0.8rem; color:var(--muted);">Ashimi Balogun O, et al. <em>Pregnancy</em> 1.6 (2025): e70113.</td>
+              <td style="font-size:0.8rem; color:var(--muted);">~70% critical titers in antigen-negative fetuses</td>
+            </tr>
+            <tr>
+              <td style="color:var(--accent); font-weight:700;">2</td>
+              <td style="font-size:0.8rem; color:var(--muted);">Moise KJ Jr, et al. <em>JAMA Netw Open</em>. 2025;8(11):e2544649.</td>
+              <td style="font-size:0.8rem; color:var(--muted);">CPG: cfDNA recommended; no surveillance if antigen-negative</td>
+            </tr>
+            <tr>
+              <td style="color:var(--accent); font-weight:700;">3</td>
+              <td style="font-size:0.8rem; color:var(--muted);">Rego S, et al. <em>Obstet Gynecol</em>. July 2024.</td>
+              <td style="font-size:0.8rem; color:var(--muted);">465 neonates; 100% concordance for RBC antigen genotyping</td>
+            </tr>
+            <tr>
+              <td style="color:var(--accent); font-weight:700;">4</td>
+              <td style="font-size:0.8rem; color:var(--muted);">Alford B, et al. <em>Sci Rep</em>. 13.1 (2023): 12786.</td>
+              <td style="font-size:0.8rem; color:var(--muted);">&gt;99.9% sensitivity, specificity; 100% concordance</td>
+            </tr>
+            <tr>
+              <td style="color:var(--accent); font-weight:700;">5</td>
+              <td style="font-size:0.8rem; color:var(--muted);">BillionToOne. PR Newswire. December 2023.</td>
+              <td style="font-size:0.8rem; color:var(--muted);">Global collaboration with J&amp;J Phase 3 trial (Nipocalimab/HDFN)</td>
+            </tr>
+            <tr>
+              <td style="color:var(--accent); font-weight:700;">6</td>
+              <td style="font-size:0.8rem; color:var(--muted);">BillionToOne. Internal data on file. August 2025.</td>
+              <td style="font-size:0.8rem; color:var(--muted);">1,000,000+ tests ordered</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 16 — CLOSING / CALL TO ACTION
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-close" id="s16">
+    <div style="text-align:center; max-width:860px;">
+      <div class="eyebrow">Summary</div>
+      <h2>Redefining the Standard of <span class="c-green">Perinatal Care</span></h2>
+      <div class="divider" style="background:var(--accent2);"></div>
+      <div class="card-grid cols-2" style="margin-top:1.5rem;">
+        <div class="card" style="border-color:var(--accent2); text-align:left;">
+          <h3 style="font-size:0.95rem; color:var(--accent2); margin-bottom:0.5rem;">✅ For Alloimmunized Pregnancies</h3>
+          <p style="font-size:0.85rem; color:var(--muted); line-height:1.6;">
+            Early cfDNA-based fetal antigen determination enables evidence-based de-escalation of surveillance when the fetus is antigen-negative.
+          </p>
+        </div>
+        <div class="card" style="border-color:var(--fnait); text-align:left;">
+          <h3 style="font-size:0.95rem; color:var(--fnait); margin-bottom:0.5rem;">✅ For FNAIT-at-Risk Pregnancies</h3>
+          <p style="font-size:0.85rem; color:var(--muted); line-height:1.6;">
+            The first non-invasive platelet antigen typing enables earlier risk stratification and management planning.
+          </p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1.2rem; border-color:var(--accent); text-align:center;">
+        <p style="font-size:1rem; color:var(--text); line-height:1.7;">
+          <strong style="color:var(--accent);">Learn More &amp; Register for Live Webinar</strong><br>
+          <span style="color:var(--muted); font-size:0.9rem;">try.unityscreen.com/webinar</span><br>
+          <span style="color:var(--muted); font-size:0.85rem;">support@unityscreen.com · 650.460.2551</span>
+        </p>
+      </div>
+      <p style="margin-top:1.5rem; font-size:0.72rem; color:var(--border); line-height:1.5;">
+        UNITY Fetal Antigen NIPT is a screening test, not a diagnostic test. This is a laboratory-developed test (LDT) performed in a CLIA-certified, CAP-accredited laboratory. It is not an FDA-approved test. © 2026 BillionToOne, Inc. UN-FB-019-2601.
+      </p>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- ─── Navigation ──────────────────────────────────────────────── -->
+<div id="dots"></div>
+<div id="nav">
+  <button onclick="prevSlide()" title="Previous (←)">&#8592;</button>
+  <span id="slide-counter">1 / 16</span>
+  <button onclick="nextSlide()" title="Next (→)">&#8594;</button>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const counter = document.getElementById('slide-counter');
+  const dotsContainer = document.getElementById('dots');
+  let current = 0;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(d);
+  });
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dotsContainer.children[current].classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dotsContainer.children[current].classList.add('active');
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+  }
+
+  function nextSlide() { goTo(current + 1); }
+  function prevSlide() { goTo(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+  }, { passive: true });
+</script>
+</body>
+</html>
