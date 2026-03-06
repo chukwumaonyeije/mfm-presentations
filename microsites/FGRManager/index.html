@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FGRManager — Surveillance + Delivery Timing (SMFM #52)</title>
+  <meta name="description" content="Physician decision-support tool for fetal growth restriction management based on SMFM Consult Series #52 delivery-timing thresholds and UA Doppler-driven surveillance." />
+
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM — FGRManager
+       Dark-first, PGIS-style tech aesthetic
+       Teal primary, animated background, code panel motif
+    ============================================================ */
+
+    /* ---------- CSS Variables ---------- */
+    :root {
+      --teal:         #00d4aa;
+      --teal-dim:     #00b894;
+      --teal-glow:    rgba(0, 212, 170, 0.15);
+      --teal-glow2:   rgba(0, 212, 170, 0.08);
+
+      /* Dark theme (default) */
+      --bg:           #0a0a0f;
+      --bg2:          #111118;
+      --card:         rgba(17, 17, 24, 0.85);
+      --card-border:  rgba(0, 212, 170, 0.18);
+      --text:         #e2e8f0;
+      --text-muted:   #94a3b8;
+      --heading:      #00d4aa;
+      --input-bg:     rgba(255,255,255,0.05);
+      --input-border: rgba(0, 212, 170, 0.25);
+      --input-focus:  rgba(0, 212, 170, 0.5);
+      --divider:      rgba(0, 212, 170, 0.12);
+      --shadow:       0 4px 24px rgba(0,0,0,0.5);
+      --shadow-card:  0 0 0 1px var(--card-border), 0 8px 32px rgba(0,0,0,0.4);
+
+      /* Status colors */
+      --good:         #10b981;
+      --good-bg:      rgba(16, 185, 129, 0.12);
+      --good-text:    #6ee7b7;
+      --warn:         #f59e0b;
+      --warn-bg:      rgba(245, 158, 11, 0.12);
+      --warn-text:    #fcd34d;
+      --bad:          #ef4444;
+      --bad-bg:       rgba(239, 68, 68, 0.12);
+      --bad-text:     #fca5a5;
+
+      --radius:       10px;
+      --radius-lg:    14px;
+      --radius-pill:  999px;
+    }
+
+    /* Light theme overrides */
+    [data-theme="light"] {
+      --bg:           #f0f4f8;
+      --bg2:          #e2e8f0;
+      --card:         rgba(255, 255, 255, 0.95);
+      --card-border:  rgba(0, 180, 148, 0.25);
+      --text:         #1e293b;
+      --text-muted:   #64748b;
+      --heading:      #0d7a63;
+      --input-bg:     rgba(0,0,0,0.04);
+      --input-border: rgba(0, 180, 148, 0.35);
+      --input-focus:  rgba(0, 180, 148, 0.5);
+      --divider:      rgba(0, 180, 148, 0.15);
+      --shadow:       0 4px 16px rgba(0,0,0,0.08);
+      --shadow-card:  0 0 0 1px var(--card-border), 0 4px 16px rgba(0,0,0,0.08);
+      --teal:         #0d7a63;
+      --teal-dim:     #0a6352;
+      --teal-glow:    rgba(13, 122, 99, 0.1);
+      --good-bg:      rgba(16, 185, 129, 0.1);
+      --good-text:    #065f46;
+      --warn-bg:      rgba(245, 158, 11, 0.1);
+      --warn-text:    #78350f;
+      --bad-bg:       rgba(239, 68, 68, 0.1);
+      --bad-text:     #7f1d1d;
+    }
+
+    /* ---------- Reset & Base ---------- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                   "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ---------- Animated Background Canvas ---------- */
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.55;
+      transition: opacity 0.5s;
+    }
+    [data-theme="light"] #bgCanvas { opacity: 0.12; }
+
+    /* ---------- Layout ---------- */
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 4rem;
+    }
+
+    /* ---------- Top Nav Bar ---------- */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 0.75rem 1.25rem;
+      background: rgba(10, 10, 15, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--divider);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: background 0.3s;
+    }
+    [data-theme="light"] .topbar {
+      background: rgba(240, 244, 248, 0.85);
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .topbar-logo {
+      width: 28px; height: 28px;
+      background: var(--teal);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: #0a0a0f;
+    }
+    .topbar-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .topbar-name span { color: var(--teal); }
+
+    .topbar-actions { display: flex; gap: 0.5rem; align-items: center; }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--teal);
+      background: var(--teal-glow);
+      border: 1px solid rgba(0, 212, 170, 0.3);
+      border-radius: var(--radius-pill);
+      padding: 0.25rem 0.65rem;
+    }
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 0 6px var(--teal);
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--teal);
+      color: #0a0a0f;
+      border-color: var(--teal);
+    }
+    .btn-primary:hover { background: var(--teal-dim); border-color: var(--teal-dim); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,212,170,0.3); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border-color: var(--divider);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--input-focus); background: var(--teal-glow2); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--teal);
+      border-color: rgba(0, 212, 170, 0.35);
+    }
+    .btn-outline:hover { background: var(--teal-glow); }
+
+    /* ---------- Hero Section ---------- */
+    .hero {
+      padding: 2.5rem 0 1.5rem;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--teal);
+      background: var(--teal-glow);
+      border: 1px solid rgba(0, 212, 170, 0.25);
+      border-radius: var(--radius-pill);
+      padding: 0.3rem 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .hero-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .hero-title .accent { color: var(--teal); }
+    .hero-subtitle {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin-bottom: 1.25rem;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .hero-stat-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-family: 'Courier New', monospace;
+    }
+    .hero-stat-value {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--teal);
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ---------- Cards ---------- */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: rgba(0, 212, 170, 0.3); }
+
+    .card-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-label::before {
+      content: '';
+      display: inline-block;
+      width: 3px; height: 12px;
+      background: var(--teal);
+      border-radius: 2px;
+    }
+
+    /* ---------- Form Fields ---------- */
+    .fields-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 520px) { .fields-grid { grid-template-columns: 1fr; } }
+
+    .field { display: flex; flex-direction: column; gap: 0.35rem; }
+
+    .field label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+
+    .field input,
+    .field select {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius);
+      padding: 0.6rem 0.85rem;
+      font-size: 0.88rem;
+      color: var(--text);
+      font-family: inherit;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .field input::placeholder { color: var(--text-muted); opacity: 0.6; }
+    .field input:focus,
+    .field select:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px var(--teal-glow);
+    }
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2300d4aa' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      padding-right: 2rem;
+      cursor: pointer;
+    }
+    [data-theme="light"] .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%230d7a63' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    }
+    .field select option {
+      background: var(--bg2);
+      color: var(--text);
+    }
+
+    .field-hint {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      opacity: 0.8;
+    }
+
+    /* ---------- Button Row ---------- */
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--divider);
+    }
+    .btn-row .btn-primary { padding: 0.6rem 1.4rem; font-size: 0.88rem; }
+
+    /* ---------- Threshold Bar ---------- */
+    .threshold-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--teal-glow2);
+      border: 1px solid var(--divider);
+      border-radius: var(--radius);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: 'Courier New', monospace;
+    }
+    .threshold-bar span { color: var(--teal); font-weight: 700; }
+
+    /* ---------- KPI Grid ---------- */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 520px) { .kpi-grid { grid-template-columns: 1fr; } }
+
+    .kpi-box {
+      background: var(--input-bg);
+      border: 1px solid var(--divider);
+      border-radius: var(--radius);
+      padding: 1rem;
+      transition: border-color 0.2s;
+    }
+    .kpi-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+      font-family: 'Courier New', monospace;
+    }
+    .kpi-value {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .kpi-value.good { color: var(--good-text); }
+    .kpi-value.warn { color: var(--warn-text); }
+    .kpi-value.bad  { color: var(--bad-text); }
+    .kpi-note {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+      line-height: 1.4;
+    }
+
+    /* ---------- Countdown Badge ---------- */
+    .countdown-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--teal-glow);
+      color: var(--teal);
+      border: 1px solid rgba(0, 212, 170, 0.3);
+      border-radius: var(--radius-pill);
+      padding: 0.3rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-top: 0.5rem;
+      font-family: 'Courier New', monospace;
+    }
+    .hidden { display: none !important; }
+    @keyframes cardPulse {
+      0%   { box-shadow: 0 0 0 0 rgba(0,212,170,0.5); }
+      50%  { box-shadow: 0 0 0 12px rgba(0,212,170,0); }
+      100% { box-shadow: 0 0 0 0 rgba(0,212,170,0); }
+    }
+    .card-pulse { animation: cardPulse 0.8s ease-out; }
+
+    /* ---------- Alert ---------- */
+    .alert {
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      margin-top: 0.75rem;
+      display: none;
+    }
+    .alert.good { background: var(--good-bg); color: var(--good-text); border: 1px solid rgba(16,185,129,0.25); }
+    .alert.warn { background: var(--warn-bg); color: var(--warn-text); border: 1px solid rgba(245,158,11,0.25); }
+    .alert.bad  { background: var(--bad-bg);  color: var(--bad-text);  border: 1px solid rgba(239,68,68,0.25); }
+
+    /* ---------- Steroid Flag ---------- */
+    .steroid-flag {
+      display: none;
+      background: var(--warn-bg);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: var(--radius);
+      padding: 0.65rem 0.9rem;
+      font-size: 0.8rem;
+      color: var(--warn-text);
+      margin-top: 0.75rem;
+      line-height: 1.5;
+    }
+
+    /* ---------- Schedule List ---------- */
+    .schedule-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+    .schedule-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.84rem;
+      color: var(--text);
+      padding: 0.5rem 0.75rem;
+      background: var(--input-bg);
+      border: 1px solid var(--divider);
+      border-radius: var(--radius);
+      line-height: 1.45;
+    }
+    .schedule-list .icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.05rem; }
+
+    /* ---------- Reference Section ---------- */
+    .ref-section {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .ref-section strong { color: var(--text); }
+
+    /* ---------- Divider ---------- */
+    .divider {
+      height: 1px;
+      background: var(--divider);
+      margin: 1rem 0;
+    }
+
+    /* ---------- Footer ---------- */
+    .site-footer {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--divider);
+      line-height: 1.6;
+    }
+    .site-footer a { color: var(--teal); text-decoration: none; }
+    .site-footer a:hover { text-decoration: underline; }
+
+    /* ---------- Modal ---------- */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 5vh 1rem 3rem;
+    }
+    .modal-overlay.open {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .modal-box {
+      background: var(--bg2);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 640px;
+      padding: 2rem;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+      flex-shrink: 0;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--divider);
+    }
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--teal);
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+      margin-left: 1rem;
+      flex-shrink: 0;
+      transition: color 0.15s;
+    }
+    .modal-close:hover { color: var(--bad-text); }
+    .modal-box h3 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 1.25rem 0 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-family: 'Courier New', monospace;
+    }
+    .modal-box p, .modal-box li {
+      font-size: 0.86rem;
+      color: var(--text);
+      line-height: 1.65;
+    }
+    .modal-box ul { padding-left: 1.25rem; }
+    .modal-box li { margin-bottom: 0.35rem; }
+    .modal-box a { color: var(--teal); }
+    .modal-footer-note {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--divider);
+    }
+
+    /* ---------- Disclaimer Banner ---------- */
+    .disclaimer {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      background: rgba(245, 158, 11, 0.07);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    .disclaimer-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.05rem; }
+
+    /* ---------- Print ---------- */
+    @media print {
+      .topbar, .btn-row, .site-footer, #aboutModal, #bgCanvas,
+      .hero, .disclaimer { display: none !important; }
+      body { background: #fff; color: #000; }
+      .card { box-shadow: none; border: 1px solid #ccc; background: #fff; }
+      .kpi-value.good { color: #065f46; }
+      .kpi-value.warn { color: #78350f; }
+      .kpi-value.bad  { color: #7f1d1d; }
+      .schedule-list li { background: #f9f9f9; border-color: #ddd; }
+    }
+
+    /* ---------- Scrollbar ---------- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--divider); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(0, 212, 170, 0.3); }
+  </style>
+</head>
+<body>
+
+<!-- Animated Background Canvas -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- ===== TOP NAV BAR ===== -->
+<nav class="topbar">
+  <a class="topbar-brand" href="#">
+    <div class="topbar-logo">FGR</div>
+    <span class="topbar-name">FGR<span>Manager</span></span>
+  </a>
+  <div class="topbar-actions">
+    <span class="status-pill"><span class="status-dot"></span>SMFM #52</span>
+    <button class="btn btn-ghost" id="aboutBtn">About</button>
+    <button class="btn btn-ghost" id="themeBtn">&#9788; Light Mode</button>
+    <a class="btn btn-outline" href="https://doctorswhocode.blog/" target="_blank" rel="noopener">DoctorsWhoCode.blog</a>
+  </div>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="page-wrap">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">&#9670; Clinical Decision Support</div>
+    <h1 class="hero-title">
+      Fetal Growth<br>
+      <span class="accent">Restriction Manager</span>
+    </h1>
+    <p class="hero-subtitle">
+      Surveillance &amp; delivery timing based on <strong>SMFM Consult Series #52</strong>.
+      UA Doppler-driven thresholds, corticosteroid eligibility, and BPP flagging.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-stat">
+        <span class="hero-stat-label">Protocol</span>
+        <span class="hero-stat-value">SMFM #52</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-label">Reference</span>
+        <span class="hero-stat-value">ACOG PB #204</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-label">Use</span>
+        <span class="hero-stat-value">Educational / QA</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <span class="disclaimer-icon">&#9888;</span>
+    <span><strong>Informational use only.</strong> This tool is for educational and quality-assurance purposes and does not provide medical advice. All therapeutic decisions must be made by a qualified healthcare provider in the context of the individual patient.</span>
+  </div>
+
+  <!-- ===== INPUT CARD ===== -->
+  <div class="card">
+    <div class="card-label">Patient Inputs</div>
+    <div class="fields-grid">
+      <div class="field">
+        <label for="ga">Gestational Age</label>
+        <input id="ga" type="text" placeholder="e.g., 32.4 or 32+4" autocomplete="off" />
+        <span class="field-hint">32.4 = 32w4d &nbsp;|&nbsp; also accepts 32+4 or 32w4d</span>
+      </div>
+      <div class="field">
+        <label for="efw">EFW Percentile</label>
+        <input id="efw" type="text" placeholder="e.g., 2.8" autocomplete="off" />
+        <span class="field-hint">FGR = EFW &lt;10th (or AC &lt;10th per SMFM). Enter 0–99.</span>
+      </div>
+      <div class="field">
+        <label for="doppler">Umbilical Artery Doppler</label>
+        <select id="doppler">
+          <option value="normal">Normal</option>
+          <option value="decreased">Decreased diastolic flow / elevated impedance</option>
+          <option value="aedf">Absent end-diastolic flow (AEDF)</option>
+          <option value="redf">Reversed end-diastolic flow (REDF)</option>
+        </select>
+        <span class="field-hint">Doppler category drives SMFM delivery window selection.</span>
+      </div>
+      <div class="field">
+        <label for="bpp">Biophysical Profile (BPP)</label>
+        <select id="bpp">
+          <option value="na">Not entered</option>
+          <option value="10">10/10</option>
+          <option value="8">8/10</option>
+          <option value="6">6/10</option>
+          <option value="4">4/10</option>
+          <option value="2">2/10</option>
+          <option value="0">0/10</option>
+        </select>
+        <span class="field-hint">Tool flags potentially nonreassuring scores.</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="runBtn">&#9654; Generate Plan</button>
+      <button class="btn btn-ghost" id="copyBtn">&#128203; Copy Summary</button>
+      <button class="btn btn-ghost" id="resetBtn">&#8635; Reset</button>
+      <button class="btn btn-ghost" id="printBtn">&#128438; Print</button>
+    </div>
+    <!-- Hidden textarea for clipboard fallback -->
+    <textarea id="copyFallback" readonly style="position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none;" aria-hidden="true"></textarea>
+
+    <div class="threshold-bar">
+      <span>SMFM thresholds:</span>
+      <span>REDF &#8594; 30–32w</span> &bull;
+      <span>AEDF &#8594; 33–34w</span> &bull;
+      <span>Decreased flow &#8594; ~37w</span> &bull;
+      <span>Severe FGR (EFW &lt;3rd, normal UA) &#8594; ~37w</span> &bull;
+      <span>Normal UA &#8594; 38–39w</span>
+    </div>
+  </div>
+
+  <!-- ===== OUTPUT CARD ===== -->
+  <div class="card" id="outputCard">
+    <div class="card-label">Clinical Decision Output</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-box">
+        <div class="kpi-label">Risk Tier</div>
+        <div class="kpi-value" id="outTier">—</div>
+        <div class="kpi-note" id="outTierNote"></div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-label">Recommended Delivery Window</div>
+        <div class="kpi-value" id="outDeliver">—</div>
+        <div class="kpi-note" id="outDeliverNote"></div>
+        <div class="countdown-badge hidden" id="outCountdown"></div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-label">Surveillance Intensity</div>
+        <div class="kpi-value" id="outInterval">—</div>
+        <div class="kpi-note" id="outIntervalNote"></div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-label">Antenatal Corticosteroids</div>
+        <div class="kpi-value" id="outSteroid">—</div>
+        <div class="kpi-note" id="outSteroidNote"></div>
+        <div class="steroid-flag" id="outSteroidFlag"></div>
+      </div>
+    </div>
+
+    <div class="alert" id="outBppAlert"></div>
+  </div>
+
+  <!-- ===== SCHEDULE CARD ===== -->
+  <div class="card">
+    <div class="card-label">Suggested Surveillance Schedule</div>
+    <ul class="schedule-list" id="outSchedule">
+      <li><span class="icon">&#8212;</span><span>Generate a plan to see the schedule.</span></li>
+    </ul>
+  </div>
+
+  <!-- ===== PROTOCOL BASIS CARD ===== -->
+  <div class="card">
+    <div class="card-label">Protocol Basis</div>
+    <div class="ref-section">
+      <p><strong>SMFM Consult Series #52 (2020):</strong> Medically indicated late-preterm and early-term deliveries — standardized approach to FGR diagnosis, surveillance, and delivery timing.</p>
+      <div class="divider"></div>
+      <p><strong>ACOG Practice Bulletin #204:</strong> Fetal Growth Restriction — supports Doppler-informed surveillance and delivery planning for AEDF/REDF.</p>
+      <div class="divider"></div>
+      <p>Delivery windows reflect widely cited SMFM thresholds; individualize for maternal indications, NICU capacity, and patient values.</p>
+      <div class="divider"></div>
+      <p><strong>Safety disclaimer:</strong> Nonreassuring NST/BPP, maternal indications (preeclampsia, HELLP, abruption), fetal anomalies, infection, PPROM, and local NICU constraints may justify earlier delivery than the Doppler-only windows shown here. This tool does not replace clinical judgment.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    Created by <a href="https://doctorswhocode.blog/" target="_blank" rel="noopener">DoctorsWhoCode.blog</a>
+    &nbsp;&bull;&nbsp; Based on SMFM Consult Series #52
+    &nbsp;&bull;&nbsp; v2.0
+  </footer>
+
+</div><!-- /page-wrap -->
+
+<!-- ===== ABOUT MODAL ===== -->
+<div class="modal-overlay" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">About FGRManager</div>
+      <button class="modal-close" id="closeModal" aria-label="Close">&times;</button>
+    </div>
+
+    <p>
+      <strong>FGRManager</strong> is a physician-facing clinical decision-support tool designed to assist
+      Maternal-Fetal Medicine specialists and obstetricians in managing pregnancies complicated by
+      <strong>fetal growth restriction (FGR)</strong>. It implements the delivery-timing thresholds and
+      surveillance framework from the <em>Society for Maternal-Fetal Medicine (SMFM) Consult Series #52</em>.
+    </p>
+
+    <h3>What This Tool Does</h3>
+    <ul>
+      <li>Classifies FGR severity based on EFW percentile and umbilical artery (UA) Doppler category.</li>
+      <li>Recommends a <strong>delivery window</strong> aligned with SMFM thresholds (REDF: 30–32w; AEDF: 33–34w; decreased diastolic flow or severe FGR: ~37w; normal UA with EFW 3–10th: 38–39w).</li>
+      <li>Calculates a <strong>countdown</strong> from current gestational age to the target delivery window.</li>
+      <li>Generates a <strong>surveillance schedule</strong> (NST/BPP frequency, UA Doppler interval, growth scan cadence) keyed to Doppler category.</li>
+      <li>Flags <strong>antenatal corticosteroid eligibility</strong> when preterm delivery is anticipated within 7 days.</li>
+      <li>Flags <strong>potentially nonreassuring BPP scores</strong> for immediate clinical attention.</li>
+    </ul>
+
+    <h3>What This Tool Does NOT Do</h3>
+    <ul>
+      <li>It does not replace clinical judgment or individualized patient assessment.</li>
+      <li>It does not account for maternal indications (preeclampsia, HELLP, abruption), fetal anomalies, PPROM, or local NICU capacity.</li>
+      <li>It does not provide a definitive plan — always adapt to the specific patient context.</li>
+    </ul>
+
+    <h3>For Patients</h3>
+    <p>
+      If your provider has shared this tool with you, it means your baby's growth is being carefully monitored.
+      Fetal growth restriction means your baby may be growing more slowly than expected. Your care team uses
+      tools like this to decide how often to check on your baby and when the safest time to deliver might be.
+      Please ask your provider any questions you have about your care plan.
+    </p>
+
+    <div class="modal-footer-note">
+      Created by <a href="https://doctorswhocode.blog/" target="_blank" rel="noopener">DoctorsWhoCode.blog</a>.
+      SMFM Consult Series #52: <em>Medically Indicated Late-Preterm and Early-Term Deliveries</em> (2020).
+      ACOG Practice Bulletin #204: <em>Fetal Growth Restriction</em>.
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   FGRManager — Clinical Logic + UI
+   SMFM Consult Series #52 delivery-timing thresholds
+   + UA Doppler-driven surveillance schedule
+   Architecture: dark-first via data-theme attribute on <html>
+============================================================ */
+
+// ---- Utility: DOM shorthand ----
+const $ = (id) => document.getElementById(id);
+
+// ============================================================
+// ANIMATED BACKGROUND — PGIS-style teal grid + code rain
+// ============================================================
+(function initBackground() {
+  const canvas = $('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, cols, drops, fontSize;
+
+  const chars = 'SMFMFGRUA EWBPPREDFAEDFDOPPLERGAWEEKSDAYSDELIVERYNSTMCA0123456789'.split('').filter(c => c.trim());
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    fontSize = 14;
+    // Use only 1 in 3 columns for a sparser effect
+    cols = Math.floor(W / (fontSize * 3));
+    drops = Array(cols).fill(1);
+  }
+
+  function getThemeColors() {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    return isDark
+      ? { bg: 'rgba(10,10,15,0.18)', char: 'rgba(0,212,170,0.7)', dim: 'rgba(0,212,170,0.2)' }
+      : { bg: 'rgba(240,244,248,0.35)', char: 'rgba(13,122,99,0.5)', dim: 'rgba(13,122,99,0.15)' };
+  }
+
+  function draw() {
+    const { bg, char, dim } = getThemeColors();
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.font = `${fontSize}px "Courier New", monospace`;
+
+    for (let i = 0; i < drops.length; i++) {
+      const c = chars[Math.floor(Math.random() * chars.length)];
+      const x = i * fontSize;
+      const y = drops[i] * fontSize;
+
+      // Bright leading char
+      ctx.fillStyle = char;
+      ctx.fillText(c, x * fontSize * 3, y);
+
+      // Dim trailing
+      if (drops[i] > 2) {
+        ctx.fillStyle = dim;
+        ctx.fillText(chars[Math.floor(Math.random() * chars.length)], x * fontSize * 3, (drops[i] - 1) * fontSize);
+      }
+
+      if (y > H && Math.random() > 0.97) drops[i] = 0;
+      drops[i]++;
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  setInterval(draw, 90);
+})();
+
+// ============================================================
+// THEME TOGGLE — dark-first via data-theme on <html>
+// ============================================================
+(function initTheme() {
+  const btn = $('themeBtn');
+  const root = document.documentElement;
+
+  // Load saved preference; default is dark
+  const saved = localStorage.getItem('fgrTheme') || 'dark';
+  root.setAttribute('data-theme', saved);
+  btn.textContent = saved === 'dark' ? '\u2600 Light Mode' : '\u263D Dark Mode';
+
+  btn.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('fgrTheme', next);
+    btn.textContent = next === 'dark' ? '\u2600 Light Mode' : '\u263D Dark Mode';
+  });
+})();
+
+// ============================================================
+// ABOUT MODAL
+// ============================================================
+(function initModal() {
+  const modal = $('aboutModal');
+  $('aboutBtn').addEventListener('click', () => modal.classList.add('open'));
+  $('closeModal').addEventListener('click', () => modal.classList.remove('open'));
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('open'); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') modal.classList.remove('open'); });
+})();
+
+// ============================================================
+// CLINICAL LOGIC
+// ============================================================
+
+// ---- Parse GA string ----
+// Accepts: "32.4" (32w4d), "32+4", "32w4d", "32w"
+function parseGA(raw) {
+  if (!raw) return null;
+  const s = raw.toLowerCase().trim()
+    .replace(/weeks?/g, 'w')
+    .replace(/days?/g, 'd')
+    .replace(/\s+/g, '');
+
+  // "32.4" — weeks.days notation
+  if (/^\d{1,2}\.\d$/.test(s)) {
+    const [w, d] = s.split('.').map(Number);
+    if (d >= 0 && d <= 6) return build(w, d);
+  }
+  // "32.4" where .4 might be decimal fraction of a week
+  if (/^\d{1,2}\.\d{1,2}$/.test(s)) {
+    const [w, d] = s.split('.').map(Number);
+    if (d >= 0 && d <= 6) return build(w, d);
+    const total = Math.round(Number(s) * 7);
+    return build(Math.floor(total / 7), total % 7);
+  }
+  // "32+4"
+  if (/^\d{1,2}\+\d$/.test(s)) {
+    const [w, d] = s.split('+').map(Number);
+    if (d >= 0 && d <= 6) return build(w, d);
+  }
+  // "32w4d" or "32w"
+  const m = s.match(/^(\d{1,2})w(?:(\d)d?)?$/);
+  if (m) {
+    const w = Number(m[1]);
+    const d = m[2] ? Number(m[2]) : 0;
+    if (d >= 0 && d <= 6) return build(w, d);
+  }
+  return null;
+}
+
+function build(w, d) {
+  return { w, d, totalDays: w * 7 + d, fmt: `${w}w${d}d` };
+}
+
+// ---- Classify: tier + delivery window ----
+function classify(efwPct, doppler) {
+  if (doppler === 'redf') {
+    return {
+      tier: 'Highest Risk — REDF',
+      tierClass: 'bad',
+      delivery: '30–32 weeks',
+      deliverTargetDays: 31 * 7,
+      deliverNote: 'SMFM #52: Deliver at 30–32 weeks with reversed end-diastolic flow.',
+    };
+  }
+  if (doppler === 'aedf') {
+    return {
+      tier: 'High Risk — AEDF',
+      tierClass: 'bad',
+      delivery: '33–34 weeks',
+      deliverTargetDays: 33 * 7 + 3,
+      deliverNote: 'SMFM #52: Deliver at 33–34 weeks with absent end-diastolic flow.',
+    };
+  }
+  if (doppler === 'decreased') {
+    return {
+      tier: 'Moderate–High Risk — Decreased Diastolic Flow',
+      tierClass: 'warn',
+      delivery: '~37 weeks',
+      deliverTargetDays: 37 * 7,
+      deliverNote: 'SMFM #52: Deliver ~37 weeks with decreased diastolic flow / elevated impedance.',
+    };
+  }
+  if (efwPct !== null && efwPct < 3) {
+    return {
+      tier: 'Severe FGR — EFW <3rd Percentile (Normal UA)',
+      tierClass: 'warn',
+      delivery: '~37 weeks',
+      deliverTargetDays: 37 * 7,
+      deliverNote: 'SMFM #52: Deliver ~37 weeks for severe FGR (EFW <3rd), even with normal UA Doppler.',
+    };
+  }
+  return {
+    tier: 'Lower Risk FGR — Normal UA Doppler',
+    tierClass: 'good',
+    delivery: '38–39 weeks',
+    deliverTargetDays: 38 * 7 + 3,
+    deliverNote: 'SMFM #52: Deliver 38–39 weeks for EFW 3rd–10th with normal UA (absent other indications).',
+  };
+}
+
+// ---- Surveillance plan ----
+function surveillancePlan(efwPct, doppler) {
+  const growthBase = { icon: '📐', text: 'Growth ultrasound every 3–4 weeks (consider every 2 weeks if severe or worsening).' };
+
+  if (doppler === 'redf') {
+    return {
+      interval: 'Intensive — Consider Hospitalization',
+      intervalClass: 'bad',
+      intervalNote: 'REDF warrants very frequent surveillance and readiness for preterm delivery.',
+      schedule: [
+        { icon: '🏥', text: 'Consider inpatient admission for continuous monitoring.' },
+        { icon: '📈', text: 'CTG / NST: 1–2× per day (institution-dependent).' },
+        { icon: '🔬', text: 'UA Doppler: at least 2–3× per week (or more per local policy).' },
+        { icon: '🧪', text: 'MCA Doppler and ductus venosus: per MFM guidance.' },
+        growthBase,
+        { icon: '💉', text: 'Antenatal corticosteroids: administer if delivery anticipated within 7 days (see below).' },
+        { icon: '🚨', text: 'Deliver 30–32 weeks; earlier if nonreassuring status or maternal indications.' },
+      ],
+    };
+  }
+  if (doppler === 'aedf') {
+    return {
+      interval: 'Very Frequent',
+      intervalClass: 'bad',
+      intervalNote: 'AEDF substantially increases stillbirth risk; surveillance escalates significantly.',
+      schedule: [
+        { icon: '📈', text: 'NST / BPP: at least 2× per week — consider more frequent per local policy.' },
+        { icon: '🔬', text: 'UA Doppler: 2–3× per week.' },
+        { icon: '🧪', text: 'Consider MCA Doppler and ductus venosus assessment.' },
+        growthBase,
+        { icon: '💉', text: 'Antenatal corticosteroids: administer if delivery anticipated within 7 days (see below).' },
+        { icon: '🚨', text: 'Deliver 33–34 weeks; earlier if clinical deterioration.' },
+      ],
+    };
+  }
+  if (doppler === 'decreased') {
+    return {
+      interval: 'Frequent',
+      intervalClass: 'warn',
+      intervalNote: 'Elevated impedance / decreased diastolic flow → closer follow-up, 37w delivery target.',
+      schedule: [
+        { icon: '📈', text: 'NST and/or BPP: 1–2× per week.' },
+        { icon: '🔬', text: 'UA Doppler: weekly (or every 1–2 weeks if stable, per local protocol).' },
+        growthBase,
+        { icon: '🚨', text: 'Deliver ~37 weeks (absent other indications).' },
+      ],
+    };
+  }
+  const severe = efwPct !== null && efwPct < 3;
+  return {
+    interval: 'Standard',
+    intervalClass: 'good',
+    intervalNote: 'Structured surveillance is still required after FGR diagnosis even with normal Doppler.',
+    schedule: severe
+      ? [
+          { icon: '📈', text: 'NST and/or BPP: weekly.' },
+          { icon: '🔬', text: 'UA Doppler: weekly.' },
+          growthBase,
+          { icon: '🚨', text: 'Deliver ~37 weeks for severe FGR (EFW <3rd).' },
+        ]
+      : [
+          { icon: '📈', text: 'NST and/or BPP: weekly.' },
+          { icon: '🔬', text: 'UA Doppler: every 1–2 weeks.' },
+          growthBase,
+          { icon: '🚨', text: 'Deliver 38–39 weeks if stable (earlier if additional indications).' },
+        ],
+  };
+}
+
+// ---- Corticosteroid eligibility ----
+function steroidEligibility(ga, doppler) {
+  if (!ga) return { eligible: false, note: '' };
+  const days = ga.totalDays;
+  const earlyDelivery = doppler === 'redf' || doppler === 'aedf';
+  if (earlyDelivery && days < 34 * 7) {
+    return {
+      eligible: true,
+      note: `At ${ga.fmt}, antenatal corticosteroids are indicated if delivery is anticipated within 7 days (GA < 34w0d). Administer betamethasone 12 mg IM q24h × 2 doses per ACOG/SMFM guidance.`,
+    };
+  }
+  if (earlyDelivery && days >= 34 * 7 && days < 37 * 7) {
+    return {
+      eligible: true,
+      note: `At ${ga.fmt} (34–36+6w), late-preterm corticosteroids (betamethasone) may be considered per SMFM guidance if delivery is anticipated within 7 days.`,
+    };
+  }
+  return { eligible: false, note: '' };
+}
+
+// ---- BPP flag ----
+function bppFlag(bpp) {
+  if (bpp === 'na') return { flag: false, cls: '', msg: '' };
+  const v = Number(bpp);
+  if (v <= 4) return { flag: true, cls: 'bad',  msg: `BPP ${v}/10 is potentially nonreassuring — consider immediate clinical evaluation, expedited delivery assessment per local policy.` };
+  if (v === 6) return { flag: true, cls: 'warn', msg: `BPP 6/10: interpret in clinical context. Repeat in 24 hours or consider delivery depending on GA and clinical picture.` };
+  if (v === 8) return { flag: true, cls: 'warn', msg: `BPP 8/10: generally reassuring, but interpret in context of fluid score, NST status, and GA.` };
+  return { flag: false, cls: '', msg: '' };
+}
+
+// ---- Countdown ----
+function countdown(ga, targetDays) {
+  if (!ga) return null;
+  const diff = targetDays - ga.totalDays;
+  if (diff <= 0) return 'At or past target window';
+  const w = Math.floor(diff / 7);
+  const d = diff % 7;
+  return `${w}w${d}d until target window`;
+}
+
+// ---- Set KPI value ----
+function setKpi(elId, text, cls) {
+  const el = $(elId);
+  el.textContent = text;
+  el.className = 'kpi-value' + (cls ? ` ${cls}` : '');
+}
+
+// ---- Main generate ----
+function generate() {
+  const gaRaw   = $('ga').value.trim();
+  const efwRaw  = $('efw').value.trim();
+  const doppler = $('doppler').value;
+  const bpp     = $('bpp').value;
+
+  const ga = parseGA(gaRaw);
+  if (!ga) { alert('Please enter a valid gestational age (e.g., 32.4, 32+4, or 32w4d).'); return; }
+  if (ga.w < 20 || ga.w > 42) { alert('Gestational age appears out of range (20–42 weeks). Please check your entry.'); return; }
+
+  const efw = efwRaw === '' ? null : Number(efwRaw);
+  if (efwRaw !== '' && (Number.isNaN(efw) || efw < 0 || efw > 99)) { alert('Please enter a valid EFW percentile (0–99).'); return; }
+
+  const cls      = classify(efw, doppler);
+  const plan     = surveillancePlan(efw, doppler);
+  const steroid  = steroidEligibility(ga, doppler);
+  const bppInfo  = bppFlag(bpp);
+  const cd       = countdown(ga, cls.deliverTargetDays);
+
+  setKpi('outTier', cls.tier, cls.tierClass);
+  $('outTierNote').textContent = `GA entered: ${ga.fmt} (${ga.totalDays} days). EFW: ${efw !== null ? efw + 'th %ile' : 'not entered'}.`;
+
+  setKpi('outDeliver', cls.delivery, cls.tierClass);
+  $('outDeliverNote').textContent = cls.deliverNote;
+  const cdBadge = $('outCountdown');
+  if (cd) { cdBadge.textContent = '\u23F1 ' + cd; cdBadge.classList.remove('hidden'); }
+  else { cdBadge.classList.add('hidden'); }
+
+  setKpi('outInterval', plan.interval, plan.intervalClass);
+  $('outIntervalNote').textContent = plan.intervalNote;
+
+  const steroidFlagEl = $('outSteroidFlag');
+  if (steroid.eligible) {
+    setKpi('outSteroid', 'Consider / Indicated', 'warn');
+    $('outSteroidNote').textContent = '';
+    steroidFlagEl.textContent = '\uD83D\uDC89 ' + steroid.note;
+    steroidFlagEl.style.display = 'block';
+  } else {
+    setKpi('outSteroid', 'Not indicated at this GA', 'good');
+    $('outSteroidNote').textContent = 'Standard corticosteroid thresholds not met based on current GA and Doppler category.';
+    steroidFlagEl.style.display = 'none';
+  }
+
+  const bppAlert = $('outBppAlert');
+  if (bppInfo.flag) {
+    bppAlert.textContent = '\u26A0 ' + bppInfo.msg;
+    bppAlert.className = `alert ${bppInfo.cls}`;
+    bppAlert.style.display = 'block';
+  } else {
+    bppAlert.style.display = 'none';
+  }
+
+  $('outSchedule').innerHTML = plan.schedule.map(item =>
+    `<li><span class="icon">${item.icon}</span><span>${item.text}</span></li>`
+  ).join('');
+
+  const bppText    = bpp === 'na' ? 'not entered' : `${bpp}/10`;
+  const dopplerText = $('doppler').selectedOptions[0].text;
+  // Scroll to output and pulse
+  const outputCard = $('outputCard');
+  if (outputCard) {
+    outputCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    outputCard.classList.add('card-pulse');
+    setTimeout(() => outputCard.classList.remove('card-pulse'), 800);
+  }
+
+  window.__FGR_SUMMARY__ = [
+    'FGRManager Clinical Summary',
+    '================================',
+    `GA: ${ga.fmt} (${ga.totalDays} days)`,
+    `EFW percentile: ${efw !== null ? efw : 'not entered'}`,
+    `UA Doppler: ${dopplerText}`,
+    `BPP: ${bppText}`,
+    '',
+    `Risk Tier: ${cls.tier}`,
+    `Delivery Window: ${cls.delivery}`,
+    `Countdown: ${cd || 'N/A'}`,
+    `Surveillance Intensity: ${plan.interval}`,
+    '',
+    'Suggested Surveillance Schedule:',
+    ...plan.schedule.map(item => `  - ${item.text}`),
+    '',
+    steroid.eligible ? `Corticosteroids: ${steroid.note}` : 'Corticosteroids: Not indicated at this GA/Doppler category.',
+    bppInfo.flag ? `\nBPP Flag: ${bppInfo.msg}` : '',
+    '',
+    'Protocol basis: SMFM Consult Series #52 | ACOG PB #204',
+    'INFORMATIONAL USE ONLY — not a substitute for clinical judgment.',
+  ].filter(l => l !== undefined).join('\n');
+}
+
+// ---- Reset ----
+function reset() {
+  $('ga').value = '';
+  $('efw').value = '';
+  $('doppler').value = 'normal';
+  $('bpp').value = 'na';
+  ['outTier','outDeliver','outInterval','outSteroid'].forEach(id => {
+    $(id).textContent = '—';
+    $(id).className = 'kpi-value';
+  });
+  ['outTierNote','outDeliverNote','outIntervalNote','outSteroidNote'].forEach(id => { $(id).textContent = ''; });
+  $('outCountdown').classList.add('hidden');
+  $('outBppAlert').style.display = 'none';
+  $('outSteroidFlag').style.display = 'none';
+  $('outSchedule').innerHTML = '<li><span class="icon">&#8212;</span><span>Generate a plan to see the schedule.</span></li>';
+  window.__FGR_SUMMARY__ = '';
+}
+
+// ---- Event listeners ----
+$('runBtn').addEventListener('click', generate);
+$('resetBtn').addEventListener('click', reset);
+$('printBtn').addEventListener('click', () => {
+  try { window.print(); } catch(e) { alert('Print dialog could not be opened. Please use Ctrl+P / Cmd+P.'); }
+});
+
+$('copyBtn').addEventListener('click', async () => {
+  const text = window.__FGR_SUMMARY__ || '';
+  if (!text) { alert('Please generate a plan first, then copy.'); return; }
+  const btn = $('copyBtn');
+  const originalText = btn.textContent;
+  // Try modern Clipboard API first
+  try {
+    await navigator.clipboard.writeText(text);
+    btn.textContent = '\u2713 Copied!';
+    setTimeout(() => { btn.textContent = originalText; }, 2500);
+    return;
+  } catch (_) { /* fall through to legacy method */ }
+  // Fallback: textarea + execCommand
+  try {
+    const ta = $('copyFallback');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '0';
+    ta.style.top = '0';
+    ta.style.opacity = '1';
+    ta.style.pointerEvents = 'auto';
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand('copy');
+    ta.style.position = 'absolute';
+    ta.style.left = '-9999px';
+    ta.style.opacity = '0';
+    ta.style.pointerEvents = 'none';
+    if (ok) {
+      btn.textContent = '\u2713 Copied!';
+      setTimeout(() => { btn.textContent = originalText; }, 2500);
+    } else {
+      throw new Error('execCommand failed');
+    }
+  } catch (_) {
+    // Last resort: show the text in a modal
+    const ta = $('copyFallback');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:80vw;max-width:600px;height:300px;z-index:2000;background:var(--bg2);color:var(--text);border:1px solid var(--card-border);border-radius:10px;padding:1rem;font-family:monospace;font-size:0.75rem;';
+    ta.focus();
+    ta.select();
+    alert('Clipboard API unavailable. The summary text is now selected — press Ctrl+C (or Cmd+C) to copy it.');
+    ta.style.cssText = 'position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none;';
+  }
+});
+['ga','efw'].forEach(id => {
+  $(id).addEventListener('keydown', (e) => { if (e.key === 'Enter') generate(); });
+});
+</script>
+</body>
+</html>

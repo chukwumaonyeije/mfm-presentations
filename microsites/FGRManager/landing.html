@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FGRManager — Fetal Growth Restriction Decision Support</title>
+  <meta name="description" content="Open-source clinical decision-support tool for fetal growth restriction management. SMFM Consult Series #52 delivery-timing thresholds, UA Doppler-driven surveillance, corticosteroid eligibility. Built by a physician." />
+  <meta property="og:title" content="FGRManager — FGR Surveillance & Delivery Timing" />
+  <meta property="og:description" content="UA Doppler-driven delivery windows and surveillance schedules based on SMFM Consult Series #52. Free, open-source, built by an MFM physician." />
+  <meta property="og:type" content="website" />
+
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM — FGRManager Landing Page
+       Mirrors index.html dark-first PGIS aesthetic
+    ============================================================ */
+
+    :root {
+      --teal:        #00d4aa;
+      --teal-dim:    #00b894;
+      --teal-glow:   rgba(0,212,170,0.15);
+      --teal-glow2:  rgba(0,212,170,0.08);
+      --bg:          #0a0a0f;
+      --bg2:         #111118;
+      --card:        rgba(17,17,24,0.85);
+      --card-border: rgba(0,212,170,0.18);
+      --text:        #e2e8f0;
+      --text-muted:  #94a3b8;
+      --heading:     #00d4aa;
+      --divider:     rgba(0,212,170,0.12);
+      --shadow:      0 4px 24px rgba(0,0,0,0.5);
+      --good:        #10b981;
+      --warn:        #f59e0b;
+      --bad:         #ef4444;
+      --radius:      10px;
+      --radius-lg:   16px;
+      --radius-pill: 999px;
+    }
+
+    [data-theme="light"] {
+      --bg:          #f0f4f8;
+      --bg2:         #e2e8f0;
+      --card:        rgba(255,255,255,0.95);
+      --card-border: rgba(0,180,148,0.25);
+      --text:        #1e293b;
+      --text-muted:  #64748b;
+      --heading:     #0d7a63;
+      --divider:     rgba(0,180,148,0.15);
+      --teal:        #0d7a63;
+      --teal-dim:    #0a6352;
+      --teal-glow:   rgba(13,122,99,0.1);
+      --teal-glow2:  rgba(13,122,99,0.06);
+      --shadow:      0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ---- Canvas ---- */
+    #bgCanvas {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none; opacity: 0.45;
+      transition: opacity 0.5s;
+    }
+    [data-theme="light"] #bgCanvas { opacity: 0.10; }
+
+    /* ---- Topbar ---- */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      background: rgba(10,10,15,0.82);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--divider);
+      transition: background 0.3s;
+    }
+    [data-theme="light"] .topbar { background: rgba(240,244,248,0.88); }
+
+    .topbar-brand {
+      display: flex; align-items: center; gap: 0.65rem;
+      text-decoration: none; color: var(--text);
+    }
+    .brand-logo {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--teal); display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 800; color: #0a0a0f; letter-spacing: -0.5px;
+    }
+    .brand-name { font-size: 1.05rem; font-weight: 700; }
+    .brand-name span { color: var(--teal); }
+
+    .topbar-nav {
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .nav-link {
+      padding: 0.4rem 0.85rem; border-radius: var(--radius-pill);
+      font-size: 0.82rem; font-weight: 500; color: var(--text-muted);
+      text-decoration: none; transition: color 0.2s, background 0.2s;
+      border: none; background: none; cursor: pointer;
+    }
+    .nav-link:hover { color: var(--text); background: var(--teal-glow2); }
+
+    .btn-cta-sm {
+      padding: 0.42rem 1.1rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.82rem; font-weight: 600;
+      background: var(--teal); color: #0a0a0f;
+      border: none; cursor: pointer; text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .btn-cta-sm:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-theme {
+      padding: 0.4rem 0.85rem; border-radius: var(--radius-pill);
+      font-size: 0.8rem; font-weight: 500;
+      background: var(--teal-glow2); color: var(--text-muted);
+      border: 1px solid var(--divider); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-theme:hover { color: var(--teal); border-color: var(--teal); }
+
+    /* ---- Page wrap ---- */
+    .page { position: relative; z-index: 1; padding-top: 58px; }
+
+    /* ---- Section base ---- */
+    section { padding: 5rem 1.5rem; }
+    .container { max-width: 1080px; margin: 0 auto; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--teal);
+      background: var(--teal-glow); border: 1px solid var(--card-border);
+      padding: 0.3rem 0.85rem; border-radius: var(--radius-pill);
+      margin-bottom: 1.25rem;
+    }
+    .section-label::before { content: '◆'; font-size: 0.55rem; }
+
+    h2.section-title {
+      font-size: clamp(1.75rem, 3.5vw, 2.6rem);
+      font-weight: 800; line-height: 1.2;
+      color: var(--text); margin-bottom: 1rem;
+    }
+    h2.section-title span { color: var(--teal); }
+
+    .section-sub {
+      font-size: 1.05rem; color: var(--text-muted);
+      max-width: 620px; margin-bottom: 3rem;
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      min-height: calc(100vh - 58px);
+      display: flex; align-items: center;
+      padding: 4rem 1.5rem 3rem;
+    }
+    .hero-inner {
+      max-width: 1080px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    @media (max-width: 768px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-panel { display: none; }
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--teal);
+      background: var(--teal-glow); border: 1px solid var(--card-border);
+      padding: 0.3rem 0.85rem; border-radius: var(--radius-pill);
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge::before { content: '●'; font-size: 0.5rem; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 900; line-height: 1.1;
+      color: var(--text); margin-bottom: 0.4rem;
+    }
+    .hero h1 .accent { color: var(--teal); display: block; }
+
+    .hero-sub {
+      font-size: 1.1rem; color: var(--text-muted);
+      margin: 1.25rem 0 2rem; max-width: 480px; line-height: 1.7;
+    }
+
+    .hero-stats {
+      display: flex; gap: 2.5rem; margin-top: 2.5rem;
+      padding-top: 2rem; border-top: 1px solid var(--divider);
+    }
+    .hero-stat-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.2rem;
+    }
+    .hero-stat-value {
+      font-size: 1.3rem; font-weight: 800;
+      color: var(--teal); font-family: 'Courier New', monospace;
+    }
+
+    .hero-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      padding: 0.75rem 1.75rem; border-radius: var(--radius-pill);
+      font-size: 0.95rem; font-weight: 700;
+      background: var(--teal); color: #0a0a0f;
+      border: none; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 0 24px rgba(0,212,170,0.3);
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: 0 0 32px rgba(0,212,170,0.45); }
+
+    .btn-outline {
+      padding: 0.75rem 1.75rem; border-radius: var(--radius-pill);
+      font-size: 0.95rem; font-weight: 600;
+      background: transparent; color: var(--text);
+      border: 1px solid var(--card-border); cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-glow2); }
+
+    /* ---- Hero Panel (code mockup) ---- */
+    .hero-panel {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow), 0 0 60px rgba(0,212,170,0.08);
+    }
+    .panel-titlebar {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: rgba(0,0,0,0.3);
+      border-bottom: 1px solid var(--divider);
+    }
+    .panel-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .panel-dot.red   { background: #ff5f57; }
+    .panel-dot.amber { background: #febc2e; }
+    .panel-dot.green { background: #28c840; }
+    .panel-title {
+      margin-left: 0.5rem; font-size: 0.75rem;
+      color: var(--text-muted); font-family: 'Courier New', monospace;
+    }
+
+    .panel-body { padding: 1.25rem 1.5rem; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.9; }
+    .panel-row { display: flex; gap: 0.75rem; }
+    .panel-key { color: var(--text-muted); min-width: 140px; }
+    .panel-val { color: var(--teal); font-weight: 700; }
+    .panel-val.warn { color: #f59e0b; }
+    .panel-val.bad  { color: #ef4444; }
+    .panel-val.good { color: #10b981; }
+    .panel-divider { border: none; border-top: 1px solid var(--divider); margin: 0.75rem 0; }
+    .panel-section { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .panel-item { color: var(--text); padding: 0.15rem 0; }
+    .panel-item::before { content: '▸ '; color: var(--teal); }
+    .panel-badge {
+      display: inline-block; margin-top: 0.75rem;
+      padding: 0.3rem 0.75rem; border-radius: var(--radius-pill);
+      font-size: 0.72rem; font-weight: 700;
+      background: rgba(239,68,68,0.15); color: #fca5a5;
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+
+    /* ---- Features ---- */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 560px) { .features-grid { grid-template-columns: 1fr; } }
+
+    .feature-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg); padding: 1.75rem;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(0,212,170,0.35);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 20px rgba(0,212,170,0.06);
+    }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: var(--teal-glow); border: 1px solid var(--card-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; margin-bottom: 1rem;
+    }
+    .feature-title { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .feature-desc  { font-size: 0.875rem; color: var(--text-muted); line-height: 1.65; }
+
+    /* ---- Threshold Table ---- */
+    .threshold-section { background: var(--bg2); }
+
+    .threshold-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    .threshold-table th {
+      text-align: left; padding: 0.85rem 1.25rem;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted);
+      border-bottom: 1px solid var(--divider);
+    }
+    .threshold-table td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--divider);
+      vertical-align: top;
+    }
+    .threshold-table tr:last-child td { border-bottom: none; }
+    .threshold-table tr:hover td { background: var(--teal-glow2); }
+
+    .tier-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.25rem 0.75rem; border-radius: var(--radius-pill);
+      font-size: 0.75rem; font-weight: 700; white-space: nowrap;
+    }
+    .tier-badge.critical { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+    .tier-badge.high     { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+    .tier-badge.moderate { background: rgba(251,191,36,0.12); color: #fde68a; border: 1px solid rgba(251,191,36,0.25); }
+    .tier-badge.elevated { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+    .tier-badge.standard { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.25); }
+
+    .deliver-val { font-family: 'Courier New', monospace; font-weight: 700; color: var(--teal); }
+    .surveillance-note { color: var(--text-muted); font-size: 0.82rem; }
+
+    .table-wrap {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg); overflow: hidden;
+    }
+
+    /* ---- How it works ---- */
+    .steps {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 1.5rem; position: relative;
+    }
+    @media (max-width: 900px) { .steps { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 500px) { .steps { grid-template-columns: 1fr; } }
+
+    .step-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg); padding: 1.75rem;
+      position: relative;
+    }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--teal); color: #0a0a0f;
+      font-size: 0.85rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .step-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .step-desc  { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ---- Use Cases ---- */
+    .use-cases-grid {
+      display: grid; grid-template-columns: repeat(2,1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 640px) { .use-cases-grid { grid-template-columns: 1fr; } }
+
+    .use-case-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg); padding: 1.75rem;
+      display: flex; gap: 1.25rem; align-items: flex-start;
+      transition: border-color 0.2s;
+    }
+    .use-case-card:hover { border-color: rgba(0,212,170,0.3); }
+    .use-case-icon {
+      font-size: 1.75rem; flex-shrink: 0;
+      width: 52px; height: 52px; border-radius: 12px;
+      background: var(--teal-glow); border: 1px solid var(--card-border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .use-case-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+    .use-case-desc  { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ---- Author ---- */
+    .author-section { background: var(--bg2); }
+
+    .author-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg); padding: 2.5rem;
+      display: flex; gap: 2.5rem; align-items: flex-start;
+      max-width: 780px; margin: 0 auto;
+    }
+    @media (max-width: 640px) { .author-card { flex-direction: column; gap: 1.5rem; } }
+
+    .author-avatar {
+      width: 80px; height: 80px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--teal), #0d7a63);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.75rem; font-weight: 900; color: #0a0a0f;
+      border: 2px solid var(--card-border);
+    }
+    .author-name { font-size: 1.15rem; font-weight: 800; color: var(--text); margin-bottom: 0.25rem; }
+    .author-title { font-size: 0.82rem; color: var(--teal); font-weight: 600; margin-bottom: 0.75rem; }
+    .author-bio { font-size: 0.875rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+    .author-links { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .author-link {
+      padding: 0.35rem 0.9rem; border-radius: var(--radius-pill);
+      font-size: 0.78rem; font-weight: 600;
+      background: var(--teal-glow2); color: var(--teal);
+      border: 1px solid var(--card-border); text-decoration: none;
+      transition: all 0.2s;
+    }
+    .author-link:hover { background: var(--teal-glow); border-color: var(--teal); }
+
+    /* ---- Disclaimer ---- */
+    .disclaimer-section {
+      background: rgba(245,158,11,0.05);
+      border-top: 1px solid rgba(245,158,11,0.2);
+      border-bottom: 1px solid rgba(245,158,11,0.2);
+      padding: 2.5rem 1.5rem;
+    }
+    .disclaimer-inner {
+      max-width: 780px; margin: 0 auto;
+      display: flex; gap: 1.25rem; align-items: flex-start;
+    }
+    .disclaimer-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .disclaimer-title { font-size: 0.9rem; font-weight: 700; color: #fcd34d; margin-bottom: 0.4rem; }
+    .disclaimer-text  { font-size: 0.83rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* ---- CTA ---- */
+    .cta-section { text-align: center; padding: 6rem 1.5rem; }
+    .cta-section h2 {
+      font-size: clamp(1.75rem, 4vw, 2.8rem);
+      font-weight: 900; color: var(--text); margin-bottom: 1rem;
+    }
+    .cta-section h2 span { color: var(--teal); }
+    .cta-section p { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 2.5rem; max-width: 520px; margin-left: auto; margin-right: auto; }
+    .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ---- Footer ---- */
+    footer {
+      padding: 2rem 1.5rem;
+      border-top: 1px solid var(--divider);
+      text-align: center;
+      font-size: 0.8rem; color: var(--text-muted);
+    }
+    footer a { color: var(--teal); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.5rem; }
+
+    /* ---- Animated counter ---- */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { opacity: 0; animation: fadeInUp 0.6s ease forwards; }
+    .fade-in-1 { animation-delay: 0.1s; }
+    .fade-in-2 { animation-delay: 0.25s; }
+    .fade-in-3 { animation-delay: 0.4s; }
+    .fade-in-4 { animation-delay: 0.55s; }
+
+    /* ---- Scrollbar ---- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--divider); border-radius: 3px; }
+  </style>
+</head>
+
+<body>
+<canvas id="bgCanvas"></canvas>
+
+<!-- ===== TOPBAR ===== -->
+<nav class="topbar">
+  <a class="topbar-brand" href="landing.html">
+    <div class="brand-logo">FGR</div>
+    <span class="brand-name">FGR<span>Manager</span></span>
+  </a>
+  <div class="topbar-nav">
+    <a href="#features"   class="nav-link">Features</a>
+    <a href="#thresholds" class="nav-link">Thresholds</a>
+    <a href="#how"        class="nav-link">How It Works</a>
+    <a href="#author"     class="nav-link">About</a>
+    <button class="btn-theme" id="themeBtn">&#9788; Light Mode</button>
+    <a href="index.html" class="btn-cta-sm">&#9654; Launch Tool</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge">CLINICAL DECISION SUPPORT &nbsp;·&nbsp; SMFM #52</div>
+        <h1 class="fade-in fade-in-1">
+          Fetal Growth
+          <span class="accent">Restriction Manager</span>
+        </h1>
+        <p class="hero-sub fade-in fade-in-2">
+          UA Doppler-driven delivery windows and surveillance schedules based on
+          <strong>SMFM Consult Series #52</strong>. Corticosteroid eligibility,
+          BPP flagging, and countdown to target delivery — all in one open-source tool.
+        </p>
+        <div class="hero-btns fade-in fade-in-3">
+          <a href="index.html" class="btn-primary">&#9654; Launch FGRManager</a>
+          <a href="#thresholds" class="btn-outline">View Thresholds</a>
+        </div>
+        <div class="hero-stats fade-in fade-in-4">
+          <div>
+            <div class="hero-stat-label">Protocol</div>
+            <div class="hero-stat-value">SMFM #52</div>
+          </div>
+          <div>
+            <div class="hero-stat-label">Doppler Tiers</div>
+            <div class="hero-stat-value">4 + Normal</div>
+          </div>
+          <div>
+            <div class="hero-stat-label">Use</div>
+            <div class="hero-stat-value">Educational / QA</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code panel mockup -->
+      <div class="hero-panel fade-in fade-in-2">
+        <div class="panel-titlebar">
+          <div class="panel-dot red"></div>
+          <div class="panel-dot amber"></div>
+          <div class="panel-dot green"></div>
+          <span class="panel-title">fgr_clinical_plan.json</span>
+        </div>
+        <div class="panel-body">
+          <div class="panel-section">Patient Inputs</div>
+          <div class="panel-row"><span class="panel-key">gestational_age:</span><span class="panel-val">31w5d</span></div>
+          <div class="panel-row"><span class="panel-key">efw_percentile:</span><span class="panel-val warn">2nd</span></div>
+          <div class="panel-row"><span class="panel-key">ua_doppler:</span><span class="panel-val bad">REDF</span></div>
+          <div class="panel-row"><span class="panel-key">bpp_score:</span><span class="panel-val">8/10</span></div>
+          <hr class="panel-divider" />
+          <div class="panel-section">Clinical Decision Output</div>
+          <div class="panel-row"><span class="panel-key">risk_tier:</span><span class="panel-val bad">Highest Risk</span></div>
+          <div class="panel-row"><span class="panel-key">delivery_window:</span><span class="panel-val warn">30–32 weeks</span></div>
+          <div class="panel-row"><span class="panel-key">countdown:</span><span class="panel-val warn">⏱ At/past window</span></div>
+          <div class="panel-row"><span class="panel-key">corticosteroids:</span><span class="panel-val warn">Consider / Indicated</span></div>
+          <hr class="panel-divider" />
+          <div class="panel-section">Surveillance Schedule</div>
+          <div class="panel-item">Consider inpatient admission</div>
+          <div class="panel-item">CTG / NST: 1–2× per day</div>
+          <div class="panel-item">UA Doppler: 2–3× per week</div>
+          <div class="panel-item">MCA + ductus venosus: per MFM</div>
+          <div class="panel-badge">&#9888; Deliver 30–32 weeks per SMFM #52</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section id="features">
+    <div class="container">
+      <div class="section-label">Features</div>
+      <h2 class="section-title">Everything you need for <span>FGR management</span></h2>
+      <p class="section-sub">Built by an MFM physician for real clinical workflow — not a checkbox tool.</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#128200;</div>
+          <div class="feature-title">SMFM #52 Delivery Thresholds</div>
+          <div class="feature-desc">Implements all four UA Doppler tiers: REDF (30–32w), AEDF (33–34w), decreased diastolic flow (~37w), and severe FGR with normal UA (~37w). Normal UA EFW 3–10th → 38–39w.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128337;</div>
+          <div class="feature-title">Delivery Countdown Badge</div>
+          <div class="feature-desc">Calculates weeks and days remaining from current GA to the target delivery window midpoint. Instantly flags when the patient is at or past the recommended window.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128203;</div>
+          <div class="feature-title">Surveillance Schedule</div>
+          <div class="feature-desc">Doppler-category–specific NST/BPP frequency, UA Doppler interval, growth scan cadence, and MCA/ductus venosus guidance — tailored to each risk tier.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128137;</div>
+          <div class="feature-title">Corticosteroid Eligibility</div>
+          <div class="feature-desc">Auto-detects standard (&lt;34w) and late-preterm (34–36+6w) thresholds with betamethasone dosing note. Flags when steroids are indicated based on GA and Doppler category.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#9888;</div>
+          <div class="feature-title">BPP Alert System</div>
+          <div class="feature-desc">Color-coded flags for BPP 6/10 (amber — potentially nonreassuring) and ≤4/10 (red — delivery consideration). Contextual guidance for each score tier.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128438;</div>
+          <div class="feature-title">Copy &amp; Print Summary</div>
+          <div class="feature-desc">One-click clipboard export of the full clinical plan as plain text for EMR documentation. Print-optimized CSS removes UI chrome for clean clinical output.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== THRESHOLD TABLE ===== -->
+  <section id="thresholds" class="threshold-section">
+    <div class="container">
+      <div class="section-label">SMFM #52 Protocol</div>
+      <h2 class="section-title">Delivery-timing <span>thresholds</span></h2>
+      <p class="section-sub">Standardized delivery windows based on umbilical artery Doppler category, per SMFM Consult Series #52 (2020).</p>
+
+      <div class="table-wrap">
+        <table class="threshold-table">
+          <thead>
+            <tr>
+              <th>UA Doppler Category</th>
+              <th>Risk Tier</th>
+              <th>Delivery Window</th>
+              <th>Surveillance Intensity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Reversed End-Diastolic Flow (REDF)</strong></td>
+              <td><span class="tier-badge critical">&#9679; Highest Risk</span></td>
+              <td><span class="deliver-val">30–32 weeks</span></td>
+              <td><span class="surveillance-note">Intensive — consider inpatient; CTG 1–2×/day; UA Doppler 2–3×/week; MCA + DV per MFM guidance</span></td>
+            </tr>
+            <tr>
+              <td><strong>Absent End-Diastolic Flow (AEDF)</strong></td>
+              <td><span class="tier-badge high">&#9679; High Risk</span></td>
+              <td><span class="deliver-val">33–34 weeks</span></td>
+              <td><span class="surveillance-note">Very frequent — NST/BPP 2–3×/week; UA Doppler 2×/week; growth scan every 2–3 weeks; MCA per MFM</span></td>
+            </tr>
+            <tr>
+              <td><strong>Decreased Diastolic Flow</strong></td>
+              <td><span class="tier-badge moderate">&#9679; Moderate–High Risk</span></td>
+              <td><span class="deliver-val">~37 weeks</span></td>
+              <td><span class="surveillance-note">Frequent — NST/BPP 2×/week; UA Doppler weekly; growth scan every 3 weeks</span></td>
+            </tr>
+            <tr>
+              <td><strong>EFW &lt;3rd %ile, Normal UA</strong> (Severe FGR)</td>
+              <td><span class="tier-badge elevated">&#9679; Severe FGR</span></td>
+              <td><span class="deliver-val">~37 weeks</span></td>
+              <td><span class="surveillance-note">Frequent — NST/BPP 2×/week; UA Doppler weekly; growth scan every 2–3 weeks</span></td>
+            </tr>
+            <tr>
+              <td><strong>Normal UA, EFW 3–10th %ile</strong></td>
+              <td><span class="tier-badge standard">&#9679; Elevated Surveillance</span></td>
+              <td><span class="deliver-val">38–39 weeks</span></td>
+              <td><span class="surveillance-note">Standard-plus — NST/BPP weekly; UA Doppler every 2–3 weeks; growth scan every 3–4 weeks</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p style="margin-top:1rem; font-size:0.78rem; color:var(--text-muted);">
+        &#9432; Delivery windows reflect widely cited SMFM thresholds. Individualize for maternal indications (preeclampsia, HELLP, abruption), NICU capacity, and patient values. This tool does not replace clinical judgment.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section id="how">
+    <div class="container">
+      <div class="section-label">Workflow</div>
+      <h2 class="section-title">How it <span>works</span></h2>
+      <p class="section-sub">Four inputs. Instant clinical decision support. Designed for the bedside, the office, and the board room.</p>
+
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-title">Enter Gestational Age</div>
+          <div class="step-desc">Accepts 32.4, 32+4, or 32w4d format. The parser normalizes all formats to weeks + days for precise countdown calculation.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-title">Enter EFW Percentile</div>
+          <div class="step-desc">Input the estimated fetal weight percentile (0–99). The tool flags severe FGR (&lt;3rd %ile) and adjusts the delivery window accordingly.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div class="step-title">Select UA Doppler Category</div>
+          <div class="step-desc">Choose from Normal, Decreased diastolic flow, AEDF, or REDF. This single input drives the SMFM delivery window and surveillance schedule.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div class="step-title">Generate Plan</div>
+          <div class="step-desc">Instantly receive the risk tier, delivery window with countdown, surveillance schedule, corticosteroid eligibility, and BPP flag. Copy or print for the chart.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== USE CASES ===== -->
+  <section style="background:var(--bg2);">
+    <div class="container">
+      <div class="section-label">Clinical Use Cases</div>
+      <h2 class="section-title">Built for <span>real workflows</span></h2>
+      <p class="section-sub">From the antepartum unit to the MFM consult room — FGRManager fits where you work.</p>
+
+      <div class="use-cases-grid">
+        <div class="use-case-card">
+          <div class="use-case-icon">&#127973;</div>
+          <div>
+            <div class="use-case-title">Antepartum Rounds</div>
+            <div class="use-case-desc">Quickly verify delivery timing for admitted FGR patients. Generate a printable surveillance plan for nursing orders and confirm steroid eligibility before rounds end.</div>
+          </div>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">&#128203;</div>
+          <div>
+            <div class="use-case-title">MFM Consult Documentation</div>
+            <div class="use-case-desc">Copy the plain-text summary directly into your EMR consult note. The output includes GA, Doppler category, delivery window, surveillance plan, and protocol basis.</div>
+          </div>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">&#127979;</div>
+          <div>
+            <div class="use-case-title">Resident &amp; Fellow Education</div>
+            <div class="use-case-desc">Walk through SMFM #52 thresholds interactively. Change the Doppler category and watch the delivery window, surveillance intensity, and steroid flag update in real time.</div>
+          </div>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">&#128200;</div>
+          <div>
+            <div class="use-case-title">Quality Assurance Review</div>
+            <div class="use-case-desc">Audit delivery timing decisions against SMFM benchmarks. Verify that surveillance schedules and steroid administration align with evidence-based thresholds.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== AUTHOR ===== -->
+  <section id="author" class="author-section">
+    <div class="container">
+      <div class="section-label" style="display:block;text-align:center;margin-bottom:2rem;">About the Author</div>
+      <div class="author-card">
+        <div class="author-avatar">CO</div>
+        <div>
+          <div class="author-name">Dr. Chukwuma Onyeije, MD</div>
+          <div class="author-title">Maternal-Fetal Medicine Specialist &nbsp;·&nbsp; Physician-Developer &nbsp;·&nbsp; DoctorsWhoCode.blog</div>
+          <div class="author-bio">
+            Dr. Onyeije is a board-certified MFM specialist and the founder of DoctorsWhoCode.blog and CodeCraftMD — platforms dedicated to the intersection of clinical medicine and software development.
+            FGRManager is part of a growing suite of open-source clinical decision-support tools designed to bring evidence-based protocols to the bedside in a usable, physician-built format.
+          </div>
+          <div class="author-links">
+            <a href="https://doctorswhocode.blog" target="_blank" rel="noopener" class="author-link">DoctorsWhoCode.blog</a>
+            <a href="index.html" class="author-link">&#9654; Launch FGRManager</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DISCLAIMER ===== -->
+  <div class="disclaimer-section">
+    <div class="disclaimer-inner">
+      <div class="disclaimer-icon">&#9888;</div>
+      <div>
+        <div class="disclaimer-title">Informational Use Only</div>
+        <div class="disclaimer-text">
+          FGRManager is an educational and quality-assurance tool. It does not provide medical advice and is not a substitute for clinical judgment. Delivery timing decisions must account for maternal indications (preeclampsia, HELLP, abruption), fetal anomalies, infection, PPROM, local NICU capabilities, and individual patient values. All therapeutic decisions must be made by a qualified healthcare provider in the context of the individual patient. Protocol basis: SMFM Consult Series #52 (2020) and ACOG Practice Bulletin #204.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to manage <span>FGR with confidence?</span></h2>
+      <p>Free, open-source, and deployable to any static host. Drop a single HTML file into GitHub Pages and you're live.</p>
+      <div class="cta-btns">
+        <a href="index.html" class="btn-primary" style="font-size:1.05rem; padding:0.85rem 2rem;">&#9654; Launch FGRManager</a>
+        <a href="#thresholds" class="btn-outline" style="font-size:1.05rem; padding:0.85rem 2rem;">View SMFM Thresholds</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <strong style="color:var(--teal)">FGRManager</strong> &nbsp;·&nbsp;
+        Created by <a href="https://doctorswhocode.blog" target="_blank" rel="noopener">DoctorsWhoCode.blog</a> &nbsp;·&nbsp;
+        Based on <strong>SMFM Consult Series #52</strong> &nbsp;·&nbsp; v2.0
+      </div>
+      <div>Informational use only &nbsp;·&nbsp; Not a substitute for clinical judgment &nbsp;·&nbsp; <a href="index.html">Launch Tool</a></div>
+    </div>
+  </footer>
+
+</div><!-- end .page -->
+
+<script>
+/* ============================================================
+   Canvas background — same as index.html
+============================================================ */
+(function initBackground() {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, cols, drops, fontSize;
+
+  const chars = 'SMFMFGRUA EWBPPREDFAEDFDOPPLERGAWEEKSDAYSDELIVERYNSTMCA0123456789'.split('').filter(c => c.trim());
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    fontSize = 14;
+    cols = Math.floor(W / (fontSize * 3));
+    drops = Array(cols).fill(1);
+  }
+
+  function getThemeColors() {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    return isDark
+      ? { bg: 'rgba(10,10,15,0.18)', char: 'rgba(0,212,170,0.7)', dim: 'rgba(0,212,170,0.2)' }
+      : { bg: 'rgba(240,244,248,0.35)', char: 'rgba(13,122,99,0.5)', dim: 'rgba(13,122,99,0.15)' };
+  }
+
+  function draw() {
+    const { bg, char, dim } = getThemeColors();
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+    ctx.font = `${fontSize}px "Courier New", monospace`;
+
+    for (let i = 0; i < drops.length; i++) {
+      const c = chars[Math.floor(Math.random() * chars.length)];
+      const x = i;
+      const y = drops[i] * fontSize;
+
+      ctx.fillStyle = char;
+      ctx.fillText(c, x * fontSize * 3, y);
+
+      if (drops[i] > 2) {
+        ctx.fillStyle = dim;
+        ctx.fillText(chars[Math.floor(Math.random() * chars.length)], x * fontSize * 3, (drops[i] - 1) * fontSize);
+      }
+
+      if (y > H && Math.random() > 0.97) drops[i] = 0;
+      drops[i]++;
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  setInterval(draw, 90);
+})();
+
+/* ============================================================
+   Theme toggle
+============================================================ */
+(function initTheme() {
+  const saved = localStorage.getItem('fgr-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  const btn = document.getElementById('themeBtn');
+  if (!btn) return;
+
+  function updateBtn() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    btn.textContent = isDark ? '\u2600\uFE0F Light Mode' : '\u263D Dark Mode';
+  }
+  updateBtn();
+
+  btn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('fgr-theme', next);
+    updateBtn();
+  });
+})();
+
+/* ============================================================
+   Smooth scroll for nav links
+============================================================ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+/* ============================================================
+   Intersection Observer — fade-in on scroll
+============================================================ */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.feature-card, .step-card, .use-case-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
