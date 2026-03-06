@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Gestational Diabetes: A Guide for You and Your Baby</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slide-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 0.5em;
+            color: #4dd0e1;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.8em;
+            margin-bottom: 0.6em;
+            color: #4dd0e1;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+            color: #81c784;
+            line-height: 1.3;
+        }
+
+        p {
+            font-size: 1.8em;
+            line-height: 1.6;
+            margin-bottom: 0.8em;
+            color: #e8e8e8;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #b0bec5;
+            margin-bottom: 1em;
+        }
+
+        /* ── Colored Boxes ── */
+        .highlight-box {
+            background: rgba(77, 208, 225, 0.1);
+            border-left: 6px solid #4dd0e1;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .info-box {
+            background: rgba(129, 199, 132, 0.1);
+            border-left: 6px solid #81c784;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .warning-box {
+            background: rgba(255, 183, 77, 0.1);
+            border-left: 6px solid #ffb74d;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        /* ── Lists ── */
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            font-size: 1.6em;
+            line-height: 1.8;
+            margin-bottom: 0.8em;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #4dd0e1;
+            font-weight: bold;
+        }
+
+        /* ── Grid Layouts ── */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        /* ── Cards ── */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid rgba(77, 208, 225, 0.3);
+        }
+
+        .card-green {
+            background: rgba(129, 199, 132, 0.07);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid rgba(129, 199, 132, 0.35);
+        }
+
+        .card-amber {
+            background: rgba(255, 183, 77, 0.07);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 183, 77, 0.35);
+        }
+
+        /* ── Navigation ── */
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2em;
+            color: #b0bec5;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 25px;
+            border-radius: 8px;
+        }
+
+        /* ── Progress Bar ── */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: #4dd0e1;
+            transition: width 0.3s ease;
+        }
+
+        /* ── Tables ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1.4em;
+        }
+
+        th {
+            background: rgba(77, 208, 225, 0.2);
+            padding: 16px 20px;
+            text-align: left;
+            color: #4dd0e1;
+            border-bottom: 3px solid #4dd0e1;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* ── Risk row colors ── */
+        .row-green td  { border-left: 5px solid #81c784; }
+        .row-amber td  { border-left: 5px solid #ffb74d; }
+        .row-red td    { border-left: 5px solid #ef5350; }
+        .row-cyan td   { border-left: 5px solid #4dd0e1; }
+
+        /* ── Icon ── */
+        .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* ── Utility ── */
+        .center { text-align: center; }
+
+        .small-text {
+            font-size: 1.3em;
+            color: #b0bec5;
+            margin-top: 20px;
+        }
+
+        .emphasis        { color: #81c784;  font-weight: 600; }
+        .emphasis-cyan   { color: #4dd0e1;  font-weight: 600; }
+        .emphasis-amber  { color: #ffb74d;  font-weight: 600; }
+        .emphasis-red    { color: #ef5350;  font-weight: 600; }
+
+        /* ── Timeline ── */
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+            margin: 30px 0;
+        }
+
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #4dd0e1;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4dd0e1;
+            border: 4px solid #1a1a2e;
+        }
+
+        .timeline-item h3 { margin-bottom: 10px; }
+        .timeline-item p  { font-size: 1.5em; }
+
+        /* ── Big stat numbers ── */
+        .stat-number {
+            font-size: 4em;
+            font-weight: 700;
+            color: #4dd0e1;
+            line-height: 1;
+            display: block;
+        }
+
+        /* ── Source note ── */
+        .source-note {
+            font-size: 1.1em;
+            color: #78909c;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* ── Step badge (numbered steps) ── */
+        .step-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(77, 208, 225, 0.2);
+            border: 2px solid #4dd0e1;
+            color: #4dd0e1;
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        /* ── Blood sugar target display ── */
+        .glucose-target {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .glucose-value {
+            font-size: 3.5em;
+            font-weight: 700;
+            color: #81c784;
+            line-height: 1;
+        }
+
+        .glucose-unit {
+            font-size: 1.4em;
+            color: #b0bec5;
+        }
+
+        .glucose-label {
+            font-size: 1.5em;
+            color: #e8e8e8;
+            margin-top: 10px;
+        }
+
+        .glucose-sublabel {
+            font-size: 1.2em;
+            color: #b0bec5;
+            margin-top: 5px;
+        }
+    </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/OVGR7ow1NUad6FcYctbLCDsemZ81Gt42BoSTWUz5BOiaCk7F7KaAzktNkZSo-OMiIhrLNvNspPyTC3jAOk0Xbn4JcXXhmJX5YF6vjSYRyEOKJgw0VfCb2PrUXn5qK1kIuiWmHEjOQZ6UczETtRaNTv3-T-1RUVTgqvrvF0QlZH2l3U1Kp2LR9WZV0Q5vbRUzJtllkWSADmndRDBFg1nzyRJPIUzoiWN_LAR-b27Bo43PyuqnbOpLR5ynqGLXaFZl5k7TsPuAItmg2dXO5zDS-7GzbW_5CGAi5Q_V8sMZaWIUAW-SD6P_MQOOm5bRFfiWlcygY42Yoxb7_X-cCYWUNM49NDt5K7uUX_sqdo50xccDWd9DvA_2NfrLlWCqySRkP_ohLII2Dp2m_9GNRQGrMIOvpAwuiW-plQd2bnuJkphzaXhoKPldMU1RKIiYSV4JgkFs9daC2mXXmn3rSuhxnc1NV2D0cYRaEPW6DVCi5Lbe7Kt3slGCNWYFNVS-TT6wODJUNlpeg0TsRFxukHh1TIUPpuglhnY8NxJCe9Uy6aPVXbwv3D5B4iLJSmJBeM08aZ6Tko4thvNQ0WHgYvLytL34QzpZbXZdHwh5NJNmZR1xyB7uvjUCqVQPJZxfrNuIEI8j4OnWQwnzQNRxc1lVye8UPL6asLCUCTs1g2P2LWws70rD5_IqBwJPVPgj7w1VO9n4NKOhB7gw22iL5a0meHCXpJv2A8SqHNHbCz8Y53cBcRac7N6QG6qUQUDXd8Na7ZPHYUlezBmhC8JER-P39hdjYS1wj_K7Wt04kIKhzkEgTdGO2OupszPBsN_qp_WI1LUz8MBJ_lAiz85KFne2Dac-IdKKyvX5PjWO8sp3aaiDzq1IpsJvihQcVF80dvHFF9Z14uJnxt3R8Om9wTrN0cKw9flt2o8qQNdww_ZiyIZZZOl0YhQrjcCRk1pU2oSBX-nnTG8YUhrITVR0iHZ8G8CnVkwJf2D6TLHDfe43Bi9ybSIBJ_MUk9jJkLU-ANmiC-PbZvf2u6Sb37Y_C2exe-Ctk56WVc5d1EivnzH8VYMcoe4lXZFC1Sqt3WWAz7aqp8SUDfNu_mq-NrWVpx9J6Q4kIvqzgCyCBNYvVXoajIYDR1QsKxBWj2_T-XBiWrkfKKUEaIGwjv8DJsf3am5MHU69c7JiVuHvGssxhtVF3elWkxVrm2oH9c3bSpE9kj6aB5tmFwB8Soh0goPwH57Rx2KfduZ3QdPTmj7CmqgRLJu1pcG36oFpDZinwiLTqtyAHCaL26nkVuhi8elLkUZ6XV_hTNBg2WNAvSPZGhRXADs9PMdeY6c75SEAsU0snw_UQKFekRgcCaB8G8aYcNrIthIlpmrrR1qaGIa_f3YE6HGQiJnPLBebtIGGRmsOii5IU9xrIc72uxf8F4XycBgOCJxD4Zo9tj02jmcOaf-H75Shnjqr-vngBGe6kIajf5P0kKKj33IkNcVN9hHAaTt8NQHU5KQycRbJoyoweJhlLNMLCKxVwx-Izbkx8cbPT6y-SssQQTDDa0kDkXvVEqVaA18LPma8q35MppY69AscTu5a4qgjP4jjCKgkzxw4EYeygPy57JwTtud7HZqr3CgDDogNY4Q-8DjgqXU-72P7A220Eu83HHooXtCvvMhyXYKxRFGG7LZJHxDJuHQg_pP9pN_ZojabD9ZY8YkZX0URwpwIXjel1Iq3NxHmvFsRqO_1Gg'></script></head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="slide-container">
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 1: Title -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide active">
+            <div class="center">
+                <span class="icon">🤰</span>
+                <h1>Understanding<br>Gestational Diabetes</h1>
+                <p class="subtitle">A Complete Guide for You and Your Baby</p>
+                <div class="highlight-box" style="max-width: 700px; margin: 30px auto;">
+                    <p style="font-size: 1.5em;">You have been diagnosed with gestational diabetes. This guide will help you understand what it means, what to do, and how to protect your baby.</p>
+                </div>
+                <p class="small-text">Press the right arrow key (→) to continue</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 2: How Common Is GDM? -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>How Common Is Gestational Diabetes?</h2>
+            <p class="subtitle">You are not alone — this is one of the most common pregnancy complications</p>
+
+            <div class="grid-3">
+                <div class="card" style="text-align: center;">
+                    <span class="stat-number">1 in 10</span>
+                    <p style="font-size: 1.4em; margin-top: 15px;">Pregnancies in the U.S. are affected by GDM</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <span class="stat-number">50–70%</span>
+                    <p style="font-size: 1.4em; margin-top: 15px;">Of women with GDM develop Type 2 Diabetes within 10 years</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <span class="stat-number">76%</span>
+                    <p style="font-size: 1.4em; margin-top: 15px;">Higher risk of GDM recurring in a future pregnancy</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <p>GDM is <span class="emphasis">manageable</span>. With the right care, most women with GDM have healthy pregnancies and healthy babies.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 3: What Is GDM? -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>What Is Gestational Diabetes?</h2>
+
+            <div class="grid-2">
+                <div>
+                    <div class="highlight-box">
+                        <h3>The Simple Explanation</h3>
+                        <p>During pregnancy, the placenta makes hormones that <span class="emphasis-amber">block insulin</span> from working properly.</p>
+                        <p>Your pancreas cannot keep up, so blood sugar rises above the safe range.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="info-box">
+                        <h3>It Is Not Your Fault</h3>
+                        <p>GDM is caused by <span class="emphasis">placental hormones</span> — not by anything you ate or did wrong.</p>
+                        <p>It typically resolves after delivery when the placenta is delivered.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="small-text">GDM is usually diagnosed between 24–28 weeks, when placental hormone levels peak.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 4: How Is GDM Diagnosed? -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>How Is GDM Diagnosed?</h2>
+            <p class="subtitle">ACOG recommends universal screening at 24–28 weeks</p>
+
+            <div class="grid-2">
+                <div>
+                    <div class="card">
+                        <h3>Step 1: 1-Hour Glucose Challenge</h3>
+                        <p style="font-size: 1.4em;">Drink a 50g glucose solution. Blood drawn 1 hour later.</p>
+                        <p style="font-size: 1.4em; margin-top: 10px;"><span class="emphasis-amber">If ≥ 130–140 mg/dL</span> → proceed to Step 2</p>
+                        <p style="font-size: 1.3em; color: #b0bec5; margin-top: 10px;">No fasting required for this test.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="card">
+                        <h3>Step 2: 3-Hour Glucose Tolerance Test</h3>
+                        <p style="font-size: 1.4em;">Fasting + 100g glucose. Blood drawn at 1, 2, and 3 hours.</p>
+                        <p style="font-size: 1.4em; margin-top: 10px;"><span class="emphasis-red">GDM diagnosed</span> if 2 or more values exceed thresholds</p>
+                        <p style="font-size: 1.3em; color: #b0bec5; margin-top: 10px;">Fasting required for this test.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <p>Some providers use a <strong>one-step approach</strong>: a 2-hour 75g test (fasting required). Your provider will tell you which test you had.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 5: Risk Factors -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Who Is at Higher Risk?</h2>
+            <p class="subtitle">Risk factors help identify who needs earlier or more frequent screening</p>
+
+            <div class="grid-2">
+                <div>
+                    <ul>
+                        <li>BMI ≥ 25 (overweight) or ≥ 30 (obese)</li>
+                        <li>Previous gestational diabetes</li>
+                        <li>Family history of Type 2 Diabetes</li>
+                        <li>Prior baby weighing more than 9 lbs</li>
+                        <li>Polycystic ovary syndrome (PCOS)</li>
+                    </ul>
+                </div>
+                <div>
+                    <ul>
+                        <li>Age 35 or older</li>
+                        <li>Hispanic, Black, Asian, or Pacific Islander ancestry</li>
+                        <li>Prediabetes before pregnancy</li>
+                        <li>Physical inactivity</li>
+                        <li>Multiple gestation (twins or more)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <p>Having risk factors does <strong>not</strong> mean you will develop GDM. Many women with no risk factors are also diagnosed. Screening is recommended for all pregnant women.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 6: GDM Classification -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Understanding Your GDM Classification</h2>
+            <p class="subtitle">Not all GDM is the same — your type guides your treatment plan</p>
+
+            <div class="grid-2">
+                <div class="card-green">
+                    <div class="step-badge">A1</div>
+                    <h3>A1GDM — Diet-Controlled</h3>
+                    <p style="font-size: 1.5em;">Blood sugar stays within target range using <span class="emphasis">healthy eating and physical activity alone</span>.</p>
+                    <p style="font-size: 1.4em; margin-top: 15px; color: #b0bec5;">Treatment: Medical Nutrition Therapy · Daily Exercise · Glucose Monitoring</p>
+                </div>
+                <div class="card-amber">
+                    <div class="step-badge" style="border-color: #ffb74d; color: #ffb74d; background: rgba(255,183,77,0.15);">A2</div>
+                    <h3 style="color: #ffb74d;">A2GDM — Medication-Controlled</h3>
+                    <p style="font-size: 1.5em;">Blood sugar requires <span class="emphasis-amber">insulin or metformin</span> to stay consistently within the safe range.</p>
+                    <p style="font-size: 1.4em; margin-top: 15px; color: #b0bec5;">Treatment: All Lifestyle Changes + Medication + Additional Fetal Monitoring</p>
+                </div>
+            </div>
+
+            <p class="small-text">Most women start with A1GDM. About 1 in 3 will eventually need medication (A2GDM). This classification also guides decisions about delivery timing.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 7: Why Blood Sugar Control Matters -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Why Blood Sugar Control Matters</h2>
+            <p class="subtitle">High blood sugar crosses the placenta and affects your baby's growth</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Glucose Transfer</h3>
+                    <p>When your blood sugar is high, extra glucose crosses the placenta to your baby.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Baby's Insulin Response</h3>
+                    <p>Your baby's pancreas responds by making <span class="emphasis-amber">extra insulin</span>, which acts like a growth hormone.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Macrosomia</h3>
+                    <p>This can cause your baby to grow <span class="emphasis-amber">larger than normal</span> (estimated fetal weight &gt; 4,000 g).</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <p>Controlling your blood sugar <span class="emphasis">dramatically reduces</span> all of these risks. Every healthy meal and every glucose check matters.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 8: Risks to Baby -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Potential Risks for Your Baby</h2>
+
+            <table>
+                <tr>
+                    <th>Risk</th>
+                    <th>What It Means</th>
+                    <th>Prevention</th>
+                </tr>
+                <tr class="row-amber">
+                    <td><strong>Macrosomia</strong></td>
+                    <td>Baby grows too large (&gt;4,000 g)</td>
+                    <td>Blood sugar control</td>
+                </tr>
+                <tr class="row-amber">
+                    <td><strong>Shoulder Dystocia</strong></td>
+                    <td>Shoulder gets stuck during delivery</td>
+                    <td>Blood sugar control + monitoring</td>
+                </tr>
+                <tr class="row-amber">
+                    <td><strong>Neonatal Hypoglycemia</strong></td>
+                    <td>Low blood sugar right after birth</td>
+                    <td>Tight glucose control in labor</td>
+                </tr>
+                <tr class="row-amber">
+                    <td><strong>Breathing Difficulties</strong></td>
+                    <td>Immature lung development</td>
+                    <td>Avoid early delivery when possible</td>
+                </tr>
+                <tr class="row-amber">
+                    <td><strong>Future Obesity / T2DM</strong></td>
+                    <td>Long-term metabolic programming</td>
+                    <td>Breastfeeding + healthy family habits</td>
+                </tr>
+            </table>
+
+            <div class="info-box">
+                <p>The <span class="emphasis">good news</span>: controlling your blood sugar dramatically reduces all of these risks.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 9: Risks to You -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>What Are the Risks for You?</h2>
+            <p class="subtitle">GDM affects your health too — both now and in the future</p>
+
+            <div class="grid-2">
+                <div>
+                    <div class="warning-box">
+                        <h3>During This Pregnancy</h3>
+                        <ul style="margin-top: 10px;">
+                            <li style="font-size: 1.4em;">Preeclampsia (high blood pressure)</li>
+                            <li style="font-size: 1.4em;">Cesarean delivery</li>
+                            <li style="font-size: 1.4em;">Polyhydramnios (too much amniotic fluid)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="card" style="text-align: center;">
+                        <span class="stat-number">50–70%</span>
+                        <p style="font-size: 1.4em; margin-top: 10px;">Risk of Type 2 Diabetes within 10 years</p>
+                        <span class="stat-number" style="margin-top: 20px;">2×</span>
+                        <p style="font-size: 1.4em; margin-top: 10px;">Higher lifetime cardiovascular risk</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <p>A GDM diagnosis is your body's <span class="emphasis-cyan">early warning system</span>. Acting now — with lifestyle changes — can protect your long-term health.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 10: Blood Sugar Goals -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Your Blood Sugar Goals</h2>
+            <p class="subtitle">Keeping your levels in this range helps protect your baby</p>
+
+            <div class="grid-3">
+                <div class="card" style="text-align: center;">
+                    <div class="glucose-target">
+                        <div class="glucose-label">Fasting</div>
+                        <div class="glucose-sublabel">First thing in the morning</div>
+                        <div class="glucose-value">&lt; 95</div>
+                        <div class="glucose-unit">mg/dL</div>
+                    </div>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <div class="glucose-target">
+                        <div class="glucose-label">1 Hour After Meal</div>
+                        <div class="glucose-sublabel">Start timing from first bite</div>
+                        <div class="glucose-value">&lt; 140</div>
+                        <div class="glucose-unit">mg/dL</div>
+                    </div>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <div class="glucose-target">
+                        <div class="glucose-label">2 Hours After Meal</div>
+                        <div class="glucose-sublabel">Start timing from first bite</div>
+                        <div class="glucose-value">&lt; 120</div>
+                        <div class="glucose-unit">mg/dL</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <p>Your doctor will tell you whether to test <strong>1 hour OR 2 hours</strong> after meals. You usually do not need to do both.</p>
+            </div>
+            <p class="source-note">Targets per ACOG Practice Bulletin No. 190 · ADA Standards of Care</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 11: Checking Your Blood Sugar -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Checking Your Blood Sugar</h2>
+            <p class="subtitle">Two ways to monitor your levels: Fingersticks and CGMs</p>
+
+            <div class="grid-2">
+                <div class="card-green">
+                    <h3>Fingerstick — The Gold Standard</h3>
+                    <ul style="margin-top: 15px;">
+                        <li style="font-size: 1.4em;"><span class="emphasis">Most accurate</span> — measures glucose directly from blood</li>
+                        <li style="font-size: 1.4em;">Required for treatment decisions</li>
+                        <li style="font-size: 1.4em;">Test fasting + 1 or 2 hours after each meal</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>CGM — Continuous Monitor</h3>
+                    <ul style="margin-top: 15px;">
+                        <li style="font-size: 1.4em;">Measures fluid between cells, <span class="emphasis-amber">not blood directly</span></li>
+                        <li style="font-size: 1.4em;">Readings can be 15–20 minutes behind actual blood sugar</li>
+                        <li style="font-size: 1.4em;">Great for seeing trends and food responses</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <p>If your CGM reading does not match how you feel, or shows a very low/high number, <strong>always double-check with a fingerstick</strong> before treating.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 12: Medical Nutrition Therapy -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Medical Nutrition Therapy</h2>
+            <p class="subtitle">Food is your first medicine</p>
+
+            <div class="grid-3">
+                <div class="card-green">
+                    <h3>Eat Consistently</h3>
+                    <p style="font-size: 1.5em;">Eat every 2–3 hours. Aim for <span class="emphasis">3 meals and 2–3 snacks</span> daily to prevent sugar spikes and drops.</p>
+                </div>
+                <div class="card-green">
+                    <h3>Pair Your Carbs</h3>
+                    <p style="font-size: 1.5em;">Never eat a "naked" carb. Always pair carbohydrates with <span class="emphasis">protein or healthy fats</span> to slow digestion.</p>
+                </div>
+                <div class="card-green">
+                    <h3>Choose Quality</h3>
+                    <p style="font-size: 1.5em;">Choose <span class="emphasis">complex carbohydrates</span> (whole grains, veggies) over simple sugars (juice, sweets).</p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <p>You do <strong>not</strong> need to eliminate carbohydrates. The goal is to choose the right type and amount to keep blood sugar stable.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 13: Smart Food Choices -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Smart Food Choices</h2>
+            <p class="subtitle">Focus on quality carbohydrates that digest slowly to keep blood sugar stable</p>
+
+            <div class="grid-2">
+                <div class="info-box">
+                    <h3>✓ Choose More Often</h3>
+                    <ul style="margin-top: 15px;">
+                        <li style="font-size: 1.3em;">Whole grains — brown rice, quinoa, oats, whole wheat</li>
+                        <li style="font-size: 1.3em;">Non-starchy vegetables — spinach, broccoli, peppers</li>
+                        <li style="font-size: 1.3em;">Legumes &amp; beans — lentils, chickpeas, black beans</li>
+                        <li style="font-size: 1.3em;">Whole fruits — berries, apples with skin, citrus</li>
+                        <li style="font-size: 1.3em;">Healthy proteins &amp; fats — nuts, avocado, eggs, lean meats</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h3>✗ Limit or Avoid</h3>
+                    <ul style="margin-top: 15px;">
+                        <li style="font-size: 1.3em;">Refined grains — white bread, white rice, regular pasta</li>
+                        <li style="font-size: 1.3em;">Sugary drinks — soda, fruit juice, sweet tea</li>
+                        <li style="font-size: 1.3em;">Processed snacks — chips, crackers, granola bars</li>
+                        <li style="font-size: 1.3em;">Sweets &amp; desserts — cakes, cookies, ice cream</li>
+                        <li style="font-size: 1.3em;">Sweetened breakfasts — sugary cereals, flavored yogurt</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 14: Exercise -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Exercise Is Medicine</h2>
+            <p class="subtitle">Physical activity is one of the most powerful tools to lower blood sugar</p>
+
+            <div class="grid-2">
+                <div>
+                    <div class="highlight-box">
+                        <h3>The 10–15 Minute Walk</h3>
+                        <p>A short walk after each meal helps your muscles <span class="emphasis">use up glucose naturally</span>, lowering your numbers without medication.</p>
+                    </div>
+                    <div class="info-box">
+                        <h3>Weekly Goal</h3>
+                        <p>Aim for <span class="emphasis">150 minutes</span> of moderate activity per week — that's just 30 minutes a day, 5 days a week.</p>
+                    </div>
+                </div>
+                <div>
+                    <h3>Safe Activities During Pregnancy</h3>
+                    <ul style="margin-top: 20px;">
+                        <li style="font-size: 1.4em;">Walking</li>
+                        <li style="font-size: 1.4em;">Swimming or water aerobics</li>
+                        <li style="font-size: 1.4em;">Stationary cycling</li>
+                        <li style="font-size: 1.4em;">Prenatal yoga</li>
+                        <li style="font-size: 1.4em;">Light resistance training</li>
+                    </ul>
+                    <p class="small-text">Always check with your provider before starting a new exercise routine.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 15: When Medication Is Needed -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>When Medication Is Needed</h2>
+            <p class="subtitle">If diet and exercise are not enough, medication is safe and effective</p>
+
+            <div class="grid-2">
+                <div class="card-green">
+                    <h3>Insulin</h3>
+                    <p style="font-size: 1.5em;">The <span class="emphasis">preferred medication</span> for GDM. Does not cross the placenta. Highly effective at controlling blood sugar.</p>
+                    <p style="font-size: 1.4em; margin-top: 15px; color: #b0bec5;">Given as injections. Your diabetes educator will teach you how.</p>
+                </div>
+                <div class="card">
+                    <h3>Metformin</h3>
+                    <p style="font-size: 1.5em;">An oral pill that reduces insulin resistance. <span class="emphasis-cyan">Safe for use in pregnancy</span> and well-studied.</p>
+                    <p style="font-size: 1.4em; margin-top: 15px; color: #b0bec5;">Does cross the placenta in small amounts; long-term data are reassuring.</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <p>Needing medication does <strong>not</strong> mean you failed. It means your body needs extra help — and that help is available and safe.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 16: Fetal Monitoring -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Monitoring Your Baby</h2>
+            <p class="subtitle">Close surveillance helps us catch and treat problems early</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>18–20 Weeks — Anatomy Ultrasound</h3>
+                    <p>Detailed survey of baby's organs, heart, and structure.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>28–32 Weeks — Fetal Echocardiogram</h3>
+                    <p>Detailed look at baby's heart — GDM increases risk of cardiac defects.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>32–36 Weeks — Growth Ultrasounds</h3>
+                    <p>Serial scans every 4 weeks to track baby's size and amniotic fluid.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>32–36 Weeks — Nonstress Tests (NST)</h3>
+                    <p>Weekly or twice-weekly fetal heart rate monitoring for A2GDM patients.</p>
+                </div>
+            </div>
+
+            <p class="small-text">A1GDM patients may need less monitoring. Your team will tailor the plan to your specific situation.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 17: What Is an NST? -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>What Is a Nonstress Test (NST)?</h2>
+
+            <div class="grid-2">
+                <div>
+                    <ul>
+                        <li>You relax while sensors monitor baby's heart rate for <strong>20–40 minutes</strong></li>
+                        <li>A <span class="emphasis">"reactive" NST</span> means baby's heart rate accelerates normally — reassuring</li>
+                        <li>A <span class="emphasis-amber">"nonreactive" result</span> does not automatically mean something is wrong</li>
+                        <li>If NST is nonreactive → a <strong>biophysical profile (BPP)</strong> ultrasound is performed</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="info-box">
+                        <h3>What Is a BPP?</h3>
+                        <p>A biophysical profile uses ultrasound to assess baby's movements, breathing, muscle tone, and amniotic fluid — a comprehensive check.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p>These tests are <span class="emphasis">reassurance tools</span>. They help your team confirm your baby is doing well.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 18: Delivery Planning -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>When Will I Deliver?</h2>
+            <p class="subtitle">ACOG recommendations for delivery timing with GDM</p>
+
+            <table>
+                <tr>
+                    <th>GDM Type</th>
+                    <th>Blood Sugar Control</th>
+                    <th>Recommended Delivery</th>
+                </tr>
+                <tr class="row-green">
+                    <td><strong>A1GDM</strong></td>
+                    <td>Well-controlled on diet alone</td>
+                    <td>39 weeks 0 days – 40 weeks 6 days</td>
+                </tr>
+                <tr class="row-cyan">
+                    <td><strong>A2GDM</strong></td>
+                    <td>Well-controlled on medication</td>
+                    <td>39 weeks 0 days</td>
+                </tr>
+                <tr class="row-amber">
+                    <td><strong>A2GDM</strong></td>
+                    <td>Poorly controlled</td>
+                    <td>37–39 weeks (individualized)</td>
+                </tr>
+                <tr class="row-red">
+                    <td><strong>Any GDM</strong></td>
+                    <td>Macrosomia ≥ 4,500 g</td>
+                    <td>Cesarean delivery discussed</td>
+                </tr>
+            </table>
+
+            <p class="small-text">Your delivery plan is individualized. Your care team will discuss the safest timing for you and your baby.</p>
+            <p class="source-note">ACOG Practice Bulletin No. 190 · SMFM Consult Series #58</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 19: Labor and Delivery -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>What to Expect During Labor</h2>
+
+            <div class="grid-2">
+                <div>
+                    <div class="highlight-box">
+                        <h3>Blood Sugar Monitoring</h3>
+                        <p>Your blood sugar will be checked every 1–2 hours during labor. The goal is to keep levels between <span class="emphasis">70–110 mg/dL</span>.</p>
+                    </div>
+                    <div class="info-box">
+                        <h3>IV Insulin (If Needed)</h3>
+                        <p>If blood sugar rises during labor, IV insulin may be given to protect your baby from neonatal hypoglycemia.</p>
+                    </div>
+                </div>
+                <div>
+                    <h3>After Your Baby Is Born</h3>
+                    <ul style="margin-top: 20px;">
+                        <li style="font-size: 1.4em;">Baby's blood sugar checked within the first hour</li>
+                        <li style="font-size: 1.4em;">Early feeding (breastfeeding or formula) helps stabilize baby's glucose</li>
+                        <li style="font-size: 1.4em;">Most babies do well and do not need special treatment</li>
+                        <li style="font-size: 1.4em;">Your blood sugar typically normalizes within days of delivery</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 20: Postpartum Glucose Testing -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Your Postpartum Glucose Test</h2>
+            <p class="subtitle">This is one of the most important follow-up steps after delivery</p>
+
+            <div class="grid-3">
+                <div class="card">
+                    <h3>The Timing</h3>
+                    <p style="font-size: 1.5em;">Schedule your test between <span class="emphasis">4 and 12 weeks</span> after your delivery.</p>
+                </div>
+                <div class="card">
+                    <h3>The Test</h3>
+                    <p style="font-size: 1.5em;">The <span class="emphasis-cyan">75g 2-Hour Oral Glucose Tolerance Test</span> — fasting + 2-hour blood draw.</p>
+                </div>
+                <div class="card">
+                    <h3>Why Not A1C?</h3>
+                    <p style="font-size: 1.5em;">The A1C test is <span class="emphasis-amber">not recommended</span> this soon after delivery. Blood loss and rapid cell turnover make it inaccurate.</p>
+                </div>
+            </div>
+
+            <table style="margin-top: 20px;">
+                <tr>
+                    <th>Result</th>
+                    <th>Next Step</th>
+                </tr>
+                <tr class="row-green">
+                    <td>Normal</td>
+                    <td>Re-screen every 1–3 years</td>
+                </tr>
+                <tr class="row-amber">
+                    <td>Prediabetes</td>
+                    <td>Lifestyle changes + consider Metformin</td>
+                </tr>
+                <tr class="row-red">
+                    <td>Diabetes</td>
+                    <td>Referral to Endocrinology</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 21: Reducing Long-Term Risk -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Reducing Your Long-Term Risk</h2>
+            <p class="subtitle">Your action plan for a healthy future</p>
+
+            <div class="grid-2">
+                <div>
+                    <div class="warning-box">
+                        <h3>Did You Know?</h3>
+                        <p>Women with GDM have a <span class="emphasis-amber">7-fold increased risk</span> of developing Type 2 Diabetes later in life.</p>
+                    </div>
+                    <div class="info-box">
+                        <h3>Healthy Weight</h3>
+                        <p>Losing just <span class="emphasis">5–7% of your body weight</span> can significantly lower your risk of diabetes.</p>
+                    </div>
+                </div>
+                <div>
+                    <ul>
+                        <li style="font-size: 1.4em;"><strong>Nutrition:</strong> Continue choosing complex carbs, lean proteins, and vegetables as a permanent lifestyle change</li>
+                        <li style="font-size: 1.4em;"><strong>Activity:</strong> Aim for 150 minutes of moderate activity per week</li>
+                        <li style="font-size: 1.4em;"><strong>Screening:</strong> Test for diabetes every 1–3 years — early detection is your best protection</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 22: Your Baby's Long-Term Health -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Your Baby's Long-Term Health</h2>
+            <p class="subtitle">Understanding how your pregnancy affects your child's future metabolism</p>
+
+            <div class="grid-2">
+                <div class="warning-box">
+                    <h3>Metabolic Programming</h3>
+                    <p>High blood sugar in the womb can <span class="emphasis-amber">"program" your baby's metabolism</span> to store fat more easily.</p>
+                    <p style="margin-top: 15px;">Babies born to moms with uncontrolled GDM have a higher risk of childhood obesity and Type 2 Diabetes.</p>
+                </div>
+                <div class="info-box">
+                    <h3>Breaking the Cycle</h3>
+                    <p>By keeping your blood sugar in range <strong>now</strong>, you are actively lowering these risks for your child.</p>
+                    <p style="margin-top: 15px;">After birth: <span class="emphasis">breastfeeding</span>, a healthy family diet, and keeping your child active are powerful ways to continue this protection.</p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <p style="font-size: 1.8em; text-align: center; font-style: italic;">"You are not just managing a condition — you are changing your family's health history."</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 23: Your Care Team -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Your Care Team</h2>
+            <p class="subtitle">You are not alone — a team of experts is here to support you and your baby</p>
+
+            <div class="grid-2">
+                <div>
+                    <ul>
+                        <li><strong>OB/GYN Provider:</strong> Manages your overall pregnancy care, monitors blood pressure, and delivers your baby</li>
+                        <li><strong>Maternal-Fetal Medicine Specialist:</strong> Performs detailed ultrasounds, interprets fetal monitoring, and manages complex blood sugar issues</li>
+                    </ul>
+                </div>
+                <div>
+                    <ul>
+                        <li><strong>Registered Dietitian:</strong> Helps you create a personalized meal plan that fits your lifestyle while keeping blood sugar stable</li>
+                        <li><strong>Diabetes Educator:</strong> Teaches you how to use your glucose meter, interpret your numbers, and administer insulin if needed</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <p>We communicate regularly to ensure you and your baby receive the best coordinated care. <span class="emphasis">You are the most important member of the team.</span></p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 24: Questions to Ask Your Doctor -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Questions to Ask Your Doctor</h2>
+            <p class="subtitle">Be an active partner in your care — bring this list to your next visit</p>
+
+            <div class="grid-2">
+                <div>
+                    <div class="card" style="margin-bottom: 20px;">
+                        <h3 style="font-size: 1.5em;">Reporting Numbers</h3>
+                        <p style="font-size: 1.3em;">How often and by what method should I send you my blood sugar logs?</p>
+                    </div>
+                    <div class="card" style="margin-bottom: 20px;">
+                        <h3 style="font-size: 1.5em;">Specific Targets</h3>
+                        <p style="font-size: 1.3em;">What are my specific goals for fasting and post-meal numbers? Should I test 1 or 2 hours after eating?</p>
+                    </div>
+                    <div class="card">
+                        <h3 style="font-size: 1.5em;">When to Call</h3>
+                        <p style="font-size: 1.3em;">At what blood sugar level should I call the office immediately?</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="card" style="margin-bottom: 20px;">
+                        <h3 style="font-size: 1.5em;">Baby Monitoring</h3>
+                        <p style="font-size: 1.3em;">Will I need extra growth ultrasounds or nonstress tests? When do those start?</p>
+                    </div>
+                    <div class="card" style="margin-bottom: 20px;">
+                        <h3 style="font-size: 1.5em;">Delivery Plan</h3>
+                        <p style="font-size: 1.3em;">How does my diagnosis affect my delivery timing? Will I need to be induced?</p>
+                    </div>
+                    <div class="card">
+                        <h3 style="font-size: 1.5em;">Postpartum</h3>
+                        <p style="font-size: 1.3em;">When should I schedule my 2-hour glucose test after the baby is born?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 25: Key Takeaways -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Five Things to Remember</h2>
+            <p class="subtitle">Key takeaways for a healthy pregnancy</p>
+
+            <div class="grid-2" style="gap: 25px;">
+                <div class="card">
+                    <div class="step-badge">01</div>
+                    <h3 style="font-size: 1.6em;">It's Not Your Fault</h3>
+                    <p style="font-size: 1.3em;">GDM is caused by placental hormones blocking your insulin — not by something you did wrong.</p>
+                </div>
+                <div class="card">
+                    <div class="step-badge">02</div>
+                    <h3 style="font-size: 1.6em;">Food Is Medicine</h3>
+                    <p style="font-size: 1.3em;">Complex carbs paired with protein and healthy fats is the most powerful way to control blood sugar.</p>
+                </div>
+                <div class="card">
+                    <div class="step-badge">03</div>
+                    <h3 style="font-size: 1.6em;">Movement Matters</h3>
+                    <p style="font-size: 1.3em;">A 10–15 minute walk after meals helps your muscles use up glucose naturally.</p>
+                </div>
+                <div class="card">
+                    <div class="step-badge">04</div>
+                    <h3 style="font-size: 1.6em;">Medication Is Safe</h3>
+                    <p style="font-size: 1.3em;">If diet isn't enough, insulin or metformin are safe tools to protect your baby.</p>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>05 — Follow Up Postpartum:</strong> Don't forget your 2-hour glucose test 4–12 weeks after delivery to ensure your diabetes has resolved.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 26: Final Message -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <div class="center">
+                <span class="icon">❤️</span>
+                <h1>You've Got This</h1>
+                <div class="highlight-box" style="max-width: 800px; margin: 30px auto;">
+                    <p style="font-size: 2em;">
+                        Gestational diabetes is a challenge, but it is temporary. Every healthy meal, every walk, and every fingerstick is an act of love for your baby.
+                    </p>
+                </div>
+                <p class="subtitle">Questions? Write them down and bring them to your next appointment.</p>
+                <p class="source-note" style="margin-top: 30px;">Based on ACOG Practice Bulletin No. 190 (Gestational Diabetes Mellitus) · SMFM Consult Series #58 · ADA Standards of Care · Atlanta Perinatal Associates</p>
+            </div>
+        </div>
+
+    </div><!-- end slide-container -->
+
+    <div class="navigation">
+        <span id="slideNumber">1</span> / <span id="totalSlides">26</span>
+        <span style="margin-left: 20px;">Use ← → arrow keys</span>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slideNumber = document.getElementById('slideNumber');
+        const totalSlidesSpan = document.getElementById('totalSlides');
+        const progressBar = document.getElementById('progressBar');
+
+        totalSlidesSpan.textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            slideNumber.textContent = currentSlide + 1;
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function prevSlide()  { showSlide(currentSlide - 1); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX   = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) prevSlide();
+        });
+
+        // Click navigation (right 30% = next, left 30% = prev)
+        document.addEventListener('click', (e) => {
+            const clickX      = e.clientX;
+            const windowWidth = window.innerWidth;
+            if (clickX > windowWidth * 0.7)      nextSlide();
+            else if (clickX < windowWidth * 0.3) prevSlide();
+        });
+
+        // Initialize
+        updateProgressBar();
+    </script>
+</body>
+</html>
