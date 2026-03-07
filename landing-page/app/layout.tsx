@@ -14,6 +14,14 @@ export const metadata: Metadata = {
       'Evidence-based clinical presentations and tools for patients, providers, and sonographers.',
     url: 'https://mfm-presentations.vercel.app',
     siteName: 'MFM Presentations',
+    images: [
+      {
+        url: 'https://mfm-presentations.vercel.app/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'MFM Presentations - Open-Source Maternal-Fetal Medicine Education',
+      },
+    ],
     locale: 'en_US',
     type: 'website',
   },
@@ -22,6 +30,7 @@ export const metadata: Metadata = {
     title: 'MFM Presentations | Open-Source Maternal-Fetal Medicine Education',
     description:
       'The open-source library for high-risk pregnancy topics, from preeclampsia to fetal cardiology.',
+    images: ['https://mfm-presentations.vercel.app/og-image.png'],
   },
 };
 
