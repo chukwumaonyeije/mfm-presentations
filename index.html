@@ -333,6 +333,59 @@
     .card.hidden {
       display: none;
     }
+    .filter-container {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .search-input {
+      flex-grow: 1;
+      padding: 16px 20px;
+      font-size: 16px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--fg);
+      transition: border-color 0.2s;
+      min-width: 200px;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .search-input::placeholder {
+      color: var(--muted);
+    }
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .filter-select {
+      padding: 14px 16px;
+      font-size: 14px;
+      min-width: 200px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--fg);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .filter-results {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
     .pagination {
       display: flex;
       justify-content: center;
@@ -384,15 +437,18 @@
       </p>
     </div>
 
-    <div class="search-container">
-      <input 
-        type="text" 
-        id="searchBox" 
-        class="search-box" 
-        placeholder="🔍 Search presentations by title, topic, or condition..."
+    <div id="filter-bar" class="filter-container">
+      <input
+        type="text"
+        id="searchBox"
+        class="search-input"
+        placeholder="🔍 Search 80+ presentations..."
         autocomplete="off"
       >
-      <div id="searchResults" class="search-results"></div>
+      <div class="filter-group">
+        <label for="tag-filter">Filter by Tag:</label>
+        <select id="tag-filter" class="filter-select"></select>
+      </div>
     </div>
 
     <div class="presentations">
@@ -1626,11 +1682,7 @@
       </div>
     </div>
 
-    <div class="pagination">
-      <button id="prevBtn" aria-label="Previous page">← Previous</button>
-      <span class="page-info" id="pageInfo">Page 1 of 1</span>
-      <button id="nextBtn" aria-label="Next page">Next →</button>
-    </div>
+    <div id="filter-results" class="filter-results"></div>
 
     <div class="disclaimer">
       <strong>⚠️ Medical Disclaimer:</strong> These presentations are educational tools and do not constitute medical advice. 
@@ -1650,101 +1702,68 @@
   </footer>
 
   <script>
-    // Pagination and search functionality
-    const searchBox = document.getElementById('searchBox');
-    const searchResults = document.getElementById('searchResults');
-    // Only select cards from the main presentations section, exclude microsites
-    const presentationsContainer = document.querySelector('.presentations:not(#microsites-container)');
-    const allCards = Array.from(presentationsContainer.querySelectorAll('.card'));
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const pageInfo = document.getElementById('pageInfo');
-    
-    const ITEMS_PER_PAGE = 10;
-    let currentPage = 1;
-    let filteredCards = [...allCards];
+    // Faceted search + tag filter (replaces pagination)
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchBox = document.getElementById('searchBox');
+      const tagFilter = document.getElementById('tag-filter');
+      const filterResults = document.getElementById('filter-results');
+      const presentationsContainer = document.querySelector('.presentations:not(#microsites-container)');
+      const allCards = Array.from(presentationsContainer.querySelectorAll('.card'));
 
-    function getMatchingCards(searchTerm) {
-      if (searchTerm === '') {
-        return allCards;
-      }
-
-      return allCards.filter(card => {
-        const title = card.querySelector('h2').textContent.toLowerCase();
-        const description = card.querySelector('p').textContent.toLowerCase();
-        const tags = Array.from(card.querySelectorAll('.tag'))
-          .map(tag => tag.textContent.toLowerCase())
-          .join(' ');
-        
-        const searchableText = `${title} ${description} ${tags}`;
-        return searchableText.includes(searchTerm);
+      // Populate tag dropdown from all unique tags
+      const allTags = new Set();
+      allCards.forEach(card => {
+        card.querySelectorAll('.tag').forEach(t => allTags.add(t.textContent.trim()));
       });
-    }
+      tagFilter.innerHTML = '<option value="all">All Tags</option>';
+      [...allTags].sort().forEach(tag => {
+        const opt = document.createElement('option');
+        opt.value = tag;
+        opt.textContent = tag;
+        tagFilter.appendChild(opt);
+      });
 
-    function displayPage() {
-      // Hide all cards first
-      allCards.forEach(card => card.classList.add('hidden'));
+      // Show all cards initially
+      allCards.forEach(card => card.classList.remove('hidden'));
+      filterResults.textContent = `Showing all ${allCards.length} presentations`;
 
-      const totalPages = Math.ceil(filteredCards.length / ITEMS_PER_PAGE);
-      const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
-      const endIdx = startIdx + ITEMS_PER_PAGE;
-      
-      // Show cards for current page
-      const cardsToShow = filteredCards.slice(startIdx, endIdx);
-      cardsToShow.forEach(card => card.classList.remove('hidden'));
+      function applyFilters() {
+        const term = searchBox.value.toLowerCase().trim();
+        const selectedTag = tagFilter.value;
+        let visible = 0;
 
-      // Update pagination controls
-      pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
-      prevBtn.disabled = currentPage === 1;
-      nextBtn.disabled = currentPage >= totalPages;
+        allCards.forEach(card => {
+          const title = (card.querySelector('h2, h3')?.textContent || '').toLowerCase();
+          const desc = (card.querySelector('p')?.textContent || '').toLowerCase();
+          const cardTags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent.trim());
 
-      // Update search results message
-      const searchTerm = searchBox.value.trim();
-      if (searchTerm === '') {
-        searchResults.textContent = `Showing ${allCards.length} presentations (${cardsToShow.length} on this page)`;
-      } else if (filteredCards.length === 0) {
-        searchResults.textContent = `No presentations found matching "${searchBox.value}"`;
-      } else {
-        searchResults.textContent = `Found ${filteredCards.length} of ${allCards.length} presentations (${cardsToShow.length} on this page)`;
+          const matchesSearch = !term || `${title} ${desc} ${cardTags.join(' ')}`.includes(term);
+          const matchesTag = selectedTag === 'all' || cardTags.includes(selectedTag);
+
+          if (matchesSearch && matchesTag) {
+            card.classList.remove('hidden');
+            visible++;
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+
+        if (!term && selectedTag === 'all') {
+          filterResults.textContent = `Showing all ${allCards.length} presentations`;
+        } else if (visible === 0) {
+          filterResults.textContent = `No presentations found`;
+        } else {
+          filterResults.textContent = `Showing ${visible} of ${allCards.length} presentations`;
+        }
       }
 
-      // Scroll to top of presentations
-      if (presentationsContainer) {
-        presentationsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-
-    function performSearch() {
-      const searchTerm = searchBox.value.toLowerCase().trim();
-      filteredCards = getMatchingCards(searchTerm);
-      currentPage = 1; // Reset to first page on new search
-      displayPage();
-    }
-
-    // Event listeners
-    let searchTimeout;
-    searchBox.addEventListener('input', () => {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(performSearch, 150);
+      let searchTimeout;
+      searchBox.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(applyFilters, 150);
+      });
+      tagFilter.addEventListener('change', applyFilters);
     });
-
-    prevBtn.addEventListener('click', () => {
-      if (currentPage > 1) {
-        currentPage--;
-        displayPage();
-      }
-    });
-
-    nextBtn.addEventListener('click', () => {
-      const totalPages = Math.ceil(filteredCards.length / ITEMS_PER_PAGE);
-      if (currentPage < totalPages) {
-        currentPage++;
-        displayPage();
-      }
-    });
-
-    // Initial display
-    displayPage();
   </script>
 </body>
 </html>
