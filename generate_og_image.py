@@ -74,7 +74,7 @@ for value, label in stats:
     stat_x += 230
 
 # URL
-url_text = "mfm-presentations.vercel.app"
+url_text = "openmfm.org"
 draw.text((100, 535), url_text, font=font_small, fill=ACCENT_COLOR)
 
 # Author

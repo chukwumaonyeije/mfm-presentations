@@ -2,7 +2,7 @@ import json
 import os
 from datetime import datetime
 
-BASE_URL = "https://mfm-presentations.vercel.app"
+BASE_URL = "https://openmfm.org"
 
 with open('landing-page/data/presentations.json', 'r', encoding='utf-8') as f:
     data = json.load(f)

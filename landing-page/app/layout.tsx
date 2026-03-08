@@ -15,6 +15,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://openmfm.org'),
+  alternates: { canonical: 'https://openmfm.org' },
   title: 'openMFM | Open-Source Maternal-Fetal Medicine Education',
   description:
     "The world's first open-source education platform for Maternal-Fetal Medicine. 80+ evidence-based clinical presentations and interactive tools for patients, providers, and sonographers. Created by Dr. Chukwuma Onyeije, MD.",
@@ -22,11 +24,11 @@ export const metadata: Metadata = {
     title: 'openMFM | Open-Source Maternal-Fetal Medicine Education',
     description:
       'Evidence-based clinical presentations and tools for patients, providers, and sonographers.',
-    url: 'https://mfm-presentations.vercel.app',
+    url: 'https://openmfm.org',
     siteName: 'openMFM',
     images: [
       {
-        url: 'https://mfm-presentations.vercel.app/og-image.png',
+        url: 'https://openmfm.org/og-image.png',
         width: 1200,
         height: 630,
         alt: 'openMFM - Open-Source Maternal-Fetal Medicine Education',
@@ -40,7 +42,7 @@ export const metadata: Metadata = {
     title: 'openMFM | Open-Source Maternal-Fetal Medicine Education',
     description:
       'The open-source library for high-risk pregnancy topics, from preeclampsia to fetal cardiology.',
-    images: ['https://mfm-presentations.vercel.app/og-image.png'],
+    images: ['https://openmfm.org/og-image.png'],
   },
 };
 
