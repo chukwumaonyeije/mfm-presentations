@@ -333,6 +333,26 @@
     .card.hidden {
       display: none;
     }
+    .microsite-card-hidden {
+      display: none !important;
+    }
+    #microsites-show-more {
+      background: var(--panel);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: none;
+    }
+    #microsites-show-more:hover {
+      background: rgba(53,208,255,.1);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(53,208,255,.25);
+    }
     .filter-container {
       display: flex;
       gap: 16px;
@@ -1684,6 +1704,10 @@
         </div>
       </div>
 
+      <div style="text-align: center; margin-top: 28px;">
+        <button id="microsites-show-more">&#9660; Show More Microsites</button>
+      </div>
+
       <div style="text-align: center; margin-top: 32px; color: var(--muted); font-size: 14px;">
         <p>💡 <strong>Suggest a microsite topic:</strong> Have an idea for an interactive clinical tool or educational resource? <a href="https://github.com/chukwumaonyeije/mfm-presentations/issues" target="_blank" style="color: var(--accent); text-decoration: none;">Open an issue</a> on GitHub.</p>
       </div>
@@ -1770,6 +1794,32 @@
         searchTimeout = setTimeout(applyFilters, 150);
       });
       tagFilter.addEventListener('change', applyFilters);
+      // Microsite Show More / Show Less
+      // NOTE: Switch to a dedicated microsites page (Option 3) once you reach 10 microsites.
+      const MICROSITES_PER_PAGE = 6;
+      const micrositesContainer = document.getElementById('microsites-container');
+      const micrositeCards = Array.from(micrositesContainer.querySelectorAll('.card'));
+      const showMoreBtn = document.getElementById('microsites-show-more');
+
+      if (micrositeCards.length > MICROSITES_PER_PAGE) {
+        micrositeCards.forEach((card, i) => {
+          if (i >= MICROSITES_PER_PAGE) card.classList.add('microsite-card-hidden');
+        });
+        showMoreBtn.style.display = 'inline-block';
+        const extra = micrositeCards.length - MICROSITES_PER_PAGE;
+        showMoreBtn.textContent = '\u25bc Show More Microsites (' + extra + ' more)';
+
+        let expanded = false;
+        showMoreBtn.addEventListener('click', () => {
+          expanded = !expanded;
+          micrositeCards.forEach((card, i) => {
+            if (i >= MICROSITES_PER_PAGE) card.classList.toggle('microsite-card-hidden', !expanded);
+          });
+          showMoreBtn.textContent = expanded
+            ? '\u25b2 Show Fewer Microsites'
+            : '\u25bc Show More Microsites (' + extra + ' more)';
+        });
+      }
     });
   </script>
 </body>
