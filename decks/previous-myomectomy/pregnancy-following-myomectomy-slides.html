@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pregnancy Following Myomectomy — MFM Clinical Presentation</title>
+  <style>
+    /* =============================================
+       MFM SLIDE DECK — CLINICAL DARK THEME
+       Strict clinical palette. No decorative clutter.
+    ============================================= */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a0e1a;
+      --bg-slide:      #111827;
+      --bg-card:       #1a2235;
+      --bg-header:     #0d1424;
+      --accent-teal:   #4ecdc4;
+      --accent-blue:   #3b82f6;
+      --accent-amber:  #f59e0b;
+      --accent-red:    #ef4444;
+      --text-primary:  #e8edf5;
+      --text-secondary:#94a3b8;
+      --text-muted:    #64748b;
+      --border:        #1e293b;
+      --border-bright: #2d3f5e;
+      --font-main:     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      overflow: hidden;
+    }
+
+    /* ── APP SHELL ── */
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ── TOP BAR ── */
+    #topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 2rem;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    #topbar .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    #topbar .brand-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent-teal);
+      flex-shrink: 0;
+    }
+
+    #slide-counter {
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── SLIDE STAGE ── */
+    #stage {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── SLIDES ── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-slide);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(60px);
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    .slide.exit-left {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+
+    /* ── SLIDE HEADER ── */
+    .slide-header {
+      padding: 2.2rem 3.5rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .slide-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-teal);
+      margin-bottom: 0.6rem;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--accent-teal);
+      border-radius: 2px;
+      opacity: 0.85;
+    }
+
+    .slide-tag.tag-warning { color: var(--accent-amber); border-color: var(--accent-amber); }
+    .slide-tag.tag-alert   { color: var(--accent-red);   border-color: var(--accent-red);   }
+    .slide-tag.tag-blue    { color: var(--accent-blue);  border-color: var(--accent-blue);  }
+
+    .slide-header h2 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    /* ── SLIDE BODY ── */
+    .slide-body {
+      flex: 1;
+      padding: 2rem 3.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ── TITLE SLIDE VARIANT ── */
+    .slide.slide-title {
+      background: linear-gradient(135deg, #0a0e1a 0%, #0f1e35 60%, #0a1628 100%);
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 3.5rem;
+    }
+
+    .slide.slide-title .title-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-teal);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .slide.slide-title h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      max-width: 75%;
+      margin-bottom: 1.5rem;
+    }
+
+    .slide.slide-title .title-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 55%;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .slide.slide-title .title-meta {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .slide.slide-title .meta-item {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+
+    .title-accent-line {
+      width: 64px; height: 4px;
+      background: var(--accent-teal);
+      margin-bottom: 1.8rem;
+      border-radius: 2px;
+    }
+
+    /* ── STAT CALLOUT ── */
+    .stat-callout {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.4rem;
+      padding: 1.5rem 2rem;
+      background: var(--bg-card);
+      border-left: 4px solid var(--accent-teal);
+      border-radius: 0 8px 8px 0;
+      max-width: 420px;
+    }
+
+    .stat-number {
+      font-size: 3.8rem;
+      font-weight: 800;
+      color: var(--accent-teal);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-label {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* Multi-stat grid */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.2rem;
+      width: 100%;
+    }
+
+    .stat-grid .stat-callout {
+      max-width: none;
+    }
+
+    .stat-callout.stat-amber {
+      border-left-color: var(--accent-amber);
+    }
+    .stat-callout.stat-amber .stat-number {
+      color: var(--accent-amber);
+    }
+
+    .stat-callout.stat-red {
+      border-left-color: var(--accent-red);
+    }
+    .stat-callout.stat-red .stat-number {
+      color: var(--accent-red);
+    }
+
+    /* ── ICON LIST ── */
+    .icon-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .icon-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+    }
+
+    .icon-list .icon {
+      color: var(--accent-teal);
+      font-style: normal;
+      flex-shrink: 0;
+      margin-top: 0.1em;
+      font-size: 0.9em;
+    }
+
+    .icon-list.icon-warning .icon { color: var(--accent-amber); }
+    .icon-list.icon-alert   .icon { color: var(--accent-red); }
+    .icon-list.icon-blue    .icon { color: var(--accent-blue); }
+
+    /* ── CLINICAL TABLE ── */
+    .clinical-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    .clinical-table th {
+      background: var(--bg-card);
+      color: var(--accent-teal);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0.85rem 1.2rem;
+      text-align: left;
+      border-bottom: 2px solid var(--border-bright);
+    }
+
+    .clinical-table td {
+      padding: 0.8rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .clinical-table tbody tr:last-child td { border-bottom: none; }
+
+    .clinical-table tbody tr:hover td {
+      background: rgba(78,205,196,0.04);
+    }
+
+    .evidence-high {
+      color: var(--accent-teal);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .evidence-mod {
+      color: var(--accent-amber);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      position: relative;
+      padding: 1.5rem 0;
+      overflow-x: auto;
+    }
+
+    .tl-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      min-width: 140px;
+    }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 50%;
+      right: -50%;
+      height: 2px;
+      background: var(--border-bright);
+      z-index: 0;
+    }
+
+    .tl-item:last-child::before { display: none; }
+
+    .tl-dot {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--accent-teal);
+      border: 3px solid var(--bg-slide);
+      position: relative;
+      z-index: 1;
+      margin-bottom: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .tl-dot.dot-amber { background: var(--accent-amber); }
+    .tl-dot.dot-blue { background: var(--accent-blue); }
+
+    .tl-week {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent-teal);
+      letter-spacing: 0.08em;
+      text-align: center;
+      margin-bottom: 0.4rem;
+    }
+
+    .tl-week.week-amber { color: var(--accent-amber); }
+    .tl-week.week-blue { color: var(--accent-blue); }
+
+    .tl-label {
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      text-align: center;
+      line-height: 1.4;
+      padding: 0 0.5rem;
+    }
+
+    /* ── TWO-COLUMN LAYOUT ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      width: 100%;
+      align-items: start;
+    }
+
+    .col-card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 1.4rem 1.6rem;
+      border-top: 3px solid var(--accent-teal);
+    }
+
+    .col-card.col-card-blue  { border-top-color: var(--accent-blue); }
+    .col-card.col-card-amber { border-top-color: var(--accent-amber); }
+
+    .col-card h3 {
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-teal);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .col-card.col-card-blue  h3 { color: var(--accent-blue); }
+    .col-card.col-card-amber h3 { color: var(--accent-amber); }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight-box {
+      background: var(--bg-card);
+      border-left: 4px solid var(--accent-blue);
+      border-radius: 0 8px 8px 0;
+      padding: 1.2rem 1.6rem;
+      margin-top: 1rem;
+    }
+
+    .highlight-box p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .highlight-box.hb-amber { border-left-color: var(--accent-amber); }
+    .highlight-box.hb-teal  { border-left-color: var(--accent-teal); }
+    .highlight-box.hb-red   { border-left-color: var(--accent-red); }
+
+    /* ── KEY POINTS (SUMMARY SLIDE) ── */
+    .key-points {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .kp-item {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 1rem 1.4rem;
+    }
+
+    .kp-num {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent-teal);
+      line-height: 1;
+      min-width: 2rem;
+      text-align: center;
+    }
+
+    .kp-text {
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    /* ── FLOWCHART ── */
+    .flowchart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      width: 100%;
+    }
+
+    .fc-node {
+      background: var(--bg-card);
+      border: 1px solid var(--border-bright);
+      border-radius: 6px;
+      padding: 0.7rem 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      text-align: center;
+      min-width: 220px;
+      max-width: 380px;
+    }
+
+    .fc-node.fc-start  { border-color: var(--accent-teal);  color: var(--accent-teal); font-weight: 700; }
+    .fc-node.fc-action { border-color: var(--accent-blue);  }
+    .fc-node.fc-end    { border-color: var(--accent-amber); color: var(--accent-amber); font-weight: 700; }
+
+    .fc-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      padding: 0.2rem 0;
+    }
+
+    .fc-arrow::before {
+      content: '';
+      width: 1px;
+      height: 18px;
+      background: var(--border-bright);
+    }
+
+    .fc-arrow::after {
+      content: '▼';
+      color: var(--border-bright);
+      font-size: 0.65rem;
+    }
+
+    /* ── SPLIT FLOWCHART ── */
+    .fc-split {
+      display: flex;
+      gap: 2rem;
+      width: 100%;
+      justify-content: center;
+      margin-top: 0.5rem;
+    }
+
+    .fc-branch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .fc-branch-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .fc-branch-label.label-yes { color: var(--accent-teal); }
+    .fc-branch-label.label-no { color: var(--accent-amber); }
+
+    /* ── ALERT BOX ── */
+    .alert-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--accent-red);
+      border-radius: 8px;
+      padding: 1.2rem 1.6rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .alert-icon {
+      font-size: 1.5rem;
+      color: var(--accent-red);
+      flex-shrink: 0;
+    }
+
+    .alert-content {
+      flex: 1;
+    }
+
+    .alert-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-red);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .alert-text {
+      font-size: 1rem;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    /* ── BOTTOM NAV ── */
+    #navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 2rem;
+      background: var(--bg-header);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: none;
+      border: 1px solid var(--border-bright);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-family: var(--font-main);
+      padding: 0.5rem 1.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: all 0.15s ease;
+      font-weight: 500;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--accent-teal);
+      color: var(--accent-teal);
+      background: rgba(78,205,196,0.05);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .nav-btn:disabled:hover {
+      border-color: var(--border-bright);
+      color: var(--text-secondary);
+      background: none;
+    }
+
+    #progress-bar-wrap {
+      flex: 1;
+      margin: 0 1.5rem;
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    #progress-bar {
+      height: 100%;
+      background: var(--accent-teal);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    /* ── KEYBOARD HINT ── */
+    .kbd-hint {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-align: center;
+      margin-top: 0.2rem;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .kbd-hint { display: block; }
+    }
+
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div id="topbar">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      MFM Clinical Presentation
+    </div>
+    <div id="slide-counter">1 / 12</div>
+  </div>
+
+  <!-- STAGE -->
+  <div id="stage">
+    <div id="slides-container">
+
+      <!-- ════════════════════════════════════════════
+           SLIDE 1 — TITLE
+           ════════════════════════════════════════════ -->
+      <div class="slide slide-title active">
+        <div class="title-eyebrow">Maternal-Fetal Medicine</div>
+        <div class="title-accent-line"></div>
+        <h1>Pregnancy Following Myomectomy</h1>
+        <p class="title-subtitle">Clinical management of high-risk pregnancies with prior uterine surgery</p>
+        <div class="title-meta">
+          <span class="meta-item">Expert Consultation Framework</span>
+          <span class="meta-item">Evidence-Based Guidelines</span>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           SLIDE 2 — LEARNING OBJECTIVES
+           ════════════════════════════════════════════ -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Overview</span>
+          <h2>Learning Objectives</h2>
+        </div>
+        <div class="slide-body">
+          <ul class="icon-list">
+            <li><span class="icon">▶</span> Identify key risk factors influencing pregnancy outcomes post-myomectomy</li>
+            <li><span class="icon">▶</span> Recognize warning signs of uterine dehiscence and rupture</li>
+            <li><span class="icon">▶</span> Apply evidence-based delivery planning strategies</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           SLIDE 3 — EPIDEMIOLOGY
+           ════════════════════════════════════════════ -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Epidemiology</span>
+          <h2>Fibroids in Pregnancy</h2>
+        </div>
+        <div class="slide-body">
+          <div class="stat-grid">
+            <div class="stat-callout">
+              <span class="stat-number">2–10%</span>
+              <span class="stat-label">of pregnant women have uterine fibroids</span>
+            </div>
+            <div class="stat-callout stat-amber">
+              <span class="stat-number">0.7–1%</span>
+              <span class="stat-label">uterine rupture risk post-myomectomy</span>
+            </div>
+          </div>
+          <div class="highlight-box hb-teal" style="margin-top: 1.5rem;">
+            <p>Most pregnancies following myomectomy result in favorable outcomes with appropriate surveillance.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           SLIDE 4 — RISK STRATIFICATION FACTORS
+           ════════════════════════════════════════════ -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Risk Assessment</span>
+          <h2>Key Prognostic Factors</h2>
+        </div>
+        <div class="slide-body">
+          <div class="two-col">
+            <div class="col-card">
+              <h3>Surgical Factors</h3>
+              <ul class="icon-list">
+                <li><span class="icon">▶</span> Approach: laparotomy vs. laparoscopic vs. robotic</li>
+                <li><span class="icon">▶</span> Uterine cavity entry status</li>
+                <li><span class="icon">▶</span> Multi-layer suture closure</li>
+              </ul>
+            </div>
+            <div class="col-card col-card-blue">
+              <h3>Myoma Characteristics</h3>
+              <ul class="icon-list icon-blue">
+                <li><span class="icon">▶</span> Size and number removed</li>
+                <li><span class="icon">▶</span> Location: intramural vs. subserosal</li>
+                <li><span class="icon">▶</span> Conception interval (~18 months mean)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           SLIDE 5 — COMPLICATIONS TABLE
+           ════════════════════════════════════════════ -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag tag-warning">Complications</span>
+          <h2>Associated Obstetric Risks</h2>
+        </div>
+        <div class="slide-body">
+          <table class="clinical-table">
+            <thead>
+              <tr>
+                <th>Complication</th>
+                <th>Clinical Implication</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Placenta previa / PAS</td>
+                <td>Increased risk due to uterine scarring</td>
+                <td><span class="evidence-high">High</span></td>
+              </tr>
+              <tr>
+                <td>Preterm birth</td>
+                <td>Spontaneous or medically indicated early delivery</td>
+                <td><span class="evidence-mod">Moderate</span></td>
+              </tr>
+              <tr>
+                <td>Malpresentation</td>
+                <td>Altered uterine contour may affect fetal position</td>
+                <td><span class="evidence-mod">Moderate</span></td>
+              </tr>
+              <tr>
+                <td>Uterine rupture</td>
+                <td>0.7–1.0%; typically third trimester, prelabor</td>
+                <td><span class="evidence-high">High</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           SLIDE 6 — UTERINE RUPTURE
+           ════════════════════════════════════════════ -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag tag-alert">Critical</span>
+          <h2>Uterine Rupture</h2>
+        </div>
+        <div class="slide-body">
+          <div class="stat-callout stat-red" style="margin-bottom: 1.5rem;">
+            <span class="stat-number">&lt;1%</span>
+            <span class="stat-label">incidence — most occur in third trimester before labor onset</span>
+          </div>
+          <div class="alert-box">
+            <div class="alert-icon">⚠</div>
+            <div class="alert-content">
+              <div class="alert-title">Warning Signs — Educate All Patients</div>
+              <div class="alert-text">Sudden, localized abdominal pain or abnormal vaginal bleeding</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           SLIDE 7 — SURVEILLANCE TIMELINE
+           ════════════════════════════════════════════ -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag tag-blue">Monitoring</span>
+          <h2>Recommended Surveillance</h2>
+        </div>
+        <div class="slide-body">
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <span class="tl-week">EARLY</span>
+              <span class="tl-label">Obtain prior operative reports</span>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot dot-blue"></div>
+              <span class="tl-week week-blue">18–22 WKS</span>
+              <span class="tl-label">Detailed scan: placental site + scar assessment</span>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot dot-amber"></div>
+              <span class="tl-week week-amber">3RD TRIMESTER</span>
+              <span class="tl-label">Growth, presentation, scar monitoring</span>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot dot-amber"></div>
+              <span class="tl-week week-amber">DELIVERY</span>
+              <span class="tl-label">PPH preparedness</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           SLIDE 8 — FIBROID MANAGEMENT
+           ════════════════════════════════════════════ -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Management</span>
+          <h2>Fibroids During Current Pregnancy</h2>
+        </div>
+        <div class="slide-body">
+          <ul class="icon-list">
+            <li><span class="icon">▶</span> Residual or new fibroids: conservative management preferred</li>
+            <li><span class="icon">▶</span> Red degeneration: supportive care, analgesia, hydration</li>
+          </ul>
+          <div class="highlight-box hb-amber" style="margin-top: 1.5rem;">
+            <p>Antepartum myomectomy may be considered in second trimester only for intractable cases unresponsive to medical therapy — remains exceptional.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           SLIDE 9 — DELIVERY PLANNING FLOWCHART
+           ════════════════════════════════════════════ -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Delivery</span>
+          <h2>Mode of Delivery Decision</h2>
+        </div>
+        <div class="slide-body">
+          <div class="flowchart">
+            <div class="fc-node fc-start">Prior Myomectomy</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-action">Was uterine cavity entered?</div>
+            <div class="fc-split">
+              <div class="fc-branch">
+                <div class="fc-branch-label label-no">No / Superficial</div>
+                <div class="fc-arrow"></div>
+                <div class="fc-node" style="border-color: var(--accent-teal);">TOLAM may be considered<br><span style="font-size:0.75rem; color: var(--text-secondary);">(selected cases)</span></div>
+              </div>
+              <div class="fc-branch">
+                <div class="fc-branch-label label-yes">Yes / Extensive Intramural</div>
+                <div class="fc-arrow"></div>
+                <div class="fc-node fc-end">Scheduled Cesarean<br><span style="font-size:0.75rem;">(standard of care)</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           SLIDE 10 — DOCUMENTATION CHECKLIST
+           ════════════════════════════════════════════ -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag tag-blue">Documentation</span>
+          <h2>Clinical Record Checklist</h2>
+        </div>
+        <div class="slide-body">
+          <ul class="icon-list icon-blue">
+            <li><span class="icon">✓</span> Operative report: incision depth, cavity entry, suture layers</li>
+            <li><span class="icon">✓</span> Ultrasonography at 18–22 weeks and third trimester</li>
+            <li><span class="icon">✓</span> Documented patient education on warning signs</li>
+            <li><span class="icon">✓</span> PPH preparedness plan (scar + fibroid = atony risk)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           SLIDE 11 — KEY TAKEAWAYS
+           ════════════════════════════════════════════ -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Summary</span>
+          <h2>Key Takeaways</h2>
+        </div>
+        <div class="slide-body">
+          <div class="key-points">
+            <div class="kp-item">
+              <span class="kp-num">1</span>
+              <span class="kp-text">Uterine rupture risk is low (&lt;1%) but highest in third trimester prelabor</span>
+            </div>
+            <div class="kp-item">
+              <span class="kp-num">2</span>
+              <span class="kp-text">Operative report review is essential for delivery planning</span>
+            </div>
+            <div class="kp-item">
+              <span class="kp-num">3</span>
+              <span class="kp-text">Cavity entry during prior surgery typically indicates cesarean delivery</span>
+            </div>
+            <div class="kp-item">
+              <span class="kp-num">4</span>
+              <span class="kp-text">Early placental localization helps identify PAS risk</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           SLIDE 12 — QUESTIONS
+           ════════════════════════════════════════════ -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Discussion</span>
+          <h2>Questions?</h2>
+        </div>
+        <div class="slide-body" style="align-items: center; text-align: center;">
+          <div style="font-size: 3rem; color: var(--accent-teal); margin-bottom: 1.5rem;">?</div>
+          <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 500px;">
+            Thank you for your attention.<br>Open for discussion and case review.
+          </p>
+        </div>
+      </div>
+
+    </div><!-- /#slides-container -->
+  </div><!-- /#stage -->
+
+  <!-- BOTTOM NAV -->
+  <div id="navbar">
+    <button class="nav-btn" id="btn-prev" disabled>&#8592; Previous</button>
+    <div id="progress-bar-wrap">
+      <div id="progress-bar"></div>
+    </div>
+    <button class="nav-btn" id="btn-next">Next &#8594;</button>
+  </div>
+
+</div><!-- /#app -->
+
+<script>
+  (function () {
+    const slides    = document.querySelectorAll('.slide');
+    const counter   = document.getElementById('slide-counter');
+    const btnPrev   = document.getElementById('btn-prev');
+    const btnNext   = document.getElementById('btn-next');
+    const progressBar = document.getElementById('progress-bar');
+    let current = 0;
+    const total = slides.length;
+
+    function goTo(idx) {
+      if (idx < 0 || idx >= total) return;
+      slides[current].classList.remove('active');
+      slides[current].classList.add('exit-left');
+      setTimeout(() => slides[current].classList.remove('exit-left'), 300);
+      current = idx;
+      slides[current].classList.add('active');
+      counter.textContent = (current + 1) + ' / ' + total;
+      btnPrev.disabled = current === 0;
+      btnNext.disabled = current === total - 1;
+      progressBar.style.width = ((current + 1) / total * 100) + '%';
+    }
+
+    btnPrev.addEventListener('click', () => goTo(current - 1));
+    btnNext.addEventListener('click', () => goTo(current + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown') {
+        e.preventDefault();
+        goTo(current + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault();
+        goTo(current - 1);
+      }
+    });
+
+    // Init
+    goTo(0);
+  })();
+</script>
+
+</body>
+</html>
