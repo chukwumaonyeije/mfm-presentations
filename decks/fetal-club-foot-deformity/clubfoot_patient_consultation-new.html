@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Understanding Clubfoot — MFM Patient Education</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0a0e1a;
+      --bg-slide:      #111827;
+      --bg-card:       #1a2235;
+      --bg-header:     #0d1424;
+      --accent-teal:   #4ecdc4;
+      --accent-blue:   #3b82f6;
+      --accent-amber:  #f59e0b;
+      --accent-red:    #ef4444;
+      --text-primary:  #e8edf5;
+      --text-secondary:#94a3b8;
+      --text-muted:    #64748b;
+      --border:        #1e293b;
+      --border-bright: #2d3f5e;
+      --font-main:     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    html {
+      height: 100%;
+      height: -webkit-fill-available;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      min-height: 100dvh;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      overflow: hidden;
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      height: 100dvh;
+      width: 100vw;
+      max-width: 100%;
+    }
+
+    /* ── TOP BAR ── */
+    #topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    @media (min-width: 768px) {
+      #topbar { padding: 0.6rem 2rem; }
+    }
+
+    #topbar .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    #topbar .brand-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent-teal);
+      flex-shrink: 0;
+    }
+
+    #slide-counter {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── STAGE ── */
+    #stage {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── SLIDES ── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-slide);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(60px);
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    .slide.exit-left {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+
+    /* ── SLIDE HEADER ── */
+    .slide-header {
+      padding: 1.2rem 1.2rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 768px) {
+      .slide-header { padding: 2rem 3.5rem 1.4rem; }
+    }
+
+    .slide-tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-teal);
+      margin-bottom: 0.5rem;
+      padding: 0.15rem 0.5rem;
+      border: 1px solid var(--accent-teal);
+      border-radius: 2px;
+      opacity: 0.85;
+    }
+
+    .slide-tag.tag-amber { color: var(--accent-amber); border-color: var(--accent-amber); }
+    .slide-tag.tag-blue  { color: var(--accent-blue);  border-color: var(--accent-blue);  }
+
+    .slide-header h2 {
+      font-size: clamp(1.4rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    /* ── SLIDE BODY ── */
+    .slide-body {
+      flex: 1;
+      padding: 1.2rem 1.2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    @media (min-width: 768px) {
+      .slide-body { padding: 2rem 3.5rem 2rem; }
+    }
+
+    /* ── TITLE SLIDE ── */
+    .slide.slide-title {
+      background: linear-gradient(135deg, #0a0e1a 0%, #0f1e35 60%, #0a1628 100%);
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .slide.slide-title { padding: 0 3.5rem; }
+    }
+
+    .slide.slide-title .title-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-teal);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .title-accent-line {
+      width: 48px; height: 4px;
+      background: var(--accent-teal);
+      margin-bottom: 1.4rem;
+      border-radius: 2px;
+    }
+
+    .slide.slide-title h1 {
+      font-size: clamp(2rem, 7vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      max-width: 90%;
+      margin-bottom: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .slide.slide-title h1 { max-width: 75%; margin-bottom: 1.5rem; }
+    }
+
+    .slide.slide-title .title-subtitle {
+      font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+      color: var(--text-secondary);
+      max-width: 90%;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .slide.slide-title .title-subtitle { max-width: 55%; margin-bottom: 2rem; }
+    }
+
+    .slide.slide-title .title-meta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .slide.slide-title .meta-item {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── STAT CALLOUT ── */
+    .stat-callout {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.4rem;
+      padding: 1.2rem 1.5rem;
+      background: var(--bg-card);
+      border-left: 4px solid var(--accent-teal);
+      border-radius: 0 8px 8px 0;
+      max-width: 320px;
+    }
+
+    @media (min-width: 768px) {
+      .stat-callout { padding: 1.5rem 2rem; max-width: 420px; }
+    }
+
+    .stat-number {
+      font-size: clamp(2.4rem, 7vw, 3.8rem);
+      font-weight: 800;
+      color: var(--accent-teal);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.9rem;
+      width: 100%;
+    }
+
+    .stat-grid .stat-callout { max-width: none; }
+
+    /* ── ICON LIST ── */
+    .icon-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .icon-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+      line-height: 1.5;
+      color: var(--text-primary);
+    }
+
+    .icon-list .icon {
+      color: var(--accent-teal);
+      font-style: normal;
+      flex-shrink: 0;
+      margin-top: 0.1em;
+      font-size: 0.85em;
+    }
+
+    .icon-list.icon-amber .icon { color: var(--accent-amber); }
+
+    /* ── CLINICAL TABLE ── */
+    .clinical-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: clamp(0.78rem, 2vw, 0.95rem);
+    }
+
+    .clinical-table th {
+      background: var(--bg-card);
+      color: var(--accent-teal);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0.7rem 0.9rem;
+      text-align: left;
+      border-bottom: 2px solid var(--border-bright);
+    }
+
+    .clinical-table td {
+      padding: 0.65rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .clinical-table tbody tr:last-child td { border-bottom: none; }
+
+    /* ── TIMELINE — vertical on mobile, horizontal on desktop ── */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      position: relative;
+      padding: 0.5rem 0;
+    }
+
+    @media (min-width: 600px) {
+      .timeline {
+        flex-direction: row;
+        align-items: stretch;
+        overflow-x: auto;
+        padding: 1rem 0;
+      }
+    }
+
+    .tl-item {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.4rem 0;
+      position: relative;
+    }
+
+    @media (min-width: 600px) {
+      .tl-item {
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        padding: 0;
+        min-width: 90px;
+      }
+    }
+
+    /* Vertical connector line on mobile */
+    .tl-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 30px;
+      bottom: -8px;
+      width: 2px;
+      background: var(--border-bright);
+      z-index: 0;
+    }
+
+    /* Horizontal connector on desktop */
+    @media (min-width: 600px) {
+      .tl-item:not(:last-child)::after { display: none; }
+      .tl-item:not(:last-child)::before {
+        content: '';
+        position: absolute;
+        top: 7px;
+        left: 50%;
+        right: -50%;
+        height: 2px;
+        background: var(--border-bright);
+        z-index: 0;
+      }
+    }
+
+    @media (max-width: 599px) {
+      .tl-item::before { display: none !important; }
+    }
+
+    .tl-dot {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--accent-teal);
+      border: 3px solid var(--bg-slide);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (min-width: 600px) {
+      .tl-dot { margin-bottom: 0.65rem; }
+    }
+
+    .tl-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      padding-bottom: 0.65rem;
+    }
+
+    @media (min-width: 600px) {
+      .tl-content { align-items: center; padding-bottom: 0; }
+    }
+
+    .tl-week {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--accent-teal);
+      letter-spacing: 0.06em;
+    }
+
+    @media (min-width: 600px) {
+      .tl-week { text-align: center; margin-bottom: 0.3rem; }
+    }
+
+    .tl-label {
+      font-size: clamp(0.78rem, 2vw, 0.88rem);
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    @media (min-width: 600px) {
+      .tl-label { text-align: center; padding: 0 0.3rem; }
+    }
+
+    /* ── TWO-COLUMN ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      width: 100%;
+      align-items: start;
+    }
+
+    @media (min-width: 600px) {
+      .two-col { grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    }
+
+    @media (min-width: 768px) {
+      .two-col { gap: 2rem; }
+    }
+
+    .col-card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border-top: 3px solid var(--accent-teal);
+    }
+
+    @media (min-width: 768px) {
+      .col-card { padding: 1.4rem 1.6rem; }
+    }
+
+    .col-card.col-card-blue  { border-top-color: var(--accent-blue); }
+    .col-card.col-card-amber { border-top-color: var(--accent-amber); }
+
+    .col-card h3 {
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-teal);
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .col-card.col-card-blue  h3 { color: var(--accent-blue); }
+    .col-card.col-card-amber h3 { color: var(--accent-amber); }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight-box {
+      background: var(--bg-card);
+      border-left: 4px solid var(--accent-teal);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.2rem;
+      margin-top: 0.9rem;
+    }
+
+    .highlight-box p {
+      font-size: clamp(0.85rem, 2.3vw, 1rem);
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .highlight-box.hb-amber { border-left-color: var(--accent-amber); }
+    .highlight-box.hb-teal  { border-left-color: var(--accent-teal); }
+
+    /* ── KEY POINTS ── */
+    .key-points {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    .kp-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+    }
+
+    .kp-num {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent-teal);
+      line-height: 1;
+      min-width: 1.8rem;
+      text-align: center;
+    }
+
+    .kp-text {
+      font-size: clamp(0.85rem, 2.3vw, 0.95rem);
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    /* ── BOTTOM NAV ── */
+    #navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 0.9rem;
+      background: var(--bg-header);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    @media (min-width: 768px) {
+      #navbar { padding: 0.75rem 2rem; }
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      background: none;
+      border: 1px solid var(--border-bright);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-family: var(--font-main);
+      padding: 0.55rem 1rem;
+      min-height: 44px;
+      min-width: 80px;
+      border-radius: 4px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+      font-weight: 500;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--accent-teal);
+      color: var(--accent-teal);
+      background: rgba(78,205,196,0.05);
+    }
+
+    .nav-btn:active {
+      background: rgba(78,205,196,0.12);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .nav-btn:disabled:hover {
+      border-color: var(--border-bright);
+      color: var(--text-secondary);
+      background: none;
+    }
+
+    #progress-bar-wrap {
+      flex: 1;
+      margin: 0 0.75rem;
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      #progress-bar-wrap { margin: 0 1.5rem; }
+    }
+
+    #progress-bar {
+      height: 100%;
+      background: var(--accent-teal);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    /* Desktop keyboard hint */
+    .kbd-hint {
+      display: none;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .kbd-hint { display: block; }
+    }
+
+    /* Mobile swipe hint */
+    .swipe-hint {
+      display: block;
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+
+    @media (min-width: 768px) {
+      .swipe-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div id="topbar">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      MFM Patient Education
+    </div>
+    <div id="slide-counter">1 / 10</div>
+  </div>
+
+  <!-- STAGE -->
+  <div id="stage">
+    <div id="slides-container">
+
+      <!-- SLIDE 1 — TITLE -->
+      <div class="slide slide-title active">
+        <div class="title-eyebrow">Patient Education · Maternal-Fetal Medicine</div>
+        <div class="title-accent-line"></div>
+        <h1>Understanding Clubfoot</h1>
+        <p class="title-subtitle">What to expect when your baby's foot turns inward</p>
+        <div class="title-meta">
+          <span class="meta-item">For expecting parents</span>
+          <span class="meta-item">Fetal diagnosis consultation</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 2 — WHAT IS CLUBFOOT -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Definition</span>
+          <h2>What Is Clubfoot?</h2>
+        </div>
+        <div class="slide-body">
+          <ul class="icon-list">
+            <li><span class="icon">▶</span> Foot turns inward and downward at birth</li>
+            <li><span class="icon">▶</span> Medical term: <em>talipes equinovarus</em></li>
+            <li><span class="icon">▶</span> One or both feet may be affected</li>
+            <li><span class="icon">▶</span> Detected on prenatal ultrasound</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SLIDE 3 — HOW COMMON -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Epidemiology</span>
+          <h2>How Common Is It?</h2>
+        </div>
+        <div class="slide-body">
+          <div class="stat-callout">
+            <span class="stat-number">1 in 1,000</span>
+            <span class="stat-label">babies are born with clubfoot</span>
+          </div>
+          <div class="highlight-box hb-teal">
+            <p>One of the most common structural birth conditions. Your care team has extensive experience treating it.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4 — CAUSES -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Etiology</span>
+          <h2>What Causes Clubfoot?</h2>
+        </div>
+        <div class="slide-body">
+          <div class="two-col">
+            <div class="col-card">
+              <h3>Contributing Factors</h3>
+              <ul class="icon-list">
+                <li><span class="icon">▶</span> Often no clear cause identified</li>
+                <li><span class="icon">▶</span> Genetic predisposition</li>
+                <li><span class="icon">▶</span> Family history increases risk</li>
+              </ul>
+            </div>
+            <div class="col-card col-card-amber">
+              <h3>Important to Know</h3>
+              <ul class="icon-list icon-amber">
+                <li><span class="icon">▶</span> Not caused by anything you did</li>
+                <li><span class="icon">▶</span> Cannot be prevented</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5 — PROGNOSIS -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Outcomes</span>
+          <h2>Will My Baby Be Okay?</h2>
+        </div>
+        <div class="slide-body">
+          <div class="stat-callout">
+            <span class="stat-number">&gt;95%</span>
+            <span class="stat-label">treatment success rate with the Ponseti method</span>
+          </div>
+          <ul class="icon-list" style="margin-top: 1.2rem;">
+            <li><span class="icon">▶</span> Walk, run, and play normally</li>
+            <li><span class="icon">▶</span> Treatment begins shortly after birth</li>
+            <li><span class="icon">▶</span> Most children have no long-term limitations</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SLIDE 6 — TREATMENT TIMELINE -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Treatment</span>
+          <h2>The Ponseti Method</h2>
+        </div>
+        <div class="slide-body">
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <span class="tl-week">Birth – 2 wks</span>
+                <span class="tl-label">Assessment &amp; planning</span>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <span class="tl-week">2 – 8 wks</span>
+                <span class="tl-label">Serial casting (weekly)</span>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <span class="tl-week">~8 wks</span>
+                <span class="tl-label">Tenotomy (if needed)</span>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <span class="tl-week">Age 0 – 4 yrs</span>
+                <span class="tl-label">Brace wear</span>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-content">
+                <span class="tl-week">Long-term</span>
+                <span class="tl-label">Normal activity</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 7 — CASTING -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Treatment — Phase 1</span>
+          <h2>Serial Casting</h2>
+        </div>
+        <div class="slide-body">
+          <ul class="icon-list">
+            <li><span class="icon">▶</span> Begins within days of birth</li>
+            <li><span class="icon">▶</span> New cast applied weekly for 6–8 weeks</li>
+            <li><span class="icon">▶</span> Gently repositions foot with each change</li>
+            <li><span class="icon">▶</span> Performed by pediatric orthopedic specialist</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SLIDE 8 — TENOTOMY & BRACING -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Treatment — Phase 2</span>
+          <h2>Tenotomy &amp; Bracing</h2>
+        </div>
+        <div class="slide-body">
+          <div class="two-col">
+            <div class="col-card col-card-blue">
+              <h3>Tenotomy</h3>
+              <ul class="icon-list">
+                <li><span class="icon">▶</span> Small Achilles tendon procedure</li>
+                <li><span class="icon">▶</span> Needed in ~80% of cases</li>
+                <li><span class="icon">▶</span> Done under local anesthesia</li>
+              </ul>
+            </div>
+            <div class="col-card">
+              <h3>Bracing</h3>
+              <ul class="icon-list">
+                <li><span class="icon">▶</span> 23 hrs/day for first 3 months</li>
+                <li><span class="icon">▶</span> Nights/naps until age 4–5</li>
+                <li><span class="icon">▶</span> Prevents recurrence</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 9 — LONG-TERM OUTLOOK -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Long-term</span>
+          <h2>Long-Term Outlook</h2>
+        </div>
+        <div class="slide-body">
+          <ul class="icon-list">
+            <li><span class="icon">▶</span> Most children walk and run normally</li>
+            <li><span class="icon">▶</span> Can participate in sports and physical activities</li>
+            <li><span class="icon">▶</span> Treated foot may be slightly smaller</li>
+            <li><span class="icon">▶</span> Periodic follow-up until skeletal maturity</li>
+          </ul>
+          <div class="highlight-box hb-amber" style="margin-top: 1rem;">
+            <p>Athletes with treated clubfoot compete at the highest levels of sport.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 10 — KEY TAKEAWAYS -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="slide-tag">Summary</span>
+          <h2>Key Takeaways</h2>
+        </div>
+        <div class="slide-body">
+          <div class="key-points">
+            <div class="kp-item">
+              <span class="kp-num">1</span>
+              <span class="kp-text">Clubfoot is treatable — outcomes with the Ponseti method are excellent</span>
+            </div>
+            <div class="kp-item">
+              <span class="kp-num">2</span>
+              <span class="kp-text">Treatment begins shortly after birth with gentle serial casting</span>
+            </div>
+            <div class="kp-item">
+              <span class="kp-num">3</span>
+              <span class="kp-text">With proper care, most children have no long-term activity limitations</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /#slides-container -->
+  </div><!-- /#stage -->
+
+  <!-- BOTTOM NAV -->
+  <div id="navbar">
+    <button class="nav-btn" id="btn-prev" disabled>&#8592; Prev</button>
+    <div id="progress-bar-wrap">
+      <div id="progress-bar"></div>
+    </div>
+    <button class="nav-btn" id="btn-next">Next &#8594;</button>
+  </div>
+
+</div><!-- /#app -->
+
+<script>
+  (function () {
+    const slides      = document.querySelectorAll('.slide');
+    const counter     = document.getElementById('slide-counter');
+    const btnPrev     = document.getElementById('btn-prev');
+    const btnNext     = document.getElementById('btn-next');
+    const progressBar = document.getElementById('progress-bar');
+    const stage       = document.getElementById('stage');
+    let current = 0;
+    const total = slides.length;
+
+    counter.textContent = '1 / ' + total;
+
+    function goTo(idx) {
+      if (idx < 0 || idx >= total) return;
+      slides[current].classList.remove('active');
+      slides[current].classList.add('exit-left');
+      const prev = current;
+      setTimeout(() => slides[prev].classList.remove('exit-left'), 300);
+      current = idx;
+      slides[current].classList.add('active');
+      counter.textContent = (current + 1) + ' / ' + total;
+      btnPrev.disabled = current === 0;
+      btnNext.disabled = current === total - 1;
+      progressBar.style.width = ((current + 1) / total * 100) + '%';
+    }
+
+    btnPrev.addEventListener('click', () => goTo(current - 1));
+    btnNext.addEventListener('click', () => goTo(current + 1));
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown') {
+        e.preventDefault(); goTo(current + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault(); goTo(current - 1);
+      }
+    });
+
+    // Touch swipe navigation
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    stage.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].clientX;
+      touchStartY = e.changedTouches[0].clientY;
+    }, { passive: true });
+
+    stage.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      // Only trigger on dominant horizontal swipe of ≥40px
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+        if (dx < 0) goTo(current + 1);
+        else        goTo(current - 1);
+      }
+    }, { passive: true });
+
+    goTo(0);
+  })();
+</script>
+
+</body>
+</html>
