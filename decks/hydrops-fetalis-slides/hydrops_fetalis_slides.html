@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Understanding Hydrops Fetalis | Atlanta Perinatal Associates</title>
+  <style>
+    /* ── Base Reset ────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --blue:      #58a6ff;
+      --green:     #3fb950;
+      --orange:    #f0883e;
+      --purple:    #bc8cff;
+      --teal:      #39d353;
+      --red:       #f85149;
+      --accent:    #1f6feb;
+      --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      overflow: hidden;
+    }
+
+    /* ── Deck & Slides ─────────────────────────────────────────── */
+    .deck {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .slide {
+      width: 100%; height: 100%;
+      position: absolute; top: 0; left: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 4rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Navigation ────────────────────────────────────────────── */
+    .nav {
+      position: fixed; bottom: 1.6rem; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1rem;
+      z-index: 100;
+    }
+    .nav button {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); font-size: 1.1rem;
+      padding: 0.5rem 1.2rem; border-radius: 8px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .nav button:hover { background: var(--accent); border-color: var(--blue); }
+    .nav .counter {
+      font-size: 0.9rem; color: var(--muted);
+      min-width: 4rem; text-align: center;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      position: fixed; top: 0; left: 0;
+      height: 3px; background: var(--blue);
+      transition: width 0.4s ease;
+      z-index: 200;
+    }
+
+    /* ── Typography ────────────────────────────────────────────── */
+    .slide-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .slide-subtitle {
+      font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .slide-body {
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      line-height: 1.65;
+      text-align: center;
+      max-width: 820px;
+      color: var(--text);
+    }
+
+    /* ── Divider ───────────────────────────────────────────────── */
+    .divider {
+      width: 60px; height: 3px;
+      border-radius: 2px;
+      margin: 0.8rem auto 1.6rem;
+    }
+    .divider-blue  { background: var(--blue); }
+    .divider-green { background: var(--green); }
+    .divider-orange{ background: var(--orange); }
+    .divider-purple{ background: var(--purple); }
+    .divider-teal  { background: var(--teal); }
+
+    /* ── Highlight Chips ───────────────────────────────────────── */
+    .chip {
+      display: inline-block;
+      padding: 0.25rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .chip-blue   { background: rgba(88,166,255,.15); color: var(--blue); border: 1px solid rgba(88,166,255,.35); }
+    .chip-green  { background: rgba(63,185,80,.15);  color: var(--green); border: 1px solid rgba(63,185,80,.35); }
+    .chip-orange { background: rgba(240,136,62,.15); color: var(--orange); border: 1px solid rgba(240,136,62,.35); }
+    .chip-purple { background: rgba(188,140,255,.15);color: var(--purple); border: 1px solid rgba(188,140,255,.35); }
+    .chip-teal   { background: rgba(57,211,83,.15);  color: var(--teal); border: 1px solid rgba(57,211,83,.35); }
+
+    /* ── Icon Grid ─────────────────────────────────────────────── */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.2rem;
+      width: 100%; max-width: 900px;
+      margin-top: 1rem;
+    }
+    .icon-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem 1rem;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .icon-card:hover { border-color: var(--blue); }
+    .icon-card .ico { font-size: 2.4rem; margin-bottom: 0.6rem; }
+    .icon-card .label {
+      font-size: 0.88rem; font-weight: 600;
+      color: var(--text); line-height: 1.3;
+    }
+    .icon-card .sub {
+      font-size: 0.75rem; color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    /* ── Stat Cards ────────────────────────────────────────────── */
+    .stat-row {
+      display: flex; flex-wrap: wrap; gap: 1.2rem;
+      justify-content: center; margin-top: 1rem;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.2rem 1.8rem;
+      text-align: center;
+      min-width: 160px;
+    }
+    .stat-card .stat-num {
+      font-size: 2rem; font-weight: 800;
+      line-height: 1;
+    }
+    .stat-card .stat-label {
+      font-size: 0.82rem; color: var(--muted);
+      margin-top: 0.4rem; line-height: 1.3;
+    }
+
+    /* ── Timeline ──────────────────────────────────────────────── */
+    .timeline {
+      display: flex; flex-direction: column;
+      gap: 0; width: 100%; max-width: 680px;
+      margin-top: 0.5rem;
+    }
+    .timeline-step {
+      display: flex; align-items: flex-start; gap: 1rem;
+      position: relative;
+    }
+    .timeline-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 19px; top: 40px;
+      width: 2px; height: calc(100% - 8px);
+      background: var(--border);
+    }
+    .timeline-dot {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+      border: 2px solid var(--border);
+      background: var(--surface);
+    }
+    .timeline-content {
+      padding-bottom: 1.4rem;
+    }
+    .timeline-content .t-title {
+      font-size: 1rem; font-weight: 700; color: var(--text);
+    }
+    .timeline-content .t-desc {
+      font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem;
+      line-height: 1.4;
+    }
+
+    /* ── Two-column layout ─────────────────────────────────────── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      width: 100%; max-width: 900px;
+      margin-top: 1rem;
+    }
+    .info-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem;
+    }
+    .info-box .box-title {
+      font-size: 0.85rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 0.8rem;
+    }
+    .info-box ul {
+      list-style: none; padding: 0;
+    }
+    .info-box ul li {
+      font-size: 0.9rem; color: var(--muted);
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .info-box ul li:last-child { border-bottom: none; }
+
+    /* ── Big Icon Hero ─────────────────────────────────────────── */
+    .hero-icon {
+      font-size: clamp(4rem, 10vw, 7rem);
+      margin-bottom: 0.5rem;
+      line-height: 1;
+    }
+
+    /* ── Table ─────────────────────────────────────────────────── */
+    .data-table {
+      width: 100%; max-width: 820px;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    .data-table th {
+      background: var(--accent);
+      color: #fff;
+      padding: 0.6rem 1rem;
+      text-align: left;
+      font-weight: 600;
+    }
+    .data-table td {
+      padding: 0.55rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .data-table tr:hover td { background: var(--surface); color: var(--text); }
+
+    /* ── Branding footer ───────────────────────────────────────── */
+    .brand {
+      position: fixed; bottom: 1rem; right: 1.5rem;
+      font-size: 0.7rem; color: var(--border);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    /* ── Slide-specific accent borders ────────────────────────── */
+    .slide-accent-blue  { border-top: 3px solid var(--blue); }
+    .slide-accent-green { border-top: 3px solid var(--green); }
+    .slide-accent-orange{ border-top: 3px solid var(--orange); }
+    .slide-accent-purple{ border-top: 3px solid var(--purple); }
+    .slide-accent-teal  { border-top: 3px solid var(--teal); }
+
+    /* ── SVG Diagram ───────────────────────────────────────────── */
+    .diagram-wrap {
+      width: 100%; max-width: 820px;
+      margin-top: 0.8rem;
+    }
+
+    /* ── Reassurance banner ────────────────────────────────────── */
+    .reassurance {
+      background: rgba(63,185,80,.1);
+      border: 1px solid rgba(63,185,80,.3);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      max-width: 700px;
+      margin-top: 1.2rem;
+      font-size: 0.95rem;
+      color: var(--green);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ── Action banner ─────────────────────────────────────────── */
+    .action-banner {
+      background: rgba(240,136,62,.1);
+      border: 1px solid rgba(240,136,62,.3);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      max-width: 700px;
+      margin-top: 1.2rem;
+      font-size: 0.95rem;
+      color: var(--orange);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ── Responsive tweaks ─────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .slide { padding: 2rem 1.5rem; }
+      .two-col { grid-template-columns: 1fr; }
+      .icon-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/cNp4HF4i4zWCw4hPvxd75iNudaTqLw4PbVsmMy6W4_tDaHQvb98aV4_AiGF-jcjUUpoQcgyxhnqMVIvtQQVXMaoYFXoDGIk_btnARixDSzGuXeP1yoOvP80b7CMCPTb0SXz0hYjY3LqTfE6idgc4R6tjVFYu0SDObrY1DJLJX48TyXPBJcIXLL4SmN02W9EVzrrzuKgOhLhjRMKs1nfHIUKs4_6rc2w-Tg1yplcznPIgVVOOTqhWd9GsEj8d5GBG923LSjXMFwdJP7p_guE0YsDFcxPjp5PM2W3CgzDx3Ns0wwlY2zv7dAcg2IeHtwsein1WCszQbrlFWdBxxunam2oJq7gz1I1dBFGlnpqUNp5SNv_QpjIq7Us_VPtKtlIHH8zPfrHDcAr0BgL5JgwspdPre6KF3HnabebH1Awe0gW7bmOozhx_Siv4ooMbpvUSqNklMAwDw5VjQjYQmzwITxWLEypVe9ES2EbJa5JN6DyRPGSbHex_J4pUzTDC-C68KyAON1OFS2qd9t4dWLQwsZLyJt1TsqcaUzzs0fctTu32xlbqNKAdcVqw9T3ZVUyvlVCuvewBrt5TAXV-_IAgJWJoOg_sYuYsYVq206nb3O-ny_1hSpwdjqO81p13hRQScPdqAZghTKDzHNXYHS_EJzZhckgpnUWcW1IMqy8tFq0K5I3hkGErntXdC46gC-7ueubl2qLWfMR_SRnS2yxxb9gjhrUYUzuAGGHk-RXloSBlX8f9vpf_szZQaQalzFy8oD7WqAtmtyKvIQN102QI_a5H4tnTWIx_cmrlzjnSlir_0R0y3oGmw6ycBTWL34zL_6-Jl1OZBz7d3kaCC3Ne0Ty47ycPmPH8esBPhxdJCRH57CKLA__Mw75RzoT8DHrzVbcSi_SUgEhmX2M3WmX9w7bBP-ufHgdljFoN1AURMueyJvkc1XbPXeolJoZPJmpeAlszfOy-Lhe4SoE-RRE39vIn9JlPHu0D2FZEMlC4joQmhf_Q7QI32Z04L-0V1SEv3kbyJpVAinYnBoJI14HuPuyhCAyVIPl0spbyRtJA2aCUGhvxFhayNDOO6lLFy8zu-XDTXYznhl_516TQEhQotGsutA7iUViXlmzmZAAgpy1OcbCoCPEl0NvqzsAA76vFfycQjxwrJt3oxeXuaQAy2dUoRxKAlO5PjCUS-tP29siYufed1hJtOgi7fhmyA5BObY7bRNUQ2JCMNO5v7rx2QJwZF0dyQz5TOd2YpHsCCZXIgjbikz_a5sXeqcec6t0z34E7ZgjBhlqnpwl9UQqzGYRpcvY71Y27l9Q5iaTpjcZ2UKwjBk29MfXSa1sQIVAbjNRJo6miPT68EOtpIxc0FTUeVmB96GmVqnzdtYs2-yM48hQFK2y1gZlX0RDQhS_Te32qn8cPYTnOPa_AoUS_fJojHkKybEQgytV5Edy0M_kZinR4_v-zFt_bSsEEa03aJYDgnxN1f4lIZEwpZwzKZT-DWs06ulDeYCFcQr9d5XzEqHU02xOW8dY1V1tUPUaQD0D75DvEYMQ-2Jkbhr8w_da7lNQ9XSjUe0fdoaWn3leK-bqW1m3ChRVNCBS7g1JRSOx2pqGBdb50oTQWNKxtNA2RHNdjSumUfbXm4TbB3F5eAXJwwkh-unI'></script></head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck">
+
+  <!-- ── SLIDE 1 · Title ──────────────────────────────────────── -->
+  <div class="slide active" id="s1">
+    <div class="hero-icon">🫧</div>
+    <div class="chip chip-blue">Patient Education</div>
+    <h1 class="slide-title">Understanding<br>Hydrops Fetalis</h1>
+    <div class="divider divider-blue"></div>
+    <p class="slide-body" style="color:var(--muted);">
+      How we evaluate and care for your baby
+    </p>
+    <p style="margin-top:2rem;font-size:0.8rem;color:var(--border);">
+      Based on SMFM Consult Series #75 · 2026
+    </p>
+  </div>
+
+  <!-- ── SLIDE 2 · What is Hydrops? ───────────────────────────── -->
+  <div class="slide" id="s2">
+    <div class="chip chip-blue">What Is It?</div>
+    <h2 class="slide-title">What Is Hydrops Fetalis?</h2>
+    <div class="divider divider-blue"></div>
+    <p class="slide-body">
+      Extra fluid collecting in your baby's body — in the skin, belly, lungs, or around the heart.
+    </p>
+    <!-- SVG body diagram -->
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <defs>
+          <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#58a6ff" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <!-- Baby silhouette -->
+        <ellipse cx="350" cy="110" rx="55" ry="75" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+        <!-- Head -->
+        <circle cx="350" cy="45" r="32" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+
+        <!-- Fluid zones -->
+        <!-- Skin edema -->
+        <ellipse cx="350" cy="45" rx="38" ry="38" fill="none" stroke="#58a6ff" stroke-width="2" stroke-dasharray="5,3" opacity="0.7"/>
+        <!-- Pleural -->
+        <ellipse cx="350" cy="95" rx="40" ry="25" fill="rgba(88,166,255,0.12)" stroke="#58a6ff" stroke-width="1.5" opacity="0.8"/>
+        <!-- Pericardial -->
+        <ellipse cx="350" cy="95" rx="18" ry="14" fill="rgba(240,136,62,0.15)" stroke="#f0883e" stroke-width="1.5"/>
+        <!-- Ascites -->
+        <ellipse cx="350" cy="145" rx="42" ry="22" fill="rgba(63,185,80,0.12)" stroke="#3fb950" stroke-width="1.5" opacity="0.8"/>
+
+        <!-- Labels -->
+        <text x="415" y="48" fill="#58a6ff" font-size="12" font-family="sans-serif">Skin Edema</text>
+        <line x1="388" y1="45" x2="413" y2="45" stroke="#58a6ff" stroke-width="1"/>
+
+        <text x="415" y="98" fill="#58a6ff" font-size="12" font-family="sans-serif">Pleural Effusion</text>
+        <line x1="390" y1="95" x2="413" y2="95" stroke="#58a6ff" stroke-width="1"/>
+
+        <text x="415" y="148" fill="#3fb950" font-size="12" font-family="sans-serif">Ascites (belly fluid)</text>
+        <line x1="392" y1="145" x2="413" y2="145" stroke="#3fb950" stroke-width="1"/>
+
+        <text x="200" y="98" fill="#f0883e" font-size="12" font-family="sans-serif" text-anchor="end">Pericardial Effusion</text>
+        <line x1="202" y1="95" x2="332" y2="95" stroke="#f0883e" stroke-width="1"/>
+      </svg>
+    </div>
+    <div class="reassurance">
+      Hydrops is detected on ultrasound — it is not caused by anything you did.
+    </div>
+  </div>
+
+  <!-- ── SLIDE 3 · How Common? ────────────────────────────────── -->
+  <div class="slide" id="s3">
+    <div class="chip chip-purple">Prevalence</div>
+    <h2 class="slide-title">How Common Is It?</h2>
+    <div class="divider divider-purple"></div>
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--blue);">1 in 1,700</div>
+        <div class="stat-label">pregnancies affected<br>by non-immune hydrops</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--purple);">90%</div>
+        <div class="stat-label">of hydrops cases are<br>non-immune (not blood type)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--orange);">Many</div>
+        <div class="stat-label">possible causes —<br>we will search for yours</div>
+      </div>
+    </div>
+    <div class="reassurance" style="margin-top:1.5rem;">
+      You are not alone. Our team has experience caring for families facing this diagnosis.
+    </div>
+  </div>
+
+  <!-- ── SLIDE 4 · Causes Overview ────────────────────────────── -->
+  <div class="slide" id="s4">
+    <div class="chip chip-orange">Causes</div>
+    <h2 class="slide-title">What Can Cause Hydrops?</h2>
+    <div class="divider divider-orange"></div>
+    <div class="icon-grid" style="max-width:860px;">
+      <div class="icon-card">
+        <div class="ico">🧬</div>
+        <div class="label">Genetic Conditions</div>
+        <div class="sub">Chromosomes or single-gene disorders</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">❤️</div>
+        <div class="label">Heart Problems</div>
+        <div class="sub">Structure or rhythm of the heart</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">🦠</div>
+        <div class="label">Infections</div>
+        <div class="sub">Parvovirus, CMV, toxoplasmosis</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">🩸</div>
+        <div class="label">Fetal Anemia</div>
+        <div class="sub">Low red blood cell count in baby</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">🫁</div>
+        <div class="label">Lung or Chest Masses</div>
+        <div class="sub">Growths pressing on blood vessels</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">🩺</div>
+        <div class="label">Placenta Issues</div>
+        <div class="sub">Tumors or blood vessel problems</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 5 · Our Evaluation Plan ────────────────────────── -->
+  <div class="slide" id="s5">
+    <div class="chip chip-blue">Our Plan</div>
+    <h2 class="slide-title">Our Evaluation Plan</h2>
+    <div class="divider divider-blue"></div>
+    <p class="slide-body" style="margin-bottom:1.2rem;">
+      We follow a step-by-step approach to find the cause and guide your care.
+    </p>
+    <div class="timeline">
+      <div class="timeline-step">
+        <div class="timeline-dot" style="border-color:var(--blue);">🔬</div>
+        <div class="timeline-content">
+          <div class="t-title">Step 1 · Detailed Ultrasound</div>
+          <div class="t-desc">Full survey of baby's anatomy, heart, and fluid areas</div>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot" style="border-color:var(--purple);">🧬</div>
+        <div class="timeline-content">
+          <div class="t-title">Step 2 · Genetic Testing</div>
+          <div class="t-desc">Amniocentesis for chromosomes and gene analysis</div>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot" style="border-color:var(--orange);">🦠</div>
+        <div class="timeline-content">
+          <div class="t-title">Step 3 · Infection Testing</div>
+          <div class="t-desc">Blood tests for parvovirus, CMV, toxoplasmosis, syphilis</div>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot" style="border-color:var(--green);">🩸</div>
+        <div class="timeline-content">
+          <div class="t-title">Step 4 · Anemia Check</div>
+          <div class="t-desc">MCA Doppler ultrasound to measure baby's blood flow</div>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot" style="border-color:var(--teal);">❤️</div>
+        <div class="timeline-content">
+          <div class="t-title">Step 5 · Fetal Echocardiogram</div>
+          <div class="t-desc">Detailed ultrasound of baby's heart structure and rhythm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 6 · Detailed Ultrasound ────────────────────────── -->
+  <div class="slide" id="s6">
+    <div class="chip chip-blue">Step 1</div>
+    <h2 class="slide-title">Detailed Ultrasound</h2>
+    <div class="divider divider-blue"></div>
+    <div class="two-col">
+      <div class="info-box">
+        <div class="box-title" style="color:var(--blue);">What We Look For</div>
+        <ul>
+          <li>🫧 Fluid in belly, chest, or skin</li>
+          <li>🫀 Heart structure and rhythm</li>
+          <li>🫁 Lung or chest masses</li>
+          <li>🧠 Brain and spine development</li>
+          <li>🩺 Placenta and umbilical cord</li>
+          <li>💧 Amniotic fluid level</li>
+        </ul>
+      </div>
+      <div class="info-box">
+        <div class="box-title" style="color:var(--green);">MCA Doppler</div>
+        <ul>
+          <li>🩸 Measures blood flow in baby's brain artery</li>
+          <li>📊 Detects signs of anemia (low blood count)</li>
+          <li>✅ Safe, painless ultrasound measurement</li>
+          <li>🔄 May be repeated over time</li>
+        </ul>
+      </div>
+    </div>
+    <div class="reassurance">
+      Ultrasound is safe for you and your baby. It gives us critical information.
+    </div>
+  </div>
+
+  <!-- ── SLIDE 7 · Genetic Testing ────────────────────────────── -->
+  <div class="slide" id="s7">
+    <div class="chip chip-purple">Step 2</div>
+    <h2 class="slide-title">Genetic Testing</h2>
+    <div class="divider divider-purple"></div>
+    <p class="slide-body" style="margin-bottom:1.2rem;">
+      Finding a genetic cause helps us understand the prognosis and plan for future pregnancies.
+    </p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Test</th>
+          <th>What It Checks</th>
+          <th>How Done</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Chromosomal Microarray (CMA)</td>
+          <td>Extra or missing chromosome pieces</td>
+          <td>Amniocentesis</td>
+        </tr>
+        <tr>
+          <td>Karyotype</td>
+          <td>Chromosome number &amp; structure</td>
+          <td>Amniocentesis</td>
+        </tr>
+        <tr>
+          <td>Exome / Genome Sequencing</td>
+          <td>Single-gene disorders (e.g., Noonan syndrome)</td>
+          <td>Amniocentesis or blood</td>
+        </tr>
+        <tr>
+          <td>Gene Panel</td>
+          <td>Targeted group of known disorder genes</td>
+          <td>Amniocentesis or blood</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="action-banner">
+      SMFM recommends offering genetic testing for all pregnancies with fetal fluid collections.
+    </div>
+  </div>
+
+  <!-- ── SLIDE 8 · Infection Testing ──────────────────────────── -->
+  <div class="slide" id="s8">
+    <div class="chip chip-orange">Step 3</div>
+    <h2 class="slide-title">Testing for Infections</h2>
+    <div class="divider divider-orange"></div>
+    <p class="slide-body" style="margin-bottom:1.2rem;">
+      Infections account for about 7–8% of hydrops cases. Many are treatable.
+    </p>
+    <div class="icon-grid" style="max-width:760px;">
+      <div class="icon-card">
+        <div class="ico">🦠</div>
+        <div class="label">Parvovirus B19</div>
+        <div class="sub">Most common infectious cause; can cause fetal anemia</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">🔬</div>
+        <div class="label">Cytomegalovirus (CMV)</div>
+        <div class="sub">Common virus; tested via blood or amniotic fluid</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">🦟</div>
+        <div class="label">Toxoplasmosis</div>
+        <div class="sub">Parasite; blood test performed</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">🩺</div>
+        <div class="label">Syphilis</div>
+        <div class="sub">Routine blood test; highly treatable</div>
+      </div>
+    </div>
+    <div class="reassurance">
+      If an infection is found, treatment options are available to protect your baby.
+    </div>
+  </div>
+
+  <!-- ── SLIDE 9 · Fetal Anemia ────────────────────────────────── -->
+  <div class="slide" id="s9">
+    <div class="chip chip-green">Step 4</div>
+    <h2 class="slide-title">Checking for Fetal Anemia</h2>
+    <div class="divider divider-green"></div>
+    <p class="slide-body" style="margin-bottom:1.2rem;">
+      Anemia (low red blood cells) is a treatable cause of hydrops.
+    </p>
+    <!-- MCA Doppler diagram -->
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 680 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <!-- Brain outline -->
+        <ellipse cx="200" cy="90" rx="80" ry="70" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+        <!-- MCA artery -->
+        <path d="M 200 90 Q 240 60 280 80" stroke="#58a6ff" stroke-width="3" fill="none"/>
+        <circle cx="280" cy="80" r="6" fill="#58a6ff"/>
+        <!-- Doppler wave -->
+        <path d="M 300 90 Q 320 60 340 90 Q 360 120 380 90 Q 400 60 420 90 Q 440 120 460 90" stroke="#3fb950" stroke-width="2.5" fill="none"/>
+        <!-- Labels -->
+        <text x="150" y="95" fill="#8b949e" font-size="13" font-family="sans-serif" text-anchor="middle">Baby's Brain</text>
+        <text x="280" y="65" fill="#58a6ff" font-size="12" font-family="sans-serif">MCA</text>
+        <text x="380" y="130" fill="#3fb950" font-size="12" font-family="sans-serif" text-anchor="middle">Blood Flow Wave</text>
+        <!-- Threshold line -->
+        <line x1="300" y1="75" x2="460" y2="75" stroke="#f0883e" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="465" y="79" fill="#f0883e" font-size="11" font-family="sans-serif">Anemia threshold (1.5 MoM)</text>
+      </svg>
+    </div>
+    <div class="two-col" style="max-width:680px;">
+      <div class="info-box">
+        <div class="box-title" style="color:var(--green);">Normal Result</div>
+        <ul>
+          <li>✅ Blood flow is within normal range</li>
+          <li>✅ No immediate concern for anemia</li>
+        </ul>
+      </div>
+      <div class="info-box">
+        <div class="box-title" style="color:var(--orange);">Elevated Result</div>
+        <ul>
+          <li>⚠️ May indicate low red blood cells</li>
+          <li>🩸 Cord blood sampling may be needed</li>
+          <li>💉 Intrauterine transfusion may help</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 10 · Fetal Echo ─────────────────────────────────── -->
+  <div class="slide" id="s10">
+    <div class="chip chip-teal">Step 5</div>
+    <h2 class="slide-title">Fetal Echocardiogram</h2>
+    <div class="divider divider-teal"></div>
+    <p class="slide-body" style="margin-bottom:1.2rem;">
+      A detailed ultrasound of your baby's heart — structure, valves, and rhythm.
+    </p>
+    <div class="icon-grid" style="max-width:720px;">
+      <div class="icon-card">
+        <div class="ico">❤️</div>
+        <div class="label">Heart Structure</div>
+        <div class="sub">Checks chambers, valves, and vessels</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">📡</div>
+        <div class="label">Heart Rhythm</div>
+        <div class="sub">Detects fast or slow heartbeat (arrhythmia)</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">💧</div>
+        <div class="label">Pericardial Fluid</div>
+        <div class="sub">Fluid around the heart is measured</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">🏥</div>
+        <div class="label">Treatment Planning</div>
+        <div class="sub">Some arrhythmias can be treated with medication</div>
+      </div>
+    </div>
+    <div class="reassurance">
+      Heart problems causing hydrops can sometimes be treated during pregnancy.
+    </div>
+  </div>
+
+  <!-- ── SLIDE 11 · Prognosis ──────────────────────────────────── -->
+  <div class="slide" id="s11">
+    <div class="chip chip-orange">Prognosis</div>
+    <h2 class="slide-title">What Affects the Outcome?</h2>
+    <div class="divider divider-orange"></div>
+    <p class="slide-body" style="margin-bottom:1rem;">
+      Outcomes vary widely and depend on the underlying cause.
+    </p>
+    <div class="two-col">
+      <div class="info-box">
+        <div class="box-title" style="color:var(--green);">More Favorable Causes</div>
+        <ul>
+          <li>✅ Parvovirus (treatable anemia)</li>
+          <li>✅ Fetal arrhythmia (medication)</li>
+          <li>✅ Lung masses (surgery after birth)</li>
+          <li>✅ Lymphatic problems</li>
+        </ul>
+      </div>
+      <div class="info-box">
+        <div class="box-title" style="color:var(--orange);">Requires Close Monitoring</div>
+        <ul>
+          <li>⚠️ Genetic syndromes</li>
+          <li>⚠️ Heart defects</li>
+          <li>⚠️ Metabolic disorders</li>
+          <li>⚠️ Unknown cause</li>
+        </ul>
+      </div>
+    </div>
+    <div class="action-banner">
+      Our team will give you individualized counseling based on your baby's specific findings.
+    </div>
+  </div>
+
+  <!-- ── SLIDE 12 · Management Options ────────────────────────── -->
+  <div class="slide" id="s12">
+    <div class="chip chip-blue">Management</div>
+    <h2 class="slide-title">Your Care Options</h2>
+    <div class="divider divider-blue"></div>
+    <p class="slide-body" style="margin-bottom:1.2rem;">
+      Care is individualized to you, your baby, and the underlying cause.
+    </p>
+    <div class="icon-grid" style="max-width:860px;">
+      <div class="icon-card">
+        <div class="ico">🔄</div>
+        <div class="label">Close Monitoring</div>
+        <div class="sub">Serial ultrasounds and maternal blood pressure checks</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">💉</div>
+        <div class="label">Fetal Transfusion</div>
+        <div class="sub">For anemia — blood given directly to baby</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">💊</div>
+        <div class="label">Medications</div>
+        <div class="sub">Treat arrhythmias through mother's bloodstream</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">🏥</div>
+        <div class="label">Specialized Delivery</div>
+        <div class="sub">Level III/IV NICU center for complex cases</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">🤝</div>
+        <div class="label">Palliative Care</div>
+        <div class="sub">Compassionate support when treatment is not the goal</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">👶</div>
+        <div class="label">Neonatology Team</div>
+        <div class="sub">Specialists ready at delivery for your baby</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 13 · Delivery Planning ─────────────────────────── -->
+  <div class="slide" id="s13">
+    <div class="chip chip-purple">Delivery</div>
+    <h2 class="slide-title">Planning for Delivery</h2>
+    <div class="divider divider-purple"></div>
+    <p class="slide-body" style="margin-bottom:1.2rem;">
+      Delivery timing is individualized. We avoid early delivery unless medically necessary.
+    </p>
+    <div class="two-col">
+      <div class="info-box">
+        <div class="box-title" style="color:var(--purple);">When Early Delivery May Be Needed</div>
+        <ul>
+          <li>⚠️ Worsening hydrops on ultrasound</li>
+          <li>⚠️ Preterm labor or water breaking</li>
+          <li>⚠️ Mirror syndrome (maternal preeclampsia)</li>
+          <li>⚠️ Non-reassuring fetal testing</li>
+        </ul>
+      </div>
+      <div class="info-box">
+        <div class="box-title" style="color:var(--green);">Delivery Location</div>
+        <ul>
+          <li>🏥 Level III or IV NICU center preferred</li>
+          <li>👶 Neonatology team present at birth</li>
+          <li>🩺 Mode of delivery individualized</li>
+          <li>💊 Steroids given if preterm delivery expected</li>
+        </ul>
+      </div>
+    </div>
+    <div class="reassurance">
+      Our goal is to keep you and your baby safe while giving the best chance for a good outcome.
+    </div>
+  </div>
+
+  <!-- ── SLIDE 14 · Your Team ──────────────────────────────────── -->
+  <div class="slide" id="s14">
+    <div class="chip chip-green">Your Team</div>
+    <h2 class="slide-title">Your Care Team</h2>
+    <div class="divider divider-green"></div>
+    <p class="slide-body" style="margin-bottom:1.2rem;">
+      You will be supported by a team of specialists working together.
+    </p>
+    <div class="icon-grid" style="max-width:760px;">
+      <div class="icon-card">
+        <div class="ico">👩‍⚕️</div>
+        <div class="label">Maternal-Fetal Medicine</div>
+        <div class="sub">High-risk pregnancy specialist (MFM)</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">🧬</div>
+        <div class="label">Genetic Counselor</div>
+        <div class="sub">Guides testing and interprets results</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">👶</div>
+        <div class="label">Neonatologist</div>
+        <div class="sub">Newborn intensive care specialist</div>
+      </div>
+      <div class="icon-card">
+        <div class="ico">❤️</div>
+        <div class="label">Pediatric Cardiologist</div>
+        <div class="sub">Heart specialist for your baby</div>
+      </div>
+    </div>
+    <div class="reassurance">
+      You are never alone. Every decision is made together with you at the center.
+    </div>
+  </div>
+
+  <!-- ── SLIDE 15 · Questions & Partnership ───────────────────── -->
+  <div class="slide" id="s15">
+    <div class="hero-icon">🤝</div>
+    <div class="chip chip-green">Partnership</div>
+    <h2 class="slide-title">We Are Here for You</h2>
+    <div class="divider divider-green"></div>
+    <p class="slide-body">
+      Every question matters. Every concern is heard. We walk this journey with you.
+    </p>
+    <div class="stat-row" style="margin-top:1.5rem;">
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--blue);">📋</div>
+        <div class="stat-label">Ask us about<br>your test results</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--green);">🗓️</div>
+        <div class="stat-label">Schedule follow-up<br>appointments</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--orange);">📞</div>
+        <div class="stat-label">Call us with<br>any concerns</div>
+      </div>
+    </div>
+    <p style="margin-top:2rem;font-size:0.78rem;color:var(--border);text-align:center;">
+      Atlanta Perinatal Associates · Based on SMFM Consult Series #75 (2026)
+    </p>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prevSlide()">&#8592; Prev</button>
+  <span class="counter" id="counter">1 / 15</span>
+  <button onclick="nextSlide()">Next &#8594;</button>
+</div>
+
+<div class="brand">Atlanta Perinatal Associates · APA</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+  const total = slides.length;
+
+  function showSlide(idx) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === idx);
+    });
+    counter.textContent = (idx + 1) + ' / ' + total;
+    progressBar.style.width = ((idx + 1) / total * 100) + '%';
+  }
+
+  function nextSlide() {
+    current = (current + 1) % total;
+    showSlide(current);
+  }
+
+  function prevSlide() {
+    current = (current - 1 + total) % total;
+    showSlide(current);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+    else if (e.key === 'ArrowLeft') prevSlide();
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (dx < -50) nextSlide();
+    else if (dx > 50) prevSlide();
+  });
+
+  showSlide(current);
+</script>
+</body>
+</html>
