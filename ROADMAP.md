@@ -33,7 +33,7 @@
   - Prenatal Screening & Counseling
   - Medical Conditions in Pregnancy
   - GYN / Women's Health
-- **8 interactive clinical microsites:**
+- **9 interactive clinical microsites:**
   - Preeclampsia Screener (preeclampsia-screener.com)
   - FGRManager (SMFM #52 delivery timing)
   - GDM Screener (ACOG 2024 PB #190)
@@ -42,6 +42,7 @@
   - Vitamin K Deficiency Bleeding (VKDB) Microsite
   - Preterm Birth Risk Screener
   - Fetal Kick Count Microsite (+ mobile-optimized version)
+  - Hydrops Fetalis Microsite
 
 ### SEO & AI Optimization (Phase 1 — March 2026)
 - Added `<meta>` SEO tags, Open Graph tags, and `<noscript>` fallback to `index.html`
