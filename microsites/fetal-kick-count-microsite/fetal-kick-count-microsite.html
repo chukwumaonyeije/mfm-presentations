@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetal Kick Count Monitor | High-Risk Pregnancy</title>
+    <style>
+        :root {
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #212529;
+            --heading: #1a5f5f;
+            --primary: #1a5f5f;
+            --primary-hover: #144a4a;
+            --accent: #20c997;
+            --accent-light: #e6f9f4;
+            --warn: #e63946;
+            --warn-light: #fdecea;
+            --caution: #f4a261;
+            --caution-light: #fff4ec;
+            --ok: #2a9d8f;
+            --ok-light: #e8f7f5;
+            --border: #dee2e6;
+            --muted: #6c757d;
+            --shadow: rgba(0,0,0,0.06);
+        }
+
+        body.dark-mode {
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #e0e0e0;
+            --heading: #20c997;
+            --border: #333;
+            --shadow: rgba(0,0,0,0.3);
+            --accent-light: #1a3530;
+            --warn-light: #3a1a1a;
+            --caution-light: #3a2a10;
+            --ok-light: #1a3530;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 1.5rem 1rem 3rem;
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 720px; margin: 0 auto; }
+
+        /* ── HEADER ── */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .header-left { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+        .header-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        .header-btn:hover { background: var(--accent-light); }
+
+        .brand-link {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+        .brand-link:hover { color: var(--heading); }
+
+        /* ── HERO ── */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #2a9d8f 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .hero h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .hero p { font-size: 0.95rem; opacity: 0.9; max-width: 520px; margin: 0 auto; }
+        .hero .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* ── TABS ── */
+        .tabs {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1.25rem;
+            border-bottom: 2px solid var(--border);
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.6rem 1.1rem;
+            cursor: pointer;
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .tab-btn.active {
+            color: var(--heading);
+            border-bottom-color: var(--primary);
+        }
+        .tab-btn:hover { color: var(--heading); }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 16px var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 1.25rem;
+        }
+
+        .card h2 {
+            color: var(--heading);
+            font-size: 1.15rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* ── KICK COUNTER ── */
+        .counter-display {
+            text-align: center;
+            padding: 1.5rem 0;
+        }
+
+        .kick-count-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            border: 4px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            transition: transform 0.1s, background 0.3s;
+        }
+        .kick-count-circle.pulse {
+            transform: scale(1.08);
+            background: var(--accent);
+        }
+        .kick-count-circle .count-num {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--heading);
+            line-height: 1;
+        }
+        .kick-count-circle .count-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .timer-display {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--heading);
+            margin-bottom: 0.25rem;
+        }
+        .timer-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.25rem; }
+
+        .kick-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(26,95,95,0.3);
+        }
+        .kick-btn:hover { background: var(--primary-hover); }
+        .kick-btn:active { transform: scale(0.96); }
+        .kick-btn:disabled { background: var(--muted); cursor: not-allowed; box-shadow: none; }
+
+        .counter-controls {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem 1.25rem;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .btn-secondary:hover { background: var(--accent-light); }
+
+        /* ── PROGRESS BAR ── */
+        .progress-wrap { margin: 1rem 0; }
+        .progress-bar-bg {
+            background: var(--border);
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 0.3rem;
+        }
+
+        /* ── KICK LOG ── */
+        .kick-log {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 1rem;
+            min-height: 2rem;
+        }
+        .kick-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            animation: popIn 0.2s ease;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ── RESULT BANNER ── */
+        .result-banner {
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+            display: none;
+        }
+        .result-banner.ok { background: var(--ok-light); border: 2px solid var(--ok); }
+        .result-banner.warn { background: var(--warn-light); border: 2px solid var(--warn); }
+        .result-banner h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .result-banner.ok h3 { color: var(--ok); }
+        .result-banner.warn h3 { color: var(--warn); }
+        .result-banner p { font-size: 0.9rem; margin-bottom: 0.4rem; }
+        .result-banner .result-note { font-size: 0.8rem; color: var(--muted); font-style: italic; margin-top: 0.5rem; }
+
+        /* ── RISK FACTOR CHECKLIST ── */
+        .risk-list { list-style: none; }
+        .risk-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.85rem;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.6rem;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .risk-item:hover { background: var(--accent-light); }
+        .risk-item.selected {
+            background: var(--accent-light);
+            border-style: solid;
+            border-color: var(--primary);
+        }
+        .risk-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .risk-item .risk-text { font-size: 0.9rem; }
+        .risk-item .risk-text strong { display: block; font-size: 0.95rem; }
+        .risk-item .risk-text span { color: var(--muted); font-size: 0.82rem; }
+
+        .risk-result-box {
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        .risk-result-box.high { background: var(--warn-light); border-left: 4px solid var(--warn); }
+        .risk-result-box.moderate { background: var(--caution-light); border-left: 4px solid var(--caution); }
+        .risk-result-box.low { background: var(--ok-light); border-left: 4px solid var(--ok); }
+        .risk-result-box h4 { font-size: 0.95rem; margin-bottom: 0.3rem; }
+        .risk-result-box.high h4 { color: var(--warn); }
+        .risk-result-box.moderate h4 { color: var(--caution); }
+        .risk-result-box.low h4 { color: var(--ok); }
+
+        /* ── CLINICAL GUIDE ── */
+        .guide-section { margin-bottom: 1.5rem; }
+        .guide-section h3 {
+            color: var(--heading);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .guide-section p { font-size: 0.9rem; margin-bottom: 0.5rem; }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-bottom: 1rem;
+        }
+        .info-table th {
+            background: var(--accent-light);
+            color: var(--heading);
+            text-align: left;
+            padding: 0.6rem 0.75rem;
+            font-weight: 600;
+        }
+        .info-table td {
+            padding: 0.55rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        .info-table tr:last-child td { border-bottom: none; }
+
+        .alert-box {
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            font-size: 0.88rem;
+        }
+        .alert-box.red { background: var(--warn-light); border-left: 4px solid var(--warn); }
+        .alert-box.yellow { background: var(--caution-light); border-left: 4px solid var(--caution); }
+        .alert-box.green { background: var(--ok-light); border-left: 4px solid var(--ok); }
+        .alert-box strong { display: block; margin-bottom: 0.3rem; font-size: 0.92rem; }
+
+        .source-badge {
+            display: inline-block;
+            background: var(--accent-light);
+            color: var(--heading);
+            border-radius: 4px;
+            padding: 0.1rem 0.5rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            margin-left: 0.3rem;
+            vertical-align: middle;
+        }
+
+        /* ── MODAL ── */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            overflow-y: auto;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 640px;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 1rem; right: 1.25rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--muted);
+            background: none;
+            border: none;
+            line-height: 1;
+        }
+        .close-btn:hover { color: var(--text); }
+        .modal-content h2 {
+            color: var(--heading);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .modal-content h3 {
+            color: var(--heading);
+            font-size: 1rem;
+            margin: 1.25rem 0 0.4rem;
+        }
+        .modal-content p { font-size: 0.9rem; margin-bottom: 0.6rem; }
+        .modal-content ul { padding-left: 1.25rem; font-size: 0.9rem; }
+        .modal-content ul li { margin-bottom: 0.35rem; }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.78rem;
+            color: var(--muted);
+            padding: 0 1rem;
+        }
+        .footer a { color: var(--muted); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.3rem; }
+            .tabs { overflow-x: auto; }
+            .tab-btn { white-space: nowrap; padding: 0.5rem 0.8rem; font-size: 0.82rem; }
+        }
+    </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/XRbFeKi0DBM0r_FY6g5ybSDmxsT0Y6pN-l8eduekiYaKqHsCebUrPb-gJDE06rKel3FI5nznD6ho8XvYwnQpfPVyeuY84wL_wjAP7naJJ2HbCtz8lmtYm8SNLWB2fCo3WgSsg8bWLyRx8zAKkwHjYrPqzfJfcj_c8-Pl6GvtiNHqFD_3CN2S-_eaqe-vl4sZkFjqzyw8OhAoANL7TkC-xHqQNLHNS9TBzJRh7EMttkboZGQR1HcqLT9OyjSyvWxRD4GGpUg9Asc3rqfwHRQDgrvKvWHzidEoUviJnh2Gghdfuv1GlgKiHYTFldQfH-knHNlyz3moKqsoZMPdmO2mTbAlVjnMr4ol8bi9EqM8qfym1lIsvD0m9VNEZ_O1OFHPl0rylwZh3jT0aARkDpn_tB8Xn5sTy6VF5k9S0G241dGmm2ViJWUWQGv86OkrGivW5VLQ4hcd1H0fe_-wE8XL-K2WHYn4dBEe_S-y6ajupFwUIscSd7eaj4CjycMZieXd3aMujLmHvg2YQX7LVj_-rx9mDXapTsErnz7lLyjsehuilWIpczzyoq5ZLxF2fJqguU4MXTDXYldo8j5o8kxBulhPysaBbmk1BY9A_YySeE1V2jMHDF1ZAN_JK9RbPmhNhnzS-Bru7Najn2JJCc-Xq5PGadrxp_LFufSe5OXrZTDOhDrUTz39SacPxq8u5Vvbvqlt-KTB7aaZc29HpazjCt16tvWsO5v35t2A9AxwhCgV-S3fvqnasjYuHa54GtDvOnmMfsu9VkVjIQ8IWe0RMAgzfa358634ae3CeJCiV1L0uMiflIvSN9iqncxntiw2cj9vT-TV8iwjd85vM-QN64UdnGndVo-4-sGaZnF4o4Ax_LNViPErqJwUYRZWRP1I41Itsr7NRWuCPhZGSybBSVHdq3G-DB5rN8FJNJY__YqFeJwgtaYKAVM44PoVUO7lbYu5yelmo69D_aSVEzPtLWEOhM_aFscMjodJ-pzinzCTq-sSVJaAPPJKk9cZnu_KrnCUd_YVdN1waMm1H5nsjrokZmRWNt8MlnM-RRTtR6fTkk0Hcre8_rD8WYa0EbbwDmn57JkUZhgK0xpNwsxA3sRH8u4W8kseVHR_7up7QorKHljfhvSlJf0CEEOjtk8lxB3DnThJZBm5vuWUEgSWEoF6zAHDNHpIxIu9wtUn_oU7r3jT10dBdutJUADogNxMwPDwxraLPCSib-UtuT1G2nvOByE1HiLQ1ISWk0Lqiswc8-_F0YrxR-S-pQsBthJQRkokoKYh9y2gp18NH_6jQcVQeaVKqg9hV3tuKqA1DtXGFJf-dXlZGXzPJMvE8Rx4BnVi93WhvD5oG0bqzy54KmJS_EIA8c-vrJpO5CySam5lIxfSExcuhxAxx-pRBNG8_cQ5i2KicTQEQzp7-GwfqhRitWjt57W5DVc-CyI9vr70RBKBj6YLLzLl9ojXVf7AIv-iXiL_Nl3ZLz6CE_d21sZQTQL1FrtA1cqWem_1bcYz79sUz-PbeMqI3UhP'></script></head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-left">
+            <button class="header-btn" id="aboutBtn">About This Tool</button>
+            <button class="header-btn" id="resourcesBtn">Resources</button>
+        </div>
+        <a class="brand-link" href="https://doctorswhocode.blog/" target="_blank">DoctorsWhoCode.blog</a>
+        <button class="header-btn" id="darkModeToggle">Dark Mode</button>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="badge">High-Risk Pregnancy Tool</div>
+        <h1>Fetal Kick Count Monitor</h1>
+        <p>A daily movement monitoring tool for high-risk pregnancies, based on ACOG, SMFM, and Count the Kicks guidelines.</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="counter">Daily Counter</button>
+        <button class="tab-btn" data-tab="risk">Risk Assessment</button>
+        <button class="tab-btn" data-tab="guide">Clinical Guide</button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         TAB 1: DAILY COUNTER
+    ═══════════════════════════════════════════ -->
+    <div class="tab-panel active" id="tab-counter">
+
+        <!-- Result Banner (shown after session ends) -->
+        <div class="result-banner" id="resultBanner">
+            <h3 id="resultTitle"></h3>
+            <p id="resultAssessment"></p>
+            <p id="resultRecommendation"></p>
+            <p class="result-note" id="resultNote"></p>
+            <div class="counter-controls" style="margin-top:1rem;">
+                <button class="btn-secondary" id="newSessionBtn">Start New Session</button>
+            </div>
+        </div>
+
+        <!-- Counter Card -->
+        <div class="card" id="counterCard">
+            <h2>Today's Kick Count Session</h2>
+            <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1rem;">
+                Lie on your left side. Tap the button each time you feel a kick, roll, flutter, or swish. 
+                <strong>Goal: 10 movements within 2 hours.</strong> Hiccups do not count.
+            </p>
+
+            <div class="counter-display">
+                <div class="kick-count-circle" id="kickCircle">
+                    <span class="count-num" id="kickCountDisplay">0</span>
+                    <span class="count-label">of 10</span>
+                </div>
+                <div class="timer-display" id="timerDisplay">0:00</div>
+                <div class="timer-label" id="timerLabel">Timer will start on first kick</div>
+                <button class="kick-btn" id="kickBtn">&#128306; Record a Movement</button>
+            </div>
+
+            <div class="progress-wrap">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+                </div>
+                <div class="progress-label">
+                    <span>0 kicks</span>
+                    <span>Goal: 10 kicks</span>
+                </div>
+            </div>
+
+            <div class="kick-log" id="kickLog"></div>
+
+            <div class="counter-controls">
+                <button class="btn-secondary" id="undoBtn">Undo Last</button>
+                <button class="btn-secondary" id="resetBtn">Reset Session</button>
+            </div>
+        </div>
+
+        <!-- Quick Reference Card -->
+        <div class="card">
+            <h2>Quick Reference</h2>
+            <div class="alert-box green">
+                <strong>Normal</strong>
+                10 movements felt within 2 hours. Baby's pattern is consistent with prior sessions.
+            </div>
+            <div class="alert-box yellow">
+                <strong>Monitor Closely</strong>
+                Movements feel weaker than usual, or it is taking longer than normal to reach 10 movements over several days.
+            </div>
+            <div class="alert-box red">
+                <strong>Call Your Provider Now</strong>
+                Fewer than 10 movements in 2 hours of focused counting, a sudden decrease in movement strength or frequency, or complete cessation of movement. <em>Do not wait.</em>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         TAB 2: RISK ASSESSMENT
+    ═══════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-risk">
+        <div class="card">
+            <h2>High-Risk Condition Checklist</h2>
+            <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1.25rem;">
+                Select all conditions that apply to your pregnancy. This will help determine when to start kick counting and how frequently to monitor. 
+                <span class="source-badge">ACOG CO #828</span> <span class="source-badge">SMFM</span>
+            </p>
+
+            <ul class="risk-list" id="riskList">
+                <li class="risk-item" data-risk="high" data-id="gdm">
+                    <input type="checkbox" id="r_gdm">
+                    <label class="risk-text" for="r_gdm">
+                        <strong>Gestational Diabetes (GDM)</strong>
+                        <span>Increased risk of macrosomia, placental dysfunction, and stillbirth</span>
+                    </label>
+                </li>
+                <li class="risk-item" data-risk="high" data-id="pregestational_dm">
+                    <input type="checkbox" id="r_pdm">
+                    <label class="risk-text" for="r_pdm">
+                        <strong>Pre-gestational Diabetes (Type 1 or Type 2)</strong>
+                        <span>Elevated stillbirth risk; surveillance often begins at 32 weeks or earlier</span>
+                    </label>
+                </li>
+                <li class="risk-item" data-risk="high" data-id="hypertension">
+                    <input type="checkbox" id="r_htn">
+                    <label class="risk-text" for="r_htn">
+                        <strong>Chronic Hypertension or Preeclampsia</strong>
+                        <span>Associated with placental insufficiency and fetal growth restriction</span>
+                    </label>
+                </li>
+                <li class="risk-item" data-risk="high" data-id="fgr">
+                    <input type="checkbox" id="r_fgr">
+                    <label class="risk-text" for="r_fgr">
+                        <strong>Fetal Growth Restriction (FGR) / SGA</strong>
+                        <span>Placental insufficiency is a primary driver; movement monitoring is critical</span>
+                    </label>
+                </li>
+                <li class="risk-item" data-risk="high" data-id="multiples">
+                    <input type="checkbox" id="r_mult">
+                    <label class="risk-text" for="r_mult">
+                        <strong>Multiple Gestation (Twins, Triplets)</strong>
+                        <span>Kick counting recommended starting at 26 weeks for multiples</span>
+                    </label>
+                </li>
+                <li class="risk-item" data-risk="high" data-id="prior_stillbirth">
+                    <input type="checkbox" id="r_sb">
+                    <label class="risk-text" for="r_sb">
+                        <strong>Prior Stillbirth or Pregnancy Loss</strong>
+                        <span>Significantly elevated risk; enhanced surveillance is indicated</span>
+                    </label>
+                </li>
+                <li class="risk-item" data-risk="moderate" data-id="obesity">
+                    <input type="checkbox" id="r_ob">
+                    <label class="risk-text" for="r_ob">
+                        <strong>Obesity (BMI &ge; 30 kg/m²)</strong>
+                        <span>May attenuate perception of fetal movement; anterior placenta also reduces sensation</span>
+                    </label>
+                </li>
+                <li class="risk-item" data-risk="moderate" data-id="advanced_age">
+                    <input type="checkbox" id="r_age">
+                    <label class="risk-text" for="r_age">
+                        <strong>Advanced Maternal Age (&ge; 35 years)</strong>
+                        <span>Modestly increased risk of stillbirth and placental complications</span>
+                    </label>
+                </li>
+                <li class="risk-item" data-risk="moderate" data-id="thyroid">
+                    <input type="checkbox" id="r_thy">
+                    <label class="risk-text" for="r_thy">
+                        <strong>Thyroid Disease (Hypo- or Hyperthyroidism)</strong>
+                        <span>Uncontrolled thyroid disease is associated with adverse fetal outcomes</span>
+                    </label>
+                </li>
+                <li class="risk-item" data-risk="moderate" data-id="lupus_aph">
+                    <input type="checkbox" id="r_lap">
+                    <label class="risk-text" for="r_lap">
+                        <strong>Autoimmune Disease / Antiphospholipid Syndrome</strong>
+                        <span>Increased risk of placental thrombosis and fetal compromise</span>
+                    </label>
+                </li>
+                <li class="risk-item" data-risk="moderate" data-id="anterior_placenta">
+                    <input type="checkbox" id="r_ap">
+                    <label class="risk-text" for="r_ap">
+                        <strong>Anterior Placenta</strong>
+                        <span>Cushions fetal movement; may require more focused counting sessions</span>
+                    </label>
+                </li>
+            </ul>
+
+            <div id="riskResult" style="display:none;" class="risk-result-box">
+                <h4 id="riskResultTitle"></h4>
+                <p id="riskResultText"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         TAB 3: CLINICAL GUIDE
+    ═══════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-guide">
+
+        <div class="card">
+            <h2>Clinical Rationale</h2>
+            <div class="guide-section">
+                <p>
+                    Maternal perception of fetal activity is often the <strong>first sign of fetal compromise</strong>. 
+                    In high-risk cohorts — specifically those involving fetal growth restriction (FGR), small for gestational age (SGA) status, or placental pathology — 
+                    standardized monitoring provides a low-cost, non-invasive method to assess fetal well-being between clinical visits.
+                    <span class="source-badge">ACOG</span>
+                </p>
+                <p>
+                    Stillbirth affects approximately <strong>1 in 175 pregnancies</strong> in the United States (~21,000 per year), 
+                    often resulting from placental insufficiency and subsequent fetal hypoxia, which manifests clinically as decreased movement.
+                    Significant racial and ethnic disparities exist, with rates highest among non-Hispanic Black and Native Hawaiian/Pacific Islander women.
+                    <span class="source-badge">CDC 2022</span> <span class="source-badge">PMC11472900</span>
+                </p>
+                <p>
+                    Evidence suggests that while fetal movements may plateau around 32 weeks, they should <strong>not decrease in frequency or intensity</strong> 
+                    as pregnancy approaches term. Standardizing fetal movement education allows for earlier identification of fetuses at risk for asphyxia.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>The Count-to-Ten Method</h2>
+            <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1rem;">
+                The Cardiff "count-to-ten" method is the most widely validated approach for structured fetal movement monitoring.
+                <span class="source-badge">ACOG</span> <span class="source-badge">Count the Kicks</span>
+            </p>
+            <table class="info-table">
+                <thead>
+                    <tr><th>Parameter</th><th>Clinical Recommendation</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Start Date</strong></td><td>28 weeks gestation (standard); 26 weeks for very high-risk (multiples, prior stillbirth)</td></tr>
+                    <tr><td><strong>Frequency</strong></td><td>Once daily, at the same time each day during the fetus's peak activity period</td></tr>
+                    <tr><td><strong>Best Time</strong></td><td>Evening (9 PM – 1 AM) or after a meal when blood sugar rises</td></tr>
+                    <tr><td><strong>Positioning</strong></td><td>Rest on the left side (lateral recumbent) to maximize uterine perfusion</td></tr>
+                    <tr><td><strong>What Counts</strong></td><td>Kicks, rolls, swishes, flutters, pokes — <em>not</em> hiccups (involuntary)</td></tr>
+                    <tr><td><strong>Normal Threshold</strong></td><td>10 movements within 2 hours</td></tr>
+                    <tr><td><strong>Documentation</strong></td><td>Use a kick chart or app to track daily baseline and duration to reach 10 movements</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Interpretation & Red Flags</h2>
+            <p style="font-size:0.88rem; margin-bottom:1rem;">
+                Patients must understand that the <strong>individual pattern</strong> is more important than any single absolute number. 
+                A sudden or progressive change from the baby's established baseline is the key clinical signal.
+            </p>
+            <div class="alert-box green">
+                <strong>Reassuring</strong>
+                10 movements felt within 2 hours. Movement pattern is consistent with the baby's established baseline.
+            </div>
+            <div class="alert-box yellow">
+                <strong>Concerning — Monitor Closely &amp; Notify Provider</strong>
+                A progressive decrease in movement strength or frequency over several days, or consistently taking longer than usual to reach 10 movements.
+            </div>
+            <div class="alert-box red">
+                <strong>Emergency — Contact Provider or L&amp;D Immediately</strong>
+                Fewer than 10 movements in a 2-hour focused counting session; sudden cessation of movement; or a dramatic change in movement pattern. 
+                <em>Do not wait until the next appointment.</em>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Clinical Management of Reduced Fetal Movement (RFM)</h2>
+            <p style="font-size:0.88rem; margin-bottom:1rem;">
+                When a patient reports RFM or a failed kick count, immediate obstetric evaluation is mandatory.
+                <span class="source-badge">ACOG</span> <span class="source-badge">SMFM</span>
+            </p>
+            <table class="info-table">
+                <thead>
+                    <tr><th>Step</th><th>Evaluation</th><th>Indication</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1st Line</strong></td>
+                        <td>Non-Stress Test (NST) / Cardiotocography (CTG)</td>
+                        <td>All patients presenting with RFM; assess fetal heart rate reactivity</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2nd Line</strong></td>
+                        <td>Biophysical Profile (BPP)</td>
+                        <td>Non-reactive NST; evaluates tone, movement, breathing, and amniotic fluid</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Amniotic Fluid</strong></td>
+                        <td>Amniotic Fluid Index (AFI)</td>
+                        <td>Oligohydramnios is a marker of placental insufficiency</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Recurrent RFM</strong></td>
+                        <td>Serial Growth Ultrasound</td>
+                        <td>Rule out occult fetal growth restriction; assess Doppler velocimetry</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Limitations &amp; Clinical Considerations</h2>
+            <div class="guide-section">
+                <p>
+                    While fetal movement counting is a standard component of antepartum care, clinicians should counsel patients on its limitations 
+                    to maintain realistic expectations and minimize undue anxiety.
+                </p>
+                <table class="info-table">
+                    <thead>
+                        <tr><th>Consideration</th><th>Clinical Note</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Anxiety</strong></td>
+                            <td>Formal counting can increase anxiety in some patients; however, research shows 77% of app users report <em>reduced</em> anxiety with regular use</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sensitivity/Specificity</strong></td>
+                            <td>Methods do not demonstrate uniformly high sensitivity or specificity for predicting adverse outcomes; clinical judgment is always required</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Obesity</strong></td>
+                            <td>Higher BMI can attenuate maternal perception of fetal movement; patients may need longer counting sessions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Anterior Placenta</strong></td>
+                            <td>Cushions movement; patients should be counseled to expect softer sensations and may need to count in a quieter environment</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Medications</strong></td>
+                            <td>Sedatives and certain other medications can reduce the perception of fetal movement</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fetal Sleep Cycles</strong></td>
+                            <td>Normal fetal sleep cycles last 20–40 minutes; if no movement is felt, wait before concluding RFM</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Evidence Base</h2>
+            <div class="guide-section">
+                <p>
+                    The Count the Kicks program in Iowa demonstrated a <strong>nearly 32% reduction in the stillbirth rate</strong> over the first 10 years of implementation (2008–2018). 
+                    If replicated nationally, this could save more than 6,000 babies per year.
+                    <span class="source-badge">BJOG 2018</span>
+                </p>
+                <p>
+                    A 2024 study in the <em>Journal of Perinatal &amp; Neonatal Nursing</em> found that standardized fetal movement education using the Count the Kicks program 
+                    reduced delays in care-seeking and improved patient empowerment. 77% of app users reported reduced anxiety; 84% reported improved prenatal bonding.
+                    <span class="source-badge">PMC11472900</span>
+                </p>
+                <p>
+                    ACOG Committee Opinion #828 (co-developed with SMFM) recommends antenatal fetal surveillance beginning at 32 weeks for most at-risk patients, 
+                    with earlier initiation for those with multiple or particularly worrisome high-risk conditions.
+                    <span class="source-badge">ACOG CO #828</span>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>
+            &#9888;&#65039; <strong>INFORMATIONAL USE ONLY.</strong> This tool is for educational purposes and does NOT provide medical advice. 
+            All clinical decisions must be made with a qualified healthcare provider. 
+            In an emergency, call your provider or go to the nearest Labor &amp; Delivery unit immediately.
+        </p>
+        <p style="margin-top:0.5rem;">
+            Sources: ACOG Committee Opinion #828 &bull; SMFM &bull; 
+            <a href="https://countthekicks.org" target="_blank">countthekicks.org</a> &bull; 
+            CDC &bull; PMC11472900 &bull; 
+            <a href="https://doctorswhocode.blog" target="_blank">DoctorsWhoCode.blog</a>
+        </p>
+    </div>
+
+</div><!-- /container -->
+
+
+<!-- ═══════════════════════════════════════════
+     ABOUT MODAL
+═══════════════════════════════════════════ -->
+<div id="aboutModal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" id="closeAbout">&times;</button>
+        <h2>About This Tool</h2>
+
+        <h3>What is Fetal Kick Counting?</h3>
+        <p>
+            Fetal kick counting — also called fetal movement monitoring — is a simple, free, and powerful way for you to check on your baby's well-being every day, right from home. 
+            It has been recommended by obstetricians and midwives since the 1970s and remains one of the most important tools in high-risk pregnancy care.
+        </p>
+
+        <h3>Why Does It Matter?</h3>
+        <p>
+            Your baby's movements are a direct reflection of how well they are doing. A change in your baby's movement pattern can be one of the <strong>earliest signs</strong> that something needs attention. 
+            Research shows that many mothers who experienced a stillbirth noticed a reduction in fetal movement in the days before it occurred. 
+            Daily monitoring helps you learn what is <em>normal for your baby</em>, so you can quickly recognize when something feels different.
+        </p>
+        <p>
+            Stillbirth affects approximately 1 in 175 pregnancies in the United States. Research shows that at least 1 in 4 stillbirths may be preventable. 
+            The Count the Kicks program in Iowa demonstrated a nearly 32% reduction in the state's stillbirth rate over 10 years of implementation.
+        </p>
+
+        <h3>How to Count</h3>
+        <ul>
+            <li>Begin counting at <strong>28 weeks</strong> (or 26 weeks if you have a high-risk condition like diabetes, hypertension, or are carrying multiples).</li>
+            <li>Choose the same time each day — evenings or after a meal are often best.</li>
+            <li>Lie on your <strong>left side</strong> to improve blood flow to the uterus.</li>
+            <li>Count every kick, roll, flutter, swish, or poke. <em>Hiccups do not count.</em></li>
+            <li>Your goal is to feel <strong>10 movements within 2 hours</strong>.</li>
+            <li>Track your sessions daily to build a baseline for your baby's unique pattern.</li>
+        </ul>
+
+        <h3>When to Call Your Provider</h3>
+        <ul>
+            <li>You do <strong>not</strong> feel 10 movements within 2 hours of focused counting.</li>
+            <li>Your baby's movements feel <strong>weaker or less frequent</strong> than their normal pattern.</li>
+            <li>You notice a <strong>sudden change</strong> in movement strength or frequency.</li>
+            <li>Your baby has <strong>stopped moving</strong> — this is a medical emergency. Call your provider or go to Labor &amp; Delivery immediately.</li>
+        </ul>
+        <p><em>Trust your instincts. You know your baby. If something feels off, call your provider — even after hours.</em></p>
+
+        <h3>Benefits Beyond Safety</h3>
+        <p>
+            Kick counting is also a beautiful bonding experience. Taking a few quiet minutes each day to focus on your baby's movements creates a special connection. 
+            Research shows that 77% of women who use a kick counting app report <strong>reduced anxiety</strong> about their baby's well-being, and 84% report improved prenatal bonding.
+        </p>
+
+        <h3>About This Microsite</h3>
+        <p>
+            This tool was created by <a href="https://doctorswhocode.blog" target="_blank">DoctorsWhoCode.blog</a> for educational use in Maternal-Fetal Medicine clinical settings. 
+            It is based on guidelines from the American College of Obstetricians and Gynecologists (ACOG), the Society for Maternal-Fetal Medicine (SMFM), 
+            and the Count the Kicks program by Healthy Birth Day, Inc.
+        </p>
+        <p><em>This tool does not provide medical advice and is not a substitute for care from a qualified healthcare provider.</em></p>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     RESOURCES MODAL
+═══════════════════════════════════════════ -->
+<div id="resourcesModal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" id="closeResources">&times;</button>
+        <h2>Clinical Resources</h2>
+
+        <h3>Guidelines &amp; Organizations</h3>
+        <ul>
+            <li><a href="https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2021/06/indications-for-outpatient-antenatal-fetal-surveillance" target="_blank">ACOG Committee Opinion #828 — Indications for Outpatient Antenatal Fetal Surveillance</a></li>
+            <li><a href="https://www.acog.org/womens-health/faqs/special-tests-for-monitoring-fetal-well-being" target="_blank">ACOG FAQ — Special Tests for Monitoring Fetal Well-Being</a></li>
+            <li><a href="https://www.smfm.org" target="_blank">Society for Maternal-Fetal Medicine (SMFM)</a></li>
+            <li><a href="https://countthekicks.org" target="_blank">Count the Kicks — Healthy Birth Day, Inc.</a></li>
+        </ul>
+
+        <h3>Patient Tools</h3>
+        <ul>
+            <li><a href="https://countthekicks.org/faq/" target="_blank">Count the Kicks — Frequently Asked Questions</a></li>
+            <li><a href="https://countthekicks.org/why-we-count/evidence/" target="_blank">Count the Kicks — Evidence Base</a></li>
+            <li><a href="https://americanpregnancy.org/healthy-pregnancy/while-pregnant/counting-baby-kicks/" target="_blank">American Pregnancy Association — Counting Baby Kicks</a></li>
+        </ul>
+
+        <h3>Key Research</h3>
+        <ul>
+            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11472900/" target="_blank">Burgess et al. (2024) — Standardizing Fetal Movement Monitoring using Count the Kicks. <em>J Perinat Neonatal Nurs.</em></a></li>
+            <li><a href="https://www.ajogmfm.org/article/S2589-9333(22)00251-8/fulltext" target="_blank">Effect of encouraging awareness of reduced fetal movement. <em>AJOG MFM.</em></a></li>
+        </ul>
+
+        <h3>Emergency</h3>
+        <p>
+            If you are concerned about your baby's movement at any time, <strong>call your healthcare provider immediately</strong> or go to the nearest Labor &amp; Delivery unit. 
+            Do not wait for your next scheduled appointment.
+        </p>
+    </div>
+</div>
+
+
+<script>
+    // ═══════════════════════════════════════════
+    //  TAB NAVIGATION
+    // ═══════════════════════════════════════════
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        });
+    });
+
+    // ═══════════════════════════════════════════
+    //  KICK COUNTER
+    // ═══════════════════════════════════════════
+    let kickCount = 0;
+    let timerInterval = null;
+    let elapsedSeconds = 0;
+    let sessionActive = false;
+    let sessionComplete = false;
+    const MAX_KICKS = 10;
+    const MAX_SECONDS = 7200; // 2 hours
+
+    const kickBtn = document.getElementById('kickBtn');
+    const kickCountDisplay = document.getElementById('kickCountDisplay');
+    const kickCircle = document.getElementById('kickCircle');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerLabel = document.getElementById('timerLabel');
+    const progressFill = document.getElementById('progressFill');
+    const kickLog = document.getElementById('kickLog');
+    const resultBanner = document.getElementById('resultBanner');
+    const counterCard = document.getElementById('counterCard');
+
+    function formatTime(s) {
+        const m = Math.floor(s / 60);
+        const sec = s % 60;
+        return `${m}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+        if (timerInterval) return;
+        timerInterval = setInterval(() => {
+            elapsedSeconds++;
+            timerDisplay.textContent = formatTime(elapsedSeconds);
+            timerLabel.textContent = 'Elapsed time';
+            if (elapsedSeconds >= MAX_SECONDS && !sessionComplete) {
+                endSession(false);
+            }
+        }, 1000);
+    }
+
+    function addKickDot(num) {
+        const dot = document.createElement('div');
+        dot.className = 'kick-dot';
+        dot.textContent = num;
+        kickLog.appendChild(dot);
+    }
+
+    function endSession(success) {
+        sessionComplete = true;
+        clearInterval(timerInterval);
+        timerInterval = null;
+        kickBtn.disabled = true;
+
+        const timeStr = formatTime(elapsedSeconds);
+
+        if (success) {
+            resultBanner.className = 'result-banner ok';
+            document.getElementById('resultTitle').textContent = '✓ Great Check-in!';
+            document.getElementById('resultAssessment').textContent =
+                `You felt 10 movements in ${timeStr}. This is a reassuring sign of your baby's well-being.`;
+            document.getElementById('resultRecommendation').innerHTML =
+                '<strong>Recommendation:</strong> Continue your daily kick counting sessions. Report any significant changes from your baby\'s normal movement pattern to your provider.';
+            document.getElementById('resultNote').textContent =
+                'Note: This tool is for educational purposes only and does not replace medical advice.';
+        } else {
+            resultBanner.className = 'result-banner warn';
+            document.getElementById('resultTitle').textContent = '⚠ Follow-Up Recommended';
+            document.getElementById('resultAssessment').textContent =
+                `You recorded ${kickCount} movement${kickCount !== 1 ? 's' : ''} in 2 hours — fewer than the 10-movement goal.`;
+            document.getElementById('resultRecommendation').innerHTML =
+                '<strong>Recommendation:</strong> Please contact your healthcare provider immediately for further evaluation. Do not wait.';
+            document.getElementById('resultNote').textContent =
+                'A change in your baby\'s movement pattern can be an important signal. It\'s always best to get it checked out promptly.';
+        }
+
+        resultBanner.style.display = 'block';
+        counterCard.style.display = 'none';
+        resultBanner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    kickBtn.addEventListener('click', () => {
+        if (sessionComplete) return;
+        if (!sessionActive) {
+            sessionActive = true;
+            startTimer();
+        }
+        kickCount++;
+        kickCountDisplay.textContent = kickCount;
+        progressFill.style.width = Math.min((kickCount / MAX_KICKS) * 100, 100) + '%';
+        addKickDot(kickCount);
+
+        // Pulse animation
+        kickCircle.classList.add('pulse');
+        setTimeout(() => kickCircle.classList.remove('pulse'), 150);
+
+        if (kickCount >= MAX_KICKS) {
+            endSession(true);
+        }
+    });
+
+    document.getElementById('undoBtn').addEventListener('click', () => {
+        if (kickCount <= 0 || sessionComplete) return;
+        kickCount--;
+        kickCountDisplay.textContent = kickCount;
+        progressFill.style.width = (kickCount / MAX_KICKS) * 100 + '%';
+        const dots = kickLog.querySelectorAll('.kick-dot');
+        if (dots.length > 0) dots[dots.length - 1].remove();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', resetSession);
+    document.getElementById('newSessionBtn').addEventListener('click', resetSession);
+
+    function resetSession() {
+        kickCount = 0;
+        elapsedSeconds = 0;
+        sessionActive = false;
+        sessionComplete = false;
+        clearInterval(timerInterval);
+        timerInterval = null;
+        kickCountDisplay.textContent = '0';
+        timerDisplay.textContent = '0:00';
+        timerLabel.textContent = 'Timer will start on first kick';
+        progressFill.style.width = '0%';
+        kickLog.innerHTML = '';
+        kickBtn.disabled = false;
+        resultBanner.style.display = 'none';
+        counterCard.style.display = 'block';
+    }
+
+    // ═══════════════════════════════════════════
+    //  RISK CHECKLIST
+    // ═══════════════════════════════════════════
+    const riskItems = document.querySelectorAll('.risk-item');
+    const riskResult = document.getElementById('riskResult');
+    const riskResultTitle = document.getElementById('riskResultTitle');
+    const riskResultText = document.getElementById('riskResultText');
+
+    riskItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') return;
+            const cb = item.querySelector('input[type="checkbox"]');
+            cb.checked = !cb.checked;
+            item.classList.toggle('selected', cb.checked);
+            updateRiskResult();
+        });
+    });
+
+    function updateRiskResult() {
+        const selected = [...riskItems].filter(i => i.querySelector('input').checked);
+        const highRisk = selected.filter(i => i.dataset.risk === 'high');
+        const moderateRisk = selected.filter(i => i.dataset.risk === 'moderate');
+
+        if (selected.length === 0) {
+            riskResult.style.display = 'none';
+            return;
+        }
+
+        riskResult.style.display = 'block';
+
+        if (highRisk.length > 0) {
+            riskResult.className = 'risk-result-box high';
+            riskResultTitle.textContent = 'High-Risk Profile — Enhanced Monitoring Recommended';
+            let startWeek = '28 weeks';
+            if (highRisk.some(i => i.dataset.id === 'multiples' || i.dataset.id === 'prior_stillbirth')) {
+                startWeek = '26 weeks';
+            }
+            riskResultText.innerHTML = `
+                Based on your selections, you have <strong>${highRisk.length} high-risk condition${highRisk.length > 1 ? 's' : ''}</strong>. 
+                Begin daily kick counting at <strong>${startWeek}</strong> gestation. 
+                Your provider may also recommend formal antenatal fetal surveillance (NST, BPP) starting at 32 weeks or earlier. 
+                Report any reduced fetal movement to your provider immediately.
+                <br><br><em>Discuss your individualized surveillance plan with your Maternal-Fetal Medicine specialist or OB provider.</em>
+            `;
+        } else if (moderateRisk.length >= 2) {
+            riskResult.className = 'risk-result-box moderate';
+            riskResultTitle.textContent = 'Moderate-Risk Profile — Daily Monitoring Advised';
+            riskResultText.innerHTML = `
+                You have <strong>${moderateRisk.length} moderate-risk factors</strong>. 
+                Begin daily kick counting at <strong>28 weeks</strong> gestation. 
+                Be aware that some of your risk factors (e.g., obesity, anterior placenta) may reduce your perception of fetal movement — 
+                allow extra time and focus during counting sessions. 
+                Report any changes in your baby's movement pattern to your provider.
+            `;
+        } else {
+            riskResult.className = 'risk-result-box low';
+            riskResultTitle.textContent = 'Monitoring Recommended — Discuss with Your Provider';
+            riskResultText.innerHTML = `
+                You have selected <strong>${selected.length} factor${selected.length > 1 ? 's' : ''}</strong>. 
+                Begin daily kick counting at <strong>28 weeks</strong> gestation as a standard precaution. 
+                Discuss your individual risk profile and surveillance plan with your healthcare provider.
+            `;
+        }
+    }
+
+    // ═══════════════════════════════════════════
+    //  MODALS
+    // ═══════════════════════════════════════════
+    function openModal(id) { document.getElementById(id).style.display = 'block'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    document.getElementById('aboutBtn').onclick = () => openModal('aboutModal');
+    document.getElementById('closeAbout').onclick = () => closeModal('aboutModal');
+    document.getElementById('resourcesBtn').onclick = () => openModal('resourcesModal');
+    document.getElementById('closeResources').onclick = () => closeModal('resourcesModal');
+
+    window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            e.target.style.display = 'none';
+        }
+    });
+
+    // ═══════════════════════════════════════════
+    //  DARK MODE
+    // ═══════════════════════════════════════════
+    const darkToggle = document.getElementById('darkModeToggle');
+    darkToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        darkToggle.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+    });
+
+</script>
+</body>
+</html>

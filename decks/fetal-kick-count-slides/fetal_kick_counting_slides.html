@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counting Your Baby's Kicks | MFM Patient Education</title>
+    <style>
+        /* ══════════════════════════════════════
+           ROOT & RESET
+        ══════════════════════════════════════ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:        #0d1117;
+            --bg2:       #161b22;
+            --teal:      #20c997;
+            --teal-dim:  #0e7a5a;
+            --teal-glow: rgba(32,201,151,0.18);
+            --blue:      #58a6ff;
+            --blue-dim:  rgba(88,166,255,0.15);
+            --green:     #3fb950;
+            --green-dim: rgba(63,185,80,0.15);
+            --red:       #f85149;
+            --red-dim:   rgba(248,81,73,0.15);
+            --amber:     #f0a030;
+            --amber-dim: rgba(240,160,48,0.15);
+            --text:      #e6edf3;
+            --muted:     #8b949e;
+            --border:    rgba(255,255,255,0.08);
+        }
+
+        html, body {
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* ══════════════════════════════════════
+           DECK & SLIDES
+        ══════════════════════════════════════ */
+        .deck {
+            width: 100%; height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 4rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.55s ease, transform 0.55s ease;
+            transform: translateX(40px);
+        }
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+        .slide.exit-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            visibility: hidden;
+        }
+
+        /* ══════════════════════════════════════
+           PROGRESS BAR
+        ══════════════════════════════════════ */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            transition: width 0.4s ease;
+            z-index: 100;
+        }
+
+        /* ══════════════════════════════════════
+           SLIDE COUNTER & NAV
+        ══════════════════════════════════════ */
+        #slide-counter {
+            position: fixed;
+            bottom: 1.4rem; right: 1.8rem;
+            font-size: 0.78rem;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            z-index: 100;
+        }
+
+        #nav-hint {
+            position: fixed;
+            bottom: 1.4rem; left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.72rem;
+            color: var(--muted);
+            z-index: 100;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        #nav-hint span { opacity: 0.6; }
+
+        .nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, color 0.2s;
+            z-index: 100;
+        }
+        .nav-btn:hover { background: var(--teal-glow); color: var(--teal); }
+        #btn-prev { left: 1rem; }
+        #btn-next { right: 1rem; }
+
+        /* ══════════════════════════════════════
+           BRAND FOOTER
+        ══════════════════════════════════════ */
+        .brand-footer {
+            position: fixed;
+            bottom: 1.4rem; left: 1.8rem;
+            font-size: 0.7rem;
+            color: var(--muted);
+            z-index: 100;
+        }
+        .brand-footer span { color: var(--teal); font-weight: 600; }
+
+        /* ══════════════════════════════════════
+           TYPOGRAPHY
+        ══════════════════════════════════════ */
+        .slide-tag {
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--teal);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 300;
+            line-height: 1.15;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 0.6rem;
+        }
+        h1 strong { font-weight: 700; color: var(--teal); }
+
+        h2 {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 300;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+        h2 strong { font-weight: 700; color: var(--teal); }
+
+        .slide-body {
+            font-size: clamp(1rem, 2vw, 1.35rem);
+            line-height: 1.65;
+            color: var(--text);
+            text-align: center;
+            max-width: 700px;
+            margin-top: 1rem;
+        }
+
+        .source-badge {
+            display: inline-block;
+            background: var(--teal-glow);
+            color: var(--teal);
+            border: 1px solid var(--teal-dim);
+            border-radius: 4px;
+            padding: 0.15rem 0.55rem;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            margin: 0.15rem;
+            vertical-align: middle;
+        }
+
+        /* ══════════════════════════════════════
+           LAYOUT HELPERS
+        ══════════════════════════════════════ */
+        .row {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: stretch;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.4rem 1.6rem;
+            flex: 1;
+            min-width: 200px;
+            max-width: 280px;
+            text-align: center;
+        }
+        .card .card-icon { font-size: 2.2rem; margin-bottom: 0.6rem; }
+        .card .card-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            margin-bottom: 0.4rem;
+        }
+        .card .card-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            line-height: 1.3;
+        }
+
+        /* ══════════════════════════════════════
+           CHECKLIST STYLES
+        ══════════════════════════════════════ */
+        .check-list {
+            list-style: none;
+            text-align: left;
+            max-width: 640px;
+            width: 100%;
+            margin-top: 1.2rem;
+        }
+        .check-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+            line-height: 1.4;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+        }
+        .check-list li .icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            margin-top: 0.05rem;
+        }
+        .check-list.do li { border-left: 3px solid var(--green); }
+        .check-list.dont li { border-left: 3px solid var(--red); }
+        .check-list.alert li { border-left: 3px solid var(--amber); }
+
+        /* ══════════════════════════════════════
+           TWO-COLUMN YES/NO
+        ══════════════════════════════════════ */
+        .yn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            max-width: 760px;
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+        .yn-col {
+            background: var(--bg2);
+            border-radius: 12px;
+            padding: 1.2rem 1.4rem;
+            border: 1px solid var(--border);
+        }
+        .yn-col.yes { border-top: 3px solid var(--green); }
+        .yn-col.no  { border-top: 3px solid var(--red); }
+        .yn-col h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+        .yn-col.yes h3 { color: var(--green); }
+        .yn-col.no h3  { color: var(--red); }
+        .yn-col ul { list-style: none; }
+        .yn-col ul li {
+            font-size: clamp(0.85rem, 1.6vw, 1rem);
+            padding: 0.35rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .yn-col ul li:last-child { border-bottom: none; }
+
+        /* ══════════════════════════════════════
+           TIMELINE
+        ══════════════════════════════════════ */
+        .timeline {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            max-width: 780px;
+            width: 100%;
+            margin-top: 1.5rem;
+            position: relative;
+        }
+        .tl-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        .tl-item::before {
+            content: '';
+            position: absolute;
+            top: 22px;
+            left: 50%;
+            right: -50%;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+        .tl-item:last-child::before { display: none; }
+        .tl-dot {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin: 0 auto 0.6rem;
+            position: relative;
+            z-index: 1;
+        }
+        .tl-dot.dim  { background: var(--bg2); border: 2px solid var(--border); color: var(--muted); }
+        .tl-dot.mark { background: var(--teal-glow); border: 2px solid var(--teal); color: var(--teal); }
+        .tl-dot.peak { background: linear-gradient(135deg, var(--teal), var(--blue)); color: #fff; border: none; }
+        .tl-label { font-size: 0.75rem; color: var(--muted); line-height: 1.3; }
+        .tl-label strong { display: block; color: var(--text); font-size: 0.82rem; }
+
+        /* ══════════════════════════════════════
+           STEP BOXES
+        ══════════════════════════════════════ */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            max-width: 720px;
+            width: 100%;
+            margin-top: 1.4rem;
+        }
+        .step-box {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.1rem 1.3rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+        }
+        .step-num {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            background: var(--teal-glow);
+            border: 1.5px solid var(--teal);
+            color: var(--teal);
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .step-text strong { display: block; font-size: 0.95rem; color: #fff; margin-bottom: 0.2rem; }
+        .step-text span { font-size: 0.82rem; color: var(--muted); }
+
+        /* ══════════════════════════════════════
+           STAT HIGHLIGHT
+        ══════════════════════════════════════ */
+        .stat-row {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+            max-width: 800px;
+        }
+        .stat-box {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.3rem 1.8rem;
+            text-align: center;
+            min-width: 160px;
+        }
+        .stat-box .stat-num {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.3rem;
+        }
+        .stat-box .stat-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.35;
+        }
+
+        /* ══════════════════════════════════════
+           ALERT BOX
+        ══════════════════════════════════════ */
+        .alert-strip {
+            background: var(--red-dim);
+            border: 1px solid var(--red);
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            max-width: 680px;
+            width: 100%;
+            margin-top: 1.2rem;
+            text-align: left;
+        }
+        .alert-strip p {
+            font-size: clamp(0.85rem, 1.6vw, 1rem);
+            color: var(--text);
+            line-height: 1.5;
+            margin-bottom: 0.3rem;
+        }
+        .alert-strip p:last-child { margin-bottom: 0; }
+
+        /* ══════════════════════════════════════
+           SLIDE-SPECIFIC BACKGROUNDS
+        ══════════════════════════════════════ */
+        .slide-title-bg {
+            background: radial-gradient(ellipse at 60% 40%, rgba(32,201,151,0.12) 0%, transparent 65%),
+                        radial-gradient(ellipse at 30% 70%, rgba(88,166,255,0.08) 0%, transparent 60%),
+                        var(--bg);
+        }
+        .slide-do-bg {
+            background: radial-gradient(ellipse at 50% 50%, rgba(63,185,80,0.07) 0%, transparent 70%), var(--bg);
+        }
+        .slide-dont-bg {
+            background: radial-gradient(ellipse at 50% 50%, rgba(248,81,73,0.07) 0%, transparent 70%), var(--bg);
+        }
+        .slide-alert-bg {
+            background: radial-gradient(ellipse at 50% 50%, rgba(240,160,48,0.08) 0%, transparent 70%), var(--bg);
+        }
+        .slide-close-bg {
+            background: radial-gradient(ellipse at 50% 50%, rgba(32,201,151,0.1) 0%, transparent 65%), var(--bg);
+        }
+
+        /* ══════════════════════════════════════
+           SVG ICON HELPERS
+        ══════════════════════════════════════ */
+        .icon-wrap {
+            margin-bottom: 1rem;
+        }
+        .icon-wrap svg {
+            width: 64px; height: 64px;
+        }
+
+        /* ══════════════════════════════════════
+           DIVIDER LINE
+        ══════════════════════════════════════ */
+        .divider {
+            width: 60px; height: 2px;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            border-radius: 2px;
+            margin: 0.8rem auto 0;
+        }
+
+        /* ══════════════════════════════════════
+           RESPONSIVE
+        ══════════════════════════════════════ */
+        @media (max-width: 640px) {
+            .slide { padding: 2rem 1.5rem; }
+            .yn-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .timeline { flex-direction: column; gap: 0.5rem; }
+            .tl-item::before { display: none; }
+            .stat-row { gap: 0.8rem; }
+        }
+    </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/5IKT-hbkT9U8tttsDm2hn50DTzCmfaAGsI-Bu9IkibrcWCqoAkio7gqjVWMNxsmBlnZ59JVTZEHW-zobR7CHe2Y4p6_hQLDPHeD8CChRLlUkiygYxxjiPpgwRV7GnbWTi5vpwQXd3bsXxL-HQL-d7JPaBO589bms5XA0GIk1RJaCYC_Dl8Zl0ILKZE60bWH2TUrrYFIwDMiIRaH6MIKZboxAMOIb4m1pyTYEBmdMfW026htWxVjiVpk4HzE-JKHXrG5vNNhCLQnQ5GL65cZkq5VBzwXxob3v70A6ssDHj8_ceJfXT0qkVT2jTuGpta4-Eph3LRRQqtmiAfMxmQbByvA7d8RcRAiRReayhPnhLJAC7lpUIqs5oetM61PN1UH90_skqudBouptfqiHpXEspdbRubNW6pH_ofjVOa84l6T5ruMEABgBJ6cmKLrs5lpgmv5LPT7Q14kW4ttY98eXPIdM7uVPDouXvjpwGUdetKhl_D5z4Cl8VyNsu9AoCyoqU5VYOF-ocTsnkxKyEVTqvsOE7jcWHkCTU6jzj0k5H-eXFV7uc8InLaE8i0phunf_HKuKlZZlAk-_iUguAgmbMDZVFz9Jw1-hhDubaZjodJ2tY0aw0s2KfaEcVig8N2Iiau75xHxbtvidVebd92xmsA2xXiB_wY7IwDm5vD3JZa99n3LDx6ou4VnUT3PE1Uv6CUQuRJUPXBpACWpL6vwPkUUjEEkT3rDxCTIK_Fu60AtqZhYqXqmMK5vdQKSGhP5fcA0ALEGGfNQWPbPwLtn6I8xr5nL5m8qbj7HbqNAGNZQkl-BZY7J_p1CnSv-wW81ptsjx_6ZwVkg4xBNOw-cW03WsmWglCcsUjtOv84wqlYKtoZH8IENUXrM7ucnJzLiaXxIpk6nCozuiTiPXbUS-pWC8Z1URV2kBx6j4sH4QepzKIaGub38ADqltpjMYnFOp49DS9wtvAE1taBEWhdWFsaJ7XO53kiKBd4CUCM7qU_1iXWmdZdmpmjq_DSeLgqJX3BH2hGHHlFHmaMHZHewpUgRQLjF1se5QCg3ijtPBVKHICwVn-TGgLH1fl98AflNvKuzee8nXBxlMoZrbYsMVNC2oYI2mckwVjl7W8tflg-HlpSkl2SIhnQM2FeCZ5IcS77CquBVzQX3d5CJ2wnWoy_AXwYdxkgg_pmWbSgHyLnT4_Ek7sUfjlg4O26pof4TIrFyF_MDhXRGAHt1xgMMkK3E3k8hB0rLIhu1ONVgrXT3vtMKzvCGdwhbP6S00EK5MTg2ILP4WGwoEpZgEy4nsNnGkMrPyuzfJdEsLcQJ0SLEE6wv8Yni5IwWTSN84iJjGGj7cTee4awCFSceH_kQG0maQ0Tv0Wtmg9wiOsFJBOuDmBfaEMc7VDhw7-2JFqCqmrOvE8l6Viks4-PBvanvfyq_bdX9jJdXRqZnvH03gZwB9HRxK_8YPmz8z4M-VQptcvUEusCEUFuKXcLMKAKgmzIV5MV_SPKpPYI5gAEDgYeLlPSoFXoa5PwLKrrRFAcIyRaBWwf263wrT2LAL5Y_JrOE_eCo6f6jD2tAoLpn9VUnqh_AwtAotBbcTChFZ-LBNvWvfnjGjh9fnTeW1y2hpySfHwIV2UBlMDo_9Xv23G9qRuQ5ScuCWVmm5xwVcvRJTnrGi5Q4uCpxz-hyilkhQSS6bK8l1aiyYqbg1SQAe67yxo8K2AdlKdh4UTGF1vm8wDA43BvRbv4n7U-3yQf4'></script></head>
+<body>
+
+<!-- Progress bar -->
+<div id="progress-bar" style="width: 6.25%"></div>
+
+<!-- Nav buttons -->
+<button class="nav-btn" id="btn-prev" onclick="prevSlide()" title="Previous">&#8592;</button>
+<button class="nav-btn" id="btn-next" onclick="nextSlide()" title="Next">&#8594;</button>
+
+<!-- Slide counter -->
+<div id="slide-counter">1 / 16</div>
+
+<!-- Nav hint -->
+<div id="nav-hint">
+    <span>&#8592; &#8594; Arrow keys</span>
+    <span>&nbsp;|&nbsp;</span>
+    <span>Space to advance</span>
+</div>
+
+<!-- Brand footer -->
+<div class="brand-footer">
+    <span>Atlanta Perinatal Associates</span> &nbsp;&bull;&nbsp; DoctorsWhoCode.blog
+</div>
+
+<div class="deck">
+
+    <!-- ════════════════════════════════════
+         SLIDE 1 — TITLE
+    ════════════════════════════════════ -->
+    <div class="slide slide-title-bg active" id="slide-1">
+        <div class="slide-tag">High-Risk Pregnancy &nbsp;·&nbsp; Patient Education</div>
+
+        <!-- Baby heartbeat SVG icon -->
+        <div class="icon-wrap">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="30" fill="rgba(32,201,151,0.12)" stroke="#20c997" stroke-width="1.5"/>
+                <!-- Heartbeat line -->
+                <polyline points="8,32 18,32 22,20 26,44 30,28 34,36 38,32 56,32"
+                    stroke="#20c997" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <!-- Baby silhouette dots -->
+                <circle cx="32" cy="32" r="3" fill="#20c997" opacity="0.6"/>
+            </svg>
+        </div>
+
+        <h1>Counting Your<br><strong>Baby's Kicks</strong></h1>
+        <div class="divider"></div>
+        <p class="slide-body" style="margin-top:1rem; font-size:1.15rem; color:var(--muted);">
+            A daily connection to your baby's well-being
+        </p>
+        <div style="margin-top:1.5rem;">
+            <span class="source-badge">ACOG</span>
+            <span class="source-badge">SMFM</span>
+            <span class="source-badge">Count the Kicks</span>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 2 — WHAT IS KICK COUNTING?
+    ════════════════════════════════════ -->
+    <div class="slide" id="slide-2">
+        <div class="slide-tag">What Is It?</div>
+        <div class="icon-wrap">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="30" fill="rgba(32,201,151,0.10)" stroke="#20c997" stroke-width="1.5"/>
+                <!-- Simple baby in womb outline -->
+                <ellipse cx="32" cy="34" rx="14" ry="16" stroke="#20c997" stroke-width="1.8" fill="none" opacity="0.5"/>
+                <!-- Head -->
+                <circle cx="32" cy="22" r="7" stroke="#20c997" stroke-width="1.8" fill="rgba(32,201,151,0.15)"/>
+                <!-- Motion lines -->
+                <line x1="48" y1="30" x2="54" y2="28" stroke="#58a6ff" stroke-width="2" stroke-linecap="round"/>
+                <line x1="48" y1="36" x2="55" y2="36" stroke="#58a6ff" stroke-width="2" stroke-linecap="round"/>
+                <line x1="48" y1="42" x2="54" y2="44" stroke="#58a6ff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <h2>Your Baby <strong>Talks to You</strong> Every Day</h2>
+        <div class="divider"></div>
+        <p class="slide-body">
+            Fetal kick counting is a <strong>free, daily way</strong> to monitor your baby's health — right from home.
+            Recommended by OB doctors since the 1970s.
+        </p>
+        <div style="margin-top:1.2rem;">
+            <span class="source-badge">ACOG</span>
+            <span class="source-badge">Cardiff Method</span>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 3 — WHY IT MATTERS
+    ════════════════════════════════════ -->
+    <div class="slide" id="slide-3">
+        <div class="slide-tag">Why It Matters</div>
+        <div class="icon-wrap">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="30" fill="rgba(88,166,255,0.10)" stroke="#58a6ff" stroke-width="1.5"/>
+                <!-- Placenta / wave icon -->
+                <path d="M12 38 Q20 24 32 32 Q44 40 52 26" stroke="#58a6ff" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                <!-- Heart -->
+                <path d="M29 28 C29 25.5 32 23 32 23 C32 23 35 25.5 35 28 C35 30.5 32 34 32 34 C32 34 29 30.5 29 28Z"
+                    fill="#20c997" opacity="0.8"/>
+            </svg>
+        </div>
+        <h2>Movement = A <strong>Window</strong> Into Your Baby's Health</h2>
+        <div class="divider"></div>
+        <p class="slide-body">
+            Your baby's movements reflect how well the <strong>placenta is working</strong>.
+            A change in movement can be one of the <strong>earliest signs</strong> that your baby needs attention.
+        </p>
+        <div style="margin-top:1.2rem;">
+            <span class="source-badge">ACOG</span>
+            <span class="source-badge">SMFM</span>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 4 — STILLBIRTH CONNECTION
+    ════════════════════════════════════ -->
+    <div class="slide" id="slide-4">
+        <div class="slide-tag">The Evidence</div>
+
+        <h2><strong>Early Action</strong> Can Save Lives</h2>
+        <div class="divider"></div>
+
+        <div class="stat-row">
+            <div class="stat-box">
+                <div class="stat-num" style="color:var(--teal);">1 in 175</div>
+                <div class="stat-label">pregnancies affected<br>by stillbirth in the U.S.</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num" style="color:var(--blue);">1 in 4</div>
+                <div class="stat-label">stillbirths may be<br><strong>preventable</strong></div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num" style="color:var(--green);">32%</div>
+                <div class="stat-label">reduction in stillbirth<br>in Iowa after Count<br>the Kicks program</div>
+            </div>
+        </div>
+
+        <p class="slide-body" style="margin-top:1.2rem; font-size:0.95rem; color:var(--muted);">
+            Many mothers noticed reduced movement <em>days before</em> stillbirth. Daily counting helps you catch changes early.
+        </p>
+        <div style="margin-top:0.8rem;">
+            <span class="source-badge">CDC 2022</span>
+            <span class="source-badge">BJOG 2018</span>
+            <span class="source-badge">Count the Kicks</span>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 5 — HIGH-RISK CONDITIONS
+    ════════════════════════════════════ -->
+    <div class="slide" id="slide-5">
+        <div class="slide-tag">High-Risk Pregnancy</div>
+        <h2>Some Pregnancies Need <strong>Extra Attention</strong></h2>
+        <div class="divider"></div>
+
+        <div class="row" style="margin-top:1.4rem; gap:0.8rem; max-width:800px;">
+            <div class="card">
+                <div class="card-icon">🩸</div>
+                <div class="card-title">Diabetes</div>
+                <div class="card-value">GDM &amp; Pre-gestational</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">💉</div>
+                <div class="card-title">Hypertension</div>
+                <div class="card-value">Chronic HTN &amp; Preeclampsia</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">👶👶</div>
+                <div class="card-title">Multiples</div>
+                <div class="card-value">Twins, Triplets</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">📉</div>
+                <div class="card-title">Growth Restriction</div>
+                <div class="card-value">FGR / SGA</div>
+            </div>
+        </div>
+
+        <p class="slide-body" style="margin-top:1.2rem; font-size:0.95rem; color:var(--muted);">
+            Your provider may ask you to start counting <strong>earlier</strong> than the standard 28 weeks.
+        </p>
+        <div style="margin-top:0.6rem;"><span class="source-badge">ACOG CO #828</span></div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 6 — WHEN TO START
+    ════════════════════════════════════ -->
+    <div class="slide" id="slide-6">
+        <div class="slide-tag">When to Start</div>
+        <h2>Start at <strong>28 Weeks</strong> — or <strong>26 Weeks</strong> If High-Risk</h2>
+        <div class="divider"></div>
+
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="tl-dot dim">20</div>
+                <div class="tl-label"><strong>Viability</strong>Movements begin</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot mark">26</div>
+                <div class="tl-label" style="color:var(--teal);"><strong style="color:var(--teal);">High-Risk</strong>Start here</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot peak">28</div>
+                <div class="tl-label" style="color:var(--teal);"><strong style="color:var(--teal);">Standard</strong>Start here</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot dim">32</div>
+                <div class="tl-label"><strong>Peak</strong>Strongest kicks</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot dim">40</div>
+                <div class="tl-label"><strong>Term</strong>Keep counting</div>
+            </div>
+        </div>
+
+        <p class="slide-body" style="margin-top:1.4rem; font-size:0.95rem; color:var(--muted);">
+            Fetal movements are strongest between <strong>28 and 34 weeks</strong>. Keep counting all the way to delivery.
+        </p>
+        <div style="margin-top:0.6rem;">
+            <span class="source-badge">Count the Kicks</span>
+            <span class="source-badge">ACOG</span>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 7 — HOW TO COUNT
+    ════════════════════════════════════ -->
+    <div class="slide" id="slide-7">
+        <div class="slide-tag">The Method</div>
+        <h2>The <strong>Count-to-Ten</strong> Method</h2>
+        <div class="divider"></div>
+
+        <div class="steps-grid">
+            <div class="step-box">
+                <div class="step-num">1</div>
+                <div class="step-text">
+                    <strong>Position</strong>
+                    <span>Lie on your <em>left side</em> to maximize blood flow to the uterus</span>
+                </div>
+            </div>
+            <div class="step-box">
+                <div class="step-num">2</div>
+                <div class="step-text">
+                    <strong>Same Time Daily</strong>
+                    <span>Evenings (9 PM–1 AM) or after a meal work best</span>
+                </div>
+            </div>
+            <div class="step-box">
+                <div class="step-num">3</div>
+                <div class="step-text">
+                    <strong>Count Every Movement</strong>
+                    <span>Kick, roll, flutter, swish, poke — all count</span>
+                </div>
+            </div>
+            <div class="step-box">
+                <div class="step-num">4</div>
+                <div class="step-text">
+                    <strong>Goal: 10 in 2 Hours</strong>
+                    <span>Record the time it takes to reach 10 movements</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:1rem;">
+            <span class="source-badge">ACOG</span>
+            <span class="source-badge">Cardiff Method</span>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 8 — WHAT COUNTS / DOESN'T
+    ════════════════════════════════════ -->
+    <div class="slide" id="slide-8">
+        <div class="slide-tag">What to Count</div>
+        <h2>Any Movement Counts — <strong>Except Hiccups</strong></h2>
+        <div class="divider"></div>
+
+        <div class="yn-grid">
+            <div class="yn-col yes">
+                <h3>✓ &nbsp;Count These</h3>
+                <ul>
+                    <li>🦵 Kicks</li>
+                    <li>🔄 Rolls</li>
+                    <li>🌊 Swishes</li>
+                    <li>🪶 Flutters</li>
+                    <li>👆 Pokes &amp; Jabs</li>
+                </ul>
+            </div>
+            <div class="yn-col no">
+                <h3>✗ &nbsp;Do Not Count</h3>
+                <ul>
+                    <li>🔁 Hiccups</li>
+                    <li style="color:var(--muted); font-size:0.82rem; padding-top:0.5rem;">
+                        Hiccups are involuntary and do not reflect active baby movement
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="slide-body" style="margin-top:1.2rem; font-size:0.9rem; color:var(--muted);">
+            You will feel your baby's unique style of moving. Learn <em>their</em> pattern — that is your baseline.
+        </p>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 9 — BEST TIME TO COUNT
+    ════════════════════════════════════ -->
+    <div class="slide" id="slide-9">
+        <div class="slide-tag">Timing</div>
+
+        <div class="icon-wrap">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="30" fill="rgba(88,166,255,0.10)" stroke="#58a6ff" stroke-width="1.5"/>
+                <!-- Moon -->
+                <path d="M38 18 A14 14 0 1 0 38 46 A10 10 0 1 1 38 18Z" fill="#58a6ff" opacity="0.7"/>
+                <!-- Stars -->
+                <circle cx="46" cy="20" r="1.5" fill="#fff" opacity="0.8"/>
+                <circle cx="50" cy="30" r="1" fill="#fff" opacity="0.6"/>
+                <circle cx="44" cy="38" r="1.2" fill="#fff" opacity="0.7"/>
+            </svg>
+        </div>
+
+        <h2>Evenings Are Your Baby's <strong>Most Active Time</strong></h2>
+        <div class="divider"></div>
+
+        <div class="row" style="margin-top:1.2rem; gap:1rem;">
+            <div class="card" style="border-top:3px solid var(--blue);">
+                <div class="card-icon">🌙</div>
+                <div class="card-title">Best Window</div>
+                <div class="card-value">9 PM – 1 AM</div>
+            </div>
+            <div class="card" style="border-top:3px solid var(--teal);">
+                <div class="card-icon">🍽️</div>
+                <div class="card-title">Also Good</div>
+                <div class="card-value">After a meal or snack</div>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber);">
+                <div class="card-icon">📅</div>
+                <div class="card-title">Key Rule</div>
+                <div class="card-value">Same time every day</div>
+            </div>
+        </div>
+
+        <p class="slide-body" style="margin-top:1.2rem; font-size:0.9rem; color:var(--muted);">
+            Consistency helps you build a reliable <strong>baseline</strong> for your baby's unique movement pattern.
+        </p>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 10 — TRACK YOUR BASELINE
+    ════════════════════════════════════ -->
+    <div class="slide" id="slide-10">
+        <div class="slide-tag">Know Your Baby</div>
+
+        <div class="icon-wrap">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="30" fill="rgba(32,201,151,0.10)" stroke="#20c997" stroke-width="1.5"/>
+                <!-- Chart bars -->
+                <rect x="14" y="38" width="8" height="12" rx="2" fill="#20c997" opacity="0.4"/>
+                <rect x="26" y="30" width="8" height="20" rx="2" fill="#20c997" opacity="0.6"/>
+                <rect x="38" y="22" width="8" height="28" rx="2" fill="#20c997" opacity="0.9"/>
+                <!-- Trend arrow -->
+                <polyline points="14,40 26,32 38,24 50,18" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" fill="none"/>
+                <polygon points="50,18 46,22 54,22" fill="#58a6ff"/>
+            </svg>
+        </div>
+
+        <h2>Know Your Baby's <strong>Normal Pattern</strong></h2>
+        <div class="divider"></div>
+
+        <p class="slide-body">
+            After a few days of counting, you will see how long it usually takes your baby to reach 10 movements.
+            A <strong>change from that baseline</strong> is the most important signal — not any single number.
+        </p>
+
+        <div class="row" style="margin-top:1.2rem; gap:0.8rem;">
+            <div class="card" style="border-top:3px solid var(--teal);">
+                <div class="card-icon">📱</div>
+                <div class="card-title">Track With</div>
+                <div class="card-value">Count the Kicks App<br><span style="font-size:0.75rem; color:var(--muted);">Free · 20+ languages</span></div>
+            </div>
+            <div class="card" style="border-top:3px solid var(--blue);">
+                <div class="card-icon">📋</div>
+                <div class="card-title">Or Use</div>
+                <div class="card-value">Paper Kick Chart<br><span style="font-size:0.75rem; color:var(--muted);">Share with your provider</span></div>
+            </div>
+        </div>
+        <div style="margin-top:0.8rem;"><span class="source-badge">ACOG</span></div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 11 — DO'S
+    ════════════════════════════════════ -->
+    <div class="slide slide-do-bg" id="slide-11">
+        <div class="slide-tag" style="color:var(--green);">Do's</div>
+        <h2>✓ &nbsp;Your Daily Kick Count <strong>Checklist</strong></h2>
+        <div class="divider" style="background:linear-gradient(90deg,var(--green),var(--teal));"></div>
+
+        <ul class="check-list do">
+            <li><span class="icon">🕘</span> Count at the <strong>same time every day</strong> to build a reliable baseline</li>
+            <li><span class="icon">🛏️</span> Lie on your <strong>left side</strong> to maximize blood flow to your baby</li>
+            <li><span class="icon">📱</span> Use an <strong>app or paper chart</strong> to log every session</li>
+            <li><span class="icon">🍽️</span> Count <strong>after a meal or snack</strong> — blood sugar rises can trigger movement</li>
+            <li><span class="icon">👩‍⚕️</span> <strong>Share your kick count history</strong> with your provider at every visit</li>
+        </ul>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 12 — DON'TS
+    ════════════════════════════════════ -->
+    <div class="slide slide-dont-bg" id="slide-12">
+        <div class="slide-tag" style="color:var(--red);">Don'ts</div>
+        <h2>✗ &nbsp;Common Mistakes to <strong>Avoid</strong></h2>
+        <div class="divider" style="background:linear-gradient(90deg,var(--red),var(--amber));"></div>
+
+        <ul class="check-list dont">
+            <li><span class="icon">🚫</span> Don't start counting <strong>before 26–28 weeks</strong> — too early to be reliable</li>
+            <li><span class="icon">🚫</span> Don't count <strong>hiccups</strong> — they are involuntary and don't reflect active movement</li>
+            <li><span class="icon">🚫</span> Don't count right after <strong>waking up</strong> — baby may be in a normal sleep cycle</li>
+            <li><span class="icon">🚫</span> Don't <strong>panic over one quiet session</strong> — have a snack, rest, and try again</li>
+            <li><span class="icon">🚫</span> Don't <strong>wait if you're worried</strong> — always call your provider when in doubt</li>
+        </ul>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 13 — WHEN TO CALL
+    ════════════════════════════════════ -->
+    <div class="slide slide-alert-bg" id="slide-13">
+        <div class="slide-tag" style="color:var(--amber);">When to Call</div>
+        <h2>Call Your Provider <strong>Right Away</strong> If…</h2>
+        <div class="divider" style="background:linear-gradient(90deg,var(--amber),var(--red));"></div>
+
+        <ul class="check-list alert">
+            <li><span class="icon">⚠️</span> Fewer than <strong>10 movements in 2 hours</strong> of focused counting</li>
+            <li><span class="icon">⚠️</span> Movements feel <strong>weaker than usual</strong> or less forceful</li>
+            <li><span class="icon">⚠️</span> A <strong>sudden change</strong> from your baby's normal pattern over several days</li>
+        </ul>
+
+        <div class="alert-strip" style="margin-top:1rem; background:var(--red-dim); border-color:var(--red);">
+            <p><strong style="color:var(--red);">🚨 Emergency — Go to Labor &amp; Delivery NOW</strong></p>
+            <p>If your baby has <strong>stopped moving completely</strong>, do not wait. Go to the nearest Labor &amp; Delivery unit immediately or call 911.</p>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 14 — CLINICAL RESPONSE
+    ════════════════════════════════════ -->
+    <div class="slide" id="slide-14">
+        <div class="slide-tag">Your Care Team's Response</div>
+        <h2>Your Team Has <strong>Tools to Check</strong> on Your Baby</h2>
+        <div class="divider"></div>
+
+        <div class="steps-grid" style="margin-top:1.4rem;">
+            <div class="step-box">
+                <div class="step-num" style="background:var(--blue-dim); border-color:var(--blue); color:var(--blue);">1</div>
+                <div class="step-text">
+                    <strong>Non-Stress Test (NST)</strong>
+                    <span>Monitors baby's heart rate for 20–40 minutes</span>
+                </div>
+            </div>
+            <div class="step-box">
+                <div class="step-num" style="background:var(--blue-dim); border-color:var(--blue); color:var(--blue);">2</div>
+                <div class="step-text">
+                    <strong>Biophysical Profile (BPP)</strong>
+                    <span>Ultrasound assessing movement, breathing, tone, and fluid</span>
+                </div>
+            </div>
+            <div class="step-box">
+                <div class="step-num" style="background:var(--blue-dim); border-color:var(--blue); color:var(--blue);">3</div>
+                <div class="step-text">
+                    <strong>Amniotic Fluid Check</strong>
+                    <span>Low fluid can indicate placental stress</span>
+                </div>
+            </div>
+            <div class="step-box">
+                <div class="step-num" style="background:var(--blue-dim); border-color:var(--blue); color:var(--blue);">4</div>
+                <div class="step-text">
+                    <strong>Growth Ultrasound</strong>
+                    <span>If reduced movement recurs, checks for growth restriction</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:1rem;">
+            <span class="source-badge">ACOG</span>
+            <span class="source-badge">SMFM</span>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 15 — BONDING BENEFIT
+    ════════════════════════════════════ -->
+    <div class="slide" id="slide-15">
+        <div class="slide-tag">The Bonding Benefit</div>
+
+        <div class="icon-wrap">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="30" fill="rgba(32,201,151,0.10)" stroke="#20c997" stroke-width="1.5"/>
+                <!-- Heart -->
+                <path d="M32 46 C32 46 14 36 14 24 C14 18 18 14 24 14 C28 14 32 18 32 18 C32 18 36 14 40 14 C46 14 50 18 50 24 C50 36 32 46 32 46Z"
+                    fill="rgba(32,201,151,0.3)" stroke="#20c997" stroke-width="2"/>
+                <!-- Small baby circle inside heart -->
+                <circle cx="32" cy="28" r="5" fill="#20c997" opacity="0.6"/>
+            </svg>
+        </div>
+
+        <h2>Kick Counting Also <strong>Builds Your Bond</strong></h2>
+        <div class="divider"></div>
+
+        <div class="stat-row">
+            <div class="stat-box">
+                <div class="stat-num" style="color:var(--teal);">84%</div>
+                <div class="stat-label">of women reported<br><strong>improved bonding</strong><br>with their baby</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num" style="color:var(--blue);">77%</div>
+                <div class="stat-label">said kick counting<br><strong>reduced their anxiety</strong><br>about baby's well-being</div>
+            </div>
+        </div>
+
+        <p class="slide-body" style="margin-top:1.2rem; font-size:0.9rem; color:var(--muted);">
+            A few quiet minutes each evening — focused on your baby — is good for you both.
+        </p>
+        <div style="margin-top:0.6rem;"><span class="source-badge">PMC 2024</span></div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         SLIDE 16 — CLOSING / PARTNERSHIP
+    ════════════════════════════════════ -->
+    <div class="slide slide-close-bg" id="slide-16">
+        <div class="slide-tag">Partnership</div>
+
+        <div class="icon-wrap">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="30" fill="rgba(32,201,151,0.10)" stroke="#20c997" stroke-width="1.5"/>
+                <!-- Two hands clasped -->
+                <path d="M20 36 C20 28 26 22 32 22 C38 22 44 28 44 36" stroke="#20c997" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                <path d="M16 38 Q20 42 32 42 Q44 42 48 38" stroke="#20c997" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                <!-- Stars above -->
+                <circle cx="24" cy="16" r="1.5" fill="#20c997" opacity="0.6"/>
+                <circle cx="32" cy="12" r="2" fill="#20c997" opacity="0.8"/>
+                <circle cx="40" cy="16" r="1.5" fill="#20c997" opacity="0.6"/>
+            </svg>
+        </div>
+
+        <h1>You Are Your Baby's<br><strong>First Advocate</strong></h1>
+        <div class="divider"></div>
+
+        <p class="slide-body" style="margin-top:1rem;">
+            Kick counting costs nothing and takes minutes.
+            It keeps you <strong>connected, informed, and empowered</strong>.
+            Your care team is always here — <strong>never hesitate to call.</strong>
+        </p>
+
+        <div style="margin-top:1.5rem; text-align:center;">
+            <p style="font-size:0.82rem; color:var(--muted); margin-bottom:0.4rem;">
+                countthekicks.org &nbsp;·&nbsp; Free app available in 20+ languages
+            </p>
+            <span class="source-badge">ACOG</span>
+            <span class="source-badge">SMFM</span>
+            <span class="source-badge">Count the Kicks</span>
+        </div>
+
+        <p style="margin-top:1.5rem; font-size:0.72rem; color:var(--muted); text-align:center; max-width:560px;">
+            For educational purposes only. This presentation does not constitute medical advice. 
+            Always consult your healthcare provider regarding your individual pregnancy care.
+        </p>
+    </div>
+
+</div><!-- /deck -->
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progress-bar');
+    const slideCounter = document.getElementById('slide-counter');
+    let current = 0;
+    const total = slides.length;
+
+    function showSlide(index) {
+        slides[current].classList.remove('active');
+        slides[current].classList.add('exit-left');
+        setTimeout(() => slides[current].classList.remove('exit-left'), 600);
+
+        current = (index + total) % total;
+        slides[current].classList.add('active');
+
+        // Update progress bar
+        const pct = ((current + 1) / total) * 100;
+        progressBar.style.width = pct + '%';
+
+        // Update counter
+        slideCounter.textContent = (current + 1) + ' / ' + total;
+    }
+
+    function nextSlide() { showSlide(current + 1); }
+    function prevSlide() { showSlide(current - 1); }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    // Touch / swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+    });
+
+    // Click right half / left half
+    document.querySelector('.deck').addEventListener('click', (e) => {
+        if (e.target.closest('button') || e.target.closest('a')) return;
+        if (e.clientX > window.innerWidth / 2) nextSlide();
+        else prevSlide();
+    });
+</script>
+</body>
+</html>
