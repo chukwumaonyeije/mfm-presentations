@@ -41,7 +41,7 @@
   - Fetal Growth Biometry Calculator (INTERGROWTH-21st / Hadlock / WHO)
   - Vitamin K Deficiency Bleeding (VKDB) Microsite
   - Preterm Birth Risk Screener
-  - Fetal Kick Count Microsite
+  - Fetal Kick Count Microsite (+ mobile-optimized version)
 
 ### SEO & AI Optimization (Phase 1 — March 2026)
 - Added `<meta>` SEO tags, Open Graph tags, and `<noscript>` fallback to `index.html`
