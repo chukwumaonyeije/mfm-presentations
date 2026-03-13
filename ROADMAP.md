@@ -3,7 +3,7 @@
 > **Site:** [openmfm.org](https://openmfm.org)  
 > **Repo:** [github.com/chukwumaonyeije/mfm-presentations](https://github.com/chukwumaonyeije/mfm-presentations)  
 > **Author:** Dr. Chukwuma Onyeije, MD — Maternal-Fetal Medicine Specialist  
-> **Last Updated:** 2026-03-12
+> **Last Updated:** 2026-03-13
 
 ---
 
@@ -20,7 +20,7 @@
 - `WARP.md` documenting GitHub Pages deployment setup
 
 ### Content Build-Out (Ongoing)
-- **81 evidence-based clinical presentations** across 12 categories:
+- **82 evidence-based clinical presentations** across 12 categories:
   - Hypertension & Preeclampsia
   - Diabetes & Metabolic
   - Fetal Growth & Doppler
@@ -33,7 +33,7 @@
   - Prenatal Screening & Counseling
   - Medical Conditions in Pregnancy
   - GYN / Women's Health
-- **7 interactive clinical microsites:**
+- **8 interactive clinical microsites:**
   - Preeclampsia Screener (preeclampsia-screener.com)
   - FGRManager (SMFM #52 delivery timing)
   - GDM Screener (ACOG 2024 PB #190)
@@ -41,6 +41,7 @@
   - Fetal Growth Biometry Calculator (INTERGROWTH-21st / Hadlock / WHO)
   - Vitamin K Deficiency Bleeding (VKDB) Microsite
   - Preterm Birth Risk Screener
+  - Fetal Kick Count Microsite
 
 ### SEO & AI Optimization (Phase 1 — March 2026)
 - Added `<meta>` SEO tags, Open Graph tags, and `<noscript>` fallback to `index.html`
@@ -78,7 +79,7 @@
 
 ### SEO Index Maintenance (March 2026)
 - Added Vein of Galen Malformation and Preterm Birth Risk Screener to `presentations.json`, `llms.txt`, and `llms-full.txt`
-- Updated presentation count: 81 presentations + 7 microsites
+- Updated presentation count: 82 presentations + 8 microsites
 - `generate_sitemap.py` now writes canonical `openmfm.org` URLs to both sitemaps
 - Removed stale `clubfoot_patient_consultation.html` (superseded by `-new` and `-old` versions)
 
