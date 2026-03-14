@@ -78,11 +78,23 @@
 - `llms.txt` and `llms-full.txt` updated to use `openmfm.org` as primary URL
 - Security headers added: `X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, `Referrer-Policy`
 
-### SEO Index Maintenance (March 2026)
+|### SEO Index Maintenance (March 2026)
 - Added Vein of Galen Malformation and Preterm Birth Risk Screener to `presentations.json`, `llms.txt`, and `llms-full.txt`
 - Updated presentation count: 82 presentations + 8 microsites
 - `generate_sitemap.py` now writes canonical `openmfm.org` URLs to both sitemaps
 - Removed stale `clubfoot_patient_consultation.html` (superseded by `-new` and `-old` versions)
+
+### Per-Deck SEO & LLM Optimization (March 2026)
+- Created `inject_deck_seo.py` — processes all 83 deck HTML files and injects:
+  - `<link rel="canonical">` pointing to `https://openmfm.org/decks/...`
+  - `<meta name="description">`, `<meta name="author">`, `<meta name="keywords">`
+  - Full Open Graph tags (`og:url`, `og:title`, `og:description`, `og:image`, `og:site_name`)
+  - Twitter Card tags (`twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`)
+  - `<script type="application/ld+json">` using `schema.org/MedicalWebPage` with `MedicalAudience`, `MedicalCondition`, author, publisher, and `isPartOf` WebSite
+  - Fixed-position "← OpenMFM Library" branded backlink footer on every deck
+- Script is idempotent (marker-based); safe to re-run on every Vercel build
+- `inject_deck_seo.py` added to Vercel `buildCommand` and `package.json` `prebuild`
+- All 83 deck HTML files now have correct canonical URLs, structured data, and site backlinks
 
 ---
 
@@ -93,17 +105,6 @@
 - Submit `https://openmfm.org/sitemap.xml` for indexing
 - Monitor crawl errors and coverage report
 - Request indexing for top priority pages if needed
-
-### JSON-LD Structured Data on Deck Pages
-- Add `<script type="application/ld+json">` to individual deck HTML files
-- Use `MedicalWebPage` or `Article` schema from [Schema.org](https://schema.org)
-- Key fields: `name`, `description`, `author`, `publisher`, `datePublished`, `url`, `about`
-- Enables Google rich results for medical content
-
-### Fix Canonical URLs on Individual Deck Pages
-- Individual decks still have `og:url` pointing to `chukwumaonyeije.github.io/...`
-- Update to `https://openmfm.org/decks/...` for correct canonical signaling
-- Can be scripted across all ~81 HTML files
 
 ### New Deck Checklist / Automation
 - Currently, adding a new deck requires manual updates to: `index.html`, `presentations.json`, `llms.txt`, `llms-full.txt`
@@ -118,11 +119,6 @@
 - Add [Plausible Analytics](https://plausible.io) (privacy-friendly) or Google Analytics 4 to `openmfm.org`
 - Track top presentations, search queries, and referral sources
 - Use data to prioritize new content
-
-### Deck Backlinks to openmfm.org
-- Each presentation deck currently has no link back to the main site
-- Add a small branded footer or header bar on each deck: "Part of the OpenMFM Library — openmfm.org"
-- Improves user navigation and internal linking for SEO
 
 ### Library UX Improvements
 - Add category/section browsing (sidebar or tab nav) to `/library`
