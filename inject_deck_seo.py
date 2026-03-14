@@ -17,6 +17,7 @@ Run from the repository root.
 import json
 import os
 import re
+import sys
 from datetime import datetime
 from urllib.parse import unquote
 
@@ -119,9 +120,30 @@ FOOTER_HTML = f"""{FOOTER_MARKER}
 </div>"""
 
 
+# ── Strip helper (used by --force) ───────────────────────────────────────────
+
+def strip_injected_blocks(content):
+    """Remove previously injected SEO and footer blocks so they can be re-injected."""
+    # SEO block: from marker to the closing </script> of the JSON-LD
+    content = re.sub(
+        r'<!-- openmfm-seo-injected -->.*?</script>',
+        '',
+        content,
+        flags=re.DOTALL,
+    )
+    # Footer block: from marker to its closing </div>
+    content = re.sub(
+        r'<!-- openmfm-footer-injected -->.*?</div>',
+        '',
+        content,
+        flags=re.DOTALL,
+    )
+    return content
+
+
 # ── Core injection ───────────────────────────────────────────────────────────
 
-def inject_presentation(p, today):
+def inject_presentation(p, today, force=False):
     href  = p["href"]
     title = p["title"]
 
@@ -139,10 +161,14 @@ def inject_presentation(p, today):
     with open(file_path, "r", encoding="utf-8", errors="replace") as fh:
         content = fh.read()
 
-    # ── Idempotency check ──────────────────────────────────────────────────
+    # ── Idempotency / force ────────────────────────────────────────────────
     if SEO_MARKER in content:
-        print(f"  ✓  Skipped   : {href}")
-        return True
+        if not force:
+            print(f"  ✓  Skipped   : {href}")
+            return True
+        # force=True: strip old blocks and re-inject with updated description
+        content = strip_injected_blocks(content)
+        print(f"  🔄 Updating  : {href}")
 
     description = get_description(p)
     keywords    = ", ".join(p.get("tags", []))
@@ -180,20 +206,23 @@ def inject_presentation(p, today):
 # ── Entry point ──────────────────────────────────────────────────────────────
 
 def main():
+    force = "--force" in sys.argv
+
     with open(JSON_PATH, "r", encoding="utf-8") as fh:
         data = json.load(fh)
 
     presentations = data["presentations"]
     today         = datetime.now().strftime("%Y-%m-%d")
 
-    print(f"\nOpenMFM — inject_deck_seo.py")
+    mode_label = " (FORCE — re-injecting all)" if force else ""
+    print(f"\nOpenMFM — inject_deck_seo.py{mode_label}")
     print(f"Processing {len(presentations)} presentations …\n")
 
     ok  = 0
     err = 0
 
     for p in presentations:
-        result = inject_presentation(p, today)
+        result = inject_presentation(p, today, force=force)
         if result:
             ok += 1
         else:
