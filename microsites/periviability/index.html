@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Periviability Counseling Resource | OpenMFM.org</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --bg-alt: #1c2128;
+  --accent: #d4a853;
+  --accent-dim: #2a1e08;
+  --accent-border: rgba(212,168,83,0.28);
+  --accent-glow: rgba(212,168,83,0.08);
+  --text: #e6edf3;
+  --text-2: #8b949e;
+  --text-3: #4d5566;
+  --border: rgba(255,255,255,0.07);
+  --border-2: rgba(255,255,255,0.12);
+  --green: #3fb950;
+  --green-bg: rgba(63,185,80,0.1);
+  --amber: #d29922;
+  --amber-bg: rgba(210,153,34,0.09);
+  --red: #f85149;
+  --red-bg: rgba(248,81,73,0.09);
+  --r: 10px;
+  --r-lg: 14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,sans-serif;font-size:16px;line-height:1.7;}
+a{color:var(--accent);}
+
+/* ── Layout ── */
+.wrap{max-width:880px;margin:0 auto;padding:0 20px;}
+
+/* ── Hero ── */
+.hero{
+  background:radial-gradient(ellipse at 50% 0%,rgba(212,168,83,0.07) 0%,transparent 65%),#0d1117;
+  border-bottom:1px solid var(--accent-border);
+  padding:64px 20px 48px;
+  text-align:center;
+}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;}
+.hero h1{font-size:clamp(24px,4.5vw,40px);font-weight:700;line-height:1.18;margin-bottom:14px;letter-spacing:-.02em;}
+.hero h1 span{color:var(--accent);}
+.hero-sub{font-size:15px;color:var(--text-2);max-width:620px;margin:0 auto 28px;line-height:1.75;}
+.disclaimer-bar{display:inline-flex;align-items:center;gap:8px;background:rgba(212,168,83,0.08);border:1px solid var(--accent-border);border-radius:20px;padding:8px 18px;font-size:12px;color:var(--accent);max-width:640px;}
+.disclaimer-bar::before{content:"ℹ";font-size:14px;flex-shrink:0;}
+
+/* ── Sections ── */
+section{padding:52px 0;}
+section+section{border-top:1px solid var(--border);}
+.sec-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+.sec-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.01em;}
+.sec-sub{font-size:14px;color:var(--text-2);margin-bottom:32px;max-width:640px;}
+
+/* ── Explainer cards ── */
+.explainer-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:580px){.explainer-grid{grid-template-columns:1fr;}}
+.exp-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:20px;}
+.exp-card-icon{font-size:22px;margin-bottom:10px;}
+.exp-card-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;}
+.exp-card p{font-size:13px;color:var(--text-2);line-height:1.7;}
+
+/* ── GA Tabs ── */
+.tab-row{display:flex;gap:6px;margin-bottom:28px;flex-wrap:wrap;}
+.tab-btn{
+  flex:1;min-width:80px;
+  padding:12px 8px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  color:var(--text-2);
+  font-size:13px;font-weight:500;
+  cursor:pointer;
+  text-align:center;
+  transition:all .15s;
+}
+.tab-btn:hover{border-color:var(--accent-border);color:var(--text);}
+.tab-btn.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);font-weight:600;}
+.tab-btn .wk{font-size:20px;font-weight:700;display:block;line-height:1.2;}
+.tab-btn .wk-label{font-size:11px;margin-top:2px;}
+
+/* ── Outcome panels ── */
+.outcome-panel{display:none;}
+.outcome-panel.active{display:block;}
+
+.ga-intro{
+  background:var(--bg-card);
+  border:1px solid var(--accent-border);
+  border-radius:var(--r-lg);
+  padding:22px 24px;
+  margin-bottom:24px;
+  border-left:3px solid var(--accent);
+}
+.ga-intro-title{font-size:15px;font-weight:600;color:var(--accent);margin-bottom:6px;}
+.ga-intro p{font-size:14px;color:var(--text-2);line-height:1.75;}
+
+.outcome-grid{display:flex;flex-direction:column;gap:16px;margin-bottom:20px;}
+.outcome-row{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;}
+.outcome-row-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.outcome-title{font-size:14px;font-weight:600;color:var(--text);}
+.outcome-range-label{font-size:13px;font-weight:700;color:var(--accent);}
+
+/* Range bar */
+.range-bar-wrap{position:relative;height:28px;margin-bottom:10px;}
+.range-track{
+  position:absolute;top:10px;left:0;right:0;
+  height:8px;border-radius:4px;
+  background:var(--bg-alt);
+}
+.range-fill{
+  position:absolute;top:10px;
+  height:8px;border-radius:4px;
+  background:linear-gradient(90deg,rgba(212,168,83,0.35),rgba(212,168,83,0.7));
+  transition:width .4s ease,left .4s ease;
+}
+.range-center-zone{
+  position:absolute;top:8px;
+  height:12px;border-radius:4px;
+  background:var(--accent);
+  opacity:.5;
+  transition:all .4s ease;
+}
+.range-low-tick,.range-high-tick{
+  position:absolute;top:0;
+  font-size:11px;font-weight:600;
+  color:var(--accent);
+  transform:translateX(-50%);
+  white-space:nowrap;
+}
+.range-high-tick{transform:translateX(-50%);}
+.range-legend{display:flex;gap:16px;font-size:11px;color:var(--text-3);margin-top:6px;}
+.range-legend span{display:flex;align-items:center;gap:5px;}
+.range-legend .dot{width:8px;height:8px;border-radius:50%;}
+
+.outcome-desc{font-size:13px;color:var(--text-2);margin-top:12px;padding-top:12px;border-top:1px solid var(--border);line-height:1.65;}
+
+/* ── Modifiers ── */
+.modifier-grid{display:flex;flex-direction:column;gap:10px;}
+.modifier-item{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:16px 18px;
+  cursor:pointer;
+  transition:border-color .15s;
+}
+.modifier-item:hover{border-color:var(--border-2);}
+.modifier-item.checked{border-color:var(--green);background:var(--green-bg);}
+.modifier-cb{
+  width:20px;height:20px;
+  border:2px solid var(--border-2);
+  border-radius:5px;flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.modifier-item.checked .modifier-cb{background:var(--green);border-color:var(--green);}
+.modifier-cb-check{display:none;font-size:12px;color:#fff;font-weight:700;}
+.modifier-item.checked .modifier-cb-check{display:block;}
+.modifier-label{font-size:14px;font-weight:500;color:var(--text);}
+.modifier-sub{font-size:12px;color:var(--text-2);margin-top:2px;}
+
+.modifier-callout-area{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
+.modifier-callout{
+  background:var(--green-bg);
+  border:1px solid rgba(63,185,80,0.3);
+  border-radius:var(--r);
+  padding:14px 16px;
+  font-size:13px;
+  color:var(--text);
+  line-height:1.7;
+  display:none;
+}
+.modifier-callout.visible{display:block;}
+.modifier-callout strong{color:var(--green);}
+
+/* ── Context section ── */
+.context-list{display:flex;flex-direction:column;gap:12px;}
+.context-item{
+  display:flex;gap:16px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:16px 18px;
+}
+.context-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.context-text{font-size:14px;color:var(--text-2);line-height:1.7;}
+.context-text strong{color:var(--text);font-weight:500;}
+
+/* ── Values clarification ── */
+.values-intro{
+  background:var(--accent-dim);
+  border:1px solid var(--accent-border);
+  border-radius:var(--r-lg);
+  padding:22px 24px;
+  margin-bottom:28px;
+  font-size:14px;color:var(--text-2);line-height:1.75;
+}
+.values-intro strong{color:var(--accent);}
+
+.values-group{margin-bottom:32px;}
+.values-group-title{
+  font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-3);margin-bottom:12px;padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+.question-cards{display:flex;flex-direction:column;gap:10px;}
+.q-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:16px 18px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
+}
+.q-text{font-size:14px;color:var(--text);line-height:1.65;flex:1;}
+.copy-btn{
+  flex-shrink:0;
+  padding:6px 12px;
+  background:transparent;
+  border:1px solid var(--border-2);
+  border-radius:6px;
+  color:var(--text-2);
+  font-size:11px;font-weight:500;
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);}
+.copy-btn.copied{border-color:var(--green);color:var(--green);}
+
+/* ── Glossary accordion ── */
+.glossary-grid{display:flex;flex-direction:column;gap:6px;}
+.glos-item{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.glos-trigger{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;background:none;border:none;cursor:pointer;
+  color:var(--text);font-size:14px;font-weight:500;text-align:left;gap:12px;
+}
+.glos-trigger:hover{background:rgba(255,255,255,0.02);}
+.glos-icon{flex-shrink:0;font-size:14px;color:var(--accent);transition:transform .2s;}
+.glos-item.open .glos-icon{transform:rotate(45deg);}
+.glos-body{display:none;padding:0 18px 14px;font-size:13px;color:var(--text-2);line-height:1.7;}
+.glos-item.open .glos-body{display:block;}
+.glos-severity{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;margin-bottom:6px;}
+.sev-monitor{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(210,153,34,0.3);}
+.sev-serious{background:var(--red-bg);color:var(--red);border:1px solid rgba(248,81,73,0.3);}
+.sev-support{background:var(--green-bg);color:var(--green);border:1px solid rgba(63,185,80,0.3);}
+
+/* ── Clinician panel ── */
+.clin-toggle{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);
+  color:var(--text-2);font-size:14px;font-weight:500;cursor:pointer;text-align:left;
+  transition:border-color .15s;
+}
+.clin-toggle:hover{border-color:var(--border-2);}
+.clin-body{display:none;margin-top:2px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:24px;}
+.clin-body.open{display:block;}
+.clin-table{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0;}
+.clin-table th{text-align:left;padding:8px 12px;background:var(--bg-alt);color:var(--text);font-weight:500;border-bottom:1px solid var(--border);}
+.clin-table td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text-2);vertical-align:top;}
+.clin-table tr:last-child td{border-bottom:none;}
+.clin-table td:first-child{font-weight:500;color:var(--text);white-space:nowrap;}
+
+/* ── References ── */
+.ref-toggle{background:none;border:1px solid var(--border);border-radius:var(--r);padding:10px 18px;color:var(--text-2);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;}
+.ref-toggle:hover{border-color:var(--accent-border);color:var(--accent);}
+.ref-list{display:none;margin-top:16px;}
+.ref-entry{padding:12px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text-2);line-height:1.65;}
+.ref-entry:last-child{border-bottom:none;}
+.ref-entry strong{color:var(--text);}
+
+/* ── Footer ── */
+footer{border-top:1px solid var(--border);padding:36px 20px;text-align:center;font-size:13px;color:var(--text-2);line-height:1.9;}
+footer a{color:var(--accent);}
+
+/* ── Print ── */
+@media print{
+  body{background:#fff;color:#111;}
+  .hero,.tab-row,.explainer-grid,.modifier-item,.context-list,.values-intro{page-break-inside:avoid;}
+  .sec-label,.sec-title{color:#111;}
+  .glos-body,.clin-body,.ref-list,.hero,.tab-row{display:none!important;}
+  .outcome-panel{display:block!important;}
+  .print-only{display:block!important;}
+  footer .no-print{display:none;}
+}
+.print-only{display:none;}
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <p class="hero-eyebrow">OpenMFM.org — Counseling Resources</p>
+  <h1>Periviability<br><span>Counseling Resource</span></h1>
+  <p class="hero-sub">Understanding outcomes at 22–25 weeks of pregnancy. For families and clinicians navigating an extraordinarily difficult moment.</p>
+  <div class="disclaimer-bar">This resource presents national outcome data to support — not replace — your conversation with your clinical team.</div>
+</header>
+
+<main>
+
+<!-- ── SECTION 1: WHAT DOES PERIVIABLE MEAN ── -->
+<section>
+<div class="wrap">
+  <p class="sec-label">Before we begin</p>
+  <h2 class="sec-title">What does "periviable" mean?</h2>
+  <p class="sec-sub">A plain-language explanation of this gestational age window and what it means for your family.</p>
+
+  <div class="explainer-grid">
+    <div class="exp-card">
+      <div class="exp-card-icon">🕐</div>
+      <div class="exp-card-title">The periviable window</div>
+      <p>Periviable means "around the edge of survival." Pregnancies between 22 and 25 weeks are in a unique zone where some babies survive with intensive care and some do not. This range is different from later preterm births — the outcomes here are less certain, and they vary widely from hospital to hospital.</p>
+    </div>
+    <div class="exp-card">
+      <div class="exp-card-icon">📐</div>
+      <div class="exp-card-title">Why the exact week matters so much</div>
+      <p>At this gestational age, even a few days can make a meaningful difference in your baby's lungs, brain development, and overall readiness for the world outside the womb. The specific week — and even the day — of your pregnancy matters when talking with your care team.</p>
+    </div>
+    <div class="exp-card">
+      <div class="exp-card-icon">🏥</div>
+      <div class="exp-card-title">What the NICU involves</div>
+      <p>If your baby is born in this window and active resuscitation is chosen, they will likely go to a neonatal intensive care unit (NICU). This means breathing support, IV nutrition, close monitoring, and a hospital stay that may last weeks to months — until close to the original due date.</p>
+    </div>
+    <div class="exp-card">
+      <div class="exp-card-icon">🤝</div>
+      <div class="exp-card-title">This is a shared decision</div>
+      <p>ACOG, SMFM, and the AAP recognize that decisions about care at this gestational age belong to families — in close partnership with their medical team. There is no single right answer. Your values, your baby's specific circumstances, and the resources at your hospital all matter.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ── SECTION 2: OUTCOMES BY GA ── -->
+<section id="outcomes-section">
+<div class="wrap">
+  <p class="sec-label">Outcome data</p>
+  <h2 class="sec-title">Outcomes by gestational age</h2>
+  <p class="sec-sub">Select your gestational age to see national outcome data. Ranges reflect the real variation between hospitals in the United States — this is intentional. Showing a single number would create false certainty that does not exist.</p>
+
+  <div class="tab-row" role="tablist" aria-label="Gestational age selector">
+    <button class="tab-btn active" onclick="switchGA(22,this)" role="tab" aria-selected="true">
+      <span class="wk">22</span><span class="wk-label">weeks</span>
+    </button>
+    <button class="tab-btn" onclick="switchGA(23,this)" role="tab" aria-selected="false">
+      <span class="wk">23</span><span class="wk-label">weeks</span>
+    </button>
+    <button class="tab-btn" onclick="switchGA(24,this)" role="tab" aria-selected="false">
+      <span class="wk">24</span><span class="wk-label">weeks</span>
+    </button>
+    <button class="tab-btn" onclick="switchGA(25,this)" role="tab" aria-selected="false">
+      <span class="wk">25</span><span class="wk-label">weeks</span>
+    </button>
+  </div>
+
+  <!-- 22 weeks panel -->
+  <div class="outcome-panel active" id="panel-22" role="tabpanel">
+    <div class="ga-intro">
+      <div class="ga-intro-title">22 weeks — the earliest edge of the periviable window</div>
+      <p>At 22 weeks, the lungs are in very early development and the brain is not yet fully formed. Survival is possible at some hospitals, but it is not the most common outcome. Many hospitals approach 22 weeks differently — some offer full resuscitation, others offer comfort-focused care as the primary option. The variation in survival between hospitals is wider at 22 weeks than at any other gestational age.</p>
+      <p style="margin-top:8px;">ACOG and SMFM recommend that families at 22 weeks be offered honest information and be supported in whichever approach aligns with their values — including choosing comfort-focused care for their baby.</p>
+    </div>
+    <div class="outcome-grid" aria-label="Outcomes at 22 weeks">
+      <div class="outcome-row">
+        <div class="outcome-row-header">
+          <div class="outcome-title">Survival to hospital discharge</div>
+          <div class="outcome-range-label">0% – 18%</div>
+        </div>
+        <div class="range-bar-wrap" aria-label="Range: 0% to 18%">
+          <div class="range-track"></div>
+          <div class="range-fill" style="left:0%;width:18%"></div>
+          <div class="range-center-zone" style="left:3%;width:10%"></div>
+          <div class="range-low-tick" style="left:0%">0%</div>
+          <div class="range-high-tick" style="left:18%">18%</div>
+        </div>
+        <div class="range-legend">
+          <span><span class="dot" style="background:rgba(212,168,83,.4);"></span>Full national range</span>
+          <span><span class="dot" style="background:var(--accent);opacity:.6;"></span>Most centers</span>
+        </div>
+        <div class="outcome-desc">At 22 weeks, survival depends heavily on which hospital your baby is born at and whether the team offers active resuscitation. Some hospitals report survival rates near 0%; centers with the most experience with very early premature babies report up to 18%. Most babies born at 22 weeks do not survive to go home.</div>
+      </div>
+
+      <div class="outcome-row">
+        <div class="outcome-row-header">
+          <div class="outcome-title">Survival without major medical complications</div>
+          <div class="outcome-range-label">0% – 5%</div>
+        </div>
+        <div class="range-bar-wrap" aria-label="Range: 0% to 5%">
+          <div class="range-track"></div>
+          <div class="range-fill" style="left:0%;width:5%"></div>
+          <div class="range-center-zone" style="left:0%;width:2%"></div>
+          <div class="range-low-tick" style="left:0%">0%</div>
+          <div class="range-high-tick" style="left:5%">5%</div>
+        </div>
+        <div class="range-legend">
+          <span><span class="dot" style="background:rgba(212,168,83,.4);"></span>Full national range</span>
+          <span><span class="dot" style="background:var(--accent);opacity:.6;"></span>Most centers</span>
+        </div>
+        <div class="outcome-desc">Among babies who do survive at 22 weeks, almost all will have at least one significant medical complication — problems with the lungs, the brain, the gut, or the eyes. Survival without any major complication is very rare at this gestational age.</div>
+      </div>
+
+      <div class="outcome-row">
+        <div class="outcome-row-header">
+          <div class="outcome-title">Severe brain injury (IVH grade III–IV or PVL)</div>
+          <div class="outcome-range-label">40% – 75%</div>
+        </div>
+        <div class="range-bar-wrap" aria-label="Range: 40% to 75%">
+          <div class="range-track"></div>
+          <div class="range-fill" style="left:40%;width:35%"></div>
+          <div class="range-center-zone" style="left:48%;width:18%"></div>
+          <div class="range-low-tick" style="left:40%">40%</div>
+          <div class="range-high-tick" style="left:75%">75%</div>
+        </div>
+        <div class="range-legend">
+          <span><span class="dot" style="background:rgba(212,168,83,.4);"></span>Full national range</span>
+          <span><span class="dot" style="background:var(--accent);opacity:.6;"></span>Most centers</span>
+        </div>
+        <div class="outcome-desc">Severe brain injury — bleeding into the brain (IVH) or injury to brain tissue (PVL) — is common at 22 weeks among babies who survive the early days. This type of injury can affect movement, learning, and development. A brain ultrasound in the NICU is used to look for this.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 23 weeks panel -->
+  <div class="outcome-panel" id="panel-23" role="tabpanel">
+    <div class="ga-intro">
+      <div class="ga-intro-title">23 weeks — the center of the shared decision-making zone</div>
+      <p>At 23 weeks, survival is possible at most hospitals that offer active resuscitation, but it is not guaranteed. The range of outcomes between hospitals remains wide — outcomes depend significantly on the experience of the NICU team, whether steroids were given, your baby's sex, and other factors. Most families who receive intensive care for a 23-week baby will face a long NICU stay with serious medical challenges along the way.</p>
+      <p style="margin-top:8px;">ACOG and SMFM recognize 23 weeks as within the zone of parental discretion — meaning both active resuscitation and comfort-focused care are ethically and medically appropriate choices, depending on a family's values and situation.</p>
+    </div>
+    <div class="outcome-grid" aria-label="Outcomes at 23 weeks">
+      <div class="outcome-row">
+        <div class="outcome-row-header">
+          <div class="outcome-title">Survival to hospital discharge</div>
+          <div class="outcome-range-label">15% – 55%</div>
+        </div>
+        <div class="range-bar-wrap" aria-label="Range: 15% to 55%">
+          <div class="range-track"></div>
+          <div class="range-fill" style="left:15%;width:40%"></div>
+          <div class="range-center-zone" style="left:22%;width:22%"></div>
+          <div class="range-low-tick" style="left:15%">15%</div>
+          <div class="range-high-tick" style="left:55%">55%</div>
+        </div>
+        <div class="range-legend">
+          <span><span class="dot" style="background:rgba(212,168,83,.4);"></span>Full national range</span>
+          <span><span class="dot" style="background:var(--accent);opacity:.6;"></span>Most centers</span>
+        </div>
+        <div class="outcome-desc">About 1 in 4 to 1 in 2 babies born at 23 weeks and actively resuscitated survive to go home, depending on the hospital. Centers that see higher volumes of extremely premature babies tend to have better outcomes. Asking your hospital about their own experience is a reasonable and important question.</div>
+      </div>
+
+      <div class="outcome-row">
+        <div class="outcome-row-header">
+          <div class="outcome-title">Survival without major medical complications</div>
+          <div class="outcome-range-label">5% – 18%</div>
+        </div>
+        <div class="range-bar-wrap" aria-label="Range: 5% to 18%">
+          <div class="range-track"></div>
+          <div class="range-fill" style="left:5%;width:13%"></div>
+          <div class="range-center-zone" style="left:8%;width:7%"></div>
+          <div class="range-low-tick" style="left:5%">5%</div>
+          <div class="range-high-tick" style="left:18%">18%</div>
+        </div>
+        <div class="range-legend">
+          <span><span class="dot" style="background:rgba(212,168,83,.4);"></span>Full national range</span>
+          <span><span class="dot" style="background:var(--accent);opacity:.6;"></span>Most centers</span>
+        </div>
+        <div class="outcome-desc">Among babies who survive at 23 weeks, the majority will have at least one significant medical complication. Surviving without any major complication — such as serious lung disease, brain injury, intestinal problems, or severe eye disease — occurs in a minority of cases but is possible, especially with favorable prognostic factors.</div>
+      </div>
+
+      <div class="outcome-row">
+        <div class="outcome-row-header">
+          <div class="outcome-title">Severe brain injury (IVH grade III–IV or PVL)</div>
+          <div class="outcome-range-label">25% – 55%</div>
+        </div>
+        <div class="range-bar-wrap" aria-label="Range: 25% to 55%">
+          <div class="range-track"></div>
+          <div class="range-fill" style="left:25%;width:30%"></div>
+          <div class="range-center-zone" style="left:31%;width:17%"></div>
+          <div class="range-low-tick" style="left:25%">25%</div>
+          <div class="range-high-tick" style="left:55%">55%</div>
+        </div>
+        <div class="range-legend">
+          <span><span class="dot" style="background:rgba(212,168,83,.4);"></span>Full national range</span>
+          <span><span class="dot" style="background:var(--accent);opacity:.6;"></span>Most centers</span>
+        </div>
+        <div class="outcome-desc">Serious brain bleeding or brain tissue injury is still common at 23 weeks. This can affect a child's development, movement, and learning long-term. Brain ultrasounds are performed routinely in the NICU to check for this. Not all brain injuries have the same impact — your neonatologist can interpret what any finding means for your baby specifically.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 24 weeks panel -->
+  <div class="outcome-panel" id="panel-24" role="tabpanel">
+    <div class="ga-intro">
+      <div class="ga-intro-title">24 weeks — active resuscitation is standard at most centers</div>
+      <p>At 24 weeks, the majority of hospitals in the United States will offer active resuscitation. Survival rates are meaningfully higher than at 22–23 weeks, though serious complications remain common. A significant portion of babies born at 24 weeks will survive to go home, though many will face an extended NICU stay and ongoing medical needs.</p>
+      <p style="margin-top:8px;">ACOG and SMFM consider 24 weeks to be at the upper end of the shared decision-making zone. Most clinical teams will recommend active resuscitation at this gestational age, though the specific conversation still belongs to the family and their care team.</p>
+    </div>
+    <div class="outcome-grid" aria-label="Outcomes at 24 weeks">
+      <div class="outcome-row">
+        <div class="outcome-row-header">
+          <div class="outcome-title">Survival to hospital discharge</div>
+          <div class="outcome-range-label">42% – 72%</div>
+        </div>
+        <div class="range-bar-wrap" aria-label="Range: 42% to 72%">
+          <div class="range-track"></div>
+          <div class="range-fill" style="left:42%;width:30%"></div>
+          <div class="range-center-zone" style="left:49%;width:17%"></div>
+          <div class="range-low-tick" style="left:42%">42%</div>
+          <div class="range-high-tick" style="left:72%">72%</div>
+        </div>
+        <div class="range-legend">
+          <span><span class="dot" style="background:rgba(212,168,83,.4);"></span>Full national range</span>
+          <span><span class="dot" style="background:var(--accent);opacity:.6;"></span>Most centers</span>
+        </div>
+        <div class="outcome-desc">Roughly half to two-thirds of babies born at 24 weeks and given active resuscitation survive to hospital discharge. This is a meaningful improvement from 22–23 weeks. Outcomes at individual hospitals still vary — centers that care for high volumes of extremely premature infants generally show survival rates toward the higher end of this range.</div>
+      </div>
+
+      <div class="outcome-row">
+        <div class="outcome-row-header">
+          <div class="outcome-title">Survival without major medical complications</div>
+          <div class="outcome-range-label">14% – 32%</div>
+        </div>
+        <div class="range-bar-wrap" aria-label="Range: 14% to 32%">
+          <div class="range-track"></div>
+          <div class="range-fill" style="left:14%;width:18%"></div>
+          <div class="range-center-zone" style="left:18%;width:10%"></div>
+          <div class="range-low-tick" style="left:14%">14%</div>
+          <div class="range-high-tick" style="left:32%">32%</div>
+        </div>
+        <div class="range-legend">
+          <span><span class="dot" style="background:rgba(212,168,83,.4);"></span>Full national range</span>
+          <span><span class="dot" style="background:var(--accent);opacity:.6;"></span>Most centers</span>
+        </div>
+        <div class="outcome-desc">About 1 in 7 to 1 in 3 babies born at 24 weeks survive without a major complication such as severe lung disease, serious brain injury, intestinal surgery, or significant eye disease. This number has improved over the past decade and continues to improve as NICU care advances.</div>
+      </div>
+
+      <div class="outcome-row">
+        <div class="outcome-row-header">
+          <div class="outcome-title">Severe brain injury (IVH grade III–IV or PVL)</div>
+          <div class="outcome-range-label">18% – 40%</div>
+        </div>
+        <div class="range-bar-wrap" aria-label="Range: 18% to 40%">
+          <div class="range-track"></div>
+          <div class="range-fill" style="left:18%;width:22%"></div>
+          <div class="range-center-zone" style="left:23%;width:13%"></div>
+          <div class="range-low-tick" style="left:18%">18%</div>
+          <div class="range-high-tick" style="left:40%">40%</div>
+        </div>
+        <div class="range-legend">
+          <span><span class="dot" style="background:rgba(212,168,83,.4);"></span>Full national range</span>
+          <span><span class="dot" style="background:var(--accent);opacity:.6;"></span>Most centers</span>
+        </div>
+        <div class="outcome-desc">Serious brain injury remains a risk at 24 weeks, though it is less common than at earlier gestational ages. NICU teams watch for this carefully with routine brain ultrasounds. Not every grade of brain bleeding has the same long-term impact — ask your neonatologist to explain what any specific finding means.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 25 weeks panel -->
+  <div class="outcome-panel" id="panel-25" role="tabpanel">
+    <div class="ga-intro">
+      <div class="ga-intro-title">25 weeks — survival is the most likely outcome with active care</div>
+      <p>At 25 weeks, the majority of babies born at hospitals equipped to care for very premature infants will survive to go home. This does not mean the NICU course is easy — most 25-week babies will still face weeks to months of hospital care, and many will have ongoing medical needs after discharge. But the trajectory here is meaningfully more encouraging than at 22–24 weeks.</p>
+      <p style="margin-top:8px;">At 25 weeks, active resuscitation is recommended by ACOG, SMFM, and the AAP as the standard approach. Comfort-focused care is still a conversation that families can initiate, and the medical team will honor that discussion.</p>
+    </div>
+    <div class="outcome-grid" aria-label="Outcomes at 25 weeks">
+      <div class="outcome-row">
+        <div class="outcome-row-header">
+          <div class="outcome-title">Survival to hospital discharge</div>
+          <div class="outcome-range-label">66% – 88%</div>
+        </div>
+        <div class="range-bar-wrap" aria-label="Range: 66% to 88%">
+          <div class="range-track"></div>
+          <div class="range-fill" style="left:66%;width:22%"></div>
+          <div class="range-center-zone" style="left:71%;width:13%"></div>
+          <div class="range-low-tick" style="left:66%">66%</div>
+          <div class="range-high-tick" style="left:88%">88%</div>
+        </div>
+        <div class="range-legend">
+          <span><span class="dot" style="background:rgba(212,168,83,.4);"></span>Full national range</span>
+          <span><span class="dot" style="background:var(--accent);opacity:.6;"></span>Most centers</span>
+        </div>
+        <div class="outcome-desc">Most babies born at 25 weeks who receive active resuscitation survive to go home. The variation between hospitals is narrower at this gestational age than at 22–24 weeks because active treatment is more consistently practiced and the medical approaches are better established.</div>
+      </div>
+
+      <div class="outcome-row">
+        <div class="outcome-row-header">
+          <div class="outcome-title">Survival without major medical complications</div>
+          <div class="outcome-range-label">28% – 48%</div>
+        </div>
+        <div class="range-bar-wrap" aria-label="Range: 28% to 48%">
+          <div class="range-track"></div>
+          <div class="range-fill" style="left:28%;width:20%"></div>
+          <div class="range-center-zone" style="left:33%;width:12%"></div>
+          <div class="range-low-tick" style="left:28%">28%</div>
+          <div class="range-high-tick" style="left:48%">48%</div>
+        </div>
+        <div class="range-legend">
+          <span><span class="dot" style="background:rgba(212,168,83,.4);"></span>Full national range</span>
+          <span><span class="dot" style="background:var(--accent);opacity:.6;"></span>Most centers</span>
+        </div>
+        <div class="outcome-desc">Roughly 1 in 3 to 1 in 2 babies born at 25 weeks will survive without a major complication. This is the best ratio in the periviable window and continues to improve as NICU care advances. Many 25-week survivors go on to lead healthy, full lives — though developmental follow-up remains important.</div>
+      </div>
+
+      <div class="outcome-row">
+        <div class="outcome-row-header">
+          <div class="outcome-title">Severe brain injury (IVH grade III–IV or PVL)</div>
+          <div class="outcome-range-label">10% – 25%</div>
+        </div>
+        <div class="range-bar-wrap" aria-label="Range: 10% to 25%">
+          <div class="range-track"></div>
+          <div class="range-fill" style="left:10%;width:15%"></div>
+          <div class="range-center-zone" style="left:13%;width:8%"></div>
+          <div class="range-low-tick" style="left:10%">10%</div>
+          <div class="range-high-tick" style="left:25%">25%</div>
+        </div>
+        <div class="range-legend">
+          <span><span class="dot" style="background:rgba(212,168,83,.4);"></span>Full national range</span>
+          <span><span class="dot" style="background:var(--accent);opacity:.6;"></span>Most centers</span>
+        </div>
+        <div class="outcome-desc">Serious brain injury is less common at 25 weeks than at earlier gestational ages. When it does occur, the severity and long-term implications vary. Your NICU team will monitor your baby with serial brain ultrasounds and discuss any findings with you.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ── SECTION 3: PROGNOSTIC MODIFIERS ── -->
+<section>
+<div class="wrap">
+  <p class="sec-label">Individual factors</p>
+  <h2 class="sec-title">Factors that may shift the outlook</h2>
+  <p class="sec-sub">These factors are known to influence outcomes at periviable gestational ages. Check any that apply to your situation.</p>
+
+  <div class="modifier-grid">
+    <div class="modifier-item" id="mod-female" onclick="toggleModifier('female')">
+      <div class="modifier-cb"><span class="modifier-cb-check">✓</span></div>
+      <div>
+        <div class="modifier-label">Female baby</div>
+        <div class="modifier-sub">Based on ultrasound or amniocentesis findings</div>
+      </div>
+    </div>
+    <div class="modifier-item" id="mod-steroids" onclick="toggleModifier('steroids')">
+      <div class="modifier-cb"><span class="modifier-cb-check">✓</span></div>
+      <div>
+        <div class="modifier-label">Antenatal corticosteroids given (or planned)</div>
+        <div class="modifier-sub">A full course requires at least 24 hours between first dose and delivery</div>
+      </div>
+    </div>
+    <div class="modifier-item" id="mod-singleton" onclick="toggleModifier('singleton')">
+      <div class="modifier-cb"><span class="modifier-cb-check">✓</span></div>
+      <div>
+        <div class="modifier-label">Singleton pregnancy (not twins or more)</div>
+        <div class="modifier-sub">As opposed to a twin or higher-order multiple pregnancy</div>
+      </div>
+    </div>
+    <div class="modifier-item" id="mod-growth" onclick="toggleModifier('growth')">
+      <div class="modifier-cb"><span class="modifier-cb-check">✓</span></div>
+      <div>
+        <div class="modifier-label">Normal growth on ultrasound</div>
+        <div class="modifier-sub">Baby's weight is at or above the 10th percentile for gestational age</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modifier-callout-area">
+    <div class="modifier-callout" id="callout-female">
+      <strong>About female sex:</strong> Female babies at periviable gestational ages have consistently shown better survival and lower rates of serious complications than male babies — a difference of roughly 5 to 10 percentage points in most large studies. This is one of the strongest individual prognostic factors at this gestational age. The reason is not fully understood but may relate to lung maturity and brain development.
+    </div>
+    <div class="modifier-callout" id="callout-steroids">
+      <strong>About antenatal corticosteroids (steroids):</strong> A complete course of betamethasone — given to you as two injections 24 hours apart — is one of the most effective interventions available. It helps your baby's lungs mature faster and reduces the risk of serious brain bleeding. If delivery can be safely delayed even 24 to 48 hours, giving steroids is strongly recommended. The benefit is real and meaningful at every week in the periviable window.
+    </div>
+    <div class="modifier-callout" id="callout-singleton">
+      <strong>About singleton pregnancy:</strong> Babies born as singletons — rather than twins or higher-order multiples — tend to have modestly better outcomes at periviable gestational ages. The difference is smaller than the effect of sex or steroid exposure, but it is consistent across studies. If you are carrying twins or more, your care team can discuss how this affects the overall picture.
+    </div>
+    <div class="modifier-callout" id="callout-growth">
+      <strong>About normal growth:</strong> Babies who are appropriately grown for their gestational age — not small for dates — tend to have better outcomes than those who have experienced growth restriction in the womb. If your ultrasounds have shown normal fetal growth, this is an encouraging factor. If there has been some growth concern, ask your MFM specialist how this affects the overall picture for your baby.
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ── SECTION 4: WHAT NUMBERS DON'T TELL YOU ── -->
+<section>
+<div class="wrap">
+  <p class="sec-label">Important context</p>
+  <h2 class="sec-title">What these numbers don't tell you</h2>
+  <p class="sec-sub">Outcome statistics are a starting point — not the whole story.</p>
+
+  <div class="context-list">
+    <div class="context-item">
+      <div class="context-icon">📊</div>
+      <div class="context-text"><strong>Data describes populations, not individuals.</strong> These numbers come from thousands of babies born across many hospitals. Your baby is one person with their own specific circumstances. No statistic can tell you with certainty what will happen for your child.</div>
+    </div>
+    <div class="context-item">
+      <div class="context-icon">🏥</div>
+      <div class="context-text"><strong>Your hospital matters.</strong> The ranges shown here reflect the real variation between hospitals in the US. A 23-week baby at a high-volume academic center with a Level IV NICU has different odds than the same baby at a community hospital. It is a reasonable question to ask your care team: "What are your outcomes at this gestational age?"</div>
+    </div>
+    <div class="context-item">
+      <div class="context-icon">📈</div>
+      <div class="context-text"><strong>Outcomes are improving.</strong> The data from 2023 is better than the data from 2010. NICU care continues to advance — new surfactant protocols, better ventilator management, improved nutrition, and earlier developmental support are all moving survival and morbidity rates in the right direction. The numbers in this tool reflect the most current available data.</div>
+    </div>
+    <div class="context-item">
+      <div class="context-icon">❤️</div>
+      <div class="context-text"><strong>Numbers cannot capture what it means to parent a child with complex medical needs.</strong> Some families who have walked this road describe it as one of the most profound experiences of their lives. Others describe exhaustion, grief, and challenges they could not have anticipated. Both can be true. Connecting with other families who have been here — through organizations like the March of Dimes or Hand to Hold — can offer something data cannot.</div>
+    </div>
+    <div class="context-item">
+      <div class="context-icon">🤝</div>
+      <div class="context-text"><strong>Your clinical team knows things this tool does not.</strong> The specific details of your pregnancy — cervical exam, fetal position, placental status, your own medical history, the experience of the team caring for you — all affect the picture. These numbers are a framework for conversation, not a substitute for one.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ── SECTION 5: VALUES CLARIFICATION ── -->
+<section>
+<div class="wrap">
+  <p class="sec-label">Shared decision-making</p>
+  <h2 class="sec-title">Questions to explore with your family and care team</h2>
+
+  <div class="values-intro">
+    <strong>These questions have no right or wrong answers.</strong> They are starting points for the most important conversation you may ever have. Shared decision-making works best when families have had a chance to reflect — even briefly — on what matters most to them. You can use the copy button on any question to save it, write it down, or share it with someone who should be part of this conversation.
+  </div>
+
+  <div class="values-group">
+    <div class="values-group-title">About your baby's experience</div>
+    <div class="question-cards">
+      <div class="q-card">
+        <div class="q-text">How do you feel about your baby going through intensive medical procedures — including breathing machines, IV lines, and frequent blood draws — during a long NICU stay?</div>
+        <button class="copy-btn" onclick="copyQuestion(this,'How do you feel about your baby going through intensive medical procedures — including breathing machines, IV lines, and frequent blood draws — during a long NICU stay?')">Copy</button>
+      </div>
+      <div class="q-card">
+        <div class="q-text">If your baby survived but needed lifelong complex medical care, how does your family feel about that possibility? Is there a level of disability or dependence that would change your decision?</div>
+        <button class="copy-btn" onclick="copyQuestion(this,'If your baby survived but needed lifelong complex medical care, how does your family feel about that possibility? Is there a level of disability or dependence that would change your decision?')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="values-group">
+    <div class="values-group-title">About uncertainty</div>
+    <div class="question-cards">
+      <div class="q-card">
+        <div class="q-text">How do you usually handle situations where you don't know the outcome? Are you someone who wants to try everything and adjust as you learn more — or do you tend to make decisions based on what is most likely to happen?</div>
+        <button class="copy-btn" onclick="copyQuestion(this,'How do you usually handle situations where you don\'t know the outcome? Are you someone who wants to try everything and adjust as you learn more — or do you tend to make decisions based on what is most likely to happen?')">Copy</button>
+      </div>
+      <div class="q-card">
+        <div class="q-text">If the medical team told you that survival was possible but unlikely, what would that mean to you? Would you want to try, or would you want to focus on keeping your baby comfortable and pain-free?</div>
+        <button class="copy-btn" onclick="copyQuestion(this,'If the medical team told you that survival was possible but unlikely, what would that mean to you? Would you want to try, or would you want to focus on keeping your baby comfortable and pain-free?')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="values-group">
+    <div class="values-group-title">About your values and faith</div>
+    <div class="question-cards">
+      <div class="q-card">
+        <div class="q-text">Does your faith tradition or cultural background shape how you think about these decisions? If so, is there someone from your community or tradition you want to be part of this conversation?</div>
+        <button class="copy-btn" onclick="copyQuestion(this,'Does your faith tradition or cultural background shape how you think about these decisions? If so, is there someone from your community or tradition you want to be part of this conversation?')">Copy</button>
+      </div>
+      <div class="q-card">
+        <div class="q-text">Have you ever cared for or been close to someone who went through prolonged intensive medical care — perhaps at the end of their life, or through a serious illness? What did that experience teach you?</div>
+        <button class="copy-btn" onclick="copyQuestion(this,'Have you ever cared for or been close to someone who went through prolonged intensive medical care? What did that experience teach you?')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="values-group">
+    <div class="values-group-title">About your family</div>
+    <div class="question-cards">
+      <div class="q-card">
+        <div class="q-text">Do you have other children or family members at home whose needs are part of this picture? How does your family's full situation shape what feels right for you?</div>
+        <button class="copy-btn" onclick="copyQuestion(this,'Do you have other children or family members at home whose needs are part of this picture? How does your family\'s full situation shape what feels right for you?')">Copy</button>
+      </div>
+      <div class="q-card">
+        <div class="q-text">What does quality of life mean to your family? Is there a condition under which you would feel that intensive medical care was causing more suffering than benefit — for your baby or for your family as a whole?</div>
+        <button class="copy-btn" onclick="copyQuestion(this,'What does quality of life mean to your family? Is there a condition under which you would feel that intensive medical care was causing more suffering than benefit?')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ── SECTION 6: NICU GLOSSARY ── -->
+<section>
+<div class="wrap">
+  <p class="sec-label">NICU glossary</p>
+  <h2 class="sec-title">Terms you will hear in the first 48 hours</h2>
+  <p class="sec-sub">Plain-language definitions for the medical words your care team will use. This is not a complete medical glossary — it is a starting point for the conversations ahead.</p>
+
+  <div class="glossary-grid">
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">Intubation <span class="glos-icon">+</span></button>
+      <div class="glos-body">Placing a small breathing tube through the mouth or nose into the airway so a ventilator can breathe for your baby. This is one of the first things done when a premature baby is born and cannot breathe well on their own.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">Ventilator (breathing machine) <span class="glos-icon">+</span></button>
+      <div class="glos-body">A machine that helps your baby breathe by pushing air into the lungs through the breathing tube. It is carefully adjusted by the NICU team. Being on a ventilator is not a sign that a baby will always need one — most babies are gradually weaned off as their lungs mature.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">CPAP <span class="glos-icon">+</span></button>
+      <div class="glos-body">Continuous Positive Airway Pressure. A gentler form of breathing support that uses a small mask or prongs in the nose to help keep the airways open. Babies who have matured enough to breathe on their own but still need a little help often use CPAP before coming completely off breathing support.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">Surfactant <span class="glos-icon">+</span></button>
+      <div class="glos-body">A soap-like substance that coats the inside of the lungs and keeps them from collapsing with each breath. Premature babies do not make enough of it on their own. Surfactant can be given through the breathing tube shortly after birth and is one of the most important treatments in the NICU for very premature babies.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">IVH — Intraventricular hemorrhage (brain bleed) <span class="glos-icon">+</span></button>
+      <div class="glos-body"><span class="glos-severity sev-serious">Serious complication</span><br>Bleeding inside the fluid-filled chambers of the brain. It is graded from I (mild) to IV (most severe). Grade I–II bleeds often resolve without serious effects. Grade III–IV bleeds can affect a child's brain development and long-term function. A brain ultrasound in the first few days of life is the standard way to check for this.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">PVL — Periventricular leukomalacia <span class="glos-icon">+</span></button>
+      <div class="glos-body"><span class="glos-severity sev-serious">Serious complication</span><br>Injury or softening of the white matter of the brain near the ventricles. This is a form of brain injury that is associated with problems with movement (including cerebral palsy), learning, and vision. It is seen on brain ultrasound, sometimes not until several weeks after birth.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">NEC — Necrotizing enterocolitis <span class="glos-icon">+</span></button>
+      <div class="glos-body"><span class="glos-severity sev-serious">Serious complication</span><br>A serious intestinal condition in premature babies where part of the bowel becomes inflamed and may die. It can range from mild (treated with antibiotics and stopping feeds temporarily) to severe (requiring surgery to remove part of the intestine). NEC is one of the more feared NICU complications and is more common in very premature babies.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">BPD — Bronchopulmonary dysplasia (chronic lung disease) <span class="glos-icon">+</span></button>
+      <div class="glos-body"><span class="glos-severity sev-monitor">Monitored closely</span><br>Chronic lung disease that develops in very premature babies who needed long-term breathing support. Babies with BPD may still need oxygen after leaving the hospital. Most improve significantly over the first 1–2 years of life as the lungs continue to grow and develop.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">ROP — Retinopathy of prematurity <span class="glos-icon">+</span></button>
+      <div class="glos-body"><span class="glos-severity sev-monitor">Monitored closely</span><br>Abnormal blood vessel growth in the retina (the back of the eye) that can develop in premature babies. Mild ROP often resolves on its own. Severe ROP can affect vision and may require laser treatment. Eye exams are a routine part of NICU care for very premature babies.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">PDA — Patent ductus arteriosus <span class="glos-icon">+</span></button>
+      <div class="glos-body"><span class="glos-severity sev-monitor">Monitored closely</span><br>A blood vessel near the heart that normally closes shortly after birth but often remains open in premature babies. A PDA can make the heart and lungs work harder. It may close on its own, be treated with medication, or rarely require a small procedure to close it.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">Sepsis <span class="glos-icon">+</span></button>
+      <div class="glos-body"><span class="glos-severity sev-serious">Serious complication</span><br>A serious infection in the bloodstream. Premature babies are more vulnerable to infection because their immune systems are not yet fully developed. Signs of sepsis are often subtle in newborns — the NICU team watches closely and acts quickly when an infection is suspected.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">TPN — Total parenteral nutrition <span class="glos-icon">+</span></button>
+      <div class="glos-body"><span class="glos-severity sev-support">Supportive care</span><br>Nutrition given directly into a vein when a baby cannot yet be fed through the stomach. TPN contains everything a premature baby needs — proteins, fats, sugars, vitamins, and minerals. It is used in the early days and weeks of life until the baby can tolerate breast milk or formula through a feeding tube.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">Central line (PICC line) <span class="glos-icon">+</span></button>
+      <div class="glos-body"><span class="glos-severity sev-support">Supportive care</span><br>A thin flexible tube placed into a large vein, used to give TPN, medications, and fluids. It stays in place for days to weeks so that the baby does not need a new IV line placed frequently.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">HFO — High-frequency oscillator ventilator <span class="glos-icon">+</span></button>
+      <div class="glos-body">A specialized ventilator that delivers very small, rapid breaths — hundreds per minute — rather than the slower breaths of a conventional ventilator. It is used for babies whose lungs are very stiff or who are not doing well on a conventional ventilator. It may look or sound different from a standard ventilator.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">Vasopressors <span class="glos-icon">+</span></button>
+      <div class="glos-body">Medications given through an IV line to help support blood pressure and heart function. Very premature babies sometimes have difficulty maintaining adequate blood pressure on their own in the early days of life. Common vasopressors used in the NICU include dopamine and epinephrine.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">Comfort care / Palliative care <span class="glos-icon">+</span></button>
+      <div class="glos-body">A care approach that focuses on keeping a baby comfortable, warm, and pain-free — held and loved by family — rather than pursuing invasive interventions aimed at extending life. Comfort care is a valid medical choice, not a failure. It can be the right choice at any gestational age, and it is done with compassion and dignity. Your care team can explain exactly what this would look like for your baby.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">Corrected age (adjusted age) <span class="glos-icon">+</span></button>
+      <div class="glos-body">The age your baby would be if they had been born on their due date, rather than early. Corrected age is used for the first 2–3 years of life to track development. A baby born at 24 weeks who is now 6 months old (calendar age) has a corrected age of about 3 months — and their development is assessed against the 3-month milestone.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">Kangaroo care (skin-to-skin) <span class="glos-icon">+</span></button>
+      <div class="glos-body"><span class="glos-severity sev-support">Beneficial for baby and family</span><br>Holding your baby on your bare chest, skin-to-skin. Research shows that kangaroo care improves temperature regulation, breathing stability, weight gain, and bonding — and it reduces parental stress. It can often begin earlier in the NICU stay than families expect. Ask your nurse when it might be possible for your baby.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">Brain ultrasound (head ultrasound) <span class="glos-icon">+</span></button>
+      <div class="glos-body">An imaging test done at the bedside using sound waves — no radiation — to look at the structures of your baby's brain. It is the standard way to screen for IVH and PVL. Most very premature babies have head ultrasounds in the first few days of life and again at several weeks. Results are discussed with families as soon as they are available.</div>
+    </div>
+
+    <div class="glos-item">
+      <button class="glos-trigger" onclick="toggleGlos(this)">Attending neonatologist <span class="glos-icon">+</span></button>
+      <div class="glos-body">The physician in charge of your baby's overall care in the NICU. Attendings rotate on a regular schedule (often weekly). Your primary nurse and the bedside team are present every day — but the attending is the physician who leads the care plan and is the person to speak with about goals of care, major decisions, and prognosis.</div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- ── SECTION 7: FOR CLINICIANS ── -->
+<section>
+<div class="wrap">
+  <p class="sec-label">Clinical reference</p>
+  <h2 class="sec-title">For clinicians</h2>
+  <p class="sec-sub">Guideline-level summary for counseling sessions. Expand to view.</p>
+
+  <button class="clin-toggle" onclick="toggleClinician(this)">
+    <span>Expand clinician reference panel</span>
+    <span>&#9660;</span>
+  </button>
+  <div class="clin-body" id="clin-body">
+
+    <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;">The following summarizes the ACOG/SMFM/AAP periviability statement (2020) and NICHD NRN data (Rysavy 2015, Rysavy 2023) for use in direct patient counseling.</p>
+
+    <table class="clin-table">
+      <thead>
+        <tr>
+          <th>GA</th>
+          <th>Survival (range)</th>
+          <th>Survival w/o major morbidity</th>
+          <th>ACOG/SMFM/AAP recommendation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>22 wks</td>
+          <td>0–18%</td>
+          <td>0–5%</td>
+          <td>Either active intervention or comfort-focused care is appropriate. Parental preference central. Document counseling thoroughly.</td>
+        </tr>
+        <tr>
+          <td>23 wks</td>
+          <td>15–55%</td>
+          <td>5–18%</td>
+          <td>Zone of parental discretion. Both approaches ethically defensible. Offer full counseling including center-specific data if available.</td>
+        </tr>
+        <tr>
+          <td>24 wks</td>
+          <td>42–72%</td>
+          <td>14–32%</td>
+          <td>Active resuscitation generally recommended. Comfort-focused care should still be discussed if family raises it. Antenatal steroids strongly indicated.</td>
+        </tr>
+        <tr>
+          <td>25 wks</td>
+          <td>66–88%</td>
+          <td>28–48%</td>
+          <td>Active resuscitation is standard of care. Outcomes increasingly favorable. Steroids, MgSO4 for neuroprotection, and level III/IV center delivery recommended.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:13px;font-weight:600;color:var(--text);margin:20px 0 8px;">Key interventions — document in counseling note</p>
+    <ul style="font-size:13px;color:var(--text-2);line-height:1.8;padding-left:18px;">
+      <li>Antenatal corticosteroids (betamethasone 12 mg IM × 2, 24 hrs apart): benefit demonstrated at 22–25 wks; administer if delivery anticipated within 7 days</li>
+      <li>Magnesium sulfate for neuroprotection: recommended at &lt;32 wks if delivery anticipated within 24 hrs (ACOG PB #455)</li>
+      <li>GBS prophylaxis: per standard intrapartum protocol regardless of gestational age</li>
+      <li>Neonatology consult: document that family met with neonatology team prior to delivery</li>
+      <li>Ethics consultation: consider for cases with significant family-team disagreement or clinical uncertainty</li>
+    </ul>
+
+    <p style="font-size:13px;font-weight:600;color:var(--text);margin:20px 0 8px;">Suggested counseling note documentation</p>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.8;">Counseling was provided to [patient] and [support person] regarding periviable delivery at [GA]. National outcome data including survival ranges and morbidity estimates were reviewed. Prognostic modifiers discussed: [fetal sex, ACS status, plurality, growth]. The zone of parental discretion was explained. Patient/family expressed [preference for active resuscitation / preference for comfort-focused care / desire for additional time/information]. Neonatology was [consulted / plan to consult]. [Ethics was / was not] involved. Goals of care: [document]. Plan: [document].</p>
+
+  </div>
+</div>
+</section>
+
+<!-- ── SECTION 8: REFERENCES ── -->
+<section>
+<div class="wrap">
+  <p class="sec-label">Evidence base</p>
+  <h2 class="sec-title">Guideline references</h2>
+  <p class="sec-sub">All content is anchored to peer-reviewed guidelines and landmark clinical trials.</p>
+
+  <button class="ref-toggle" id="ref-toggle-btn" onclick="toggleRefs()">
+    <span>Show references</span> <span>&#9660;</span>
+  </button>
+  <div class="ref-list" id="ref-list">
+    <div class="ref-entry"><strong>ACOG/SMFM/AAP Periviability Statement (2020).</strong> Periviable Birth. American College of Obstetricians and Gynecologists, Society for Maternal-Fetal Medicine, American Academy of Pediatrics. <em>Obstet Gynecol.</em> 2020;135(4):e187–e199.</div>
+    <div class="ref-entry"><strong>Rysavy MA, et al. (2015).</strong> Between-hospital variation in treatment and outcomes in extremely preterm infants. <em>N Engl J Med.</em> 2015;372(19):1801–1811. (NICHD Neonatal Research Network)</div>
+    <div class="ref-entry"><strong>Rysavy MA, et al. (2023).</strong> Outcomes of Extremely Preterm Infants. <em>JAMA Pediatrics.</em> (Updated NICHD NRN outcomes data)</div>
+    <div class="ref-entry"><strong>Younge N, et al. (2017).</strong> Survival and Neurodevelopmental Outcomes among Periviable Infants. <em>N Engl J Med.</em> 2017;376(7):617–628.</div>
+    <div class="ref-entry"><strong>Stoll BJ, et al. (2015).</strong> Trends in Care Practices, Morbidity, and Mortality of Extremely Preterm Neonates, 1993–2012. <em>JAMA.</em> 2015;314(10):1039–1051.</div>
+    <div class="ref-entry"><strong>Carlo WA, et al. (SUPPORT trial, 2010).</strong> Surfactant and Continuous Positive Airway Pressure versus Surfactant in Very Immature Premature Infants. <em>N Engl J Med.</em> 2010;362(21):1970–1979.</div>
+    <div class="ref-entry"><strong>ACOG Practice Bulletin #130 (reaffirmed 2022).</strong> Prediction and Prevention of Preterm Birth. <em>Obstet Gynecol.</em></div>
+    <div class="ref-entry"><strong>ACOG Practice Bulletin #455.</strong> Magnesium Sulfate Before Anticipated Preterm Birth for Neuroprotection. <em>Obstet Gynecol.</em></div>
+  </div>
+</div>
+</section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>Built by <a href="https://openmfm.org" target="_blank" rel="noopener">OpenMFM.org</a> — Evidence-based maternal-fetal medicine education</p>
+  <p style="margin-top:4px;">Chukwuma Onyeije, MD, FACOG | Atlanta Perinatal Associates</p>
+  <p style="margin-top:14px;font-size:12px;color:var(--text-3);max-width:620px;margin-left:auto;margin-right:auto;">This resource is for educational and counseling support purposes only. It does not constitute medical advice and does not replace a conversation with your clinical team. Outcome data reflects national ranges from published literature and does not represent any individual hospital's outcomes. Families facing periviable delivery should make decisions in close partnership with their care team.</p>
+  <p style="margin-top:12px;font-size:12px;color:var(--text-3);">
+    <a href="https://www.marchofdimes.org" target="_blank" rel="noopener">March of Dimes</a> &nbsp;·&nbsp;
+    <a href="https://handtohold.org" target="_blank" rel="noopener">Hand to Hold (NICU family support)</a> &nbsp;·&nbsp;
+    <a href="https://openmfm.org" target="_blank" rel="noopener">OpenMFM.org</a>
+  </p>
+</footer>
+
+<script>
+// ── State ──
+window.periState = { ga: 22, modifiers: [] };
+
+// ── GA tab switching ──
+function switchGA(ga, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected','false');
+  });
+  document.querySelectorAll('.outcome-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected','true');
+  document.getElementById('panel-' + ga).classList.add('active');
+  window.periState.ga = ga;
+}
+
+// ── Modifier toggle ──
+function toggleModifier(key) {
+  const item = document.getElementById('mod-' + key);
+  const callout = document.getElementById('callout-' + key);
+  const isChecked = item.classList.contains('checked');
+  item.classList.toggle('checked', !isChecked);
+  callout.classList.toggle('visible', !isChecked);
+  if (!isChecked) {
+    window.periState.modifiers.push(key);
+  } else {
+    window.periState.modifiers = window.periState.modifiers.filter(m => m !== key);
+  }
+}
+
+// ── Glossary accordion ──
+function toggleGlos(trigger) {
+  const item = trigger.closest('.glos-item');
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.glos-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// ── Clinician panel ──
+function toggleClinician(btn) {
+  const body = document.getElementById('clin-body');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  btn.querySelector('span:first-child').textContent = isOpen ? 'Expand clinician reference panel' : 'Collapse clinician reference panel';
+}
+
+// ── References ──
+function toggleRefs() {
+  const list = document.getElementById('ref-list');
+  const btn = document.getElementById('ref-toggle-btn');
+  const hidden = list.style.display === 'none' || !list.style.display;
+  list.style.display = hidden ? 'block' : 'none';
+  btn.querySelector('span:first-child').textContent = hidden ? 'Hide references' : 'Show references';
+}
+
+// ── Copy question ──
+function copyQuestion(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(() => {
+    // Fallback for non-HTTPS
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+</script>
+
+</body>
+</html>
