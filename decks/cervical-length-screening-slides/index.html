@@ -569,6 +569,106 @@
             background: radial-gradient(circle, rgba(0,119,182,0.08) 0%, transparent 70%);
             pointer-events: none;
         }
+
+        /* ─── Mobile Responsive ─────────────────────────────────────── */
+        @media (max-width: 768px) {
+            /* Allow slide to scroll vertically when content overflows */
+            .slide {
+                padding: 3.5em 1.2em 5em;
+                justify-content: flex-start;
+                align-items: stretch;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* Scale down typography */
+            h1 { font-size: clamp(1.6rem, 6vw, 2.2rem); }
+            h2 { font-size: clamp(1.3rem, 5vw, 1.8rem); }
+            h3 { font-size: clamp(1rem, 4vw, 1.3rem); }
+            p.body-text { font-size: 0.95em; max-width: 100%; }
+            .subtitle { font-size: 1em; }
+            .slide-eyebrow { font-size: 0.75em; }
+
+            /* Two-column → single column */
+            .two-col {
+                flex-direction: column;
+                gap: 1em;
+                max-width: 100%;
+            }
+
+            /* Stat cards: compact */
+            .stat-row { gap: 0.7em; }
+            .stat-card {
+                min-width: 120px;
+                max-width: 100%;
+                padding: 0.9em 1em;
+                flex: 1 1 40%;
+            }
+            .stat-card .stat-value { font-size: 1.8em; }
+            .stat-card .stat-label { font-size: 0.78em; }
+
+            /* Horizontal timeline → vertical stack */
+            .timeline {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8em;
+                max-width: 100%;
+            }
+            .timeline-item { width: 100%; text-align: left; }
+            .timeline-item::before { display: none; }
+            .timeline-dot {
+                margin: 0 0 0.3em 0;
+                width: 36px;
+                height: 36px;
+                font-size: 0.85em;
+            }
+            .timeline-label { font-size: 0.82em; }
+            .timeline-ga { font-size: 0.9em; }
+
+            /* Tables: horizontal scroll */
+            .clinical-table {
+                font-size: 0.78em;
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                max-width: 100%;
+            }
+            .clinical-table thead th { padding: 0.5em 0.7em; font-size: 0.82em; }
+            .clinical-table tbody td { padding: 0.5em 0.7em; font-size: 0.82em; }
+
+            /* Threshold bar */
+            .threshold-bar { max-width: 100%; }
+            .threshold-marker .marker-label { font-size: 0.72em; }
+            .threshold-scale { font-size: 0.7em; }
+
+            /* Icon grid */
+            .icon-grid { gap: 0.8em; }
+            .icon-item { max-width: 110px; }
+            .icon-circle { width: 50px; height: 50px; font-size: 1.3em; }
+            .icon-item .icon-label { font-size: 0.78em; }
+            .icon-item .icon-value { font-size: 0.95em; }
+
+            /* Evidence & highlight blocks */
+            .evidence-block { padding: 0.8em 1em; }
+            .evidence-block .ev-text { font-size: 0.95em; }
+            .highlight-box { padding: 0.8em 1em; max-width: 100%; }
+            .highlight-box .hb-text { font-size: 0.95em; }
+
+            /* Nav bar: smaller */
+            #nav { padding: 0.4em 0.9em; gap: 0.7em; bottom: 0.8em; }
+            #nav button { font-size: 1em; padding: 0.25em 0.5em; }
+            #slide-counter { font-size: 0.78em; min-width: 48px; }
+
+            /* Hide desktop footer branding — too cramped on mobile */
+            .slide-footer { display: none; }
+        }
+
+        @media (max-width: 420px) {
+            .slide { padding: 3em 0.9em 4.5em; }
+            h1 { font-size: clamp(1.4rem, 7vw, 1.9rem); }
+            h2 { font-size: clamp(1.2rem, 6vw, 1.6rem); }
+            .stat-card { flex: 1 1 100%; max-width: 100%; }
+        }
     </style>
 <!-- openmfm-seo-injected -->
 <link rel="canonical" href="https://openmfm.org/decks/cervical-length-screening-slides/index.html">
