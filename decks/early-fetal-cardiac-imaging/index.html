@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Early Fetal Cardiac Imaging | openmfm.org</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent:    #1f6feb;
+      --accent-lt: #388bfd;
+      --green:     #3fb950;
+      --orange:    #d29922;
+      --red:       #f85149;
+      --teal:      #39d353;
+      --purple:    #bc8cff;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Deck ── */
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 5vw;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Typography ── */
+    .eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-lt);
+      margin-bottom: 0.6rem;
+    }
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      text-align: center;
+      color: var(--text);
+    }
+    h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+      font-weight: 600;
+      line-height: 1.2;
+      text-align: center;
+      color: var(--text);
+      margin-bottom: 1.4rem;
+    }
+    .subtitle {
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.8rem;
+      max-width: 680px;
+    }
+    .body-text {
+      font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+      line-height: 1.7;
+      color: var(--text);
+      max-width: 760px;
+      text-align: center;
+    }
+
+    /* ── Pill / Tag ── */
+    .pill {
+      display: inline-block;
+      padding: 0.25em 0.9em;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .pill-blue   { background: rgba(31,111,235,0.18); color: var(--accent-lt); border: 1px solid rgba(56,139,253,0.35); }
+    .pill-green  { background: rgba(63,185,80,0.15);  color: var(--green);     border: 1px solid rgba(63,185,80,0.35); }
+    .pill-orange { background: rgba(210,153,34,0.15); color: var(--orange);    border: 1px solid rgba(210,153,34,0.35); }
+
+    /* ── Cards ── */
+    .card-grid {
+      display: grid;
+      gap: 1.1rem;
+      width: 100%;
+      max-width: 900px;
+    }
+    .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .card-icon { font-size: 2rem; line-height: 1; }
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent-lt);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .card-body {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      width: 100%;
+      max-width: 860px;
+      margin-top: 0.5rem;
+    }
+    .tl-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .tl-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .tl-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      z-index: 1;
+      position: relative;
+    }
+    .tl-dot-blue   { background: var(--accent);  color: #fff; }
+    .tl-dot-green  { background: var(--green);   color: #0d1117; }
+    .tl-dot-orange { background: var(--orange);  color: #0d1117; }
+    .tl-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-lt);
+      margin-top: 0.5rem;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+    .tl-desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.25rem;
+      max-width: 110px;
+      line-height: 1.4;
+    }
+
+    /* ── Indication Table ── */
+    .ind-table {
+      width: 100%;
+      max-width: 860px;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .ind-table th {
+      background: rgba(31,111,235,0.2);
+      color: var(--accent-lt);
+      padding: 0.6rem 1rem;
+      text-align: left;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      border-bottom: 2px solid var(--accent);
+    }
+    .ind-table td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .ind-table tr:last-child td { border-bottom: none; }
+    .ind-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .cat-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15em 0.6em;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    .cat-fetal    { background: rgba(56,139,253,0.15); color: var(--accent-lt); }
+    .cat-maternal { background: rgba(63,185,80,0.15);  color: var(--green); }
+    .cat-familial { background: rgba(188,140,255,0.15); color: var(--purple); }
+
+    /* ── Soft Marker Banner ── */
+    .banner {
+      width: 100%;
+      max-width: 780px;
+      border-radius: 12px;
+      padding: 1.2rem 1.8rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .banner-green  { background: rgba(63,185,80,0.12);  border: 1px solid rgba(63,185,80,0.35); }
+    .banner-orange { background: rgba(210,153,34,0.12); border: 1px solid rgba(210,153,34,0.35); }
+    .banner-icon { font-size: 1.8rem; line-height: 1; flex-shrink: 0; }
+    .banner-content { flex: 1; }
+    .banner-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .banner-green  .banner-title { color: var(--green); }
+    .banner-orange .banner-title { color: var(--orange); }
+    .banner-body { font-size: 0.85rem; color: var(--muted); line-height: 1.55; }
+
+    /* ── Views Row ── */
+    .views-row {
+      display: flex;
+      gap: 1.2rem;
+      width: 100%;
+      max-width: 860px;
+    }
+    .view-card {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-align: center;
+    }
+    .view-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .view-title { font-size: 0.82rem; font-weight: 700; color: var(--accent-lt); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+    .view-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.45; }
+
+    /* ── Nav ── */
+    .nav {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(22,27,34,0.9);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.45rem 1.2rem;
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    .nav button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav button:hover { color: var(--text); background: rgba(255,255,255,0.07); }
+    .nav-counter { font-size: 0.78rem; color: var(--muted); min-width: 52px; text-align: center; }
+
+    /* ── Dots ── */
+    .dots {
+      position: fixed;
+      bottom: 4.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.45rem;
+      z-index: 100;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background 0.3s;
+      cursor: pointer;
+    }
+    .dot.active { background: var(--accent-lt); }
+
+    /* ── Brand Footer ── */
+    .brand {
+      position: fixed;
+      top: 1rem;
+      right: 1.5rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      z-index: 100;
+    }
+    .brand span { color: var(--accent-lt); font-weight: 700; }
+
+    /* ── Slide-specific overrides ── */
+    #slide-1 { background: radial-gradient(ellipse at 60% 40%, rgba(31,111,235,0.12) 0%, transparent 65%), var(--bg); }
+    #slide-1 h1 { font-size: clamp(2.4rem, 5.5vw, 4.4rem); }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+      .views-row { flex-direction: column; }
+      .timeline { flex-direction: column; gap: 1.2rem; }
+      .tl-step::after { display: none; }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/early-fetal-cardiac-imaging/index.html">
+<meta name="description" content="Patient education on early fetal cardiac imaging (13–16 weeks): indications for referral, three key screening views, capabilities and limitations of early imaging versus the standard 18–22 week echo, EIF soft marker counseling, fetal cardiac MRI, and next steps after a finding. Based on AHA, ASE, and SMFM guidelines.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Fetal Echocardiography, Congenital Heart Disease, Fetal Cardiology, High-Risk Pregnancy, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/early-fetal-cardiac-imaging/index.html">
+<meta property="og:title" content="Early Fetal Cardiac Imaging - Patient Education | OpenMFM">
+<meta property="og:description" content="Patient education on early fetal cardiac imaging (13–16 weeks): indications for referral, three key screening views, capabilities and limitations of early imaging versus the standard 18–22 week echo, EIF soft marker counseling, fetal cardiac MRI, and next steps after a finding. Based on AHA, ASE, and SMFM guidelines.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Early Fetal Cardiac Imaging - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Patient education on early fetal cardiac imaging (13–16 weeks): indications for referral, three key screening views, capabilities and limitations of early imaging versus the standard 18–22 week echo, EIF soft marker counseling, fetal cardiac MRI, and next steps after a finding. Based on AHA, ASE, and SMFM guidelines.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Early Fetal Cardiac Imaging - Patient Education",
+  "description": "Patient education on early fetal cardiac imaging (13–16 weeks): indications for referral, three key screening views, capabilities and limitations of early imaging versus the standard 18–22 week echo, EIF soft marker counseling, fetal cardiac MRI, and next steps after a finding. Based on AHA, ASE, and SMFM guidelines.",
+  "url": "https://openmfm.org/decks/early-fetal-cardiac-imaging/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-19",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Early Fetal Cardiac Imaging - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Fetal Echocardiography, Congenital Heart Disease, Fetal Cardiology, High-Risk Pregnancy, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div class="brand">openmfm<span>.org</span></div>
+
+<div class="deck" id="deck">
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 1 — Title
+  ══════════════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="eyebrow">Patient Education Series</div>
+    <h1>Early Fetal Cardiac Imaging</h1>
+    <p class="subtitle">Understanding your baby's heart — earlier than ever before</p>
+    <div style="margin-top:2rem; display:flex; gap:0.7rem; flex-wrap:wrap; justify-content:center;">
+      <span class="pill pill-blue">Fetal Echocardiography</span>
+      <span class="pill pill-green">High-Risk Pregnancy</span>
+      <span class="pill pill-orange">Congenital Heart Disease</span>
+    </div>
+    <p style="margin-top:2.5rem; font-size:0.78rem; color:var(--muted); letter-spacing:0.06em;">
+      Based on AHA · ASE · SMFM Guidelines &nbsp;|&nbsp; openmfm.org
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 2 — What is Fetal Echocardiography?
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="eyebrow">What is it?</div>
+    <h2>Fetal Echocardiography</h2>
+    <p class="body-text" style="margin-bottom:1.8rem;">
+      A specialized ultrasound that creates detailed images of your baby's heart — its structure, chambers, valves, and blood flow.
+    </p>
+    <div class="card-grid card-grid-3" style="max-width:820px;">
+      <div class="card">
+        <div class="card-icon">🫀</div>
+        <div class="card-title">What it sees</div>
+        <div class="card-body">Heart chambers, valves, great vessels, and blood flow patterns</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📡</div>
+        <div class="card-title">How it works</div>
+        <div class="card-body">High-resolution sound waves — no radiation, safe for mother and baby</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🕐</div>
+        <div class="card-title">Standard timing</div>
+        <div class="card-body">Typically performed at 18–22 weeks as part of routine prenatal care</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 3 — Standard Screening Views
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="eyebrow">Standard Screening</div>
+    <h2>Three Key Views of the Heart</h2>
+    <p class="body-text" style="margin-bottom:1.6rem;">
+      Every routine anatomy scan evaluates three essential cardiac views to screen for congenital heart disease.
+    </p>
+    <div class="views-row">
+      <div class="view-card">
+        <div class="view-icon">🔲</div>
+        <div class="view-title">Four-Chamber View</div>
+        <div class="view-desc">Checks that the heart has four equal chambers and is positioned correctly in the chest</div>
+      </div>
+      <div class="view-card">
+        <div class="view-icon">➡️</div>
+        <div class="view-title">Outflow Tracts</div>
+        <div class="view-desc">Confirms the aorta and pulmonary artery exit the heart at the correct angles</div>
+      </div>
+      <div class="view-card">
+        <div class="view-icon">🔵</div>
+        <div class="view-title">3-Vessel Trachea (3VT)</div>
+        <div class="view-desc">Verifies the three major vessels near the trachea are the right size and arrangement</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 4 — What is EARLY Imaging?
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="eyebrow">Early Imaging</div>
+    <h2>Earlier Than Ever: 13–16 Weeks</h2>
+    <p class="body-text" style="margin-bottom:2rem;">
+      Advances in ultrasound technology now allow visualization of very small cardiac structures as early as <strong>13–14 weeks</strong> — well before the standard 18-week scan.
+    </p>
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-dot tl-dot-blue">11</div>
+        <div class="tl-label">11–13 Wks</div>
+        <div class="tl-desc">Nuchal translucency screening identifies high-risk pregnancies</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot tl-dot-orange">13</div>
+        <div class="tl-label">13–16 Wks</div>
+        <div class="tl-desc">Early fetal echo for high-risk patients — preliminary cardiac assessment</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot tl-dot-green">18</div>
+        <div class="tl-label">18–22 Wks</div>
+        <div class="tl-desc">Standard mid-trimester echo — gold standard, mandatory follow-up</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:var(--purple);color:#fff;">24</div>
+        <div class="tl-label">After 22 Wks</div>
+        <div class="tl-desc">Additional imaging if needed for complex findings</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 5 — Who Needs Early Imaging?
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="eyebrow">Clinical Indications</div>
+    <h2>Who Is Referred for Early Imaging?</h2>
+    <table class="ind-table">
+      <thead>
+        <tr>
+          <th style="width:140px;">Category</th>
+          <th>Indication</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="cat-label cat-fetal">Fetal</span></td>
+          <td>Increased nuchal translucency (≥3.5 mm), major structural anomalies, hydrops fetalis, persistent fetal arrhythmia</td>
+        </tr>
+        <tr>
+          <td><span class="cat-label cat-maternal">Maternal</span></td>
+          <td>Pre-gestational diabetes (HbA1c &gt;7.5%), autoimmune antibodies (anti-SSA/SSB), exposure to cardiac teratogens (ACE inhibitors, retinoic acid)</td>
+        </tr>
+        <tr>
+          <td><span class="cat-label cat-familial">Familial</span></td>
+          <td>Parent or sibling with congenital heart disease, conception via IVF/ICSI, monochorionic twin pregnancy</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.72rem; color:var(--muted); margin-top:0.9rem;">Source: AHA · ASE · SMFM Guidelines</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 6 — What Early Imaging Can & Cannot Do
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="eyebrow">What to Expect</div>
+    <h2>Early Imaging: Capabilities &amp; Limits</h2>
+    <div class="card-grid card-grid-2" style="max-width:820px;">
+      <div class="card" style="border-color:rgba(63,185,80,0.4);">
+        <div class="card-icon">✅</div>
+        <div class="card-title" style="color:var(--green);">What it can detect</div>
+        <div class="card-body">Major structural heart defects (e.g., hypoplastic left heart, transposition of great arteries) as early as 13–14 weeks in high-risk pregnancies</div>
+      </div>
+      <div class="card" style="border-color:rgba(210,153,34,0.4);">
+        <div class="card-icon">⚠️</div>
+        <div class="card-title" style="color:var(--orange);">Important limitations</div>
+        <div class="card-body">Some structures (e.g., pulmonary veins) are too small to evaluate before 18 weeks. A follow-up echo at 18–22 weeks is <strong>always required</strong></div>
+      </div>
+      <div class="card" style="border-color:rgba(56,139,253,0.4);">
+        <div class="card-icon">🔬</div>
+        <div class="card-title">Advancing technology</div>
+        <div class="card-body">High-resolution transabdominal and transvaginal ultrasound now achieves diagnostic quality at 13–16 weeks in experienced hands</div>
+      </div>
+      <div class="card" style="border-color:rgba(188,140,255,0.4);">
+        <div class="card-icon">🤝</div>
+        <div class="card-title" style="color:var(--purple);">Not a replacement</div>
+        <div class="card-body">Early imaging supplements — but does not replace — the standard 18–22 week fetal echocardiogram for all patients</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 7 — Soft Markers: What They Mean
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="eyebrow">Soft Markers</div>
+    <h2>Echogenic Intracardiac Focus (EIF)</h2>
+    <p class="body-text" style="margin-bottom:1.6rem; font-size:1rem;">
+      A bright spot sometimes seen inside the heart on ultrasound. Current SMFM guidelines are clear:
+    </p>
+    <div style="display:flex; flex-direction:column; gap:0.9rem; width:100%; max-width:720px;">
+      <div class="banner banner-green">
+        <div class="banner-icon">✅</div>
+        <div class="banner-content">
+          <div class="banner-title">Isolated EIF with Normal Aneuploidy Screen</div>
+          <div class="banner-body">Considered a <strong>normal variant</strong>. Does not require fetal echocardiography or specialized postnatal follow-up. (SMFM Grade 1B Recommendation)</div>
+        </div>
+      </div>
+      <div class="banner banner-orange">
+        <div class="banner-icon">⚠️</div>
+        <div class="banner-content">
+          <div class="banner-title">EIF with Other Risk Factors</div>
+          <div class="banner-body">When combined with abnormal aneuploidy screening or additional structural findings, further evaluation may be recommended by your care team.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 8 — Adjunctive Imaging: Fetal MRI
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="eyebrow">Adjunctive Imaging</div>
+    <h2>When Fetal Cardiac MRI Is Used</h2>
+    <p class="body-text" style="margin-bottom:1.6rem; font-size:1rem;">
+      Fetal cardiovascular MRI (CMR) is not a screening tool. It is used in specific situations where ultrasound is limited.
+    </p>
+    <div class="card-grid card-grid-3" style="max-width:860px;">
+      <div class="card">
+        <div class="card-icon">🔍</div>
+        <div class="card-title">When it helps</div>
+        <div class="card-body">Maternal obesity, low amniotic fluid (oligohydramnios), or complex anatomy such as vascular rings or heterotaxy</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🛡️</div>
+        <div class="card-title">Safety</div>
+        <div class="card-body">MRI without gadolinium contrast is considered safe in pregnancy — no ionizing radiation</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏥</div>
+        <div class="card-title">Availability</div>
+        <div class="card-body">Advanced fetal CMR sequences are available at select tertiary care and research centers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 9 — What Happens After a Finding?
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-9">
+    <div class="eyebrow">After the Scan</div>
+    <h2>If a Finding Is Identified</h2>
+    <p class="body-text" style="margin-bottom:1.8rem; font-size:1rem;">
+      A finding on early imaging starts a collaborative care process — not a final diagnosis.
+    </p>
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-dot tl-dot-blue">1</div>
+        <div class="tl-label">Counseling</div>
+        <div class="tl-desc">Your MFM specialist explains the finding and what it may mean</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot tl-dot-orange">2</div>
+        <div class="tl-label">Follow-Up Echo</div>
+        <div class="tl-desc">Repeat fetal echocardiogram at 18–22 weeks to confirm findings</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot tl-dot-green">3</div>
+        <div class="tl-label">Specialist Referral</div>
+        <div class="tl-desc">Pediatric cardiologist consultation if a significant defect is confirmed</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:var(--purple);color:#fff;">4</div>
+        <div class="tl-label">Birth Planning</div>
+        <div class="tl-desc">Delivery at a center with neonatal cardiac surgery capability when indicated</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 10 — Questions to Ask Your Doctor
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-10">
+    <div class="eyebrow">Your Voice Matters</div>
+    <h2>Questions to Ask Your Care Team</h2>
+    <div class="card-grid card-grid-2" style="max-width:820px;">
+      <div class="card">
+        <div class="card-icon">❓</div>
+        <div class="card-body" style="font-size:0.95rem; color:var(--text);">"Do I qualify for early fetal cardiac imaging based on my history?"</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">❓</div>
+        <div class="card-body" style="font-size:0.95rem; color:var(--text);">"What specific heart structures will be evaluated at each visit?"</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">❓</div>
+        <div class="card-body" style="font-size:0.95rem; color:var(--text);">"If something is found early, what are my next steps?"</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">❓</div>
+        <div class="card-body" style="font-size:0.95rem; color:var(--text);">"Will I still need the standard 18–22 week echocardiogram?"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 11 — Key Takeaways
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-11">
+    <div class="eyebrow">Summary</div>
+    <h2>Key Takeaways</h2>
+    <div class="card-grid" style="grid-template-columns:1fr; max-width:700px; gap:0.8rem;">
+      <div class="card" style="flex-direction:row; align-items:center; gap:1rem; padding:1rem 1.4rem;">
+        <div style="font-size:1.5rem;">🕐</div>
+        <div class="card-body" style="text-align:left;">Standard cardiac screening is performed at <strong>18–22 weeks</strong> for all pregnancies</div>
+      </div>
+      <div class="card" style="flex-direction:row; align-items:center; gap:1rem; padding:1rem 1.4rem;">
+        <div style="font-size:1.5rem;">⚡</div>
+        <div class="card-body" style="text-align:left;">Early imaging at <strong>13–16 weeks</strong> is available for high-risk pregnancies and provides preliminary cardiac assessment</div>
+      </div>
+      <div class="card" style="flex-direction:row; align-items:center; gap:1rem; padding:1rem 1.4rem;">
+        <div style="font-size:1.5rem;">🔄</div>
+        <div class="card-body" style="text-align:left;">A <strong>follow-up echo at 18–22 weeks is always required</strong> after early imaging — it is not optional</div>
+      </div>
+      <div class="card" style="flex-direction:row; align-items:center; gap:1rem; padding:1rem 1.4rem;">
+        <div style="font-size:1.5rem;">🤝</div>
+        <div class="card-body" style="text-align:left;">Early diagnosis enables better planning, counseling, and access to specialized care for your baby</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 12 — Closing / Partnership
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-12" style="background: radial-gradient(ellipse at 40% 60%, rgba(31,111,235,0.1) 0%, transparent 65%), var(--bg);">
+    <div class="eyebrow">Partnership in Care</div>
+    <h1 style="font-size:clamp(1.8rem,4vw,3.2rem); margin-bottom:1rem;">We Are With You Every Step</h1>
+    <p class="subtitle" style="max-width:600px; margin-bottom:2rem;">
+      Early fetal cardiac imaging is a tool for knowledge — not alarm. Our team is here to guide you with clear information, compassionate care, and expert support.
+    </p>
+    <div style="display:flex; gap:0.8rem; flex-wrap:wrap; justify-content:center; margin-bottom:2rem;">
+      <span class="pill pill-blue">Maternal-Fetal Medicine</span>
+      <span class="pill pill-green">Pediatric Cardiology</span>
+      <span class="pill pill-orange">Neonatal Care</span>
+    </div>
+    <p style="font-size:0.82rem; color:var(--muted);">
+      openmfm.org &nbsp;|&nbsp; AHA · ASE · SMFM Guidelines &nbsp;|&nbsp; &copy; Atlanta Perinatal Associates
+    </p>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- ── Navigation Dots ── -->
+<div class="dots" id="dots"></div>
+
+<!-- ── Nav Bar ── -->
+<div class="nav">
+  <button id="btn-prev" title="Previous (←)">&#8592;</button>
+  <span class="nav-counter" id="counter">1 / 12</span>
+  <button id="btn-next" title="Next (→)">&#8594;</button>
+</div>
+
+<script>
+  (function () {
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const dotsContainer = document.getElementById('dots');
+    const counter = document.getElementById('counter');
+    let current = 0;
+
+    // Build dots
+    slides.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(d);
+    });
+
+    function goTo(idx) {
+      slides[current].classList.remove('active');
+      dotsContainer.children[current].classList.remove('active');
+      current = (idx + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dotsContainer.children[current].classList.add('active');
+      counter.textContent = (current + 1) + ' / ' + slides.length;
+    }
+
+    document.getElementById('btn-next').addEventListener('click', () => goTo(current + 1));
+    document.getElementById('btn-prev').addEventListener('click', () => goTo(current - 1));
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+    });
+
+    // Touch / swipe
+    let startX = 0;
+    document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 50) goTo(dx < 0 ? current + 1 : current - 1);
+    }, { passive: true });
+  })();
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
