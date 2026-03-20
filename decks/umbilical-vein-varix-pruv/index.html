@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umbilical Vein Varix &amp; Persistent Right Umbilical Vein | MFM Patient Consultation</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0d1117;
+      --surface:     #161b22;
+      --surface2:    #1c2330;
+      --border:      #30363d;
+      --text:        #e6edf3;
+      --muted:       #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-teal: #39d0b4;
+      --accent-green:#3fb950;
+      --accent-amber:#d29922;
+      --accent-red:  #f85149;
+      --accent-purple:#bc8cff;
+      --brand:       #1f6feb;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ─── Deck & Slide ──────────────────────────────────────────────────── */
+    .deck {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3em 4em;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ─── Navigation ────────────────────────────────────────────────────── */
+    .nav {
+      position: fixed; bottom: 1.6em; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1.2em;
+      z-index: 100;
+    }
+    .nav button {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); padding: 0.45em 1.2em;
+      border-radius: 6px; font-size: 1em; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav button:hover { background: var(--brand); border-color: var(--brand); }
+    .nav .counter { color: var(--muted); font-size: 0.9em; min-width: 5em; text-align: center; }
+
+    /* ─── Progress Bar ──────────────────────────────────────────────────── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--brand);
+      transition: width 0.4s ease;
+      z-index: 200;
+    }
+
+    /* ─── Typography ────────────────────────────────────────────────────── */
+    .slide-label {
+      font-size: 0.75em; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.6em;
+    }
+    h1 { font-size: clamp(2em, 4.5vw, 3.6em); font-weight: 300; line-height: 1.15; }
+    h2 { font-size: clamp(1.6em, 3.5vw, 2.6em); font-weight: 300; line-height: 1.2; }
+    h3 { font-size: clamp(1.1em, 2vw, 1.5em); font-weight: 400; }
+    p  { font-size: clamp(0.95em, 1.6vw, 1.25em); line-height: 1.7; max-width: 780px; text-align: center; color: var(--text); }
+
+    .accent-blue   { color: var(--accent-blue); }
+    .accent-teal   { color: var(--accent-teal); }
+    .accent-green  { color: var(--accent-green); }
+    .accent-amber  { color: var(--accent-amber); }
+    .accent-red    { color: var(--accent-red); }
+    .accent-purple { color: var(--accent-purple); }
+
+    /* ─── Cards & Layouts ───────────────────────────────────────────────── */
+    .two-col {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2em; width: 100%; max-width: 1000px; margin-top: 1.5em;
+    }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.6em 1.8em;
+    }
+    .card h3 { margin-bottom: 0.6em; }
+    .card p  { text-align: left; font-size: 1em; }
+
+    /* ─── Pill / Badge ──────────────────────────────────────────────────── */
+    .pill {
+      display: inline-block; padding: 0.25em 0.85em;
+      border-radius: 20px; font-size: 0.8em; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .pill-blue   { background: rgba(88,166,255,.15); color: var(--accent-blue); border: 1px solid rgba(88,166,255,.3); }
+    .pill-teal   { background: rgba(57,208,180,.15); color: var(--accent-teal); border: 1px solid rgba(57,208,180,.3); }
+    .pill-green  { background: rgba(63,185,80,.15);  color: var(--accent-green); border: 1px solid rgba(63,185,80,.3); }
+    .pill-amber  { background: rgba(210,153,34,.15); color: var(--accent-amber); border: 1px solid rgba(210,153,34,.3); }
+
+    /* ─── Comparison Table ──────────────────────────────────────────────── */
+    .comp-table {
+      width: 100%; max-width: 960px; border-collapse: collapse;
+      font-size: clamp(0.8em, 1.3vw, 1em); margin-top: 1.4em;
+    }
+    .comp-table th {
+      background: var(--surface2); color: var(--accent-blue);
+      padding: 0.7em 1em; text-align: left; border-bottom: 2px solid var(--border);
+      font-weight: 600; letter-spacing: 0.04em;
+    }
+    .comp-table td {
+      padding: 0.65em 1em; border-bottom: 1px solid var(--border);
+      vertical-align: top; line-height: 1.5;
+    }
+    .comp-table tr:nth-child(even) td { background: rgba(255,255,255,.025); }
+    .comp-table td:first-child { color: var(--muted); font-weight: 500; }
+
+    /* ─── Timeline ──────────────────────────────────────────────────────── */
+    .timeline {
+      display: flex; align-items: flex-start; gap: 0;
+      width: 100%; max-width: 900px; margin-top: 1.8em;
+    }
+    .tl-step {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      position: relative;
+    }
+    .tl-step:not(:last-child)::after {
+      content: '';
+      position: absolute; top: 22px; left: 50%;
+      width: 100%; height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .tl-dot {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1em; font-weight: 700; z-index: 1;
+      border: 2px solid;
+    }
+    .tl-dot.blue   { background: rgba(88,166,255,.15); border-color: var(--accent-blue); color: var(--accent-blue); }
+    .tl-dot.teal   { background: rgba(57,208,180,.15); border-color: var(--accent-teal); color: var(--accent-teal); }
+    .tl-dot.green  { background: rgba(63,185,80,.15);  border-color: var(--accent-green); color: var(--accent-green); }
+    .tl-dot.amber  { background: rgba(210,153,34,.15); border-color: var(--accent-amber); color: var(--accent-amber); }
+    .tl-label { font-size: 0.8em; text-align: center; margin-top: 0.6em; color: var(--muted); max-width: 100px; line-height: 1.35; }
+    .tl-title { font-size: 0.95em; text-align: center; margin-top: 0.3em; font-weight: 500; max-width: 110px; line-height: 1.3; }
+
+    /* ─── Icon Row ──────────────────────────────────────────────────────── */
+    .icon-row {
+      display: flex; gap: 2.5em; margin-top: 1.8em; flex-wrap: wrap;
+      justify-content: center;
+    }
+    .icon-item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.5em; max-width: 140px;
+    }
+    .icon-item svg { width: 52px; height: 52px; }
+    .icon-item span { font-size: 0.85em; text-align: center; color: var(--muted); line-height: 1.35; }
+
+    /* ─── Stat Box ──────────────────────────────────────────────────────── */
+    .stat-row { display: flex; gap: 2em; margin-top: 1.6em; flex-wrap: wrap; justify-content: center; }
+    .stat-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.2em 1.8em; text-align: center; min-width: 160px;
+    }
+    .stat-box .stat-num { font-size: 2.4em; font-weight: 700; line-height: 1; }
+    .stat-box .stat-lbl { font-size: 0.8em; color: var(--muted); margin-top: 0.3em; line-height: 1.3; }
+
+    /* ─── Alert Box ─────────────────────────────────────────────────────── */
+    .alert {
+      border-radius: 10px; padding: 1em 1.4em;
+      display: flex; align-items: flex-start; gap: 0.8em;
+      max-width: 820px; margin-top: 1.4em; font-size: 0.95em; line-height: 1.55;
+    }
+    .alert-amber { background: rgba(210,153,34,.12); border: 1px solid rgba(210,153,34,.35); color: var(--text); }
+    .alert-green { background: rgba(63,185,80,.12);  border: 1px solid rgba(63,185,80,.35); color: var(--text); }
+    .alert-icon  { font-size: 1.3em; flex-shrink: 0; margin-top: 0.05em; }
+
+    /* ─── Checklist ─────────────────────────────────────────────────────── */
+    .checklist { list-style: none; margin-top: 1.2em; max-width: 700px; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 0.7em;
+      padding: 0.5em 0; font-size: clamp(0.9em, 1.4vw, 1.1em); line-height: 1.5;
+    }
+    .checklist li::before { content: '✦'; color: var(--accent-teal); flex-shrink: 0; margin-top: 0.05em; }
+
+    /* ─── Footer Branding ───────────────────────────────────────────────── */
+    .slide-footer {
+      position: absolute; bottom: 3.5em; left: 4em; right: 4em;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.72em; color: var(--muted); border-top: 1px solid var(--border);
+      padding-top: 0.6em;
+    }
+
+    /* ─── SVG Diagram Wrapper ───────────────────────────────────────────── */
+    .diagram { margin-top: 1.4em; }
+
+    /* ─── Title Slide Specific ──────────────────────────────────────────── */
+    .title-eyebrow {
+      font-size: 0.8em; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent-teal); margin-bottom: 0.8em;
+    }
+    .title-divider {
+      width: 60px; height: 3px; background: var(--brand);
+      border-radius: 2px; margin: 1em auto;
+    }
+    .title-sub { font-size: clamp(1em, 1.8vw, 1.3em); color: var(--muted); max-width: 600px; text-align: center; line-height: 1.6; }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/umbilical-vein-varix-pruv/index.html">
+<meta name="description" content="Patient education on two uncommon umbilical vein findings — umbilical vein varix (focal dilation ≥9 mm) and persistent right umbilical vein (PRUV) — covering anatomy, ultrasound diagnosis, isolated vs. non-isolated prognosis, serial monitoring with Doppler, delivery timing, and questions to ask your MFM specialist. Based on ACOG and SMFM guidelines.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Umbilical Vein Varix, Persistent Right Umbilical Vein, Fetal Anomaly, High-Risk Pregnancy, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/umbilical-vein-varix-pruv/index.html">
+<meta property="og:title" content="Umbilical Vein Varix &amp; Persistent Right Umbilical Vein - Patient Education | OpenMFM">
+<meta property="og:description" content="Patient education on two uncommon umbilical vein findings — umbilical vein varix (focal dilation ≥9 mm) and persistent right umbilical vein (PRUV) — covering anatomy, ultrasound diagnosis, isolated vs. non-isolated prognosis, serial monitoring with Doppler, delivery timing, and questions to ask your MFM specialist. Based on ACOG and SMFM guidelines.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Umbilical Vein Varix &amp; Persistent Right Umbilical Vein - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Patient education on two uncommon umbilical vein findings — umbilical vein varix (focal dilation ≥9 mm) and persistent right umbilical vein (PRUV) — covering anatomy, ultrasound diagnosis, isolated vs. non-isolated prognosis, serial monitoring with Doppler, delivery timing, and questions to ask your MFM specialist. Based on ACOG and SMFM guidelines.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Umbilical Vein Varix & Persistent Right Umbilical Vein - Patient Education",
+  "description": "Patient education on two uncommon umbilical vein findings — umbilical vein varix (focal dilation ≥9 mm) and persistent right umbilical vein (PRUV) — covering anatomy, ultrasound diagnosis, isolated vs. non-isolated prognosis, serial monitoring with Doppler, delivery timing, and questions to ask your MFM specialist. Based on ACOG and SMFM guidelines.",
+  "url": "https://openmfm.org/decks/umbilical-vein-varix-pruv/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-20",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Umbilical Vein Varix & Persistent Right Umbilical Vein - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Umbilical Vein Varix, Persistent Right Umbilical Vein, Fetal Anomaly, High-Risk Pregnancy, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck">
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide active">
+    <div class="title-eyebrow">MFM Patient Consultation</div>
+    <h1 style="text-align:center;">
+      Understanding Your<br>
+      <span class="accent-blue">Ultrasound Findings</span>
+    </h1>
+    <div class="title-divider"></div>
+    <p class="title-sub">
+      Umbilical Vein Varix &amp; Persistent Right Umbilical Vein
+    </p>
+    <div style="margin-top:2em; display:flex; gap:1em; flex-wrap:wrap; justify-content:center;">
+      <span class="pill pill-blue">Uncommon Finding</span>
+      <span class="pill pill-green">Often Reassuring</span>
+      <span class="pill pill-teal">Monitoring-Based Care</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Maternal-Fetal Medicine</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 2 — WHAT IS THE UMBILICAL VEIN?
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Foundation</div>
+    <h2>The Umbilical Vein</h2>
+    <p>A single vein in the umbilical cord carries <span class="accent-teal">oxygen-rich blood</span> from the placenta to your baby's liver and heart.</p>
+
+    <!-- SVG: Simplified fetal circulation diagram -->
+    <div class="diagram">
+      <svg viewBox="0 0 680 220" width="680" height="220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">
+        <!-- Placenta -->
+        <rect x="10" y="70" width="110" height="80" rx="12" fill="#1c2330" stroke="#30363d" stroke-width="1.5"/>
+        <text x="65" y="108" text-anchor="middle" fill="#8b949e" font-size="13" font-family="sans-serif">Placenta</text>
+        <text x="65" y="124" text-anchor="middle" fill="#39d0b4" font-size="11" font-family="sans-serif">O&#x2082;-rich blood</text>
+
+        <!-- Umbilical cord line -->
+        <line x1="120" y1="110" x2="260" y2="110" stroke="#39d0b4" stroke-width="3" stroke-dasharray="6,3"/>
+        <text x="190" y="100" text-anchor="middle" fill="#8b949e" font-size="11" font-family="sans-serif">Umbilical Cord</text>
+
+        <!-- Baby abdomen -->
+        <ellipse cx="360" cy="110" rx="90" ry="70" fill="#1c2330" stroke="#30363d" stroke-width="1.5"/>
+        <text x="360" y="95" text-anchor="middle" fill="#8b949e" font-size="12" font-family="sans-serif">Baby's Abdomen</text>
+
+        <!-- Umbilical vein inside abdomen -->
+        <path d="M260,110 Q310,110 330,100 Q350,90 360,100" stroke="#58a6ff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <text x="310" y="130" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="sans-serif">Umbilical Vein</text>
+
+        <!-- Liver -->
+        <ellipse cx="370" cy="108" rx="28" ry="20" fill="rgba(88,166,255,0.15)" stroke="#58a6ff" stroke-width="1.5"/>
+        <text x="370" y="112" text-anchor="middle" fill="#58a6ff" font-size="10" font-family="sans-serif">Liver</text>
+
+        <!-- Heart -->
+        <rect x="480" y="60" width="70" height="60" rx="10" fill="rgba(248,81,73,0.12)" stroke="#f85149" stroke-width="1.5"/>
+        <text x="515" y="95" text-anchor="middle" fill="#f85149" font-size="12" font-family="sans-serif">Heart</text>
+
+        <!-- Ductus venosus to heart -->
+        <path d="M395,100 Q440,80 480,88" stroke="#d29922" stroke-width="2.5" fill="none" stroke-dasharray="5,3"/>
+        <text x="440" y="73" text-anchor="middle" fill="#d29922" font-size="10" font-family="sans-serif">Ductus Venosus</text>
+
+        <!-- Arrow from placenta -->
+        <polygon points="125,106 120,110 125,114" fill="#39d0b4"/>
+        <!-- Arrow to heart -->
+        <polygon points="476,86 480,88 476,92" fill="#d29922"/>
+      </svg>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 2 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 3 — UMBILICAL VEIN VARIX EXPLAINED
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Condition 1</div>
+    <h2><span class="accent-blue">Umbilical Vein Varix</span> (UVV)</h2>
+    <p>A focal <strong>widening or ballooning</strong> of the umbilical vein — most often in the portion inside the baby's abdomen.</p>
+
+    <!-- SVG: Normal vein vs varix -->
+    <div class="diagram">
+      <svg viewBox="0 0 600 160" width="600" height="160" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">
+        <!-- Normal vein label -->
+        <text x="130" y="20" text-anchor="middle" fill="#8b949e" font-size="13" font-family="sans-serif">Normal Vein</text>
+        <!-- Normal vein tube -->
+        <rect x="20" y="55" width="220" height="28" rx="14" fill="rgba(88,166,255,0.15)" stroke="#58a6ff" stroke-width="2"/>
+        <text x="130" y="74" text-anchor="middle" fill="#58a6ff" font-size="11" font-family="sans-serif">Uniform diameter</text>
+
+        <!-- Arrow -->
+        <text x="300" y="75" text-anchor="middle" fill="#8b949e" font-size="28" font-family="sans-serif">&#x2192;</text>
+
+        <!-- Varix vein label -->
+        <text x="470" y="20" text-anchor="middle" fill="#8b949e" font-size="13" font-family="sans-serif">Vein with Varix</text>
+        <!-- Varix vein tube with bulge -->
+        <path d="M360,69 L400,69 Q410,69 415,55 Q430,30 445,55 Q450,69 460,69 L580,69 L580,83 L460,83 Q450,83 445,97 Q430,122 415,97 Q410,83 400,83 L360,83 Z"
+              fill="rgba(210,153,34,0.15)" stroke="#d29922" stroke-width="2"/>
+        <text x="445" y="76" text-anchor="middle" fill="#d29922" font-size="10" font-family="sans-serif">Varix</text>
+        <!-- Measurement arrows -->
+        <line x1="415" y1="30" x2="415" y2="122" stroke="#d29922" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="432" y="135" text-anchor="start" fill="#d29922" font-size="10" font-family="sans-serif">&#x2265;9 mm</text>
+      </svg>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num accent-blue">&lt;1%</div>
+        <div class="stat-lbl">of all pregnancies</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-teal">&#x2265;9 mm</div>
+        <div class="stat-lbl">diagnostic diameter threshold</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 3 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 4 — PERSISTENT RIGHT UMBILICAL VEIN EXPLAINED
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Condition 2</div>
+    <h2><span class="accent-teal">Persistent Right Umbilical Vein</span> (PRUV)</h2>
+    <p>Normally, the <strong>right</strong> umbilical vein closes by week 7. In PRUV, the right vein remains open while the left vein disappears — a variation in vessel development.</p>
+
+    <!-- SVG: Normal vs PRUV comparison -->
+    <div class="diagram">
+      <svg viewBox="0 0 600 170" width="600" height="170" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">
+        <!-- Normal -->
+        <text x="130" y="18" text-anchor="middle" fill="#8b949e" font-size="13" font-family="sans-serif">Normal Development</text>
+        <ellipse cx="130" cy="90" rx="80" ry="60" fill="#1c2330" stroke="#30363d" stroke-width="1.5"/>
+        <!-- Stomach -->
+        <ellipse cx="110" cy="80" rx="22" ry="16" fill="rgba(63,185,80,0.15)" stroke="#3fb950" stroke-width="1.5"/>
+        <text x="110" y="84" text-anchor="middle" fill="#3fb950" font-size="9" font-family="sans-serif">Stomach</text>
+        <!-- Left UV curves away from stomach -->
+        <path d="M130,110 Q150,100 160,85 Q165,75 155,70" stroke="#58a6ff" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <text x="168" y="68" text-anchor="start" fill="#58a6ff" font-size="10" font-family="sans-serif">Left UV</text>
+        <text x="130" y="148" text-anchor="middle" fill="#3fb950" font-size="10" font-family="sans-serif">Curves AWAY from stomach &#x2713;</text>
+
+        <!-- Divider -->
+        <line x1="300" y1="20" x2="300" y2="165" stroke="#30363d" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- PRUV -->
+        <text x="470" y="18" text-anchor="middle" fill="#8b949e" font-size="13" font-family="sans-serif">Persistent Right UV (PRUV)</text>
+        <ellipse cx="470" cy="90" rx="80" ry="60" fill="#1c2330" stroke="#30363d" stroke-width="1.5"/>
+        <!-- Stomach -->
+        <ellipse cx="490" cy="80" rx="22" ry="16" fill="rgba(63,185,80,0.15)" stroke="#3fb950" stroke-width="1.5"/>
+        <text x="490" y="84" text-anchor="middle" fill="#3fb950" font-size="9" font-family="sans-serif">Stomach</text>
+        <!-- Right UV curves TOWARD stomach -->
+        <path d="M470,110 Q450,100 445,85 Q440,75 455,72" stroke="#d29922" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <text x="418" y="68" text-anchor="end" fill="#d29922" font-size="10" font-family="sans-serif">Right UV</text>
+        <text x="470" y="148" text-anchor="middle" fill="#d29922" font-size="10" font-family="sans-serif">Curves TOWARD stomach (PRUV)</text>
+      </svg>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num accent-teal">0.1&#x2013;0.5%</div>
+        <div class="stat-lbl">prevalence in pregnancy</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-green">73&#x2013;98%</div>
+        <div class="stat-lbl">good outcome when isolated</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 4 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 5 — SIDE-BY-SIDE COMPARISON
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">At a Glance</div>
+    <h2>UVV vs. PRUV — Key Differences</h2>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Umbilical Vein Varix (UVV)</th>
+          <th>Persistent Right Umbilical Vein (PRUV)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>What it is</td>
+          <td>Focal ballooning of the vein</td>
+          <td>Wrong vein persists; right instead of left</td>
+        </tr>
+        <tr>
+          <td>How it is found</td>
+          <td>Dilated segment on ultrasound (&#x2265;9 mm)</td>
+          <td>Vein curves toward the stomach on scan</td>
+        </tr>
+        <tr>
+          <td>Prevalence</td>
+          <td>&lt;1% of pregnancies</td>
+          <td>0.1&#x2013;0.5% of pregnancies</td>
+        </tr>
+        <tr>
+          <td>Isolated prognosis</td>
+          <td>Generally favorable; no increased IUFD risk before 39 wks</td>
+          <td>Excellent; 73&#x2013;98% good outcome</td>
+        </tr>
+        <tr>
+          <td>Key concern</td>
+          <td>Growth restriction; rare thrombosis</td>
+          <td>Cardiac, GI, or renal anomalies if non-isolated</td>
+        </tr>
+        <tr>
+          <td>Monitoring focus</td>
+          <td>Serial growth scans + Doppler</td>
+          <td>Detailed anatomy scan + fetal echo</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 5 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 6 — ISOLATED vs NON-ISOLATED
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Prognosis</div>
+    <h2>Isolated vs. Non-Isolated</h2>
+    <p>The single most important question: <span class="accent-amber">Is this the only finding?</span></p>
+
+    <div class="two-col" style="max-width:860px; margin-top:1.6em;">
+      <div class="card" style="border-color: rgba(63,185,80,.4);">
+        <h3 class="accent-green">&#x2713; Isolated Finding</h3>
+        <p>No other structural abnormalities detected. Prognosis is <strong>generally very good</strong>. Most babies are born healthy with appropriate monitoring.</p>
+      </div>
+      <div class="card" style="border-color: rgba(210,153,34,.4);">
+        <h3 class="accent-amber">&#x26A0; Non-Isolated Finding</h3>
+        <p>Other anomalies are present in 25&#x2013;35% of UVV cases and a subset of PRUV cases. Additional evaluation and specialist input are required.</p>
+      </div>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:1.8em;">
+      <span class="alert-icon">&#x1F4A1;</span>
+      <span>Your care team will determine whether your finding is isolated through a detailed anatomy scan and fetal echocardiogram.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 6 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 7 — NEXT STEPS / EVALUATION PLAN
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">What Happens Next</div>
+    <h2>Your Evaluation Plan</h2>
+    <p>A structured evaluation ensures no associated findings are missed.</p>
+
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-dot blue">1</div>
+        <div class="tl-title">Detailed Anatomy Scan</div>
+        <div class="tl-label">Level II ultrasound — all organs reviewed</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot teal">2</div>
+        <div class="tl-title">Fetal Echocardiogram</div>
+        <div class="tl-label">Dedicated heart study</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot amber">3</div>
+        <div class="tl-title">Genetic Counseling</div>
+        <div class="tl-label">If additional findings are present</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot green">4</div>
+        <div class="tl-title">Serial Monitoring</div>
+        <div class="tl-label">Growth scans + Doppler every 4 weeks</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 7 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 8 — MONITORING DETAILS (UVV)
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Monitoring — UVV</div>
+    <h2>Watching the Varix</h2>
+    <p>For umbilical vein varix, serial assessments track key parameters throughout pregnancy.</p>
+
+    <div class="icon-row">
+      <!-- Growth icon -->
+      <div class="icon-item">
+        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="26" cy="26" r="24" stroke="#58a6ff" stroke-width="2" fill="rgba(88,166,255,0.1)"/>
+          <polyline points="14,36 22,26 30,30 38,18" stroke="#58a6ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="38" cy="18" r="3" fill="#58a6ff"/>
+        </svg>
+        <span>Fetal Growth Scans</span>
+      </div>
+      <!-- Ruler icon -->
+      <div class="icon-item">
+        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="18" width="36" height="16" rx="4" stroke="#39d0b4" stroke-width="2" fill="rgba(57,208,180,0.1)"/>
+          <line x1="16" y1="18" x2="16" y2="26" stroke="#39d0b4" stroke-width="2"/>
+          <line x1="24" y1="18" x2="24" y2="24" stroke="#39d0b4" stroke-width="1.5"/>
+          <line x1="32" y1="18" x2="32" y2="26" stroke="#39d0b4" stroke-width="2"/>
+          <line x1="40" y1="18" x2="40" y2="24" stroke="#39d0b4" stroke-width="1.5"/>
+        </svg>
+        <span>Varix Size Measurement</span>
+      </div>
+      <!-- Doppler / wave icon -->
+      <div class="icon-item">
+        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="26" cy="26" r="24" stroke="#d29922" stroke-width="2" fill="rgba(210,153,34,0.1)"/>
+          <path d="M12,26 Q16,18 20,26 Q24,34 28,26 Q32,18 36,26 Q38,30 40,26" stroke="#d29922" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span>Doppler Blood Flow</span>
+      </div>
+      <!-- Clot / alert icon -->
+      <div class="icon-item">
+        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="26" cy="26" r="24" stroke="#bc8cff" stroke-width="2" fill="rgba(188,140,255,0.1)"/>
+          <line x1="26" y1="16" x2="26" y2="30" stroke="#bc8cff" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="26" cy="36" r="2.5" fill="#bc8cff"/>
+        </svg>
+        <span>Thrombosis Screening</span>
+      </div>
+    </div>
+
+    <div class="alert alert-amber" style="margin-top:1.6em;">
+      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+      <span><strong>Important:</strong> If you notice a significant decrease in fetal movement, contact your care team immediately for evaluation.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 8 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 9 — MONITORING DETAILS (PRUV)
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Monitoring — PRUV</div>
+    <h2>Monitoring a Persistent Right Umbilical Vein</h2>
+    <p>If PRUV is the only finding, monitoring is straightforward and reassuring.</p>
+
+    <ul class="checklist" style="margin-top:1.6em;">
+      <li>Detailed anatomy scan to confirm no associated structural anomalies</li>
+      <li>Fetal echocardiogram — cardiac defects are the most common associated finding</li>
+      <li>Standard prenatal care schedule if no other issues are identified</li>
+      <li>Multidisciplinary team involvement if additional anomalies are detected</li>
+    </ul>
+
+    <div class="alert alert-green" style="margin-top:1.6em;">
+      <span class="alert-icon">&#x2705;</span>
+      <span>Isolated PRUV carries an excellent prognosis. The majority of affected babies are born healthy and require no special postnatal treatment.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 9 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 10 — DELIVERY PLANNING
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Delivery</div>
+    <h2>Planning Your Delivery</h2>
+    <p>When the finding is isolated and monitoring is reassuring, delivery planning follows a standard approach.</p>
+
+    <div class="two-col" style="max-width:860px; margin-top:1.6em;">
+      <div class="card">
+        <h3 class="accent-blue">Timing</h3>
+        <p>Delivery is typically planned around <strong>37&#x2013;39 weeks</strong> of gestation for isolated UVV. Earlier delivery is only considered if growth restriction, thrombosis, or fetal distress is detected.</p>
+      </div>
+      <div class="card">
+        <h3 class="accent-teal">Mode of Delivery</h3>
+        <p>Vaginal delivery is generally safe unless there is another obstetric indication for cesarean section. Your MFM team will coordinate with your delivery hospital.</p>
+      </div>
+    </div>
+
+    <div class="alert alert-amber" style="margin-top:1.4em;">
+      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+      <span>Turbulent flow or thrombus within the varix is a critical finding that may require urgent delivery. This will be monitored closely at every scan.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 10 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 11 — QUESTIONS TO ASK
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Your Voice Matters</div>
+    <h2>Questions to Ask Your Doctor</h2>
+
+    <ul class="checklist" style="margin-top:1.4em; max-width:760px;">
+      <li>Is this finding isolated, or were other abnormalities seen?</li>
+      <li>How often will I need ultrasounds, and what are we watching for?</li>
+      <li>Do I need a fetal echocardiogram, and when?</li>
+      <li>What signs or symptoms should prompt me to call right away?</li>
+      <li>Where should I plan to deliver, and will my baby need special care after birth?</li>
+      <li>Are there any activity restrictions I should follow?</li>
+    </ul>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 11 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 12 — PARTNERSHIP & CLOSING
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Partnership in Care</div>
+    <h1 style="text-align:center; font-size:clamp(1.8em,3.5vw,2.8em);">
+      We Are Your <span class="accent-teal">Partners</span>
+    </h1>
+    <div class="title-divider"></div>
+    <p style="margin-top:0.8em;">These are uncommon findings, but when isolated, <strong>most babies do very well.</strong> Our team will monitor your baby closely, answer every question, and support you at every step.</p>
+
+    <div class="stat-row" style="margin-top:1.8em;">
+      <div class="stat-box">
+        <div class="stat-num accent-green">Most</div>
+        <div class="stat-lbl">isolated cases have<br>healthy outcomes</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-blue">Serial</div>
+        <div class="stat-lbl">monitoring keeps<br>your baby safe</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-teal">Always</div>
+        <div class="stat-lbl">ask questions —<br>no concern is too small</div>
+      </div>
+    </div>
+
+    <div style="margin-top:2em; font-size:0.85em; color:var(--muted); text-align:center; max-width:700px; line-height:1.6;">
+      Information consistent with ACOG, SMFM, and current evidence-based guidelines.<br>
+      This material supports — and does not replace — a conversation with your physician.
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Maternal-Fetal Medicine</span>
+    </div>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- Navigation Controls -->
+<div class="nav">
+  <button onclick="prevSlide()">&#x2190; Prev</button>
+  <span class="counter" id="counter">1 / 12</span>
+  <button onclick="nextSlide()">Next &#x2192;</button>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+
+  function updateUI() {
+    counter.textContent = (currentSlide + 1) + ' / ' + total;
+    progressBar.style.width = ((currentSlide + 1) / total * 100) + '%';
+  }
+
+  function showSlide(index) {
+    slides.forEach((s, i) => s.classList.toggle('active', i === index));
+    updateUI();
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % total;
+    showSlide(currentSlide);
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + total) % total;
+    showSlide(currentSlide);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+    else if (e.key === 'ArrowLeft') prevSlide();
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) > 40) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
