@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MFM Presentations — Open-Source Maternal-Fetal Medicine Education Library</title>
-  <meta name="description" content="84 free, evidence-based Maternal-Fetal Medicine presentations for patients and providers. Covers gestational diabetes, preeclampsia, fetal growth restriction, fetal anomalies, genetics, and more. Created by a Maternal-Fetal Medicine specialist. Open source.">
+  <meta name="description" content="90+ free, evidence-based Maternal-Fetal Medicine presentations and 13 interactive clinical tools for patients and providers. Covers gestational diabetes, preeclampsia, fetal growth restriction, fetal anomalies, genetics, and more. Created by a Maternal-Fetal Medicine specialist. Open source.">
   <meta name="author" content="Dr. Chukwuma Onyeije, MFM Specialist">
   <meta name="keywords" content="maternal fetal medicine, MFM, high-risk pregnancy, patient education, preeclampsia, gestational diabetes, fetal growth restriction, fetal anomalies, obstetrics, perinatology">
 
   <!-- Open Graph (Facebook, LinkedIn, WhatsApp previews) -->
   <meta property="og:title" content="MFM Presentations — Open-Source Clinical Education Library">
-  <meta property="og:description" content="84 free evidence-based Maternal-Fetal Medicine presentations for patients and providers. Covers high-risk pregnancy, genetics, fetal anomalies, and more.">
+  <meta property="og:description" content="90+ free evidence-based Maternal-Fetal Medicine presentations and 13 interactive clinical tools for patients and providers. Covers high-risk pregnancy, genetics, fetal anomalies, and more.">
   <meta property="og:url" content="https://chukwumaonyeije.github.io/mfm-presentations/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="MFM Presentations">
@@ -18,7 +18,7 @@
   <!-- Twitter / X Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="MFM Presentations — Open-Source Clinical Education Library">
-  <meta name="twitter:description" content="84 free evidence-based MFM presentations for patients and providers. High-risk pregnancy, genetics, fetal anomalies, and more.">
+  <meta name="twitter:description" content="90+ free evidence-based MFM presentations and 13 interactive tools for patients and providers. High-risk pregnancy, genetics, fetal anomalies, and more.">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://chukwumaonyeije.github.io/mfm-presentations/">
@@ -441,9 +441,60 @@
       font-size: 16px;
       font-weight: 500;
     }
+    /* ── Site Navigation ── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      height: 50px;
+    }
+    .site-nav .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--fg);
+      text-decoration: none;
+      margin-right: auto;
+    }
+    .site-nav .nav-brand span { color: var(--accent); }
+    .site-nav a.nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 0 16px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .site-nav a.nav-link:hover { color: var(--fg); }
+    .site-nav a.nav-link.active { color: var(--accent); border-bottom-color: var(--accent); }
+    @media (max-width: 600px) {
+      .site-nav { padding: 0 12px; }
+      .site-nav .nav-brand { font-size: 14px; }
+      .site-nav a.nav-link { padding: 0 10px; font-size: 13px; }
+    }
   </style>
 </head>
 <body>
+  <nav class="site-nav">
+    <a href="https://openmfm.org" class="nav-brand">open<span>MFM</span></a>
+    <a href="https://openmfm.org" class="nav-link" id="nav-home">&#x2190; Home</a>
+    <a href="https://openmfm.org/library" class="nav-link" id="nav-library">Library</a>
+    <a href="https://openmfm.org/interactive" class="nav-link" id="nav-interactive">Interactive Tools</a>
+  </nav>
+  <script>
+    (function(){
+      var p = window.location.pathname;
+      if (p === '/interactive') document.getElementById('nav-interactive').classList.add('active');
+      else if (p === '/library') document.getElementById('nav-library').classList.add('active');
+    })();
+  </script>
   <header>
     <h1>MFM Presentations & Clinical Consultations</h1>
     <p class="subtitle">Evidence-based educational resources for maternal-fetal medicine</p>
@@ -462,7 +513,7 @@
         type="text"
         id="searchBox"
         class="search-input"
-        placeholder="🔍 Search 84+ presentations..."
+        placeholder="🔍 Search 90+ presentations..."
         autocomplete="off"
       >
       <div class="filter-group">
@@ -1684,15 +1735,17 @@
 
     </div>
 
-    <!-- Microsites Section -->
-    <div style="margin-top: 64px; margin-bottom: 48px;">
-      <h2 style="font-size: 28px; font-weight: 700; color: var(--fg); margin-bottom: 24px;">🌐 Interactive Microsites</h2>
-      <p style="color: var(--muted); font-size: 16px; margin-bottom: 32px;">
-        Comprehensive, multi-page educational resources designed for both patients and clinicians, featuring interactive content, documentation templates, and evidence-based counseling tools. These microsites provide deep exploration of topics with rich multimedia content, calculators, and clinical decision support.
-      </p>
+    <!-- Interactive Tools Teaser -->
+    <div style="margin-top: 64px; margin-bottom: 48px; text-align: center;">
       
-      <div class="presentations" id="microsites-container">
-        <!-- cfDNA Navigator / NIPT Decision Guide -->
+      <h2 style="font-size: 28px; font-weight: 700; color: var(--fg); margin-bottom: 16px;">&#x1F310; Interactive Clinical Tools</h2>
+      <p style="color: var(--muted); font-size: 16px; margin-bottom: 32px; max-width: 640px; margin-left: auto; margin-right: auto; line-height: 1.7;">
+        13 evidence-based calculators, screeners, and patient education microsites — now on their own dedicated page with search and filtering.
+      </p>
+      <a href="https://openmfm.org/interactive" class="btn" style="font-size: 17px; padding: 14px 32px; display: inline-block;">
+        &#x1F4CA; Explore Interactive Tools &#x2192;
+      </a>
+      <div style="display:none" id="microsites-container"><!-- cfDNA Navigator / NIPT Decision Guide -->
         <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
           <h2>cfDNA Navigator - NIPT Decision Guide</h2>
           <p>Interactive patient decision guide for cell-free DNA prenatal screening (NIPT). Covers whether to pursue NIPT based on age, risk factors, and patient values — and explains what a positive result means, including condition-specific and age-stratified positive predictive values (PPV).</p>
@@ -1915,14 +1968,6 @@
           </div>
         </div>
       </div>
-
-      <div style="text-align: center; margin-top: 28px;">
-        <button id="microsites-show-more">&#9660; Show More Microsites</button>
-      </div>
-
-      <div style="text-align: center; margin-top: 32px; color: var(--muted); font-size: 14px;">
-        <p>💡 <strong>Suggest a microsite topic:</strong> Have an idea for an interactive clinical tool or educational resource? <a href="https://github.com/chukwumaonyeije/mfm-presentations/issues" target="_blank" style="color: var(--accent); text-decoration: none;">Open an issue</a> on GitHub.</p>
-      </div>
     </div>
 
     <div id="filter-results" class="filter-results"></div>
@@ -1940,7 +1985,7 @@
       <a href="https://github.com/chukwumaonyeije/mfm-presentations" target="_blank" rel="noopener">View on GitHub</a>
     </p>
     <p style="margin-top: 8px; font-size: 12px;">
-      82 open-source presentations &bull; 8 interactive microsites &bull; Evidence-based MFM education
+      90 open-source presentations &bull; 13 interactive microsites &bull; Evidence-based MFM education
     </p>
   </footer>
 
@@ -2006,32 +2051,6 @@
         searchTimeout = setTimeout(applyFilters, 150);
       });
       tagFilter.addEventListener('change', applyFilters);
-      // Microsite Show More / Show Less
-      // NOTE: Switch to a dedicated microsites page (Option 3) once you reach 10 microsites.
-      const MICROSITES_PER_PAGE = 6;
-      const micrositesContainer = document.getElementById('microsites-container');
-      const micrositeCards = Array.from(micrositesContainer.querySelectorAll('.card'));
-      const showMoreBtn = document.getElementById('microsites-show-more');
-
-      if (micrositeCards.length > MICROSITES_PER_PAGE) {
-        micrositeCards.forEach((card, i) => {
-          if (i >= MICROSITES_PER_PAGE) card.classList.add('microsite-card-hidden');
-        });
-        showMoreBtn.style.display = 'inline-block';
-        const extra = micrositeCards.length - MICROSITES_PER_PAGE;
-        showMoreBtn.textContent = '\u25bc Show More Microsites (' + extra + ' more)';
-
-        let expanded = false;
-        showMoreBtn.addEventListener('click', () => {
-          expanded = !expanded;
-          micrositeCards.forEach((card, i) => {
-            if (i >= MICROSITES_PER_PAGE) card.classList.toggle('microsite-card-hidden', !expanded);
-          });
-          showMoreBtn.textContent = expanded
-            ? '\u25b2 Show Fewer Microsites'
-            : '\u25bc Show More Microsites (' + extra + ' more)';
-        });
-      }
     });
   </script>
 </body>

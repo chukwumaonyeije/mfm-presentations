@@ -20,10 +20,18 @@ export default async function HomePage() {
   const { presentations, microsites }: { presentations: Presentation[]; microsites: Microsite[] } =
     JSON.parse(fileContents);
 
-  const featuredKeywords = ['Preeclampsia', 'Gestational Diabetes', 'Fetal Growth Restriction', 'Twin'];
-  const featuredPresentations = presentations
-    .filter((p) => featuredKeywords.some((kw) => p.title.includes(kw)))
-    .slice(0, 8);
+  // 3 most recent (top of array, already sorted newest-first) + 3 curated picks
+  const curatedSlugs = ['basic-gdm', 'fetal-growth-restriction-patients', 'preeclampsia'];
+  const recentThree = presentations.slice(0, 3);
+  const curatedThree = curatedSlugs
+    .map(slug => presentations.find(p => p.href.includes(slug)))
+    .filter((p): p is Presentation => p !== undefined);
+  // Deduplicate in case a curated pick is also in the top 3
+  const seen = new Set(recentThree.map(p => p.href));
+  const featuredPresentations = [
+    ...recentThree,
+    ...curatedThree.filter(p => !seen.has(p.href)),
+  ].slice(0, 6);
 
   return (
     <div className="min-h-screen text-white" style={{ fontFamily: "var(--font-inter, 'Inter', sans-serif)" }}>
@@ -101,7 +109,7 @@ export default async function HomePage() {
 
         {/* Subtitle */}
         <p className="relative z-10 text-base md:text-lg text-slate-400 max-w-2xl mx-auto mb-4" style={{ fontWeight: 300 }}>
-          80+ evidence-based clinical presentations and interactive tools for patients, providers,
+          90+ evidence-based clinical presentations and 13 interactive tools for patients, providers,
           and sonographers.
         </p>
 
@@ -122,20 +130,20 @@ export default async function HomePage() {
           >
             Explore the Full Library →
           </Link>
-          <a
-            href="#microsites"
+          <Link
+            href="/interactive"
             className="btn-glass inline-flex items-center gap-2 text-slate-200 font-semibold py-3 px-8 rounded-lg"
             style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)", letterSpacing: '0.02em' }}
           >
             Interactive Tools
-          </a>
+          </Link>
         </div>
 
         {/* Stats */}
         <div className="relative z-10 flex flex-wrap justify-center gap-10 sm:gap-14">
           {[
-            { icon: BookOpen, value: '80+', label: 'Presentations' },
-            { icon: Wrench, value: '6', label: 'Interactive Tools' },
+            { icon: BookOpen, value: '90+', label: 'Presentations' },
+            { icon: Wrench, value: '13', label: 'Interactive Tools' },
             { icon: Code2, value: '100%', label: 'Open-Source' },
           ].map((stat) => (
             <div key={stat.label} className="flex flex-col items-center gap-1">
@@ -163,9 +171,9 @@ export default async function HomePage() {
           Featured Presentations
         </h2>
         <p className="text-slate-400 text-center mb-10 text-sm">
-          Commonly used resources for high-risk obstetric care
+          3 recently added &amp; 3 most-used resources for high-risk obstetric care
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredPresentations.map((p, i) => (
             <a
               href={p.href}

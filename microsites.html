@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Clinical Tools — OpenMFM</title>
+  <meta name="description" content="13 evidence-based interactive calculators, screeners, and patient education microsites for Maternal-Fetal Medicine. Covers gestational diabetes, preeclampsia, fetal growth restriction, periviability, cervical length, and more.">
+  <meta property="og:title" content="Interactive Clinical Tools — OpenMFM">
+  <meta property="og:description" content="13 evidence-based interactive calculators, screeners, and patient education microsites for Maternal-Fetal Medicine.">
+  <meta property="og:url" content="https://openmfm.org/interactive">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://openmfm.org/interactive">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#0b1c2c">
+  <style>
+    :root {
+      --bg: #07111c;
+      --panel: #0b1c2c;
+      --fg: #f4f7fb;
+      --muted: #b7c4d6;
+      --accent: #35d0ff;
+      --accent2: #ff4d6d;
+      --line: #16324a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    /* ── Site Navigation ── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      height: 50px;
+    }
+    .site-nav .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--fg);
+      text-decoration: none;
+      margin-right: auto;
+    }
+    .site-nav .nav-brand span { color: var(--accent); }
+    .site-nav a.nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 0 16px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .site-nav a.nav-link:hover { color: var(--fg); }
+    .site-nav a.nav-link.active { color: var(--accent); border-bottom-color: var(--accent); }
+    @media (max-width: 600px) {
+      .site-nav { padding: 0 12px; }
+      .site-nav .nav-brand { font-size: 14px; }
+      .site-nav a.nav-link { padding: 0 10px; font-size: 13px; }
+    }
+    /* ── Hero ── */
+    .hero {
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 40px 32px 32px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+    .hero-count {
+      display: inline-block;
+      margin-top: 16px;
+      background: rgba(53,208,255,.1);
+      border: 1px solid rgba(53,208,255,.3);
+      color: var(--accent);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    /* ── Main layout ── */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px 32px;
+    }
+    /* ── Filter bar ── */
+    .filter-container {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .search-input {
+      flex-grow: 1;
+      padding: 14px 20px;
+      font-size: 16px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--fg);
+      transition: border-color 0.2s;
+      min-width: 200px;
+    }
+    .search-input:focus { outline: none; border-color: var(--accent); }
+    .search-input::placeholder { color: var(--muted); }
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .filter-select {
+      padding: 12px 16px;
+      font-size: 14px;
+      min-width: 180px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--fg);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .filter-select:focus { outline: none; border-color: var(--accent); }
+    .filter-results {
+      margin-bottom: 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    /* ── Card grid ── */
+    .presentations {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(11,28,44,.92), rgba(9,22,35,.92));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 24px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .card.microsite-card {
+      border: 2px solid var(--accent);
+      background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));
+    }
+    .card h2 {
+      font-size: 20px;
+      color: var(--fg);
+      margin-bottom: 10px;
+      line-height: 1.35;
+    }
+    .card p {
+      color: var(--muted);
+      margin-bottom: 14px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .tag {
+      display: inline-block;
+      background: rgba(53,208,255,.1);
+      border: 1px solid rgba(53,208,255,.3);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-right: 6px;
+      margin-bottom: 14px;
+    }
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--bg);
+      text-decoration: none;
+      padding: 11px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-right: 8px;
+      margin-top: 6px;
+    }
+    .btn:hover { transform: scale(1.04); box-shadow: 0 8px 24px rgba(53,208,255,.4); }
+    .button-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .card.hidden { display: none; }
+    /* ── Pagination ── */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin-top: 48px;
+    }
+    .pagination button {
+      background: var(--panel);
+      border: 2px solid var(--line);
+      color: var(--fg);
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pagination button:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: rgba(53,208,255,.1);
+      transform: translateY(-2px);
+    }
+    .pagination button:disabled { opacity: 0.3; cursor: not-allowed; }
+    .pagination .page-info { color: var(--muted); font-size: 15px; font-weight: 500; }
+    /* ── Footer ── */
+    footer {
+      background: var(--panel);
+      border-top: 1px solid var(--line);
+      padding: 24px 32px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      main { padding: 28px 16px; }
+      .hero { padding: 28px 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="https://openmfm.org" class="nav-brand">open<span>MFM</span></a>
+    <a href="https://openmfm.org" class="nav-link" id="nav-home">&#x2190; Home</a>
+    <a href="https://openmfm.org/library" class="nav-link" id="nav-library">Library</a>
+    <a href="https://openmfm.org/interactive" class="nav-link active" id="nav-interactive">Interactive Tools</a>
+  </nav>
+
+  <div class="hero">
+    <h1>Interactive <span>Clinical Tools</span></h1>
+    <p>Evidence-based calculators, screeners, and patient education microsites</p>
+    <span class="hero-count">&#x1F310; 13 Interactive Tools</span>
+  </div>
+
+  <main>
+    <div class="filter-container">
+      <input
+        type="text"
+        id="searchBox"
+        class="search-input"
+        placeholder="&#x1F50D; Search interactive tools..."
+        autocomplete="off"
+      >
+      <div class="filter-group">
+        <label for="tag-filter">Filter by Tag:</label>
+        <select id="tag-filter" class="filter-select"></select>
+      </div>
+    </div>
+    <div id="filter-results" class="filter-results"></div>
+
+    <div class="presentations" id="microsites-grid">
+
+      <!-- cfDNA Navigator / NIPT Decision Guide -->
+      <div class="card microsite-card" data-tags="NIPT,cfDNA Screening,Prenatal Genetics,Interactive">
+        <h2>cfDNA Navigator &#x2014; NIPT Decision Guide</h2>
+        <p>Interactive patient decision guide for cell-free DNA prenatal screening (NIPT). Covers whether to pursue NIPT based on age, risk factors, and patient values &#x2014; and explains what a positive result means, including condition-specific and age-stratified positive predictive values (PPV).</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag">NIPT</span>
+          <span class="tag">cfDNA Screening</span>
+          <span class="tag">Prenatal Genetics</span>
+        </div>
+        <div class="button-group">
+          <a href="microsites/understanding-nipt-testing/index.html" class="btn" style="background:var(--accent);">&#x1F9EC; Launch Guide</a>
+        </div>
+      </div>
+
+      <!-- VOGM Screener -->
+      <div class="card microsite-card" data-tags="Vein of Galen,Fetal MRI,Right Heart Strain,Clinical Tool">
+        <h2>Vein of Galen Malformation &#x2014; Prenatal Risk Stratification Screener</h2>
+        <p>Interactive prenatal risk stratification and counseling tool for Vein of Galen Malformation (VOGM). Evaluates fetal MRI brain parenchymal findings, cardiac hemodynamics, malformation morphology, and systemic findings to generate a tiered risk assessment with evidence-based clinical recommendations.</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag">Vein of Galen</span>
+          <span class="tag">Fetal MRI</span>
+          <span class="tag">Clinical Tool</span>
+        </div>
+        <div class="button-group">
+          <a href="microsites/vogm-screener/index.html" class="btn" style="background:var(--accent);">&#x1F4CA; Launch Screener</a>
+        </div>
+      </div>
+
+      <!-- Periviability -->
+      <div class="card microsite-card" data-tags="Periviability,Prematurity,Neonatal Outcomes,Patient Education">
+        <h2>Periviability Counseling Resource</h2>
+        <p>A dual-audience periviability counseling resource covering survival and morbidity outcomes by gestational age (22&#x2013;25 weeks), prognostic factors, family decision-support questions, key clinical terminology, and ACOG/SMFM guideline references &#x2014; for patients, families, and clinicians.</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag">Periviability</span>
+          <span class="tag">Prematurity</span>
+          <span class="tag">Neonatal Outcomes</span>
+        </div>
+        <div class="button-group">
+          <a href="microsites/periviability/index.html" class="btn" style="background:var(--accent);">&#x1F46A; Launch Resource</a>
+        </div>
+      </div>
+
+      <!-- Cervical Length Screening -->
+      <div class="card microsite-card" data-tags="Cervical Length,Preterm Birth,Screening Tool,Patient Education">
+        <h2>Cervical Length Screening &amp; Preterm Prevention</h2>
+        <p>Interactive cervical length screening tool and patient education resource covering measurement thresholds, risk stratification, progesterone therapy, cerclage indications, pessary considerations, and ACOG/SMFM guideline-based preterm prevention strategies.</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag">Cervical Length</span>
+          <span class="tag">Preterm Birth</span>
+          <span class="tag">Screening Tool</span>
+        </div>
+        <div class="button-group">
+          <a href="microsites/cervical-length-screening/index.html" class="btn" style="background:var(--accent);">&#x1F4CA; Launch Screener</a>
+        </div>
+      </div>
+
+      <!-- Preeclampsia Screener -->
+      <div class="card microsite-card" data-tags="Preeclampsia,Risk Calculator,Clinical Tool,Aspirin Prophylaxis">
+        <h2>Preeclampsia Screener &#x2014; Interactive Risk Calculator</h2>
+        <p>Evidence-based preeclampsia risk assessment tool for patients and clinicians. Calculate personalized risk scores using maternal characteristics, medical history, and biomarkers. Includes ACOG and USPSTF guideline-based recommendations for aspirin prophylaxis, surveillance protocols, and patient counseling resources.</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag">Preeclampsia</span>
+          <span class="tag">Risk Calculator</span>
+          <span class="tag">Aspirin Prophylaxis</span>
+        </div>
+        <div class="button-group">
+          <a href="https://www.preeclampsia-screener.com/" target="_blank" rel="noopener" class="btn" style="background:var(--accent);">&#x1F4CA; Launch Screener</a>
+        </div>
+      </div>
+
+      <!-- Vitamin K Deficiency Bleeding -->
+      <div class="card microsite-card" data-tags="Vitamin K,Newborn Care,Patient Education,Clinician Toolkit">
+        <h2>Vitamin K Deficiency Bleeding (VKDB)</h2>
+        <p>Comprehensive dual-audience microsite covering neonatal Vitamin K prophylaxis. Patient-facing section explains why newborns need the Vitamin K shot, safety considerations, and common myths. Clinician toolkit includes 60-second counseling scripts, documentation templates, and evidence-based responses to common misconceptions.</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag">Vitamin K</span>
+          <span class="tag">Newborn Care</span>
+          <span class="tag">Clinician Toolkit</span>
+        </div>
+        <div class="button-group">
+          <a href="microsites/vitamin-k-deficiency-bleeding/index.html" class="btn" style="background:var(--accent);">&#x1F46A; For Parents</a>
+          <a href="microsites/vitamin-k-deficiency-bleeding/clinicians.html" class="btn" style="background:#ff4d6d;">&#x1F9D1;&#x200D;&#x2695;&#xFE0F; For Clinicians</a>
+        </div>
+      </div>
+
+      <!-- GDM Screener -->
+      <div class="card microsite-card" data-tags="Gestational Diabetes,Risk Assessment,Clinical Tool,ACOG 2024">
+        <h2>GDM Screener &#x2014; Gestational Diabetes Risk Assessment</h2>
+        <p>Interactive clinical decision support tool for determining when to screen for Gestational Diabetes Mellitus (GDM). Step-by-step risk assessment covering BMI thresholds, high-risk factors, and additional risk factors. Provides evidence-based recommendations for early vs. routine screening timing based on ACOG 2024 guidelines and Practice Bulletin No. 190.</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag">Gestational Diabetes</span>
+          <span class="tag">Risk Assessment</span>
+          <span class="tag">ACOG 2024</span>
+        </div>
+        <div class="button-group">
+          <a href="microsites/gdm-screener/index.html" class="btn" style="background:var(--accent);">&#x1F4CA; Launch Screener</a>
+        </div>
+      </div>
+
+      <!-- HTN Screener -->
+      <div class="card microsite-card" data-tags="Hypertension,Preeclampsia,Clinical Tool,ACOG PB 222">
+        <h2>HTN in Pregnancy &#x2014; Hypertension Classification Tool</h2>
+        <p>Comprehensive clinical decision support tool for classifying and managing hypertensive disorders in pregnancy. Features blood pressure classification, gestational age-based diagnosis, severe features assessment, and risk factor evaluation for aspirin prophylaxis. Includes evidence-based treatment recommendations and delivery timing guidance based on ACOG Practice Bulletin No. 222 and CHAP 2022 guidelines.</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag">Hypertension</span>
+          <span class="tag">Preeclampsia</span>
+          <span class="tag">Clinical Tool</span>
+        </div>
+        <div class="button-group">
+          <a href="microsites/htn-screener/index.html" class="btn" style="background:var(--accent);">&#x1F4CA; Launch Screener</a>
+        </div>
+      </div>
+
+      <!-- Fetal Growth Calculator -->
+      <div class="card microsite-card" data-tags="Fetal Growth,Biometry Calculator,Doppler,Clinical Tool">
+        <h2>Fetal Growth Biometry Calculator &#x2014; Multi-Standard Percentile Tool</h2>
+        <p>Comprehensive fetal biometry calculator with automated percentile calculations using INTERGROWTH-21st, Hadlock, and WHO growth standards. Features Hadlock formula EFW computation, Doppler indices interpretation (UA-PI, MCA-PI, MCA-PSV), FGR/SGA/LGA classification, and delivery timing recommendations. Includes color-coded results and clinical management guidance.</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag">Fetal Growth</span>
+          <span class="tag">Biometry Calculator</span>
+          <span class="tag">Doppler</span>
+        </div>
+        <div class="button-group">
+          <a href="microsites/fetal-growth-calculator/index.html" class="btn" style="background:var(--accent);">&#x1F4CA; Launch Calculator</a>
+        </div>
+      </div>
+
+      <!-- FGRManager -->
+      <div class="card microsite-card" data-tags="Fetal Growth Restriction,SMFM #52,Doppler Surveillance,Delivery Timing,Clinical Tool">
+        <h2>FGRManager &#x2014; FGR Surveillance &amp; Delivery Timing Tool</h2>
+        <p>Interactive clinical decision-support tool for managing pregnancies complicated by fetal growth restriction (FGR). Implements SMFM Consult Series #52 delivery-timing thresholds driven by umbilical artery (UA) Doppler category. Provides risk tier, delivery countdown, surveillance schedule, corticosteroid eligibility, BPP alert system, and one-click EMR summary export.</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag">Fetal Growth Restriction</span>
+          <span class="tag">SMFM #52</span>
+          <span class="tag">Delivery Timing</span>
+        </div>
+        <div class="button-group">
+          <a href="microsites/FGRManager/landing.html" class="btn" style="background:var(--accent);">&#x1F4CB; Overview</a>
+          <a href="microsites/FGRManager/index.html" class="btn" style="background:#ff4d6d;">&#x1FA7A; Launch Tool</a>
+        </div>
+      </div>
+
+      <!-- Preterm Birth Risk Assessment -->
+      <div class="card microsite-card" data-tags="Preterm Birth,Risk Assessment,Patient Education,Clinical Tool">
+        <h2>Previous Preterm Birth Risk &#x2014; Interactive Patient Assessment</h2>
+        <p>Step-by-step interactive risk assessment tool for patients with a history of preterm birth. Evaluates clinical risk factors across a multi-step workflow, generates personalized risk stratification (high/moderate/low), and provides evidence-based recommendations including cervical length surveillance, progesterone therapy, and cerclage candidacy.</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag">Preterm Birth</span>
+          <span class="tag">Risk Assessment</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="microsites/preterm-birth-microsite/preterm_birth_microsite.html" class="btn" style="background:var(--accent);">&#x1FA7A; Launch Tool</a>
+        </div>
+      </div>
+
+      <!-- Hydrops Fetalis -->
+      <div class="card microsite-card" data-tags="Hydrops Fetalis,Patient Education,Fetal Edema,Family Counseling">
+        <h2>Hydrops Fetalis &#x2014; Interactive Patient &amp; Family Microsite</h2>
+        <p>Comprehensive interactive educational resource for patients and families facing a hydrops fetalis diagnosis. Explores immune and non-immune causes, diagnostic evaluation, ultrasound findings, management approaches, prognosis, and practical guidance for navigating this challenging diagnosis during pregnancy.</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag">Hydrops Fetalis</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Family Counseling</span>
+        </div>
+        <div class="button-group">
+          <a href="microsites/hydrops-fetalis-microsite/hydrops_microsite.html" class="btn" style="background:var(--accent);">&#x1F46A; View Microsite</a>
+        </div>
+      </div>
+
+      <!-- Fetal Kick Count Microsite -->
+      <div class="card microsite-card" data-tags="Fetal Movement,Kick Counting,Patient Education,Fetal Well-Being,Mobile Friendly">
+        <h2>Fetal Kick Count &#x2014; Interactive Patient Education Microsite</h2>
+        <p>Comprehensive interactive microsite for patients on fetal kick counting and fetal movement monitoring. Covers kick count methods, how to track movements, what counts as a kick, when to call your provider, and evidence-based guidance on recognizing decreased fetal movement. Includes a dedicated mobile-optimized version.</p>
+        <div>
+          <span class="tag" style="background:rgba(53,208,255,.15);border-color:rgba(53,208,255,.4);">&#x1F310; Microsite</span>
+          <span class="tag" style="background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.4);color:#c084fc;">&#x1F4F1; Mobile Friendly</span>
+          <span class="tag">Fetal Movement</span>
+          <span class="tag">Kick Counting</span>
+        </div>
+        <div class="button-group">
+          <a href="microsites/fetal-kick-count-microsite/fetal-kick-count-microsite.html" class="btn" style="background:var(--accent);">&#x1F476; View Microsite</a>
+          <a href="microsites/fetal-kick-count-microsite/fetal-kick-count-mobile-final.html" class="btn" style="background:#c084fc;color:#07111c;">&#x1F4F1; Mobile Version</a>
+        </div>
+      </div>
+
+    </div><!-- /microsites-grid -->
+
+    <div class="pagination" id="pagination" style="display:none;"></div>
+
+    <div style="text-align:center; margin-top:40px; color:var(--muted); font-size:14px;">
+      &#x1F4A1; <strong>Suggest a tool:</strong> Have an idea for a new clinical calculator or patient resource?
+      <a href="https://github.com/chukwumaonyeije/mfm-presentations/issues" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;">Open an issue on GitHub</a>.
+    </div>
+
+    <div style="background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.25);border-left:4px solid var(--accent2);border-radius:12px;padding:16px;margin-top:48px;font-size:14px;color:var(--muted);">
+      <strong style="color:var(--accent2);">&#x26A0;&#xFE0F; Medical Disclaimer:</strong>
+      These tools are educational resources and do not constitute medical advice.
+      Clinical decisions should be individualized based on current evidence, local protocols, patient circumstances, and provider judgment.
+      Always consult current ACOG, SMFM, and institutional guidelines.
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      Created by <strong>Dr. Chukwuma Onyeije</strong>, Maternal-Fetal Medicine Specialist &mdash;
+      <a href="https://openmfm.org/library">Full Presentation Library</a> &bull;
+      <a href="https://github.com/chukwumaonyeije/mfm-presentations" target="_blank" rel="noopener">View on GitHub</a>
+    </p>
+    <p style="margin-top:8px;font-size:12px;">
+      90 open-source presentations &bull; 13 interactive microsites &bull; Evidence-based MFM education
+    </p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchBox   = document.getElementById('searchBox');
+      const tagFilter   = document.getElementById('tag-filter');
+      const filterRes   = document.getElementById('filter-results');
+      const grid        = document.getElementById('microsites-grid');
+      const allCards    = Array.from(grid.querySelectorAll('.card'));
+      const PERPAGE     = 9;
+      let currentPage   = 1;
+      let visibleCards  = [...allCards];
+
+      // Build tag dropdown
+      const allTags = new Set();
+      allCards.forEach(card => {
+        (card.dataset.tags || '').split(',').forEach(t => allTags.add(t.trim()));
+      });
+      tagFilter.innerHTML = '<option value="all">All Tags</option>';
+      [...allTags].sort().forEach(tag => {
+        const opt = document.createElement('option');
+        opt.value = tag; opt.textContent = tag;
+        tagFilter.appendChild(opt);
+      });
+
+      function applyFilters() {
+        const term = searchBox.value.toLowerCase().trim();
+        const selectedTag = tagFilter.value;
+        visibleCards = allCards.filter(card => {
+          const text = (card.textContent || '').toLowerCase();
+          const tags = (card.dataset.tags || '').split(',').map(t => t.trim());
+          const matchSearch = !term || text.includes(term);
+          const matchTag    = selectedTag === 'all' || tags.includes(selectedTag);
+          return matchSearch && matchTag;
+        });
+        currentPage = 1;
+        render();
+      }
+
+      function render() {
+        const total = visibleCards.length;
+        const totalPages = Math.ceil(total / PERPAGE);
+        const start = (currentPage - 1) * PERPAGE;
+        const end   = start + PERPAGE;
+
+        allCards.forEach(c => c.classList.add('hidden'));
+        visibleCards.slice(start, end).forEach(c => c.classList.remove('hidden'));
+
+        // Results label
+        if (!searchBox.value.trim() && tagFilter.value === 'all') {
+          filterRes.textContent = 'Showing all ' + total + ' interactive tools';
+        } else if (total === 0) {
+          filterRes.textContent = 'No tools found';
+        } else {
+          filterRes.textContent = 'Showing ' + Math.min(end, total) + ' of ' + total + ' tools';
+        }
+
+        // Pagination
+        const pag = document.getElementById('pagination');
+        if (totalPages <= 1) {
+          pag.style.display = 'none';
+        } else {
+          pag.style.display = 'flex';
+          pag.innerHTML = '';
+          const prev = document.createElement('button');
+          prev.textContent = '\u2190 Prev';
+          prev.disabled = currentPage === 1;
+          prev.addEventListener('click', () => { currentPage--; render(); window.scrollTo({top:0,behavior:'smooth'}); });
+          const info = document.createElement('span');
+          info.className = 'page-info';
+          info.textContent = 'Page ' + currentPage + ' of ' + totalPages;
+          const next = document.createElement('button');
+          next.textContent = 'Next \u2192';
+          next.disabled = currentPage === totalPages;
+          next.addEventListener('click', () => { currentPage++; render(); window.scrollTo({top:0,behavior:'smooth'}); });
+          pag.append(prev, info, next);
+        }
+      }
+
+      let t;
+      searchBox.addEventListener('input', () => { clearTimeout(t); t = setTimeout(applyFilters, 150); });
+      tagFilter.addEventListener('change', applyFilters);
+      render();
+    });
+  </script>
+</body>
+</html>
