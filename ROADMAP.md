@@ -3,7 +3,7 @@
 > **Site:** [openmfm.org](https://openmfm.org)  
 > **Repo:** [github.com/chukwumaonyeije/mfm-presentations](https://github.com/chukwumaonyeije/mfm-presentations)  
 > **Author:** Dr. Chukwuma Onyeije, MD — Maternal-Fetal Medicine Specialist  
-> **Last Updated:** 2026-03-13
+> **Last Updated:** 2026-03-20
 
 ---
 
@@ -20,7 +20,7 @@
 - `WARP.md` documenting GitHub Pages deployment setup
 
 ### Content Build-Out (Ongoing)
-- **82 evidence-based clinical presentations** across 12 categories:
+- **90 evidence-based clinical presentations** across 12 categories:
   - Hypertension & Preeclampsia
   - Diabetes & Metabolic
   - Fetal Growth & Doppler
@@ -33,7 +33,7 @@
   - Prenatal Screening & Counseling
   - Medical Conditions in Pregnancy
   - GYN / Women's Health
-- **9 interactive clinical microsites:**
+- **13 interactive clinical microsites:**
   - Preeclampsia Screener (preeclampsia-screener.com)
   - FGRManager (SMFM #52 delivery timing)
   - GDM Screener (ACOG 2024 PB #190)
@@ -43,6 +43,10 @@
   - Preterm Birth Risk Screener
   - Fetal Kick Count Microsite (+ mobile-optimized version)
   - Hydrops Fetalis Microsite
+  - cfDNA Navigator — NIPT Decision Guide
+  - Vein of Galen Malformation — Prenatal Risk Stratification Screener
+  - Periviability Counseling Resource
+  - Cervical Length Screening & Preterm Prevention
 
 ### SEO & AI Optimization (Phase 1 — March 2026)
 - Added `<meta>` SEO tags, Open Graph tags, and `<noscript>` fallback to `index.html`
@@ -78,7 +82,7 @@
 - `llms.txt` and `llms-full.txt` updated to use `openmfm.org` as primary URL
 - Security headers added: `X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, `Referrer-Policy`
 
-|### SEO Index Maintenance (March 2026)
+### SEO Index Maintenance (March 2026)
 - Added Vein of Galen Malformation and Preterm Birth Risk Screener to `presentations.json`, `llms.txt`, and `llms-full.txt`
 - Updated presentation count: 82 presentations + 8 microsites
 - `generate_sitemap.py` now writes canonical `openmfm.org` URLs to both sitemaps
@@ -95,6 +99,22 @@
 - Script is idempotent (marker-based); safe to re-run on every Vercel build
 - `inject_deck_seo.py` added to Vercel `buildCommand` and `package.json` `prebuild`
 - All 83 deck HTML files now have correct canonical URLs, structured data, and site backlinks
+
+### Deck Modernization — Dark Theme Rebuild (March 2026)
+- Established OpenMFM dark design system (CSS variables, components, mobile-responsive layout)
+- Rebuilt legacy decks to modern 13-slide dark theme: EIF Patient Education, Gestational Diabetes, Preeclampsia
+- Added UVV & Persistent Right Umbilical Vein as new deck (`/decks/umbilical-vein-varix-pruv/`)
+- `inject_deck_seo.py` processes all rebuilt decks automatically on every Vercel build
+
+### Site Navigation & Library UX (March 20, 2026)
+- **Sticky site-wide nav bar** on `/library` and `/interactive` — Home | Library | Interactive Tools with active-page highlight
+- **Dedicated `/interactive` page** (`microsites.html`) — all 13 microsites with keyword search, tag filter dropdown, and pagination (9/page); `/interactive` Vercel rewrite added
+- **Scope tabs on `/library`** — "Presentations | Interactive Tools" tabs switch the entire search, tag filter, and result count to the selected container
+- **URL state for search** — `?q=`, `?tab=`, `?tag=` written via `history.replaceState()` on every filter change; params read on page load so searches are bookmarkable and shareable (e.g., `openmfm.org/library?q=preeclampsia&tab=interactive`)
+- **"Recently Added" badges** — teal ✦ New pill auto-injected via JS on the 3 newest presentation cards
+- **Microsites teaser on library** — full microsites grid on `/library` replaced with a clean CTA card linking to `/interactive`
+- **Homepage featured presentations** — 3 most recent + 3 curated picks (GDM, FGR, Preeclampsia) in a 3-col grid; "Interactive Tools" CTA links to `/interactive`
+- **Counts updated site-wide** — 90+ presentations, 13 interactive tools across homepage hero, meta tags, OG tags, footer, and search placeholder
 
 ---
 
@@ -121,9 +141,9 @@
 - Use data to prioritize new content
 
 ### Library UX Improvements
-- Add category/section browsing (sidebar or tab nav) to `/library`
-- "Recently Added" or "Recently Updated" badge/filter
-- Keyboard shortcut for search focus
+- Add category/section browsing (sidebar or topic grouping) to `/library`
+- Keyboard shortcut for search focus (`/` key)
+- Pagination on `/library` for the presentations grid (currently all-on-one-page)
 
 ### Custom 404 Page
 - Create a branded `404.html` / Next.js `not-found.tsx` page
