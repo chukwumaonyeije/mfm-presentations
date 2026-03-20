@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preeclampsia — Evidence-Based Management | MFM Provider Education</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0d1117;
+      --surface:     #161b22;
+      --surface2:    #1c2330;
+      --border:      #30363d;
+      --text:        #e6edf3;
+      --muted:       #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-teal: #39d0b4;
+      --accent-green:#3fb950;
+      --accent-amber:#d29922;
+      --accent-red:  #f85149;
+      --accent-purple:#bc8cff;
+      --brand:       #1f6feb;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg); color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    .deck { width: 100%; height: 100%; position: relative; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3em 4em;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--brand); transition: width 0.4s ease; z-index: 200;
+    }
+
+    .nav {
+      position: fixed; bottom: 1.6em; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1.2em; z-index: 100;
+    }
+    .nav button {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); padding: 0.45em 1.2em;
+      border-radius: 6px; font-size: 1em; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav button:hover { background: var(--brand); border-color: var(--brand); }
+    .nav .counter { color: var(--muted); font-size: 0.9em; min-width: 5em; text-align: center; }
+
+    .slide-footer {
+      position: absolute; bottom: 3.5em; left: 4em; right: 4em;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.72em; color: var(--muted);
+      border-top: 1px solid var(--border); padding-top: 0.6em;
+    }
+
+    .slide-label {
+      font-size: 0.75em; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.6em;
+    }
+
+    h1 { font-size: clamp(2em, 4.5vw, 3.6em); font-weight: 300; line-height: 1.15; }
+    h2 { font-size: clamp(1.6em, 3.5vw, 2.6em); font-weight: 300; line-height: 1.2; }
+    h3 { font-size: clamp(1.1em, 2vw, 1.5em); font-weight: 400; }
+    p  { font-size: clamp(0.95em, 1.6vw, 1.25em); line-height: 1.7; max-width: 780px; text-align: center; }
+
+    .accent-blue   { color: var(--accent-blue); }
+    .accent-teal   { color: var(--accent-teal); }
+    .accent-green  { color: var(--accent-green); }
+    .accent-amber  { color: var(--accent-amber); }
+    .accent-red    { color: var(--accent-red); }
+    .accent-purple { color: var(--accent-purple); }
+
+    .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 2em; width: 100%; max-width: 1000px; margin-top: 1.5em; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.6em; width: 100%; max-width: 1000px; margin-top: 1.5em; }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.6em 1.8em; }
+    .card h3 { margin-bottom: 0.6em; }
+    .card p  { text-align: left; font-size: 1em; }
+
+    .pill { display: inline-block; padding: 0.25em 0.85em; border-radius: 20px; font-size: 0.8em; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+    .pill-blue   { background: rgba(88,166,255,.15);  color: var(--accent-blue);   border: 1px solid rgba(88,166,255,.3); }
+    .pill-amber  { background: rgba(210,153,34,.15);  color: var(--accent-amber);  border: 1px solid rgba(210,153,34,.3); }
+    .pill-red    { background: rgba(248,81,73,.15);   color: var(--accent-red);    border: 1px solid rgba(248,81,73,.3); }
+    .pill-teal   { background: rgba(57,208,180,.15);  color: var(--accent-teal);   border: 1px solid rgba(57,208,180,.3); }
+    .pill-green  { background: rgba(63,185,80,.15);   color: var(--accent-green);  border: 1px solid rgba(63,185,80,.3); }
+
+    .stat-row { display: flex; gap: 2em; margin-top: 1.6em; flex-wrap: wrap; justify-content: center; }
+    .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2em 1.8em; text-align: center; min-width: 155px; }
+    .stat-box .stat-num { font-size: 2.2em; font-weight: 700; line-height: 1; }
+    .stat-box .stat-lbl { font-size: 0.8em; color: var(--muted); margin-top: 0.3em; line-height: 1.3; }
+
+    .alert { border-radius: 10px; padding: 1em 1.4em; display: flex; align-items: flex-start; gap: 0.8em; max-width: 820px; margin-top: 1.4em; font-size: 0.95em; line-height: 1.55; }
+    .alert-amber  { background: rgba(210,153,34,.12); border: 1px solid rgba(210,153,34,.35); color: var(--text); }
+    .alert-green  { background: rgba(63,185,80,.12);  border: 1px solid rgba(63,185,80,.35);  color: var(--text); }
+    .alert-red    { background: rgba(248,81,73,.12);  border: 1px solid rgba(248,81,73,.35);   color: var(--text); }
+    .alert-blue   { background: rgba(88,166,255,.10); border: 1px solid rgba(88,166,255,.3);  color: var(--text); }
+    .alert-icon   { font-size: 1.3em; flex-shrink: 0; margin-top: 0.05em; }
+
+    .checklist { list-style: none; margin-top: 1.2em; max-width: 700px; }
+    .checklist li { display: flex; align-items: flex-start; gap: 0.7em; padding: 0.45em 0; font-size: clamp(0.9em, 1.4vw, 1.05em); line-height: 1.5; }
+    .checklist li::before { content: '✦'; color: var(--accent-teal); flex-shrink: 0; margin-top: 0.05em; }
+
+    .comp-table { width: 100%; max-width: 960px; border-collapse: collapse; font-size: clamp(0.8em, 1.3vw, 1em); margin-top: 1.4em; }
+    .comp-table th { background: var(--surface2); color: var(--accent-blue); padding: 0.7em 1em; text-align: left; border-bottom: 2px solid var(--border); font-weight: 600; }
+    .comp-table td { padding: 0.65em 1em; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+    .comp-table tr:nth-child(even) td { background: rgba(255,255,255,.025); }
+    .comp-table td:first-child { color: var(--muted); font-weight: 500; }
+
+    .title-eyebrow { font-size: 0.8em; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-teal); margin-bottom: 0.8em; }
+    .title-divider { width: 60px; height: 3px; background: var(--brand); border-radius: 2px; margin: 1em auto; }
+    .title-sub     { font-size: clamp(1em, 1.8vw, 1.3em); color: var(--muted); max-width: 620px; text-align: center; line-height: 1.6; }
+
+    @media (max-width: 700px) {
+      .slide { padding: 2em 1.6em 5em; }
+      .two-col, .three-col { grid-template-columns: 1fr; }
+      .slide-footer { left: 1.6em; right: 1.6em; }
+      .stat-box { min-width: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck">
+
+  <!-- SLIDE 1 — TITLE -->
+  <div class="slide active">
+    <div class="title-eyebrow">MFM Provider Education</div>
+    <h1 style="text-align:center;">
+      Preeclampsia<br>
+      <span class="accent-red">Early Identification &amp; Management</span>
+    </h1>
+    <div class="title-divider"></div>
+    <p class="title-sub">Evidence-based clinical update — diagnosis, surveillance, intervention, and long-term counseling</p>
+    <div style="margin-top:2em; display:flex; gap:1em; flex-wrap:wrap; justify-content:center;">
+      <span class="pill pill-red">Hypertensive Disorder</span>
+      <span class="pill pill-amber">ACOG PB #222</span>
+      <span class="pill pill-blue">Provider Education</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Maternal-Fetal Medicine</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 — EPIDEMIOLOGY -->
+  <div class="slide">
+    <div class="slide-label">Epidemiology</div>
+    <h2>Epidemiology &amp; <span class="accent-red">Impact</span></h2>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num accent-red">2–8%</div>
+        <div class="stat-lbl">of US pregnancies<br>affected</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-amber">60%</div>
+        <div class="stat-lbl">higher risk<br>in Black women</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-blue">#1</div>
+        <div class="stat-lbl">cause of maternal<br>morbidity worldwide</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-purple">Long</div>
+        <div class="stat-lbl">-term CV risk for<br>mother &amp; offspring</div>
+      </div>
+    </div>
+    <ul class="checklist" style="margin-top:1.6em;">
+      <li>Leading cause of maternal mortality globally — yet largely preventable with early identification</li>
+      <li>Associated with preterm birth, IUGR, and placental abruption</li>
+      <li>Racial disparity is structural — Black women face 60% higher risk independent of other factors</li>
+      <li>Long-term cardiovascular sequelae for both mother and child</li>
+    </ul>
+    <div style="margin-top:1em; font-size:0.8em; color:var(--muted); text-align:center;">ACOG Practice Bulletin #222, 2020</div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 2 of 13</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 — PATHOPHYSIOLOGY -->
+  <div class="slide">
+    <div class="slide-label">Pathophysiology</div>
+    <h2>Two-Stage <span class="accent-blue">Pathophysiology</span></h2>
+    <div class="two-col" style="margin-top:1.6em;">
+      <div class="card" style="border-color:rgba(88,166,255,.4);">
+        <h3 class="accent-blue">Stage 1 — Early Pregnancy</h3>
+        <p><strong>Abnormal placentation:</strong> Inadequate trophoblast invasion and failure of spiral artery remodeling. Occurs in the first half of pregnancy — often clinically silent. Sets the stage for the maternal syndrome.</p>
+      </div>
+      <div class="card" style="border-color:rgba(248,81,73,.4);">
+        <h3 class="accent-red">Stage 2 — Maternal Syndrome</h3>
+        <p><strong>Endothelial dysfunction:</strong> &#x2193; VEGF, &#x2191; sFlt-1, &#x2191; sEng. Systemic inflammation and oxidative stress. Hypertension and end-organ damage manifest clinically in the second half of pregnancy.</p>
+      </div>
+    </div>
+    <div class="alert alert-blue">
+      <span class="alert-icon">&#x1F4A1;</span>
+      <span>The <strong>sFlt-1/PlGF ratio</strong> is increasingly used for short-term prediction of preeclampsia and can rule out preeclampsia within 1 week when the ratio is &#x2264;38.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 3 of 13</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 — DIAGNOSTIC CRITERIA -->
+  <div class="slide">
+    <div class="slide-label">Diagnosis — ACOG 2019</div>
+    <h2>Diagnostic Criteria <span class="accent-blue">(ACOG 2019)</span></h2>
+    <p>New-onset hypertension after 20 weeks in a previously normotensive woman, <strong>plus at least one</strong> of the following:</p>
+    <table class="comp-table">
+      <thead>
+        <tr><th>Criterion</th><th>Threshold</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Blood Pressure</td><td>SBP &#x2265;140 or DBP &#x2265;90 mmHg on two occasions &#x2265;4 hours apart</td></tr>
+        <tr><td>Proteinuria</td><td>&#x2265;300 mg/24h, protein/creatinine &#x2265;0.3, or dipstick &#x2265;2+</td></tr>
+        <tr><td>Thrombocytopenia</td><td>Platelets &lt;100,000/&#xB5;L</td></tr>
+        <tr><td>Renal insufficiency</td><td>Creatinine &gt;1.1 mg/dL or doubling of baseline</td></tr>
+        <tr><td>Impaired liver function</td><td>Transaminases 2&#xD7; upper limit of normal</td></tr>
+        <tr><td>Pulmonary edema</td><td>New-onset</td></tr>
+        <tr><td>Cerebral/visual symptoms</td><td>New-onset headache unresponsive to medication, or scotomata</td></tr>
+      </tbody>
+    </table>
+    <div class="alert alert-amber" style="margin-top:1em;">
+      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+      <span><strong>Proteinuria is no longer required for diagnosis</strong> — any end-organ involvement is sufficient. BP can normalize between readings; do not dismiss the diagnosis on a single normal value.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 4 of 13</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 — SEVERE FEATURES -->
+  <div class="slide">
+    <div class="slide-label">Severe Features</div>
+    <h2>Preeclampsia with <span class="accent-red">Severe Features</span></h2>
+    <div class="two-col" style="margin-top:1.4em; max-width:900px;">
+      <ul class="checklist" style="margin-top:0;">
+        <li>Severe hypertension: SBP &#x2265;160 or DBP &#x2265;110 mmHg</li>
+        <li>Thrombocytopenia: Platelets &lt;100,000/&#xB5;L</li>
+        <li>Liver dysfunction: Transaminases &#x2265;2&#xD7; normal + RUQ pain</li>
+        <li>Renal dysfunction: Creatinine &gt;1.1 mg/dL or doubling</li>
+      </ul>
+      <ul class="checklist" style="margin-top:0;">
+        <li>Pulmonary edema (new-onset)</li>
+        <li>Persistent headache unresponsive to medication</li>
+        <li>Visual symptoms: scotomata, blurring, or photophobia</li>
+        <li>Severe RUQ or epigastric pain unresponsive to medication</li>
+      </ul>
+    </div>
+    <div class="alert alert-red">
+      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+      <span>Severe features warrant hospitalization, aggressive BP control, seizure prophylaxis, and delivery planning. <strong>Delivery is the only definitive treatment.</strong> Headache + hyperreflexia does not predict seizure — magnesium is still indicated.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 5 of 13</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 — RISK STRATIFICATION + FIRST-TRIMESTER SCREENING -->
+  <div class="slide">
+    <div class="slide-label">Prevention</div>
+    <h2>Risk Stratification &amp; <span class="accent-teal">First-Trimester Screening</span></h2>
+    <div class="two-col" style="margin-top:1.4em;">
+      <div class="card" style="border-color:rgba(248,81,73,.4);">
+        <h3 class="accent-red">High-Risk Factors (&gt;8% risk)</h3>
+        <p>Prior preeclampsia (especially early-onset) &bull; Multifetal gestation &bull; Chronic hypertension &bull; Type 1 or 2 diabetes &bull; Renal disease &bull; Autoimmune disease (SLE, APS)</p>
+      </div>
+      <div class="card" style="border-color:rgba(57,208,180,.4);">
+        <h3 class="accent-teal">FMF Algorithm (11&#x2013;13+6 weeks)</h3>
+        <p>Maternal characteristics + MAP + uterine artery Doppler PI + serum PAPP-A and PlGF. Detection rate: ~75% for early-onset preeclampsia. ASPRE trial validated this approach.</p>
+      </div>
+    </div>
+    <div class="alert alert-blue">
+      <span class="alert-icon">&#x1F4A1;</span>
+      <span><strong>Moderate-risk factors</strong> include nulliparity, BMI &gt;30, family history, age &#x2265;35, prior adverse pregnancy outcome, IVF, and low socioeconomic status. &#x2265;2 moderate-risk factors = aspirin indication.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 6 of 13</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 — ASPIRIN PROPHYLAXIS -->
+  <div class="slide">
+    <div class="slide-label">Prevention</div>
+    <h2>Aspirin <span class="accent-green">Prophylaxis</span></h2>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num accent-blue">81–162 mg</div>
+        <div class="stat-lbl">daily at bedtime<br>(162 mg for high-risk)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-teal">&lt;16 wks</div>
+        <div class="stat-lbl">initiate — ideally<br>by 12 weeks</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-green">62%</div>
+        <div class="stat-lbl">reduction in early<br>preeclampsia (ASPRE)</div>
+      </div>
+    </div>
+    <table class="comp-table" style="margin-top:1.4em;">
+      <thead><tr><th>Parameter</th><th>Recommendation</th></tr></thead>
+      <tbody>
+        <tr><td>Indication</td><td>&#x2265;1 high-risk factor OR &#x2265;2 moderate-risk factors (USPSTF/ACOG 2021)</td></tr>
+        <tr><td>Dose</td><td>81–162 mg daily at bedtime; continue until delivery</td></tr>
+        <tr><td>NNT</td><td>72 to prevent one case of preeclampsia</td></tr>
+        <tr><td>ASPRE trial</td><td>62% reduction in early preeclampsia with 150 mg at bedtime (FMF-screened population)</td></tr>
+      </tbody>
+    </table>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 7 of 13</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 8 — ANTENATAL SURVEILLANCE -->
+  <div class="slide">
+    <div class="slide-label">Surveillance</div>
+    <h2>Antenatal <span class="accent-blue">Surveillance</span></h2>
+    <div class="two-col" style="margin-top:1.4em;">
+      <div class="card">
+        <h3 class="accent-blue">Without Severe Features</h3>
+        <p>BP monitoring 2&#xD7; weekly (outpatient possible) &bull; Weekly labs: CBC, LFTs, creatinine &bull; Fetal NST/BPP 1&#x2013;2&#xD7; weekly from diagnosis &bull; Growth ultrasound every 3 weeks</p>
+      </div>
+      <div class="card" style="border-color:rgba(248,81,73,.4);">
+        <h3 class="accent-red">With Severe Features</h3>
+        <p>Inpatient management at &#x2265;34 weeks &bull; Expectant management 23&#x2013;33+6 weeks at tertiary center only &bull; Daily labs + continuous/frequent BP monitoring &bull; Daily fetal surveillance</p>
+      </div>
+    </div>
+    <div class="alert alert-amber">
+      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+      <span>Trend labs serially — <strong>platelets are often the first to fall</strong>. BP can normalize between readings. Do not dismiss the diagnosis based on a single normal measurement.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 8 of 13</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 — ACUTE SEVERE HYPERTENSION -->
+  <div class="slide">
+    <div class="slide-label">Acute Management</div>
+    <h2>Acute Severe Hypertension <span class="accent-red">Management</span></h2>
+    <p>Goal: Reduce SBP to 140&#x2013;150 mmHg and DBP to 90&#x2013;100 mmHg <strong>within 30&#x2013;60 minutes</strong>.</p>
+    <table class="comp-table">
+      <thead><tr><th>Agent</th><th>Dose</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Labetalol IV</td><td>20 mg &#x2192; 40 mg &#x2192; 80 mg q10min</td><td>Max 220 mg total; first-line</td></tr>
+        <tr><td>Hydralazine IV</td><td>5&#x2013;10 mg q20min</td><td>Max 20 mg total</td></tr>
+        <tr><td>Nifedipine PO</td><td>10&#x2013;20 mg q20min</td><td>Immediate release only — not extended</td></tr>
+      </tbody>
+    </table>
+    <div class="alert alert-red">
+      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+      <span>ACOG mandates treating sustained SBP &#x2265;160 or DBP &#x2265;110 mmHg within 30&#x2013;60 minutes. Failure to treat promptly significantly increases maternal stroke risk. Document time-to-treatment.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 9 of 13</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 10 — MAGNESIUM SULFATE -->
+  <div class="slide">
+    <div class="slide-label">Seizure Prophylaxis</div>
+    <h2>Magnesium Sulfate <span class="accent-purple">Prophylaxis</span></h2>
+    <div class="three-col" style="margin-top:1.4em;">
+      <div class="card">
+        <h3 class="accent-purple">Indications</h3>
+        <p>Preeclampsia with severe features &bull; During labor and 24&#x2013;48 hours postpartum &bull; Treatment and prevention of eclamptic seizures</p>
+      </div>
+      <div class="card">
+        <h3 class="accent-blue">Dosing</h3>
+        <p><strong>Loading:</strong> 4&#x2013;6 g IV over 15&#x2013;20 minutes<br><br><strong>Maintenance:</strong> 2 g/hour continuous infusion</p>
+      </div>
+      <div class="card">
+        <h3 class="accent-amber">Monitoring</h3>
+        <p>Deep tendon reflexes (discontinue if absent) &bull; Respiratory rate &gt;12/min &bull; Urine output &gt;25 mL/hour &bull; Serum Mg if renal insufficiency (goal 4&#x2013;7 mEq/L)</p>
+      </div>
+    </div>
+    <div class="alert alert-amber">
+      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+      <span>Headache and hyperreflexia <strong>do not predict seizure</strong>. Magnesium is indicated for seizure prophylaxis in all severe-feature cases regardless of neurological symptoms.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 10 of 13</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 11 — DELIVERY TIMING + HELLP -->
+  <div class="slide">
+    <div class="slide-label">Delivery</div>
+    <h2>Delivery Timing &amp; <span class="accent-red">HELLP Syndrome</span></h2>
+    <table class="comp-table">
+      <thead><tr><th>Clinical Scenario</th><th>Delivery Timing</th></tr></thead>
+      <tbody>
+        <tr><td>Preeclampsia without severe features</td><td class="accent-green">37 0/7 weeks</td></tr>
+        <tr><td>Preeclampsia with severe features</td><td class="accent-amber">34 0/7 weeks</td></tr>
+        <tr><td>HELLP syndrome</td><td class="accent-amber">34 0/7 weeks</td></tr>
+        <tr><td>Eclampsia</td><td class="accent-red">After stabilization</td></tr>
+        <tr><td>Severe features + maternal instability</td><td class="accent-red">Immediate</td></tr>
+      </tbody>
+    </table>
+    <div class="alert alert-amber" style="margin-top:1em;">
+      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+      <span><strong>HELLP</strong> (Hemolysis, Elevated Liver enzymes, Low Platelets): up to 20% present without hypertension or proteinuria. Monitor for DIC, liver hematoma/rupture, and acute renal failure. Administer betamethasone if delivery expected before 34 weeks.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 11 of 13</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 12 — POSTPARTUM MANAGEMENT -->
+  <div class="slide">
+    <div class="slide-label">Postpartum</div>
+    <h2>Postpartum <span class="accent-blue">Management</span></h2>
+    <div class="two-col" style="margin-top:1.4em;">
+      <div class="card">
+        <h3 class="accent-blue">Immediate (0&#x2013;72 hours)</h3>
+        <p>Continue magnesium sulfate 24&#x2013;48 hours postpartum &bull; Monitor BP closely — <strong>peaks 3&#x2013;6 days postpartum</strong>, not immediately after delivery &bull; Treat severe hypertension aggressively &bull; Watch for new-onset postpartum preeclampsia/eclampsia</p>
+      </div>
+      <div class="card">
+        <h3 class="accent-teal">Antihypertensive Selection</h3>
+        <p><strong>Preferred:</strong> Labetalol, nifedipine (safe for breastfeeding)<br><strong>Avoid:</strong> Methyldopa (slow onset)<br><strong>Caution:</strong> ACE inhibitors/ARBs (verify breastfeeding safety)<br><strong>NSAIDs:</strong> Use with caution — may worsen hypertension and renal function</p>
+      </div>
+    </div>
+    <div class="alert alert-amber">
+      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+      <span>Ensure BP check at <strong>7&#x2013;10 days</strong> postpartum (not just 6 weeks). Postpartum hypertension peaks days 3&#x2013;6 — patients discharged before this window are at risk.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 12 of 13</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 13 — LONG-TERM RISK + SUMMARY -->
+  <div class="slide">
+    <div class="slide-label">Long-Term &amp; Summary</div>
+    <h2>Long-Term Risk &amp; <span class="accent-blue">Clinical Action Items</span></h2>
+    <div class="two-col" style="margin-top:1.2em;">
+      <div class="card">
+        <h3 class="accent-red">Long-Term Cardiovascular Risk</h3>
+        <p>2&#x2013;4&#xD7; increased CV disease risk &bull; 2&#xD7; stroke risk &bull; Earlier onset of events (40s&#x2013;50s) &bull; Risk of chronic hypertension, metabolic syndrome, and diabetes. AHA 2021: preeclampsia is an independent CV risk factor. Annual BP checks + lifestyle counseling lifelong.</p>
+      </div>
+      <div class="card">
+        <h3 class="accent-amber">Recurrence Risk</h3>
+        <p>Term preeclampsia &#x2192; 5&#x2013;7% recurrence &bull; Early-onset &#x2192; 25&#x2013;65% &bull; Two prior pregnancies &#x2192; 32% &bull; Severe preeclampsia &#x2192; up to 40%.<br><br>Preconception: optimize chronic conditions + aspirin before 16 weeks in next pregnancy.</p>
+      </div>
+    </div>
+    <ul class="checklist" style="margin-top:1.2em; max-width:860px; display:grid; grid-template-columns:1fr 1fr; gap:0 3em;">
+      <li>Screen early — risk-stratify at first prenatal visit</li>
+      <li>Manage severe features — BP control + MgSO&#x2084; + deliver appropriately</li>
+      <li>Prevent — aspirin &lt;16 weeks for eligible patients</li>
+      <li>Time delivery correctly — balance maternal and fetal risks</li>
+      <li>Diagnose accurately — end-organ involvement; proteinuria not required</li>
+      <li>Follow long-term — cardiovascular risk counseling + ongoing primary care</li>
+    </ul>
+    <div style="margin-top:1.2em; font-size:0.8em; color:var(--muted); text-align:center; line-height:1.6;">
+      ACOG Practice Bulletin #222 &bull; USPSTF 2021 &bull; AHA 2021 &bull; ASPRE Trial<br>
+      This material supports &#x2014; and does not replace &#x2014; individualized clinical judgment.
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Maternal-Fetal Medicine</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button onclick="prevSlide()">&#x2190; Prev</button>
+  <span class="counter" id="counter">1 / 13</span>
+  <button onclick="nextSlide()">Next &#x2192;</button>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+
+  function updateUI() {
+    counter.textContent = (currentSlide + 1) + ' / ' + total;
+    progressBar.style.width = ((currentSlide + 1) / total * 100) + '%';
+  }
+  function showSlide(index) {
+    slides.forEach((s, i) => s.classList.toggle('active', i === index));
+    updateUI();
+  }
+  function nextSlide() { currentSlide = (currentSlide + 1) % total; showSlide(currentSlide); }
+  function prevSlide() { currentSlide = (currentSlide - 1 + total) % total; showSlide(currentSlide); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+    else if (e.key === 'ArrowLeft') prevSlide();
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) > 40) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
