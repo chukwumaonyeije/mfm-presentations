@@ -479,6 +479,36 @@
       .site-nav .nav-brand { font-size: 14px; }
       .site-nav a.nav-link { padding: 0 10px; font-size: 13px; }
     }
+    /* ── Scope tabs ── */
+    .tab-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .tab-btn {
+      background: var(--panel);
+      border: 2px solid var(--line);
+      color: var(--muted);
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { border-color: var(--accent); color: var(--fg); }
+    .tab-btn.active {
+      background: rgba(53,208,255,.1);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    /* ── Recently Added badge ── */
+    .new-badge {
+      background: rgba(57,208,180,.15) !important;
+      border-color: rgba(57,208,180,.4) !important;
+      color: #39d0b4 !important;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -506,6 +536,11 @@
         Welcome to our collection of high-quality, evidence-based presentations for Maternal-Fetal Medicine clinicians and patients. 
         These presentations are designed for teaching, consultation, and shared decision-making in obstetric care.
       </p>
+    </div>
+
+    <div class="tab-row">
+      <button class="tab-btn active" id="tab-presentations">&#x1F4DA; Presentations</button>
+      <button class="tab-btn" id="tab-interactive">&#x1F310; Interactive Tools</button>
     </div>
 
     <div id="filter-bar" class="filter-container">
@@ -1990,60 +2025,127 @@
   </footer>
 
   <script>
-    // Faceted search + tag filter (replaces pagination)
     document.addEventListener('DOMContentLoaded', () => {
-      const searchBox = document.getElementById('searchBox');
-      const tagFilter = document.getElementById('tag-filter');
+      const searchBox  = document.getElementById('searchBox');
+      const tagFilter  = document.getElementById('tag-filter');
       const filterResults = document.getElementById('filter-results');
-      const presentationsContainer = document.querySelector('.presentations:not(#microsites-container)');
-      const allCards = Array.from(presentationsContainer.querySelectorAll('.card'));
+      const presContainer = document.querySelector('.presentations:not(#microsites-container)');
+      const msContainer   = document.getElementById('microsites-container');
+      const presCards  = Array.from(presContainer.querySelectorAll('.card'));
+      const msCards    = Array.from(msContainer.querySelectorAll('.card'));
 
-      // Populate tag dropdown from all unique tags
-      const allTags = new Set();
-      allCards.forEach(card => {
-        card.querySelectorAll('.tag').forEach(t => allTags.add(t.textContent.trim()));
+      let activeTab    = 'presentations';
+      let currentCards = presCards;
+
+      // ── "Recently Added" badge on first 3 presentation cards ──
+      presCards.slice(0, 3).forEach(card => {
+        const badge = document.createElement('span');
+        badge.className = 'tag new-badge';
+        badge.textContent = '\u2756 New';
+        const tagsDiv = card.querySelector('div');
+        if (tagsDiv) tagsDiv.prepend(badge);
       });
-      tagFilter.innerHTML = '<option value="all">All Tags</option>';
-      [...allTags].sort().forEach(tag => {
-        const opt = document.createElement('option');
-        opt.value = tag;
-        opt.textContent = tag;
-        tagFilter.appendChild(opt);
-      });
 
-      // Show all cards initially
-      allCards.forEach(card => card.classList.remove('hidden'));
-      filterResults.textContent = `Showing all ${allCards.length} presentations`;
+      // ── Tag dropdown ──
+      function buildTagDropdown(cards) {
+        const allTags = new Set();
+        cards.forEach(card => {
+          card.querySelectorAll('.tag').forEach(t => {
+            const txt = t.textContent.trim();
+            if (!txt.includes('\u2756') && !txt.includes('\uD83C\uDF10') && txt !== 'Microsite') allTags.add(txt);
+          });
+        });
+        tagFilter.innerHTML = '<option value="all">All Tags</option>';
+        [...allTags].sort().forEach(tag => {
+          const opt = document.createElement('option');
+          opt.value = tag; opt.textContent = tag;
+          tagFilter.appendChild(opt);
+        });
+      }
 
+      // ── URL state ──
+      function updateURL() {
+        const params = new URLSearchParams();
+        if (activeTab !== 'presentations') params.set('tab', activeTab);
+        const q = searchBox.value.trim();
+        if (q) params.set('q', q);
+        const tag = tagFilter.value;
+        if (tag && tag !== 'all') params.set('tag', tag);
+        const qs = params.toString();
+        history.replaceState(null, '', qs ? '?' + qs : window.location.pathname);
+      }
+
+      // ── Filter ──
       function applyFilters() {
         const term = searchBox.value.toLowerCase().trim();
         const selectedTag = tagFilter.value;
+        const label = activeTab === 'presentations' ? 'presentations' : 'interactive tools';
         let visible = 0;
 
-        allCards.forEach(card => {
-          const title = (card.querySelector('h2, h3')?.textContent || '').toLowerCase();
-          const desc = (card.querySelector('p')?.textContent || '').toLowerCase();
+        currentCards.forEach(card => {
+          const title = (card.querySelector('h2,h3')?.textContent || '').toLowerCase();
+          const desc  = (card.querySelector('p')?.textContent || '').toLowerCase();
           const cardTags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent.trim());
-
-          const matchesSearch = !term || `${title} ${desc} ${cardTags.join(' ')}`.includes(term);
-          const matchesTag = selectedTag === 'all' || cardTags.includes(selectedTag);
-
-          if (matchesSearch && matchesTag) {
-            card.classList.remove('hidden');
-            visible++;
-          } else {
-            card.classList.add('hidden');
-          }
+          const matchSearch = !term || `${title} ${desc} ${cardTags.join(' ')}`.includes(term);
+          const matchTag    = selectedTag === 'all' || cardTags.includes(selectedTag);
+          if (matchSearch && matchTag) { card.classList.remove('hidden'); visible++; }
+          else card.classList.add('hidden');
         });
 
         if (!term && selectedTag === 'all') {
-          filterResults.textContent = `Showing all ${allCards.length} presentations`;
+          filterResults.textContent = `Showing all ${currentCards.length} ${label}`;
         } else if (visible === 0) {
-          filterResults.textContent = `No presentations found`;
+          filterResults.textContent = `No ${label} found`;
         } else {
-          filterResults.textContent = `Showing ${visible} of ${allCards.length} presentations`;
+          filterResults.textContent = `Showing ${visible} of ${currentCards.length} ${label}`;
         }
+        updateURL();
       }
+
+      // ── Tab switch ──
+      function switchTab(tab) {
+        activeTab = tab;
+        document.getElementById('tab-presentations').classList.toggle('active', tab === 'presentations');
+        document.getElementById('tab-interactive').classList.toggle('active', tab === 'interactive');
+
+        if (tab === 'presentations') {
+          presContainer.style.display = '';
+          msContainer.style.display = 'none';
+          currentCards = presCards;
+          searchBox.placeholder = '\uD83D\uDD0D Search 90+ presentations...';
+        } else {
+          presContainer.style.display = 'none';
+          msContainer.style.display = '';
+          currentCards = msCards;
+          searchBox.placeholder = '\uD83D\uDD0D Search 13 interactive tools...';
+        }
+        buildTagDropdown(currentCards);
+        searchBox.value = '';
+        tagFilter.value = 'all';
+        currentCards.forEach(c => c.classList.remove('hidden'));
+        applyFilters();
+      }
+
+      // ── Init from URL params ──
+      const params  = new URLSearchParams(window.location.search);
+      const initTab = params.get('tab') || 'presentations';
+      const initQ   = params.get('q') || '';
+      const initTag = params.get('tag') || 'all';
+
+      buildTagDropdown(presCards);
+
+      if (initTab === 'interactive') {
+        switchTab('interactive');
+      } else {
+        presContainer.style.display = '';
+        msContainer.style.display = 'none';
+      }
+
+      if (initQ) searchBox.value = initQ;
+      if (initTag !== 'all') tagFilter.value = initTag;
+
+      currentCards.forEach(c => c.classList.remove('hidden'));
+      applyFilters();
 
       let searchTimeout;
       searchBox.addEventListener('input', () => {
@@ -2051,6 +2153,8 @@
         searchTimeout = setTimeout(applyFilters, 150);
       });
       tagFilter.addEventListener('change', applyFilters);
+      document.getElementById('tab-presentations').addEventListener('click', () => switchTab('presentations'));
+      document.getElementById('tab-interactive').addEventListener('click', () => switchTab('interactive'));
     });
   </script>
 </body>
