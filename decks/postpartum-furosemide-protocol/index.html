@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postpartum Furosemide (Lasix) Protocol | OpenMFM</title>
+  <style>
+    :root {
+      --bg:          #0d1117;
+      --surface:     #161b22;
+      --surface2:    #1c2330;
+      --border:      #30363d;
+      --text:        #e6edf3;
+      --muted:       #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-teal: #39d0b4;
+      --accent-green:#3fb950;
+      --accent-amber:#d29922;
+      --accent-red:  #f85149;
+      --accent-purple:#bc8cff;
+      --brand:       #1f6feb;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; overflow: hidden; }
+
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--brand); transition: width 0.3s ease; z-index: 1000;
+    }
+
+    #deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 3.5rem 4rem 4.5rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.35s ease;
+      text-align: center;
+    }
+    .slide.active { opacity: 1; pointer-events: auto; }
+
+    .slide-label {
+      font-size: 0.72em; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent-teal); margin-bottom: 0.5em;
+    }
+    h1 { font-size: clamp(1.8em, 3.5vw, 2.8em); font-weight: 800; line-height: 1.15; margin-bottom: 0.4em; }
+    h2 { font-size: clamp(1.3em, 2.6vw, 2em); font-weight: 700; line-height: 1.2; margin-bottom: 0.5em; }
+    h3 { font-size: clamp(0.95em, 1.7vw, 1.25em); font-weight: 600; color: var(--muted); margin-bottom: 0.8em; }
+    p  { font-size: clamp(0.88em, 1.4vw, 1.05em); line-height: 1.65; max-width: 820px; }
+
+    .accent-blue   { color: var(--accent-blue); }
+    .accent-teal   { color: var(--accent-teal); }
+    .accent-green  { color: var(--accent-green); }
+    .accent-amber  { color: var(--accent-amber); }
+    .accent-red    { color: var(--accent-red); }
+
+    .title-eyebrow {
+      font-size: 0.75em; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent-teal); margin-bottom: 0.8em;
+    }
+    .title-divider {
+      width: 60px; height: 3px; background: var(--brand);
+      border-radius: 2px; margin: 0.9em auto;
+    }
+
+    /* Pills */
+    .pill {
+      display: inline-block; padding: 0.32em 0.9em; border-radius: 999px;
+      font-size: 0.78em; font-weight: 600; letter-spacing: 0.04em;
+    }
+    .pill-blue   { background: rgba(88,166,255,0.15);  color: var(--accent-blue);   border: 1px solid rgba(88,166,255,0.35); }
+    .pill-teal   { background: rgba(57,208,180,0.15);  color: var(--accent-teal);   border: 1px solid rgba(57,208,180,0.35); }
+    .pill-green  { background: rgba(63,185,80,0.15);   color: var(--accent-green);  border: 1px solid rgba(63,185,80,0.35); }
+    .pill-amber  { background: rgba(210,153,34,0.15);  color: var(--accent-amber);  border: 1px solid rgba(210,153,34,0.35); }
+    .pill-red    { background: rgba(248,81,73,0.15);   color: var(--accent-red);    border: 1px solid rgba(248,81,73,0.35); }
+
+    /* Stat boxes */
+    .stat-row { display: flex; gap: 1.2em; flex-wrap: wrap; justify-content: center; }
+    .stat-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.1em 1.5em; min-width: 140px; text-align: center; flex: 1; max-width: 220px;
+    }
+    .stat-num  { font-size: clamp(1.8em, 3vw, 2.6em); font-weight: 800; line-height: 1; }
+    .stat-label{ font-size: 0.78em; color: var(--muted); margin-top: 0.3em; line-height: 1.35; }
+
+    /* Cards */
+    .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; width: 100%; max-width: 860px; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1em; width: 100%; max-width: 960px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.1em 1.4em; text-align: left;
+    }
+    .card h3 { margin-bottom: 0.4em; font-size: 0.95em; color: var(--text); }
+    .card p  { font-size: 0.85em; color: var(--muted); line-height: 1.55; }
+
+    /* Alerts */
+    .alert {
+      display: flex; align-items: flex-start; gap: 0.9em;
+      border-radius: 10px; padding: 0.9em 1.2em;
+      border: 1px solid; text-align: left; max-width: 820px;
+    }
+    .alert-green  { background: rgba(63,185,80,0.1);  border-color: rgba(63,185,80,0.35);  }
+    .alert-amber  { background: rgba(210,153,34,0.1); border-color: rgba(210,153,34,0.35); }
+    .alert-blue   { background: rgba(88,166,255,0.1); border-color: rgba(88,166,255,0.35); }
+    .alert-teal   { background: rgba(57,208,180,0.1); border-color: rgba(57,208,180,0.35); }
+    .alert-red    { background: rgba(248,81,73,0.1);  border-color: rgba(248,81,73,0.35);  }
+    .alert-icon   { font-size: 1.2em; flex-shrink: 0; margin-top: 0.1em; }
+    .alert p      { font-size: 0.88em; line-height: 1.6; }
+    .alert strong { display: block; font-size: 0.95em; color: var(--text); margin-bottom: 0.2em; }
+
+    /* Checklist */
+    .checklist { list-style: none; text-align: left; width: 100%; max-width: 760px; }
+    .checklist li {
+      padding: 0.5em 0; border-bottom: 1px solid var(--border);
+      font-size: clamp(0.85em,1.35vw,1em); display: flex; gap: 0.7em; align-items: flex-start;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before { content: "&#x2713;"; color: var(--accent-teal); font-weight: 700; flex-shrink: 0; margin-top: 0.05em; }
+
+    /* Compare cards */
+    .compare-row { display: flex; gap: 1.2em; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 900px; }
+    .compare-card {
+      flex: 1; min-width: 160px; max-width: 210px;
+      background: var(--surface); border-radius: 12px; padding: 1.1em;
+      text-align: center; border-top: 4px solid;
+    }
+    .compare-card.furo { border-top-color: var(--accent-teal); }
+    .compare-card.pbo  { border-top-color: var(--accent-amber); }
+    .cc-label { font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.4em; }
+    .cc-value { font-size: clamp(1.6em,2.8vw,2.4em); font-weight: 800; color: var(--text); }
+    .cc-desc  { font-size: 0.78em; color: var(--muted); margin-top: 0.3em; line-height: 1.3; }
+
+    /* Protocol table */
+    .proto-table { width: 100%; max-width: 680px; border-collapse: collapse; font-size: 0.9em; }
+    .proto-table th {
+      background: var(--surface2); color: var(--accent-teal);
+      padding: 0.7em 1em; text-align: left; font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+    .proto-table td { padding: 0.7em 1em; border-bottom: 1px solid var(--border); text-align: left; }
+    .proto-table tr:last-child td { border-bottom: none; }
+    .proto-table tr:hover td { background: var(--surface); }
+
+    /* Citation */
+    .citation { font-size: 0.68em; color: var(--muted); font-style: italic; margin-top: 1em; text-align: center; }
+
+    /* Navigation */
+    #nav {
+      position: fixed; bottom: 1.4em; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1em; z-index: 500;
+    }
+    .nav-btn {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); padding: 0.5em 1.2em; border-radius: 8px;
+      cursor: pointer; font-size: 0.86em; font-weight: 600; transition: all 0.2s;
+    }
+    .nav-btn:hover { background: var(--surface2); border-color: var(--accent-blue); }
+    .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    #slide-counter { font-size: 0.82em; color: var(--muted); min-width: 5em; text-align: center; }
+
+    .slide-footer {
+      position: absolute; bottom: 0.9em; left: 1.5em; right: 1.5em;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.68em; color: var(--muted); pointer-events: none;
+    }
+
+    #back-link {
+      position: fixed; bottom: 1.4em; left: 1.2em; z-index: 600;
+      background: rgba(13,17,23,0.88); backdrop-filter: blur(6px);
+      border: 1px solid rgba(57,208,180,0.35); border-radius: 8px; padding: 5px 14px;
+    }
+    #back-link a { color: var(--accent-teal); text-decoration: none; font-size: 0.72em; font-weight: 500; white-space: nowrap; }
+
+    /* Mobile */
+    @media (max-width: 700px) {
+      .slide { padding: 3rem 1.2rem 4.5rem; }
+      .two-col, .three-col { grid-template-columns: 1fr; }
+      .compare-row { gap: 0.7em; }
+      .compare-card { min-width: 130px; }
+      h1 { font-size: 1.6em; }
+      h2 { font-size: 1.2em; }
+      .proto-table { font-size: 0.78em; }
+      .proto-table th, .proto-table td { padding: 0.5em 0.7em; }
+      #back-link { display: none; }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/postpartum-furosemide-protocol/index.html">
+<meta name="description" content="Evidence-based provider protocol for postpartum furosemide (Lasix) 20 mg + KCl 20 mEq daily &amp;#xD7; 5 days in hypertensive disorders of pregnancy; based on the Lopes Perdigao et al. RCT (Hypertension 2021) showing NNT=13 and 60% reduction in persistent postpartum hypertension. Adopted by Greater Atlanta Women&amp;#x2019;s Healthcare OB Call Group, March 2026.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Postpartum Hypertension, Preeclampsia, Furosemide, Call Group Protocol, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/postpartum-furosemide-protocol/index.html">
+<meta property="og:title" content="Postpartum Furosemide (Lasix) Protocol - Provider Education | OpenMFM">
+<meta property="og:description" content="Evidence-based provider protocol for postpartum furosemide (Lasix) 20 mg + KCl 20 mEq daily &amp;#xD7; 5 days in hypertensive disorders of pregnancy; based on the Lopes Perdigao et al. RCT (Hypertension 2021) showing NNT=13 and 60% reduction in persistent postpartum hypertension. Adopted by Greater Atlanta Women&amp;#x2019;s Healthcare OB Call Group, March 2026.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Postpartum Furosemide (Lasix) Protocol - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Evidence-based provider protocol for postpartum furosemide (Lasix) 20 mg + KCl 20 mEq daily &amp;#xD7; 5 days in hypertensive disorders of pregnancy; based on the Lopes Perdigao et al. RCT (Hypertension 2021) showing NNT=13 and 60% reduction in persistent postpartum hypertension. Adopted by Greater Atlanta Women&amp;#x2019;s Healthcare OB Call Group, March 2026.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Postpartum Furosemide (Lasix) Protocol - Provider Education",
+  "description": "Evidence-based provider protocol for postpartum furosemide (Lasix) 20 mg + KCl 20 mEq daily &#xD7; 5 days in hypertensive disorders of pregnancy; based on the Lopes Perdigao et al. RCT (Hypertension 2021) showing NNT=13 and 60% reduction in persistent postpartum hypertension. Adopted by Greater Atlanta Women&#x2019;s Healthcare OB Call Group, March 2026.",
+  "url": "https://openmfm.org/decks/postpartum-furosemide-protocol/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-23",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Postpartum Furosemide (Lasix) Protocol - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Postpartum Hypertension, Preeclampsia, Furosemide, Call Group Protocol, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="deck">
+
+  <!-- ── Slide 1: Title ── -->
+  <div class="slide active">
+    <div class="title-eyebrow">MFM Clinical Protocol &mdash; Provider Education</div>
+    <h1>Postpartum Furosemide<br><span class="accent-teal">(Lasix) Protocol</span></h1>
+    <div class="title-divider"></div>
+    <p style="color:var(--muted); max-width:640px; margin-bottom:1.2em;">
+      Accelerated blood pressure recovery in hypertensive disorders of pregnancy
+    </p>
+    <div style="display:flex; gap:0.8em; flex-wrap:wrap; justify-content:center; margin-bottom:1.2em;">
+      <span class="pill pill-teal">Postpartum Hypertension</span>
+      <span class="pill pill-blue">Preeclampsia</span>
+      <span class="pill pill-green">Furosemide</span>
+      <span class="pill pill-amber">Provider Education</span>
+    </div>
+    <p style="font-size:0.75em; color:var(--muted);">
+      Based on: Lopes Perdigao et al., <em>Hypertension</em> 2021;77:1517&#x2013;1524<br>
+      Greater Atlanta Women&#x2019;s Healthcare OB Call Group &bull; Protocol Effective March 2026
+    </p>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Maternal-Fetal Medicine</span>
+    </div>
+  </div>
+
+  <!-- ── Slide 2: Clinical Problem ── -->
+  <div class="slide">
+    <div class="slide-label">The Problem</div>
+    <h2>Postpartum Hypertension: A Leading Cause of Readmission</h2>
+    <h3>Blood pressure rises days 3&#x2013;6 postpartum as fluid mobilizes from the interstitium back into the intravascular compartment</h3>
+    <div class="stat-row" style="margin-bottom:1.2em;">
+      <div class="stat-box">
+        <div class="stat-num accent-red">18%</div>
+        <div class="stat-label">of maternal deaths worldwide attributable to hypertensive disorders of pregnancy</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-amber">27%</div>
+        <div class="stat-label">of postpartum readmissions caused by persistent hypertension</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-teal">Days<br><span style="font-size:0.65em;">3&#x2013;6</span></div>
+        <div class="stat-label">peak BP rise from postpartum fluid mobilization</div>
+      </div>
+    </div>
+    <div class="alert alert-blue">
+      <span class="alert-icon">&#x1F4A1;</span>
+      <p>BP initially <strong>decreases</strong> in the first 48 hours after delivery, then <strong>rises</strong> as sodium mobilizes into the vascular space &#x2014; creating a critical window for diuretic intervention.</p>
+    </div>
+    <div class="citation">WHO, 2006 &bull; ACOG Practice Bulletin, 2020 &bull; Hirshberg et al., <em>J Perinatol</em> 2016</div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 2 of 8</span>
+    </div>
+  </div>
+
+  <!-- ── Slide 3: Study Design (CONSORT SVG) ── -->
+  <div class="slide">
+    <div class="slide-label">The Evidence</div>
+    <h2>Randomized, Double-Blind, Placebo-Controlled Trial</h2>
+    <h3>Lopes Perdigao et al., <em>Hypertension</em> 2021 &bull; University of Pennsylvania</h3>
+
+    <svg viewBox="0 0 620 240" style="max-width:680px; width:100%; margin-top:0.5em;" aria-label="CONSORT flow diagram: 384 women with hypertensive disorders of pregnancy randomized to furosemide vs placebo">
+      <!-- Enrollment box -->
+      <rect x="185" y="8" width="250" height="54" rx="8" fill="#1c2330" stroke="#30363d" stroke-width="1.5"/>
+      <text x="310" y="30" text-anchor="middle" fill="#e6edf3" font-size="13" font-weight="700" font-family="system-ui,sans-serif">384 Women with HDP</text>
+      <text x="310" y="50" text-anchor="middle" fill="#8b949e" font-size="11" font-family="system-ui,sans-serif">Randomized, Double-Blind</text>
+
+      <!-- Vertical stem -->
+      <line x1="310" y1="62" x2="310" y2="88" stroke="#30363d" stroke-width="2"/>
+      <!-- Horizontal split -->
+      <line x1="155" y1="88" x2="465" y2="88" stroke="#30363d" stroke-width="2"/>
+      <!-- Left leg -->
+      <line x1="155" y1="88" x2="155" y2="110" stroke="#30363d" stroke-width="2"/>
+      <!-- Right leg -->
+      <line x1="465" y1="88" x2="465" y2="110" stroke="#30363d" stroke-width="2"/>
+
+      <!-- Furosemide arm box -->
+      <rect x="25" y="110" width="260" height="64" rx="8" fill="#0d2218" stroke="#39d0b4" stroke-width="1.5"/>
+      <text x="155" y="133" text-anchor="middle" fill="#39d0b4" font-size="13" font-weight="700" font-family="system-ui,sans-serif">Furosemide Group</text>
+      <text x="155" y="151" text-anchor="middle" fill="#e6edf3" font-size="12" font-family="system-ui,sans-serif">n = 192</text>
+      <text x="155" y="167" text-anchor="middle" fill="#8b949e" font-size="10" font-family="system-ui,sans-serif">20 mg PO daily &#xD7; 5 days</text>
+
+      <!-- Placebo arm box -->
+      <rect x="335" y="110" width="260" height="64" rx="8" fill="#1c1a0a" stroke="#d29922" stroke-width="1.5"/>
+      <text x="465" y="133" text-anchor="middle" fill="#d29922" font-size="13" font-weight="700" font-family="system-ui,sans-serif">Placebo Group</text>
+      <text x="465" y="151" text-anchor="middle" fill="#e6edf3" font-size="12" font-family="system-ui,sans-serif">n = 192</text>
+      <text x="465" y="167" text-anchor="middle" fill="#8b949e" font-size="10" font-family="system-ui,sans-serif">Identical placebo tablet</text>
+
+      <!-- Down arrows to outcomes -->
+      <line x1="155" y1="174" x2="155" y2="194" stroke="#30363d" stroke-width="2"/>
+      <line x1="465" y1="174" x2="465" y2="194" stroke="#30363d" stroke-width="2"/>
+
+      <!-- Furosemide outcome -->
+      <rect x="25" y="194" width="260" height="40" rx="8" fill="#0d2218" stroke="#3fb950" stroke-width="1.5"/>
+      <text x="155" y="211" text-anchor="middle" fill="#3fb950" font-size="12" font-weight="700" font-family="system-ui,sans-serif">5% Persistent HTN at Day 7</text>
+      <text x="155" y="228" text-anchor="middle" fill="#8b949e" font-size="10" font-family="system-ui,sans-serif">Median 8.5 days to resolution</text>
+
+      <!-- Placebo outcome -->
+      <rect x="335" y="194" width="260" height="40" rx="8" fill="#2a1010" stroke="#f85149" stroke-width="1.5"/>
+      <text x="465" y="211" text-anchor="middle" fill="#f85149" font-size="12" font-weight="700" font-family="system-ui,sans-serif">16% Persistent HTN at Day 7</text>
+      <text x="465" y="228" text-anchor="middle" fill="#8b949e" font-size="10" font-family="system-ui,sans-serif">Median 10.5 days to resolution</text>
+    </svg>
+
+    <div class="citation">Lopes Perdigao et al., <em>Hypertension</em> 2021 &bull; n=384 &bull; Primary outcome: persistent hypertension at 7 days postpartum</div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 3 of 8</span>
+    </div>
+  </div>
+
+  <!-- ── Slide 4: BP Trajectories (SVG Line Chart) ── -->
+  <div class="slide">
+    <div class="slide-label">Study Results</div>
+    <h2>BP Trajectories by Treatment Group</h2>
+    <h3>Non-Severe HDP &mdash; Postpartum Systolic BP Over Time (p &lt; 0.0001)</h3>
+
+    <svg viewBox="0 0 580 240" style="max-width:660px; width:100%; margin-top:0.3em;" aria-label="Line graph: postpartum systolic BP trajectories over 14 days showing furosemide arm resolving faster than placebo">
+      <!-- Background -->
+      <rect x="60" y="10" width="490" height="190" fill="#161b22" rx="4"/>
+
+      <!-- Grid lines -->
+      <line x1="60" y1="10"  x2="550" y2="10"  stroke="#30363d" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <line x1="60" y1="48"  x2="550" y2="48"  stroke="#30363d" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <line x1="60" y1="86"  x2="550" y2="86"  stroke="#30363d" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <!-- 140 threshold line -->
+      <line x1="60" y1="124" x2="550" y2="124" stroke="#d29922" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <text x="555" y="128" fill="#d29922" font-size="9" font-family="system-ui,sans-serif">140</text>
+      <line x1="60" y1="162" x2="550" y2="162" stroke="#30363d" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <line x1="60" y1="200" x2="550" y2="200" stroke="#30363d" stroke-width="0.5"/>
+
+      <!-- Y-axis labels (SBP mmHg) -->
+      <text x="52" y="14"  text-anchor="end" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">165</text>
+      <text x="52" y="52"  text-anchor="end" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">155</text>
+      <text x="52" y="90"  text-anchor="end" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">145</text>
+      <text x="52" y="128" text-anchor="end" fill="#d29922" font-size="9" font-family="system-ui,sans-serif">140</text>
+      <text x="52" y="166" text-anchor="end" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">130</text>
+      <text x="52" y="204" text-anchor="end" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">120</text>
+
+      <!-- Y axis line -->
+      <line x1="60" y1="10" x2="60" y2="200" stroke="#30363d" stroke-width="1.5"/>
+      <!-- X axis line -->
+      <line x1="60" y1="200" x2="550" y2="200" stroke="#30363d" stroke-width="1.5"/>
+
+      <!-- X-axis labels (days) -->
+      <!-- x(d) = 60 + (d/14)*490 -->
+      <!-- Day 0: 60, Day 1: 95, Day 2: 130, Day 3: 165, Day 5: 235, Day 7: 305, Day 10: 410, Day 14: 550 -->
+      <text x="60"  y="215" text-anchor="middle" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">0</text>
+      <text x="95"  y="215" text-anchor="middle" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">1</text>
+      <text x="130" y="215" text-anchor="middle" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">2</text>
+      <text x="165" y="215" text-anchor="middle" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">3</text>
+      <text x="235" y="215" text-anchor="middle" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">5</text>
+      <text x="305" y="215" text-anchor="middle" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">7</text>
+      <text x="410" y="215" text-anchor="middle" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">10</text>
+      <text x="550" y="215" text-anchor="middle" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">14</text>
+      <text x="305" y="228" text-anchor="middle" fill="#8b949e" font-size="9" font-family="system-ui,sans-serif">Days Postpartum</text>
+
+      <!-- y(sbp) = 200 - ((sbp - 120) / 45) * 190 -->
+      <!-- 120→200, 130→157.8, 140→115.6, 145→94.4, 150→73.3, 155→52.2, 160→31.1, 165→10 -->
+
+      <!-- Furosemide line (teal): d0=152,d1=143,d2=136,d3=138,d5=136,d7=132,d10=127,d14=122 -->
+      <!-- y: 152→(32/45)*190=135.1→64.9; 143→(23/45)*190=97.1→102.9; 136→(16/45)*190=67.6→132.4; 138→(18/45)*190=76→124; 136→132.4; 132→(12/45)*190=50.7→149.3; 127→(7/45)*190=29.6→170.4; 122→(2/45)*190=8.4→191.6 -->
+      <polyline
+        points="60,64.9 95,102.9 130,132.4 165,124 235,132.4 305,149.3 410,170.4 550,191.6"
+        fill="none" stroke="#39d0b4" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <!-- Dots -->
+      <circle cx="60"  cy="64.9"  r="4" fill="#39d0b4"/>
+      <circle cx="95"  cy="102.9" r="4" fill="#39d0b4"/>
+      <circle cx="130" cy="132.4" r="4" fill="#39d0b4"/>
+      <circle cx="165" cy="124"   r="4" fill="#39d0b4"/>
+      <circle cx="235" cy="132.4" r="4" fill="#39d0b4"/>
+      <circle cx="305" cy="149.3" r="4" fill="#39d0b4"/>
+      <circle cx="410" cy="170.4" r="4" fill="#39d0b4"/>
+      <circle cx="550" cy="191.6" r="4" fill="#39d0b4"/>
+
+      <!-- Placebo line (amber): d0=152,d1=143,d2=138,d3=148,d5=151,d7=147,d10=141,d14=137 -->
+      <!-- y: 148→(28/45)*190=118.2→81.8; 151→(31/45)*190=131.1→68.9; 147→(27/45)*190=114→86; 141→(21/45)*190=88.7→111.3; 137→(17/45)*190=71.8→128.2 -->
+      <polyline
+        points="60,64.9 95,102.9 130,124 165,81.8 235,68.9 305,86 410,111.3 550,128.2"
+        fill="none" stroke="#d29922" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8,4"/>
+      <!-- Dots -->
+      <circle cx="60"  cy="64.9"  r="4" fill="#d29922"/>
+      <circle cx="95"  cy="102.9" r="4" fill="#d29922"/>
+      <circle cx="130" cy="124"   r="4" fill="#d29922"/>
+      <circle cx="165" cy="81.8"  r="4" fill="#d29922"/>
+      <circle cx="235" cy="68.9"  r="4" fill="#d29922"/>
+      <circle cx="305" cy="86"    r="4" fill="#d29922"/>
+      <circle cx="410" cy="111.3" r="4" fill="#d29922"/>
+      <circle cx="550" cy="128.2" r="4" fill="#d29922"/>
+
+      <!-- Legend -->
+      <line x1="70" y1="30" x2="100" y2="30" stroke="#39d0b4" stroke-width="2.5"/>
+      <circle cx="85" cy="30" r="3.5" fill="#39d0b4"/>
+      <text x="106" y="34" fill="#39d0b4" font-size="10" font-family="system-ui,sans-serif" font-weight="600">Furosemide</text>
+      <line x1="200" y1="30" x2="230" y2="30" stroke="#d29922" stroke-width="2.5" stroke-dasharray="6,3"/>
+      <circle cx="215" cy="30" r="3.5" fill="#d29922"/>
+      <text x="236" y="34" fill="#d29922" font-size="10" font-family="system-ui,sans-serif" font-weight="600">Placebo</text>
+      <text x="340" y="34" fill="#d29922" font-size="9" font-family="system-ui,sans-serif">&#x2012;&#x2012; HTN threshold (140 mmHg)</text>
+    </svg>
+
+    <div class="citation">Adapted from Lopes Perdigao et al., <em>Hypertension</em> 2021, Figure 2 &bull; Non-severe HDP subgroup &bull; Systolic BP trajectories, approximate representation</div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 4 of 8</span>
+    </div>
+  </div>
+
+  <!-- ── Slide 5: Clinical Implications ── -->
+  <div class="slide">
+    <div class="slide-label">Clinical Impact</div>
+    <h2>Clinical Implications</h2>
+    <h3>Furosemide Significantly Reduces Persistent Postpartum Hypertension &mdash; Non-Severe HDP Subgroup</h3>
+
+    <div class="stat-row" style="margin-bottom:1.2em;">
+      <div class="stat-box" style="border-top:3px solid var(--accent-teal);">
+        <div class="stat-num accent-teal">NNT</div>
+        <div class="stat-label" style="font-size:0.9em; font-weight:700; color:var(--text);">= 13</div>
+        <div class="stat-label">women treated to prevent 1 case of persistent HTN at day 7</div>
+      </div>
+      <div class="stat-box" style="border-top:3px solid var(--accent-green);">
+        <div class="stat-num accent-green">60%</div>
+        <div class="stat-label">reduction in elevated BPs at 7 days postpartum (aRR 0.26)</div>
+      </div>
+      <div class="stat-box" style="border-top:3px solid var(--accent-blue);">
+        <div class="stat-num accent-blue">2 d</div>
+        <div class="stat-label">faster resolution of hypertension (8.5 vs 10.5 days)</div>
+      </div>
+      <div class="stat-box" style="border-top:3px solid var(--accent-purple);">
+        <div class="stat-num accent-purple">No</div>
+        <div class="stat-label">increase in severe maternal morbidity or adverse events</div>
+      </div>
+    </div>
+
+    <div class="alert alert-amber">
+      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+      <p><strong>Effect most prominent in non-severe HDP</strong> &mdash; aRR 0.26 (95% CI 0.10&#x2013;0.67) &bull; aHR 1.62 (95% CI 1.22&#x2013;2.15) for time to BP resolution. Effect attenuated in severe HDP subgroup.</p>
+    </div>
+
+    <div class="citation">Lopes Perdigao et al., <em>Hypertension</em> 2021 &bull; Table 2 &bull; Adjusted for mode of delivery and antihypertensive use</div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 5 of 8</span>
+    </div>
+  </div>
+
+  <!-- ── Slide 6: Key Outcomes Comparison ── -->
+  <div class="slide">
+    <div class="slide-label">Primary Endpoints</div>
+    <h2>Key Outcomes &mdash; Non-Severe HDP</h2>
+    <h3>Primary endpoints adjusted for mode of delivery</h3>
+
+    <div class="compare-row" style="margin-bottom:1.2em;">
+      <div class="compare-card furo">
+        <div class="cc-label">Furosemide</div>
+        <div class="cc-value accent-teal">5%</div>
+        <div class="cc-desc">Persistent HTN at 7 days postpartum</div>
+      </div>
+      <div class="compare-card pbo">
+        <div class="cc-label">Placebo</div>
+        <div class="cc-value accent-amber">16%</div>
+        <div class="cc-desc">Persistent HTN at 7 days postpartum</div>
+      </div>
+      <div class="compare-card furo">
+        <div class="cc-label">Furosemide</div>
+        <div class="cc-value accent-teal">8.5 d</div>
+        <div class="cc-desc">Median days to BP resolution (&lt;140/90)</div>
+      </div>
+      <div class="compare-card pbo">
+        <div class="cc-label">Placebo</div>
+        <div class="cc-value accent-amber">10.5 d</div>
+        <div class="cc-desc">Median days to BP resolution (&lt;140/90)</div>
+      </div>
+    </div>
+
+    <div class="two-col" style="max-width:680px;">
+      <div class="alert alert-green">
+        <span class="alert-icon">&#x2714;</span>
+        <p>aRR 0.26 (95% CI 0.10&#x2013;0.67)<br>aHR 1.62 (95% CI 1.22&#x2013;2.15)</p>
+      </div>
+      <div class="alert alert-teal">
+        <span class="alert-icon">&#x2714;</span>
+        <p>No difference in readmission rates, potassium levels, or severe maternal morbidity between groups</p>
+      </div>
+    </div>
+
+    <div class="citation">Lopes Perdigao et al., <em>Hypertension</em> 2021 &bull; Table 2</div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 6 of 8</span>
+    </div>
+  </div>
+
+  <!-- ── Slide 7: The Protocol ── -->
+  <div class="slide">
+    <div class="slide-label">Call Group Protocol</div>
+    <h2>The Postpartum Lasix Protocol</h2>
+    <h3>Greater Atlanta Women&#x2019;s Healthcare OB Call Group &mdash; Effective March 2026</h3>
+
+    <div style="display:flex; gap:0.6em; flex-wrap:wrap; justify-content:center; margin-bottom:1em;">
+      <span class="pill pill-blue">Gestational Hypertension</span>
+      <span class="pill pill-blue">Preeclampsia (w/ or w/o severe features)</span>
+      <span class="pill pill-blue">Chronic HTN with Superimposed Preeclampsia</span>
+    </div>
+
+    <table class="proto-table">
+      <thead>
+        <tr>
+          <th>Medication</th>
+          <th>Dose</th>
+          <th>Route</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Furosemide (Lasix)</strong></td>
+          <td><strong class="accent-teal">20 mg</strong></td>
+          <td>PO once daily</td>
+          <td>5 days</td>
+        </tr>
+        <tr>
+          <td><strong>Potassium Chloride (K-Dur)</strong></td>
+          <td><strong class="accent-teal">20 mEq</strong></td>
+          <td>PO once daily</td>
+          <td>5 days</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="citation" style="margin-top:0.8em;">Greater Atlanta Women&#x2019;s Healthcare OB Call Group Protocol, March 17, 2026 &bull; Based on Lopes Perdigao et al., <em>Hypertension</em> 2021</div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 7 of 8</span>
+    </div>
+  </div>
+
+  <!-- ── Slide 8: Implementation & Monitoring ── -->
+  <div class="slide">
+    <div class="slide-label">Implementation</div>
+    <h2>Order Entry &amp; Safety Checklist</h2>
+
+    <ul class="checklist" style="margin-bottom:1em;">
+      <li>Enter furosemide and KCl with postpartum orders, specifying number of days or doses. At discharge, the order automatically updates to reflect remaining doses.</li>
+      <li>Verify a current <strong>Comprehensive Metabolic Panel (CMP)</strong> is on file &#x2014; confirm potassium (K) and creatinine (Cr) are within acceptable range before initiating.</li>
+      <li>
+        <span><strong class="accent-red">Exclusions:</strong> Creatinine &gt; 1.2 mg/dL &bull; Potassium &lt; 3 mEq/L &bull; Cardiac disease &bull; Prior diuretic use &bull; Furosemide allergy</span>
+      </li>
+      <li>Continue postpartum BP monitoring via <strong>HeartSafe Motherhood</strong> text program through 7&#x2013;10 days postpartum.</li>
+    </ul>
+
+    <div class="two-col" style="max-width:740px;">
+      <div class="alert alert-teal">
+        <span class="alert-icon">&#x1F4F1;</span>
+        <p><strong>HeartSafe Motherhood</strong> &#x2014; text-based BP surveillance program. Enroll all patients with HDP prior to discharge to capture late postpartum hypertension.</p>
+      </div>
+      <div class="alert alert-amber">
+        <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+        <p><strong>Call Protocol</strong> &#x2014; For BP &#x2265; 160/110 at any point, initiate severe-range hypertension management per ACOG Practice Bulletin. Do not delay for oral medications.</p>
+      </div>
+    </div>
+
+    <div class="citation">Greater Atlanta Women&#x2019;s Healthcare OB Call Group Protocol, 2026 &bull; Lopes Perdigao et al., 2021 &bull; ACOG Practice Bulletin, 2020</div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 8 of 8</span>
+    </div>
+  </div>
+
+</div><!-- /#deck -->
+
+<div id="nav">
+  <button class="nav-btn" id="btn-prev" onclick="changeSlide(-1)" disabled>&#x2190; Prev</button>
+  <span id="slide-counter">1 / 8</span>
+  <button class="nav-btn" id="btn-next" onclick="changeSlide(1)">Next &#x2192;</button>
+</div>
+
+<div id="back-link">
+  <a href="https://openmfm.org/library">&#x2190; OpenMFM Library</a>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('progress-bar').style.width = ((current + 1) / total * 100) + '%';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function changeSlide(dir) {
+    if (dir === 1 && current < total - 1) showSlide(current + 1);
+    if (dir === -1 && current > 0) showSlide(current - 1);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 40) changeSlide(dx > 0 ? 1 : -1);
+  }, { passive: true });
+
+  showSlide(0);
+</script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
