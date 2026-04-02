@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physiologic Midgut Herniation | OpenMFM Patient Education</title>
+    <style>
+        /* ─── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:        #0d1117;
+            --surface:   #0f1d30;
+            --border:    #17324d;
+            --text:      #e6edf3;
+            --muted:     #8b949e;
+            --accent:    #22d3ee;   /* OpenMFM cyan               */
+            --green:     #3fb950;   /* green – reassurance         */
+            --orange:    #d29922;   /* amber – action / caution    */
+            --red:       #f85149;   /* red   – warning             */
+            --teal:      #39d353;
+            --brand:     #1f6feb;
+            --font-sans: 'Space Grotesk', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        html, body {
+            width: 100%; height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-sans);
+            overflow: hidden;
+        }
+
+        /* ─── Deck & Slides ─────────────────────────────────────────── */
+        .deck {
+            width: 100%; height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 3.5rem 4rem 4.75rem;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.45s ease;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+        .slide.active { opacity: 1; visibility: visible; }
+
+        /* ─── Progress Bar ──────────────────────────────────────────── */
+        #progress-bar {
+            position: fixed; top: 0; left: 0; height: 3px;
+            background: var(--accent);
+            transition: width 0.4s ease;
+            z-index: 100;
+        }
+
+        /* ─── Slide Counter ─────────────────────────────────────────── */
+        #slide-counter {
+            position: fixed; bottom: 1.2rem; right: 1.8rem;
+            font-size: 0.85rem; color: var(--muted);
+            z-index: 100;
+        }
+
+        /* ─── Navigation Arrows ─────────────────────────────────────── */
+        .nav-btn {
+            position: fixed; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            color: var(--muted); font-size: 1.4rem;
+            width: 2.6rem; height: 2.6rem;
+            border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, color 0.2s;
+            z-index: 100;
+        }
+        .nav-btn:hover { background: var(--brand); color: #fff; }
+        #btn-prev { left: 1rem; }
+        #btn-next { right: 1rem; }
+
+        /* ─── Typography ────────────────────────────────────────────── */
+        h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 700; letter-spacing: -0.02em; color: var(--text); font-family: var(--font-sans); }
+        h2 { font-size: clamp(1.6rem, 3.5vw, 2.6rem); font-weight: 700; color: var(--accent); margin-bottom: 1.2rem; font-family: var(--font-sans); }
+        h3 { font-size: clamp(1rem, 2vw, 1.4rem); font-weight: 500; color: var(--muted); }
+        p, li { font-size: clamp(0.95rem, 1.8vw, 1.25rem); line-height: 1.7; }
+
+        .subtitle { font-size: clamp(1rem, 2vw, 1.4rem); color: var(--muted); margin-top: 0.6rem; }
+        .brand-tag {
+            margin-top: 2rem;
+            font-size: 0.8rem; color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 0.6rem; text-align: center;
+            letter-spacing: 0.08em; text-transform: uppercase;
+        }
+
+        /* ─── Accent Chips ──────────────────────────────────────────── */
+        .chip {
+            display: inline-block;
+            padding: 0.25em 0.75em;
+            border-radius: 999px;
+            font-size: 0.8rem; font-weight: 600;
+            letter-spacing: 0.06em; text-transform: uppercase;
+        }
+        .chip-blue   { background: rgba(88,166,255,0.15); color: var(--accent); border: 1px solid var(--accent); }
+        .chip-green  { background: rgba(63,185,80,0.15);  color: var(--green);  border: 1px solid var(--green); }
+        .chip-orange { background: rgba(210,153,34,0.15); color: var(--orange); border: 1px solid var(--orange); }
+        .chip-red    { background: rgba(248,81,73,0.15);  color: var(--red);    border: 1px solid var(--red); }
+
+        /* ─── Icon Cards ────────────────────────────────────────────── */
+        .card-row {
+            display: flex; gap: 1.5rem; flex-wrap: wrap;
+            justify-content: center; width: 100%; max-width: 900px;
+        }
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.4rem 1.6rem;
+            flex: 1 1 200px; max-width: 260px;
+            text-align: center;
+        }
+        .card .icon { font-size: 2.4rem; margin-bottom: 0.6rem; }
+        .card .card-title { font-size: 1rem; font-weight: 600; color: var(--accent); margin-bottom: 0.4rem; }
+        .card .card-body  { font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+
+        /* ─── Timeline ──────────────────────────────────────────────── */
+        .timeline {
+            display: flex; align-items: flex-start;
+            gap: 0; width: 100%; max-width: 860px;
+            position: relative; margin-top: 1rem;
+        }
+        .tl-item {
+            flex: 1; text-align: center; position: relative;
+            padding-top: 2.4rem;
+        }
+        .tl-item::before {
+            content: '';
+            position: absolute; top: 0.65rem; left: 0; right: 0;
+            height: 3px; background: var(--border);
+        }
+        .tl-item:first-child::before { left: 50%; }
+        .tl-item:last-child::before  { right: 50%; }
+        .tl-dot {
+            position: absolute; top: 0;
+            left: 50%; transform: translateX(-50%);
+            width: 1.3rem; height: 1.3rem;
+            border-radius: 50%;
+            border: 3px solid var(--bg);
+            z-index: 1;
+        }
+        .tl-week  { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.3rem; }
+        .tl-label { font-size: 0.85rem; font-weight: 600; line-height: 1.3; }
+        .tl-pct   { font-size: 1.1rem; font-weight: 700; margin-top: 0.3rem; }
+
+        /* ─── Data Table ────────────────────────────────────────────── */
+        .data-table {
+            width: 100%; max-width: 820px;
+            border-collapse: collapse;
+            font-size: clamp(0.8rem, 1.4vw, 1rem);
+        }
+        .data-table th {
+            background: var(--surface);
+            color: var(--accent);
+            font-weight: 600;
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+        .data-table td {
+            padding: 0.65rem 1rem;
+            border: 1px solid var(--border);
+            color: var(--text);
+            vertical-align: middle;
+        }
+        .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+        /* ─── Comparison Grid ───────────────────────────────────────── */
+        .compare-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 1.2rem; width: 100%; max-width: 820px;
+        }
+        .compare-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.2rem 1.4rem;
+        }
+        .compare-card .cc-title {
+            font-size: 1rem; font-weight: 700;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid;
+        }
+        .compare-card.normal .cc-title { color: var(--green); border-color: var(--green); }
+        .compare-card.patho  .cc-title { color: var(--red);   border-color: var(--red); }
+        .compare-card ul { list-style: none; padding: 0; }
+        .compare-card ul li {
+            font-size: 0.9rem; color: var(--muted);
+            padding: 0.3rem 0; border-bottom: 1px solid var(--border);
+            display: flex; align-items: flex-start; gap: 0.5rem;
+        }
+        .compare-card ul li:last-child { border-bottom: none; }
+        .compare-card ul li::before { content: '›'; color: var(--accent); font-weight: 700; }
+
+        /* ─── Warning Box ───────────────────────────────────────────── */
+        .warning-box {
+            background: rgba(248,81,73,0.08);
+            border: 1px solid var(--red);
+            border-left: 4px solid var(--red);
+            border-radius: 8px;
+            padding: 1rem 1.4rem;
+            max-width: 760px;
+            margin-top: 1rem;
+        }
+        .warning-box .wb-title { font-weight: 700; color: var(--red); margin-bottom: 0.4rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .warning-box p { font-size: 0.95rem; color: var(--text); }
+
+        /* ─── Reassurance Box ───────────────────────────────────────── */
+        .reassure-box {
+            background: rgba(63,185,80,0.08);
+            border: 1px solid var(--green);
+            border-left: 4px solid var(--green);
+            border-radius: 8px;
+            padding: 1rem 1.4rem;
+            max-width: 760px;
+            margin-top: 1rem;
+        }
+        .reassure-box p { font-size: 1rem; color: var(--text); }
+
+        /* ─── Action Steps ──────────────────────────────────────────── */
+        .steps { list-style: none; padding: 0; width: 100%; max-width: 700px; }
+        .steps li {
+            display: flex; align-items: flex-start; gap: 1rem;
+            padding: 0.8rem 0; border-bottom: 1px solid var(--border);
+            font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+        }
+        .steps li:last-child { border-bottom: none; }
+        .step-num {
+            min-width: 2rem; height: 2rem;
+            background: var(--brand);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.85rem;
+        }
+
+        /* ─── Slide 1 – Hero ────────────────────────────────────────── */
+        .hero-icon { font-size: 5rem; margin-bottom: 1rem; }
+        .hero-divider {
+            width: 60px; height: 3px;
+            background: var(--accent);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        /* ─── Slide 8 – Partnership ─────────────────────────────────── */
+        .partner-row {
+            display: flex; gap: 1.2rem; flex-wrap: wrap;
+            justify-content: center; max-width: 820px;
+        }
+        .partner-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.2rem 1.4rem;
+            flex: 1 1 180px; max-width: 220px;
+            text-align: center;
+        }
+        .partner-item .pi-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .partner-item .pi-label { font-size: 0.9rem; color: var(--muted); }
+
+        @media (max-width: 700px) {
+            .slide {
+                justify-content: flex-start;
+                align-items: stretch;
+                padding: 4.5rem 1.25rem 6rem;
+            }
+            #slide-counter {
+                right: 1rem;
+                bottom: 0.85rem;
+            }
+            .nav-btn {
+                top: auto;
+                bottom: 3rem;
+                transform: none;
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+            #btn-prev { left: 1rem; }
+            #btn-next { right: 1rem; }
+            .card,
+            .partner-item {
+                max-width: none;
+                flex-basis: 100%;
+            }
+            .timeline {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .tl-item {
+                padding-top: 0;
+                padding-left: 2rem;
+                text-align: left;
+            }
+            .tl-item::before {
+                left: 0.55rem;
+                right: auto;
+                top: 0;
+                bottom: -1rem;
+                width: 3px;
+                height: auto;
+            }
+            .tl-item:first-child::before,
+            .tl-item:last-child::before {
+                left: 0.55rem;
+                right: auto;
+            }
+            .tl-dot {
+                left: 0.55rem;
+                transform: translateX(-50%);
+            }
+            .compare-grid { grid-template-columns: 1fr; }
+            .data-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+<!-- Slide Counter -->
+<div id="slide-counter"></div>
+<!-- Navigation Buttons -->
+<button class="nav-btn" id="btn-prev" aria-label="Previous slide">&#8592;</button>
+<button class="nav-btn" id="btn-next" aria-label="Next slide">&#8594;</button>
+
+<div class="deck">
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 1 · TITLE
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide active" id="slide-1">
+        <div class="hero-icon">🧬</div>
+        <h1>Physiologic Midgut<br>Herniation</h1>
+        <div class="hero-divider"></div>
+        <p class="subtitle">Understanding Normal Early Fetal Development</p>
+        <div style="margin-top:1.5rem; display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center;">
+            <span class="chip chip-blue">Patient Education</span>
+            <span class="chip chip-green">Normal Finding</span>
+            <span class="chip chip-blue">First Trimester</span>
+        </div>
+        <div class="brand-tag">OpenMFM.org · DoctorsWhoCode.blog</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 2 · WHAT IS IT?
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-2">
+        <h2>What Is Midgut Herniation?</h2>
+        <div class="card-row">
+            <div class="card">
+                <div class="icon">🤰</div>
+                <div class="card-title">Normal Development</div>
+                <div class="card-body">A normal stage of early development, not a birth defect.</div>
+            </div>
+            <div class="card">
+                <div class="icon">🔬</div>
+                <div class="card-title">What Happens</div>
+                <div class="card-body">The baby's intestines temporarily move into the base of the umbilical cord.</div>
+            </div>
+            <div class="card">
+                <div class="icon">📏</div>
+                <div class="card-title">Why It Occurs</div>
+                <div class="card-body">The liver and gut grow faster than the abdomen, so the cord provides temporary space.</div>
+            </div>
+        </div>
+        <div class="reassure-box" style="margin-top:1.4rem;">
+            <p>This process is <strong>completely expected</strong> and resolves on its own as the baby grows.</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 3 · EMBRYOLOGY (SIMPLIFIED)
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-3">
+        <h2>How the Baby's Gut Develops</h2>
+        <div class="card-row">
+            <div class="card">
+                <div class="icon">🔄</div>
+                <div class="card-title">Rotation</div>
+                <div class="card-body">The intestines rotate 270° around a central artery while outside the abdomen.</div>
+            </div>
+            <div class="card">
+                <div class="icon">🔍</div>
+                <div class="card-title">On Ultrasound</div>
+                <div class="card-body">Appears as a small, bright mass (&lt;7 mm) at the cord insertion. This is normal.</div>
+            </div>
+            <div class="card">
+                <div class="icon">↩️</div>
+                <div class="card-title">Return</div>
+                <div class="card-body">The intestines return to the abdomen as it expands, automatically and spontaneously.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 4 · TIMELINE
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-4">
+        <h2>The Timeline of Normal Herniation</h2>
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="tl-dot" style="background:#d29922;"></div>
+                <div class="tl-week">6 – 8 Weeks</div>
+                <div class="tl-label" style="color:#d29922;">Begins</div>
+                <div class="tl-pct" style="color:#d29922;">64%</div>
+                <div style="font-size:0.75rem;color:var(--muted);">of fetuses</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot" style="background:#58a6ff;"></div>
+                <div class="tl-week">9 – 10 Weeks</div>
+                <div class="tl-label" style="color:#58a6ff;">Peak</div>
+                <div class="tl-pct" style="color:#58a6ff;">100%</div>
+                <div style="font-size:0.75rem;color:var(--muted);">of normal fetuses</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot" style="background:#a371f7;"></div>
+                <div class="tl-week">11 Weeks</div>
+                <div class="tl-label" style="color:#a371f7;">Resolving</div>
+                <div class="tl-pct" style="color:#a371f7;">25%</div>
+                <div style="font-size:0.75rem;color:var(--muted);">still visible</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot" style="background:#3fb950;"></div>
+                <div class="tl-week">12 Weeks<br>(CRL &gt;45 mm)</div>
+                <div class="tl-label" style="color:#3fb950;">Resolved</div>
+                <div class="tl-pct" style="color:#3fb950;">0%</div>
+                <div style="font-size:0.75rem;color:var(--muted);">should remain</div>
+            </div>
+        </div>
+        <div class="reassure-box" style="margin-top:1.6rem; max-width:820px;">
+            <p>At 9–10 weeks, <strong>every single normal fetus</strong> shows this finding. It is a sign of healthy development.</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 5 · GESTATIONAL AGE TABLE
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-5">
+        <h2>Gestational Age Milestones</h2>
+        <div style="width:100%; overflow-x:auto;">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Gestational Age</th>
+                    <th>What We Expect</th>
+                    <th>Incidence of Herniation</th>
+                    <th>Clinical Significance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>8 Weeks</td>
+                    <td>Herniation begins</td>
+                    <td><span class="chip chip-orange">64%</span></td>
+                    <td>Normal. No action needed.</td>
+                </tr>
+                <tr>
+                    <td>9 – 10 Weeks</td>
+                    <td>Peak herniation</td>
+                    <td><span class="chip chip-blue">100%</span></td>
+                    <td>Universal. Expected in all fetuses.</td>
+                </tr>
+                <tr>
+                    <td>11 Weeks</td>
+                    <td>Retraction begins</td>
+                    <td><span class="chip chip-orange">25%</span></td>
+                    <td>Transition. Still normal.</td>
+                </tr>
+                <tr>
+                    <td>12 Weeks (CRL &gt;45 mm)</td>
+                    <td>Complete resolution</td>
+                    <td><span class="chip chip-green">0%</span></td>
+                    <td>Herniation should be absent</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 6 · NORMAL vs. PATHOLOGICAL
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-6">
+        <h2>Normal vs. Pathological: Key Differences</h2>
+        <div class="compare-grid">
+            <div class="compare-card normal">
+                <div class="cc-title">✅ Physiological (Normal)</div>
+                <ul>
+                    <li>Seen before 12 weeks (CRL &lt;45 mm)</li>
+                    <li>Mass size: 4 – 7 mm</li>
+                    <li>Contains bowel only, with no liver</li>
+                    <li>Resolves spontaneously</li>
+                    <li>No follow-up required if early</li>
+                </ul>
+            </div>
+            <div class="compare-card patho">
+                <div class="cc-title">⚠️ Pathological (Omphalocele)</div>
+                <ul>
+                    <li>Persists beyond 12 weeks (CRL &gt;45 mm)</li>
+                    <li>Mass size: &gt;7 mm</li>
+                    <li>May contain liver within the cord</li>
+                    <li>Does not resolve on its own</li>
+                    <li>Requires detailed evaluation</li>
+                </ul>
+            </div>
+        </div>
+        <div class="warning-box">
+            <div class="wb-title">⚠️ Important Note</div>
+            <p>A diagnosis of omphalocele should <strong>never</strong> be made before 12 weeks or a CRL of 45 mm. Early findings are almost always normal.</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 7 · WHAT HAPPENS NEXT
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-7">
+        <h2>What Happens Next?</h2>
+        <ol class="steps">
+            <li>
+                <div class="step-num">1</div>
+                <div>
+                    <strong>Seen before 11 weeks (CRL &lt;45 mm)</strong><br>
+                    <span style="color:var(--muted);">No action is needed. This is a normal finding. Continue routine prenatal care.</span>
+                </div>
+            </li>
+            <li>
+                <div class="step-num">2</div>
+                <div>
+                    <strong>Seen at 11 – 12 weeks (CRL 45–50 mm)</strong><br>
+                    <span style="color:var(--muted);">A follow-up ultrasound in 1-2 weeks confirms complete resolution.</span>
+                </div>
+            </li>
+            <li>
+                <div class="step-num">3</div>
+                <div>
+                    <strong>Persists beyond 12 weeks (CRL &gt;50 mm)</strong><br>
+                    <span style="color:var(--muted);">Classified as omphalocele. High-resolution ultrasound and further evaluation are arranged.</span>
+                </div>
+            </li>
+        </ol>
+        <div class="reassure-box" style="margin-top:1rem;">
+            <p>The vast majority of early findings resolve completely. Your care team will guide every step.</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 8 · PARTNERSHIP & REASSURANCE
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-8">
+        <h2>You Are Not Alone in This Journey</h2>
+        <div class="partner-row">
+            <div class="partner-item">
+                <div class="pi-icon">🩺</div>
+                <div class="card-title">Expert Monitoring</div>
+                <div class="pi-label">Your MFM team tracks every milestone with precision.</div>
+            </div>
+            <div class="partner-item">
+                <div class="pi-icon">💬</div>
+                <div class="card-title">Open Communication</div>
+                <div class="pi-label">Questions are always welcome. No concern is too small.</div>
+            </div>
+            <div class="partner-item">
+                <div class="pi-icon">📅</div>
+                <div class="card-title">Clear Next Steps</div>
+                <div class="pi-label">Every follow-up is planned and explained in advance.</div>
+            </div>
+            <div class="partner-item">
+                <div class="pi-icon">❤️</div>
+                <div class="card-title">Partnership Care</div>
+                <div class="pi-label">We walk alongside you from first scan to delivery.</div>
+            </div>
+        </div>
+        <div class="brand-tag" style="margin-top:2rem;">
+            OpenMFM.org · DoctorsWhoCode.blog · Maternal-Fetal Medicine
+        </div>
+    </div>
+
+</div><!-- /.deck -->
+
+<script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const totalSlides = slides.length;
+    let current = 0;
+
+    const progressBar = document.getElementById('progress-bar');
+    const counter     = document.getElementById('slide-counter');
+
+    function updateUI() {
+        const pct = ((current + 1) / totalSlides) * 100;
+        progressBar.style.width = pct + '%';
+        counter.textContent = (current + 1) + ' / ' + totalSlides;
+    }
+
+    function goTo(index) {
+        slides[current].classList.remove('active');
+        current = (index + totalSlides) % totalSlides;
+        slides[current].classList.add('active');
+        updateUI();
+    }
+
+    document.getElementById('btn-next').addEventListener('click', () => goTo(current + 1));
+    document.getElementById('btn-prev').addEventListener('click', () => goTo(current - 1));
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+        if (e.key === 'ArrowLeft')                   { e.preventDefault(); goTo(current - 1); }
+    });
+
+    // Touch / swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend',   e => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) goTo(current + (dx < 0 ? 1 : -1));
+    });
+
+    // Initialise
+    slides.forEach((s, i) => { if (i !== 0) s.classList.remove('active'); });
+    slides[0].classList.add('active');
+    updateUI();
+</script>
+</body>
+</html>
