@@ -97,9 +97,9 @@ export default async function HomePage() {
               className="relative mb-6 text-5xl font-extrabold leading-tight tracking-tight md:text-7xl"
               style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}
             >
-              Built for the moments when high-risk pregnancy needs
+              The Open-Source Library for
               <span className="relative mt-2 block text-cyan-400">
-                clearer teaching and better tools.
+                Maternal-Fetal Medicine
                 <span
                   className="absolute inset-0 -z-10 blur-xl"
                   style={{
