@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preconception Counseling in Lupus (SLE) | MFM Patient Education</title>
+    <style>
+        /* ─── Reset & Base ─────────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0d0d0d;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── Deck & Slide ──────────────────────────────────────────────── */
+        .deck {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4vw 6vw;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease;
+            text-align: center;
+        }
+        .slide.active { opacity: 1; visibility: visible; }
+
+        /* ─── Slide Backgrounds ─────────────────────────────────────────── */
+        .bg-dark   { background: #0d0d0d; }
+        .bg-navy   { background: #0b1a2e; }
+        .bg-deep   { background: #0f1f0f; }
+        .bg-plum   { background: #1a0b2e; }
+        .bg-slate  { background: #111827; }
+
+        /* ─── Typography ────────────────────────────────────────────────── */
+        .eyebrow {
+            font-size: clamp(0.65rem, 1.2vw, 0.9rem);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 0.6em;
+        }
+        h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 200;
+            color: #60a5fa;
+            line-height: 1.15;
+            margin-bottom: 0.5em;
+        }
+        h2 {
+            font-size: clamp(1.5rem, 3.5vw, 2.8rem);
+            font-weight: 300;
+            color: #60a5fa;
+            line-height: 1.2;
+            margin-bottom: 0.6em;
+        }
+        h3 {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            font-weight: 400;
+            color: #93c5fd;
+            margin-bottom: 0.4em;
+        }
+        .lead {
+            font-size: clamp(1rem, 2.2vw, 1.55rem);
+            line-height: 1.55;
+            max-width: 820px;
+            color: #d1d5db;
+        }
+        .sub {
+            font-size: clamp(0.85rem, 1.6vw, 1.15rem);
+            color: #9ca3af;
+            margin-top: 0.5em;
+            max-width: 700px;
+        }
+
+        /* ─── Color Tokens ──────────────────────────────────────────────── */
+        .blue   { color: #60a5fa; }
+        .green  { color: #4ade80; }
+        .orange { color: #fb923c; }
+        .red    { color: #f87171; }
+        .purple { color: #c084fc; }
+        .teal   { color: #2dd4bf; }
+
+        /* ─── Cards / Boxes ─────────────────────────────────────────────── */
+        .card-row {
+            display: flex;
+            gap: 1.5vw;
+            margin-top: 1.5em;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1100px;
+        }
+        .card {
+            background: #1c1c2e;
+            border: 1px solid #2a2a3e;
+            border-radius: 14px;
+            padding: 1.4em 1.8em;
+            flex: 1 1 220px;
+            max-width: 300px;
+            text-align: left;
+        }
+        .card .icon { font-size: 2em; margin-bottom: 0.3em; }
+        .card h3 { font-size: clamp(0.9rem, 1.6vw, 1.15rem); margin-bottom: 0.3em; }
+        .card p  { font-size: clamp(0.75rem, 1.3vw, 0.95rem); color: #9ca3af; line-height: 1.5; }
+
+        .box {
+            background: #1c1c2e;
+            border: 1px solid #2a2a3e;
+            border-radius: 14px;
+            padding: 1.5em 2em;
+            margin-top: 1.2em;
+            max-width: 860px;
+            width: 100%;
+        }
+        .box.green-border { border-color: #4ade80; }
+        .box.orange-border { border-color: #fb923c; }
+        .box.red-border { border-color: #f87171; }
+        .box.blue-border { border-color: #60a5fa; }
+
+        /* ─── Timeline ──────────────────────────────────────────────────── */
+        .timeline {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            margin-top: 1.5em;
+            max-width: 1000px;
+            width: 100%;
+        }
+        .tl-step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        .tl-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 22px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #2a2a3e;
+        }
+        .tl-dot {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            z-index: 1;
+            margin-bottom: 0.6em;
+        }
+        .tl-label {
+            font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+            color: #9ca3af;
+            text-align: center;
+            padding: 0 0.3em;
+        }
+        .tl-title {
+            font-size: clamp(0.75rem, 1.3vw, 1rem);
+            font-weight: 600;
+            color: #e0e0e0;
+            text-align: center;
+            margin-bottom: 0.2em;
+        }
+
+        /* ─── Table ─────────────────────────────────────────────────────── */
+        .risk-table {
+            width: 100%;
+            max-width: 960px;
+            border-collapse: collapse;
+            margin-top: 1.2em;
+            font-size: clamp(0.7rem, 1.3vw, 0.95rem);
+        }
+        .risk-table th {
+            background: #1a2744;
+            color: #93c5fd;
+            padding: 0.7em 1em;
+            text-align: left;
+            font-weight: 500;
+            border-bottom: 2px solid #2a3a5e;
+        }
+        .risk-table td {
+            padding: 0.65em 1em;
+            border-bottom: 1px solid #1e1e2e;
+            color: #d1d5db;
+            text-align: left;
+            vertical-align: top;
+        }
+        .risk-table tr:nth-child(even) td { background: #111827; }
+
+        /* ─── Pill badges ───────────────────────────────────────────────── */
+        .pill {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 0.25em 0.9em;
+            font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+            font-weight: 600;
+            margin: 0.2em;
+        }
+        .pill-green  { background: #052e16; color: #4ade80; border: 1px solid #4ade80; }
+        .pill-orange { background: #431407; color: #fb923c; border: 1px solid #fb923c; }
+        .pill-red    { background: #450a0a; color: #f87171; border: 1px solid #f87171; }
+        .pill-blue   { background: #0c1a3e; color: #60a5fa; border: 1px solid #60a5fa; }
+
+        /* ─── Progress Bar ──────────────────────────────────────────────── */
+        #progress-bar {
+            height: 3px;
+            background: #60a5fa;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        /* ─── Navigation ────────────────────────────────────────────────── */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6em 2em;
+            background: #0d0d0d;
+            border-top: 1px solid #1e1e2e;
+        }
+        .nav button {
+            background: #1c1c2e;
+            color: #9ca3af;
+            border: 1px solid #2a2a3e;
+            padding: 0.5em 1.4em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .nav button:hover { background: #2a2a3e; color: #e0e0e0; }
+        .nav button:disabled { opacity: 0.3; cursor: default; }
+        #slide-counter { font-size: 0.85rem; color: #6b7280; }
+
+        /* ─── Branding ──────────────────────────────────────────────────── */
+        .brand {
+            position: fixed;
+            bottom: 54px;
+            right: 1.5em;
+            font-size: 0.65rem;
+            color: #374151;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/lupus-preconception/sle_preconception_slides.html">
+<meta name="description" content="Patient education on preconception counseling in systemic lupus erythematosus (SLE), including why disease quiescence before conception matters, medication safety, antibody testing, flare prevention, aspirin and anticoagulation considerations, fetal surveillance, and postpartum planning.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Lupus, SLE, Preconception Counseling, Autoimmune Disease, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/lupus-preconception/sle_preconception_slides.html">
+<meta property="og:title" content="Preconception Counseling in Lupus (SLE) - Patient Education | OpenMFM">
+<meta property="og:description" content="Patient education on preconception counseling in systemic lupus erythematosus (SLE), including why disease quiescence before conception matters, medication safety, antibody testing, flare prevention, aspirin and anticoagulation considerations, fetal surveillance, and postpartum planning.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Preconception Counseling in Lupus (SLE) - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Patient education on preconception counseling in systemic lupus erythematosus (SLE), including why disease quiescence before conception matters, medication safety, antibody testing, flare prevention, aspirin and anticoagulation considerations, fetal surveillance, and postpartum planning.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Preconception Counseling in Lupus (SLE) - Patient Education",
+  "description": "Patient education on preconception counseling in systemic lupus erythematosus (SLE), including why disease quiescence before conception matters, medication safety, antibody testing, flare prevention, aspirin and anticoagulation considerations, fetal surveillance, and postpartum planning.",
+  "url": "https://openmfm.org/decks/lupus-preconception/sle_preconception_slides.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-04-03",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Preconception Counseling in Lupus (SLE) - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Lupus, SLE, Preconception Counseling, Autoimmune Disease, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<div class="deck">
+
+    <!-- ── SLIDE 1 · Title ──────────────────────────────────────────────── -->
+    <div class="slide active bg-navy">
+        <div class="eyebrow">Maternal-Fetal Medicine · Patient Education</div>
+        <h1>Planning Your Pregnancy<br>with Lupus</h1>
+        <p class="lead">A guide to preconception counseling for women with Systemic Lupus Erythematosus (SLE).</p>
+        <p class="sub" style="margin-top:1.5em;">Atlanta Perinatal Associates &nbsp;|&nbsp; DoctorsWhoCode.blog</p>
+    </div>
+
+    <!-- ── SLIDE 2 · What is Lupus? ─────────────────────────────────────── -->
+    <div class="slide bg-dark">
+        <div class="eyebrow">Understanding Your Condition</div>
+        <h2>What Is Lupus (SLE)?</h2>
+        <p class="lead">Lupus is an <span class="blue">autoimmune condition</span> where the immune system becomes overactive and can affect multiple organs.</p>
+        <div class="box blue-border" style="margin-top:1.2em;">
+            <p class="lead" style="font-size:1.2rem;">With careful planning, <span class="green">most women with lupus can have a healthy pregnancy.</span></p>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 3 · Why Plan Ahead? ────────────────────────────────────── -->
+    <div class="slide bg-slate">
+        <div class="eyebrow">Why It Matters</div>
+        <h2>Why Does Timing Matter?</h2>
+        <div class="card-row">
+            <div class="card">
+                <div class="icon">🔥</div>
+                <h3 class="orange">Flare Risk</h3>
+                <p>Active lupus at conception increases the chance of a flare during pregnancy.</p>
+            </div>
+            <div class="card">
+                <div class="icon">🩺</div>
+                <h3 class="blue">Medication Safety</h3>
+                <p>Some lupus medicines are not safe during pregnancy and must be changed first.</p>
+            </div>
+            <div class="card">
+                <div class="icon">👶</div>
+                <h3 class="green">Baby's Health</h3>
+                <p>Planning ahead reduces risks of preterm birth and other complications for your baby.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 4 · The 6-Month Rule ───────────────────────────────────── -->
+    <div class="slide bg-navy">
+        <div class="eyebrow">The Most Important Step</div>
+        <h2>The 6-Month Rule</h2>
+        <p class="lead">We aim for your lupus to be <span class="green">quiet (inactive)</span> for at least <span class="blue">6 months</span> before you try to conceive.</p>
+        <div class="box green-border" style="margin-top:1.2em;">
+            <p class="lead" style="font-size:1.15rem;">This is the single most powerful thing you can do to protect your pregnancy.</p>
+        </div>
+        <p class="sub" style="margin-top:1em;">We measure disease activity with a score called the <strong>SLEDAI</strong>. A score below 4 is our goal.</p>
+    </div>
+
+    <!-- ── SLIDE 5 · Timeline ────────────────────────────────────────────── -->
+    <div class="slide bg-dark">
+        <div class="eyebrow">Your Preconception Roadmap</div>
+        <h2>Steps Before Conception</h2>
+        <div class="timeline">
+            <div class="tl-step">
+                <div class="tl-dot" style="background:#1a2744; border:2px solid #60a5fa;">📋</div>
+                <div class="tl-title">Now</div>
+                <div class="tl-label">Preconception visit &amp; lab work</div>
+            </div>
+            <div class="tl-step">
+                <div class="tl-dot" style="background:#1a2e1a; border:2px solid #4ade80;">💊</div>
+                <div class="tl-title">1–3 Months</div>
+                <div class="tl-label">Adjust medications to pregnancy-safe options</div>
+            </div>
+            <div class="tl-step">
+                <div class="tl-dot" style="background:#2e1a0a; border:2px solid #fb923c;">🔬</div>
+                <div class="tl-title">3–6 Months</div>
+                <div class="tl-label">Confirm disease is quiet (SLEDAI &lt; 4)</div>
+            </div>
+            <div class="tl-step">
+                <div class="tl-dot" style="background:#0a2e1a; border:2px solid #2dd4bf;">✅</div>
+                <div class="tl-title">6+ Months</div>
+                <div class="tl-label">Green light to try to conceive</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 6 · Medications – Safe ─────────────────────────────────── -->
+    <div class="slide bg-deep">
+        <div class="eyebrow">Medication Review</div>
+        <h2>Your Most Important Medicine</h2>
+        <div class="box green-border">
+            <h3 class="green" style="font-size:1.6rem;">Hydroxychloroquine (Plaquenil)</h3>
+            <p class="lead" style="font-size:1.15rem; margin-top:0.5em;">Safe before, during, and after pregnancy. <span class="green">Do not stop this medicine.</span></p>
+        </div>
+        <p class="sub" style="margin-top:1.2em;">It reduces flares, protects your placenta, and lowers the risk of neonatal lupus in your baby.</p>
+    </div>
+
+    <!-- ── SLIDE 7 · Medications – Change ───────────────────────────────── -->
+    <div class="slide bg-slate">
+        <div class="eyebrow">Medication Review</div>
+        <h2>Medicines We Will Change</h2>
+        <div class="card-row">
+            <div class="card" style="border-color:#f87171;">
+                <div class="icon">🚫</div>
+                <h3 class="red">Stop Before Pregnancy</h3>
+                <p>Mycophenolate (CellCept), Methotrexate, Leflunomide</p>
+                <p style="margin-top:0.5em; color:#f87171; font-size:0.85rem;">Stop at least 3 months before trying to conceive.</p>
+            </div>
+            <div class="card" style="border-color:#fb923c;">
+                <div class="icon">🔄</div>
+                <h3 class="orange">Switch to Safer Option</h3>
+                <p>Azathioprine (Imuran) is a pregnancy-safe alternative for immune suppression.</p>
+            </div>
+            <div class="card" style="border-color:#fb923c;">
+                <div class="icon">💊</div>
+                <h3 class="orange">Blood Pressure Medicines</h3>
+                <p>ACE inhibitors and ARBs must be switched to labetalol or nifedipine.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 8 · Key Lab Tests ───────────────────────────────────────── -->
+    <div class="slide bg-navy">
+        <div class="eyebrow">Lab Workup</div>
+        <h2>Important Blood Tests</h2>
+        <table class="risk-table">
+            <thead>
+                <tr>
+                    <th>Test</th>
+                    <th>What We Are Looking For</th>
+                    <th>Why It Matters</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="blue">Antiphospholipid Antibodies</span></td>
+                    <td>Lupus anticoagulant, anti-cardiolipin, anti-β₂GPI</td>
+                    <td>Guides blood thinner therapy during pregnancy</td>
+                </tr>
+                <tr>
+                    <td><span class="purple">Anti-Ro (SSA) / Anti-La (SSB)</span></td>
+                    <td>Antibodies that can cross the placenta</td>
+                    <td>Requires extra heart monitoring for baby (weeks 16–26)</td>
+                </tr>
+                <tr>
+                    <td><span class="teal">Kidney Function (GFR, Urine Protein)</span></td>
+                    <td>Signs of lupus nephritis</td>
+                    <td>Active kidney disease requires delay of conception</td>
+                </tr>
+                <tr>
+                    <td><span class="green">SLEDAI Score</span></td>
+                    <td>Overall disease activity</td>
+                    <td>Must be &lt; 4 for 6 months before trying to conceive</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ── SLIDE 9 · Risk Factors ────────────────────────────────────────── -->
+    <div class="slide bg-dark">
+        <div class="eyebrow">Understanding Your Risk</div>
+        <h2>Factors That Affect Pregnancy Risk</h2>
+        <div class="card-row">
+            <div class="card" style="border-color:#f87171;">
+                <div class="icon">🫘</div>
+                <h3 class="red">Lupus Nephritis</h3>
+                <p>History of kidney involvement increases risk of preeclampsia and preterm birth.</p>
+            </div>
+            <div class="card" style="border-color:#fb923c;">
+                <div class="icon">🩸</div>
+                <h3 class="orange">Antiphospholipid Syndrome</h3>
+                <p>Raises risk of blood clots and pregnancy loss. Treated with aspirin and heparin.</p>
+            </div>
+            <div class="card" style="border-color:#fb923c;">
+                <div class="icon">📈</div>
+                <h3 class="orange">High Blood Pressure</h3>
+                <p>Pre-existing hypertension is associated with lower live birth rates.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 10 · Baby Aspirin ───────────────────────────────────────── -->
+    <div class="slide bg-deep">
+        <div class="eyebrow">Preventive Care</div>
+        <h2>Baby Aspirin: A Simple Protector</h2>
+        <p class="lead">We recommend <span class="blue">low-dose aspirin 81 mg</span> daily starting in early pregnancy.</p>
+        <div class="card-row" style="margin-top:1.2em;">
+            <div class="card" style="border-color:#60a5fa;">
+                <div class="icon">🛡️</div>
+                <h3 class="blue">Prevents Preeclampsia</h3>
+                <p>Reduces risk of dangerous high blood pressure in pregnancy.</p>
+            </div>
+            <div class="card" style="border-color:#60a5fa;">
+                <div class="icon">🩺</div>
+                <h3 class="blue">Protects the Placenta</h3>
+                <p>Especially important if antiphospholipid antibodies are present.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 11 · IVF Considerations ────────────────────────────────── -->
+    <div class="slide bg-slate">
+        <div class="eyebrow">Fertility Treatments</div>
+        <h2>If You Need IVF</h2>
+        <p class="lead">IVF is possible with lupus. We work closely with your fertility specialist to keep you safe.</p>
+        <div class="box orange-border" style="margin-top:1.2em;">
+            <p class="lead" style="font-size:1.1rem;"><span class="orange">Ovarian stimulation</span> raises estrogen levels, which can trigger a flare. <br>Close monitoring is essential.</p>
+        </div>
+        <p class="sub" style="margin-top:1em;">If you are on cyclophosphamide therapy, we discuss <strong>egg or embryo freezing</strong> to protect your fertility early.</p>
+    </div>
+
+    <!-- ── SLIDE 12 · Monitoring During Pregnancy ───────────────────────── -->
+    <div class="slide bg-navy">
+        <div class="eyebrow">During Pregnancy</div>
+        <h2>How We Monitor You and Your Baby</h2>
+        <div class="card-row">
+            <div class="card">
+                <div class="icon">🔊</div>
+                <h3 class="blue">Growth Ultrasounds</h3>
+                <p>Regular ultrasounds to check your baby's growth and wellbeing.</p>
+            </div>
+            <div class="card">
+                <div class="icon">❤️</div>
+                <h3 class="purple">Fetal Echocardiogram</h3>
+                <p>Heart monitoring for babies of mothers with anti-Ro/La antibodies (weeks 16–26).</p>
+            </div>
+            <div class="card">
+                <div class="icon">🧪</div>
+                <h3 class="teal">Lab Monitoring</h3>
+                <p>Regular blood and urine tests to detect flares or kidney changes early.</p>
+            </div>
+            <div class="card">
+                <div class="icon">📋</div>
+                <h3 class="green">MFM Visits</h3>
+                <p>Frequent visits with your Maternal-Fetal Medicine specialist throughout pregnancy.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 13 · Counseling & Support ──────────────────────────────── -->
+    <div class="slide bg-dark">
+        <div class="eyebrow">Your Wellbeing Matters</div>
+        <h2>You Deserve Complete Counseling</h2>
+        <p class="lead">Studies show that up to <span class="orange">9 in 10 women with lupus</span> never received full reproductive health counseling.</p>
+        <div class="box green-border" style="margin-top:1.2em;">
+            <p class="lead" style="font-size:1.15rem;"><span class="green">Women who receive multidisciplinary counseling report better physical and emotional health.</span></p>
+        </div>
+        <p class="sub" style="margin-top:1em;">We are committed to being that team for you.</p>
+    </div>
+
+    <!-- ── SLIDE 14 · Lifestyle ──────────────────────────────────────────── -->
+    <div class="slide bg-slate">
+        <div class="eyebrow">What You Can Do</div>
+        <h2>Healthy Habits That Help</h2>
+        <div class="card-row">
+            <div class="card" style="border-color:#4ade80;">
+                <div class="icon">⚖️</div>
+                <h3 class="green">Healthy Weight</h3>
+                <p>Target BMI 18.5–24.9. Obesity increases risk of miscarriage and gestational diabetes.</p>
+            </div>
+            <div class="card" style="border-color:#4ade80;">
+                <div class="icon">🚭</div>
+                <h3 class="green">Stop Smoking</h3>
+                <p>Smoking worsens lupus activity and pregnancy outcomes. We can help you quit.</p>
+            </div>
+            <div class="card" style="border-color:#4ade80;">
+                <div class="icon">💊</div>
+                <h3 class="green">Take Your Medicines</h3>
+                <p>Never stop Hydroxychloroquine without talking to your doctor first.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 15 · Your Care Team ────────────────────────────────────── -->
+    <div class="slide bg-navy">
+        <div class="eyebrow">Partnership-Based Care</div>
+        <h2>Your Multidisciplinary Team</h2>
+        <div class="card-row">
+            <div class="card" style="border-color:#60a5fa;">
+                <div class="icon">🦴</div>
+                <h3 class="blue">Rheumatologist</h3>
+                <p>Manages your lupus disease activity and medications.</p>
+            </div>
+            <div class="card" style="border-color:#c084fc;">
+                <div class="icon">🤰</div>
+                <h3 class="purple">Maternal-Fetal Medicine</h3>
+                <p>High-risk pregnancy specialist. Monitors you and your baby closely.</p>
+            </div>
+            <div class="card" style="border-color:#2dd4bf;">
+                <div class="icon">🔬</div>
+                <h3 class="teal">Fertility Specialist</h3>
+                <p>Coordinates IVF timing with your lupus management plan.</p>
+            </div>
+        </div>
+        <p class="sub" style="margin-top:1.2em;">We communicate with each other so you receive seamless, coordinated care.</p>
+    </div>
+
+    <!-- ── SLIDE 16 · Action Plan ────────────────────────────────────────── -->
+    <div class="slide bg-deep">
+        <div class="eyebrow">Your Next Steps</div>
+        <h2>Your Preconception Action Plan</h2>
+        <div class="box" style="text-align:left; max-width:700px;">
+            <p style="font-size:1.1rem; margin-bottom:0.7em;">
+                <span class="pill pill-blue">Step 1</span>
+                <span style="color:#d1d5db;"> Complete your lab workup (antibodies, kidney function, SLEDAI).</span>
+            </p>
+            <p style="font-size:1.1rem; margin-bottom:0.7em;">
+                <span class="pill pill-orange">Step 2</span>
+                <span style="color:#d1d5db;"> Transition off unsafe medications with your rheumatologist.</span>
+            </p>
+            <p style="font-size:1.1rem; margin-bottom:0.7em;">
+                <span class="pill pill-green">Step 3</span>
+                <span style="color:#d1d5db;"> Continue Hydroxychloroquine every day.</span>
+            </p>
+            <p style="font-size:1.1rem; margin-bottom:0.7em;">
+                <span class="pill pill-green">Step 4</span>
+                <span style="color:#d1d5db;"> Achieve 6 months of quiet disease before trying to conceive.</span>
+            </p>
+            <p style="font-size:1.1rem;">
+                <span class="pill pill-blue">Step 5</span>
+                <span style="color:#d1d5db;"> Start low-dose aspirin 81 mg when you begin trying.</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 17 · Closing ────────────────────────────────────────────── -->
+    <div class="slide bg-navy">
+        <div class="eyebrow">We Are Here for You</div>
+        <h1 style="font-size:clamp(1.8rem,4vw,3rem);">Your dream of motherhood<br>is our shared goal.</h1>
+        <p class="lead" style="margin-top:0.8em;">With the right preparation and the right team, a healthy pregnancy with lupus is achievable.</p>
+        <p class="sub" style="margin-top:1.5em;">Atlanta Perinatal Associates &nbsp;·&nbsp; DoctorsWhoCode.blog</p>
+        <p class="sub" style="margin-top:0.3em; font-size:0.75rem;">Guideline sources: ACOG, SMFM, ACR, EULAR</p>
+    </div>
+
+</div><!-- /deck -->
+
+<!-- ── Progress Bar ── -->
+<div id="progress-bar"></div>
+
+<!-- ── Navigation ── -->
+<div class="nav">
+    <button id="btn-prev" onclick="prevSlide()" disabled>&#8592; Prev</button>
+    <span id="slide-counter">1 / 17</span>
+    <button id="btn-next" onclick="nextSlide()">Next &#8594;</button>
+</div>
+
+<div class="brand">Atlanta Perinatal Associates · DoctorsWhoCode.blog</div>
+
+<script>
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    const counter = document.getElementById('slide-counter');
+    const progressBar = document.getElementById('progress-bar');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+
+    function showSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === index);
+        });
+        counter.textContent = `${index + 1} / ${total}`;
+        progressBar.style.width = `${((index + 1) / total) * 100}%`;
+        btnPrev.disabled = index === 0;
+        btnNext.disabled = index === total - 1;
+    }
+
+    function nextSlide() {
+        if (current < total - 1) { current++; showSlide(current); }
+    }
+
+    function prevSlide() {
+        if (current > 0) { current--; showSlide(current); }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

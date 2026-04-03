@@ -155,7 +155,7 @@ def inject_presentation(p, today, force=False):
     file_path = os.path.join(REPO_ROOT, file_rel)
 
     if not os.path.exists(file_path):
-        print(f"  ⚠  NOT FOUND : {file_rel}")
+        print(f"  [WARN] NOT FOUND : {file_rel}")
         return False
 
     with open(file_path, "r", encoding="utf-8", errors="replace") as fh:
@@ -164,11 +164,11 @@ def inject_presentation(p, today, force=False):
     # ── Idempotency / force ────────────────────────────────────────────────
     if SEO_MARKER in content:
         if not force:
-            print(f"  ✓  Skipped   : {href}")
+            print(f"  [SKIP] Skipped   : {href}")
             return True
         # force=True: strip old blocks and re-inject with updated description
         content = strip_injected_blocks(content)
-        print(f"  🔄 Updating  : {href}")
+        print(f"  [INFO] Updating  : {href}")
 
     description = get_description(p)
     keywords    = ", ".join(p.get("tags", []))
@@ -199,7 +199,7 @@ def inject_presentation(p, today, force=False):
     with open(file_path, "w", encoding="utf-8") as fh:
         fh.write(content)
 
-    print(f"  ✅ Injected  : {href}")
+    print(f"  [OK] Injected    : {href}")
     return True
 
 
@@ -228,10 +228,10 @@ def main():
         else:
             err += 1
 
-    print(f"\n{'─'*50}")
+    print(f"\n{'-'*50}")
     print(f"Done.  Injected: {ok}  |  Failed/Not Found: {err}")
     if err:
-        print("  → Check the ⚠ lines above and verify href paths in presentations.json.")
+        print("  -> Check the [WARN] lines above and verify href paths in presentations.json.")
 
 
 if __name__ == "__main__":

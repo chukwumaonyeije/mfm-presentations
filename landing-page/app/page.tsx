@@ -1,18 +1,27 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import Link from 'next/link';
-import { BookOpen, Wrench, Code2, Github, Heart } from 'lucide-react';
+import {
+  ArrowRight,
+  BookOpen,
+  Clock3,
+  Code2,
+  Github,
+  Heart,
+  Sparkles,
+  Stethoscope,
+  Wrench,
+} from 'lucide-react';
 import PulseLine from './components/PulseLine';
 
 interface Presentation {
   title: string;
   href: string;
   tags: string[];
-}
-
-interface Microsite extends Presentation {
   description: string;
 }
+
+type Microsite = Presentation;
 
 export default async function HomePage() {
   const jsonPath = path.join(process.cwd(), 'data', 'presentations.json');
@@ -20,220 +29,257 @@ export default async function HomePage() {
   const { presentations, microsites }: { presentations: Presentation[]; microsites: Microsite[] } =
     JSON.parse(fileContents);
 
-  // 3 most recent (top of array, already sorted newest-first) + 3 curated picks
+  const presentationCount = presentations.length;
+  const micrositeCount = microsites.length;
+  const latestPresentation = presentations[0];
+  const recentPresentations = presentations.slice(0, 4);
   const curatedSlugs = ['basic-gdm', 'fetal-growth-restriction-patients', 'preeclampsia'];
-  const recentThree = presentations.slice(0, 3);
-  const curatedThree = curatedSlugs
-    .map(slug => presentations.find(p => p.href.includes(slug)))
-    .filter((p): p is Presentation => p !== undefined);
-  // Deduplicate in case a curated pick is also in the top 3
-  const seen = new Set(recentThree.map(p => p.href));
-  const featuredPresentations = [
-    ...recentThree,
-    ...curatedThree.filter(p => !seen.has(p.href)),
-  ].slice(0, 6);
+  const clinicalEssentials = curatedSlugs
+    .map((slug) => presentations.find((presentation) => presentation.href.includes(slug)))
+    .filter((presentation): presentation is Presentation => presentation !== undefined);
 
   return (
-    <div className="min-h-screen text-white" style={{ fontFamily: "var(--font-inter, 'Inter', sans-serif)" }}>
-
-      {/* ── HEADER ── */}
-      <header className="relative z-20 container mx-auto px-4 py-6 flex justify-between items-center">
-        <div className="text-2xl font-bold" style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}>
+    <div
+      className="landing-shell min-h-screen text-white"
+      style={{ fontFamily: "var(--font-inter, 'Inter', sans-serif)" }}
+    >
+      <header className="relative z-20 container mx-auto flex items-center justify-between px-4 py-6">
+        <div
+          className="text-2xl font-bold"
+          style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}
+        >
           <span className="text-white">open</span>
           <span className="text-cyan-400">MFM</span>
         </div>
         <nav className="flex items-center gap-6 text-sm">
-          <Link href="/library" className="text-slate-400 hover:text-white transition-colors">
+          <Link href="/interactive" className="text-slate-400 transition-colors hover:text-white">
+            Tools
+          </Link>
+          <Link href="/library" className="text-slate-400 transition-colors hover:text-white">
             Full Library
           </Link>
           <a
             href="https://github.com/chukwumaonyeije/mfm-presentations"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5"
+            className="flex items-center gap-1.5 text-slate-400 transition-colors hover:text-white"
           >
-            <Github className="w-4 h-4" />
+            <Github className="h-4 w-4" />
             GitHub
           </a>
         </nav>
       </header>
 
-      {/* ── HERO ── */}
-      <section className="relative container mx-auto px-4 pt-12 pb-20 text-center">
-        {/* Radial glow */}
+      <section className="relative container mx-auto px-4 pb-18 pt-8 md:pt-12">
         <div
-          className="absolute pointer-events-none"
+          className="hero-glow pointer-events-none absolute"
           style={{
-            top: '30%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '800px',
-            height: '600px',
-            background: 'radial-gradient(ellipse, rgba(34, 211, 238, 0.06) 0%, transparent 70%)',
+            top: '14%',
+            left: '52%',
           }}
         />
-
-        {/* Pulse line */}
         <PulseLine />
 
-        {/* Badge */}
-        <div className="relative z-10 mb-8">
-          <span
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase"
-            style={{
-              background: 'rgba(34, 211, 238, 0.08)',
-              border: '1px solid rgba(34, 211, 238, 0.2)',
-              color: '#22d3ee',
-              letterSpacing: '0.15em',
-            }}
-          >
-            <Heart className="w-3 h-3" />
-            Open-Source MFM Education
-          </span>
-        </div>
-
-        {/* Headline */}
-        <h1
-          className="relative z-10 text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight"
-          style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}
-        >
-          The Open-Source Library for{' '}
-          <span className="relative inline-block">
-            <span className="text-cyan-400">Maternal-Fetal Medicine</span>
-            <span
-              className="absolute inset-0 blur-xl -z-10"
-              style={{ background: 'rgba(34, 211, 238, 0.15)', animation: 'pulse-glow 2.5s ease-in-out infinite' }}
-            />
-          </span>
-        </h1>
-
-        {/* Subtitle */}
-        <p className="relative z-10 text-base md:text-lg text-slate-400 max-w-2xl mx-auto mb-4" style={{ fontWeight: 300 }}>
-          90+ evidence-based clinical presentations and 13 interactive tools for patients, providers,
-          and sonographers.
-        </p>
-
-        {/* Author */}
-        <p className="relative z-10 text-sm text-slate-500 mb-10">
-          Created by{' '}
-          <span className="text-slate-300 font-medium">Dr. Chukwuma Onyeije, MD</span>
-          {' · '}
-          <span className="text-cyan-400">Maternal-Fetal Medicine Specialist</span>
-        </p>
-
-        {/* CTA Buttons */}
-        <div className="relative z-10 flex flex-wrap justify-center gap-4 mb-14">
-          <Link
-            href="/library"
-            className="btn-glow inline-flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 px-8 rounded-lg transition-all"
-            style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)", letterSpacing: '0.02em' }}
-          >
-            Explore the Full Library →
-          </Link>
-          <Link
-            href="/interactive"
-            className="btn-glass inline-flex items-center gap-2 text-slate-200 font-semibold py-3 px-8 rounded-lg"
-            style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)", letterSpacing: '0.02em' }}
-          >
-            Interactive Tools
-          </Link>
-        </div>
-
-        {/* Stats */}
-        <div className="relative z-10 flex flex-wrap justify-center gap-10 sm:gap-14">
-          {[
-            { icon: BookOpen, value: '90+', label: 'Presentations' },
-            { icon: Wrench, value: '13', label: 'Interactive Tools' },
-            { icon: Code2, value: '100%', label: 'Open-Source' },
-          ].map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center gap-1">
-              <stat.icon className="w-5 h-5 mb-1 text-cyan-400 opacity-60" />
-              <span
-                className="text-3xl sm:text-4xl font-bold text-cyan-400"
-                style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}
-              >
-                {stat.value}
+        <div className="relative z-10 grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,420px)] lg:items-end">
+          <div className="text-center lg:text-left">
+            <div className="mb-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+              <span className="eyebrow-pill">
+                <Heart className="h-3.5 w-3.5" />
+                Open-Source MFM Education
               </span>
-              <span className="text-xs uppercase tracking-widest text-slate-500" style={{ letterSpacing: '0.12em' }}>
-                {stat.label}
+              <span className="eyebrow-pill subtle">
+                <Sparkles className="h-3.5 w-3.5" />
+                Latest deck pinned from the library feed
               </span>
             </div>
-          ))}
+
+            <h1
+              className="relative mb-6 text-5xl font-extrabold leading-tight tracking-tight md:text-7xl"
+              style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}
+            >
+              Built for the moments when high-risk pregnancy needs
+              <span className="relative mt-2 block text-cyan-400">
+                clearer teaching and better tools.
+                <span
+                  className="absolute inset-0 -z-10 blur-xl"
+                  style={{
+                    background: 'rgba(34, 211, 238, 0.15)',
+                    animation: 'pulse-glow 2.5s ease-in-out infinite',
+                  }}
+                />
+              </span>
+            </h1>
+
+            <p
+              className="mx-auto mb-4 max-w-2xl text-base text-slate-300 md:text-lg lg:mx-0"
+              style={{ fontWeight: 300 }}
+            >
+              openMFM is the public teaching layer for Maternal-Fetal Medicine: evidence-based slide decks,
+              patient education, and clinical tools that stay usable in real care.
+            </p>
+
+            <p className="mb-10 text-sm text-slate-500">
+              Created by <span className="font-medium text-slate-300">Dr. Chukwuma Onyeije, MD</span>
+              {' · '}
+              <span className="text-cyan-400">Maternal-Fetal Medicine Specialist</span>
+            </p>
+
+            <div className="mb-14 flex flex-wrap justify-center gap-4 lg:justify-start">
+              <Link
+                href="/library"
+                className="btn-glow inline-flex items-center gap-2 rounded-lg bg-cyan-500 px-8 py-3 font-semibold text-white transition-all hover:bg-cyan-600"
+                style={{
+                  fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)",
+                  letterSpacing: '0.02em',
+                }}
+              >
+                Explore the full library
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/interactive"
+                className="btn-glass inline-flex items-center gap-2 rounded-lg px-8 py-3 font-semibold text-slate-200"
+                style={{
+                  fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)",
+                  letterSpacing: '0.02em',
+                }}
+              >
+                Interactive tools
+              </Link>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-10 sm:gap-14 lg:justify-start">
+              {[
+                { icon: BookOpen, value: `${presentationCount}+`, label: 'Presentations' },
+                { icon: Wrench, value: String(micrositeCount), label: 'Interactive Tools' },
+                { icon: Code2, value: 'Open', label: 'Source Available' },
+              ].map((stat) => (
+                <div key={stat.label} className="flex flex-col items-center gap-1 lg:items-start">
+                  <stat.icon className="mb-1 h-5 w-5 text-cyan-400 opacity-60" />
+                  <span
+                    className="text-3xl font-bold text-cyan-400 sm:text-4xl"
+                    style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}
+                  >
+                    {stat.value}
+                  </span>
+                  <span
+                    className="text-xs uppercase tracking-widest text-slate-500"
+                    style={{ letterSpacing: '0.12em' }}
+                  >
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <aside className="feature-panel">
+            <div className="feature-panel__label">
+              <Clock3 className="h-4 w-4" />
+              Newest presentation
+            </div>
+            <h2 className="feature-panel__title">{latestPresentation.title}</h2>
+            <p className="feature-panel__description">{latestPresentation.description}</p>
+            <div className="mb-6 flex flex-wrap gap-2">
+              {latestPresentation.tags.slice(0, 4).map((tag) => (
+                <span key={tag} className="chip chip-cyan">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div className="feature-panel__meta">
+              <span className="feature-panel__meta-item">
+                <Stethoscope className="h-4 w-4" />
+                Patient-centered counseling
+              </span>
+              <span className="feature-panel__meta-item">Feed-driven preview</span>
+            </div>
+            <a
+              href={latestPresentation.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="feature-panel__link"
+            >
+              Open latest deck
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          </aside>
         </div>
       </section>
 
-      {/* ── FEATURED PRESENTATIONS ── */}
       <section className="container mx-auto px-4 py-16">
-        <h2
-          className="text-3xl font-bold text-center mb-2"
-          style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}
-        >
-          Featured Presentations
-        </h2>
-        <p className="text-slate-400 text-center mb-10 text-sm">
-          3 recently added &amp; 3 most-used resources for high-risk obstetric care
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredPresentations.map((p, i) => (
+        <div className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2
+              className="text-3xl font-bold"
+              style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}
+            >
+              Latest presentations
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm text-slate-400">
+              The home page pulls its newest previews directly from the top of the shared presentation feed,
+              so the latest deck shows up here first.
+            </p>
+          </div>
+          <Link
+            href="/library"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-cyan-300"
+          >
+            Browse the full archive
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+          {recentPresentations[0] && (
             <a
-              href={p.href}
-              key={i}
+              href={recentPresentations[0].href}
               target="_blank"
               rel="noopener noreferrer"
-              className="card-glow p-6 rounded-lg flex flex-col"
+              className="recent-card recent-card--primary card-glow rounded-3xl p-7"
             >
-              <h3 className="font-bold text-base mb-3 text-cyan-400 leading-snug">{p.title}</h3>
-              <div className="flex flex-wrap gap-2 mt-auto pt-3">
-                {p.tags.slice(0, 2).map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs font-medium px-2.5 py-0.5 rounded-full"
-                    style={{ background: 'rgba(34, 211, 238, 0.1)', color: '#67e8f9' }}
-                  >
+              <div className="mb-5 flex items-center justify-between gap-3">
+                <span className="section-kicker">Newest release</span>
+                <span className="chip chip-subtle">Preview</span>
+              </div>
+              <h3 className="mb-4 text-2xl font-bold leading-tight text-white">
+                {recentPresentations[0].title}
+              </h3>
+              <p className="mb-6 max-w-2xl text-sm leading-7 text-slate-300">
+                {recentPresentations[0].description}
+              </p>
+              <div className="mb-6 flex flex-wrap gap-2">
+                {recentPresentations[0].tags.slice(0, 4).map((tag) => (
+                  <span key={tag} className="chip chip-cyan">
                     {tag}
                   </span>
                 ))}
               </div>
+              <span className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-300">
+                View presentation
+                <ArrowRight className="h-4 w-4" />
+              </span>
             </a>
-          ))}
-        </div>
-        <div className="text-center mt-10">
-          <Link href="/library" className="text-cyan-400 hover:text-cyan-300 font-semibold underline underline-offset-4">
-            View all {presentations.length} presentations →
-          </Link>
-        </div>
-      </section>
-
-      {/* ── MICROSITES ── */}
-      <section id="microsites" className="py-20" style={{ background: 'rgba(15, 23, 42, 0.5)' }}>
-        <div className="container mx-auto px-4">
-          <h2
-            className="text-3xl font-bold text-center mb-2"
-            style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}
-          >
-            Interactive Clinical Tools
-          </h2>
-          <p className="text-slate-400 text-center mb-12 text-sm">
-            Evidence-based calculators and decision-support microsites
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {microsites.map((m, i) => (
+          )}
+          <div className="grid gap-4">
+            {recentPresentations.slice(1).map((presentation, index) => (
               <a
-                href={m.href}
-                key={i}
+                href={presentation.href}
+                key={presentation.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="card-glow p-6 rounded-lg flex flex-col"
+                className="recent-card card-glow rounded-2xl p-5"
               >
-                <h3 className="font-bold text-xl mb-2 text-cyan-400">{m.title}</h3>
-                <p className="text-slate-400 flex-grow text-sm leading-relaxed">{m.description}</p>
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {m.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs font-medium px-2.5 py-0.5 rounded-full"
-                      style={{ background: 'rgba(34, 211, 238, 0.1)', color: '#67e8f9' }}
-                    >
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <span className="section-kicker">Recent addition {index + 2}</span>
+                  <ArrowRight className="h-4 w-4 text-slate-500" />
+                </div>
+                <h3 className="mb-2 text-lg font-semibold leading-snug text-white">
+                  {presentation.title}
+                </h3>
+                <p className="mb-4 text-sm leading-6 text-slate-400">{presentation.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {presentation.tags.slice(0, 3).map((tag) => (
+                    <span key={tag} className="chip chip-subtle">
                       {tag}
                     </span>
                   ))}
@@ -244,26 +290,110 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="text-center py-12 text-sm">
+      <section className="container mx-auto px-4 py-8">
+        <div className="mb-10 max-w-2xl">
+          <h2
+            className="text-3xl font-bold"
+            style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}
+          >
+            Clinical essentials
+          </h2>
+          <p className="mt-2 text-sm text-slate-400">
+            Core resources that clinicians and patients return to most often across diabetes, fetal
+            growth, and hypertensive disease.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {clinicalEssentials.map((presentation) => (
+            <a
+              href={presentation.href}
+              key={presentation.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="card-glow flex flex-col rounded-3xl p-6"
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <span className="section-kicker">Core deck</span>
+                <BookOpen className="h-4 w-4 text-cyan-400/70" />
+              </div>
+              <h3 className="mb-3 text-xl font-bold leading-snug text-cyan-300">
+                {presentation.title}
+              </h3>
+              <p className="flex-grow text-sm leading-7 text-slate-400">
+                {presentation.description}
+              </p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {presentation.tags.slice(0, 3).map((tag) => (
+                  <span key={tag} className="chip chip-subtle">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section id="microsites" className="py-20" style={{ background: 'rgba(15, 23, 42, 0.5)' }}>
+        <div className="container mx-auto px-4">
+          <h2
+            className="mb-2 text-center text-3xl font-bold"
+            style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}
+          >
+            Interactive clinical tools
+          </h2>
+          <p className="mx-auto mb-12 max-w-2xl text-center text-sm text-slate-400">
+            Evidence-based calculators and decision-support microsites
+          </p>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {microsites.map((microsite) => (
+              <a
+                href={microsite.href}
+                key={microsite.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="card-glow flex flex-col rounded-3xl p-6"
+              >
+                <div className="mb-4 flex items-center justify-between">
+                  <span className="section-kicker">Interactive microsite</span>
+                  <Wrench className="h-4 w-4 text-cyan-400/70" />
+                </div>
+                <h3 className="mb-2 text-xl font-bold text-cyan-400">{microsite.title}</h3>
+                <p className="flex-grow text-sm leading-relaxed text-slate-400">
+                  {microsite.description}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {microsite.tags.map((tag) => (
+                    <span key={tag} className="chip chip-subtle">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <footer className="py-12 text-center text-sm">
         <p className="text-slate-600">
           A{' '}
           <a
             href="https://DoctorsWhoCode.blog"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-slate-500 hover:text-cyan-400 transition-colors"
+            className="text-slate-500 transition-colors hover:text-cyan-400"
           >
             DoctorsWhoCode.blog
           </a>
-          {' '}project · Open-source under MIT License
+          {' '}project · built to keep MFM education open, current, and usable
         </p>
         <p className="mt-2">
           <a
             href="https://github.com/chukwumaonyeije/mfm-presentations"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-slate-600 hover:text-cyan-400 transition-colors"
+            className="text-slate-600 transition-colors hover:text-cyan-400"
           >
             View on GitHub
           </a>
