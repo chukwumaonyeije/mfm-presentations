@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#08131f">
+    <title>Suspected Large Baby at 38 Weeks | OpenMFM Patient Education</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #08131f;
+            --surface: rgba(15, 29, 46, 0.94);
+            --surface-soft: rgba(18, 38, 59, 0.88);
+            --surface-strong: rgba(11, 24, 38, 0.97);
+            --border: rgba(142, 198, 255, 0.18);
+            --border-strong: rgba(77, 220, 194, 0.35);
+            --text: #f5f9fc;
+            --muted: #b7c8d8;
+            --soft: #8ea6bb;
+            --accent: #4ddcc2;
+            --accent-2: #74b9ff;
+            --ok: #79e09b;
+            --warn: #ffbf63;
+            --danger: #ff6f7d;
+            --nav-h: 4.5rem;
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        body {
+            min-height: 100dvh;
+            overflow-x: hidden;
+            color: var(--text);
+            font-family: "Aptos", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(77, 220, 194, 0.16), transparent 22%),
+                radial-gradient(circle at 82% 14%, rgba(255, 191, 99, 0.12), transparent 20%),
+                linear-gradient(180deg, #08131f 0%, #06101a 100%);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.024) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.024) 1px, transparent 1px);
+            background-size: 44px 44px;
+            mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.34), transparent 82%);
+        }
+
+        #progressBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            z-index: 300;
+            background: linear-gradient(90deg, var(--accent), var(--ok));
+            box-shadow: 0 0 20px rgba(77, 220, 194, 0.4);
+            transition: width 0.35s ease;
+        }
+
+        #slideMeta {
+            position: fixed;
+            top: calc(env(safe-area-inset-top, 0px) + 0.8rem);
+            right: max(env(safe-area-inset-right, 0px), 1rem);
+            z-index: 200;
+            padding: 0.28rem 0.65rem;
+            border-radius: 999px;
+            border: 1px solid rgba(142, 198, 255, 0.18);
+            background: rgba(8, 19, 31, 0.78);
+            backdrop-filter: blur(10px);
+            color: var(--muted);
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+
+        #app {
+            width: 100%;
+            min-height: 100dvh;
+            position: relative;
+        }
+
+        #topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 150;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: calc(env(safe-area-inset-top, 0px) + 0.85rem) max(env(safe-area-inset-right, 0px), 1rem) 0.9rem max(env(safe-area-inset-left, 0px), 1rem);
+            border-bottom: 1px solid rgba(142, 198, 255, 0.12);
+            background: linear-gradient(180deg, rgba(7, 17, 28, 0.94) 0%, rgba(7, 17, 28, 0.78) 72%, rgba(7, 17, 28, 0) 100%);
+            backdrop-filter: blur(12px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            min-width: 0;
+        }
+
+        .brand-mark {
+            width: 0.7rem;
+            height: 0.7rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            box-shadow: 0 0 18px rgba(77, 220, 194, 0.38);
+            flex-shrink: 0;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.18rem;
+            min-width: 0;
+        }
+
+        .brand-kicker {
+            color: var(--accent);
+            font-size: 0.62rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .brand-title {
+            color: var(--text);
+            font-size: 0.92rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .topbar-note {
+            color: var(--soft);
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .deck {
+            width: 100%;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            min-height: 100dvh;
+            padding: clamp(1rem, 4vw, 3rem) clamp(1rem, 5vw, 4rem);
+            padding-top: calc(env(safe-area-inset-top, 0px) + 5.7rem);
+            padding-bottom: calc(var(--nav-h) + 1.75rem + env(safe-area-inset-bottom, 0px));
+            opacity: 0;
+            transition: opacity 0.28s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        @media (max-width: 767px) {
+            .slide.active {
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+            }
+        }
+
+        @media (min-width: 768px) {
+            body {
+                overflow: hidden;
+                height: 100dvh;
+            }
+
+            .deck {
+                height: 100dvh;
+                overflow: hidden;
+            }
+
+            .slide {
+                position: absolute;
+                inset: 0;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+            }
+
+            .slide.active {
+                position: relative;
+            }
+        }
+
+        .slide-shell {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(1rem, 2vw, 1.6rem);
+        }
+
+        .slide-header {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .slide-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.24rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid rgba(77, 220, 194, 0.32);
+            background: rgba(77, 220, 194, 0.08);
+            color: var(--accent);
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .slide-label.alt {
+            color: var(--warn);
+            border-color: rgba(255, 191, 99, 0.3);
+            background: rgba(255, 191, 99, 0.08);
+        }
+
+        .slide-label.alert {
+            color: var(--danger);
+            border-color: rgba(255, 111, 125, 0.32);
+            background: rgba(255, 111, 125, 0.08);
+        }
+
+        h1 {
+            font-size: clamp(2rem, 6vw, 4rem);
+            line-height: 1.06;
+            letter-spacing: -0.04em;
+            text-wrap: balance;
+            max-width: 15ch;
+        }
+
+        h2 {
+            font-size: clamp(1.25rem, 3.2vw, 2.45rem);
+            line-height: 1.14;
+            letter-spacing: -0.03em;
+            text-wrap: balance;
+        }
+
+        .accent {
+            color: var(--accent);
+        }
+
+        .accent-2 {
+            color: var(--accent-2);
+        }
+
+        .warn {
+            color: var(--warn);
+        }
+
+        .body-text {
+            max-width: 760px;
+            text-align: center;
+            color: var(--muted);
+            font-size: clamp(0.98rem, 1.8vw, 1.22rem);
+            line-height: 1.6;
+        }
+
+        .eyebrow-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+            justify-content: center;
+        }
+
+        .eyebrow-chip {
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            background: rgba(116, 185, 255, 0.08);
+            border: 1px solid rgba(116, 185, 255, 0.18);
+            color: var(--soft);
+            font-size: 0.76rem;
+            letter-spacing: 0.05em;
+        }
+
+        .title-panel,
+        .card,
+        .highlight-box,
+        .timeline-item,
+        .checklist li,
+        .table-wrap,
+        .citation-card {
+            box-shadow: var(--shadow);
+        }
+
+        .title-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: clamp(1.4rem, 3vw, 2.4rem);
+        }
+
+        .card-grid {
+            display: grid;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .cols-2,
+        .cols-3,
+        .cols-4 {
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 640px) {
+            .cols-2,
+            .cols-4 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (min-width: 960px) {
+            .cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .cols-4 {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 1.1rem 1.15rem;
+        }
+
+        .card.kpi {
+            text-align: center;
+            background: linear-gradient(180deg, rgba(15, 29, 46, 0.96), rgba(11, 24, 38, 0.96));
+        }
+
+        .card-title {
+            color: var(--accent);
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.11em;
+            text-transform: uppercase;
+            margin-bottom: 0.55rem;
+        }
+
+        .card-body {
+            color: var(--muted);
+            font-size: clamp(0.86rem, 1.45vw, 1rem);
+            line-height: 1.5;
+        }
+
+        .metric {
+            color: var(--text);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -0.05em;
+        }
+
+        .metric-subtext {
+            margin-top: 0.35rem;
+            color: var(--muted);
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+
+        .metric.kpi-green {
+            color: var(--ok);
+        }
+
+        .metric.kpi-blue {
+            color: var(--accent-2);
+        }
+
+        .metric.kpi-warn,
+        .tradeoff {
+            color: var(--warn);
+        }
+
+        .highlight-box {
+            width: 100%;
+            max-width: 920px;
+            background: var(--surface);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 20px 20px 0;
+            padding: 1rem 1.2rem;
+        }
+
+        .highlight-box.warn-box {
+            border-left-color: var(--warn);
+        }
+
+        .highlight-label {
+            color: var(--accent);
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.45rem;
+        }
+
+        .warn-box .highlight-label {
+            color: var(--warn);
+        }
+
+        .highlight-text {
+            color: var(--muted);
+            font-size: clamp(0.9rem, 1.5vw, 1.02rem);
+            line-height: 1.55;
+        }
+
+        .checklist {
+            list-style: none;
+            width: 100%;
+            max-width: 860px;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            padding: 0.95rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+        }
+
+        .check-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 999px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.08rem;
+            background: rgba(121, 224, 155, 0.14);
+            color: var(--ok);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .check-icon.warn {
+            background: rgba(255, 191, 99, 0.12);
+            color: var(--warn);
+        }
+
+        .check-text strong {
+            color: var(--text);
+            display: block;
+            margin-bottom: 0.2rem;
+            font-size: 0.98rem;
+        }
+
+        .check-text span {
+            color: var(--muted);
+            font-size: clamp(0.87rem, 1.4vw, 0.98rem);
+            line-height: 1.45;
+        }
+
+        .table-wrap {
+            width: 100%;
+            max-width: 980px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--surface);
+        }
+
+        table {
+            width: 100%;
+            min-width: 680px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: rgba(16, 35, 54, 0.95);
+            color: var(--accent);
+            text-align: left;
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid rgba(142, 198, 255, 0.1);
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.45;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .good {
+            color: var(--ok);
+            font-weight: 700;
+        }
+
+        .neutral {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            width: 100%;
+            max-width: 920px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 0.95rem 1rem;
+        }
+
+        .timeline-dot {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.88rem;
+            font-weight: 700;
+            border: 2px solid currentColor;
+            color: var(--accent);
+            background: rgba(77, 220, 194, 0.12);
+        }
+
+        .timeline-dot.warn {
+            color: var(--warn);
+            background: rgba(255, 191, 99, 0.12);
+        }
+
+        .timeline-dot.blue {
+            color: var(--accent-2);
+            background: rgba(116, 185, 255, 0.14);
+        }
+
+        .timeline-content strong {
+            color: var(--text);
+            display: block;
+            margin-bottom: 0.18rem;
+            font-size: 0.95rem;
+        }
+
+        .timeline-content span {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+
+        @media (min-width: 900px) {
+            .timeline {
+                flex-direction: row;
+                gap: 0;
+            }
+
+            .timeline-item {
+                flex: 1;
+                background: transparent;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+                padding: 0 0.7rem;
+                align-items: center;
+                flex-direction: column;
+                text-align: center;
+                position: relative;
+            }
+
+            .timeline-item:not(:last-child)::after {
+                content: "";
+                position: absolute;
+                top: 1.2rem;
+                left: 50%;
+                width: 100%;
+                height: 2px;
+                background: rgba(142, 198, 255, 0.16);
+                z-index: 0;
+            }
+
+            .timeline-dot {
+                z-index: 1;
+            }
+
+            .timeline-content {
+                margin-top: 0.8rem;
+            }
+        }
+
+        .citation-card {
+            width: 100%;
+            max-width: 920px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 1.3rem 1.4rem;
+        }
+
+        .citation-title {
+            color: var(--accent);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.7rem;
+        }
+
+        .citation-text {
+            color: var(--muted);
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .citation-text strong {
+            color: var(--text);
+        }
+
+        .source-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin-top: 1rem;
+        }
+
+        .source-pill {
+            padding: 0.4rem 0.85rem;
+            border-radius: 999px;
+            background: rgba(116, 185, 255, 0.08);
+            border: 1px solid rgba(116, 185, 255, 0.16);
+            color: var(--soft);
+            font-size: 0.78rem;
+        }
+
+        .footnote {
+            color: var(--soft);
+            font-size: 0.78rem;
+            line-height: 1.5;
+            max-width: 760px;
+            text-align: center;
+        }
+
+        .swipe-hint {
+            color: var(--soft);
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .swipe-hint {
+                display: none;
+            }
+        }
+
+        .nav {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 180;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            min-height: var(--nav-h);
+            padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px));
+            border-top: 1px solid rgba(142, 198, 255, 0.14);
+            background: rgba(7, 17, 28, 0.92);
+            backdrop-filter: blur(12px);
+        }
+
+        .nav-btn {
+            min-width: 90px;
+            min-height: 44px;
+            padding: 0.7rem 1.4rem;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: var(--surface-strong);
+            color: var(--text);
+            font: inherit;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .nav-btn:hover,
+        .nav-btn:focus-visible {
+            background: rgba(18, 38, 59, 0.96);
+            border-color: var(--border-strong);
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        .nav-counter {
+            min-width: 70px;
+            text-align: center;
+            color: var(--soft);
+            font-size: 0.82rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .footer-brand {
+            position: fixed;
+            right: max(env(safe-area-inset-right, 0px), 1rem);
+            bottom: calc(var(--nav-h) + 0.35rem + env(safe-area-inset-bottom, 0px));
+            color: var(--soft);
+            font-size: 0.64rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            pointer-events: none;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .footer-brand {
+                display: block;
+            }
+        }
+
+        #ariaAnnounce {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 640px) {
+            .topbar-note {
+                display: none;
+            }
+
+            #topbar {
+                padding-bottom: 0.8rem;
+            }
+
+            .card,
+            .timeline-item,
+            .checklist li,
+            .citation-card,
+            .highlight-box,
+            .title-panel {
+                border-radius: 20px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation: none !important;
+                transition: none !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/induction-38wk-LGA/index.html">
+<meta name="description" content="Patient education on induction of labor at 38 weeks when ultrasound suggests a large-for-gestational-age fetus, including what the estimate means, risks of ongoing growth, 2026 randomized-trial meta-analysis data, safety tradeoffs, and shared decision-making points.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="LGA, Macrosomia, Induction of Labor, Shared Decision-Making, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/induction-38wk-LGA/index.html">
+<meta property="og:title" content="Suspected Large Baby at 38 Weeks - Induction Counseling | OpenMFM">
+<meta property="og:description" content="Patient education on induction of labor at 38 weeks when ultrasound suggests a large-for-gestational-age fetus, including what the estimate means, risks of ongoing growth, 2026 randomized-trial meta-analysis data, safety tradeoffs, and shared decision-making points.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Suspected Large Baby at 38 Weeks - Induction Counseling | OpenMFM">
+<meta name="twitter:description" content="Patient education on induction of labor at 38 weeks when ultrasound suggests a large-for-gestational-age fetus, including what the estimate means, risks of ongoing growth, 2026 randomized-trial meta-analysis data, safety tradeoffs, and shared decision-making points.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Suspected Large Baby at 38 Weeks - Induction Counseling",
+  "description": "Patient education on induction of labor at 38 weeks when ultrasound suggests a large-for-gestational-age fetus, including what the estimate means, risks of ongoing growth, 2026 randomized-trial meta-analysis data, safety tradeoffs, and shared decision-making points.",
+  "url": "https://openmfm.org/decks/induction-38wk-LGA/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-04-16",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Suspected Large Baby at 38 Weeks - Induction Counseling"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "LGA, Macrosomia, Induction of Labor, Shared Decision-Making, Patient Education"
+}
+</script>
+</head>
+<body>
+    <div id="progressBar" aria-hidden="true"></div>
+    <div id="slideMeta" aria-hidden="true">1 / 12</div>
+
+    <div id="app">
+        <header id="topbar">
+            <div class="brand">
+                <span class="brand-mark" aria-hidden="true"></span>
+                <div class="brand-text">
+                    <span class="brand-kicker">OpenMFM Patient Education</span>
+                    <span class="brand-title">Suspected Large Baby at 38 Weeks</span>
+                </div>
+            </div>
+            <div class="topbar-note">Arrow keys or swipe to advance</div>
+        </header>
+
+        <main class="deck" aria-label="Induction at 38 weeks for suspected large baby slide deck">
+            <div id="ariaAnnounce" aria-live="polite"></div>
+
+            <section class="slide active" id="s1" aria-hidden="false">
+                <div class="slide-shell">
+                    <div class="title-panel">
+                        <div class="slide-header">
+                            <div class="slide-label">Shared Decision-Making</div>
+                            <h1>Suspected <span class="accent">Large Baby</span> at 38 Weeks</h1>
+                            <p class="body-text">
+                                A patient-facing counseling deck on whether induction of labor is a reasonable option
+                                when ultrasound suggests your baby may be larger than average.
+                            </p>
+                            <div class="eyebrow-row">
+                                <span class="eyebrow-chip">Evidence-based counseling</span>
+                                <span class="eyebrow-chip">Low-anxiety patient language</span>
+                                <span class="eyebrow-chip">New 2026 meta-analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="swipe-hint">Swipe left or right to move between slides</p>
+                </div>
+            </section>
+
+            <section class="slide" id="s2" aria-hidden="true">
+                <div class="slide-shell">
+                    <div class="slide-header">
+                        <div class="slide-label">What This Means</div>
+                        <h2>“Large for gestational age” means your baby’s <span class="accent">estimated weight</span> is above the 90th percentile.</h2>
+                    </div>
+                    <div class="card-grid cols-3">
+                        <article class="card">
+                            <div class="card-title">The finding</div>
+                            <p class="card-body">This is based on ultrasound, not a scale. It tells us your baby may be bigger than expected for this week of pregnancy.</p>
+                        </article>
+                        <article class="card">
+                            <div class="card-title">What matters</div>
+                            <p class="card-body">A larger baby can make vaginal delivery harder, especially if the shoulders are broad or labor goes long.</p>
+                        </article>
+                        <article class="card">
+                            <div class="card-title">Important nuance</div>
+                            <p class="card-body">Ultrasound estimates are useful, but not exact. The decision is individualized, not automatic.</p>
+                        </article>
+                    </div>
+                    <div class="highlight-box">
+                        <div class="highlight-label">OpenMFM framing</div>
+                        <p class="highlight-text">This conversation is about planning well, not creating alarm. Most pregnancies with suspected LGA still end with a healthy parent and baby.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide" id="s3" aria-hidden="true">
+                <div class="slide-shell">
+                    <div class="slide-header">
+                        <div class="slide-label alt">Why We Talk About It</div>
+                        <h2>As pregnancy continues, a bigger baby can raise the chance of <span class="warn">cesarean delivery</span> and <span class="warn">shoulder dystocia</span>.</h2>
+                    </div>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-icon warn">!</span>
+                            <div class="check-text">
+                                <strong>Cesarean delivery</strong>
+                                <span>A larger baby may make labor arrest more likely, especially if the pelvis and the baby are a mismatch.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon warn">!</span>
+                            <div class="check-text">
+                                <strong>Shoulder dystocia</strong>
+                                <span>This means the shoulders are harder to deliver after the head. It is uncommon, but it matters because it can create an emergency.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon warn">!</span>
+                            <div class="check-text">
+                                <strong>Birth trauma</strong>
+                                <span>The risk of clavicle fracture or brachial plexus stretch injury rises as birth weight rises, even though the absolute risk remains low.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="slide" id="s4" aria-hidden="true">
+                <div class="slide-shell">
+                    <div class="slide-header">
+                        <div class="slide-label">The Counseling Question</div>
+                        <h2>One evidence-supported option is <span class="accent">induction between 38 weeks 0 days and 38 weeks 4 days</span>.</h2>
+                        <p class="body-text">
+                            The goal is to avoid several extra days of fetal growth while keeping delivery early enough to be effective and late enough to remain term.
+                        </p>
+                    </div>
+                    <div class="highlight-box warn-box">
+                        <div class="highlight-label">How to say it clearly</div>
+                        <p class="highlight-text">This is an option to discuss, not a rule that everyone must follow. Your prior birth history, cervix, diabetes status, and any contraindication to labor still matter.</p>
+                    </div>
+                    <div class="card-grid cols-2">
+                        <article class="card">
+                            <div class="card-title">Why 38 weeks</div>
+                            <p class="card-body">It targets the window where the baby is still term but has less time to continue gaining weight.</p>
+                        </article>
+                        <article class="card">
+                            <div class="card-title">Who decides</div>
+                            <p class="card-body">You and your MFM or obstetric team decide together after reviewing the ultrasound estimate, labor history, and your priorities.</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide" id="s5" aria-hidden="true">
+                <div class="slide-shell">
+                    <div class="slide-header">
+                        <div class="slide-label">What The Study Found</div>
+                        <h2>A new meta-analysis pooled <span class="accent">5 randomized trials</span> and <span class="accent-2">4,083 patients</span>.</h2>
+                    </div>
+                    <div class="card-grid cols-4">
+                        <article class="card kpi">
+                            <div class="card-title">Cesarean rate</div>
+                            <div class="metric kpi-green">27.9%</div>
+                            <p class="metric-subtext">With induction</p>
+                        </article>
+                        <article class="card kpi">
+                            <div class="card-title">Cesarean rate</div>
+                            <div class="metric kpi-blue">31.9%</div>
+                            <p class="metric-subtext">With expectant management</p>
+                        </article>
+                        <article class="card kpi">
+                            <div class="card-title">Relative effect</div>
+                            <div class="metric kpi-green">13%</div>
+                            <p class="metric-subtext">Lower cesarean risk</p>
+                        </article>
+                        <article class="card kpi">
+                            <div class="card-title">Clinical takeaway</div>
+                            <div class="metric kpi-warn">25</div>
+                            <p class="metric-subtext">Inductions needed to prevent 1 cesarean</p>
+                        </article>
+                    </div>
+                    <p class="footnote">That is an absolute difference of about 4 percentage points, which is a real but not dramatic effect. The counseling should stay balanced.</p>
+                </div>
+            </section>
+
+            <section class="slide" id="s6" aria-hidden="true">
+                <div class="slide-shell">
+                    <div class="slide-header">
+                        <div class="slide-label">Baby Size And Delivery Difficulty</div>
+                        <h2>Induction appears to lower the chance of a <span class="accent">bigger birth weight</span> and may reduce delivery trauma.</h2>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Outcome</th>
+                                    <th>Induction</th>
+                                    <th>Expectant management</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="neutral">Birth weight ≥ 4000 g</td>
+                                    <td class="good">20.8%</td>
+                                    <td>38.9%</td>
+                                </tr>
+                                <tr>
+                                    <td class="neutral">Shoulder dystocia</td>
+                                    <td class="good">2.3%</td>
+                                    <td>3.4%</td>
+                                </tr>
+                                <tr>
+                                    <td class="neutral">Neonatal fracture</td>
+                                    <td class="good">Trend lower</td>
+                                    <td>Trend higher</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="highlight-box">
+                        <div class="highlight-label">How to phrase the evidence</div>
+                        <p class="highlight-text">The strongest signal is fewer cesareans and fewer large babies. Shoulder dystocia and fractures also moved in the right direction, but the event counts were smaller.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide" id="s7" aria-hidden="true">
+                <div class="slide-shell">
+                    <div class="slide-header">
+                        <div class="slide-label">Maternal Safety</div>
+                        <h2>Induction did <span class="accent">not increase major maternal complications</span> in the pooled trials.</h2>
+                    </div>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div class="check-text">
+                                <strong>No higher postpartum hemorrhage signal</strong>
+                                <span>The study did not show more major bleeding with the induction strategy.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div class="check-text">
+                                <strong>No higher severe laceration signal</strong>
+                                <span>Third- or fourth-degree tears were not increased in the induction group.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div class="check-text">
+                                <strong>No higher operative vaginal delivery signal</strong>
+                                <span>Forceps or vacuum use was not increased in a meaningful way.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div class="check-text">
+                                <strong>No higher fever or infection signal</strong>
+                                <span>The trial-level data did not show a meaningful maternal infection penalty.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="slide" id="s8" aria-hidden="true">
+                <div class="slide-shell">
+                    <div class="slide-header">
+                        <div class="slide-label">Neonatal Safety</div>
+                        <h2>Induction also did <span class="accent">not increase the major newborn risks</span> parents usually worry about.</h2>
+                    </div>
+                    <div class="card-grid cols-2">
+                        <article class="card">
+                            <div class="card-title">NICU and breathing</div>
+                            <p class="card-body">NICU admission and respiratory morbidity were not meaningfully higher with induction in the pooled trials.</p>
+                        </article>
+                        <article class="card">
+                            <div class="card-title">Blood sugar and Apgar scores</div>
+                            <p class="card-body">There was no meaningful increase in neonatal hypoglycemia or low Apgar scores.</p>
+                        </article>
+                    </div>
+                    <div class="highlight-box">
+                        <div class="highlight-label">Counseling summary</div>
+                        <p class="highlight-text">The evidence supports that early-term induction for suspected LGA can be discussed without expecting a broad neonatal safety penalty.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide" id="s9" aria-hidden="true">
+                <div class="slide-shell">
+                    <div class="slide-header">
+                        <div class="slide-label alert">Important Tradeoff</div>
+                        <h2>Phototherapy for jaundice was <span class="warn">slightly more common</span> after induction.</h2>
+                    </div>
+                    <div class="card-grid cols-3">
+                        <article class="card kpi">
+                            <div class="card-title">Phototherapy</div>
+                            <div class="metric tradeoff">4.8%</div>
+                            <p class="metric-subtext">With induction</p>
+                        </article>
+                        <article class="card kpi">
+                            <div class="card-title">Phototherapy</div>
+                            <div class="metric kpi-blue">3.0%</div>
+                            <p class="metric-subtext">With expectant management</p>
+                        </article>
+                        <article class="card">
+                            <div class="card-title">What that means</div>
+                            <p class="card-body">Jaundice treatment may be needed a little more often, but it is common, familiar, and usually straightforward to manage.</p>
+                        </article>
+                    </div>
+                    <div class="highlight-box warn-box">
+                        <div class="highlight-label">Balanced language</div>
+                        <p class="highlight-text">This is the main tradeoff to mention. It should be stated clearly, but it does not cancel out the larger delivery benefits.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide" id="s10" aria-hidden="true">
+                <div class="slide-shell">
+                    <div class="slide-header">
+                        <div class="slide-label">Who This Fits Best</div>
+                        <h2>This conversation is most useful when the pregnancy is otherwise term and <span class="accent">labor is still a reasonable option</span>.</h2>
+                    </div>
+                    <div class="card-grid cols-2">
+                        <article class="card">
+                            <div class="card-title">Often a reasonable candidate</div>
+                            <p class="card-body">Singleton pregnancy, reassuring fetal testing, no contraindication to labor, and a patient who wants to lower the chance of ongoing fetal growth.</p>
+                        </article>
+                        <article class="card">
+                            <div class="card-title">Reasons the plan may change</div>
+                            <p class="card-body">Prior cesarean history, diabetes, estimated fetal weight near the very high range, an unfavorable cervix, or any maternal or fetal issue that changes delivery planning.</p>
+                        </article>
+                    </div>
+                    <div class="highlight-box">
+                        <div class="highlight-label">Guideline-consistent nuance</div>
+                        <p class="highlight-text">Because ultrasound weight estimates are imperfect and not every patient benefits equally, the message should stay shared-decision oriented rather than routine-for-everyone.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide" id="s11" aria-hidden="true">
+                <div class="slide-shell">
+                    <div class="slide-header">
+                        <div class="slide-label">Next Steps</div>
+                        <h2>Use the counseling visit to move from <span class="accent">worry</span> to <span class="accent-2">a concrete delivery plan</span>.</h2>
+                    </div>
+                    <div class="timeline">
+                        <article class="timeline-item">
+                            <div class="timeline-dot">1</div>
+                            <div class="timeline-content">
+                                <strong>Review the estimate</strong>
+                                <span>Ask how certain the ultrasound estimate is and whether the growth pattern has been consistent.</span>
+                            </div>
+                        </article>
+                        <article class="timeline-item">
+                            <div class="timeline-dot blue">2</div>
+                            <div class="timeline-content">
+                                <strong>Discuss labor history</strong>
+                                <span>Prior vaginal birth, prior cesarean, and current cervical exam can all change the decision.</span>
+                            </div>
+                        </article>
+                        <article class="timeline-item">
+                            <div class="timeline-dot warn">3</div>
+                            <div class="timeline-content">
+                                <strong>Compare options</strong>
+                                <span>Induction at 38 weeks versus expectant management should be discussed in absolute numbers, not just impressions.</span>
+                            </div>
+                        </article>
+                        <article class="timeline-item">
+                            <div class="timeline-dot">4</div>
+                            <div class="timeline-content">
+                                <strong>Choose the plan</strong>
+                                <span>Make a plan that matches both the evidence and your goals for delivery.</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide" id="s12" aria-hidden="true">
+                <div class="slide-shell">
+                    <div class="slide-header">
+                        <div class="slide-label">Bottom Line</div>
+                        <h2>For a suspected large baby at term, <span class="accent">38-week induction is a reasonable, evidence-supported option</span>, not a mandatory rule.</h2>
+                    </div>
+                    <ul class="checklist">
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div class="check-text">
+                                <strong>The strongest benefit is fewer cesareans</strong>
+                                <span>In the pooled trials, cesarean delivery fell from 31.9% to 27.9%.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div class="check-text">
+                                <strong>The strategy also reduced ongoing fetal growth</strong>
+                                <span>That likely explains the favorable direction for shoulder dystocia and birth trauma.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon warn">!</span>
+                            <div class="check-text">
+                                <strong>The main tradeoff is a small increase in phototherapy</strong>
+                                <span>That risk should be named clearly while keeping the overall counseling balanced.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div class="check-text">
+                                <strong>The decision remains individualized</strong>
+                                <span>Ultrasound error, diabetes, prior delivery history, and patient preference still matter.</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="citation-card">
+                        <div class="citation-title">Evidence source</div>
+                        <p class="citation-text">
+                            <strong>Paladino I, Berghella V.</strong> Induction at 38 weeks for large-for-gestational-age or macrosomic fetuses decreases the incidence of cesarean delivery: meta-analysis of randomized controlled trials.
+                            <strong> American Journal of Obstetrics &amp; Gynecology MFM.</strong> 2026;8:101897.
+                        </p>
+                        <div class="source-pills">
+                            <span class="source-pill">5 randomized trials</span>
+                            <span class="source-pill">4,083 participants</span>
+                            <span class="source-pill">Published April 2026</span>
+                            <span class="source-pill">Term induction window: 38+0 to 38+4</span>
+                        </div>
+                    </div>
+                    <p class="footnote">This deck is for education and counseling support. Delivery planning should still be individualized with your obstetric or MFM team.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <nav class="nav" aria-label="Presentation navigation">
+        <button class="nav-btn" id="prevBtn" type="button" aria-label="Previous slide">← Prev</button>
+        <span class="nav-counter" id="navCounter" aria-live="polite">1 / 12</span>
+        <button class="nav-btn" id="nextBtn" type="button" aria-label="Next slide">Next →</button>
+    </nav>
+
+    <div class="footer-brand">OpenMFM · Evidence-based MFM counseling</div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const totalSlides = slides.length;
+        const navCounter = document.getElementById('navCounter');
+        const slideMeta = document.getElementById('slideMeta');
+        const progressBar = document.getElementById('progressBar');
+        const ariaAnnounce = document.getElementById('ariaAnnounce');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlide = 0;
+
+        function updateSlideState(index) {
+            currentSlide = index;
+
+            slides.forEach((slide, i) => {
+                const isActive = i === index;
+                slide.classList.toggle('active', isActive);
+                slide.setAttribute('aria-hidden', String(!isActive));
+            });
+
+            const label = `${index + 1} / ${totalSlides}`;
+            navCounter.textContent = label;
+            slideMeta.textContent = label;
+            progressBar.style.width = `${((index + 1) / totalSlides) * 100}%`;
+
+            const currentHeading = slides[index].querySelector('h1, h2');
+            if (currentHeading) {
+                ariaAnnounce.textContent = `Slide ${index + 1} of ${totalSlides}. ${currentHeading.textContent.trim()}`;
+            }
+
+            if (window.innerWidth < 768) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function nextSlide() {
+            updateSlideState((currentSlide + 1) % totalSlides);
+        }
+
+        function prevSlide() {
+            updateSlideState((currentSlide - 1 + totalSlides) % totalSlides);
+        }
+
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                event.preventDefault();
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                prevSlide();
+            }
+        });
+
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        document.addEventListener('touchstart', (event) => {
+            touchStartX = event.changedTouches[0].screenX;
+            touchStartY = event.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (event) => {
+            const dx = event.changedTouches[0].screenX - touchStartX;
+            const dy = event.changedTouches[0].screenY - touchStartY;
+
+            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 45) {
+                if (dx < 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }, { passive: true });
+
+        updateSlideState(0);
+    </script>
+<!-- openmfm-footer-injected -->
+<div id="openmfmLibraryFooter" style="position:fixed;bottom:calc(var(--nav-h) + 12px + env(safe-area-inset-bottom, 0px));left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
