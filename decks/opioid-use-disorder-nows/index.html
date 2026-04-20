@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opioid Use Disorder &amp; Neonatal Opioid Withdrawal Syndrome | MFM Clinical Education</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0d1117;
+            --bg-card: #161b22;
+            --bg-card2: #1c2230;
+            --accent-blue: #58a6ff;
+            --accent-teal: #39d0c8;
+            --accent-amber: #f0a500;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --accent-purple: #bc8cff;
+            --text-primary: #e6edf3;
+            --text-muted: #8b949e;
+            --border: #30363d;
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text-primary);
+            font-family: var(--font);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Deck & Slides ── */
+        .deck {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3em 4em;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ── Navigation Bar ── */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6em 2em;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            background: var(--bg-card2);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.4em 1.4em;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover { background: #2d333b; }
+
+        .slide-counter {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-bar {
+            height: 3px;
+            background: var(--border);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
+            transition: width 0.4s ease;
+        }
+
+        /* ── Shared Typography ── */
+        h1 { font-size: 3.2em; font-weight: 300; letter-spacing: -0.02em; line-height: 1.1; }
+        h2 { font-size: 2.2em; font-weight: 300; letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 0.4em; }
+        h3 { font-size: 1.3em; font-weight: 500; }
+        p  { font-size: 1.15em; line-height: 1.65; color: var(--text-primary); }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: var(--text-muted);
+            margin-top: 0.4em;
+            font-weight: 300;
+        }
+
+        .label {
+            font-size: 0.75em;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.6em;
+        }
+
+        /* ── Color Accents ── */
+        .accent-blue   { color: var(--accent-blue); }
+        .accent-teal   { color: var(--accent-teal); }
+        .accent-amber  { color: var(--accent-amber); }
+        .accent-red    { color: var(--accent-red); }
+        .accent-green  { color: var(--accent-green); }
+        .accent-purple { color: var(--accent-purple); }
+
+        /* ── Cards ── */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.2em 1.6em;
+        }
+
+        .card-grid {
+            display: grid;
+            gap: 1em;
+            width: 100%;
+            max-width: 960px;
+        }
+
+        .card-grid-2 { grid-template-columns: 1fr 1fr; }
+        .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+        /* ── Warning Box ── */
+        .warning-box {
+            background: rgba(248, 81, 73, 0.12);
+            border: 1px solid var(--accent-red);
+            border-left: 4px solid var(--accent-red);
+            border-radius: 8px;
+            padding: 1em 1.4em;
+            max-width: 860px;
+            width: 100%;
+        }
+
+        .info-box {
+            background: rgba(88, 166, 255, 0.08);
+            border: 1px solid var(--accent-blue);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 1em 1.4em;
+            max-width: 860px;
+            width: 100%;
+        }
+
+        /* ── Table ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+
+        thead th {
+            background: var(--bg-card2);
+            color: var(--accent-teal);
+            padding: 0.7em 1em;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.8em;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody td {
+            padding: 0.7em 1em;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            line-height: 1.5;
+        }
+
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+        /* ── Icon Circles ── */
+        .icon-circle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            flex-shrink: 0;
+        }
+
+        .icon-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 1em;
+            margin-bottom: 0.8em;
+        }
+
+        .icon-row-text h3 { margin-bottom: 0.2em; }
+        .icon-row-text p  { font-size: 0.95em; color: var(--text-muted); }
+
+        /* ── Tier List ── */
+        .tier-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6em;
+            width: 100%;
+            max-width: 860px;
+        }
+
+        .tier-item {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.8em 1.2em;
+        }
+
+        .tier-badge {
+            font-size: 0.7em;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.3em 0.7em;
+            border-radius: 4px;
+            flex-shrink: 0;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .tier-badge-green  { background: rgba(63,185,80,0.2);  color: var(--accent-green); }
+        .tier-badge-blue   { background: rgba(88,166,255,0.2); color: var(--accent-blue); }
+        .tier-badge-amber  { background: rgba(240,165,0,0.2);  color: var(--accent-amber); }
+        .tier-badge-red    { background: rgba(248,81,73,0.2);  color: var(--accent-red); }
+        .tier-badge-purple { background: rgba(188,140,255,0.2);color: var(--accent-purple); }
+
+        /* ── Transfer Diagram ── */
+        .transfer-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            width: 100%;
+            max-width: 860px;
+            margin-top: 1em;
+        }
+
+        .transfer-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.4em 2em;
+            text-align: center;
+            flex: 1;
+        }
+
+        .transfer-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 1em;
+            color: var(--accent-amber);
+            font-size: 0.75em;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            gap: 0.3em;
+        }
+
+        .arrow-line {
+            width: 60px;
+            height: 2px;
+            background: var(--accent-amber);
+            position: relative;
+        }
+
+        .arrow-line::after {
+            content: '';
+            position: absolute;
+            right: -1px;
+            top: -5px;
+            border: 6px solid transparent;
+            border-left-color: var(--accent-amber);
+        }
+
+        /* ── NOWS Symptoms ── */
+        .symptom-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8em;
+            width: 100%;
+            max-width: 860px;
+        }
+
+        .symptom-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1em 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 0.8em;
+        }
+
+        .symptom-icon {
+            font-size: 1.6em;
+            flex-shrink: 0;
+        }
+
+        /* ── Slide-specific backgrounds ── */
+        .slide-title-bg {
+            background: radial-gradient(ellipse at 30% 40%, rgba(88,166,255,0.06) 0%, transparent 70%),
+                        radial-gradient(ellipse at 70% 60%, rgba(57,208,200,0.05) 0%, transparent 70%),
+                        var(--bg);
+        }
+
+        .slide-warning-bg {
+            background: radial-gradient(ellipse at 50% 50%, rgba(248,81,73,0.04) 0%, transparent 70%), var(--bg);
+        }
+
+        /* ── Divider ── */
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
+            border-radius: 2px;
+            margin: 0.5em 0 1em;
+        }
+
+        /* ── Footer Tag ── */
+        .slide-tag {
+            position: absolute;
+            bottom: 1.2em;
+            right: 2em;
+            font-size: 0.7em;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .source-tag {
+            position: absolute;
+            bottom: 1.2em;
+            left: 2em;
+            font-size: 0.7em;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        /* ── Checklist ── */
+        .checklist {
+            list-style: none;
+            width: 100%;
+            max-width: 860px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7em;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8em;
+            font-size: 1.05em;
+            line-height: 1.5;
+        }
+
+        .check-icon {
+            flex-shrink: 0;
+            margin-top: 0.1em;
+            font-size: 1.1em;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .slide { padding: 2em 1.5em; }
+            h1 { font-size: 2.2em; }
+            h2 { font-size: 1.6em; }
+            .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+            .symptom-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/opioid-use-disorder-nows/index.html">
+<meta name="description" content="Evidence-based clinical guide to opioid use disorder (OUD) and neonatal opioid withdrawal syndrome (NOWS) in pregnancy: placental transfer of oxycodone, NOWS symptoms and duration, obstetric complications, contraindication of abrupt cessation, analgesic hierarchy, prescribing principles, and postpartum surveillance. Based on ACOG, SMFM, and SAMHSA guidelines.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Opioid Use Disorder, NOWS, Substance Use in Pregnancy, Neonatal Opioid Withdrawal, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/opioid-use-disorder-nows/index.html">
+<meta property="og:title" content="Opioid Use Disorder &amp; NOWS in Pregnancy - Provider Education | OpenMFM">
+<meta property="og:description" content="Evidence-based clinical guide to opioid use disorder (OUD) and neonatal opioid withdrawal syndrome (NOWS) in pregnancy: placental transfer of oxycodone, NOWS symptoms and duration, obstetric complications, contraindication of abrupt cessation, analgesic hierarchy, prescribing principles, and postpartum surveillance. Based on ACOG, SMFM, and SAMHSA guidelines.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Opioid Use Disorder &amp; NOWS in Pregnancy - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Evidence-based clinical guide to opioid use disorder (OUD) and neonatal opioid withdrawal syndrome (NOWS) in pregnancy: placental transfer of oxycodone, NOWS symptoms and duration, obstetric complications, contraindication of abrupt cessation, analgesic hierarchy, prescribing principles, and postpartum surveillance. Based on ACOG, SMFM, and SAMHSA guidelines.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Opioid Use Disorder & NOWS in Pregnancy - Provider Education",
+  "description": "Evidence-based clinical guide to opioid use disorder (OUD) and neonatal opioid withdrawal syndrome (NOWS) in pregnancy: placental transfer of oxycodone, NOWS symptoms and duration, obstetric complications, contraindication of abrupt cessation, analgesic hierarchy, prescribing principles, and postpartum surveillance. Based on ACOG, SMFM, and SAMHSA guidelines.",
+  "url": "https://openmfm.org/decks/opioid-use-disorder-nows/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-04-20",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Opioid Use Disorder & NOWS in Pregnancy - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Opioid Use Disorder, NOWS, Substance Use in Pregnancy, Neonatal Opioid Withdrawal, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 11.11%"></div>
+</div>
+
+<div class="deck">
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 1 — TITLE
+    ══════════════════════════════════════════════ -->
+    <div class="slide active slide-title-bg">
+        <div class="label accent-blue">MFM Clinical Education</div>
+        <h1>Opioid Use Disorder<br><span class="accent-teal">&amp; NOWS</span></h1>
+        <div class="divider"></div>
+        <p class="subtitle">Neonatal Opioid Withdrawal Syndrome — Clinical Guidelines &amp; Management</p>
+        <br>
+        <p style="font-size:0.9em; color:var(--text-muted); max-width:600px; text-align:center;">
+            ACOG · SMFM · SAMHSA Evidence-Based Framework
+        </p>
+        <div class="slide-tag">Atlanta Perinatal Associates · DoctorsWhoCode.blog</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 2 — CLINICAL CONTEXT
+    ══════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="label">Clinical Context</div>
+        <h2>When Is Percocet Considered?</h2>
+        <div class="divider"></div>
+        <div class="tier-list">
+            <div class="tier-item">
+                <span class="tier-badge tier-badge-green">Indication</span>
+                <p style="font-size:1em; margin:0;">Severe, acute pain <strong>refractory</strong> to safer alternatives</p>
+            </div>
+            <div class="tier-item">
+                <span class="tier-badge tier-badge-amber">Caution</span>
+                <p style="font-size:1em; margin:0;">Benefits must <strong>outweigh significant fetal and neonatal risks</strong></p>
+            </div>
+            <div class="tier-item">
+                <span class="tier-badge tier-badge-purple">OUD Context</span>
+                <p style="font-size:1em; margin:0;">Part of managed opioid agonist therapy (OAT) for Opioid Use Disorder</p>
+            </div>
+            <div class="tier-item">
+                <span class="tier-badge tier-badge-red">Chronic Use</span>
+                <p style="font-size:1em; margin:0;">Requires <strong>multidisciplinary plan</strong>: obstetrics, neonatology, anesthesia</p>
+            </div>
+        </div>
+        <div class="source-tag">ACOG · SMFM</div>
+        <div class="slide-tag">Slide 2 of 9</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 3 — PLACENTAL TRANSFER
+    ══════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="label">Fetal Physiology</div>
+        <h2>Placental Transfer of Oxycodone</h2>
+        <div class="divider"></div>
+        <div class="transfer-diagram">
+            <div class="transfer-box">
+                <div style="font-size:2.2em; margin-bottom:0.3em;">&#x1F931;</div>
+                <h3 class="accent-blue">Maternal</h3>
+                <p style="font-size:0.9em; color:var(--text-muted); margin-top:0.4em;">Oxycodone administered</p>
+            </div>
+            <div class="transfer-arrow">
+                <div class="arrow-line"></div>
+                <span>Readily<br>crosses</span>
+            </div>
+            <div class="transfer-box" style="border-color: var(--accent-amber);">
+                <div style="font-size:2.2em; margin-bottom:0.3em;">&#x1F476;</div>
+                <h3 class="accent-amber">Fetal</h3>
+                <p style="font-size:0.9em; color:var(--text-muted); margin-top:0.4em;">Levels equal or exceed maternal</p>
+            </div>
+        </div>
+        <br>
+        <div class="info-box" style="max-width:860px;">
+            <p style="font-size:0.95em; margin:0;">
+                <strong class="accent-blue">Immature fetal metabolism</strong> prolongs opioid half-life, increasing the risk of
+                <strong>cumulative toxicity</strong> in the intrauterine environment.
+            </p>
+        </div>
+        <div class="source-tag">Placental pharmacokinetics</div>
+        <div class="slide-tag">Slide 3 of 9</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 4 — NOWS
+    ══════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="label">Neonatal Risk</div>
+        <h2>Neonatal Opioid Withdrawal Syndrome <span class="accent-amber">(NOWS)</span></h2>
+        <div class="divider"></div>
+        <div class="symptom-grid">
+            <div class="symptom-card">
+                <span class="symptom-icon">&#x1F624;</span>
+                <div>
+                    <h3>Hyperirritability</h3>
+                    <p style="font-size:0.85em; color:var(--text-muted);">High-pitched cry, tremors, inconsolability</p>
+                </div>
+            </div>
+            <div class="symptom-card">
+                <span class="symptom-icon">&#x1FAB4;</span>
+                <div>
+                    <h3>Respiratory Distress</h3>
+                    <p style="font-size:0.85em; color:var(--text-muted);">Tachypnea, nasal flaring, apnea</p>
+                </div>
+            </div>
+            <div class="symptom-card">
+                <span class="symptom-icon">&#x1F922;</span>
+                <div>
+                    <h3>GI Dysfunction</h3>
+                    <p style="font-size:0.85em; color:var(--text-muted);">Poor feeding, vomiting, diarrhea</p>
+                </div>
+            </div>
+            <div class="symptom-card">
+                <span class="symptom-icon">&#x26A1;</span>
+                <div>
+                    <h3>Autonomic Instability</h3>
+                    <p style="font-size:0.85em; color:var(--text-muted);">Sweating, fever, mottled skin</p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <p style="font-size:0.9em; color:var(--text-muted); max-width:860px; text-align:center;">
+            Risk and severity <strong style="color:var(--text-primary);">directly correlated</strong> with cumulative dose and duration of exposure near delivery.
+            Symptoms may persist up to <strong style="color:var(--text-primary);">10 weeks</strong> post-delivery.
+        </p>
+        <div class="source-tag">ACOG · SMFM</div>
+        <div class="slide-tag">Slide 4 of 9</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 5 — OBSTETRIC COMPLICATIONS
+    ══════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="label">Obstetric Risks</div>
+        <h2>Complications of Prenatal Opioid Exposure</h2>
+        <div class="divider"></div>
+        <div class="card-grid card-grid-3" style="max-width:960px;">
+            <div class="card" style="border-top: 3px solid var(--accent-red);">
+                <div style="font-size:1.8em; margin-bottom:0.4em;">&#x1FAC0;</div>
+                <h3 class="accent-red">Preterm Birth</h3>
+                <p style="font-size:0.9em; color:var(--text-muted); margin-top:0.4em;">Increased hazard for spontaneous preterm delivery</p>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--accent-amber);">
+                <div style="font-size:1.8em; margin-bottom:0.4em;">&#x1F4C9;</div>
+                <h3 class="accent-amber">Fetal Growth</h3>
+                <p style="font-size:0.9em; color:var(--text-muted); margin-top:0.4em;">SGA status · Decreased FHR variability · IUGR</p>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--accent-purple);">
+                <div style="font-size:1.8em; margin-bottom:0.4em;">&#x1F9EC;</div>
+                <h3 class="accent-purple">Anomalies</h3>
+                <p style="font-size:0.9em; color:var(--text-muted); margin-top:0.4em;">Modest association with NTDs, cardiac defects, gastroschisis (1st trimester)</p>
+            </div>
+        </div>
+        <br>
+        <div class="info-box">
+            <p style="font-size:0.9em; margin:0;">
+                <strong class="accent-blue">Note:</strong> Absolute risk of congenital anomalies remains low relative to background rate (3&ndash;5%).
+                Data are conflicting; no definitive causal relationship established.
+            </p>
+        </div>
+        <div class="source-tag">ACOG · Epidemiological literature</div>
+        <div class="slide-tag">Slide 5 of 9</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 6 — MATERNAL SAFETY / OUD
+    ══════════════════════════════════════════════ -->
+    <div class="slide slide-warning-bg">
+        <div class="label">Maternal Safety</div>
+        <h2>Opioid Use Disorder &amp; Abrupt Cessation</h2>
+        <div class="divider"></div>
+        <div class="card-grid card-grid-2" style="max-width:860px;">
+            <div class="card">
+                <h3 class="accent-amber">Risk of OUD</h3>
+                <p style="font-size:0.9em; color:var(--text-muted); margin-top:0.5em;">
+                    Chronic opioid therapy carries high risk of developing or exacerbating Opioid Use Disorder.
+                </p>
+            </div>
+            <div class="card">
+                <h3 class="accent-blue">Comorbidities</h3>
+                <p style="font-size:0.9em; color:var(--text-muted); margin-top:0.5em;">
+                    Psychiatric disorders (56%), tobacco use (77&ndash;95%), HCV infection (30%) frequently co-occur.
+                </p>
+            </div>
+        </div>
+        <br>
+        <div class="warning-box">
+            <h3 class="accent-red" style="margin-bottom:0.4em;">&#x26A0; Abrupt Cessation is Contraindicated</h3>
+            <p style="font-size:0.95em;">
+                Precipitated withdrawal in opioid-dependent pregnant patients is associated with
+                <strong>fetal distress, preterm labor, and stillbirth.</strong>
+                Discontinuation requires a slow, <strong>medically supervised taper</strong> or transition to MOUD.
+            </p>
+        </div>
+        <div class="source-tag">ACOG · SAMHSA</div>
+        <div class="slide-tag">Slide 6 of 9</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 7 — PAIN MANAGEMENT HIERARCHY
+    ══════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="label">Management</div>
+        <h2>Analgesic Hierarchy in Pregnancy</h2>
+        <div class="divider"></div>
+        <div style="width:100%; max-width:960px; overflow-x:auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Line</th>
+                        <th>Agent</th>
+                        <th>Recommendation</th>
+                        <th>Key Caveat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="tier-badge tier-badge-green">1st</span></td>
+                        <td><strong>Acetaminophen</strong></td>
+                        <td style="color:var(--accent-green);">First-line, all trimesters</td>
+                        <td style="color:var(--text-muted);">Lowest risk; adhere to dosing limits</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tier-badge tier-badge-blue">2nd</span></td>
+                        <td><strong>NSAIDs</strong></td>
+                        <td style="color:var(--accent-blue);">Early pregnancy only</td>
+                        <td style="color:var(--text-muted);">Avoid after 20 wks &mdash; ductus arteriosus closure, oligohydramnios</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tier-badge tier-badge-amber">3rd</span></td>
+                        <td><strong>Percocet</strong></td>
+                        <td style="color:var(--accent-amber);">Severe, refractory pain only</td>
+                        <td style="color:var(--text-muted);">Lowest effective dose; shortest duration (&lt;3 days)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tier-badge tier-badge-purple">OUD</span></td>
+                        <td><strong>Methadone / Buprenorphine</strong></td>
+                        <td style="color:var(--accent-purple);">Standard of care for OUD</td>
+                        <td style="color:var(--text-muted);">Preferred over short-acting opioids; ACOG/SAMHSA endorsed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="source-tag">ACOG PB · SAMHSA</div>
+        <div class="slide-tag">Slide 7 of 9</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 8 — CLINICAL RECOMMENDATIONS
+    ══════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="label">Clinical Action</div>
+        <h2>Prescribing &amp; Monitoring Principles</h2>
+        <div class="divider"></div>
+        <ul class="checklist">
+            <li>
+                <span class="check-icon accent-green">&#x2714;</span>
+                <span><strong>Lowest effective dose, shortest duration</strong> &mdash; typically &lt;3 days for acute pain (ACOG).</span>
+            </li>
+            <li>
+                <span class="check-icon accent-blue">&#x2714;</span>
+                <span><strong>Universal substance use screening</strong> at first prenatal visit using validated tools (4P&rsquo;s, CRAFFT, NIDA Quick Screen).</span>
+            </li>
+            <li>
+                <span class="check-icon accent-amber">&#x2714;</span>
+                <span><strong>Multidisciplinary birth plan</strong> &mdash; notify pediatric team in advance; monitor neonate 4&ndash;7 days for NOWS.</span>
+            </li>
+            <li>
+                <span class="check-icon accent-purple">&#x2714;</span>
+                <span><strong>Informed consent</strong> must document discussion of NOWS risk and unknown long-term neurodevelopmental effects.</span>
+            </li>
+            <li>
+                <span class="check-icon accent-teal">&#x2714;</span>
+                <span><strong>Postpartum vigilance</strong> &mdash; first year postpartum is high-risk for relapse; continue MOUD with dose adjustments.</span>
+            </li>
+        </ul>
+        <div class="source-tag">ACOG · SMFM · SAMHSA</div>
+        <div class="slide-tag">Slide 8 of 9</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SLIDE 9 — BREASTFEEDING & SUMMARY
+    ══════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="label">Postpartum Considerations</div>
+        <h2>Breastfeeding &amp; Key Takeaways</h2>
+        <div class="divider"></div>
+        <div class="card-grid card-grid-2" style="max-width:900px;">
+            <div class="card" style="border-top: 3px solid var(--accent-teal);">
+                <h3 class="accent-teal">&#x1F931; Breastfeeding</h3>
+                <p style="font-size:0.9em; color:var(--text-muted); margin-top:0.5em;">
+                    Oxycodone is excreted in breast milk. Monitor infant for sedation and respiratory depression.
+                    Mandatory alertness and breathing assessment.
+                </p>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--accent-purple);">
+                <h3 class="accent-purple">&#x1F9E0; Neurodevelopment</h3>
+                <p style="font-size:0.9em; color:var(--text-muted); margin-top:0.5em;">
+                    Emerging evidence of white matter alterations affecting behavioral control.
+                    Long-term effects remain under investigation.
+                </p>
+            </div>
+        </div>
+        <br>
+        <div class="warning-box" style="max-width:900px;">
+            <h3 class="accent-red" style="margin-bottom:0.5em;">&#x26A0; Clinical Summary</h3>
+            <p style="font-size:0.92em; line-height:1.6;">
+                Percocet in pregnancy is a <strong>last-resort analgesic</strong>. When required, use the
+                <strong>lowest dose for the shortest duration</strong>. For OUD, transition to
+                <strong>methadone or buprenorphine</strong> is the standard of care.
+                Never abruptly discontinue in a dependent patient.
+            </p>
+        </div>
+        <div class="source-tag">ACOG · SMFM · SAMHSA</div>
+        <div class="slide-tag">Slide 9 of 9</div>
+    </div>
+
+</div><!-- /.deck -->
+
+<!-- ── Navigation Bar ── -->
+<div class="nav-bar">
+    <button class="nav-btn" onclick="prevSlide()">&#8592; Previous</button>
+    <span class="slide-counter" id="slideCounter">1 / 9</span>
+    <button class="nav-btn" onclick="nextSlide()">Next &#8594;</button>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    const counter = document.getElementById('slideCounter');
+    const progressFill = document.getElementById('progressFill');
+
+    function showSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === index);
+        });
+        counter.textContent = (index + 1) + ' / ' + total;
+        progressFill.style.width = ((index + 1) / total * 100) + '%';
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % total;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + total) % total;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+    });
+
+    showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
