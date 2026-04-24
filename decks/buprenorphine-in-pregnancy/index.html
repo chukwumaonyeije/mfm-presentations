@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buprenorphine in Pregnancy - Patient &amp; Provider Education</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Space Grotesk', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Progress bar ── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: #22d3ee;
+      transition: width 0.4s ease;
+      z-index: 100;
+    }
+
+    /* ── Deck container ── */
+    #deck {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── Individual slides ── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      pointer-events: none;
+    }
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: all;
+    }
+    .slide.exit {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+
+    /* ── Slide number ── */
+    .slide-num {
+      position: absolute;
+      bottom: 1.2rem;
+      right: 2rem;
+      font-size: 0.75rem;
+      color: #484f58;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Navigation ── */
+    #nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 0.8rem 0;
+      background: #161b22;
+      border-top: 1px solid #21262d;
+    }
+    #nav button {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      padding: 0.45rem 1.4rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+    #nav button:hover { background: #30363d; }
+    #slide-counter { font-size: 0.85rem; color: #8b949e; min-width: 70px; text-align: center; }
+
+    /* ── Typography ── */
+    h1 { font-size: 3rem; font-weight: 300; letter-spacing: -0.02em; line-height: 1.15; }
+    h2 { font-size: 2.2rem; font-weight: 300; letter-spacing: -0.01em; line-height: 1.2; }
+    h3 { font-size: 1.3rem; font-weight: 400; color: #8b949e; margin-top: 0.4rem; }
+    p  { font-size: 1.15rem; line-height: 1.65; max-width: 820px; text-align: center; }
+
+    /* ── Color accents ── */
+    .accent-blue  { color: #22d3ee; }
+    .accent-green { color: #3fb950; }
+    .accent-amber { color: #d29922; }
+    .accent-red   { color: #f85149; }
+    .accent-purple{ color: #bc8cff; }
+
+    /* ── Divider ── */
+    .divider {
+      width: 60px; height: 3px;
+      background: #22d3ee;
+      border-radius: 2px;
+      margin: 1rem auto;
+    }
+
+    /* ── Tag / badge ── */
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .tag-blue   { background: rgba(34,211,238,0.15); color: #22d3ee; border: 1px solid rgba(34,211,238,0.3); }
+    .tag-green  { background: rgba(63,185,80,0.15);  color: #3fb950; border: 1px solid rgba(63,185,80,0.3); }
+    .tag-amber  { background: rgba(210,153,34,0.15); color: #d29922; border: 1px solid rgba(210,153,34,0.3); }
+    .tag-red    { background: rgba(248,81,73,0.15);  color: #f85149; border: 1px solid rgba(248,81,73,0.3); }
+
+    /* ── Footer note ── */
+    .footnote {
+      position: absolute;
+      bottom: 2.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.78rem;
+      color: #484f58;
+      text-align: center;
+      width: 80%;
+      border-top: 1px solid #21262d;
+      padding-top: 0.5rem;
+    }
+
+    /* ── Cards ── */
+    .card-grid {
+      display: grid;
+      gap: 1.2rem;
+      width: 100%;
+      max-width: 900px;
+    }
+    .card-grid-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .card {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+    }
+    .card-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.5rem;
+    }
+    .card-body { font-size: 0.95rem; color: #8b949e; line-height: 1.6; }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      max-width: 860px;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    th {
+      background: #161b22;
+      color: #22d3ee;
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 2px solid #21262d;
+    }
+    td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid #21262d;
+      color: #c9d1d9;
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(34,211,238,0.06); }
+
+    /* ── Flowchart ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: nowrap;
+      max-width: 900px;
+    }
+    .flow-step {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      text-align: center;
+      flex: 1;
+      min-width: 0;
+    }
+    .flow-step .step-num {
+      font-size: 0.7rem;
+      color: #22d3ee;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.3rem;
+    }
+    .flow-step .step-text {
+      font-size: 0.88rem;
+      color: #c9d1d9;
+      line-height: 1.4;
+    }
+    .flow-arrow {
+      color: #30363d;
+      font-size: 1.4rem;
+      padding: 0 0.3rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      width: 100%;
+      max-width: 700px;
+    }
+    .timeline-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .timeline-label {
+      width: 220px;
+      text-align: right;
+      font-size: 0.9rem;
+      color: #8b949e;
+      flex-shrink: 0;
+    }
+    .timeline-bar-wrap {
+      flex: 1;
+      background: #161b22;
+      border-radius: 6px;
+      height: 28px;
+      overflow: hidden;
+      border: 1px solid #21262d;
+    }
+    .timeline-bar {
+      height: 100%;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      padding-left: 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #0d1117;
+    }
+
+    /* ── Pill list ── */
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+      max-width: 820px;
+    }
+    .pill {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 20px;
+      padding: 0.4rem 1rem;
+      font-size: 0.88rem;
+      color: #c9d1d9;
+    }
+
+    /* ── Warning box ── */
+    .warn-box {
+      background: rgba(248,81,73,0.08);
+      border: 1px solid rgba(248,81,73,0.35);
+      border-left: 4px solid #f85149;
+      border-radius: 8px;
+      padding: 1rem 1.4rem;
+      max-width: 820px;
+      font-size: 0.95rem;
+      color: #ffa198;
+      line-height: 1.6;
+    }
+    .info-box {
+      background: rgba(88,166,255,0.07);
+      border: 1px solid rgba(88,166,255,0.3);
+      border-left: 4px solid #58a6ff;
+      border-radius: 8px;
+      padding: 1rem 1.4rem;
+      max-width: 820px;
+      font-size: 0.95rem;
+      color: #a5c8ff;
+      line-height: 1.6;
+    }
+    .success-box {
+      background: rgba(63,185,80,0.07);
+      border: 1px solid rgba(63,185,80,0.3);
+      border-left: 4px solid #3fb950;
+      border-radius: 8px;
+      padding: 1rem 1.4rem;
+      max-width: 820px;
+      font-size: 0.95rem;
+      color: #7ee787;
+      line-height: 1.6;
+    }
+
+    /* ── Stat boxes ── */
+    .stat-row {
+      display: flex;
+      gap: 1.4rem;
+      justify-content: center;
+    }
+    .stat-box {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 10px;
+      padding: 1.2rem 1.8rem;
+      text-align: center;
+      min-width: 160px;
+    }
+    .stat-value {
+      font-size: 2.4rem;
+      font-weight: 300;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: #8b949e;
+      margin-top: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Icon SVG wrappers ── */
+    .icon-lg {
+      width: 56px; height: 56px;
+      margin-bottom: 1rem;
+    }
+    .icon-sm {
+      width: 20px; height: 20px;
+      vertical-align: middle;
+      margin-right: 0.4rem;
+    }
+
+    /* ── Spacing helpers ── */
+    .mt-1 { margin-top: 0.5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mt-3 { margin-top: 1.5rem; }
+    .mb-1 { margin-bottom: 0.5rem; }
+    .mb-2 { margin-bottom: 1rem; }
+    .text-sm { font-size: 0.88rem; color: #8b949e; }
+    .text-center { text-align: center; }
+    .w-full { width: 100%; }
+
+    /* ── Slide-specific backgrounds ── */
+    .slide-title-bg {
+      background: radial-gradient(ellipse at 30% 40%, rgba(88,166,255,0.07) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 60%, rgba(188,140,255,0.05) 0%, transparent 60%);
+    }
+    .slide-warning-bg {
+      background: radial-gradient(ellipse at 50% 50%, rgba(248,81,73,0.05) 0%, transparent 70%);
+    }
+    .slide-success-bg {
+      background: radial-gradient(ellipse at 50% 50%, rgba(63,185,80,0.05) 0%, transparent 70%);
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/buprenorphine-in-pregnancy/index.html">
+<meta name="description" content="Dual-audience OpenMFM deck on buprenorphine in pregnancy, including OUD assessment, treatment setting selection, informed consent, induction timing and protocol, buprenorphine/naloxone use, lactation, monitoring, pain control, and patient counseling. Based on Dartmouth-Hitchcock CARPP guidance with ACOG-, SMFM-, and SAMHSA-aligned framing.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Buprenorphine, Opioid Use Disorder, Substance Use in Pregnancy, Patient Education, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/buprenorphine-in-pregnancy/index.html">
+<meta property="og:title" content="Buprenorphine in Pregnancy - Patient &amp; Provider Education | OpenMFM">
+<meta property="og:description" content="Dual-audience OpenMFM deck on buprenorphine in pregnancy, including OUD assessment, treatment setting selection, informed consent, induction timing and protocol, buprenorphine/naloxone use, lactation, monitoring, pain control, and patient counseling. Based on Dartmouth-Hitchcock CARPP guidance with ACOG-, SMFM-, and SAMHSA-aligned framing.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Buprenorphine in Pregnancy - Patient &amp; Provider Education | OpenMFM">
+<meta name="twitter:description" content="Dual-audience OpenMFM deck on buprenorphine in pregnancy, including OUD assessment, treatment setting selection, informed consent, induction timing and protocol, buprenorphine/naloxone use, lactation, monitoring, pain control, and patient counseling. Based on Dartmouth-Hitchcock CARPP guidance with ACOG-, SMFM-, and SAMHSA-aligned framing.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Buprenorphine in Pregnancy - Patient & Provider Education",
+  "description": "Dual-audience OpenMFM deck on buprenorphine in pregnancy, including OUD assessment, treatment setting selection, informed consent, induction timing and protocol, buprenorphine/naloxone use, lactation, monitoring, pain control, and patient counseling. Based on Dartmouth-Hitchcock CARPP guidance with ACOG-, SMFM-, and SAMHSA-aligned framing.",
+  "url": "https://openmfm.org/decks/buprenorphine-in-pregnancy/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-04-24",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Buprenorphine in Pregnancy - Patient & Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Buprenorphine, Opioid Use Disorder, Substance Use in Pregnancy, Patient Education, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<div id="deck">
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 1: TITLE
+  ══════════════════════════════════════════════ -->
+  <div class="slide slide-title-bg active" id="slide-1">
+    <div style="text-align:center;">
+      <div class="mb-2">
+        <span class="tag tag-blue">OpenMFM</span>
+        &nbsp;
+        <span class="tag tag-amber">Patient &amp; Provider</span>
+      </div>
+      <h1 style="max-width:700px; margin:0 auto;">
+        Buprenorphine Initiation<br>&amp; Maintenance<br>
+        <span class="accent-blue">in Pregnancy</span>
+      </h1>
+      <div class="divider"></div>
+      <h3>Clinical guide with patient counseling points</h3>
+      <p class="mt-3 text-sm">
+        Chukwuma Onyeije, MD, FACOG &nbsp;|&nbsp; Maternal-Fetal Medicine<br>
+        Primary source: Dartmouth-Hitchcock CARPP guidance; reviewed against ACOG, SMFM, and SAMHSA framing
+      </p>
+    </div>
+    <div class="slide-num">1 / 13</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 2: ASSESSMENT
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <h2><span class="accent-blue">01 &mdash;</span> Initial Assessment</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-2 mt-3" style="max-width:860px;">
+      <div class="card">
+        <div class="card-title accent-blue">Diagnosis</div>
+        <div class="card-body">
+          Confirm OUD by <strong>DSM-5 criteria</strong> supplemented by urine drug testing.<br><br>
+          Inventory all current and past substances; document prior SUD treatment history.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-amber">Co-morbidities</div>
+        <div class="card-body">
+          Screen for <strong>depression, anxiety, and PTSD</strong>.<br><br>
+          Assess social and environmental factors; screen for <strong>intimate partner violence</strong>.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-green">Physical Exam</div>
+        <div class="card-body">
+          Examine for sequelae of substance use.<br><br>
+          Assess facilitators and barriers to pharmacotherapy.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-purple">Laboratory</div>
+        <div class="card-body">
+          CBC, LFTs, renal function, Hep C, HIV, STIs, TB.<br><br>
+          Offer Hep A &amp; B testing and vaccination when appropriate.
+        </div>
+      </div>
+    </div>
+    <div class="footnote">Patient-facing anchor: medication treatment is safer than repeated opioid use and withdrawal, and it works best with behavioral and social support.</div>
+    <div class="slide-num">2 / 13</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 3: TREATMENT SETTING
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <h2><span class="accent-blue">02 &mdash;</span> Treatment Setting Selection</h2>
+    <div class="divider"></div>
+    <table class="mt-3">
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Indication</th>
+          <th>Features</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag tag-green">Office-Based</span></td>
+          <td>Low complexity, stable social support, low diversion risk</td>
+          <td>Buprenorphine or methadone; flexible scheduling</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-blue">Intensive Outpatient (IOP)</span></td>
+          <td>Moderate complexity; needs structured counseling</td>
+          <td>More frequent visits; intensive psychosocial support</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-amber">Specialty OTP</span></td>
+          <td>Complex patients; daily supervised dosing needed</td>
+          <td>Daily methadone or buprenorphine; highest structure</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-red">Inpatient / Residential</span></td>
+          <td>Failed less intensive options; severe complexity</td>
+          <td>24-hour care; reserved for most complex cases</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="footnote">Shared decision-making: consider past treatment history, psychiatric co-morbidities, social factors, and diversion risk. Methadone remains an established standard of care in pregnancy.</div>
+    <div class="slide-num">3 / 13</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 4: INFORMED CONSENT
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <h2><span class="accent-blue">03 &mdash;</span> Informed Consent &amp; Treatment Agreement</h2>
+    <div class="divider"></div>
+    <div class="info-box mt-3">
+      The treatment agreement clarifies expectations for both practitioner and patient, and provides structure for effective monitoring. It must be reviewed and signed by both parties.
+    </div>
+    <div class="pill-list mt-3">
+      <div class="pill">Single prescribing practice</div>
+      <div class="pill">Single designated pharmacy</div>
+      <div class="pill">PDMP use acknowledged</div>
+      <div class="pill">Toxicology screens agreed</div>
+      <div class="pill">Pill / film counts on request</div>
+      <div class="pill">Authorization to communicate with other providers</div>
+    </div>
+    <div class="footnote">Consent must include risks and benefits of buprenorphine compared to methadone and other treatment options.</div>
+    <div class="slide-num">4 / 13</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 5: INDUCTION TIMING
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <h2><span class="accent-blue">04 &mdash;</span> Induction Timing</h2>
+    <h3>Preventing Precipitated Withdrawal</h3>
+    <div class="divider"></div>
+    <div class="stat-row mt-2">
+      <div class="stat-box">
+        <div class="stat-value accent-green">≥12</div>
+        <div class="stat-label">COWS Score Required<br>Before First Dose</div>
+      </div>
+    </div>
+    <div class="timeline mt-3">
+      <div class="timeline-row">
+        <div class="timeline-label">Short-acting opioids<br><span style="font-size:0.78rem;color:#484f58;">heroin, hydrocodone, oxycodone IR</span></div>
+        <div class="timeline-bar-wrap">
+          <div class="timeline-bar" style="width:55%; background:#3fb950;">12 – 16 hours</div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-label">Intermediate-acting<br><span style="font-size:0.78rem;color:#484f58;">OxyContin</span></div>
+        <div class="timeline-bar-wrap">
+          <div class="timeline-bar" style="width:72%; background:#d29922;">17 – 24 hours</div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-label">Methadone</div>
+        <div class="timeline-bar-wrap">
+          <div class="timeline-bar" style="width:100%; background:#f85149;">30 – 48 hours</div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">Failure to wait for adequate withdrawal is the most common cause of precipitated withdrawal — a severe and distressing complication.</div>
+    <div class="slide-num">5 / 13</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 6: INDUCTION SETTING
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <h2><span class="accent-blue">05 &mdash;</span> Induction Setting in Pregnancy</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-2 mt-3" style="max-width:860px;">
+      <div class="card">
+        <div class="card-title accent-green">Office / Home Induction</div>
+        <div class="card-body">
+          <strong>GA &lt; 23 weeks</strong> without complicating factors.<br><br>
+          Preferred if patient has prior buprenorphine experience.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-red">Inpatient / In-Clinic</div>
+        <div class="card-body">
+          <strong>GA ≥ 23 weeks</strong>, acute illness, polysubstance use, or long-acting opioids.<br><br>
+          Also indicated for adherence concerns or obstetric co-morbidities.
+        </div>
+      </div>
+    </div>
+    <div class="info-box mt-3" style="max-width:860px;">
+      Women already on a <strong>stable, known dose</strong> of buprenorphine may receive a prescription without formal induction.
+    </div>
+    <div class="footnote">In-office induction is generally preferred over home induction during pregnancy.</div>
+    <div class="slide-num">6 / 13</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 7: INDUCTION PROTOCOL
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <h2><span class="accent-blue">06 &mdash;</span> Induction Protocol</h2>
+    <div class="divider"></div>
+    <div class="flow mt-3">
+      <div class="flow-step">
+        <div class="step-num">Step 1</div>
+        <div class="step-text">Confirm COWS <strong>≥ 12</strong></div>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step">
+        <div class="step-num">Step 2</div>
+        <div class="step-text">Administer <strong>4 mg SL</strong><br><span style="font-size:0.78rem;color:#58a6ff;">(2 mg if not physically dependent)</span></div>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step">
+        <div class="step-num">Step 3</div>
+        <div class="step-text">Observe <strong>45–60 min</strong><br>Reassess COWS</div>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step">
+        <div class="step-num">Step 4</div>
+        <div class="step-text">Repeat <strong>4 mg q2h</strong> PRN<br>Max <strong>12 mg Day 1</strong></div>
+      </div>
+    </div>
+    <div class="card-grid card-grid-2 mt-3" style="max-width:860px;">
+      <div class="card">
+        <div class="card-title accent-green">Maintenance Target</div>
+        <div class="card-body">
+          <strong>8 – 16 mg</strong> as a single daily dose.<br>
+          Suppresses craving and withdrawal; holds patient in treatment.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-amber">Pregnancy Pharmacokinetics</div>
+        <div class="card-body">
+          Latter half of pregnancy may require <strong>split dosing (TID–QID)</strong> due to altered pharmacokinetics.
+        </div>
+      </div>
+    </div>
+    <div class="footnote">Doses &gt;16 mg increase diversion risk. FDA approves up to 24 mg/day. Use above 16 mg only in rare, documented cases.</div>
+    <div class="slide-num">7 / 13</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 8: SUBOXONE VS SUBUTEX
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <h2><span class="accent-blue">07 &mdash;</span> Buprenorphine/Naloxone in Pregnancy</h2>
+    <div class="divider"></div>
+    <table class="mt-3">
+      <thead>
+        <tr>
+          <th>Formulation</th>
+          <th>Naloxone Component</th>
+          <th>Preferred Use</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Buprenorphine/Naloxone</strong><br><span class="text-sm">Suboxone</span></td>
+          <td>Minimally absorbed sublingually; <strong>no clinically significant fetal effect</strong></td>
+          <td><span class="tag tag-green">Preferred</span> — reduces diversion risk; avoids postpartum medication change</td>
+        </tr>
+        <tr>
+          <td><strong>Buprenorphine monotherapy</strong><br><span class="text-sm">Subutex</span></td>
+          <td>None</td>
+          <td>Higher diversion potential; previously standard but now less preferred</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="info-box mt-3">
+      A growing body of evidence supports the combination product for all patients, including pregnant women. Naloxone taken sublingually as directed has <strong>virtually no systemic effect</strong>.
+    </div>
+    <div class="footnote">Counsel all patients that Neonatal Opioid Withdrawal Syndrome (NOWS) is treatable and can occur with either formulation.</div>
+    <div class="slide-num">8 / 13</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 9: LACTATION
+  ══════════════════════════════════════════════ -->
+  <div class="slide slide-success-bg" id="slide-9">
+    <h2><span class="accent-green">08 &mdash;</span> Lactation Compatibility</h2>
+    <div class="divider" style="background:#3fb950;"></div>
+    <div class="success-box mt-3">
+      Buprenorphine and buprenorphine/naloxone are <strong>compatible with lactation</strong>. Stable patients not using other substances should be <strong>encouraged to breastfeed</strong>.
+    </div>
+    <div class="card-grid card-grid-3 mt-3">
+      <div class="card">
+        <div class="card-title accent-green">Breastmilk Levels</div>
+        <div class="card-body">Low transfer of buprenorphine and metabolites into breastmilk.</div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-green">Infant Exposure</div>
+        <div class="card-body">Buprenorphine is poorly bioavailable orally → <strong>minimal infant exposure</strong>.</div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-green">Naloxone</div>
+        <div class="card-body">Not orally bioavailable; <strong>unlikely to affect breastfeeding infant</strong>.</div>
+      </div>
+    </div>
+    <div class="footnote">Breastfeeding may also reduce severity of NOWS in the newborn.</div>
+    <div class="slide-num">9 / 13</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 10: PSYCHOSOCIAL + MONITORING
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-10">
+    <h2><span class="accent-blue">09 &mdash;</span> Psychosocial Treatment &amp; Monitoring</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-2 mt-3" style="max-width:860px;">
+      <div class="card">
+        <div class="card-title accent-purple">Psychosocial Components</div>
+        <div class="card-body">
+          Group therapy (especially with pregnant/postpartum peers) &bull; Motivational Interviewing &bull; OUD education &bull; Community support/mutual help groups &bull; Individual counseling as needed &bull; Psychiatric co-morbidity screening and treatment
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-blue">Monitoring Protocol</div>
+        <div class="card-body">
+          Weekly office visits (early treatment) &bull; At-visit and <strong>unannounced</strong> urine toxicology &bull; Pill/film counts &bull; PDMP checks &bull; Observed ingestion at initiation &bull; Frequency guided by patient stability
+        </div>
+      </div>
+    </div>
+    <div class="footnote">Psychosocial treatment is a mandatory adjunct to pharmacotherapy — not optional.</div>
+    <div class="slide-num">10 / 13</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 11: RESPONDING TO RELAPSE / DIVERSION
+  ══════════════════════════════════════════════ -->
+  <div class="slide" id="slide-11">
+    <h2><span class="accent-blue">10 &mdash;</span> Responding to Patient Behaviors</h2>
+    <div class="divider"></div>
+    <div class="warn-box mt-2">
+      <strong>Relapse or continued use is NOT an automatic indication to discontinue buprenorphine.</strong> It should prompt re-evaluation of the treatment plan and intensification of support.
+    </div>
+    <table class="mt-3" style="max-width:860px;">
+      <thead>
+        <tr><th>Diversion / Misuse Red Flag</th><th>Clinical Response</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Claims of naloxone intolerance (to obtain mono-product)</td><td>Investigate; document; do not substitute without evidence</td></tr>
+        <tr><td>Early refill requests; lost/stolen medication</td><td>Increase monitoring; consider observed dosing</td></tr>
+        <tr><td>Positive illicit tox or negative buprenorphine tox</td><td>Discuss; adjust dose or increase visit frequency</td></tr>
+        <tr><td>Sudden dose increase request (previously stable)</td><td>Re-evaluate clinical status; assess for relapse</td></tr>
+        <tr><td>Missed appointments; poor psychosocial engagement</td><td>Outreach; consider more structured program</td></tr>
+      </tbody>
+    </table>
+    <div class="footnote">A well-managed relapse can strengthen the patient–provider alliance. Individualize all treatment plan changes.</div>
+    <div class="slide-num">11 / 13</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 12: PAIN MANAGEMENT
+  ══════════════════════════════════════════════ -->
+  <div class="slide slide-warning-bg" id="slide-12">
+    <h2><span class="accent-amber">11 &mdash;</span> Pain Management in Buprenorphine-Maintained Patients</h2>
+    <div class="divider" style="background:#d29922;"></div>
+    <div class="card-grid card-grid-2 mt-3" style="max-width:860px;">
+      <div class="card">
+        <div class="card-title accent-green">Preferred Approaches</div>
+        <div class="card-body">
+          Non-narcotics first: acetaminophen, NSAIDs.<br><br>
+          Temporarily <strong>increase and/or split</strong> buprenorphine dose for mild-moderate acute pain.<br><br>
+          Regional anesthesia or IV fentanyl for labor/delivery.<br><br>
+          Short-acting full opioid agonists for post-op pain (higher doses may be required).
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-red">Contraindicated</div>
+        <div class="card-body">
+          <strong>Nalbuphine (Nubain)</strong> and <strong>Butorphanol (Stadol)</strong> are opioid agonist-antagonists.<br><br>
+          These agents <strong>will precipitate acute withdrawal</strong> in patients chronically using opioids.<br><br>
+          <span class="accent-red">Do not administer under any circumstances.</span>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">Continue buprenorphine through delivery and postpartum to prevent the need for re-induction. Prescribe naloxone to all patients and household members.</div>
+    <div class="slide-num">12 / 13</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 13: SUMMARY
+  ══════════════════════════════════════════════ -->
+  <div class="slide slide-title-bg" id="slide-13">
+    <h2><span class="accent-blue">Key Clinical &amp; Counseling Takeaways</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid mt-3" style="grid-template-columns: 1fr 1fr 1fr; max-width:900px;">
+      <div class="card">
+        <div class="card-title accent-blue">Diagnose Carefully</div>
+        <div class="card-body">DSM-5 criteria + urine drug testing. Assess psychiatric co-morbidities and social determinants.</div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-amber">Induct Safely</div>
+        <div class="card-body">Wait for COWS ≥ 12. Start 4 mg SL. Prefer in-office induction in pregnancy. Max 12 mg Day 1.</div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-green">Maintain Comprehensively</div>
+        <div class="card-body">8–16 mg daily. Combination product preferred. Breastfeeding encouraged. Psychosocial treatment is mandatory.</div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-purple">Monitor with Compassion</div>
+        <div class="card-body">Use urine tox, PDMP review, pill counts, and close follow-up. Relapse should trigger reassessment and stronger support, not abandonment.</div>
+      </div>
+      <div class="card">
+        <div class="card-title accent-red">Avoid Harm</div>
+        <div class="card-body">Never use nalbuphine or butorphanol. Continue buprenorphine through delivery. Prescribe naloxone to all.</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:#8b949e;">What Patients Need to Hear</div>
+        <div class="card-body">Treatment protects both parent and baby, NOWS is expected and treatable, and breastfeeding is often possible when recovery is stable.</div>
+      </div>
+    </div>
+    <div class="footnote">Source: Dartmouth-Hitchcock CARPP Guidelines &nbsp;|&nbsp; DoctorsWhoCode.blog &nbsp;|&nbsp; OpenMFM.org</div>
+    <div class="slide-num">13 / 13</div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation bar -->
+<div id="nav">
+  <button id="btn-prev">&#8592; Prev</button>
+  <span id="slide-counter">1 / 13</span>
+  <button id="btn-next">Next &#8594;</button>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let current = 0;
+
+  const progressBar = document.getElementById('progress-bar');
+  const counter = document.getElementById('slide-counter');
+
+  function goTo(index) {
+    if (index < 0 || index >= total) return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit');
+    setTimeout(() => { slides[current].classList.remove('exit'); }, 450);
+    current = index;
+    slides[current].classList.add('active');
+    counter.textContent = (current + 1) + ' / ' + total;
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  document.getElementById('btn-next').addEventListener('click', () => goTo(current + 1));
+  document.getElementById('btn-prev').addEventListener('click', () => goTo(current - 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) > 50) dx < 0 ? goTo(current + 1) : goTo(current - 1);
+  });
+
+  // Initialize
+  goTo(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

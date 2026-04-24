@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthBench Professional - Provider Education</title>
+  <style>
+    /* ─── Reset & Base ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --cyan:      #22d3ee;
+      --cyan-dim:  rgba(34,211,238,.15);
+      --green:     #3fb950;
+      --green-dim: rgba(63,185,80,.12);
+      --amber:     #d29922;
+      --amber-dim: rgba(210,153,34,.12);
+      --red:       #f85149;
+      --red-dim:   rgba(248,81,73,.12);
+      --purple:    #a371f7;
+      --font:      'Space Grotesk', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      overflow: hidden;
+    }
+
+    /* ─── Deck & Slide ──────────────────────────────────────────────── */
+    .deck {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity .45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ─── Typography ────────────────────────────────────────────────── */
+    .kicker {
+      font-size: .75rem; font-weight: 600; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--cyan);
+      margin-bottom: .6rem;
+    }
+    h1 {
+      font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+      font-weight: 300; line-height: 1.15;
+      color: var(--text); text-align: center;
+    }
+    h1 span { color: var(--cyan); }
+    h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 300; color: var(--text);
+      text-align: center; margin-bottom: 1.4rem;
+    }
+    h2 span { color: var(--cyan); }
+    .subtitle {
+      font-size: 1.1rem; color: var(--muted);
+      text-align: center; margin-top: .8rem;
+      max-width: 680px; line-height: 1.6;
+    }
+    .byline {
+      font-size: .85rem; color: var(--muted);
+      margin-top: 2rem; letter-spacing: .06em;
+    }
+
+    /* ─── Cards / Panels ────────────────────────────────────────────── */
+    .card-row {
+      display: flex; gap: 1.2rem;
+      width: 100%; max-width: 1000px;
+      margin-top: 1.2rem;
+    }
+    .card {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+    }
+    .card .card-icon {
+      font-size: 1.8rem; margin-bottom: .5rem;
+    }
+    .card .card-title {
+      font-size: .8rem; font-weight: 600; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--cyan);
+      margin-bottom: .4rem;
+    }
+    .card .card-body {
+      font-size: .95rem; color: var(--muted); line-height: 1.55;
+    }
+    .card.green  { border-color: var(--green);  background: var(--green-dim); }
+    .card.amber  { border-color: var(--amber);  background: var(--amber-dim); }
+    .card.cyan   { border-color: var(--cyan);   background: var(--cyan-dim);  }
+    .card.red    { border-color: var(--red);    background: var(--red-dim);   }
+    .card.purple { border-color: var(--purple); background: rgba(163,113,247,.12); }
+
+    /* ─── Stat Blocks ───────────────────────────────────────────────── */
+    .stat-row {
+      display: flex; gap: 1.4rem;
+      width: 100%; max-width: 1000px;
+      margin-top: 1.2rem;
+    }
+    .stat {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1rem;
+      text-align: center;
+    }
+    .stat .stat-num {
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700; color: var(--cyan);
+      line-height: 1;
+    }
+    .stat .stat-label {
+      font-size: .78rem; color: var(--muted);
+      margin-top: .4rem; line-height: 1.4;
+      text-transform: uppercase; letter-spacing: .08em;
+    }
+
+    /* ─── Tables ────────────────────────────────────────────────────── */
+    .tbl-wrap {
+      width: 100%; max-width: 900px;
+      margin-top: 1.2rem;
+      overflow: hidden; border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: .9rem;
+    }
+    thead tr { background: var(--surface); }
+    thead th {
+      padding: .75rem 1rem; text-align: left;
+      font-size: .72rem; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--cyan); border-bottom: 1px solid var(--border);
+    }
+    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:nth-child(odd) { background: rgba(22,27,34,.6); }
+    tbody td { padding: .7rem 1rem; color: var(--text); }
+    .tag {
+      display: inline-block;
+      padding: .15rem .55rem;
+      border-radius: 4px;
+      font-size: .72rem; font-weight: 600;
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+    .tag-green  { background: var(--green-dim);  color: var(--green);  border: 1px solid var(--green); }
+    .tag-amber  { background: var(--amber-dim);  color: var(--amber);  border: 1px solid var(--amber); }
+    .tag-cyan   { background: var(--cyan-dim);   color: var(--cyan);   border: 1px solid var(--cyan);  }
+    .tag-red    { background: var(--red-dim);    color: var(--red);    border: 1px solid var(--red);   }
+    .tag-purple { background: rgba(163,113,247,.12); color: var(--purple); border: 1px solid var(--purple); }
+
+    /* ─── Bar Charts ────────────────────────────────────────────────── */
+    .bar-chart {
+      width: 100%; max-width: 860px;
+      margin-top: 1.2rem;
+    }
+    .bar-row {
+      display: flex; align-items: center;
+      gap: .8rem; margin-bottom: .75rem;
+    }
+    .bar-label {
+      width: 260px; flex-shrink: 0;
+      font-size: .82rem; color: var(--text); text-align: right;
+    }
+    .bar-track {
+      flex: 1; height: 28px;
+      background: var(--surface);
+      border-radius: 5px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .bar-fill {
+      height: 100%; border-radius: 5px;
+      display: flex; align-items: center; padding-left: .6rem;
+      font-size: .78rem; font-weight: 700; color: #0d1117;
+      transition: width .8s ease;
+    }
+    .bar-fill.cyan   { background: var(--cyan); }
+    .bar-fill.green  { background: var(--green); }
+    .bar-fill.amber  { background: var(--amber); }
+    .bar-fill.muted  { background: var(--muted); }
+    .bar-fill.purple { background: var(--purple); }
+
+    /* ─── Process Steps ─────────────────────────────────────────────── */
+    .steps {
+      display: flex; gap: 0;
+      width: 100%; max-width: 900px;
+      margin-top: 1.2rem;
+    }
+    .step {
+      flex: 1; position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0; padding: 1.2rem 1rem;
+      text-align: center;
+    }
+    .step:first-child { border-radius: 10px 0 0 10px; }
+    .step:last-child  { border-radius: 0 10px 10px 0; }
+    .step:not(:last-child)::after {
+      content: '▶';
+      position: absolute; right: -14px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--cyan); font-size: .9rem; z-index: 2;
+    }
+    .step-num {
+      font-size: 1.6rem; font-weight: 700; color: var(--cyan);
+      line-height: 1;
+    }
+    .step-title {
+      font-size: .78rem; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--text);
+      margin: .4rem 0 .3rem;
+    }
+    .step-desc {
+      font-size: .78rem; color: var(--muted); line-height: 1.45;
+    }
+
+    /* ─── Callout Box ───────────────────────────────────────────────── */
+    .callout {
+      width: 100%; max-width: 820px;
+      border-left: 4px solid var(--cyan);
+      background: var(--cyan-dim);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.4rem;
+      margin-top: 1.2rem;
+      font-size: .95rem; color: var(--text); line-height: 1.6;
+    }
+    .callout strong { color: var(--cyan); }
+
+    /* ─── Navigation ────────────────────────────────────────────────── */
+    #nav {
+      position: fixed; bottom: 1.4rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 40px; padding: .45rem 1.2rem;
+      z-index: 100;
+    }
+    #nav button {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 1rem; padding: .2rem .5rem;
+      border-radius: 4px; transition: color .2s, background .2s;
+    }
+    #nav button:hover { color: var(--cyan); background: var(--cyan-dim); }
+    #nav button:disabled { opacity: .25; cursor: default; }
+    #slide-counter {
+      font-size: .78rem; color: var(--muted);
+      min-width: 52px; text-align: center;
+    }
+    #progress {
+      position: fixed; top: 0; left: 0;
+      height: 3px; background: var(--cyan);
+      transition: width .4s ease; z-index: 200;
+    }
+
+    /* ─── Slide-specific helpers ────────────────────────────────────── */
+    .center-col {
+      display: flex; flex-direction: column;
+      align-items: center; text-align: center;
+      width: 100%; max-width: 900px;
+    }
+    .two-col {
+      display: flex; gap: 2rem;
+      width: 100%; max-width: 1000px; margin-top: 1.2rem;
+    }
+    .two-col > div { flex: 1; }
+    .section-label {
+      font-size: .7rem; font-weight: 600; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: .5rem;
+    }
+    .big-num {
+      font-size: clamp(3rem, 6vw, 5rem);
+      font-weight: 700; color: var(--cyan); line-height: 1;
+    }
+    .divider {
+      width: 60px; height: 3px;
+      background: var(--cyan); border-radius: 2px;
+      margin: 1rem auto;
+    }
+    .footnote {
+      position: fixed; bottom: 4.5rem; left: 50%;
+      transform: translateX(-50%);
+      font-size: .68rem; color: var(--muted);
+      letter-spacing: .04em;
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/healthbench-professional/index.html">
+<meta name="description" content="Clinician-facing review of HealthBench Professional and the April 22, 2026 OpenAI clinician release, covering benchmark design, physician adjudication, domain-level results, adversarial robustness, limitations, and practical implications for evaluating LLMs in real clinical conversations.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="HealthBench Professional, Clinical AI, Large Language Models, Provider Education, Medical Research">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/healthbench-professional/index.html">
+<meta property="og:title" content="HealthBench Professional - Provider Education | OpenMFM">
+<meta property="og:description" content="Clinician-facing review of HealthBench Professional and the April 22, 2026 OpenAI clinician release, covering benchmark design, physician adjudication, domain-level results, adversarial robustness, limitations, and practical implications for evaluating LLMs in real clinical conversations.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HealthBench Professional - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Clinician-facing review of HealthBench Professional and the April 22, 2026 OpenAI clinician release, covering benchmark design, physician adjudication, domain-level results, adversarial robustness, limitations, and practical implications for evaluating LLMs in real clinical conversations.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "HealthBench Professional - Provider Education",
+  "description": "Clinician-facing review of HealthBench Professional and the April 22, 2026 OpenAI clinician release, covering benchmark design, physician adjudication, domain-level results, adversarial robustness, limitations, and practical implications for evaluating LLMs in real clinical conversations.",
+  "url": "https://openmfm.org/decks/healthbench-professional/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-04-24",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "HealthBench Professional - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "HealthBench Professional, Clinical AI, Large Language Models, Provider Education, Medical Research"
+}
+</script>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<div class="deck">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide active">
+    <div class="center-col">
+      <div class="kicker">Provider Education · April 22, 2026</div>
+      <h1><span>HealthBench</span> Professional</h1>
+      <div class="divider"></div>
+      <p class="subtitle">Evaluating Large Language Models on Real Clinician Chats</p>
+      <p class="byline">OpenMFM review of Soskin Hicks, Trofimov, Singhal et al. (OpenAI)</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 2 — THE PROBLEM
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="kicker">Context</div>
+    <h2>AI Use Among Clinicians Has <span>Doubled</span></h2>
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num">Millions</div>
+        <div class="stat-label">Clinicians using ChatGPT weekly</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2×</div>
+        <div class="stat-label">Growth in clinician usage over the past year</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">Limited</div>
+        <div class="stat-label">Benchmarks reflecting real multi-turn clinical workflows</div>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Gap:</strong> Most existing benchmarks rely on single-turn, multiple-choice, or synthetic vignettes — not real clinician-model conversations.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 3 — WHAT IS HEALTHBENCH PROFESSIONAL
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="kicker">The Benchmark</div>
+    <h2>Introducing <span>HealthBench Professional</span></h2>
+    <div class="card-row">
+      <div class="card cyan">
+        <div class="card-icon">📋</div>
+        <div class="card-title">Meaningful</div>
+        <div class="card-body">Tasks reflect real clinician workflows at the point of care, directly impacting care delivery.</div>
+      </div>
+      <div class="card green">
+        <div class="card-icon">✅</div>
+        <div class="card-title">Trustworthy</div>
+        <div class="card-body">Every example adjudicated by three or more physicians across three review phases.</div>
+      </div>
+      <div class="card amber">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">Challenging</div>
+        <div class="card-body">Difficult cases enriched ~3.5× via stratified sampling; preserves headroom for future models.</div>
+      </div>
+    </div>
+    <div class="stat-row" style="margin-top:.8rem;">
+      <div class="stat">
+        <div class="stat-num">525</div>
+        <div class="stat-label">Final benchmark tasks</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">15,079</div>
+        <div class="stat-label">Candidate examples reviewed</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">190</div>
+        <div class="stat-label">Physician contributors across 50 countries</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 4 — THREE USE CASES
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="kicker">Benchmark Structure</div>
+    <h2>Three Core <span>Clinical Use Cases</span></h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Use Case</th>
+            <th>Description</th>
+            <th>Share of Benchmark</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-cyan">Care Consult</span></td>
+            <td>Reasoning through differentials, management, and treatment decisions</td>
+            <td>48.8% (n = 256)</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-amber">Writing &amp; Documentation</span></td>
+            <td>Note generation, summarization, coding, patient messaging</td>
+            <td>27.0% (n = 142)</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-green">Medical Research</span></td>
+            <td>Finding and synthesizing evidence relevant to clinical questions</td>
+            <td>14.9% (n = 78)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout" style="margin-top:1rem;">
+      <strong>28 medical specialties</strong> represented — top 10 specialties account for 57.7% of examples.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 5 — DATA SOURCING
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="kicker">Data Collection</div>
+    <h2>Good Faith &amp; <span>Red Teaming</span></h2>
+    <div class="two-col">
+      <div>
+        <div class="card green" style="height:100%;">
+          <div class="card-icon">🩺</div>
+          <div class="card-title">Good Faith</div>
+          <div class="card-body">Physicians using ChatGPT for Clinicians in routine clinical, academic, and research work. Provides broad coverage of realistic professional workflows.</div>
+        </div>
+      </div>
+      <div>
+        <div class="card red" style="height:100%;">
+          <div class="card-icon">⚠️</div>
+          <div class="card-title">Red Teaming</div>
+          <div class="card-body">Deliberate adversarial stress-testing to surface errors, edge cases, and failure modes. Approximately one-third of the final benchmark.</div>
+        </div>
+      </div>
+    </div>
+    <div class="steps" style="margin-top:1.2rem;">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Physician Authorship</div>
+        <div class="step-desc">Creates conversation, writes rubric, assigns Likert 1–7 rating</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Physician Review</div>
+        <div class="step-desc">Independent review for realism, difficulty, and rubric quality</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Final Adjudication</div>
+        <div class="step-desc">Resolves ambiguities; confirms clinical accuracy and relevance</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 6 — HUMAN PHYSICIAN BASELINE
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="kicker">Baseline</div>
+    <h2>The <span>Human Physician</span> Reference Standard</h2>
+    <div class="card-row">
+      <div class="card cyan">
+        <div class="card-icon">🔬</div>
+        <div class="card-title">Specialty-Matched</div>
+        <div class="card-body">Each task assigned to a physician with relevant specialty or subspecialty expertise.</div>
+      </div>
+      <div class="card green">
+        <div class="card-icon">⏱️</div>
+        <div class="card-title">Unbounded Time</div>
+        <div class="card-body">No time constraint; physicians could use internet and standard medical databases.</div>
+      </div>
+      <div class="card amber">
+        <div class="card-icon">🚫</div>
+        <div class="card-title">No AI Assistance</div>
+        <div class="card-body">Responses written without AI tools to represent a true human upper bound.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Purpose:</strong> Establishes what an ideal, well-resourced physician response looks like — the gold standard against which AI systems are measured.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 7 — SCORING
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="kicker">Methodology</div>
+    <h2><span>Rubric-Based</span> Scoring</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Rubric Criteria</td>
+            <td>Physician-written; each criterion independently evaluated</td>
+          </tr>
+          <tr>
+            <td>Point Range</td>
+            <td>−10 to +10 per criterion; negative points for unsafe or harmful behavior</td>
+          </tr>
+          <tr>
+            <td>Length Adjustment</td>
+            <td>Penalty of 1.47 pts per 500 characters above 2,000 to prevent verbosity gaming</td>
+          </tr>
+          <tr>
+            <td>Grader Model</td>
+            <td>GPT-5.4 at low reasoning effort (more capable than prior HealthBench grader)</td>
+          </tr>
+          <tr>
+            <td>Samples per Example</td>
+            <td>8 samples averaged to reduce variability in main comparisons</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>Score interpretation:</strong> Scores reported ×100 for readability. A score of 45 on HealthBench Professional can coexist with high real-world performance in typical usage.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 8 — MAIN RESULTS
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="kicker">Results</div>
+    <h2>Overall <span>Benchmark Performance</span></h2>
+    <div class="bar-chart">
+      <div class="bar-row">
+        <div class="bar-label">GPT-5.4 in ChatGPT for Clinicians</div>
+        <div class="bar-track"><div class="bar-fill cyan" style="width:59%;">59.0</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">GPT-5.4 (base)</div>
+        <div class="bar-track"><div class="bar-fill green" style="width:48.1%;">48.1</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">GPT-5.4 + Browsing</div>
+        <div class="bar-track"><div class="bar-fill amber" style="width:45.8%;">45.8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Human Physicians</div>
+        <div class="bar-track"><div class="bar-fill muted" style="width:43.7%;">43.7</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Claude Opus 4.7</div>
+        <div class="bar-track"><div class="bar-fill purple" style="width:40%;">~40</div></div>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Key finding:</strong> GPT-5.4 in ChatGPT for Clinicians significantly outperforms human physician baseline (p = 3.7 × 10⁻¹⁰).
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 9 — PERFORMANCE BY USE CASE
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="kicker">Results by Domain</div>
+    <h2>Performance by <span>Use Case</span></h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Use Case</th>
+            <th>ChatGPT for Clinicians</th>
+            <th>Human Physicians</th>
+            <th>Base GPT-5.4</th>
+            <th>Significance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-cyan">Care Consult</span></td>
+            <td>51.0</td>
+            <td>42.7</td>
+            <td>~51.0</td>
+            <td><span class="tag tag-green">p = 0.025</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-amber">Writing &amp; Docs</span></td>
+            <td>64.1</td>
+            <td>32.1</td>
+            <td>34.6</td>
+            <td><span class="tag tag-green">p &lt; 10⁻⁸</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-green">Medical Research</span></td>
+            <td>67.0</td>
+            <td>56.3</td>
+            <td>58.1</td>
+            <td><span class="tag tag-green">p = 0.0015</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>Largest gain:</strong> Writing &amp; Documentation — ChatGPT for Clinicians scored nearly <strong>2× the physician baseline</strong> (64.1 vs. 32.1).
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 10 — ADVERSARIAL / DIFFICULT CASES
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="kicker">Adversarial Robustness</div>
+    <h2>Performance on <span>Hardest Cases</span></h2>
+    <div class="bar-chart">
+      <div class="bar-row">
+        <div class="bar-label">ChatGPT for Clinicians (RT Likert 1–2)</div>
+        <div class="bar-track"><div class="bar-fill cyan" style="width:55.8%;">55.8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Human Physicians (RT Likert 1–2)</div>
+        <div class="bar-track"><div class="bar-fill muted" style="width:30%;">30.0</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Base GPT-5.4 (RT Likert 1–2)</div>
+        <div class="bar-track"><div class="bar-fill amber" style="width:26.2%;">26.2</div></div>
+      </div>
+    </div>
+    <div class="card-row" style="margin-top:.8rem;">
+      <div class="card cyan">
+        <div class="card-title">Good Faith Typical</div>
+        <div class="card-body">ChatGPT for Clinicians: 69.0 vs. Physicians: 55.7 (p = 1.0 × 10⁻⁷)</div>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Good Faith Difficult</div>
+        <div class="card-body">Statistically tied with physicians (p = 0.60) — a genuine challenge for all systems.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 11 — REASONING EFFORT & TEST-TIME COMPUTE
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="kicker">Test-Time Scaling</div>
+    <h2>Reasoning Effort <span>Improves Scores</span></h2>
+    <div class="two-col">
+      <div>
+        <div class="section-label">GPT-5.4: Low → X-High Reasoning</div>
+        <div class="big-num">+5.6 – 7.3</div>
+        <p style="color:var(--muted);font-size:.9rem;margin-top:.5rem;">Points gained by increasing reasoning effort, depending on verbosity setting</p>
+        <div class="callout" style="margin-top:1rem;">
+          <strong>Key insight:</strong> Gains are driven by higher-quality responses — not simply longer ones. Length adjustment confirms this.
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Average Gain: Low → High Reasoning</div>
+        <div class="big-num">+3.3</div>
+        <p style="color:var(--muted);font-size:.9rem;margin-top:.5rem;">Average score improvement across GPT-5 through GPT-5.4 models</p>
+        <div class="callout" style="margin-top:1rem;">
+          <strong>Verbosity effect:</strong> Low → medium verbosity adds ~1,300 characters but only 3.9 unadjusted points, which the length penalty largely neutralizes.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 12 — LIMITATIONS
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="kicker">Critical Appraisal</div>
+    <h2>Limitations &amp; <span>Interpretation</span></h2>
+    <div class="card-row">
+      <div class="card amber">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Scores ≠ Real-World Rate</div>
+        <div class="card-body">Adversarial enrichment means benchmark scores are intentionally lower than typical clinical performance.</div>
+      </div>
+      <div class="card red">
+        <div class="card-icon">🏥</div>
+        <div class="card-title">EHR Workflows Not Covered</div>
+        <div class="card-body">Institution-specific constraints and EHR-integrated workflows are absent from the current benchmark.</div>
+      </div>
+      <div class="card purple">
+        <div class="card-icon">🔬</div>
+        <div class="card-title">OpenAI Model Selection Bias</div>
+        <div class="card-body">Difficulty ratings assigned against OpenAI frontier models; may partially confound cross-model comparisons.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Recommendation:</strong> Institutions should conduct pre-deployment evaluations for their specific use cases and monitor post-deployment performance.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 13 — CONCLUSION
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="center-col">
+      <div class="kicker">Conclusion</div>
+      <h1>Raising the <span>Ceiling of Care</span></h1>
+      <div class="divider"></div>
+      <div class="card-row" style="margin-top:1.2rem;">
+        <div class="card cyan">
+          <div class="card-title">Today</div>
+          <div class="card-body">On HealthBench Professional, GPT-5.4 in ChatGPT for Clinicians outperformed the physician baseline, with the largest gains in documentation and research tasks.</div>
+        </div>
+        <div class="card green">
+          <div class="card-title">Benchmark Value</div>
+          <div class="card-body">HealthBench Professional provides a rigorous, unsaturated measure to track frontier model progress in clinical AI.</div>
+        </div>
+        <div class="card amber">
+          <div class="card-title">Guardrail</div>
+          <div class="card-body">Benchmark wins are not deployment clearance. Local evaluation, workflow testing, and physician accountability still determine whether a model belongs in clinical practice.</div>
+        </div>
+      </div>
+      <p class="subtitle" style="margin-top:1.4rem;">
+        Sources: OpenAI, &ldquo;Making ChatGPT better for clinicians,&rdquo; April 22, 2026, plus the HealthBench Professional paper and dataset release.
+      </p>
+    </div>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- Navigation -->
+<div id="nav">
+  <button id="btn-prev" onclick="prevSlide()" title="Previous (←)">&#8592;</button>
+  <span id="slide-counter">1 / 13</span>
+  <button id="btn-next" onclick="nextSlide()" title="Next (→)">&#8594;</button>
+</div>
+
+<script>
+  let cur = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total  = slides.length;
+  const counter = document.getElementById('slide-counter');
+  const progress = document.getElementById('progress');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+
+  function show(idx) {
+    slides[cur].classList.remove('active');
+    cur = (idx + total) % total;
+    slides[cur].classList.add('active');
+    counter.textContent = `${cur + 1} / ${total}`;
+    progress.style.width = `${((cur + 1) / total) * 100}%`;
+    btnPrev.disabled = cur === 0;
+    btnNext.disabled = cur === total - 1;
+  }
+
+  function nextSlide() { if (cur < total - 1) show(cur + 1); }
+  function prevSlide() { if (cur > 0) show(cur - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft')                   { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch / swipe support
+  let touchX = null;
+  document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+  document.addEventListener('touchend',   e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+    touchX = null;
+  });
+
+  show(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
