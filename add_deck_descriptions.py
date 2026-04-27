@@ -106,8 +106,10 @@ DESCRIPTIONS = {
         "Explains Di-Di twin pregnancy: chorionicity determination, growth scan schedule, preterm birth risk, and delivery timing recommendations for dichorionic-diamniotic twins.",
     "decks/advanced-maternal-age-patient/advanced_maternal_age_patient_education.html":
         "Covers AMA (\u226535 years): age-related aneuploidy risk, NIPT and amniocentesis options, preeclampsia and GDM screening, and delivery planning for older mothers.",
+    "decks/hlhs-sonography/index.html":
+        "Patient-friendly prenatal counseling handout on hypoplastic left heart syndrome: what HLHS means, how pregnancy is monitored, delivery planning, newborn care, and family support.",
     "decks/hlhs-sonography/hlhs_sonography.html":
-        "Sonographer-focused guide to HLHS: ultrasound identification of left heart hypoplasia, associated findings, referral criteria, and fetal echocardiography indications.",
+        "Patient-friendly prenatal counseling handout on hypoplastic left heart syndrome: what HLHS means, how pregnancy is monitored, delivery planning, newborn care, and family support.",
     "decks/gastric-bypass/gastric-bypass.html":
         "Covers nutritional deficiencies, dumping syndrome, fetal growth monitoring, and gestational weight gain guidance for pregnancies following bariatric surgery.",
     "decks/eif-patient/eif_patient_education_with_images.html":
