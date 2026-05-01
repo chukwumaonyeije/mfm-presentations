@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>When NIPT Gets Complicated: Edge Cases in cfDNA Screening</title>
+<meta name="description" content="Interactive Labcorp-sponsored MFM presentation on NIPT edge cases, cfDNA biology, genome-wide screening, and clinical counseling.">
+<meta name="author" content="Chukwuma I. Onyeije, MD">
+<meta property="og:title" content="When NIPT Gets Complicated: Edge Cases in cfDNA Screening">
+<meta property="og:description" content="Interactive MFM discussion of cfDNA edge cases, sponsored-talk best practices, and Labcorp platform context.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://openmfm.org/nipt-edge-cases">
+<link rel="canonical" href="https://openmfm.org/nipt-edge-cases">
+<style>
+:root{
+  --navy:#071A2C;
+  --blue:#003865;
+  --sky:#00A3E0;
+  --gold:#F2A900;
+  --ink:#142331;
+  --muted:#6B7785;
+  --paper:#F7FAFC;
+  --white:#fff;
+  --green:#2F855A;
+  --red:#A03535;
+  --shadow:0 24px 70px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  height:100%;
+  background:#081522;
+  color:var(--ink);
+  font-family:Aptos,Inter,"Segoe UI",Roboto,Arial,sans-serif;
+}
+body{overflow:hidden}
+.speaker-notes{display:none}
+.deck-shell{
+  height:100%;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at 80% 5%,rgba(0,163,224,.28),transparent 26%),
+    linear-gradient(135deg,#040b12,#0b1a2a 55%,#081522);
+}
+.deck{
+  position:relative;
+  aspect-ratio:16/9;
+  width:min(100vw,calc(100vh*16/9));
+  height:min(100vh,calc(100vw*9/16));
+  box-shadow:var(--shadow);
+  background:var(--white);
+  overflow:hidden;
+}
+.slide{
+  position:absolute;
+  inset:0;
+  padding:52px 64px 46px;
+  display:none;
+  background:linear-gradient(180deg,#fff,#f7fafc);
+  overflow:hidden;
+}
+.slide.active{
+  display:flex;
+  flex-direction:column;
+}
+.slide::after{
+  content:attr(data-n) " / " attr(data-total);
+  position:absolute;
+  right:28px;
+  bottom:18px;
+  color:#7c8794;
+  font-size:14px;
+}
+.kicker{
+  color:var(--sky);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:15px;
+  margin:0 0 10px;
+}
+.slide h1{
+  font-size:54px;
+  line-height:1.03;
+  margin:0 0 14px;
+  color:var(--blue);
+  letter-spacing:-.04em;
+}
+.slide h2{
+  font-size:34px;
+  line-height:1.08;
+  margin:0 0 22px;
+  color:var(--blue);
+  letter-spacing:-.03em;
+}
+.slide h3{
+  font-size:24px;
+  margin:0 0 10px;
+  color:var(--navy);
+}
+.slide p,.slide li,.slide td,.slide th{
+  font-size:22px;
+  line-height:1.32;
+}
+.slide p{margin:0 0 16px}
+.slide ul,.slide ol{margin:0 0 14px 1.1em;padding:0}
+.slide li{margin:7px 0}
+.slide small{font-size:.62em;color:var(--muted)}
+.subtitle{font-size:29px;color:#d5eafa}
+.date{font-size:18px;color:#cdd8e6;margin-top:22px}
+.title{
+  background:
+    radial-gradient(circle at 80% 20%,rgba(0,163,224,.28),transparent 30%),
+    linear-gradient(135deg,#061626,#003865 70%,#081522);
+  color:white;
+  justify-content:center;
+}
+.title h1{font-size:64px;color:white}
+.title h2{color:white;font-size:36px}
+.title strong{color:white}
+.title::after{color:#c8d9e8}
+.visual{justify-content:center}
+.slide blockquote{
+  border-left:9px solid var(--gold);
+  background:rgba(0,56,101,.07);
+  padding:22px 26px;
+  margin:10px 0 20px;
+  border-radius:0 14px 14px 0;
+  font-weight:700;
+  color:#102336;
+}
+.largequote{font-size:36px;line-height:1.18}
+.callout,.prompt,.answer{
+  border-left:8px solid var(--sky);
+  background:#eaf7fc;
+  padding:17px 22px;
+  border-radius:14px;
+  font-size:22px;
+  line-height:1.32;
+  margin-top:auto;
+}
+.prompt{border-color:var(--gold);background:#fff7df}
+.answer{border-color:var(--green);background:#eaf6ef}
+.split{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:32px;
+  align-items:start;
+}
+.split>div,.card{
+  background:white;
+  border:1px solid rgba(0,56,101,.12);
+  border-radius:22px;
+  padding:24px 28px;
+  box-shadow:0 12px 28px rgba(7,26,44,.08);
+}
+.guardrails{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:38px;
+}
+.guardrails>div:first-child{border-top:8px solid var(--green)}
+.guardrails>div:last-child{border-top:8px solid var(--red)}
+.guardrails>div{
+  background:#fff;
+  border-radius:20px;
+  padding:26px 30px;
+  box-shadow:0 10px 26px rgba(7,26,44,.08);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:white;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 12px 30px rgba(7,26,44,.08);
+}
+th{
+  background:#e7f4fb;
+  color:var(--blue);
+  font-size:19px;
+  text-align:left;
+}
+td,th{
+  border:1px solid rgba(0,56,101,.14);
+  padding:12px 14px;
+  vertical-align:top;
+}
+td{font-size:19px}
+.big-list li{font-size:25px;margin:12px 0}
+.poll{
+  background:white;
+  border:2px solid rgba(0,56,101,.14);
+  border-radius:24px;
+  padding:26px 30px;
+  box-shadow:0 14px 35px rgba(7,26,44,.12);
+}
+.poll-title{
+  color:var(--gold);
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:15px;
+  margin-bottom:8px;
+}
+.case{background:linear-gradient(135deg,#f8fbff,#eef8fc)}
+.case .poll p{font-size:25px;font-weight:700;color:var(--navy)}
+.steps{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  margin-top:16px;
+}
+.steps div{
+  background:white;
+  border-radius:22px;
+  padding:24px;
+  box-shadow:0 14px 30px rgba(7,26,44,.09);
+  min-height:150px;
+}
+.steps b{
+  display:grid;
+  place-items:center;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:var(--blue);
+  color:white;
+  margin-bottom:16px;
+}
+.steps span{font-size:22px;line-height:1.25}
+.triad,.flow{
+  display:flex;
+  gap:16px;
+  align-items:center;
+  justify-content:center;
+  margin:24px 0;
+}
+.triad div{
+  background:white;
+  border-radius:24px;
+  padding:26px 30px;
+  text-align:center;
+  min-width:240px;
+  font-size:30px;
+  font-weight:800;
+  box-shadow:0 12px 30px rgba(7,26,44,.09);
+}
+.mega{font-size:58px!important}
+.flow div{
+  background:white;
+  border-radius:18px;
+  padding:18px 20px;
+  text-align:center;
+  font-size:22px;
+  font-weight:800;
+  box-shadow:0 8px 22px rgba(7,26,44,.08);
+}
+.flow span{font-size:30px;color:var(--sky);font-weight:900}
+.map{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-top:10px;
+}
+.map div{
+  background:white;
+  border-radius:22px;
+  padding:24px;
+  text-align:center;
+  font-size:24px;
+  font-weight:800;
+  box-shadow:0 12px 30px rgba(7,26,44,.08);
+}
+.map .center{
+  grid-column:1/4;
+  background:linear-gradient(135deg,var(--blue),var(--navy));
+  color:white;
+  font-size:34px;
+}
+.algorithm{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.algorithm .node,.algorithm .branch>div{
+  background:white;
+  border:1px solid rgba(0,56,101,.14);
+  border-radius:20px;
+  padding:20px;
+  text-align:center;
+  font-size:21px;
+  line-height:1.25;
+  box-shadow:0 10px 24px rgba(7,26,44,.07);
+}
+.algorithm .top{
+  background:linear-gradient(135deg,var(--blue),var(--navy));
+  color:white;
+  font-weight:900;
+  font-size:28px;
+}
+.algorithm .branch{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.wide .branch>div{font-size:19px}
+.placenta{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:28px;
+  align-items:center;
+  margin-top:28px;
+}
+.placenta div{
+  border-radius:28px;
+  padding:34px;
+  text-align:center;
+  font-size:30px;
+  font-weight:900;
+  box-shadow:0 14px 35px rgba(7,26,44,.11);
+}
+.placental{background:#fff7df;border:2px solid var(--gold)}
+.blood{background:#eaf7fc;border:2px solid var(--sky)}
+.fetus{background:#ecf8f1;border:2px solid var(--green)}
+.lenses{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+.lenses div{
+  background:white;
+  border-radius:24px;
+  padding:24px;
+  box-shadow:0 12px 30px rgba(7,26,44,.09);
+  min-height:220px;
+}
+.lenses b{
+  display:block;
+  font-size:48px;
+  color:var(--sky);
+  line-height:1;
+}
+.codebox{
+  font-family:"SFMono-Regular",Consolas,monospace;
+  background:#071A2C;
+  color:#eef8fc;
+  border-radius:20px;
+  padding:28px;
+  font-size:23px;
+  line-height:1.55;
+  box-shadow:0 18px 40px rgba(7,26,44,.18);
+}
+.refs li{font-size:21px;margin:14px 0}
+.slide a{
+  color:var(--blue);
+  font-weight:800;
+  text-decoration:none;
+  border-bottom:2px solid rgba(0,163,224,.35);
+}
+.refs-slide h1,.refs-slide h2{color:var(--blue)}
+.ref{
+  position:absolute;
+  left:64px;
+  bottom:18px;
+  color:#8793a0;
+  font-size:13px;
+}
+.nav{
+  position:fixed;
+  left:50%;
+  bottom:14px;
+  transform:translateX(-50%);
+  display:flex;
+  gap:8px;
+  align-items:center;
+  background:rgba(255,255,255,.94);
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+  border-radius:999px;
+  padding:8px 12px;
+  z-index:10;
+  font-size:14px;
+  color:var(--navy);
+}
+.nav button{
+  border:0;
+  background:var(--blue);
+  color:white;
+  border-radius:999px;
+  font-weight:800;
+  padding:7px 12px;
+  cursor:pointer;
+}
+.nav button:disabled{opacity:.35;cursor:not-allowed}
+.progress{
+  position:fixed;
+  left:0;
+  bottom:0;
+  height:5px;
+  background:var(--sky);
+  width:0;
+  z-index:11;
+}
+.notes-panel{
+  position:fixed;
+  right:18px;
+  top:18px;
+  width:min(420px,38vw);
+  max-height:70vh;
+  overflow:auto;
+  background:rgba(7,26,44,.96);
+  color:#fff;
+  border-radius:18px;
+  padding:18px 20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+  z-index:20;
+  display:none;
+}
+.notes-panel.open{display:block}
+.notes-panel h3{margin:0 0 8px;color:#fff}
+.notes-panel p{font-size:16px;line-height:1.4}
+.help{
+  position:fixed;
+  left:18px;
+  bottom:16px;
+  color:#d5eafa;
+  font-size:13px;
+  z-index:10;
+}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chips span{
+  background:#e7f4fb;
+  color:var(--blue);
+  border-radius:999px;
+  padding:8px 14px;
+  font-weight:800;
+  font-size:18px;
+}
+@media print{
+  html,body{background:white;overflow:visible}
+  .deck-shell{display:block;height:auto;background:white}
+  .deck{width:auto;height:auto;aspect-ratio:auto;box-shadow:none;overflow:visible}
+  .slide,.slide.active{
+    display:flex;
+    position:relative;
+    width:13.333in;
+    height:7.5in;
+    page-break-after:always;
+    break-after:page;
+  }
+  .nav,.progress,.help,.notes-panel{display:none!important}
+}
+@media (max-width:1080px){
+  .slide{padding:40px 44px 42px}
+  .slide h1{font-size:46px}
+  .slide h2{font-size:30px}
+  .slide p,.slide li,.slide td,.slide th{font-size:18px}
+  .big-list li{font-size:21px}
+  .case .poll p,.steps span,.flow div,.algorithm .node,.algorithm .branch>div{font-size:19px}
+  .triad div,.placenta div{font-size:24px}
+  .map div{font-size:21px}
+  .map .center{font-size:28px}
+  .codebox{font-size:18px}
+}
+@media (max-width:820px){
+  body{overflow:auto}
+  .deck-shell{
+    display:block;
+    min-height:100vh;
+    height:auto;
+    padding:16px 0 40px;
+  }
+  .deck{
+    width:100%;
+    height:auto;
+    aspect-ratio:auto;
+    background:transparent;
+    box-shadow:none;
+    overflow:visible;
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+  .slide,.slide.active{
+    position:relative;
+    inset:auto;
+    display:flex!important;
+    min-height:auto;
+    overflow:visible;
+    margin:0 14px 16px;
+    padding:26px 20px 52px;
+    border-radius:24px;
+    background:linear-gradient(180deg,#fff,#f7fafc);
+    box-shadow:0 16px 40px rgba(0,0,0,.16);
+  }
+  .title{min-height:calc(100vh - 72px)}
+  .slide::after{right:18px;bottom:16px;font-size:12px}
+  .slide h1{font-size:clamp(2.1rem,9vw,3rem)}
+  .slide h2{font-size:clamp(1.55rem,7vw,2.2rem);margin-bottom:18px}
+  .slide h3{font-size:1.15rem}
+  .slide p,.slide li,.slide td,.slide th{font-size:1rem;line-height:1.55}
+  .subtitle{font-size:1.1rem;line-height:1.5}
+  .date{font-size:.92rem}
+  .big-list li{font-size:1.02rem}
+  .largequote{font-size:1.55rem}
+  .prompt,.callout,.answer,.poll,.split>div,.card,.guardrails>div,.steps div,.triad div,.flow div,.map div,.algorithm .node,.algorithm .branch>div,.placenta div,.lenses div,.codebox{
+    box-shadow:none;
+  }
+  .split,.guardrails,.steps,.lenses,.algorithm .branch,.placenta,.map{
+    grid-template-columns:1fr;
+  }
+  .map .center{grid-column:1}
+  .flow,.triad{flex-direction:column}
+  .flow{align-items:stretch}
+  .flow span{transform:rotate(90deg)}
+  .triad div{min-width:0;width:100%}
+  table{
+    display:block;
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+  .ref{
+    position:static;
+    margin-top:10px;
+    font-size:12px;
+  }
+  .nav,.progress,.help,.notes-panel{display:none!important}
+}
+</style>
+</head>
+<body>
+<div class="deck-shell"><main class="deck" aria-label="NIPT Edge Cases Labcorp sponsored interactive presentation"><section class="slide title" data-n="1" data-total="51"><h2>Edge Cases in cfDNA Screening</h2><p class="subtitle">An interactive, Labcorp-sponsored MFM discussion for OB/GYN and MFM clinicians</p><p><strong>Chukwuma I. Onyeije, MD</strong><br>Maternal-Fetal Medicine</p><p class="date">Prepared for live presentation and publication on openMFM.org</p><aside class="speaker-notes">Open with the premise: cfDNA screening is mature technology, but the difficult value comes from interpreting unexpected biology.</aside></section><section class="slide " data-n="2" data-total="51"><h2>Disclosure + Independence</h2><div class="split"><div><h3>Disclosure</h3><p>This educational session is sponsored by Labcorp. Platform-specific examples include MaterniT® 21 PLUS, GENOME-Flex, and MaterniT GENOME.</p></div><div><h3>Clinical independence</h3><p>Management recommendations are anchored in professional guidance, diagnostic confirmation, and patient-centered counseling.</p></div></div><div class="callout"><strong>Best-practice language:</strong> A sponsored talk is most credible when it is transparent, balanced, evidence-based, and useful even to clinicians who use a different laboratory.</div><aside class="speaker-notes">Say this explicitly. It protects credibility and sets a scholarly tone.</aside></section><section class="slide visual" data-n="3" data-total="51"><h2>How This Talk Will Work</h2><div class="steps"><div><b>1</b><span>Short framing</span></div><div><b>2</b><span>Audience decisions</span></div><div><b>3</b><span>Case reveals</span></div><div><b>4</b><span>Algorithmic takeaways</span></div></div><div class="prompt">For each edge case, ask: <strong>What signal is the test seeing?</strong> Fetal, placental, maternal, twin-related, or technical?</div><aside class="speaker-notes"></aside></section><section class="slide " data-n="4" data-total="51"><h2>Learning Objectives</h2><ol class="big-list"><li>Explain why cfDNA results may differ from fetal diagnostic results.</li><li>Recognize high-value edge cases: no-call, CPM, vanishing twin, multifetal gestation, maternal CNV, and complex genome-wide patterns.</li><li>Use a structured pathway for positive, no-call, discordant, and genome-wide results.</li><li>Discuss Labcorp testing in a balanced sponsored-talk format without overclaiming.</li><li>Counsel patients with clarity: screen, risk, diagnostic confirmation, and next step.</li></ol><aside class="speaker-notes"></aside></section><section class="slide " data-n="5" data-total="51"><h2>The Core Clinical Principle</h2><h1 class="mega">cfDNA is primarily a placental signal.</h1><div class="triad"><div>Placenta<br><small>trophoblast source</small></div><div>Maternal plasma<br><small>mixed DNA pool</small></div><div>Fetal diagnosis<br><small>requires diagnostic testing</small></div></div><div class="callout">Most edge cases become understandable once the clinician stops asking “What is the baby’s karyotype?” and first asks “Where could this signal be coming from?”</div><aside class="speaker-notes">This is the thesis slide. Return to it repeatedly.</aside></section><section class="slide " data-n="6" data-total="51"><h2>Labcorp Platform Context</h2><table><thead><tr><th>Clinical offering</th><th>Use in this talk</th><th>Balanced wording</th></tr></thead><tbody><tr><td>MaterniT® 21 PLUS</td><td>Common trisomies, optional fetal sex, sex chromosome aneuploidy options, enhanced sequencing options</td><td>A customizable cfDNA screening platform; not diagnostic.</td></tr><tr><td>GENOME-Flex</td><td>Pathway that can add genome-wide assessment in select high-risk contexts</td><td>Useful when broader chromosomal assessment is clinically relevant.</td></tr><tr><td>MaterniT GENOME</td><td>Genome-wide NIPS: all 23 chromosome pairs; large deletions/duplications ≥7 Mb; select microdeletions</td><td>Broader information increases both opportunity and counseling complexity.</td></tr></tbody></table><div class="callout">Use platform details to support clinical reasoning—not to imply that broader screening removes the need for diagnostic confirmation.</div><div class="ref">Labcorp provider information</div><aside class="speaker-notes"></aside></section><section class="slide " data-n="7" data-total="51"><h2>Sponsored-Talk Guardrails</h2><div class="guardrails"><div><h3>Say</h3><ul><li>“screening,” not diagnosis</li><li>“placental signal,” not fetal karyotype</li><li>“workflow fit,” not universal superiority</li><li>“confirm before irreversible decisions”</li></ul></div><div><h3>Avoid</h3><ul><li>Overstating performance</li><li>Minimizing false positives</li><li>Implying all expanded findings are equally actionable</li><li>Competitor-bashing</li></ul></div></div><aside class="speaker-notes">Sponsored credibility rises when limitations are addressed early and honestly.</aside></section><section class="slide case" data-n="8" data-total="51"><h2>Audience Warm-Up</h2><div class="poll"><div class="poll-title">Audience decision point</div><p>A 35-year-old G2P1 at 10w2d asks: “Which NIPT should I get?” Normal early ultrasound. BMI 27. No family history. What is your first counseling move?</p><ol type="A"><li>Recommend the broadest genome-wide test because more information is always better</li><li>Review screening vs diagnostic testing, patient values, fetal sex/SCA preferences, and what she would do with uncertain findings</li><li>Avoid cfDNA and order only serum screening</li><li>Recommend diagnostic testing for all patients</li></ol></div><div class="answer">Teaching point: the “best” test starts with <strong>informed preference</strong>, not reflexive test expansion.</div><aside class="speaker-notes"></aside></section><section class="slide " data-n="9" data-total="51"><h2>Counting-Based cfDNA: The Practical Model</h2><div class="flow"><div>Maternal blood</div><span>→</span><div>Plasma cfDNA</div><span>→</span><div>Sequencing</div><span>→</span><div>Chromosome counts</div><span>→</span><div>Risk call</div></div><div class="split"><div><h3>Strength</h3><p>Chromosomal dosage signal is conceptually straightforward and scalable.</p></div><div><h3>Limitation</h3><p>The signal is mixed: maternal + placental, and sometimes co-twin or tumor-derived.</p></div></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="10" data-total="51"><h2>What Counting Can and Cannot Answer</h2><table><thead><tr><th>Question</th><th>cfDNA can help with</th><th>cfDNA cannot do alone</th></tr></thead><tbody><tr><td>Common trisomy risk</td><td>High-performance screening for T21/T18/T13</td><td>Confirm fetal diagnosis</td></tr><tr><td>Genome-wide imbalance</td><td>Detect large dosage signals above reporting thresholds</td><td>Resolve fetal vs placental vs maternal origin</td></tr><tr><td>Twin pregnancy</td><td>Screen for common trisomies in selected twin contexts</td><td>Reliably assign every signal to a specific fetus</td></tr><tr><td>Discordant result</td><td>Identify that a signal exists</td><td>Explain the source without clinical correlation and diagnostic testing</td></tr></tbody></table><aside class="speaker-notes"></aside></section><section class="slide " data-n="11" data-total="51"><h2>Guideline Guardrails to Keep in View</h2><ul class="big-list"><li>cfDNA should be available to obstetric patients as a high-performing screen for common aneuploidies.</li><li>Patients should retain the right to pursue or decline screening and diagnostic testing after counseling.</li><li>Positive and no-call results require counseling, ultrasound evaluation, and discussion of diagnostic testing.</li><li>Routine general-population screening for microdeletions or large genome-wide CNVs is not recommended by SMFM; diagnostic testing is preferred when fetal CNV information is the primary goal.</li></ul><div class="ref">SMFM Consult Series #74; ACOG current guidance</div><aside class="speaker-notes"></aside></section><section class="slide visual" data-n="12" data-total="51"><h2>The Edge-Case Map</h2><div class="map"><div class="center">Unexpected cfDNA result</div><div>Technical<br><small>sample, low FF</small></div><div>Placental<br><small>CPM, insufficiency</small></div><div>Fetal<br><small>true aneuploidy, mosaicism</small></div><div>Maternal<br><small>CNV, mosaicism, malignancy</small></div><div>Pregnancy context<br><small>vanishing twin, IVF, multiples</small></div></div><aside class="speaker-notes"></aside></section><section class="slide case" data-n="13" data-total="51"><h2>Edge Case 1: No-Call / Low Fetal Fraction</h2><div class="poll"><div class="poll-title">Audience decision point</div><p>A patient at 11w0d has a “no-call” due to low fetal fraction. BMI 42. Ultrasound is normal. What do you tell her first?</p><ol type="A"><li>This is basically negative because nothing abnormal was reported</li><li>Repeat testing is mandatory and diagnostic testing is unnecessary</li><li>A no-call is not a negative result; it needs counseling, ultrasound review, and a discussion of repeat cfDNA vs diagnostic testing</li><li>Proceed directly to pregnancy termination</li></ol></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="14" data-total="51"><h2>Low Fetal Fraction: What It Usually Means</h2><div class="split"><div><h3>Common contributors</h3><ul><li>Early gestational age</li><li>Higher maternal BMI</li><li>Sample quality or technical issues</li><li>Placental dysfunction</li><li>Some aneuploidies, especially T13/T18/triploidy patterns in some platforms</li></ul></div><div><h3>Clinical interpretation</h3><ul><li>No-call ≠ screen-negative</li><li>Repeat may be reasonable in selected cases</li><li>Diagnostic testing should be offered when clinical concern is high or repeat failure occurs</li></ul></div></div><div class="callout">Never let “insufficient data” be heard as “reassuring data.”</div><aside class="speaker-notes"></aside></section><section class="slide " data-n="15" data-total="51"><h2>No-Call Pathway</h2><div class="algorithm"><div class="node top">No-call / low fetal fraction</div><div class="branch"><div>Confirm GA, BMI, sample details</div><div>Perform/confirm ultrasound</div><div>Review indication + patient goals</div></div><div class="branch"><div><b>Anomaly or high-risk context?</b><br>Offer genetics + diagnostic testing</div><div><b>Low-risk context?</b><br>Repeat cfDNA may be reasonable</div><div><b>Repeat failure?</b><br>Escalate to diagnostic pathway</div></div></div><div class="ref">ACOG/SMFM guidance</div><aside class="speaker-notes"></aside></section><section class="slide " data-n="16" data-total="51"><h2>Counseling Language: No-Call</h2><blockquote>“This result does not say the baby is affected, but it also does not say the baby is unaffected. The test did not have enough usable placental DNA signal to give a reliable answer. Our next step is to combine ultrasound findings, your baseline risk, and your preferences to decide between repeating screening and moving to diagnostic testing.”</blockquote><aside class="speaker-notes"></aside></section><section class="slide case" data-n="17" data-total="51"><h2>Edge Case 2: Confined Placental Mosaicism</h2><div class="poll"><div class="poll-title">Audience decision point</div><p>NIPT returns high risk for trisomy 16. Detailed ultrasound is normal. Patient asks for the most definitive fetal answer. What test best answers the fetal question?</p><ol type="A"><li>Repeat cfDNA</li><li>CVS only</li><li>Amniocentesis with karyotype/microarray as appropriate</li><li>Maternal serum screening</li></ol></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="18" data-total="51"><h2>CPM: Why cfDNA and Amnio Can Disagree</h2><div class="placenta"><div class="placental abnormal">Placenta<br><small>abnormal cell line</small></div><div class="blood">cfDNA high-risk signal</div><div class="fetus normal">Fetus<br><small>normal or different karyotype</small></div></div><div class="callout">CPM is not a laboratory “mistake.” It is a biologic explanation for a real placental signal that may not represent the fetal karyotype.</div><aside class="speaker-notes"></aside></section><section class="slide " data-n="19" data-total="51"><h2>CVS vs Amnio: Match the Test to the Question</h2><table><thead><tr><th>Clinical question</th><th>CVS</th><th>Amniocentesis</th></tr></thead><tbody><tr><td>Is the placenta abnormal?</td><td>Directly samples placental tissue</td><td>Indirect; fetal cells in amniotic fluid</td></tr><tr><td>Is the fetus affected?</td><td>May be confounded by CPM</td><td>Preferred for fetal karyotype confirmation</td></tr><tr><td>Early answer needed?</td><td>Earlier</td><td>Later</td></tr><tr><td>Mosaic/discordant cfDNA?</td><td>Can add ambiguity</td><td>Often clarifies fetal involvement</td></tr></tbody></table><div class="callout">The most common error is using a placental test to resolve a placental-vs-fetal discordance question.</div><aside class="speaker-notes"></aside></section><section class="slide " data-n="20" data-total="51"><h2>Positive NIPT Pathway</h2><div class="algorithm wide"><div class="node top">Positive cfDNA screen</div><div class="branch"><div>Genetic counseling</div><div>Detailed ultrasound</div><div>Condition-specific PPV discussion</div></div><div class="branch"><div><b>Anomaly present?</b><br>Higher fetal suspicion</div><div><b>No anomaly?</b><br>Consider CPM, PPV, maternal source</div></div><div class="branch"><div>Offer diagnostic testing</div><div>Prefer amnio when fetal confirmation is the question</div><div>Do not make irreversible decisions on screening alone</div></div></div><aside class="speaker-notes"></aside></section><section class="slide case" data-n="21" data-total="51"><h2>Edge Case 3: Vanishing Twin</h2><div class="poll"><div class="poll-title">Audience decision point</div><p>A patient had early twin gestation after IVF. One sac demised at 8 weeks. At 12 weeks, cfDNA is positive for T21. Current ultrasound shows one normal fetus. What is the key counseling point?</p><ol type="A"><li>The surviving fetus definitely has T21</li><li>The result may reflect residual cfDNA from the demised co-twin; diagnostic testing should be discussed</li><li>Ignore the result because vanishing twin makes all cfDNA invalid</li><li>Repeat at 13 weeks will always fix the problem</li></ol></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="22" data-total="51"><h2>Vanishing Twin: The Signal Problem</h2><div class="split"><div><h3>Mechanism</h3><p>Residual cfDNA from a demised co-twin can persist and confound the risk estimate for the ongoing fetus.</p></div><div><h3>Practical response</h3><ul><li>Document early ultrasound history</li><li>Clarify timing of demise</li><li>Use ultrasound correlation</li><li>Offer diagnostic testing if the result would change management</li></ul></div></div><div class="callout">The test may be accurately detecting DNA from the pregnancy—but not necessarily from the surviving fetus.</div><aside class="speaker-notes"></aside></section><section class="slide " data-n="23" data-total="51"><h2>Edge Case 4: Twins and Higher-Order Multiples</h2><div class="split"><div><h3>Useful</h3><ul><li>cfDNA is supported as a first-line option for trisomy 21 in twin gestations</li><li>Data for T18/T13 in twins are increasingly supportive but affected numbers remain smaller</li></ul></div><div><h3>Be cautious</h3><ul><li>Sex chromosome aneuploidy screening in twins is not routinely recommended by SMFM</li><li>Higher-order multiples remain a difficult evidence space</li><li>Assigning a signal to one fetus can be challenging</li></ul></div></div><div class="ref">SMFM Consult Series #74</div><aside class="speaker-notes"></aside></section><section class="slide " data-n="24" data-total="51"><h2>Twin Result Pathway</h2><div class="algorithm"><div class="node top">Twin cfDNA result</div><div class="branch"><div>Confirm chorionicity and viability</div><div>Review fetal fraction/reporting details</div><div>Detailed ultrasound of both fetuses</div></div><div class="branch"><div><b>Positive common trisomy?</b><br>Genetics + diagnostic testing strategy</div><div><b>SCA or complex result?</b><br>Discuss limitations and consider diagnostic pathway</div><div><b>Vanishing twin?</b><br>Interpret with caution</div></div></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="25" data-total="51"><h2>Edge Case 5: Maternal CNV or Mosaicism</h2><div class="split"><div><h3>Clue</h3><p>cfDNA signal does not fit fetal ultrasound or diagnostic testing.</p></div><div><h3>Potential sources</h3><ul><li>Benign maternal copy-number variant</li><li>Maternal sex chromosome mosaicism</li><li>Transplant history or transfusion context</li><li>Maternal malignancy, rarely</li></ul></div></div><div class="callout">The “fetal” screen is performed in a maternal bloodstream. Maternal biology is always in the assay.</div><aside class="speaker-notes"></aside></section><section class="slide case" data-n="26" data-total="51"><h2>Edge Case 6: Multiple Aneuploidies</h2><div class="poll"><div class="poll-title">Audience decision point</div><p>Singleton pregnancy. cfDNA reports multiple chromosomal abnormalities. Detailed ultrasound and amnio are normal. What should rise on the differential?</p><ol type="A"><li>CPM only</li><li>Maternal CNV/mosaicism and, rarely, occult maternal malignancy</li><li>Paternity discrepancy</li><li>False negative amniocentesis is the only explanation</li></ol></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="27" data-total="51"><h2>Complex Pattern Pathway</h2><div class="algorithm wide"><div class="node top">Multiple aneuploidies / complex genome-wide pattern</div><div class="branch"><div>Review report with lab/genetics</div><div>Detailed fetal ultrasound</div><div>Offer fetal diagnostic testing</div></div><div class="branch"><div><b>Fetal diagnosis abnormal?</b><br>Manage fetal condition</div><div><b>Fetal diagnosis normal?</b><br>Consider CPM + maternal source</div><div><b>Pattern concerning?</b><br>Coordinate maternal evaluation</div></div><div class="branch"><div>Document uncertainty</div><div>Shared decision-making</div><div>Follow-up plan</div></div></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="28" data-total="51"><h2>Genome-Wide Screening: Power and Discipline</h2><div class="split"><div><h3>Power</h3><ul><li>All chromosome-pair assessment</li><li>Large CNV gains/losses above threshold</li><li>Signals that may explain atypical ultrasound findings</li></ul></div><div><h3>Discipline</h3><ul><li>Lower PPV for rarer findings</li><li>More incidental or maternal findings</li><li>Need for genetics and diagnostic confirmation</li><li>Avoid routine broad screening when guidelines discourage it</li></ul></div></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="29" data-total="51"><h2>Rare Autosomal Trisomy Signal</h2><div class="split"><div><h3>Think biologically</h3><ul><li>True fetal mosaicism</li><li>Confined placental mosaicism</li><li>Placental dysfunction risk</li></ul></div><div><h3>Clinical moves</h3><ul><li>Detailed anatomic survey</li><li>Genetic counseling</li><li>Discuss amniocentesis</li><li>Consider growth surveillance when CPM is plausible</li></ul></div></div><div class="callout">For rare autosomal trisomies, the clinical question is often not only “is the fetus affected?” but also “what does this tell us about the placenta?”</div><aside class="speaker-notes"></aside></section><section class="slide " data-n="30" data-total="51"><h2>Large CNV or Microdeletion Signal</h2><table><thead><tr><th>Finding type</th><th>Counseling emphasis</th><th>Next step</th></tr></thead><tbody><tr><td>Large CNV</td><td>May be clinically significant; origin may be fetal, placental, or maternal</td><td>Genetics + diagnostic testing; microarray often appropriate</td></tr><tr><td>22q11.2 or other microdeletion</td><td>Lower prevalence makes PPV more sensitive to population risk</td><td>Pretest counseling; diagnostic testing if actionable information desired</td></tr><tr><td>Incidental maternal pattern</td><td>May require maternal follow-up pathway</td><td>Coordinate carefully; avoid alarmist language</td></tr></tbody></table><aside class="speaker-notes"></aside></section><section class="slide " data-n="31" data-total="51"><h2>Reading the Report: A Structured Review</h2><ol class="big-list"><li><strong>Result category:</strong> negative, positive, no-call, atypical, genome-wide finding.</li><li><strong>Test scope:</strong> what was actually ordered and reported?</li><li><strong>Fetal fraction / quality:</strong> reportable? borderline? redraw?</li><li><strong>Pregnancy context:</strong> GA, BMI, twins, vanishing twin, IVF/donor egg.</li><li><strong>Phenotype:</strong> ultrasound normal, soft markers, structural anomaly, growth concern.</li><li><strong>Decision:</strong> repeat screening, diagnostic testing, genetics, maternal evaluation, surveillance.</li></ol><aside class="speaker-notes"></aside></section><section class="slide " data-n="32" data-total="51"><h2>The Four-Lens Interpretation Framework</h2><div class="lenses"><div><b>1</b><h3>Analytic</h3><p>Was the sample reportable?</p></div><div><b>2</b><h3>Biologic</h3><p>What signal source is plausible?</p></div><div><b>3</b><h3>Clinical</h3><p>Does ultrasound support the result?</p></div><div><b>4</b><h3>Decision</h3><p>What will change management?</p></div></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="33" data-total="51"><h2>PPV, Prevalence, and the Counseling Trap</h2><div class="split"><div><h3>High sensitivity is not the same as high PPV.</h3><p>PPV changes with condition prevalence, patient risk, test scope, and result type.</p></div><div><h3>Patient-centered framing</h3><p>“This is a high-risk screen. The chance that it is truly fetal depends on the condition, your clinical context, and ultrasound findings. Diagnostic testing is how we confirm.”</p></div></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="34" data-total="51"><h2>Patient Counseling Script</h2><blockquote>“NIPT is one of our strongest screening tools, but it is still a screening test. It looks at DNA fragments in your blood, most of which come from the placenta. When the result is positive, complex, or inconclusive, we use ultrasound and—when you want a definitive fetal answer—diagnostic testing.”</blockquote><aside class="speaker-notes"></aside></section><section class="slide " data-n="35" data-total="51"><h2>Documentation Template</h2><div class="codebox">NIPT result reviewed: [negative / positive / no-call / atypical / genome-wide].<br>Discussed that cfDNA is a screening test and primarily reflects placental DNA in maternal plasma.<br>Reviewed limitations, PPV/residual risk, ultrasound findings, and differential source of signal.<br>Options discussed: repeat cfDNA, genetic counseling, diagnostic testing with CVS/amnio, and/or maternal evaluation as indicated.<br>Patient questions answered; plan: [ ].</div><aside class="speaker-notes"></aside></section><section class="slide case" data-n="36" data-total="51"><h2>Interactive Case 1: No-Call</h2><h3>Scenario</h3><ul><li>38-year-old at 10w4d</li><li>BMI 41</li><li>No-call: low fetal fraction</li><li>NT ultrasound not yet performed</li></ul><div class="poll"><div class="poll-title">Audience decision point</div><p>What is your next best step?</p><ol type="A"><li>Tell her the test is negative</li><li>Repeat immediately only</li><li>Ultrasound + counseling + offer repeat vs diagnostic testing depending on findings/preferences</li><li>Order serum screen and ignore cfDNA</li></ol></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="37" data-total="51"><h2>Case 1 Reveal</h2><div class="answer">Best answer: <strong>Ultrasound + counseling + shared decision-making.</strong></div><p>Repeat testing may be reasonable if early gestational age or BMI plausibly contributed, but no-call is not reassuring. If ultrasound is abnormal, if baseline risk is high, or if repeat fails, escalate to diagnostic testing.</p><aside class="speaker-notes"></aside></section><section class="slide case" data-n="38" data-total="51"><h2>Interactive Case 2: Positive T18, Normal Ultrasound</h2><h3>Scenario</h3><ul><li>12w6d singleton</li><li>NIPT high risk for trisomy 18</li><li>Early anatomy appears normal</li><li>Patient wants certainty before making decisions</li></ul><div class="poll"><div class="poll-title">Audience decision point</div><p>How do you counsel?</p><ol type="A"><li>High-risk screen confirms fetal T18</li><li>Repeat NIPT to confirm</li><li>Discuss PPV and offer diagnostic testing; amnio is preferred for fetal confirmation when CPM is a concern</li><li>No further testing is needed because ultrasound is normal</li></ol></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="39" data-total="51"><h2>Case 2 Reveal</h2><div class="answer">Best answer: <strong>Genetic counseling + diagnostic testing.</strong></div><p>A normal ultrasound lowers suspicion but does not erase the risk. A screen-positive result requires confirmatory diagnostic testing before irreversible decisions.</p><aside class="speaker-notes"></aside></section><section class="slide case" data-n="40" data-total="51"><h2>Interactive Case 3: Vanishing Twin</h2><h3>Scenario</h3><ul><li>IVF pregnancy</li><li>Two sacs at 6 weeks; one demised by 8 weeks</li><li>NIPT at 12 weeks high risk for T21</li><li>Surviving fetus appears normal</li></ul><div class="poll"><div class="poll-title">Audience decision point</div><p>What is the most important interpretive limitation?</p><ol type="A"><li>cfDNA may represent the demised co-twin rather than the surviving fetus</li><li>T21 is excluded by the normal ultrasound</li><li>Repeat NIPT always resolves this</li><li>Diagnostic testing is contraindicated</li></ol></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="41" data-total="51"><h2>Case 3 Reveal</h2><div class="answer">Best answer: <strong>Signal-source uncertainty.</strong></div><p>Document the early twin history. Discuss that the result may not belong to the ongoing fetus, and offer diagnostic testing if the answer will affect management.</p><aside class="speaker-notes"></aside></section><section class="slide case" data-n="42" data-total="51"><h2>Interactive Case 4: Multiple Aneuploidies</h2><h3>Scenario</h3><ul><li>Singleton pregnancy</li><li>Genome-wide cfDNA reports multiple chromosomal abnormalities</li><li>Detailed ultrasound normal</li><li>Amniocentesis normal</li></ul><div class="poll"><div class="poll-title">Audience decision point</div><p>What should be considered next?</p><ol type="A"><li>No further action because amnio is normal</li><li>Maternal CNV/mosaicism, CPM, and rarely maternal malignancy</li><li>Repeat the same test until negative</li><li>Terminate based on screening result</li></ol></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="43" data-total="51"><h2>Case 4 Reveal</h2><div class="answer">Best answer: <strong>Source-of-signal analysis.</strong></div><p>Work with genetics and the laboratory. Consider placental and maternal explanations. Any maternal evaluation should be coordinated, documented, and proportionate to the pattern and clinical context.</p><aside class="speaker-notes"></aside></section><section class="slide " data-n="44" data-total="51"><h2>Edge Case → Action Summary</h2><table><thead><tr><th>Edge case</th><th>Core risk</th><th>Clinician action</th></tr></thead><tbody><tr><td>No-call / low FF</td><td>Not a negative result</td><td>Counsel + ultrasound + repeat vs diagnostic testing</td></tr><tr><td>Positive common trisomy</td><td>False positive possible</td><td>Genetics + diagnostic confirmation</td></tr><tr><td>Normal amnio after positive NIPT</td><td>CPM or maternal source</td><td>Reconcile source; consider surveillance</td></tr><tr><td>Vanishing twin</td><td>Residual co-twin cfDNA</td><td>Document timing; offer diagnostic testing</td></tr><tr><td>Twins</td><td>Attribution limits</td><td>Confirm chorionicity; diagnostic strategy if positive</td></tr><tr><td>Genome-wide CNV</td><td>More uncertainty</td><td>Genetics + amnio/microarray when appropriate</td></tr><tr><td>Multiple abnormalities</td><td>Maternal source possible</td><td>Lab/genetics review + maternal pathway if warranted</td></tr></tbody></table><aside class="speaker-notes"></aside></section><section class="slide " data-n="45" data-total="51"><h2>Clinic Implementation: Make the Pathway Boring</h2><div class="steps"><div><b>Order</b><span>Document GA, pregnancy type, donor egg, vanishing twin, clinical indication.</span></div><div><b>Review</b><span>Use the four-lens framework before calling the patient.</span></div><div><b>Counsel</b><span>Screening language + PPV/residual risk + patient goals.</span></div><div><b>Confirm</b><span>Diagnostic testing before irreversible decisions.</span></div></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="46" data-total="51"><h2>How to Answer Platform-Comparison Questions</h2><table><thead><tr><th>Question from audience</th><th>Credible sponsored-talk response</th></tr></thead><tbody><tr><td>“Is Labcorp better?”</td><td>“The point is not a universal claim of superiority. Labcorp’s counting-based approach gives clinicians a scalable, interpretable framework and genome-wide options in selected contexts.”</td></tr><tr><td>“Should everyone get genome-wide screening?”</td><td>“No. Broader scope should be matched to indication, counseling, and what the patient would do with uncertain findings.”</td></tr><tr><td>“What about false positives?”</td><td>“They are central to counseling. False positives may arise from CPM, maternal CNV, vanishing twin, or rare maternal disease.”</td></tr><tr><td>“What do you do with a discordant result?”</td><td>“Do a source-of-signal analysis and use diagnostic testing when fetal confirmation is needed.”</td></tr></tbody></table><aside class="speaker-notes"></aside></section><section class="slide " data-n="47" data-total="51"><h2>Publishing on openMFM.org</h2><div class="split"><div><h3>For live talk</h3><ul><li>Use decision polls before reveals</li><li>Pause after each case</li><li>Keep algorithms as take-home slides</li><li>Speak to clinical judgment, not brand enthusiasm</li></ul></div><div><h3>For online readers</h3><ul><li>Readable slide titles</li><li>Speaker notes embedded</li><li>References at end</li><li>Print-to-PDF friendly</li><li>Keyboard navigation and slide counter</li></ul></div></div><aside class="speaker-notes"></aside></section><section class="slide " data-n="48" data-total="51"><h2>Key Takeaways</h2><ol class="big-list"><li>NIPT is powerful screening, not diagnosis.</li><li>The signal is usually placental DNA in maternal plasma.</li><li>Edge cases are not exceptions to the biology; they reveal the biology.</li><li>Labcorp’s counting-based, genome-wide-capable framework can be discussed credibly when paired with limitations and algorithms.</li><li>Positive, no-call, atypical, and genome-wide findings require structured counseling and confirmatory pathways.</li></ol><aside class="speaker-notes"></aside></section><section class="slide " data-n="49" data-total="51"><h2>Closing Thought</h2><blockquote class="largequote">The future of NIPT is not simply more data.<br>It is better clinical interpretation of biologic signal.</blockquote><aside class="speaker-notes"></aside></section><section class="slide refs-slide" data-n="50" data-total="51"><h2>References: Guidance + Laboratory Sources</h2><ol class="refs"><li>SMFM Consult Series #74. <em>Cell-free DNA screening for aneuploidies: updated guidance.</em> 2025. ACOG-endorsed. <a href="https://publications.smfm.org/publications/620-society-for-maternal-fetal-medicine-consult-series-74cell/">SMFM</a></li><li>ACOG Practice Bulletin No. 226 / current ACOG guidance. <em>Screening for fetal chromosomal abnormalities.</em> <a href="https://www.acog.org/advocacy/policy-priorities/non-invasive-prenatal-testing/current-acog-guidance">ACOG</a></li><li>Labcorp Women’s Health. MaterniT® 21 PLUS provider information. <a href="https://womenshealth.labcorp.com/providers/prenatal-screening/noninvasive-prenatal-testing/maternit-21-plus">Labcorp</a></li><li>Labcorp Women’s Health. MaterniT GENOME provider information. <a href="https://womenshealth.labcorp.com/providers/prenatal-screening/noninvasive-prenatal-screening/prenatal-maternit-genome">Labcorp</a></li><li>FDA Safety Communication. <em>Genetic Non-Invasive Prenatal Screening Tests May Have False Results.</em> 2022. <a href="https://content.govdelivery.com/accounts/USFDA/bulletins/3141f63">FDA MedWatch</a></li></ol><aside class="speaker-notes"></aside></section><section class="slide refs-slide" data-n="51" data-total="51"><h2>References: Evidence Base</h2><ol class="refs" start="6"><li>Bianchi DW et al. DNA sequencing versus standard prenatal aneuploidy screening. <em>NEJM.</em> 2014.</li><li>Norton ME et al. Cell-free DNA analysis for noninvasive examination of trisomy. <em>NEJM.</em> 2015.</li><li>Gil MM et al. cfDNA screening for aneuploidy: updated meta-analysis. <em>Ultrasound Obstet Gynecol.</em> 2017.</li><li>Bianchi DW et al. NIPT and incidental detection of occult maternal malignancies. <em>JAMA.</em> 2015.</li><li>Grati FR et al. Confined placental mosaicism and cfDNA discordance literature.</li></ol><aside class="speaker-notes"></aside></section></main></div>
+<div class="nav"><button id="prev">←</button><span id="page"></span><button id="next">→</button></div>
+<div class="help">Keys: ←/→ navigate · N notes · O jump · F fullscreen · Print to PDF</div>
+<div class="progress"></div>
+<div class="notes-panel"><h3>Speaker notes</h3><p id="notes-body"></p></div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];let idx=0;const page=document.getElementById('page');const prev=document.getElementById('prev');const next=document.getElementById('next');const progress=document.querySelector('.progress');const notes=document.querySelector('.notes-panel');const notesBody=document.getElementById('notes-body');
+function show(i){idx=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,j)=>s.classList.toggle('active',j===idx));page.textContent=`${idx+1} / ${slides.length}`;prev.disabled=idx===0;next.disabled=idx===slides.length-1;progress.style.width=`${((idx+1)/slides.length)*100}%`;const note=slides[idx].querySelector('.speaker-notes')?.textContent||'';notesBody.textContent=note||'No speaker notes for this slide.';location.hash=`slide-${idx+1}`;}
+prev.onclick=()=>show(idx-1);next.onclick=()=>show(idx+1);
+document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(idx+1)} if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(idx-1)} if(e.key.toLowerCase()==='n'){notes.classList.toggle('open')} if(e.key.toLowerCase()==='f'){document.documentElement.requestFullscreen?.()} if(e.key.toLowerCase()==='o'){const n=prompt(`Jump to slide 1-${slides.length}`,idx+1); if(n) show(parseInt(n,10)-1)}});
+const m=location.hash.match(/slide-(\d+)/);show(m?parseInt(m[1],10)-1:0);
+</script>
+</body>
+</html>
