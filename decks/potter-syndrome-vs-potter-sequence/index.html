@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potter Syndrome &amp; Potter Sequence — MFM Physician Discussion</title>
+    <style>
+        /* ─── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── Progress Bar ──────────────────────────────────────────── */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #58a6ff, #3fb950);
+            transition: width 0.4s ease;
+            z-index: 100;
+        }
+
+        /* ─── Slide Counter ─────────────────────────────────────────── */
+        #slide-counter {
+            position: fixed;
+            bottom: 18px; right: 28px;
+            font-size: 0.78em;
+            color: #8b949e;
+            letter-spacing: 0.08em;
+            z-index: 100;
+        }
+
+        /* ─── Nav Hint ──────────────────────────────────────────────── */
+        #nav-hint {
+            position: fixed;
+            bottom: 18px; left: 28px;
+            font-size: 0.72em;
+            color: #484f58;
+            z-index: 100;
+        }
+
+        /* ─── Deck & Slides ─────────────────────────────────────────── */
+        .deck {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0; left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3.5em 5em;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ─── Typography ────────────────────────────────────────────── */
+        .slide-title {
+            font-size: 2.6em;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            text-align: center;
+            line-height: 1.2;
+            margin-bottom: 0.4em;
+        }
+
+        .slide-subtitle {
+            font-size: 1.25em;
+            color: #8b949e;
+            text-align: center;
+            font-weight: 300;
+            margin-bottom: 1.2em;
+        }
+
+        .slide-body {
+            font-size: 1.18em;
+            line-height: 1.65;
+            text-align: center;
+            max-width: 820px;
+            color: #cdd9e5;
+        }
+
+        .accent { color: #58a6ff; }
+        .green  { color: #3fb950; }
+        .orange { color: #d29922; }
+        .red    { color: #f85149; }
+        .muted  { color: #8b949e; }
+
+        /* ─── Divider ───────────────────────────────────────────────── */
+        .divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, #58a6ff, #3fb950);
+            margin: 0.8em auto 1.2em;
+            border-radius: 2px;
+        }
+
+        /* ─── Tag / Badge ───────────────────────────────────────────── */
+        .tag {
+            display: inline-block;
+            padding: 0.18em 0.7em;
+            border-radius: 20px;
+            font-size: 0.72em;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 0.6em;
+        }
+        .tag-blue   { background: rgba(88,166,255,0.15); color: #58a6ff; border: 1px solid rgba(88,166,255,0.3); }
+        .tag-green  { background: rgba(63,185,80,0.12);  color: #3fb950; border: 1px solid rgba(63,185,80,0.3); }
+        .tag-orange { background: rgba(210,153,34,0.15); color: #d29922; border: 1px solid rgba(210,153,34,0.3); }
+        .tag-red    { background: rgba(248,81,73,0.12);  color: #f85149; border: 1px solid rgba(248,81,73,0.3); }
+
+        /* ─── Two-Column Layout ─────────────────────────────────────── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2em;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 0.5em;
+        }
+
+        .col-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.4em 1.6em;
+            text-align: left;
+        }
+
+        .col-card h3 {
+            font-size: 1em;
+            font-weight: 600;
+            margin-bottom: 0.6em;
+            color: #e6edf3;
+        }
+
+        .col-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .col-card ul li {
+            font-size: 0.88em;
+            color: #cdd9e5;
+            padding: 0.28em 0;
+            border-bottom: 1px solid #21262d;
+            line-height: 1.45;
+        }
+
+        .col-card ul li:last-child { border-bottom: none; }
+
+        /* ─── Table ─────────────────────────────────────────────────── */
+        .data-table {
+            width: 100%;
+            max-width: 860px;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin-top: 0.8em;
+        }
+
+        .data-table th {
+            background: #161b22;
+            color: #58a6ff;
+            font-weight: 600;
+            padding: 0.65em 1em;
+            text-align: left;
+            border-bottom: 2px solid #30363d;
+            font-size: 0.82em;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .data-table td {
+            padding: 0.6em 1em;
+            border-bottom: 1px solid #21262d;
+            color: #cdd9e5;
+            vertical-align: top;
+            line-height: 1.45;
+        }
+
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: rgba(88,166,255,0.04); }
+
+        /* ─── Stat Boxes ────────────────────────────────────────────── */
+        .stat-row {
+            display: flex;
+            gap: 1.4em;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 0.8em;
+        }
+
+        .stat-box {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.1em 1.6em;
+            text-align: center;
+            min-width: 140px;
+        }
+
+        .stat-number {
+            font-size: 2.4em;
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.72em;
+            color: #8b949e;
+            margin-top: 0.3em;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        /* ─── Pathway Boxes ─────────────────────────────────────────── */
+        .pathway-row {
+            display: flex;
+            gap: 1.6em;
+            justify-content: center;
+            margin-top: 0.8em;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .pathway-box {
+            flex: 1;
+            background: #161b22;
+            border-radius: 12px;
+            padding: 1.4em 1.6em;
+            text-align: left;
+        }
+
+        .pathway-box h3 {
+            font-size: 0.95em;
+            font-weight: 700;
+            margin-bottom: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .pathway-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .pathway-box ul li {
+            font-size: 0.84em;
+            color: #cdd9e5;
+            padding: 0.3em 0;
+            border-bottom: 1px solid #21262d;
+            line-height: 1.4;
+        }
+
+        .pathway-box ul li:last-child { border-bottom: none; }
+
+        .pathway-palliative { border: 1px solid rgba(248,81,73,0.35); }
+        .pathway-palliative h3 { color: #f85149; }
+
+        .pathway-aggressive { border: 1px solid rgba(63,185,80,0.35); }
+        .pathway-aggressive h3 { color: #3fb950; }
+
+        /* ─── Blockquote ────────────────────────────────────────────── */
+        .clinical-quote {
+            border-left: 3px solid #58a6ff;
+            padding: 0.8em 1.4em;
+            background: rgba(88,166,255,0.06);
+            border-radius: 0 8px 8px 0;
+            max-width: 820px;
+            text-align: left;
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #cdd9e5;
+            font-style: italic;
+            margin-top: 0.8em;
+        }
+
+        .clinical-quote cite {
+            display: block;
+            font-style: normal;
+            font-size: 0.78em;
+            color: #8b949e;
+            margin-top: 0.5em;
+        }
+
+        /* ─── Flow Diagram ──────────────────────────────────────────── */
+        .flow {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 0.8em;
+        }
+
+        .flow-node {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 0.55em 1em;
+            font-size: 0.82em;
+            text-align: center;
+            color: #e6edf3;
+            line-height: 1.35;
+        }
+
+        .flow-arrow {
+            color: #58a6ff;
+            font-size: 1.3em;
+        }
+
+        /* ─── Evidence Badge ────────────────────────────────────────── */
+        .evidence-row {
+            display: flex;
+            gap: 1em;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1em;
+        }
+
+        .evidence-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6em;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 0.7em 1em;
+            max-width: 260px;
+            text-align: left;
+        }
+
+        .evidence-icon {
+            font-size: 1.4em;
+            line-height: 1;
+            margin-top: 0.1em;
+        }
+
+        .evidence-text {
+            font-size: 0.82em;
+            color: #cdd9e5;
+            line-height: 1.4;
+        }
+
+        .evidence-text strong {
+            display: block;
+            color: #e6edf3;
+            margin-bottom: 0.2em;
+        }
+
+        /* ─── Title Slide ───────────────────────────────────────────── */
+        #slide-1 {
+            background: radial-gradient(ellipse at 30% 40%, rgba(88,166,255,0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 70%, rgba(63,185,80,0.06) 0%, transparent 55%),
+                        #0d1117;
+        }
+
+        .title-eyebrow {
+            font-size: 0.75em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #58a6ff;
+            margin-bottom: 0.8em;
+        }
+
+        .title-main {
+            font-size: 3.2em;
+            font-weight: 200;
+            text-align: center;
+            line-height: 1.15;
+            margin-bottom: 0.3em;
+        }
+
+        .title-main span { font-weight: 600; color: #58a6ff; }
+
+        .title-sub {
+            font-size: 1.1em;
+            color: #8b949e;
+            text-align: center;
+            font-weight: 300;
+            margin-bottom: 1.6em;
+        }
+
+        .title-meta {
+            display: flex;
+            gap: 2em;
+            font-size: 0.78em;
+            color: #484f58;
+            letter-spacing: 0.06em;
+        }
+
+        /* ─── Section Divider Slides ────────────────────────────────── */
+        .section-slide {
+            background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+        }
+
+        .section-number {
+            font-size: 5em;
+            font-weight: 200;
+            color: rgba(88,166,255,0.15);
+            line-height: 1;
+            margin-bottom: 0.1em;
+        }
+
+        .section-label {
+            font-size: 0.72em;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #58a6ff;
+            margin-bottom: 0.5em;
+        }
+
+        .section-title {
+            font-size: 2.8em;
+            font-weight: 300;
+            text-align: center;
+        }
+
+        /* ─── Responsive ────────────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .slide { padding: 2em 2.5em; }
+            .slide-title { font-size: 1.9em; }
+            .two-col { grid-template-columns: 1fr; }
+            .pathway-row { flex-direction: column; }
+            .stat-row { gap: 0.8em; }
+        }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/potter-syndrome-vs-potter-sequence/index.html">
+<meta name="description" content="Featured clinician deck on Potter syndrome versus Potter sequence, including the pathophysiology of prolonged oligohydramnios, bilateral renal agenesis, classic sonographic findings, differential diagnosis, prognosis, delivery considerations, and counseling points for obstetric and MFM practice.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Potter Syndrome, Potter Sequence, Bilateral Renal Agenesis, Prenatal Ultrasound, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/potter-syndrome-vs-potter-sequence/index.html">
+<meta property="og:title" content="Potter Syndrome vs Potter Sequence - Provider Education | OpenMFM">
+<meta property="og:description" content="Featured clinician deck on Potter syndrome versus Potter sequence, including the pathophysiology of prolonged oligohydramnios, bilateral renal agenesis, classic sonographic findings, differential diagnosis, prognosis, delivery considerations, and counseling points for obstetric and MFM practice.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Potter Syndrome vs Potter Sequence - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Featured clinician deck on Potter syndrome versus Potter sequence, including the pathophysiology of prolonged oligohydramnios, bilateral renal agenesis, classic sonographic findings, differential diagnosis, prognosis, delivery considerations, and counseling points for obstetric and MFM practice.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Potter Syndrome vs Potter Sequence - Provider Education",
+  "description": "Featured clinician deck on Potter syndrome versus Potter sequence, including the pathophysiology of prolonged oligohydramnios, bilateral renal agenesis, classic sonographic findings, differential diagnosis, prognosis, delivery considerations, and counseling points for obstetric and MFM practice.",
+  "url": "https://openmfm.org/decks/potter-syndrome-vs-potter-sequence/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-05-05",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Potter Syndrome vs Potter Sequence - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Potter Syndrome, Potter Sequence, Bilateral Renal Agenesis, Prenatal Ultrasound, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="slide-counter"></div>
+<div id="nav-hint">← → Arrow keys to navigate</div>
+
+<div class="deck">
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 1 — TITLE
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-1">
+        <div class="title-eyebrow">MFM Physician Discussion Series</div>
+        <h1 class="title-main"><span>Potter</span> Syndrome<br>&amp; Potter Sequence</h1>
+        <p class="title-sub">Pathophysiology · Diagnosis · Prognosis · Emerging Therapies</p>
+        <div class="divider"></div>
+        <div class="title-meta">
+            <span>Maternal-Fetal Medicine</span>
+            <span>|</span>
+            <span>ACOG · SMFM · RAFT Trial 2023</span>
+            <span>|</span>
+            <span>DoctorsWhoCode.blog</span>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 2 — TERMINOLOGY
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-blue">Terminology</div>
+        <h2 class="slide-title">Syndrome vs. Sequence</h2>
+        <div class="divider"></div>
+        <div class="two-col">
+            <div class="col-card">
+                <h3 class="accent">Potter <em>Syndrome</em></h3>
+                <ul>
+                    <li>Classic / "true" Potter</li>
+                    <li>Bilateral renal agenesis (BRA)</li>
+                    <li>Described by Edith Potter, 1946</li>
+                    <li>Specific etiology — BRA only</li>
+                    <li>Prevalence: ~1 in 3,000 births</li>
+                    <li>Male predominance</li>
+                </ul>
+            </div>
+            <div class="col-card">
+                <h3 class="green">Potter <em>Sequence</em></h3>
+                <ul>
+                    <li>Oligohydramnios sequence</li>
+                    <li>Any cause of severe oligohydramnios</li>
+                    <li>Preferred modern dysmorphology term</li>
+                    <li>Single initiating event → cascade</li>
+                    <li>Renal &amp; non-renal etiologies</li>
+                    <li>Technically more precise</li>
+                </ul>
+            </div>
+        </div>
+        <p class="slide-body muted" style="font-size:0.82em; margin-top:1em;">
+            "Sequence" is preferred because findings arise from one initiating event, not a shared genetic cause.
+        </p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 3 — ETIOLOGY / CLASSIFICATION
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-orange">Etiology</div>
+        <h2 class="slide-title">Osathanondh &amp; Potter Classification</h2>
+        <div class="divider"></div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Diagnosis</th>
+                    <th>Mechanism</th>
+                    <th>Key Feature</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="accent">I</span></td>
+                    <td>ARPKD (infantile PKD)</td>
+                    <td>Fusiform dilation of collecting ducts</td>
+                    <td>Bilateral enlarged kidneys</td>
+                </tr>
+                <tr>
+                    <td><span class="accent">II</span></td>
+                    <td>Renal agenesis / MCDK</td>
+                    <td>Absent or non-functional kidneys</td>
+                    <td><span class="red">Classic Potter Syndrome</span></td>
+                </tr>
+                <tr>
+                    <td><span class="accent">III</span></td>
+                    <td>ADPKD (adult type)</td>
+                    <td>Rarely severe in utero</td>
+                    <td>Uncommon fetal presentation</td>
+                </tr>
+                <tr>
+                    <td><span class="accent">IV</span></td>
+                    <td>Obstructive uropathy (PUV)</td>
+                    <td>Cystic dysplasia from obstruction</td>
+                    <td>Posterior urethral valves</td>
+                </tr>
+                <tr>
+                    <td><span class="orange">Non-renal</span></td>
+                    <td>PPROM / Placental insufficiency</td>
+                    <td>Occult fluid leakage; 50% of 2nd-trimester cases</td>
+                    <td>No renal malformation</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="slide-body muted" style="font-size:0.78em; margin-top:0.8em;">
+            Also: Renal tubular dysgenesis (RAS gene mutations) · 17q12 deletion syndrome
+        </p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 4 — PATHOPHYSIOLOGY OVERVIEW
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-blue">Pathophysiology</div>
+        <h2 class="slide-title">The Oligohydramnios Cascade</h2>
+        <div class="divider"></div>
+        <div class="flow">
+            <div class="flow-node" style="border-color:#58a6ff;">Deficient fetal<br>urine production</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" style="border-color:#d29922;">Severe<br>oligohydramnios<br>/ anhydramnios</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" style="border-color:#f85149;"><strong>Pulmonary<br>hypoplasia</strong><br><span style="font-size:0.8em;color:#8b949e;">Primary cause of death</span></div>
+        </div>
+        <div class="flow" style="margin-top:0.6em;">
+            <div class="flow-node">Uterine wall<br>compression</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">Skeletal deformities<br>Limb contractures</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">Potter facies<br>Arthrogryposis</div>
+        </div>
+        <p class="slide-body" style="margin-top:1em; font-size:0.95em;">
+            Critical window: <span class="accent">16–26 weeks' gestation</span> — amniotic fluid essential for distal airway arborization.
+        </p>
+        <p class="slide-body muted" style="font-size:0.82em; margin-top:0.4em;">
+            Male fetuses predominantly affected. Associated cardiac defects frequent.
+        </p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 5 — PULMONARY HYPOPLASIA MECHANISMS
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-red">Pulmonary Hypoplasia</div>
+        <h2 class="slide-title">Three Interacting Mechanisms</h2>
+        <div class="divider"></div>
+        <div class="evidence-row">
+            <div class="evidence-item">
+                <div class="evidence-icon">🫁</div>
+                <div class="evidence-text">
+                    <strong>1. Intrapulmonary Fluid Loss</strong>
+                    Reduced amniotic pressure → ↑ alveolar-to-amniotic gradient → excess lung liquid loss → arrested airway development. Tracheal ligation reverses effect experimentally.
+                </div>
+            </div>
+            <div class="evidence-item">
+                <div class="evidence-icon">🦴</div>
+                <div class="evidence-text">
+                    <strong>2. Thoracic Compression</strong>
+                    ↑ Fetal spinal flexion → abdominal contents compress diaphragm → reduced lung expansion → further lung liquid loss.
+                </div>
+            </div>
+            <div class="evidence-item">
+                <div class="evidence-icon">🔬</div>
+                <div class="evidence-text">
+                    <strong>3. Impaired Epithelial-Endothelial Development</strong>
+                    Oligohydramnios compromises cell size, type I epithelial differentiation, and angiogenesis in the developing lung.
+                </div>
+            </div>
+        </div>
+        <p class="slide-body muted" style="font-size:0.82em; margin-top:1em;">
+            Result: ↓ alveolar number · ↓ lung weight · inadequate gas exchange capacity at birth
+        </p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 6 — CARDIAC ASSOCIATIONS
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-orange">Associated Anomalies</div>
+        <h2 class="slide-title">Concomitant Cardiac Defects</h2>
+        <div class="divider"></div>
+        <p class="slide-body" style="margin-bottom:0.8em;">
+            Structural heart anomalies occur <span class="orange">frequently</span> in Potter sequence. Fetal echocardiography is indicated at diagnosis.
+        </p>
+        <div class="stat-row">
+            <div class="stat-box">
+                <div class="stat-number accent">33%</div>
+                <div class="stat-label">Ventricular Septal Defect</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number orange">15%</div>
+                <div class="stat-label">Endocardial Cushion Defect</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" style="color:#d29922;">12%</div>
+                <div class="stat-label">Tetralogy of Fallot</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" style="color:#8b949e;">12%</div>
+                <div class="stat-label">Patent Ductus Arteriosus</div>
+            </div>
+        </div>
+        <p class="slide-body muted" style="font-size:0.82em; margin-top:1em;">
+            Also: Congenital pulmonary airway malformations (CPAM) · Breech presentation · Premature delivery
+        </p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 7 — CLINICAL FEATURES (POTTER FACIES)
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-blue">Clinical Features</div>
+        <h2 class="slide-title">Hallmark Findings of Potter Sequence</h2>
+        <div class="divider"></div>
+        <div class="two-col">
+            <div class="col-card">
+                <h3 class="accent">Potter Facies</h3>
+                <ul>
+                    <li>Flattened nose</li>
+                    <li>Recessed chin (micrognathia)</li>
+                    <li>Large, low-set ears — deficient cartilage</li>
+                    <li>Prominent infraorbital creases</li>
+                    <li>Wide-set eyes (hypertelorism)</li>
+                    <li>Mechanical compression etiology</li>
+                </ul>
+            </div>
+            <div class="col-card">
+                <h3 class="orange">Somatic Findings</h3>
+                <ul>
+                    <li>Pulmonary hypoplasia — primary cause of death</li>
+                    <li>Clubfeet (talipes equinovarus)</li>
+                    <li>Joint contractures / arthrogryposis</li>
+                    <li>Limb positioning abnormalities</li>
+                    <li>FGR — wrinkled, redundant skin</li>
+                    <li>Breech presentation common</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 8 — PRENATAL DIAGNOSIS
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-green">Prenatal Diagnosis</div>
+        <h2 class="slide-title">Ultrasound &amp; Adjunct Modalities</h2>
+        <div class="divider"></div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Modality</th>
+                    <th>Key Finding</th>
+                    <th>Clinical Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="accent">2D Ultrasound</span></td>
+                    <td>Severe oligohydramnios / anhydramnios; empty renal fossae; absent bladder filling</td>
+                    <td>Primary screening modality</td>
+                </tr>
+                <tr>
+                    <td><span class="accent">Color Doppler</span></td>
+                    <td>Absent renal arteries</td>
+                    <td>Confirms bilateral renal agenesis</td>
+                </tr>
+                <tr>
+                    <td><span class="accent">Furosemide Challenge</span></td>
+                    <td>Failure of bladder filling after maternal IV furosemide</td>
+                    <td>Adjunct when kidneys not visualized</td>
+                </tr>
+                <tr>
+                    <td><span class="accent">Fetal MRI</span></td>
+                    <td>Hypoplastic thoracic cage; renal anatomy</td>
+                    <td>Equivocal ultrasound findings</td>
+                </tr>
+                <tr>
+                    <td><span class="orange">Chromosomal Microarray</span></td>
+                    <td>17q12 deletion; AR conditions</td>
+                    <td>Genetic evaluation — all cases</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="slide-body muted" style="font-size:0.78em; margin-top:0.8em;">
+            SMFM Fetal Anomalies Consult Series #4 (2021) · Maternal AFP does not reliably discriminate renal vs. non-renal cases
+        </p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 9 — PROGNOSTIC OUTCOMES DATA
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-red">Prognosis</div>
+        <h2 class="slide-title">Longitudinal Outcomes — Renal Oligohydramnios</h2>
+        <div class="divider"></div>
+        <p class="slide-body muted" style="font-size:0.82em; margin-bottom:0.8em;">
+            22-year retrospective cohort · n = 131 fetuses · Nishi et al., <em>J Pediatrics</em> 2024
+        </p>
+        <div class="stat-row">
+            <div class="stat-box">
+                <div class="stat-number green">30%</div>
+                <div class="stat-label">Survived beyond neonatal period</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number red">35%</div>
+                <div class="stat-label">Termination of pregnancy</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number orange">20%</div>
+                <div class="stat-label">Neonatal death</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" style="color:#8b949e;">8%</div>
+                <div class="stat-label">IUFD</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" style="color:#8b949e;">7%</div>
+                <div class="stat-label">Postneonatal death</div>
+            </div>
+        </div>
+        <p class="slide-body" style="margin-top:0.9em; font-size:0.92em;">
+            Earlier GA at oligohydramnios onset: <span class="red">OR 1.16 (95% CI 1.01–1.37)</span> for IUFD
+        </p>
+        <p class="slide-body muted" style="font-size:0.8em; margin-top:0.3em;">
+            Kaplan-Meier survival (all causes): 57% at 1 yr · 55% at 3 yr · 51% at 5 yr
+        </p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 10 — RAFT TRIAL
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-green">Landmark Evidence</div>
+        <h2 class="slide-title">The RAFT Trial — JAMA 2023</h2>
+        <div class="divider"></div>
+        <p class="slide-body muted" style="font-size:0.82em; margin-bottom:0.6em;">
+            Renal Anhydramnios Fetal Therapy Trial · Miller JL et al. · Johns Hopkins &amp; Multicenter · JAMA 2023;330(21):2096-2105
+        </p>
+        <div class="stat-row">
+            <div class="stat-box" style="border-color:rgba(63,185,80,0.4);">
+                <div class="stat-number green">82%</div>
+                <div class="stat-label">Survived ≥14 days &amp; dialysis access placed (vs. 0% expectant)</div>
+            </div>
+            <div class="stat-box" style="border-color:rgba(210,153,34,0.4);">
+                <div class="stat-number orange">35%</div>
+                <div class="stat-label">Survived to hospital discharge on long-term dialysis</div>
+            </div>
+            <div class="stat-box" style="border-color:rgba(88,166,255,0.4);">
+                <div class="stat-number accent">&lt;26w</div>
+                <div class="stat-label">Gestational age threshold for amnioinfusion initiation</div>
+            </div>
+        </div>
+        <div class="clinical-quote">
+            "Serial amnioinfusions initiated before 26 weeks' gestation mitigated lethal pulmonary hypoplasia in newborns and was associated with survival to at least 14 days of life and placement of dialysis access in 82% of neonates."
+            <cite>— Miller JL, Baschat AA, Rosner M, et al. JAMA. 2023</cite>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 11 — SERIAL AMNIOINFUSION PROTOCOL
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-blue">Intervention</div>
+        <h2 class="slide-title">Serial Amnioinfusion — Mechanism &amp; Rationale</h2>
+        <div class="divider"></div>
+        <div class="flow">
+            <div class="flow-node" style="border-color:#58a6ff;">Transabdominal<br>amnioinfusion<br>&lt;26 weeks</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">Restore amniotic<br>fluid volume</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">Mechanically stent<br>uterine cavity</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" style="border-color:#3fb950;">Permit distal<br>airway development</div>
+        </div>
+        <div class="two-col" style="margin-top:1em;">
+            <div class="col-card">
+                <h3 class="accent">Eligibility Criteria</h3>
+                <ul>
+                    <li>Singleton pregnancy</li>
+                    <li>Bilateral renal agenesis confirmed</li>
+                    <li>Initiation before 26 weeks GA</li>
+                    <li>Tertiary center with neonatology + nephrology</li>
+                    <li>Patient declines termination</li>
+                </ul>
+            </div>
+            <div class="col-card">
+                <h3 class="orange">Neonatal Requirements</h3>
+                <ul>
+                    <li>Immediate ventilatory support at birth</li>
+                    <li>HFOV or ECMO if severe hypoplasia</li>
+                    <li>Long-term hemodialysis (even VLBW infants)</li>
+                    <li>Eventual renal transplantation</li>
+                    <li>Disrupted RAAS — BP management</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 12 — MANAGEMENT PATHWAYS
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-orange">Management</div>
+        <h2 class="slide-title">Clinical Management Pathways</h2>
+        <div class="divider"></div>
+        <div class="pathway-row">
+            <div class="pathway-box pathway-palliative">
+                <h3>Palliative / Comfort Care</h3>
+                <ul>
+                    <li>Standard prenatal care</li>
+                    <li>No fetal monitoring in labor</li>
+                    <li>Vaginal delivery preferred</li>
+                    <li>Comfort care at birth</li>
+                    <li>Rapid mortality: asphyxia / respiratory failure</li>
+                    <li>Perinatal hospice consultation</li>
+                </ul>
+            </div>
+            <div class="pathway-box pathway-aggressive">
+                <h3>Experimental / Aggressive</h3>
+                <ul>
+                    <li>Serial amnioinfusions (tertiary center)</li>
+                    <li>Intense fetal surveillance</li>
+                    <li>Planned delivery at level IV NICU</li>
+                    <li>MFM + Neonatology + Peds Nephrology coordination</li>
+                    <li>Survival possible: up to 30–35%</li>
+                    <li>Long-term dialysis &amp; transplant required</li>
+                </ul>
+            </div>
+        </div>
+        <p class="slide-body red" style="font-size:0.85em; margin-top:0.9em;">
+            Anhydramnios &lt;22 weeks without intervention → <strong>100% neonatal mortality</strong> expected
+        </p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 13 — COUNSELING IMPERATIVES
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-blue">Counseling</div>
+        <h2 class="slide-title">Obstetrician Counseling Imperatives</h2>
+        <div class="divider"></div>
+        <div class="evidence-row">
+            <div class="evidence-item">
+                <div class="evidence-icon">🫧</div>
+                <div class="evidence-text">
+                    <strong>Pulmonary Function is the Sole Determinant</strong>
+                    Preserving lung development in utero is the only modifiable factor for short-term neonatal survival.
+                </div>
+            </div>
+            <div class="evidence-item">
+                <div class="evidence-icon">📅</div>
+                <div class="evidence-text">
+                    <strong>Gestational Age at Onset is Critical</strong>
+                    Earlier onset = significantly higher risk of IUFD (OR 1.16). Counsel accordingly at time of diagnosis.
+                </div>
+            </div>
+            <div class="evidence-item">
+                <div class="evidence-icon">⚖️</div>
+                <div class="evidence-text">
+                    <strong>Three Options Must Be Presented</strong>
+                    Termination of pregnancy · Palliative neonatal care · Aggressive experimental management (amnioinfusion + dialysis).
+                </div>
+            </div>
+            <div class="evidence-item">
+                <div class="evidence-icon">🏥</div>
+                <div class="evidence-text">
+                    <strong>Multidisciplinary Coordination Required</strong>
+                    If aggressive management selected: MFM + Neonatology + Pediatric Nephrology before delivery.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 14 — GENETIC COUNSELING
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-green">Genetics</div>
+        <h2 class="slide-title">Genetic Counseling Considerations</h2>
+        <div class="divider"></div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Condition</th>
+                    <th>Inheritance</th>
+                    <th>Recurrence Risk</th>
+                    <th>Testing</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Isolated bilateral renal agenesis</td>
+                    <td>Multifactorial (most likely)</td>
+                    <td>Low; AR documented in familial cases</td>
+                    <td>Chromosomal microarray</td>
+                </tr>
+                <tr>
+                    <td>Renal tubular dysgenesis</td>
+                    <td>Autosomal recessive</td>
+                    <td>25% per pregnancy</td>
+                    <td>RAS gene panel (ACE, AGT, AGTR1, REN)</td>
+                </tr>
+                <tr>
+                    <td>17q12 deletion syndrome</td>
+                    <td>De novo or AD</td>
+                    <td>Defined recurrence risk</td>
+                    <td>Microarray / FISH</td>
+                </tr>
+                <tr>
+                    <td>ARPKD</td>
+                    <td>Autosomal recessive</td>
+                    <td>25% per pregnancy</td>
+                    <td>PKHD1 sequencing</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="slide-body muted" style="font-size:0.78em; margin-top:0.8em;">
+            Genetic counseling indicated for <em>all</em> affected families · Prenatal testing available for defined recurrence-risk conditions
+        </p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 15 — VENTILATORY SUPPORT
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-red">Neonatal Management</div>
+        <h2 class="slide-title">Ventilatory &amp; Renal Support Strategy</h2>
+        <div class="divider"></div>
+        <div class="two-col">
+            <div class="col-card">
+                <h3 class="red">Ventilatory Support</h3>
+                <ul>
+                    <li>Survival requires sufficient lung volume for oxygenation</li>
+                    <li>High-frequency oscillatory ventilation (HFOV) — first-line</li>
+                    <li>ECMO — if severe but potentially viable hypoplasia</li>
+                    <li>Conventional MV — adjunct</li>
+                    <li>Refractory respiratory failure → mortality in classic BRA</li>
+                </ul>
+            </div>
+            <div class="col-card">
+                <h3 class="accent">Renal Replacement Therapy</h3>
+                <ul>
+                    <li>Hemodialysis achievable in VLBW infants</li>
+                    <li>Case reports confirm long-term maintenance possible</li>
+                    <li>Peritoneal dialysis as bridge</li>
+                    <li>Kidney transplant — long-term goal</li>
+                    <li>RAAS disruption: BP management complex</li>
+                </ul>
+            </div>
+        </div>
+        <p class="slide-body muted" style="font-size:0.82em; margin-top:0.9em;">
+            Survival strictly depends on adequate lung volume — renal replacement alone cannot overcome lethal pulmonary hypoplasia
+        </p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 16 — KEY PROGNOSTIC FACTORS SUMMARY
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-orange">Clinical Pearls</div>
+        <h2 class="slide-title">Key Prognostic Determinants</h2>
+        <div class="divider"></div>
+        <div class="evidence-row">
+            <div class="evidence-item" style="border-left: 3px solid #f85149;">
+                <div class="evidence-icon">⏱️</div>
+                <div class="evidence-text">
+                    <strong>Gestational Age at Onset</strong>
+                    Single most critical prognostic factor. Earlier onset → higher IUFD risk (OR 1.16, 95% CI 1.01–1.37).
+                </div>
+            </div>
+            <div class="evidence-item" style="border-left: 3px solid #f85149;">
+                <div class="evidence-icon">🫁</div>
+                <div class="evidence-text">
+                    <strong>Degree of Pulmonary Hypoplasia</strong>
+                    Lung volume at birth determines short-term survival. Classic BRA without intervention → death within hours.
+                </div>
+            </div>
+            <div class="evidence-item" style="border-left: 3px solid #58a6ff;">
+                <div class="evidence-icon">🏥</div>
+                <div class="evidence-text">
+                    <strong>Level of Care &amp; Intervention</strong>
+                    Tertiary center + serial amnioinfusions → 82% survive ≥14 days (RAFT). 35% survive to discharge.
+                </div>
+            </div>
+            <div class="evidence-item" style="border-left: 3px solid #3fb950;">
+                <div class="evidence-icon">⚖️</div>
+                <div class="evidence-text">
+                    <strong>Underlying Etiology</strong>
+                    Non-agenesis renal oligohydramnios (PUV, ARPKD) may carry better prognosis than classic BRA.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 17 — SMFM / ACOG GUIDELINE ALIGNMENT
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="tag tag-blue">Guidelines</div>
+        <h2 class="slide-title">Guideline &amp; Evidence Alignment</h2>
+        <div class="divider"></div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Recommendation</th>
+                    <th>Source</th>
+                    <th>Evidence Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ultrasound + Color Doppler for diagnosis of BRA</td>
+                    <td>SMFM Fetal Anomalies Consult Series #4, 2021</td>
+                    <td><span class="green">Strong</span></td>
+                </tr>
+                <tr>
+                    <td>Fetal MRI as adjunct for equivocal findings</td>
+                    <td>SMFM / Expert consensus</td>
+                    <td><span class="orange">Moderate</span></td>
+                </tr>
+                <tr>
+                    <td>Chromosomal microarray for all Potter sequence</td>
+                    <td>SMFM / ACOG</td>
+                    <td><span class="green">Strong</span></td>
+                </tr>
+                <tr>
+                    <td>Serial amnioinfusion &lt;26w for BRA (experimental)</td>
+                    <td>RAFT Trial — JAMA 2023 (Miller et al.)</td>
+                    <td><span class="accent">RCT Evidence</span></td>
+                </tr>
+                <tr>
+                    <td>Multidisciplinary counseling — all cases</td>
+                    <td>ACOG / SMFM / Expert consensus</td>
+                    <td><span class="green">Strong</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SLIDE 18 — SUMMARY / TAKE-HOME
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="slide" style="background: radial-gradient(ellipse at 70% 30%, rgba(63,185,80,0.07) 0%, transparent 55%), radial-gradient(ellipse at 30% 70%, rgba(88,166,255,0.07) 0%, transparent 55%), #0d1117;">
+        <div class="tag tag-green">Summary</div>
+        <h2 class="slide-title">Clinical Take-Home Points</h2>
+        <div class="divider"></div>
+        <div class="two-col">
+            <div class="col-card">
+                <h3 class="accent">Diagnosis &amp; Pathophysiology</h3>
+                <ul>
+                    <li>"Sequence" preferred over "syndrome" for non-BRA cases</li>
+                    <li>Oligohydramnios 16–26w → pulmonary hypoplasia</li>
+                    <li>Three mechanisms: fluid loss, compression, impaired development</li>
+                    <li>Cardiac anomalies in up to 33% (VSD most common)</li>
+                    <li>Chromosomal microarray for all cases</li>
+                </ul>
+            </div>
+            <div class="col-card">
+                <h3 class="green">Prognosis &amp; Management</h3>
+                <ul>
+                    <li>Classic BRA without intervention: near-universal neonatal death</li>
+                    <li>RAFT Trial: 82% survive ≥14d with serial amnioinfusions</li>
+                    <li>35% survive to discharge; all require long-term dialysis</li>
+                    <li>Anhydramnios &lt;22w without Rx → 100% neonatal mortality</li>
+                    <li>Three counseling options must be explicitly offered</li>
+                </ul>
+            </div>
+        </div>
+        <p class="slide-body muted" style="font-size:0.78em; margin-top:1em;">
+            DoctorsWhoCode.blog · Maternal-Fetal Medicine · References: Dicker 1984 · Miller JAMA 2023 · Nishi J Pediatrics 2024 · SMFM 2021 · Scott 1995
+        </p>
+    </div>
+
+</div><!-- /.deck -->
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progress-bar');
+    const slideCounter = document.getElementById('slide-counter');
+    const total = slides.length;
+
+    function showSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === index);
+        });
+        const pct = ((index + 1) / total) * 100;
+        progressBar.style.width = pct + '%';
+        slideCounter.textContent = (index + 1) + ' / ' + total;
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % total;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + total) % total;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+    });
+
+    showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
