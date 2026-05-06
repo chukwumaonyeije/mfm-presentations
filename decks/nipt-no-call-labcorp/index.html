@@ -4,12 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>When NIPT Goes Silent: What No-Call Results Cost Your Patients | OpenMFM</title>
-
-<meta property="og:title" content="When NIPT Goes Silent: What No-Call Results Cost Your Patients" />
-<meta property="og:description" content="OpenMFM clinician deck on no-call NIPT results, low fetal fraction, platform differences, and the clinical cost of delayed cfDNA answers." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://openmfm.org/nipt-no-call-results" />
-<link rel="canonical" href="https://openmfm.org/nipt-no-call-results" />
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap');
 
@@ -17,6 +11,8 @@
     --navy:       #081422;
     --deep-blue:  #0e1f3a;
     --mid-blue:   #183560;
+    --panel:      #102544;
+    --panel-soft: #0c1b31;
     --gold:       #c9a84c;
     --amber:      #e8b84b;
     --red:        #d04f3a;
@@ -24,20 +20,23 @@
     --steel:      #dce8f5;
     --muted:      #7a93b0;
     --white:      #ffffff;
-    --W: 1100px;
-    --H: 618px;
+    --W: 1366px;
+    --H: 768px;
+    --edge: 64px;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
 
   body {
-    background:#06101d;
+    background:
+      radial-gradient(circle at top, rgba(24,53,96,.42), transparent 36%),
+      linear-gradient(180deg, #040b15 0%, #06101d 100%);
     font-family:'DM Sans',sans-serif;
     color:var(--white);
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding:56px 0 80px;
+    padding:76px 0 96px;
     overflow-x:hidden;
   }
 
@@ -47,42 +46,46 @@
     background:rgba(6,16,29,.97);
     backdrop-filter:blur(8px);
     border-bottom:1px solid rgba(201,168,76,.3);
-    padding:9px 22px;
+    padding:12px 24px;
     display:flex; align-items:center; justify-content:space-between;
   }
   .nav-home {
     color:var(--steel);
     text-decoration:none;
     font-family:'DM Mono',monospace;
-    font-size:10px;
-    letter-spacing:1.4px;
+    font-size:11px;
+    letter-spacing:1.6px;
     text-transform:uppercase;
     border:1px solid rgba(201,168,76,.25);
-    padding:5px 10px;
+    padding:7px 12px;
     border-radius:2px;
     background:rgba(201,168,76,.08);
   }
   .nav-home:hover { background:rgba(201,168,76,.18); }
-  .nav-id  { font-family:'DM Mono',monospace; font-size:10px; color:var(--gold); letter-spacing:2px; text-transform:uppercase; }
+  .nav-id  { font-family:'DM Mono',monospace; font-size:11px; color:var(--gold); letter-spacing:2.1px; text-transform:uppercase; }
   .nav-ctrls { display:flex; gap:8px; align-items:center; }
   .nbtn {
     background:rgba(201,168,76,.12);
     border:1px solid rgba(201,168,76,.4);
     color:var(--gold);
-    font-family:'DM Mono',monospace; font-size:10px;
-    padding:5px 13px; cursor:pointer; border-radius:2px; letter-spacing:1px;
+    font-family:'DM Mono',monospace; font-size:11px;
+    padding:7px 15px; cursor:pointer; border-radius:3px; letter-spacing:1.2px;
     transition:background .2s;
   }
   .nbtn:hover { background:rgba(201,168,76,.28); }
-  #ctr { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); }
+  #ctr { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); }
 
   /* ── SLIDES ──────────────────────────────────────── */
   .slides { width:100%; display:flex; flex-direction:column; align-items:center; }
 
   .slide {
-    width:var(--W); min-height:var(--H);
+    width:min(94vw, var(--W)); min-height:var(--H);
     position:relative; overflow:hidden;
     display:none; flex-direction:column;
+    background:linear-gradient(180deg, rgba(10,24,42,.98), rgba(6,16,29,.99));
+    border:1px solid rgba(201,168,76,.12);
+    border-radius:20px;
+    box-shadow:0 36px 80px rgba(0,0,0,.35);
   }
   .slide.on { display:flex; animation:fadeUp .35s ease; }
   @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
@@ -95,7 +98,8 @@
     display:flex; gap:7px; padding:12px 16px;
     background:rgba(8,20,34,.95);
     border-top:1px solid rgba(201,168,76,.15);
-    overflow-x:auto; width:var(--W); margin-top:6px;
+    overflow-x:auto; width:min(94vw, var(--W)); margin-top:10px;
+    border-radius:14px;
   }
   .thumb {
     width:82px; height:46px; flex-shrink:0;
@@ -109,7 +113,7 @@
   }
   .thumb:hover,.thumb.on { border-color:var(--gold); color:var(--gold); }
 
-  .hint { position:fixed; bottom:12px; right:18px; font-family:'DM Mono',monospace; font-size:9px; color:rgba(122,147,176,.4); letter-spacing:1px; z-index:300; }
+  .hint { position:fixed; bottom:16px; right:22px; font-family:'DM Mono',monospace; font-size:10px; color:rgba(122,147,176,.52); letter-spacing:1.2px; z-index:300; }
 
   /* ══════════════════════════════════════════════════
      REUSABLE COMPONENTS
@@ -119,102 +123,103 @@
   .hdr {
     background:var(--deep-blue);
     border-bottom:2px solid var(--gold);
-    padding:17px 44px 14px;
+    padding:24px var(--edge) 18px;
     display:flex; align-items:flex-end; justify-content:space-between;
     flex-shrink:0;
   }
-  .hdr-num  { font-family:'DM Mono',monospace; font-size:9px; color:var(--gold); letter-spacing:2px; margin-bottom:3px; }
-  .hdr-ttl  { font-family:'DM Serif Display',serif; font-size:26px; color:var(--white); line-height:1.2; }
-  .hdr-kicker { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); letter-spacing:1px; text-align:right; }
+  .hdr-num  { font-family:'DM Mono',monospace; font-size:11px; color:var(--gold); letter-spacing:2.4px; margin-bottom:6px; }
+  .hdr-ttl  { font-family:'DM Serif Display',serif; font-size:38px; color:var(--white); line-height:1.08; max-width:860px; }
+  .hdr-kicker { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:1.6px; text-align:right; text-transform:uppercase; }
 
   /* Slide body */
-  .body { flex:1; padding:22px 44px; display:flex; flex-direction:column; gap:12px; overflow:hidden; }
+  .body { flex:1; padding:28px var(--edge); display:flex; flex-direction:column; gap:18px; overflow:hidden; }
 
   /* Footer */
   .ftr {
-    padding:7px 44px;
+    padding:11px var(--edge);
     background:rgba(4,10,20,.6);
     border-top:1px solid rgba(100,140,200,.1);
     display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
   }
-  .ftr span { font-family:'DM Mono',monospace; font-size:8.5px; color:rgba(122,147,176,.45); letter-spacing:.8px; }
+  .ftr span { font-family:'DM Mono',monospace; font-size:10px; color:rgba(122,147,176,.55); letter-spacing:1px; }
 
   /* Bullet card */
   .bc {
-    background:rgba(24,53,96,.22);
-    border:1px solid rgba(100,140,200,.18);
-    border-left:3px solid var(--gold);
-    border-radius:3px;
-    padding:11px 16px;
-    display:flex; align-items:flex-start; gap:12px;
+    background:rgba(24,53,96,.28);
+    border:1px solid rgba(120,156,210,.18);
+    border-left:4px solid var(--gold);
+    border-radius:10px;
+    padding:18px 20px;
+    display:flex; align-items:flex-start; gap:14px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.02);
   }
   .bc.warn { border-left-color:var(--red); }
   .bc.ok   { border-left-color:var(--green); }
   .bc.neu  { border-left-color:var(--muted); }
-  .bi  { font-size:17px; flex-shrink:0; margin-top:1px; }
-  .bt  { font-size:13px; line-height:1.5; color:var(--steel); }
+  .bi  { font-size:22px; flex-shrink:0; margin-top:1px; }
+  .bt  { font-size:18px; line-height:1.55; color:var(--steel); }
   .bt strong { color:var(--white); font-weight:600; }
-  .bt .cite  { font-family:'DM Mono',monospace; font-size:9.5px; color:var(--muted); display:block; margin-top:3px; }
+  .bt .cite  { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); display:block; margin-top:8px; line-height:1.45; }
 
   /* Two-column */
-  .two { display:grid; grid-template-columns:1fr 1fr; gap:16px; flex:1; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:20px; flex:1; }
   .col {
-    background:rgba(14,31,58,.5);
-    border:1px solid rgba(100,140,200,.18);
-    border-radius:4px; padding:16px;
-    display:flex; flex-direction:column; gap:8px;
+    background:rgba(14,31,58,.62);
+    border:1px solid rgba(120,156,210,.16);
+    border-radius:14px; padding:22px;
+    display:flex; flex-direction:column; gap:10px;
   }
   .col.tr { border-top:3px solid var(--red); }
   .col.tg { border-top:3px solid var(--green); }
   .col.to { border-top:3px solid var(--gold); }
-  .col-hd { font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
+  .col-hd { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
   .col-hd.r { color:var(--red); } .col-hd.g { color:var(--green); } .col-hd.o { color:var(--gold); }
-  .ci { font-size:12.5px; color:var(--steel); line-height:1.5; padding:5px 0; border-bottom:1px solid rgba(100,140,200,.1); }
+  .ci { font-size:17px; color:var(--steel); line-height:1.55; padding:10px 0; border-bottom:1px solid rgba(100,140,200,.1); }
   .ci:last-child { border-bottom:none; }
   .ci strong { color:var(--white); }
 
   /* Stat blocks */
-  .stats { display:flex; gap:12px; }
+  .stats { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:16px; }
   .sb {
     flex:1;
-    background:rgba(14,31,58,.6);
-    border:1px solid rgba(100,140,200,.18);
-    border-radius:4px; padding:14px;
+    background:linear-gradient(180deg, rgba(14,31,58,.78), rgba(8,20,34,.92));
+    border:1px solid rgba(120,156,210,.16);
+    border-radius:16px; padding:18px 16px;
     text-align:center; display:flex; flex-direction:column; align-items:center; gap:5px;
   }
-  .sn { font-family:'DM Serif Display',serif; font-size:32px; line-height:1; }
+  .sn { font-family:'DM Serif Display',serif; font-size:48px; line-height:1; }
   .sn.o { color:var(--gold); } .sn.r { color:var(--red); } .sn.g { color:var(--green); }
-  .sl { font-size:11px; color:var(--muted); line-height:1.4; text-align:center; }
-  .sc { font-family:'DM Mono',monospace; font-size:8.5px; color:rgba(122,147,176,.55); }
+  .sl { font-size:15px; color:var(--steel); line-height:1.5; text-align:center; }
+  .sc { font-family:'DM Mono',monospace; font-size:10px; color:rgba(122,147,176,.65); line-height:1.45; }
 
   /* Key point */
   .kp {
     background:linear-gradient(90deg,rgba(201,168,76,.1),rgba(201,168,76,.02));
-    border-left:3px solid var(--gold);
-    padding:10px 15px;
-    font-size:13.5px; color:var(--white); font-weight:500; line-height:1.55;
-    border-radius:0 4px 4px 0;
+    border-left:4px solid var(--gold);
+    padding:16px 20px;
+    font-size:20px; color:var(--white); font-weight:500; line-height:1.55;
+    border-radius:0 12px 12px 0;
   }
-  .kp small { font-size:10px; color:var(--muted); display:block; margin-top:4px; font-weight:400; }
+  .kp small { font-size:11px; color:var(--muted); display:block; margin-top:10px; font-weight:400; line-height:1.5; }
 
   /* Callout */
   .co {
     background:rgba(201,168,76,.07);
     border:1px solid rgba(201,168,76,.32);
-    border-radius:4px; padding:12px 16px;
-    display:flex; gap:11px; align-items:flex-start;
+    border-radius:14px; padding:18px 20px;
+    display:flex; gap:14px; align-items:flex-start;
   }
   .co.red { background:rgba(208,79,58,.07); border-color:rgba(208,79,58,.32); }
-  .co-ic { font-size:19px; flex-shrink:0; }
-  .co-tx { font-size:12.5px; color:var(--steel); line-height:1.6; }
+  .co-ic { font-size:24px; flex-shrink:0; }
+  .co-tx { font-size:18px; color:var(--steel); line-height:1.6; }
   .co-tx strong { color:var(--white); }
 
   /* Data table */
-  table.dt { width:100%; border-collapse:collapse; font-size:11.5px; }
-  table.dt th { background:var(--mid-blue); color:var(--gold); font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:1px; padding:7px 11px; text-align:left; text-transform:uppercase; }
-  table.dt td { padding:7px 11px; color:var(--steel); border-bottom:1px solid rgba(100,140,200,.1); vertical-align:top; }
+  table.dt { width:100%; border-collapse:separate; border-spacing:0; font-size:14px; overflow:hidden; border:1px solid rgba(120,156,210,.18); border-radius:14px; }
+  table.dt th { background:var(--mid-blue); color:var(--gold); font-family:'DM Mono',monospace; font-size:10.5px; letter-spacing:1.2px; padding:13px 14px; text-align:left; text-transform:uppercase; }
+  table.dt td { padding:12px 14px; color:var(--steel); border-bottom:1px solid rgba(100,140,200,.1); vertical-align:top; line-height:1.45; }
   table.dt tr:nth-child(even) td { background:rgba(24,53,96,.15); }
-  .tag { display:inline-block; padding:2px 7px; border-radius:2px; font-family:'DM Mono',monospace; font-size:8.5px; font-weight:500; letter-spacing:.4px; }
+  .tag { display:inline-block; padding:4px 9px; border-radius:999px; font-family:'DM Mono',monospace; font-size:10px; font-weight:500; letter-spacing:.4px; }
   .tf { background:rgba(208,79,58,.18); color:var(--red);   border:1px solid rgba(208,79,58,.3); }
   .tok{ background:rgba(42,122,80,.18);  color:#5ad98a;      border:1px solid rgba(42,122,80,.3); }
   .tw { background:rgba(232,184,75,.13); color:var(--amber); border:1px solid rgba(232,184,75,.3); }
@@ -223,15 +228,15 @@
   .cc {
     background:rgba(14,31,58,.7);
     border:1px solid rgba(201,168,76,.22);
-    border-radius:4px; overflow:hidden; flex:0 0 auto;
+    border-radius:16px; overflow:hidden; flex:0 0 auto;
   }
-  .cc-hd { background:rgba(201,168,76,.09); border-bottom:1px solid rgba(201,168,76,.22); padding:9px 16px; display:flex; align-items:center; gap:11px; }
-  .cc-badge { background:var(--gold); color:var(--navy); font-family:'DM Mono',monospace; font-size:8.5px; font-weight:600; padding:3px 8px; border-radius:2px; letter-spacing:.8px; }
-  .cc-ttl { font-size:12.5px; color:var(--white); font-weight:500; }
-  .cc-body { padding:13px 16px; display:flex; flex-direction:column; gap:8px; }
-  .cr { display:flex; gap:10px; align-items:flex-start; }
-  .cl { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); letter-spacing:.8px; width:86px; flex-shrink:0; padding-top:1px; text-transform:uppercase; }
-  .cv { font-size:12px; color:var(--steel); line-height:1.45; }
+  .cc-hd { background:rgba(201,168,76,.09); border-bottom:1px solid rgba(201,168,76,.22); padding:14px 18px; display:flex; align-items:center; gap:11px; }
+  .cc-badge { background:var(--gold); color:var(--navy); font-family:'DM Mono',monospace; font-size:10px; font-weight:600; padding:4px 10px; border-radius:999px; letter-spacing:1px; }
+  .cc-ttl { font-size:18px; color:var(--white); font-weight:500; line-height:1.35; }
+  .cc-body { padding:18px; display:flex; flex-direction:column; gap:12px; }
+  .cr { display:flex; gap:12px; align-items:flex-start; }
+  .cl { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; width:110px; flex-shrink:0; padding-top:3px; text-transform:uppercase; }
+  .cv { font-size:16px; color:var(--steel); line-height:1.55; }
   .cv.fail { color:var(--red); font-weight:500; }
   .cv.win  { color:#5ad98a; font-weight:500; }
   .cv.warn { color:var(--amber); }
@@ -241,10 +246,10 @@
     background:linear-gradient(135deg,var(--deep-blue) 0%,var(--navy) 100%);
     align-items:center; justify-content:center; flex-direction:column; gap:14px; text-align:center;
   }
-  .sec-n { font-family:'DM Mono',monospace; font-size:10px; color:var(--gold); letter-spacing:4px; text-transform:uppercase; }
-  .sec-t { font-family:'DM Serif Display',serif; font-size:44px; color:var(--white); max-width:680px; line-height:1.15; }
-  .sec-s { font-size:13px; color:var(--muted); max-width:500px; line-height:1.6; }
-  .gold-bar { width:56px; height:2px; background:var(--gold); }
+  .sec-n { font-family:'DM Mono',monospace; font-size:12px; color:var(--gold); letter-spacing:4px; text-transform:uppercase; }
+  .sec-t { font-family:'DM Serif Display',serif; font-size:58px; color:var(--white); max-width:860px; line-height:1.1; }
+  .sec-s { font-size:20px; color:var(--muted); max-width:760px; line-height:1.6; }
+  .gold-bar { width:76px; height:3px; background:var(--gold); }
 
   /* Title slide */
   .title-sl { background:var(--navy); flex-direction:column; justify-content:flex-end; }
@@ -261,42 +266,276 @@
       repeating-linear-gradient(90deg,transparent,transparent 8px,rgba(201,168,76,.7) 8px,rgba(201,168,76,.7) 9px),
       repeating-linear-gradient(180deg,transparent,transparent 20px,rgba(100,150,220,.5) 20px,rgba(100,150,220,.5) 21px);
   }
-  .tc { position:relative; z-index:2; padding:0 52px 48px; }
+  .tc { position:relative; z-index:2; padding:0 64px 58px; }
   .disc-banner {
     background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.48); border-radius:3px;
-    padding:8px 15px; margin-bottom:26px; display:inline-flex; align-items:flex-start; gap:10px;
+    padding:14px 18px; margin-bottom:30px; display:inline-flex; align-items:flex-start; gap:12px;
   }
-  .disc-tx { font-family:'DM Mono',monospace; font-size:9.5px; color:var(--amber); letter-spacing:.4px; line-height:1.55; }
-  .slide-tag { font-family:'DM Mono',monospace; font-size:9.5px; color:var(--gold); letter-spacing:3px; text-transform:uppercase; margin-bottom:12px; }
-  h1.mt { font-family:'DM Serif Display',serif; font-size:40px; line-height:1.15; color:var(--white); max-width:610px; margin-bottom:9px; }
+  .disc-tx { font-family:'DM Mono',monospace; font-size:12px; color:var(--amber); letter-spacing:.5px; line-height:1.65; }
+  .slide-tag { font-family:'DM Mono',monospace; font-size:12px; color:var(--gold); letter-spacing:3px; text-transform:uppercase; margin-bottom:18px; }
+  h1.mt { font-family:'DM Serif Display',serif; font-size:72px; line-height:1.02; color:var(--white); max-width:880px; margin-bottom:14px; }
   h1.mt em { color:var(--gold); font-style:italic; }
-  .sub { font-size:14px; color:var(--steel); font-weight:300; max-width:530px; line-height:1.52; margin-bottom:28px; }
-  .pbar { display:flex; align-items:center; gap:18px; }
-  .pav { width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--mid-blue),var(--gold)); display:flex; align-items:center; justify-content:center; font-family:'DM Serif Display',serif; font-size:17px; border:2px solid rgba(201,168,76,.38); flex-shrink:0; }
+  .sub { font-size:26px; color:var(--steel); font-weight:300; max-width:860px; line-height:1.48; margin-bottom:34px; }
+  .pbar { display:flex; align-items:center; gap:22px; }
+  .pav { width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,var(--mid-blue),var(--gold)); display:flex; align-items:center; justify-content:center; font-family:'DM Serif Display',serif; font-size:24px; border:2px solid rgba(201,168,76,.38); flex-shrink:0; }
   .pinfo { display:flex; flex-direction:column; }
-  .pname { font-weight:600; font-size:14.5px; }
-  .pcred { font-size:11.5px; color:var(--muted); }
-  .echip { margin-left:auto; background:rgba(201,168,76,.08); border:1px solid rgba(201,168,76,.28); border-radius:2px; padding:6px 13px; text-align:right; }
-  .echip .el { font-family:'DM Mono',monospace; font-size:8.5px; color:var(--muted); letter-spacing:2px; display:block; }
-  .echip .ev { font-size:11.5px; color:var(--gold); font-weight:500; }
+  .pname { font-weight:600; font-size:24px; }
+  .pcred { font-size:18px; color:var(--muted); line-height:1.4; }
+  .echip { margin-left:auto; background:rgba(201,168,76,.08); border:1px solid rgba(201,168,76,.28); border-radius:10px; padding:10px 16px; text-align:right; min-width:240px; }
+  .echip .el { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:2.2px; display:block; }
+  .echip .ev { font-size:18px; color:var(--gold); font-weight:500; }
 
   /* Closing */
-  .closing { background:linear-gradient(148deg,#081422 0%,#050d19 100%); align-items:center; justify-content:center; flex-direction:column; gap:18px; text-align:center; }
-  .cl-t { font-family:'DM Serif Display',serif; font-size:34px; }
-  .cl-s { font-size:13.5px; color:var(--muted); max-width:540px; line-height:1.6; }
-  .ref-box { background:rgba(201,168,76,.06); border:1px solid rgba(201,168,76,.22); padding:12px 22px; border-radius:4px; max-width:620px; }
-  .ref-lbl { font-family:'DM Mono',monospace; font-size:8.5px; color:var(--muted); letter-spacing:2px; margin-bottom:6px; }
-  .ref-tx  { font-size:10.5px; color:var(--muted); line-height:1.65; }
+  .closing { background:linear-gradient(148deg,#081422 0%,#050d19 100%); align-items:center; justify-content:center; flex-direction:column; gap:24px; text-align:center; padding:36px var(--edge); }
+  .cl-t { font-family:'DM Serif Display',serif; font-size:54px; }
+  .cl-s { font-size:18px; color:var(--muted); max-width:1120px; line-height:1.6; }
+  .ref-box { background:rgba(201,168,76,.06); border:1px solid rgba(201,168,76,.22); padding:18px 24px; border-radius:16px; max-width:1120px; }
+  .ref-lbl { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:2px; margin-bottom:8px; }
+  .ref-tx  { font-size:13px; color:var(--muted); line-height:1.7; }
 
   /* Performance badge row */
-  .perf-row { display:flex; gap:10px; }
+  .perf-row { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:14px; }
   .perf-b {
-    flex:1; background:rgba(14,31,58,.6); border:1px solid rgba(100,140,200,.18); border-radius:4px; padding:12px; text-align:center;
+    flex:1; background:rgba(14,31,58,.6); border:1px solid rgba(100,140,200,.18); border-radius:14px; padding:16px; text-align:center;
   }
-  .perf-n { font-family:'DM Serif Display',serif; font-size:28px; }
+  .perf-n { font-family:'DM Serif Display',serif; font-size:36px; }
   .perf-n.o{color:var(--gold);} .perf-n.r{color:var(--red);} .perf-n.g{color:var(--green);}
-  .perf-l { font-size:10.5px; color:var(--muted); line-height:1.4; margin-top:4px; }
-  .perf-c { font-family:'DM Mono',monospace; font-size:8px; color:rgba(122,147,176,.5); margin-top:3px; }
+  .perf-l { font-size:14px; color:var(--steel); line-height:1.45; margin-top:6px; }
+  .perf-c { font-family:'DM Mono',monospace; font-size:10px; color:rgba(122,147,176,.58); margin-top:4px; }
+
+  .agenda-grid,
+  .case-grid,
+  .counsel-grid,
+  .three-up {
+    display:grid;
+    gap:18px;
+  }
+  .agenda-grid { grid-template-columns:repeat(2, minmax(0,1fr)); }
+  .case-grid { grid-template-columns:repeat(2, minmax(0,1fr)); }
+  .counsel-grid { grid-template-columns:repeat(3, minmax(0,1fr)); }
+  .three-up { grid-template-columns:repeat(3, minmax(0,1fr)); }
+
+  .agenda-card,
+  .counsel-card,
+  .mini-case,
+  .compare-card {
+    background:linear-gradient(180deg, rgba(14,31,58,.82), rgba(8,20,34,.98));
+    border:1px solid rgba(120,156,210,.16);
+    border-radius:16px;
+    padding:20px;
+  }
+  .agenda-card {
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+    min-height:170px;
+  }
+  .agenda-num {
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:rgba(201,168,76,.16);
+    border:1px solid rgba(201,168,76,.35);
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'DM Mono',monospace;
+    font-size:13px;
+    flex-shrink:0;
+  }
+  .agenda-title {
+    font-family:'DM Serif Display',serif;
+    font-size:28px;
+    line-height:1.1;
+    margin-bottom:8px;
+  }
+  .agenda-copy {
+    font-size:17px;
+    line-height:1.55;
+    color:var(--steel);
+  }
+
+  .comparison-grid {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+    gap:20px;
+  }
+  .compare-card {
+    padding:22px;
+  }
+  .compare-title {
+    font-family:'DM Mono',monospace;
+    font-size:11px;
+    letter-spacing:2px;
+    color:var(--gold);
+    text-transform:uppercase;
+    margin-bottom:16px;
+  }
+  .compare-list {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .compare-row {
+    display:grid;
+    grid-template-columns:minmax(0, 1.15fr) minmax(0, .85fr) minmax(0, .85fr);
+    gap:12px;
+    align-items:start;
+    padding-bottom:12px;
+    border-bottom:1px solid rgba(120,156,210,.12);
+  }
+  .compare-row:last-child {
+    border-bottom:none;
+    padding-bottom:0;
+  }
+  .metric-name {
+    font-size:15px;
+    color:var(--white);
+    line-height:1.45;
+    font-weight:600;
+  }
+  .metric-values {
+    font-size:15px;
+    line-height:1.45;
+    color:var(--steel);
+  }
+  .metric-values strong {
+    display:block;
+    font-size:22px;
+    color:var(--white);
+    line-height:1.1;
+    margin-bottom:4px;
+  }
+  .metric-values.bad strong { color:var(--red); }
+  .metric-values.good strong { color:var(--green); }
+  .metric-values.warn strong { color:var(--gold); }
+
+  .mini-case {
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    min-height:100%;
+  }
+  .mini-case-top {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .mini-case-title {
+    font-family:'DM Serif Display',serif;
+    font-size:26px;
+    line-height:1.1;
+  }
+  .mini-case-row {
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding-top:10px;
+    border-top:1px solid rgba(120,156,210,.12);
+  }
+  .mini-case-label {
+    font-family:'DM Mono',monospace;
+    font-size:10px;
+    letter-spacing:1.4px;
+    color:var(--muted);
+    text-transform:uppercase;
+  }
+  .mini-case-value {
+    font-size:16px;
+    color:var(--steel);
+    line-height:1.5;
+  }
+  .mini-case-value strong { color:var(--white); }
+
+  .counsel-card {
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    min-height:100%;
+  }
+  .counsel-head {
+    font-family:'DM Serif Display',serif;
+    font-size:26px;
+    line-height:1.1;
+  }
+  .counsel-imp,
+  .counsel-msg,
+  .source-note,
+  .table-note {
+    font-size:16px;
+    line-height:1.55;
+    color:var(--steel);
+  }
+  .counsel-msg {
+    padding-top:12px;
+    border-top:1px solid rgba(120,156,210,.12);
+  }
+  .counsel-msg strong,
+  .source-note strong,
+  .table-note strong {
+    color:var(--white);
+  }
+  .source-note,
+  .table-note {
+    font-family:'DM Mono',monospace;
+    font-size:11px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+
+  .story-grid {
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:20px;
+    align-items:stretch;
+  }
+  .story-card {
+    background:linear-gradient(180deg, rgba(201,168,76,.08), rgba(24,53,96,.18));
+    border:1px solid rgba(201,168,76,.24);
+    border-radius:18px;
+    padding:24px;
+  }
+  .story-kicker {
+    font-family:'DM Mono',monospace;
+    font-size:11px;
+    letter-spacing:2px;
+    color:var(--gold);
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .story-copy {
+    font-size:20px;
+    line-height:1.65;
+    color:var(--steel);
+  }
+  .story-copy strong { color:var(--white); }
+  .story-points {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .story-pill {
+    background:rgba(14,31,58,.74);
+    border:1px solid rgba(120,156,210,.16);
+    border-radius:14px;
+    padding:16px 18px;
+  }
+  .story-pill strong {
+    display:block;
+    font-size:14px;
+    color:var(--gold);
+    font-family:'DM Mono',monospace;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .story-pill span {
+    font-size:17px;
+    color:var(--steel);
+    line-height:1.55;
+  }
 
   /* Comparison table alternate header */
   .cmp-hd { background:var(--mid-blue); padding:8px 12px; border-radius:3px 3px 0 0; display:flex; }
@@ -355,7 +594,13 @@
 
     .two,
     .stats,
-    .perf-row { display:flex; flex-direction:column; }
+    .perf-row,
+    .agenda-grid,
+    .comparison-grid,
+    .case-grid,
+    .counsel-grid,
+    .three-up,
+    .story-grid { display:flex; flex-direction:column; }
 
     .sec-t { font-size:clamp(2rem, 8vw, 2.8rem); }
     .sec-s,
@@ -497,10 +742,37 @@
     <div class="hdr-kicker">LEARNING OBJECTIVES</div>
   </div>
   <div class="body">
-    <div class="bc ok"><span class="bi">📋</span><div class="bt"><strong>1 · The No-Call Problem</strong><br>The clinical, emotional, and operational cost of a failed NIPT result — from a physician who manages these cases weekly at APA.</div></div>
-    <div class="bc ok"><span class="bi">🔬</span><div class="bt"><strong>2 · Why Results Fail</strong><br>Low fetal fraction, mosaicism flags, atypical results — the mechanisms and how platform architecture determines whether you get an answer.</div></div>
-    <div class="bc ok"><span class="bi">📊</span><div class="bt"><strong>3 · Platform Performance — Published Data</strong><br>Head-to-head comparison of MaterniT® 21 PLUS and Panorama™: non-reportable rates, PPV, twin performance, and the Genome-Flex rescue pathway.</div></div>
-    <div class="bc ok"><span class="bi">🧬</span><div class="bt"><strong>4 · sgNIPT for CF — Promise and Caution</strong><br>The Wynn et al. 2025 study, the Zemanick et al. 2025 false negative cases, and what every ordering physician must counsel before testing.</div></div>
+    <div class="agenda-grid">
+      <article class="agenda-card">
+        <div class="agenda-num">01</div>
+        <div>
+          <div class="agenda-title">The no-call problem</div>
+          <div class="agenda-copy">Why an indeterminate result is never neutral for the patient, the ordering clinician, or the decision window.</div>
+        </div>
+      </article>
+      <article class="agenda-card">
+        <div class="agenda-num">02</div>
+        <div>
+          <div class="agenda-title">Why results fail</div>
+          <div class="agenda-copy">Low fetal fraction, mosaic flags, atypical findings, and the architecture choices that turn signal into either an answer or silence.</div>
+        </div>
+      </article>
+      <article class="agenda-card">
+        <div class="agenda-num">03</div>
+        <div>
+          <div class="agenda-title">Platform performance</div>
+          <div class="agenda-copy">Published head-to-head differences in non-reportable rates, PPV, twin performance, and rescue pathways.</div>
+        </div>
+      </article>
+      <article class="agenda-card">
+        <div class="agenda-num">04</div>
+        <div>
+          <div class="agenda-title">sgNIPT for CF</div>
+          <div class="agenda-copy">The Wynn 2025 and Zemanick 2025 papers, what the data supports, and what still requires caution in counseling.</div>
+        </div>
+      </article>
+    </div>
+    <div class="kp">Tonight's frame: every slide asks the same clinical question. <strong>Does this platform get my patient an answer I can act on, in time?</strong></div>
   </div>
   <div class="ftr"><span>ONYEIJE · ATLANTA PERINATAL ASSOCIATES</span><span>LABCORP EDUCATIONAL PROGRAM · 2025</span></div>
 </div>
@@ -514,13 +786,31 @@
     <div class="hdr-kicker">CLINICAL STAKES</div>
   </div>
   <div class="body">
-    <div class="co">
-      <span class="co-ic">🏥</span>
-      <div class="co-tx">
-        <strong>From my practice.</strong> A 38-year-old G2P1 at 11 weeks receives her NIPT: <em>"Specimen may be mosaic — result indeterminate."</em> She calls the office in tears. Her OB calls me. We counsel her. She is terrified. We repeat the draw on a different platform. Fourteen days later: normal result. Two weeks of anxiety — and a repeat venipuncture — for a patient who already carried the weight of a prior high-risk pregnancy.
+    <div class="story-grid">
+      <div class="story-card">
+        <div class="story-kicker">From my practice</div>
+        <div class="story-copy">
+          A 38-year-old G2P1 at 11 weeks receives her NIPT: <em>"Specimen may be mosaic. Result indeterminate."</em> She calls the office in tears. Her OB calls me. We counsel her, repeat the draw on a different platform, and wait again.
+          <br><br>
+          <strong>Fourteen days later:</strong> the repeat result is normal. The first report created two weeks of anxiety, a second venipuncture, and a decision window with less certainty than the patient deserved.
+        </div>
+      </div>
+      <div class="story-points">
+        <div class="story-pill">
+          <strong>Patient impact</strong>
+          <span>Fear rises immediately because "indeterminate" rarely feels neutral to a pregnant patient.</span>
+        </div>
+        <div class="story-pill">
+          <strong>Clinical impact</strong>
+          <span>The ordering team now has to choose between redraw, platform switch, invasive testing, or no answer at all.</span>
+        </div>
+        <div class="story-pill">
+          <strong>System impact</strong>
+          <span>The architecture of the assay, not the effort of the clinician, determines whether that first blood draw becomes useful information.</span>
+        </div>
       </div>
     </div>
-    <div class="stats" style="margin-top:2px">
+    <div class="stats">
       <div class="sb">
         <div class="sn r">1.3%</div>
         <div class="sl">sgNIPT no-call rate in Hoskovec et al. unselected cohort of 9,151 patients</div>
@@ -542,7 +832,7 @@
         <div class="sc">Rafalko et al., ISPD 2023 (LabCorp internal data)</div>
       </div>
     </div>
-    <div class="kp">Of those rescued MaterniT results, <strong>39% were positive findings</strong> — mosaic aneuploidy, non-mosaic aneuploidy, CNVs, suspected maternal events. The no-call was hiding something clinically real.<small>Rafalko et al., ISPD poster 2023 · Breakdown: 61% mosaic aneuploidy, 16% suspected maternal events, 14% non-mosaic aneuploidy, 5% subchromosomal CNVs, 4% multiple aneuploidies</small></div>
+    <div class="kp">Of those rescued MaterniT results, <strong>39% were positive findings.</strong> Mosaic aneuploidy, maternal events, non-mosaic aneuploidy, and CNVs were being hidden behind the no-call label.<small>Rafalko et al., ISPD poster 2023. Breakdown: 61% mosaic aneuploidy, 16% suspected maternal events, 14% non-mosaic aneuploidy, 5% subchromosomal CNVs, 4% multiple aneuploidies.</small></div>
   </div>
   <div class="ftr"><span>ONYEIJE · ATLANTA PERINATAL ASSOCIATES</span><span>LABCORP EDUCATIONAL PROGRAM · 2025</span></div>
 </div>
@@ -598,30 +888,61 @@
     <div><div class="hdr-num">06</div><div class="hdr-ttl">Key Performance Comparison: MaterniT® vs. Panorama™</div></div>
     <div class="hdr-kicker">PUBLISHED DATA</div>
   </div>
-  <div class="body" style="gap:8px">
-    <table class="dt">
-      <thead>
-        <tr>
-          <th>Metric</th>
-          <th>MaterniT® 21 PLUS</th>
-          <th>Panorama™</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>Non-reportable rate — first draw (singletons)</td><td><strong>1%</strong></td><td><strong>1.4%</strong> (not including atypical results)</td></tr>
-        <tr><td>Non-reportable rate — twins</td><td><strong>&lt;3.8%</strong> (since 2012)</td><td><strong>&gt;10%</strong> (since 2019)</td></tr>
-        <tr><td>Non-reportable rate — triplets</td><td><strong>17.3%</strong></td><td><span class="tag tf">EXCLUDED</span> from assay</td></tr>
-        <tr><td>Turnaround time</td><td><strong>3–5 days</strong></td><td><strong>5–7 days</strong></td></tr>
-        <tr><td>22q (DiGeorge) PPV</td><td><strong>90%–99%</strong></td><td><strong>53%</strong></td></tr>
-        <tr><td>Trisomy 22 PPV</td><td><strong>43.3%</strong></td><td><span class="tag tf">EXCLUDED</span></td></tr>
-        <tr><td>Trisomy 16 PPV</td><td><strong>35.8%</strong></td><td><span class="tag tf">EXCLUDED</span></td></tr>
-        <tr><td>Triploidy PPV</td><td><strong>N/A (screening not applicable)</strong></td><td><strong>7.5–11%</strong></td></tr>
-        <tr><td>Genome-Flex rescue pathway</td><td><span class="tag tok">AVAILABLE</span></td><td><span class="tag tf">EXCLUDED</span></td></tr>
-        <tr><td>Fetal enrichment (low FF rescue)</td><td><span class="tag tok">AVAILABLE</span></td><td><span class="tag tf">EXCLUDED</span></td></tr>
-        <tr><td>Mosaicism Ratio (bioinformatics)</td><td><span class="tag tok">MaterniT 21 PLUS only</span></td><td><span class="tag tf">NOT AVAILABLE</span></td></tr>
-      </tbody>
-    </table>
-    <p style="font-family:'DM Mono',monospace;font-size:8.5px;color:var(--muted)">Sources: LabCorp internal data; Natera website accessed June 2025; Dar et al. AJOG 2022; Rafalko et al. ISPD 2023; Soster et al. Front Genet 2023; Dugoff et al. AJOG 2023 | MaterniT 21 PLUS comparison brochure L1553350 ©2025 Labcorp</p>
+  <div class="body">
+    <div class="kp"><strong>Bottom line:</strong> the largest differences are not cosmetic. They show up in redraw burden, access in twins and triplets, 22q performance, and whether a low-fetal-fraction sample can be rescued.</div>
+    <div class="comparison-grid">
+      <article class="compare-card">
+        <div class="compare-title">Access and turnaround</div>
+        <div class="compare-list">
+          <div class="compare-row">
+            <div class="metric-name">Non-reportable rate, singletons</div>
+            <div class="metric-values good"><strong>1%</strong>First draw</div>
+            <div class="metric-values bad"><strong>1.4%</strong>Does not include atypical results</div>
+          </div>
+          <div class="compare-row">
+            <div class="metric-name">Non-reportable rate, twins</div>
+            <div class="metric-values good"><strong>&lt;3.8%</strong>Screening twins since 2012</div>
+            <div class="metric-values bad"><strong>&gt;10%</strong>Since 2019</div>
+          </div>
+          <div class="compare-row">
+            <div class="metric-name">Triplet pregnancies</div>
+            <div class="metric-values warn"><strong>17.3%</strong>Reportable pathway exists</div>
+            <div class="metric-values bad"><strong>Excluded</strong>Not offered</div>
+          </div>
+          <div class="compare-row">
+            <div class="metric-name">Turnaround time</div>
+            <div class="metric-values good"><strong>3-5 days</strong>Routine workflow</div>
+            <div class="metric-values warn"><strong>5-7 days</strong>Longer wait to answer</div>
+          </div>
+        </div>
+      </article>
+      <article class="compare-card">
+        <div class="compare-title">Performance and rescue tools</div>
+        <div class="compare-list">
+          <div class="compare-row">
+            <div class="metric-name">22q (DiGeorge) PPV</div>
+            <div class="metric-values good"><strong>90%-99%</strong>Soster 2023</div>
+            <div class="metric-values bad"><strong>53%</strong>Dar 2022</div>
+          </div>
+          <div class="compare-row">
+            <div class="metric-name">Trisomy 22 and trisomy 16 PPV</div>
+            <div class="metric-values warn"><strong>43.3% / 35.8%</strong>Published PPV</div>
+            <div class="metric-values bad"><strong>Excluded</strong>No assay coverage</div>
+          </div>
+          <div class="compare-row">
+            <div class="metric-name">Genome-Flex rescue and fetal enrichment</div>
+            <div class="metric-values good"><strong>Available</strong>Low-fraction rescue pathway exists</div>
+            <div class="metric-values bad"><strong>Excluded</strong>No comparable rescue pathway</div>
+          </div>
+          <div class="compare-row">
+            <div class="metric-name">Mosaicism Ratio</div>
+            <div class="metric-values good"><strong>Available</strong>MaterniT 21 PLUS only</div>
+            <div class="metric-values bad"><strong>Not available</strong>No quantitative ratio for counseling</div>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="table-note">Sources: LabCorp internal data; Natera website accessed June 2025; Dar et al. AJOG 2022; Rafalko et al. ISPD 2023; Soster et al. Front Genet 2023; Dugoff et al. AJOG 2023; MaterniT 21 PLUS comparison brochure L1553350, 2025.</div>
   </div>
   <div class="ftr"><span>ONYEIJE · ATLANTA PERINATAL ASSOCIATES</span><span>LABCORP EDUCATIONAL PROGRAM · 2025</span></div>
 </div>
@@ -641,31 +962,31 @@
     </div>
     <div class="stats" style="margin-top:4px">
       <div class="sb">
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:6px">T21 PPV · DZ TWINS</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px">T21 PPV · DZ TWINS</div>
         <div class="sn g">100%</div><div class="sl">MaterniT®</div>
-        <div style="height:8px"></div>
-        <div class="sn r" style="font-size:22px">88%</div><div class="sl" style="font-size:10px">Panorama™</div>
+        <div style="height:10px"></div>
+        <div class="sn r" style="font-size:34px">88%</div><div class="sl" style="font-size:13px">Panorama™</div>
         <div class="sc">Dugoff et al. AJOG 2023; Kantor et al. Prenat Diagn 2022</div>
       </div>
       <div class="sb">
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:6px">T18 PPV · DZ TWINS</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px">T18 PPV · DZ TWINS</div>
         <div class="sn g">100%</div><div class="sl">MaterniT®</div>
-        <div style="height:8px"></div>
-        <div class="sn r" style="font-size:22px">70%</div><div class="sl" style="font-size:10px">Panorama™</div>
+        <div style="height:10px"></div>
+        <div class="sn r" style="font-size:34px">70%</div><div class="sl" style="font-size:13px">Panorama™</div>
         <div class="sc">Dugoff et al. AJOG 2023</div>
       </div>
       <div class="sb">
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:6px">T13 PPV · DZ TWINS</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px">T13 PPV · DZ TWINS</div>
         <div class="sn g">100%</div><div class="sl">MaterniT®</div>
-        <div style="height:8px"></div>
-        <div class="sn r" style="font-size:22px">67%</div><div class="sl" style="font-size:10px">Panorama™</div>
+        <div style="height:10px"></div>
+        <div class="sn r" style="font-size:34px">67%</div><div class="sl" style="font-size:13px">Panorama™</div>
         <div class="sc">Dugoff et al. AJOG 2023</div>
       </div>
       <div class="sb">
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:6px">22q PPV · SINGLETONS</div>
-        <div class="sn g" style="font-size:22px">90–99%</div><div class="sl">MaterniT®</div>
-        <div style="height:8px"></div>
-        <div class="sn r" style="font-size:22px">53%</div><div class="sl" style="font-size:10px">Panorama™</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px">22q PPV · SINGLETONS</div>
+        <div class="sn g" style="font-size:34px">90–99%</div><div class="sl">MaterniT®</div>
+        <div style="height:10px"></div>
+        <div class="sn r" style="font-size:34px">53%</div><div class="sl" style="font-size:13px">Panorama™</div>
         <div class="sc">Soster et al. Front Genet 2023; Dar et al. AJOG 2022</div>
       </div>
     </div>
@@ -682,26 +1003,28 @@
     <div><div class="hdr-num">08</div><div class="hdr-ttl">Cases from My Practice at APA</div></div>
     <div class="hdr-kicker">DE-IDENTIFIED CLINICAL CASES · PERSONAL EXPERIENCE</div>
   </div>
-  <div class="body" style="gap:10px">
-    <div class="cc">
-      <div class="cc-hd"><span class="cc-badge">CASE A</span><span class="cc-ttl">Atypical / Low Fetal Fraction → Rescued by MaterniT Fetal Enrichment</span></div>
-      <div class="cc-body">
-        <div class="cr"><span class="cl">Patient</span><span class="cv">34-year-old G1P0, 10w3d GA, BMI 36, no prior genetic history</span></div>
-        <div class="cr"><span class="cl">Initial NIPT</span><span class="cv fail">No result returned — fetal fraction below reportable threshold on SNP-based platform</span></div>
-        <div class="cr"><span class="cl">Resolution</span><span class="cv win">Repeat sample processed with MaterniT fetal enrichment technology → Normal result reported within 4 days</span></div>
-        <div class="cr"><span class="cl">Impact</span><span class="cv warn">11-day delay total; patient required additional counseling call; unnecessary anxiety in first trimester</span></div>
+  <div class="body">
+    <div class="case-grid">
+      <div class="cc">
+        <div class="cc-hd"><span class="cc-badge">CASE A</span><span class="cc-ttl">Atypical / low fetal fraction, rescued by MaterniT fetal enrichment</span></div>
+        <div class="cc-body">
+          <div class="cr"><span class="cl">Patient</span><span class="cv">34-year-old G1P0 at 10w3d, BMI 36, no prior genetic history</span></div>
+          <div class="cr"><span class="cl">Initial NIPT</span><span class="cv fail">No result returned because fetal fraction fell below the reportable threshold on an SNP-based platform</span></div>
+          <div class="cr"><span class="cl">Resolution</span><span class="cv win">Repeat sample processed with MaterniT fetal enrichment technology. Normal result reported within 4 days.</span></div>
+          <div class="cr"><span class="cl">Impact</span><span class="cv warn">Total delay: 11 days, additional counseling call, avoidable anxiety in the first trimester</span></div>
+        </div>
+      </div>
+      <div class="cc">
+        <div class="cc-hd"><span class="cc-badge">CASE B</span><span class="cc-ttl">"Specimen may be mosaic," then actionable counseling with Mosaicism Ratio</span></div>
+        <div class="cc-body">
+          <div class="cr"><span class="cl">Patient</span><span class="cv">39-year-old G2P1 at 11w1d, prior T21 pregnancy, already anxious</span></div>
+          <div class="cr"><span class="cl">Initial NIPT</span><span class="cv fail">Atypical result with possible mosaicism. No actionable data and no next-step framework from the original report.</span></div>
+          <div class="cr"><span class="cl">Resolution</span><span class="cv win">MaterniT 21 PLUS Mosaicism Ratio provided quantitative data. Patient then chose amniocentesis with informed consent grounded in real numbers.</span></div>
+          <div class="cr"><span class="cl">Impact</span><span class="cv warn">The diagnostic decision was made from usable data, not a vague flag. That difference changes counseling.</span></div>
+        </div>
       </div>
     </div>
-    <div class="cc">
-      <div class="cc-hd"><span class="cc-badge">CASE B</span><span class="cc-ttl">"Specimen May Be Mosaic" → Mosaicism Ratio Enables Actionable Counseling</span></div>
-      <div class="cc-body">
-        <div class="cr"><span class="cl">Patient</span><span class="cv">39-year-old G2P1, 11w1d GA, prior T21 pregnancy, already anxious</span></div>
-        <div class="cr"><span class="cl">Initial NIPT</span><span class="cv fail">"Atypical result — specimen may be mosaic" — no actionable data, no next steps for provider</span></div>
-        <div class="cr"><span class="cl">Resolution</span><span class="cv win">MaterniT 21 PLUS Mosaicism Ratio report provided quantitative data; patient counseled with specific risk; elected amniocentesis with full informed consent</span></div>
-        <div class="cr"><span class="cl">Impact</span><span class="cv warn">Patient made a diagnostic decision based on real data — not a vague flag. That is the difference a result makes.</span></div>
-      </div>
-    </div>
-    <p style="font-family:'DM Mono',monospace;font-size:8.5px;color:var(--muted)">Cases are composite de-identified representations of APA clinical experience. Individual outcomes vary. These cases do not constitute a clinical study or proof of superiority of any platform.</p>
+    <div class="source-note">Cases are composite, de-identified representations of APA clinical experience. Individual outcomes vary. These cases do not constitute a clinical study or proof of superiority of any platform.</div>
   </div>
   <div class="ftr"><span>ONYEIJE · ATLANTA PERINATAL ASSOCIATES</span><span>LABCORP EDUCATIONAL PROGRAM · 2025</span></div>
 </div>
@@ -752,22 +1075,46 @@
     <div><div class="hdr-num">11</div><div class="hdr-ttl">Three Families. Three False Negatives. One Letter That Changed the Conversation.</div></div>
     <div class="hdr-kicker">ZEMANICK ET AL. · J CYSTIC FIBROSIS · NOV 2025</div>
   </div>
-  <div class="body" style="gap:10px">
+  <div class="body" style="gap:14px">
     <div class="co red">
       <span class="co-ic">🔴</span>
-      <div class="co-tx"><strong>University of Colorado MFM + Pediatric CF Clinic (Zemanick et al., 2025):</strong> Three infants received low-risk results on BTO's Unity sgNIPT and were subsequently diagnosed with CF by newborn screen. One of the letter's co-authors — Dr. Zaretsky — is also a Medical Advisor to BTO and a co-author on the Wynn et al. study that ran the original 100% sensitivity claim.</div>
+      <div class="co-tx"><strong>University of Colorado MFM and Pediatric CF Clinic (Zemanick et al., 2025):</strong> Three infants received low-risk results on BTO's Unity sgNIPT and were later diagnosed with CF by newborn screen. One co-author, Dr. Zaretsky, is also a Medical Advisor to BTO and a co-author on the Wynn paper that advanced the original 100% sensitivity claim.</div>
     </div>
-    <table class="dt">
-      <thead><tr><th>Case</th><th>Sibling with CF?</th><th>Meconium Ileus?</th><th>Maternal Variant</th><th>Paternal Variant</th><th>Fetal Fraction</th><th>Risk Result</th><th>Newborn Screen</th></tr></thead>
-      <tbody>
-        <tr><td>Case 1</td><td>Yes</td><td>No</td><td>F508del</td><td>A559T</td><td>6.7%</td><td><span class="tag tf">Low 1:200</span></td><td>F508del / A559T — CF affected</td></tr>
-        <tr><td>Case 2</td><td>Yes</td><td>No</td><td>F508del</td><td>F508del</td><td>4.4%</td><td><span class="tag tf">Low &lt;1:5000</span></td><td>F508del / F508del — CF affected</td></tr>
-        <tr><td>Case 3</td><td>No</td><td>Yes</td><td>F508del</td><td>G330X</td><td>11%</td><td><span class="tag tf">Low 1:1500</span></td><td>F508del / G330X — CF affected</td></tr>
-      </tbody>
-    </table>
+    <div class="three-up">
+      <article class="mini-case">
+        <div class="mini-case-top">
+          <div class="mini-case-title">Case 1</div>
+          <span class="tag tf">Low 1:200</span>
+        </div>
+        <div class="mini-case-row"><div class="mini-case-label">Family context</div><div class="mini-case-value">Sibling with CF: <strong>Yes</strong> · Meconium ileus: <strong>No</strong></div></div>
+        <div class="mini-case-row"><div class="mini-case-label">Parental variants</div><div class="mini-case-value">Maternal <strong>F508del</strong> · Paternal <strong>A559T</strong></div></div>
+        <div class="mini-case-row"><div class="mini-case-label">Fetal fraction</div><div class="mini-case-value"><strong>6.7%</strong></div></div>
+        <div class="mini-case-row"><div class="mini-case-label">Outcome</div><div class="mini-case-value">Newborn screen and diagnostic workup confirmed <strong>F508del / A559T, CF affected</strong>.</div></div>
+      </article>
+      <article class="mini-case">
+        <div class="mini-case-top">
+          <div class="mini-case-title">Case 2</div>
+          <span class="tag tf">Low &lt;1:5000</span>
+        </div>
+        <div class="mini-case-row"><div class="mini-case-label">Family context</div><div class="mini-case-value">Sibling with CF: <strong>Yes</strong> · Meconium ileus: <strong>No</strong></div></div>
+        <div class="mini-case-row"><div class="mini-case-label">Parental variants</div><div class="mini-case-value">Maternal <strong>F508del</strong> · Paternal <strong>F508del</strong></div></div>
+        <div class="mini-case-row"><div class="mini-case-label">Fetal fraction</div><div class="mini-case-value"><strong>4.4%</strong></div></div>
+        <div class="mini-case-row"><div class="mini-case-label">Outcome</div><div class="mini-case-value">Newborn screen and diagnostic workup confirmed <strong>F508del / F508del, CF affected</strong>.</div></div>
+      </article>
+      <article class="mini-case">
+        <div class="mini-case-top">
+          <div class="mini-case-title">Case 3</div>
+          <span class="tag tf">Low 1:1500</span>
+        </div>
+        <div class="mini-case-row"><div class="mini-case-label">Family context</div><div class="mini-case-value">Sibling with CF: <strong>No</strong> · Meconium ileus: <strong>Yes</strong></div></div>
+        <div class="mini-case-row"><div class="mini-case-label">Parental variants</div><div class="mini-case-value">Maternal <strong>F508del</strong> · Paternal <strong>G330X</strong></div></div>
+        <div class="mini-case-row"><div class="mini-case-label">Fetal fraction</div><div class="mini-case-value"><strong>11%</strong></div></div>
+        <div class="mini-case-row"><div class="mini-case-label">Outcome</div><div class="mini-case-value">Newborn screen and diagnostic workup confirmed <strong>F508del / G330X, CF affected</strong>.</div></div>
+      </article>
+    </div>
     <div class="bc warn">
       <span class="bi">📊</span>
-      <div class="bt"><strong>Statistical analysis by Zemanick et al.:</strong> The probability of observing ≥3 false negatives by chance alone ranges from <strong>2 in 100 to 8 in 1,000,000,000</strong> depending on assumptions. This cluster is not random variation.
+      <div class="bt"><strong>Statistical analysis by Zemanick et al.:</strong> The probability of observing at least 3 false negatives by chance alone ranges from <strong>2 in 100 to 8 in 1,000,000,000</strong>, depending on assumptions. This cluster should not be dismissed as random variation.
       <span class="cite">Zemanick et al., J Cystic Fibrosis, Letter to the Editor, Nov 2025</span></div>
     </div>
   </div>
@@ -809,43 +1156,41 @@
     <div><div class="hdr-num">13</div><div class="hdr-ttl">What Every Ordering Physician Must Counsel Before sgNIPT</div></div>
     <div class="hdr-kicker">EVIDENCE-BASED COUNSELING POINTS</div>
   </div>
-  <div class="body" style="gap:8px">
-    <table class="dt">
-      <thead><tr><th>Limitation</th><th>Clinical Implication</th><th>What to Tell the Patient</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>No-call rate: 1.3% (Hoskovec 2023); 0.8% CF-carrier sub-cohort (Wynn 2025)</td>
-          <td>Approximately 1 in 100 patients won't get an answer</td>
-          <td><span class="tag tw">COUNSEL</span> A repeat draw or alternative platform may be needed</td>
-        </tr>
-        <tr>
-          <td>PPV: 48.3% average (Hoskovec); 65% CF cohort (Wynn)</td>
-          <td>High positive results are risk estimates, not diagnoses</td>
-          <td><span class="tag tw">COUNSEL</span> Positive result triggers referral for confirmatory CVS or amnio</td>
-        </tr>
-        <tr>
-          <td>Cannot detect homozygous rare CF variants except F508del</td>
-          <td>Missed cases in ethnically diverse populations (1.5–3.1% of US CF)</td>
-          <td><span class="tag tf">HIGH RISK</span> Low-risk result does not rule out CF — especially in consanguineous or ethnically homogeneous populations</td>
-        </tr>
-        <tr>
-          <td>ACOG classifies sgNIPT as <strong>investigational</strong></td>
-          <td>Not yet recommended standard of care</td>
-          <td><span class="tag tw">COUNSEL</span> This test is a screening tool — sequential maternal/paternal carrier screening remains ACOG standard</td>
-        </tr>
-        <tr>
-          <td>Partner testing still needed for true reproductive risk</td>
-          <td>sgNIPT risk is pregnancy-specific only</td>
-          <td><span class="tag tw">COUNSEL</span> Recommend paternal carrier testing for subsequent pregnancies — LabCorp offers saliva collection (FOTB) to remove logistical barriers</td>
-        </tr>
-        <tr>
-          <td>Prenatal dx still required for therapy eligibility</td>
-          <td>High-risk sgNIPT alone does not qualify for CFTRm protocol</td>
-          <td><span class="tag tok">INFORM</span> Positive result → refer for confirmatory testing before any in utero treatment discussion</td>
-        </tr>
-      </tbody>
-    </table>
-    <p style="font-family:'DM Mono',monospace;font-size:8.5px;color:var(--muted)">Sources: Hoskovec et al. 2023; Wynn et al. 2025; Zemanick et al. 2025; APA BTO internal analysis 2025; ACOG Committee Opinion 691; ACMG guidelines Gregg et al. 2021</p>
+  <div class="body">
+    <div class="kp"><strong>Use this as a counseling slide, not a data dump.</strong> Patients do not need every paper. They need a clear explanation of what the test can do, what it can miss, and what happens next.</div>
+    <div class="counsel-grid">
+      <article class="counsel-card">
+        <div class="counsel-head">No-call results happen</div>
+        <div class="counsel-imp">Hoskovec reported a 1.3% no-call rate; Wynn reported 0.8% in the CF-carrier sub-cohort. Roughly 1 in 100 patients may not get an answer on the first pass.</div>
+        <div class="counsel-msg"><span class="tag tw">COUNSEL</span> Tell the patient up front that a repeat draw or an alternative platform may be needed.</div>
+      </article>
+      <article class="counsel-card">
+        <div class="counsel-head">Positive does not mean diagnostic</div>
+        <div class="counsel-imp">PPV was 48.3% on average in Hoskovec and 65% in the Wynn CF cohort. A high-risk result is still a risk estimate.</div>
+        <div class="counsel-msg"><span class="tag tw">COUNSEL</span> Positive results should trigger confirmatory CVS or amniocentesis, not irreversible decisions.</div>
+      </article>
+      <article class="counsel-card">
+        <div class="counsel-head">Low-risk does not rule out all CF</div>
+        <div class="counsel-imp">The assay cannot detect homozygous rare CF variants other than F508del. Missed cases remain possible, especially in diverse populations.</div>
+        <div class="counsel-msg"><span class="tag tf">HIGH RISK</span> A low-risk result does not fully exclude CF in consanguineous or ethnically homogeneous populations.</div>
+      </article>
+      <article class="counsel-card">
+        <div class="counsel-head">ACOG still calls sgNIPT investigational</div>
+        <div class="counsel-imp">This is not yet standard-of-care replacement testing for traditional maternal and paternal carrier screening.</div>
+        <div class="counsel-msg"><span class="tag tw">COUNSEL</span> Present sgNIPT as a screening tool, while sequential maternal and paternal carrier screening remains the ACOG standard.</div>
+      </article>
+      <article class="counsel-card">
+        <div class="counsel-head">Partner testing still matters</div>
+        <div class="counsel-imp">sgNIPT gives pregnancy-specific risk. It does not replace knowing the true parental genotype combination for future pregnancies.</div>
+        <div class="counsel-msg"><span class="tag tw">COUNSEL</span> Recommend paternal carrier testing for future pregnancies. Saliva collection can reduce logistical barriers.</div>
+      </article>
+      <article class="counsel-card">
+        <div class="counsel-head">Therapy pathways still require diagnosis</div>
+        <div class="counsel-imp">A high-risk sgNIPT result alone does not qualify a patient for in utero treatment or definitive therapeutic planning.</div>
+        <div class="counsel-msg"><span class="tag tok">INFORM</span> High-risk results should lead to confirmatory testing before any treatment discussion.</div>
+      </article>
+    </div>
+    <div class="source-note">Sources: Hoskovec et al. 2023; Wynn et al. 2025; Zemanick et al. 2025; APA BTO internal analysis 2025; ACOG Committee Opinion 691; ACMG guidelines Gregg et al. 2021.</div>
   </div>
   <div class="ftr"><span>ONYEIJE · ATLANTA PERINATAL ASSOCIATES</span><span>LABCORP EDUCATIONAL PROGRAM · 2025</span></div>
 </div>
@@ -877,7 +1222,7 @@
       </div>
     </div>
 
-    <div class="kp" style="font-size:13px">My job is to get every patient an answer — before the anxiety window closes and before a decision has to be made without adequate information. Platform selection is part of that clinical responsibility.</div>
+    <div class="kp">My job is to get every patient an answer before the anxiety window closes and before a decision has to be made without adequate information. Platform selection is part of that clinical responsibility.</div>
   </div>
 
   <div class="ref-box" style="margin-top:4px">
@@ -936,7 +1281,10 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowLeft'||e.key==='ArrowUp')  go(-1);
 });
 
-document.getElementById('prog').style.width=`${(1/total)*100}%`;
+const qsSlide = Number(new URLSearchParams(window.location.search).get('slide'));
+const hashSlide = Number((window.location.hash || '').replace('#',''));
+const initialSlide = Number.isFinite(qsSlide) && qsSlide > 0 ? qsSlide : (Number.isFinite(hashSlide) && hashSlide > 0 ? hashSlide : 1);
+goTo(initialSlide);
 </script>
 <!-- openmfm-footer-injected -->
 <div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
