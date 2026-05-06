@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>openMFM cfDNA Edge Case Tool</title>
+  <meta name="description" content="Clinician-facing decision support for cfDNA and NIPT edge cases in MFM practice, including low fetal fraction, atypical results, and mosaic flags." />
+  <meta property="og:title" content="openMFM cfDNA Edge Case Tool" />
+  <meta property="og:description" content="Clinician-facing decision support for cfDNA and NIPT edge cases in MFM practice." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://openmfm.org/cfdna-edge-case-tool/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="openMFM cfDNA Edge Case Tool" />
+  <meta name="twitter:description" content="A clinician-facing tool for low fetal fraction, atypical, mosaic, and other indeterminate cfDNA scenarios." />
+  <style>
+    :root{
+      --bg:#08111f;
+      --panel:#101c2f;
+      --panel2:#13243c;
+      --ink:#eef6ff;
+      --muted:#a9bbd3;
+      --line:#25405f;
+      --accent:#4cc9f0;
+      --accent2:#80ffdb;
+      --warn:#ffd166;
+      --danger:#ff6b6b;
+      --ok:#8ee28e;
+      --shadow:0 24px 70px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 5%, rgba(76,201,240,.18), transparent 32%),
+        radial-gradient(circle at 90% 15%, rgba(128,255,219,.12), transparent 28%),
+        linear-gradient(180deg,#06101e 0%,#08111f 50%,#050a13 100%);
+      color:var(--ink);
+      min-height:100vh;
+    }
+    header{
+      padding:42px 22px 20px;
+      max-width:1180px;
+      margin:0 auto;
+    }
+    .eyebrow{
+      color:var(--accent2);
+      letter-spacing:.12em;
+      font-weight:800;
+      font-size:.78rem;
+      text-transform:uppercase;
+    }
+    h1{
+      margin:.35rem 0 .6rem;
+      font-size:clamp(2.1rem,5vw,4.4rem);
+      line-height:.95;
+      letter-spacing:-.06em;
+    }
+    .subtitle{
+      max-width:880px;
+      color:var(--muted);
+      font-size:1.1rem;
+      line-height:1.6;
+    }
+    main{
+      max-width:1180px;
+      margin:0 auto;
+      padding:18px 22px 56px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 390px;
+      gap:22px;
+    }
+    @media(max-width:980px){main{grid-template-columns:1fr}}
+    .card{
+      background:linear-gradient(180deg,rgba(19,36,60,.96),rgba(16,28,47,.96));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      overflow:hidden;
+    }
+    .card h2{
+      margin:0;
+      padding:22px 22px 4px;
+      letter-spacing:-.03em;
+      font-size:1.45rem;
+    }
+    .card p.lead{
+      padding:0 22px 14px;
+      margin:0;
+      color:var(--muted);
+      line-height:1.5;
+    }
+    form{
+      padding:8px 22px 24px;
+      display:grid;
+      gap:18px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    @media(max-width:720px){.grid{grid-template-columns:1fr}}
+    label{
+      display:block;
+      color:#dbeaff;
+      font-weight:700;
+      font-size:.9rem;
+      margin-bottom:8px;
+    }
+    input,select{
+      width:100%;
+      padding:13px 14px;
+      border-radius:14px;
+      border:1px solid #315071;
+      background:#081524;
+      color:var(--ink);
+      outline:none;
+      font-size:1rem;
+    }
+    input:focus,select:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(76,201,240,.15);
+    }
+    .checks{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+    @media(max-width:720px){.checks{grid-template-columns:1fr}}
+    .check{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:12px;
+      border:1px solid #2a4869;
+      border-radius:14px;
+      background:rgba(8,21,36,.72);
+      min-height:58px;
+    }
+    .check input{width:auto;margin-top:2px}
+    .check span{color:#dbeaff;font-weight:650}
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    button{
+      border:0;
+      border-radius:999px;
+      padding:13px 18px;
+      font-weight:850;
+      cursor:pointer;
+      letter-spacing:.01em;
+    }
+    .primary{
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#03111d;
+    }
+    .secondary{
+      background:#152942;
+      color:var(--ink);
+      border:1px solid #345777;
+    }
+    aside{
+      display:grid;
+      gap:22px;
+      align-content:start;
+    }
+    .result{
+      padding:22px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:7px 12px;
+      font-weight:850;
+      font-size:.83rem;
+      border:1px solid transparent;
+    }
+    .badge.ok{background:rgba(142,226,142,.13);color:var(--ok);border-color:rgba(142,226,142,.35)}
+    .badge.warn{background:rgba(255,209,102,.13);color:var(--warn);border-color:rgba(255,209,102,.4)}
+    .badge.danger{background:rgba(255,107,107,.14);color:var(--danger);border-color:rgba(255,107,107,.4)}
+    .recommendation{
+      margin:16px 0 0;
+      font-size:1.45rem;
+      line-height:1.18;
+      letter-spacing:-.035em;
+      font-weight:900;
+    }
+    .why{
+      color:var(--muted);
+      line-height:1.55;
+      margin:12px 0 0;
+    }
+    .pathway{
+      display:grid;
+      gap:10px;
+      padding:0 22px 22px;
+    }
+    .step{
+      padding:13px 14px;
+      border-radius:16px;
+      background:rgba(8,21,36,.72);
+      border:1px solid #2c4968;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .num{
+      width:28px;height:28px;
+      border-radius:50%;
+      background:rgba(76,201,240,.18);
+      color:var(--accent);
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      flex:0 0 auto;
+    }
+    .step strong{display:block}
+    .step small{color:var(--muted);line-height:1.45;display:block;margin-top:3px}
+    .flags{
+      padding:0 22px 22px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .flag{
+      border-radius:999px;
+      padding:7px 10px;
+      background:#081524;
+      color:#dcecff;
+      border:1px solid #2c4968;
+      font-size:.82rem;
+      font-weight:750;
+    }
+    .note{
+      margin:0 22px 22px;
+      padding:14px;
+      border-left:4px solid var(--accent);
+      background:rgba(76,201,240,.09);
+      color:#dbeaff;
+      border-radius:12px;
+      line-height:1.5;
+    }
+    .refs{
+      padding:18px 22px 24px;
+      color:var(--muted);
+      font-size:.86rem;
+      line-height:1.45;
+    }
+    .refs a{color:var(--accent2)}
+    footer{
+      max-width:1180px;
+      margin:0 auto;
+      padding:0 22px 46px;
+      color:#8298b5;
+      font-size:.86rem;
+      line-height:1.5;
+    }
+    @media print{
+      body{background:#fff;color:#000}
+      .card{box-shadow:none;border-color:#ccc;background:#fff;color:#000}
+      input,select{background:#fff;color:#000}
+      .actions{display:none}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">openMFM.org • NIPT Edge Case Companion</div>
+    <h1>cfDNA Decision Support</h1>
+    <p class="subtitle">
+      A clinician-facing teaching tool for NIPT edge cases. It supports counseling pathways for low fetal fraction,
+      abnormal results, multiple aneuploidies, twin/IVF scenarios, and expanded screening. It does not replace clinical judgment,
+      genetic counseling, ultrasound assessment, or diagnostic testing.
+    </p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Patient + Test Context</h2>
+      <p class="lead">Enter the minimum information needed to generate an edge-case pathway.</p>
+
+      <form id="toolForm">
+        <div class="grid">
+          <div>
+            <label for="ga">Gestational age at draw (weeks)</label>
+            <input id="ga" type="number" min="6" max="42" step="0.1" placeholder="e.g., 11.4" />
+          </div>
+          <div>
+            <label for="bmi">BMI</label>
+            <input id="bmi" type="number" min="15" max="80" step="0.1" placeholder="e.g., 34" />
+          </div>
+          <div>
+            <label for="pregnancy">Pregnancy type</label>
+            <select id="pregnancy">
+              <option value="singleton">Singleton</option>
+              <option value="twins">Twins</option>
+              <option value="higher">Triplet or higher-order multiple</option>
+            </select>
+          </div>
+          <div>
+            <label for="result">NIPT result category</label>
+            <select id="result">
+              <option value="negative">Negative / low risk</option>
+              <option value="positive-common">Positive: T21/T18/T13</option>
+              <option value="positive-sca">Positive: sex chromosome aneuploidy</option>
+              <option value="microdeletion">Positive: microdeletion / expanded screen</option>
+              <option value="rare">Rare autosomal / genome-wide CNV</option>
+              <option value="multiple">Multiple aneuploidies / chaotic pattern</option>
+              <option value="nocall">No-call / low fetal fraction / quantity not sufficient</option>
+            </select>
+          </div>
+          <div>
+            <label for="ff">Fetal fraction if available (%)</label>
+            <input id="ff" type="number" min="0" max="40" step="0.1" placeholder="optional" />
+          </div>
+          <div>
+            <label for="ultrasound">Ultrasound status</label>
+            <select id="ultrasound">
+              <option value="notdone">Not yet performed</option>
+              <option value="normal">Normal / no major anomaly</option>
+              <option value="anomaly">Structural anomaly or increased NT</option>
+              <option value="demise">Demised co-twin / empty sac / vanishing twin concern</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label>Edge-case modifiers</label>
+          <div class="checks">
+            <label class="check"><input type="checkbox" id="ivf" /><span>IVF / ART pregnancy</span></label>
+            <label class="check"><input type="checkbox" id="donor" /><span>Donor egg / gestational carrier</span></label>
+            <label class="check"><input type="checkbox" id="vtwin" /><span>Known vanishing twin or early twin sac</span></label>
+            <label class="check"><input type="checkbox" id="prior" /><span>Prior aneuploidy / high-risk history</span></label>
+            <label class="check"><input type="checkbox" id="maternalcnv" /><span>Known maternal CNV / mosaicism</span></label>
+            <label class="check"><input type="checkbox" id="repeatFail" /><span>Repeat no-call</span></label>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="primary">Generate pathway</button>
+          <button type="button" class="secondary" id="resetBtn">Reset</button>
+          <button type="button" class="secondary" onclick="window.print()">Print</button>
+        </div>
+      </form>
+    </section>
+
+    <aside>
+      <section class="card result" id="resultCard">
+        <span class="badge warn" id="riskBadge">Awaiting input</span>
+        <div class="recommendation" id="recommendation">Generate a pathway to view recommendations.</div>
+        <p class="why" id="whyText">This tool is designed for bedside teaching and referral triage, not autonomous medical decision-making.</p>
+      </section>
+
+      <section class="card">
+        <h2>Recommended Pathway</h2>
+        <div class="pathway" id="pathway">
+          <div class="step"><div class="num">1</div><div><strong>Confirm key clinical inputs</strong><small>Gestational age, fetal number, viability, ultrasound findings, and NIPT report category.</small></div></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Edge-Case Flags</h2>
+        <div class="flags" id="flags">
+          <span class="flag">Placental cfDNA ≠ fetal karyotype</span>
+          <span class="flag">Screening test only</span>
+        </div>
+        <div class="note">
+          Abnormal or inconclusive cfDNA results should be paired with genetic counseling and consideration of diagnostic testing when the result would change management.
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <footer>
+    <strong>Clinical disclaimer:</strong> This is an educational aid for MFM presentations. It should be reviewed against local protocols,
+    current ACOG/SMFM guidance, genetic counseling recommendations, and the specific laboratory report before clinical use.
+  </footer>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function bool(id){ return $(id).checked; }
+    function val(id){ return $(id).value; }
+    function num(id){ const n = parseFloat($(id).value); return Number.isFinite(n) ? n : null; }
+
+    function setBadge(level){
+      const badge = $("riskBadge");
+      badge.className = "badge " + level.cls;
+      badge.textContent = level.text;
+    }
+
+    function addStep(arr, title, detail){
+      arr.push({title, detail});
+    }
+
+    function renderSteps(steps){
+      $("pathway").innerHTML = steps.map((s,i)=>`
+        <div class="step">
+          <div class="num">${i+1}</div>
+          <div><strong>${s.title}</strong><small>${s.detail}</small></div>
+        </div>
+      `).join("");
+    }
+
+    function renderFlags(flags){
+      const base = ["Placental cfDNA ≠ fetal karyotype", "Screening test only"];
+      const uniq = [...new Set([...base, ...flags])];
+      $("flags").innerHTML = uniq.map(f=>`<span class="flag">${f}</span>`).join("");
+    }
+
+    function generate(e){
+      e.preventDefault();
+
+      const ga = num("ga");
+      const bmi = num("bmi");
+      const ff = num("ff");
+      const pregnancy = val("pregnancy");
+      const result = val("result");
+      const ultrasound = val("ultrasound");
+
+      const flags = [];
+      const steps = [];
+      let recommendation = "";
+      let why = "";
+      let level = {cls:"ok", text:"Routine pathway"};
+
+      const early = ga !== null && ga < 10;
+      const highBMI = bmi !== null && bmi >= 35;
+      const lowFF = ff !== null && ff < 4;
+      const highRiskContext = ultrasound === "anomaly" || bool("prior") || bool("repeatFail") || pregnancy !== "singleton";
+
+      if (early) flags.push("Early gestational age");
+      if (highBMI) flags.push("Elevated BMI / dilution effect");
+      if (lowFF) flags.push("Low fetal fraction");
+      if (pregnancy === "twins") flags.push("Twin pregnancy: attribution challenge");
+      if (pregnancy === "higher") flags.push("Higher-order multiples: limited validation");
+      if (bool("ivf")) flags.push("IVF / ART");
+      if (bool("donor")) flags.push("Donor egg / carrier context");
+      if (bool("vtwin") || ultrasound === "demise") flags.push("Vanishing twin concern");
+      if (bool("maternalcnv")) flags.push("Maternal CNV / mosaicism may affect result");
+      if (ultrasound === "anomaly") flags.push("Structural anomaly changes pathway");
+
+      addStep(steps, "Start with ultrasound context", "Confirm viability, gestational age, fetal number, chorionicity when applicable, and major structural findings.");
+      addStep(steps, "Review the actual report language", "Document test name, panel ordered, fetal fraction if reported, result category, and laboratory comments.");
+
+      if(result === "negative"){
+        if(ultrasound === "anomaly"){
+          level = {cls:"warn", text:"Discordant negative screen"};
+          recommendation = "Do not let a negative cfDNA result override an abnormal ultrasound.";
+          why = "A low-risk cfDNA result lowers risk for targeted aneuploidies but does not exclude chromosomal disease, CNVs, single-gene disorders, or structural anomalies.";
+          addStep(steps, "Offer diagnostic testing", "If anomalies are present, offer amniocentesis with karyotype/microarray as clinically appropriate.");
+          addStep(steps, "Counsel residual risk", "Explain that cfDNA is a screening test and does not replace fetal diagnostic evaluation.");
+        } else {
+          recommendation = "Continue routine prenatal care with anatomy ultrasound.";
+          why = "A negative cfDNA result substantially lowers risk for the screened conditions, but residual risk remains.";
+          addStep(steps, "Routine follow-up", "Proceed with standard anatomy ultrasound and condition-specific surveillance.");
+          addStep(steps, "Avoid over-reassurance", "Document that cfDNA does not screen for all genetic or structural conditions.");
+        }
+      }
+
+      if(result === "nocall"){
+        level = {cls:"warn", text:"No-call pathway"};
+        recommendation = highRiskContext || bool("repeatFail") ? "Prioritize genetic counseling and diagnostic testing discussion." : "Risk-stratify: repeat draw may be reasonable, but no-call is not reassurance.";
+        why = "Low fetal fraction/no-call results can reflect gestational age, BMI, placental biology, or increased aneuploidy risk.";
+        if(early){
+          addStep(steps, "If drawn before 10 weeks", "Consider redraw at an appropriate gestational age after confirming dating and viability.");
+        }
+        if(highBMI){
+          addStep(steps, "Address BMI-related fetal fraction risk", "Counsel that elevated maternal cfDNA contribution can reduce fetal fraction and increase no-call risk.");
+        }
+        if(bool("repeatFail") || highRiskContext){
+          addStep(steps, "Offer diagnostic testing", "Repeated no-call, anomalies, prior high-risk history, or multifetal gestation should lower threshold for amniocentesis/CVS discussion.");
+        } else {
+          addStep(steps, "Consider redraw vs diagnostic testing", "Shared decision-making should include gestational age, ultrasound findings, patient values, and time-sensitive management needs.");
+        }
+      }
+
+      if(["positive-common","positive-sca","microdeletion","rare"].includes(result)){
+        level = {cls:"danger", text:"Abnormal screen"};
+        recommendation = "Refer for genetic counseling and offer diagnostic confirmation.";
+        why = "Positive predictive value varies by condition, prevalence, ultrasound findings, and panel type. Expanded findings generally require especially careful interpretation.";
+        addStep(steps, "Do not act irreversibly on cfDNA alone", "Confirm with CVS or amniocentesis when the result would change management.");
+        addStep(steps, "Use ultrasound to refine risk", "A targeted ultrasound helps assess concordance but does not replace diagnostic testing.");
+        if(result === "positive-sca"){
+          addStep(steps, "Consider maternal contribution", "Sex chromosome results can be influenced by maternal mosaicism or maternal chromosomal variation.");
+        }
+        if(result === "microdeletion" || result === "rare"){
+          addStep(steps, "Frame lower PPV clearly", "Rare conditions and CNVs have lower PPV in many populations; microarray may be needed for diagnostic evaluation.");
+          flags.push("Expanded screening: PPV discipline required");
+        }
+        if(bool("vtwin") || ultrasound === "demise"){
+          addStep(steps, "Assess vanishing twin contribution", "Residual cfDNA from a demised co-twin may cause discordant or persistent abnormal signals.");
+        }
+      }
+
+      if(result === "multiple"){
+        level = {cls:"danger", text:"Complex abnormal pattern"};
+        recommendation = "Treat as a high-priority discordance/secondary finding pathway.";
+        why = "Multiple aneuploidies or chaotic genome-wide patterns can reflect fetal/placental disease, confined placental mosaicism, maternal CNV, or rarely maternal malignancy.";
+        addStep(steps, "Confirm report and call the lab/genetics team", "Clarify whether the finding is multiple aneuploidies, genome-wide CNV pattern, or technical limitation.");
+        addStep(steps, "Perform detailed ultrasound", "Assess for fetal anomalies, growth restriction, placental findings, demise, or multifetal complications.");
+        addStep(steps, "Offer diagnostic testing", "Amniocentesis is often favored for fetal karyotype/microarray when placental mosaicism is a concern.");
+        addStep(steps, "Consider maternal evaluation if fetal testing is normal", "If fetal evaluation is discordant, coordinate maternal assessment for CNV/mosaicism and, when appropriate, malignancy evaluation.");
+        flags.push("Maternal source possible");
+        flags.push("Confined placental mosaicism possible");
+      }
+
+      $("recommendation").textContent = recommendation || "Generate a pathway to view recommendations.";
+      $("whyText").textContent = why || "This tool is designed for bedside teaching and referral triage, not autonomous medical decision-making.";
+      setBadge(level);
+      renderSteps(steps);
+      renderFlags(flags);
+    }
+
+    $("toolForm").addEventListener("submit", generate);
+    $("resetBtn").addEventListener("click", () => {
+      $("toolForm").reset();
+      setBadge({cls:"warn", text:"Awaiting input"});
+      $("recommendation").textContent = "Generate a pathway to view recommendations.";
+      $("whyText").textContent = "This tool is designed for bedside teaching and referral triage, not autonomous medical decision-making.";
+      renderSteps([{title:"Confirm key clinical inputs", detail:"Gestational age, fetal number, viability, ultrasound findings, and NIPT report category."}]);
+      renderFlags([]);
+    });
+  </script>
+</body>
+</html>
