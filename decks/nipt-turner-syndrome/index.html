@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIPT Positive: Monosomy X / Turner Syndrome</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== DECK & SLIDES ===== */
+        .deck {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3em 5em;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        .slide-label {
+            font-size: 0.75em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #58a6ff;
+            margin-bottom: 0.6em;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: clamp(2.4em, 5vw, 3.8em);
+            font-weight: 300;
+            line-height: 1.15;
+            text-align: center;
+            color: #e6edf3;
+        }
+
+        h2 {
+            font-size: clamp(1.8em, 3.5vw, 2.8em);
+            font-weight: 300;
+            line-height: 1.2;
+            text-align: center;
+            color: #e6edf3;
+            margin-bottom: 0.6em;
+        }
+
+        .subtitle {
+            font-size: clamp(1em, 2vw, 1.4em);
+            color: #8b949e;
+            text-align: center;
+            margin-top: 0.5em;
+            font-weight: 300;
+        }
+
+        /* ===== ACCENT LINE ===== */
+        .accent-line {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #58a6ff, #3fb950);
+            border-radius: 2px;
+            margin: 1em auto;
+        }
+
+        /* ===== CONTENT BLOCKS ===== */
+        .content-grid {
+            display: grid;
+            gap: 1.2em;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 1em;
+        }
+
+        .content-grid.two-col {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 1.4em 1.8em;
+            position: relative;
+        }
+
+        .card.blue { border-left: 4px solid #58a6ff; }
+        .card.green { border-left: 4px solid #3fb950; }
+        .card.orange { border-left: 4px solid #d29922; }
+        .card.red { border-left: 4px solid #f85149; }
+        .card.purple { border-left: 4px solid #bc8cff; }
+
+        .card-icon {
+            font-size: 1.8em;
+            margin-bottom: 0.3em;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1em;
+            font-weight: 600;
+            color: #e6edf3;
+            margin-bottom: 0.4em;
+            letter-spacing: 0.04em;
+        }
+
+        .card-body {
+            font-size: 0.88em;
+            color: #8b949e;
+            line-height: 1.6;
+        }
+
+        .card-body strong {
+            color: #e6edf3;
+        }
+
+        /* ===== STAT CALLOUT ===== */
+        .stat-row {
+            display: flex;
+            gap: 1.5em;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1em;
+        }
+
+        .stat-box {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 1.2em 2em;
+            text-align: center;
+            min-width: 180px;
+        }
+
+        .stat-number {
+            font-size: 2.8em;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-number.blue { color: #58a6ff; }
+        .stat-number.green { color: #3fb950; }
+        .stat-number.orange { color: #d29922; }
+        .stat-number.red { color: #f85149; }
+
+        .stat-label {
+            font-size: 0.78em;
+            color: #8b949e;
+            margin-top: 0.4em;
+            line-height: 1.4;
+        }
+
+        /* ===== TABLE ===== */
+        .data-table {
+            width: 100%;
+            max-width: 860px;
+            border-collapse: collapse;
+            margin-top: 1em;
+            font-size: 0.88em;
+        }
+
+        .data-table th {
+            background: #1c2128;
+            color: #58a6ff;
+            padding: 0.75em 1em;
+            text-align: left;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid #30363d;
+        }
+
+        .data-table td {
+            padding: 0.75em 1em;
+            border-bottom: 1px solid #21262d;
+            color: #c9d1d9;
+            vertical-align: top;
+            line-height: 1.5;
+        }
+
+        .data-table tr:last-child td { border-bottom: none; }
+
+        .data-table .tag {
+            display: inline-block;
+            padding: 0.2em 0.6em;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .tag-preferred { background: #0d4429; color: #3fb950; }
+        .tag-caution  { background: #3d1f00; color: #d29922; }
+
+        /* ===== ICON ROW ===== */
+        .icon-row {
+            display: flex;
+            gap: 1.5em;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1.2em;
+        }
+
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5em;
+            max-width: 150px;
+            text-align: center;
+        }
+
+        .icon-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+        }
+
+        .icon-circle.blue   { background: #0d2a4a; border: 2px solid #58a6ff; }
+        .icon-circle.green  { background: #0d2e1a; border: 2px solid #3fb950; }
+        .icon-circle.orange { background: #2d1f00; border: 2px solid #d29922; }
+        .icon-circle.purple { background: #1e1030; border: 2px solid #bc8cff; }
+
+        .icon-label {
+            font-size: 0.8em;
+            color: #8b949e;
+            line-height: 1.4;
+        }
+
+        /* ===== BADGE ===== */
+        .badge {
+            display: inline-block;
+            padding: 0.25em 0.75em;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .badge-screen { background: #1c2a3a; color: #58a6ff; border: 1px solid #1f4068; }
+        .badge-diag   { background: #0d2e1a; color: #3fb950; border: 1px solid #1a4731; }
+        .badge-action { background: #2d1f00; color: #d29922; border: 1px solid #4a3200; }
+
+        /* ===== TIMELINE ===== */
+        .timeline {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            width: 100%;
+            max-width: 860px;
+            margin-top: 1.2em;
+        }
+
+        .timeline-step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .timeline-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #30363d;
+            z-index: 0;
+        }
+
+        .timeline-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            font-weight: 700;
+            z-index: 1;
+            position: relative;
+        }
+
+        .timeline-dot.blue   { background: #0d2a4a; border: 2px solid #58a6ff; color: #58a6ff; }
+        .timeline-dot.green  { background: #0d2e1a; border: 2px solid #3fb950; color: #3fb950; }
+        .timeline-dot.orange { background: #2d1f00; border: 2px solid #d29922; color: #d29922; }
+        .timeline-dot.purple { background: #1e1030; border: 2px solid #bc8cff; color: #bc8cff; }
+
+        .timeline-content {
+            text-align: center;
+            margin-top: 0.8em;
+            padding: 0 0.5em;
+        }
+
+        .timeline-title {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #e6edf3;
+            margin-bottom: 0.3em;
+        }
+
+        .timeline-desc {
+            font-size: 0.75em;
+            color: #8b949e;
+            line-height: 1.4;
+        }
+
+        /* ===== SLIDE BACKGROUNDS ===== */
+        .slide-title-bg {
+            background: radial-gradient(ellipse at 30% 50%, #0d2a4a 0%, #0d1117 60%);
+        }
+
+        .slide-alt-bg {
+            background: #0d1117;
+        }
+
+        /* ===== PROGRESS BAR ===== */
+        #progress-bar {
+            height: 3px;
+            background: linear-gradient(90deg, #58a6ff, #3fb950);
+            transition: width 0.4s ease;
+            flex-shrink: 0;
+        }
+
+        /* ===== NAV ===== */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6em 2em;
+            background: #161b22;
+            border-top: 1px solid #21262d;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            padding: 0.4em 1.2em;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: background 0.2s, color 0.2s;
+            font-family: inherit;
+        }
+
+        .nav-btn:hover {
+            background: #30363d;
+            color: #e6edf3;
+        }
+
+        .slide-counter {
+            font-size: 0.8em;
+            color: #8b949e;
+            letter-spacing: 0.05em;
+        }
+
+        .brand {
+            font-size: 0.72em;
+            color: #30363d;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* ===== UTILITY ===== */
+        .text-blue   { color: #58a6ff; }
+        .text-green  { color: #3fb950; }
+        .text-orange { color: #d29922; }
+        .text-red    { color: #f85149; }
+        .text-purple { color: #bc8cff; }
+        .text-muted  { color: #8b949e; }
+
+        .mt-sm { margin-top: 0.5em; }
+        .mt-md { margin-top: 1em; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            body {
+                min-height: 100dvh;
+                height: 100dvh;
+            }
+            .deck {
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .slide {
+                min-height: calc(100dvh - 74px);
+                height: auto;
+                padding: 1.5rem 1rem 6.5rem;
+                justify-content: flex-start;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            h1 { font-size: clamp(2rem, 12vw, 2.8rem); }
+            h2 { font-size: clamp(1.45rem, 8vw, 2.1rem); }
+            .subtitle { font-size: 1rem; }
+            .content-grid { gap: 0.8rem; }
+            .content-grid.two-col { grid-template-columns: 1fr; }
+            .card { padding: 1rem; }
+            .stat-row, .icon-row { flex-direction: column; gap: 0.8rem; }
+            .data-table {
+                display: block;
+                max-width: 100%;
+                overflow-x: auto;
+                white-space: normal;
+                font-size: 0.78rem;
+            }
+            .data-table th,
+            .data-table td {
+                min-width: 120px;
+                padding: 0.65rem;
+            }
+            .timeline { flex-direction: column; gap: 1em; }
+            .timeline-step {
+                width: 100%;
+                flex-direction: row;
+                align-items: flex-start;
+                text-align: left;
+            }
+            .timeline-step::after { display: none; }
+            .timeline-content {
+                text-align: left;
+                margin-top: 0;
+            }
+            .nav-bar {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                padding: 0.6rem 0.75rem calc(0.6rem + env(safe-area-inset-bottom));
+                gap: 0.6rem;
+                z-index: 20;
+            }
+            .nav-btn {
+                padding: 0.5rem 0.75rem;
+                min-width: 72px;
+            }
+            .brand {
+                max-width: 42vw;
+                text-align: center;
+                font-size: 0.58rem;
+            }
+        }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/nipt-turner-syndrome/index.html">
+<meta name="description" content="Patient counseling deck for an NIPT result showing increased risk for monosomy X / Turner syndrome, explaining that NIPT is a screening test, why false positives occur, the role of ultrasound and fetal echocardiography, and how amniocentesis clarifies the diagnosis.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="NIPT, Turner Syndrome, Monosomy X, Prenatal Genetics, Genetic Counseling, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/nipt-turner-syndrome/index.html">
+<meta property="og:title" content="NIPT Increased Risk for Turner Syndrome - Patient Counseling | OpenMFM">
+<meta property="og:description" content="Patient counseling deck for an NIPT result showing increased risk for monosomy X / Turner syndrome, explaining that NIPT is a screening test, why false positives occur, the role of ultrasound and fetal echocardiography, and how amniocentesis clarifies the diagnosis.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NIPT Increased Risk for Turner Syndrome - Patient Counseling | OpenMFM">
+<meta name="twitter:description" content="Patient counseling deck for an NIPT result showing increased risk for monosomy X / Turner syndrome, explaining that NIPT is a screening test, why false positives occur, the role of ultrasound and fetal echocardiography, and how amniocentesis clarifies the diagnosis.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "NIPT Increased Risk for Turner Syndrome - Patient Counseling",
+  "description": "Patient counseling deck for an NIPT result showing increased risk for monosomy X / Turner syndrome, explaining that NIPT is a screening test, why false positives occur, the role of ultrasound and fetal echocardiography, and how amniocentesis clarifies the diagnosis.",
+  "url": "https://openmfm.org/decks/nipt-turner-syndrome/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-05-11",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "NIPT Increased Risk for Turner Syndrome - Patient Counseling"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "NIPT, Turner Syndrome, Monosomy X, Prenatal Genetics, Genetic Counseling, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div id="progress-bar" style="width: 14.28%;"></div>
+
+<div class="deck">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 1 — TITLE
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-title-bg active" id="slide-1">
+        <div class="slide-label">Maternal-Fetal Medicine · Prenatal Counseling</div>
+        <h1>NIPT Positive for<br><span class="text-blue">Monosomy X</span></h1>
+        <div class="accent-line"></div>
+        <p class="subtitle">Clinical Discussion &amp; Patient Counseling<br>Turner Syndrome (45,X)</p>
+        <div class="mt-md" style="display:flex; gap:0.8em; flex-wrap:wrap; justify-content:center;">
+            <span class="badge badge-screen">Screening Result</span>
+            <span class="badge badge-diag">Diagnostic Pathway</span>
+            <span class="badge badge-action">Counseling Framework</span>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 2 — NIPT IS A SCREENING TEST
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-alt-bg" id="slide-2">
+        <div class="slide-label">Understanding the Result</div>
+        <h2>NIPT is a <span class="text-blue">Screening</span> Test</h2>
+        <div class="accent-line"></div>
+
+        <div class="stat-row">
+            <div class="stat-box">
+                <div class="stat-number red">29.4%</div>
+                <div class="stat-label">Positive Predictive Value<br>for Turner Syndrome (45,X)</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number orange">42.9%</div>
+                <div class="stat-label">Overall PPV for Sex<br>Chromosome Aneuploidies</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number blue">59%</div>
+                <div class="stat-label">Rate of Confined<br>Placental Mosaicism</div>
+            </div>
+        </div>
+
+        <p class="subtitle mt-md">cfDNA originates from the <strong style="color:#e6edf3;">placenta</strong>, not directly from the fetus</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 3 — WHY FALSE POSITIVES OCCUR
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-alt-bg" id="slide-3">
+        <div class="slide-label">Interpreting the Result</div>
+        <h2>Why <span class="text-orange">False Positives</span> Occur</h2>
+        <div class="accent-line"></div>
+
+        <div class="content-grid two-col" style="max-width:860px;">
+            <div class="card orange">
+                <span class="card-icon">🧬</span>
+                <div class="card-title">Confined Placental Mosaicism (CPM)</div>
+                <div class="card-body">
+                    Abnormal cells present in the <strong>placenta</strong> but not in the fetus.<br><br>
+                    Accounts for <strong>59%</strong> of discordant Monosomy X NIPT results.
+                </div>
+            </div>
+            <div class="card purple">
+                <span class="card-icon">👩</span>
+                <div class="card-title">Maternal Mosaicism</div>
+                <div class="card-body">
+                    Unrecognized <strong>maternal Turner mosaicism</strong> sheds 45,X cfDNA into maternal circulation.<br><br>
+                    Mimics a fetal anomaly on NIPT.
+                </div>
+            </div>
+        </div>
+
+        <p class="subtitle mt-md text-muted" style="font-size:0.85em;">A positive NIPT result requires confirmation — it does not establish a diagnosis.</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 4 — ULTRASOUND EVALUATION
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-alt-bg" id="slide-4">
+        <div class="slide-label">Obstetric Management</div>
+        <h2>Mandatory <span class="text-blue">Ultrasound</span> Evaluation</h2>
+        <div class="accent-line"></div>
+
+        <div class="icon-row">
+            <div class="icon-item">
+                <div class="icon-circle blue">🔬</div>
+                <div class="icon-label"><strong style="color:#e6edf3;">Detailed Anatomy Scan</strong><br>Comprehensive fetal survey</div>
+            </div>
+            <div class="icon-item">
+                <div class="icon-circle purple">❤️</div>
+                <div class="icon-label"><strong style="color:#e6edf3;">Fetal Echocardiogram</strong><br>Structural cardiac defects</div>
+            </div>
+            <div class="icon-item">
+                <div class="icon-circle orange">📏</div>
+                <div class="icon-label"><strong style="color:#e6edf3;">Nuchal Translucency</strong><br>Increased NT assessment</div>
+            </div>
+            <div class="icon-item">
+                <div class="icon-circle green">💧</div>
+                <div class="icon-label"><strong style="color:#e6edf3;">Fetal Hydrops</strong><br>Fluid accumulation survey</div>
+            </div>
+        </div>
+
+        <div class="card green mt-md" style="max-width:700px; text-align:center;">
+            <div class="card-body" style="font-size:0.92em;">
+                A <strong>normal ultrasound</strong> decreases the post-test probability of true fetal 45,X and raises suspicion for placental or maternal mosaicism.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 5 — DIAGNOSTIC TESTING TABLE
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-alt-bg" id="slide-5">
+        <div class="slide-label">Diagnostic Pathway</div>
+        <h2>Diagnostic <span class="text-green">Testing</span> Strategy</h2>
+        <div class="accent-line"></div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Modality</th>
+                    <th>Timing</th>
+                    <th>Target Tissue</th>
+                    <th>Clinical Utility</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Amniocentesis</strong></td>
+                    <td>≥ 15 weeks</td>
+                    <td>Fetal amniocytes</td>
+                    <td>Definitive diagnosis; bypasses placental discordance</td>
+                    <td><span class="tag tag-preferred">Preferred</span></td>
+                </tr>
+                <tr>
+                    <td><strong>CVS</strong></td>
+                    <td>10 – 13 weeks</td>
+                    <td>Placental trophoblast</td>
+                    <td>High risk of diagnostic error due to CPM; concordant CVS + NIPT most likely reflects CPM</td>
+                    <td><span class="tag tag-caution">Use Caution</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Maternal Karyotype</strong></td>
+                    <td>Any gestational age</td>
+                    <td>Maternal blood</td>
+                    <td>Indicated when NIPT, ultrasound, and fetal testing are discordant</td>
+                    <td><span class="tag tag-caution">As Indicated</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 6 — PATIENT COUNSELING & PROGNOSIS
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-alt-bg" id="slide-6">
+        <div class="slide-label">Maternal Counseling</div>
+        <h2>Prognosis &amp; <span class="text-purple">Clinical Features</span></h2>
+        <div class="accent-line"></div>
+
+        <div class="content-grid two-col" style="max-width:860px;">
+            <div class="card blue">
+                <span class="card-icon">📊</span>
+                <div class="card-title">Prevalence</div>
+                <div class="card-body">
+                    1 in 2,000 – 2,500 <strong>live births</strong>.<br><br>
+                    Confirmed 45,X carries a high rate of spontaneous first-trimester loss.
+                </div>
+            </div>
+            <div class="card green">
+                <span class="card-icon">🧠</span>
+                <div class="card-title">Neurocognitive Profile</div>
+                <div class="card-body">
+                    <strong>Intellectual capacity is typically normal.</strong><br><br>
+                    Specific neurocognitive challenges (visuospatial, executive function) may arise.
+                </div>
+            </div>
+            <div class="card orange">
+                <span class="card-icon">🌱</span>
+                <div class="card-title">Postnatal Features</div>
+                <div class="card-body">
+                    Short stature · Ovarian dysgenesis<br>
+                    Delayed or absent puberty · Infertility<br><br>
+                    <strong>Hormone replacement therapy</strong> is available and effective.
+                </div>
+            </div>
+            <div class="card red">
+                <span class="card-icon">❤️‍🩹</span>
+                <div class="card-title">Lifelong Morbidity</div>
+                <div class="card-body">
+                    Increased risk of cardiovascular anomalies, autoimmune disease, and metabolic dysfunction across the lifespan.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 7 — CLINICAL PATHWAY / NEXT STEPS
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-alt-bg" id="slide-7">
+        <div class="slide-label">Clinical Action Plan</div>
+        <h2>Moving <span class="text-green">Forward</span> Together</h2>
+        <div class="accent-line"></div>
+
+        <div class="timeline">
+            <div class="timeline-step">
+                <div class="timeline-dot blue">1</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Targeted Ultrasound</div>
+                    <div class="timeline-desc">Anatomy scan &amp; fetal echocardiogram scheduled promptly</div>
+                </div>
+            </div>
+            <div class="timeline-step">
+                <div class="timeline-dot orange">2</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Genetic Counseling</div>
+                    <div class="timeline-desc">Specialized prenatal genetic counselor referral</div>
+                </div>
+            </div>
+            <div class="timeline-step">
+                <div class="timeline-dot green">3</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Amniocentesis</div>
+                    <div class="timeline-desc">Definitive diagnostic testing at ≥15 weeks</div>
+                </div>
+            </div>
+            <div class="timeline-step">
+                <div class="timeline-dot purple">4</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">Informed Decision</div>
+                    <div class="timeline-desc">Results reviewed; pregnancy management plan established with your team</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card green mt-md" style="max-width:700px; text-align:center;">
+            <div class="card-body" style="font-size:0.92em;">
+                <strong>25% of patients</strong> with confirmed fetal sex chromosome aneuploidy choose to continue their pregnancies following specialized genetic counseling. <strong>Your team supports every decision.</strong>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /.deck -->
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav-bar">
+    <button class="nav-btn" onclick="prevSlide()">&#8592; Back</button>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:0.2em;">
+        <span class="slide-counter" id="slide-counter">1 / 7</span>
+        <span class="brand">DoctorsWhoCode.blog · MFM Presentations</span>
+    </div>
+    <button class="nav-btn" onclick="nextSlide()">Next &#8594;</button>
+</nav>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    const counter = document.getElementById('slide-counter');
+    const progressBar = document.getElementById('progress-bar');
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+        counter.textContent = (index + 1) + ' / ' + total;
+        progressBar.style.width = ((index + 1) / total * 100) + '%';
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % total;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + total) % total;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    showSlide(0);
+</script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;top:12px;left:12px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
