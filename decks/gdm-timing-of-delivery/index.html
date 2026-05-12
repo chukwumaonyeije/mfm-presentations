@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timing of Delivery for Gestational Diabetes</title>
+    <style>
+        /* ─── Reset & Base ─────────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── Deck & Slides ─────────────────────────────────────────────── */
+        .deck {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3em 5em;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ─── Typography ────────────────────────────────────────────────── */
+        h1 { font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 300; letter-spacing: 0; line-height: 1.15; }
+        h2 { font-size: clamp(1.6rem, 3.5vw, 2.8rem); font-weight: 300; letter-spacing: 0; }
+        h3 { font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 400; }
+        p  { font-size: clamp(1rem, 1.8vw, 1.35rem); line-height: 1.7; max-width: 820px; text-align: center; }
+
+        .kicker {
+            font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #58a6ff;
+            margin-bottom: 0.6em;
+        }
+
+        /* ─── Color Accents ─────────────────────────────────────────────── */
+        .accent-blue   { color: #58a6ff; }
+        .accent-green  { color: #3fb950; }
+        .accent-orange { color: #f0883e; }
+        .accent-red    { color: #f85149; }
+        .accent-teal   { color: #39d353; }
+        .accent-yellow { color: #e3b341; }
+
+        /* ─── Slide Backgrounds ─────────────────────────────────────────── */
+        .slide-title    { background: linear-gradient(135deg, #0d1117 0%, #161b22 60%, #1a2332 100%); }
+        .slide-a1       { background: linear-gradient(135deg, #0d1117 0%, #0d2137 100%); }
+        .slide-a2       { background: linear-gradient(135deg, #0d1117 0%, #0d2a1a 100%); }
+        .slide-poor     { background: linear-gradient(135deg, #0d1117 0%, #2a1a0d 100%); }
+        .slide-refractory { background: linear-gradient(135deg, #0d1117 0%, #2a0d0d 100%); }
+        .slide-macro    { background: linear-gradient(135deg, #0d1117 0%, #1a0d2a 100%); }
+        .slide-risk     { background: linear-gradient(135deg, #0d1117 0%, #1a1a0d 100%); }
+        .slide-summary  { background: linear-gradient(135deg, #0d1117 0%, #0d1a2a 100%); }
+
+        /* ─── Cards & Boxes ─────────────────────────────────────────────── */
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.4em 2em;
+            margin: 0.5em;
+        }
+
+        .card-row {
+            display: flex;
+            gap: 1em;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .card-item {
+            flex: 1;
+            min-width: 220px;
+            max-width: 320px;
+        }
+
+        /* ─── Timeline ──────────────────────────────────────────────────── */
+        .timeline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 1.5em 0;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .tl-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .tl-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3px solid;
+            background: #0d1117;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tl-line {
+            height: 3px;
+            flex: 1;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .tl-label {
+            font-size: 0.75rem;
+            margin-top: 0.5em;
+            text-align: center;
+            max-width: 80px;
+            line-height: 1.3;
+        }
+
+        .tl-week {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4em;
+        }
+
+        /* ─── Table ─────────────────────────────────────────────────────── */
+        .summary-table {
+            width: 100%;
+            max-width: 1050px;
+            border-collapse: collapse;
+            font-size: clamp(0.75rem, 1.3vw, 1rem);
+        }
+
+        .summary-table th {
+            background: rgba(88, 166, 255, 0.15);
+            color: #58a6ff;
+            padding: 0.75em 1em;
+            text-align: left;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid rgba(88,166,255,0.3);
+        }
+
+        .summary-table td {
+            padding: 0.65em 1em;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            vertical-align: top;
+            line-height: 1.4;
+        }
+
+        .summary-table tr:last-child td { border-bottom: none; }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2em 0.7em;
+            border-radius: 20px;
+            font-size: 0.78em;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .badge-green  { background: rgba(63,185,80,0.2);  color: #3fb950; border: 1px solid rgba(63,185,80,0.4); }
+        .badge-blue   { background: rgba(88,166,255,0.2); color: #58a6ff; border: 1px solid rgba(88,166,255,0.4); }
+        .badge-orange { background: rgba(240,136,62,0.2); color: #f0883e; border: 1px solid rgba(240,136,62,0.4); }
+        .badge-red    { background: rgba(248,81,73,0.2);  color: #f85149; border: 1px solid rgba(248,81,73,0.4); }
+        .badge-purple { background: rgba(188,140,255,0.2);color: #bc8cff; border: 1px solid rgba(188,140,255,0.4); }
+
+        /* ─── Icon SVGs ─────────────────────────────────────────────────── */
+        .icon-wrap {
+            margin-bottom: 0.8em;
+        }
+
+        .icon-wrap svg {
+            width: 64px;
+            height: 64px;
+        }
+
+        /* ─── Risk Chart ─────────────────────────────────────────────────── */
+        .risk-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7em;
+            width: 100%;
+            max-width: 750px;
+            margin-top: 1em;
+        }
+
+        .risk-row {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+        }
+
+        .risk-label {
+            font-size: 0.9rem;
+            width: 220px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .risk-bar-bg {
+            flex: 1;
+            height: 28px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .risk-bar {
+            height: 100%;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            padding-left: 0.6em;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #fff;
+            transition: width 0.8s ease;
+        }
+
+        /* ─── Navigation ─────────────────────────────────────────────────── */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6em 2em;
+            background: rgba(255,255,255,0.03);
+            border-top: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #e6edf3;
+            padding: 0.45em 1.4em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover { background: rgba(255,255,255,0.14); }
+        .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+        .nav-counter {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 0.08em;
+        }
+
+        .progress-bar {
+            height: 3px;
+            background: rgba(255,255,255,0.08);
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #58a6ff, #3fb950);
+            transition: width 0.4s ease;
+        }
+
+        /* ─── Source note ────────────────────────────────────────────────── */
+        .source-note {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.3);
+            margin-top: 1.5em;
+            letter-spacing: 0.04em;
+        }
+
+        /* ─── Divider ────────────────────────────────────────────────────── */
+        .divider {
+            width: 60px;
+            height: 3px;
+            border-radius: 2px;
+            margin: 0.8em auto;
+        }
+
+        /* ─── Responsive ───────────────────────────────────────────────── */
+        @media (max-width: 768px) {
+            body {
+                min-height: 100dvh;
+                height: 100dvh;
+                width: 100%;
+            }
+
+            .deck {
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .slide {
+                min-height: calc(100dvh - 70px);
+                height: auto;
+                padding: 1.5rem 1rem 6rem;
+                justify-content: flex-start;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            h1 { font-size: clamp(2rem, 11vw, 2.7rem); }
+            h2 { font-size: clamp(1.45rem, 8vw, 2.05rem); text-align: center; }
+            h3 { font-size: 1.08rem; }
+            p { font-size: 0.98rem; line-height: 1.55; }
+
+            .kicker {
+                font-size: 0.68rem;
+                text-align: center;
+            }
+
+            .card {
+                width: 100%;
+                padding: 1rem;
+                margin: 0.35rem 0;
+            }
+
+            .card-row {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: stretch;
+            }
+
+            .card-item {
+                max-width: none;
+                min-width: 0;
+            }
+
+            .timeline {
+                align-items: stretch;
+                overflow-x: auto;
+                padding-bottom: 0.35rem;
+            }
+
+            .tl-label {
+                max-width: 72px;
+                font-size: 0.68rem;
+            }
+
+            .risk-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.35rem;
+            }
+
+            .risk-label {
+                width: auto;
+                text-align: left;
+            }
+
+            .summary-table {
+                display: block;
+                max-width: 100%;
+                overflow-x: auto;
+                white-space: normal;
+                font-size: 0.8rem;
+            }
+
+            .summary-table th,
+            .summary-table td {
+                min-width: 150px;
+                padding: 0.65rem;
+            }
+
+            .source-note {
+                font-size: 0.62rem;
+                text-align: center;
+            }
+
+            .nav {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                padding: 0.6rem 0.75rem calc(0.6rem + env(safe-area-inset-bottom));
+                background: rgba(13,17,23,0.96);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                z-index: 30;
+            }
+
+            .nav-btn {
+                min-width: 78px;
+                padding: 0.5rem 0.65rem;
+                font-size: 0.82rem;
+            }
+
+            .nav-counter {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/gdm-timing-of-delivery/index.html">
+<meta name="description" content="Evidence-based clinical education deck on delivery timing for gestational diabetes, including A1GDM, A2GDM, poor glycemic control, refractory disease, suspected macrosomia, neonatal risk tradeoffs, and ACOG/SMFM/NICE-aligned timing windows.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Gestational Diabetes, Delivery Timing, A1GDM, A2GDM, Glycemic Control, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/gdm-timing-of-delivery/index.html">
+<meta property="og:title" content="Timing of Delivery in Gestational Diabetes - Provider Education | OpenMFM">
+<meta property="og:description" content="Evidence-based clinical education deck on delivery timing for gestational diabetes, including A1GDM, A2GDM, poor glycemic control, refractory disease, suspected macrosomia, neonatal risk tradeoffs, and ACOG/SMFM/NICE-aligned timing windows.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Timing of Delivery in Gestational Diabetes - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Evidence-based clinical education deck on delivery timing for gestational diabetes, including A1GDM, A2GDM, poor glycemic control, refractory disease, suspected macrosomia, neonatal risk tradeoffs, and ACOG/SMFM/NICE-aligned timing windows.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Timing of Delivery in Gestational Diabetes - Provider Education",
+  "description": "Evidence-based clinical education deck on delivery timing for gestational diabetes, including A1GDM, A2GDM, poor glycemic control, refractory disease, suspected macrosomia, neonatal risk tradeoffs, and ACOG/SMFM/NICE-aligned timing windows.",
+  "url": "https://openmfm.org/decks/gdm-timing-of-delivery/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-05-12",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Timing of Delivery in Gestational Diabetes - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Gestational Diabetes, Delivery Timing, A1GDM, A2GDM, Glycemic Control, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="deck">
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 1 — TITLE
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-title active" id="slide-1">
+        <div class="kicker">Maternal-Fetal Medicine · Clinical Education</div>
+        <h1 style="text-align:center; max-width:900px;">
+            Timing of Delivery<br>
+            <span class="accent-blue">in Gestational Diabetes</span>
+        </h1>
+        <div class="divider" style="background:#58a6ff;"></div>
+        <p style="color:rgba(255,255,255,0.55); font-size:1.1rem; margin-top:0.5em;">
+            Evidence-Based Recommendations &nbsp;·&nbsp; ACOG &nbsp;·&nbsp; SMFM &nbsp;·&nbsp; NICE
+        </p>
+        <p class="source-note">ACOG Practice Bulletin · SMFM Consult Series · NICE NG3</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 2 — GDM CLASSIFICATION OVERVIEW
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-a1" id="slide-2">
+        <div class="kicker">Classification</div>
+        <h2 style="text-align:center; margin-bottom:0.3em;">GDM: A Tiered Approach</h2>
+        <div class="divider" style="background:#58a6ff;"></div>
+        <div class="card-row" style="margin-top:1em;">
+            <div class="card card-item" style="border-color:rgba(63,185,80,0.4);">
+                <div class="badge badge-green" style="margin-bottom:0.6em;">A1GDM</div>
+                <h3 class="accent-green">Diet-Controlled</h3>
+                <p style="font-size:0.95rem; text-align:left; margin-top:0.4em; color:rgba(255,255,255,0.75);">
+                    Glycemic targets met with nutrition alone
+                </p>
+            </div>
+            <div class="card card-item" style="border-color:rgba(88,166,255,0.4);">
+                <div class="badge badge-blue" style="margin-bottom:0.6em;">A2GDM</div>
+                <h3 class="accent-blue">Medication-Managed</h3>
+                <p style="font-size:0.95rem; text-align:left; margin-top:0.4em; color:rgba(255,255,255,0.75);">
+                    Requires insulin or oral hypoglycemic agents
+                </p>
+            </div>
+            <div class="card card-item" style="border-color:rgba(240,136,62,0.4);">
+                <div class="badge badge-orange" style="margin-bottom:0.6em;">POORLY CONTROLLED</div>
+                <h3 class="accent-orange">Suboptimal Control</h3>
+                <p style="font-size:0.95rem; text-align:left; margin-top:0.4em; color:rgba(255,255,255,0.75);">
+                    Persistent hyperglycemia despite therapy
+                </p>
+            </div>
+        </div>
+        <p class="source-note">ACOG Practice Bulletin No. 190</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 3 — A1GDM TIMING
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-a1" id="slide-3">
+        <div class="kicker">Diet-Controlled GDM · A1GDM</div>
+        <h2 style="text-align:center;">
+            <span class="accent-green">Well-Controlled</span> &nbsp;|&nbsp; Normal Fetal Growth
+        </h2>
+        <div class="divider" style="background:#3fb950;"></div>
+
+        <!-- Gestational age timeline -->
+        <div class="timeline" style="margin-top:1.5em;">
+            <div class="tl-node">
+                <div class="tl-week" style="color:rgba(255,255,255,0.3);">34</div>
+                <div class="tl-dot" style="border-color:rgba(255,255,255,0.2);"></div>
+                <div class="tl-label" style="color:rgba(255,255,255,0.3);">Late preterm</div>
+            </div>
+            <div class="tl-line"></div>
+            <div class="tl-node">
+                <div class="tl-week" style="color:rgba(255,255,255,0.3);">37</div>
+                <div class="tl-dot" style="border-color:rgba(255,255,255,0.2);"></div>
+                <div class="tl-label" style="color:rgba(255,255,255,0.3);">Early term</div>
+            </div>
+            <div class="tl-line"></div>
+            <div class="tl-node">
+                <div class="tl-week accent-green" style="font-size:1.1rem;">39</div>
+                <div class="tl-dot" style="border-color:#3fb950; background:#3fb950;"></div>
+                <div class="tl-label accent-green" style="font-weight:600;">Earliest<br>delivery</div>
+            </div>
+            <div class="tl-line" style="background:rgba(63,185,80,0.4);"></div>
+            <div class="tl-node">
+                <div class="tl-week accent-green">40<sup style="font-size:0.6em;">6/7</sup></div>
+                <div class="tl-dot" style="border-color:#3fb950; background:#3fb950;"></div>
+                <div class="tl-label accent-green" style="font-weight:600;">Expectant<br>limit</div>
+            </div>
+            <div class="tl-line"></div>
+            <div class="tl-node">
+                <div class="tl-week" style="color:rgba(255,255,255,0.3);">41+</div>
+                <div class="tl-dot" style="border-color:rgba(248,81,73,0.5);"></div>
+                <div class="tl-label" style="color:rgba(248,81,73,0.7);">Increased risk</div>
+            </div>
+        </div>
+
+        <div class="card" style="max-width:680px; margin-top:1em; border-color:rgba(63,185,80,0.3);">
+            <p style="font-size:1.05rem; text-align:center; color:rgba(255,255,255,0.85);">
+                Antepartum fetal testing indicated.<br>
+                <span class="accent-green">No benefit</span> to delivery before 39 weeks.
+            </p>
+        </div>
+        <p class="source-note">ACOG PB No. 190 [1]</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 4 — A2GDM TIMING
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-a2" id="slide-4">
+        <div class="kicker">Medication-Managed GDM · A2GDM</div>
+        <h2 style="text-align:center;">
+            <span class="accent-blue">Well-Controlled</span> &nbsp;|&nbsp; Normal Fetal Growth
+        </h2>
+        <div class="divider" style="background:#58a6ff;"></div>
+
+        <div class="timeline" style="margin-top:1.5em;">
+            <div class="tl-node">
+                <div class="tl-week" style="color:rgba(255,255,255,0.3);">37</div>
+                <div class="tl-dot" style="border-color:rgba(255,255,255,0.2);"></div>
+                <div class="tl-label" style="color:rgba(255,255,255,0.3);">Early term</div>
+            </div>
+            <div class="tl-line"></div>
+            <div class="tl-node">
+                <div class="tl-week accent-blue" style="font-size:1.1rem;">39<sup style="font-size:0.6em;">0/7</sup></div>
+                <div class="tl-dot" style="border-color:#58a6ff; background:#58a6ff;"></div>
+                <div class="tl-label accent-blue" style="font-weight:600;">Delivery<br>window opens</div>
+            </div>
+            <div class="tl-line" style="background:rgba(88,166,255,0.4);"></div>
+            <div class="tl-node">
+                <div class="tl-week accent-blue">39<sup style="font-size:0.6em;">6/7</sup></div>
+                <div class="tl-dot" style="border-color:#58a6ff; background:#58a6ff;"></div>
+                <div class="tl-label accent-blue" style="font-weight:600;">Delivery<br>window closes</div>
+            </div>
+            <div class="tl-line"></div>
+            <div class="tl-node">
+                <div class="tl-week" style="color:rgba(248,81,73,0.7);">40+</div>
+                <div class="tl-dot" style="border-color:rgba(248,81,73,0.5);"></div>
+                <div class="tl-label" style="color:rgba(248,81,73,0.7);">Not recommended</div>
+            </div>
+        </div>
+
+        <div class="card-row" style="margin-top:1em;">
+            <div class="card" style="border-color:rgba(88,166,255,0.3); max-width:400px;">
+                <p style="font-size:0.95rem; text-align:center; color:rgba(255,255,255,0.8);">
+                    Induction at 38–39 wks reduces <span class="accent-blue">LGA rates</span> without increasing cesarean delivery
+                </p>
+            </div>
+            <div class="card" style="border-color:rgba(88,166,255,0.3); max-width:400px;">
+                <p style="font-size:0.95rem; text-align:center; color:rgba(255,255,255,0.8);">
+                    Shoulder dystocia: <span class="accent-blue">1.4%</span> with induction at 38–39 wks vs. <span class="accent-red">10%</span> with expectant management beyond 40 wks
+                </p>
+            </div>
+        </div>
+        <p class="source-note">ACOG PB No. 190 [1]</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 5 — POORLY CONTROLLED GDM
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-poor" id="slide-5">
+        <div class="kicker">Suboptimal Glycemic Control</div>
+        <h2 style="text-align:center;">
+            <span class="accent-orange">Poorly Controlled</span> GDM
+        </h2>
+        <div class="divider" style="background:#f0883e;"></div>
+
+        <div class="timeline" style="margin-top:1.5em;">
+            <div class="tl-node">
+                <div class="tl-week" style="color:rgba(255,255,255,0.3);">34</div>
+                <div class="tl-dot" style="border-color:rgba(255,255,255,0.2);"></div>
+                <div class="tl-label" style="color:rgba(255,255,255,0.3);">Late preterm</div>
+            </div>
+            <div class="tl-line"></div>
+            <div class="tl-node">
+                <div class="tl-week accent-orange" style="font-size:1.1rem;">37<sup style="font-size:0.6em;">0/7</sup></div>
+                <div class="tl-dot" style="border-color:#f0883e; background:#f0883e;"></div>
+                <div class="tl-label accent-orange" style="font-weight:600;">Earliest<br>delivery</div>
+            </div>
+            <div class="tl-line" style="background:rgba(240,136,62,0.4);"></div>
+            <div class="tl-node">
+                <div class="tl-week accent-orange">38<sup style="font-size:0.6em;">6/7</sup></div>
+                <div class="tl-dot" style="border-color:#f0883e; background:#f0883e;"></div>
+                <div class="tl-label accent-orange" style="font-weight:600;">Upper<br>limit</div>
+            </div>
+            <div class="tl-line"></div>
+            <div class="tl-node">
+                <div class="tl-week" style="color:rgba(255,255,255,0.3);">39</div>
+                <div class="tl-dot" style="border-color:rgba(255,255,255,0.2);"></div>
+                <div class="tl-label" style="color:rgba(255,255,255,0.3);">Full term</div>
+            </div>
+        </div>
+
+        <div class="card" style="max-width:720px; margin-top:1em; border-color:rgba(240,136,62,0.3);">
+            <p style="font-size:1rem; text-align:center; color:rgba(255,255,255,0.8);">
+                Balance <span class="accent-orange">prematurity risk</span> against <span class="accent-red">stillbirth risk</span>.<br>
+                No clear glycemic threshold defined by ACOG for "poorly controlled."
+            </p>
+        </div>
+        <p class="source-note">ACOG PB No. 190 [1]</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 6 — REFRACTORY / LATE PRETERM
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-refractory" id="slide-6">
+        <div class="kicker">Refractory Poor Control</div>
+        <h2 style="text-align:center;">
+            Late Preterm Delivery &nbsp;
+            <span class="accent-red">34–36<sup style="font-size:0.6em;">6/7</sup> Weeks</span>
+        </h2>
+        <div class="divider" style="background:#f85149;"></div>
+
+        <div class="card-row" style="margin-top:1.2em;">
+            <div class="card card-item" style="border-color:rgba(248,81,73,0.4); max-width:340px;">
+                <!-- Hospital icon -->
+                <div style="text-align:center; margin-bottom:0.5em;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#f85149" stroke-width="1.5" width="48" height="48">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <path d="M9 12h6M12 9v6"/>
+                        <path d="M3 9h18"/>
+                    </svg>
+                </div>
+                <h3 class="accent-red" style="text-align:center;">Indication 1</h3>
+                <p style="font-size:0.9rem; text-align:center; margin-top:0.4em; color:rgba(255,255,255,0.75);">
+                    Failure of in-hospital attempts to improve glycemic control
+                </p>
+            </div>
+            <div class="card card-item" style="border-color:rgba(248,81,73,0.4); max-width:340px;">
+                <div style="text-align:center; margin-bottom:0.5em;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#f85149" stroke-width="1.5" width="48" height="48">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                </div>
+                <h3 class="accent-red" style="text-align:center;">Indication 2</h3>
+                <p style="font-size:0.9rem; text-align:center; margin-top:0.4em; color:rgba(255,255,255,0.75);">
+                    Abnormal antepartum fetal surveillance
+                </p>
+            </div>
+        </div>
+
+        <div class="card" style="max-width:680px; margin-top:1em; border-color:rgba(248,81,73,0.2); background:rgba(248,81,73,0.07);">
+            <p style="font-size:1rem; text-align:center; color:rgba(255,255,255,0.85);">
+                <span class="accent-red">Reserve for refractory cases only.</span><br>
+                Late preterm delivery carries significant neonatal morbidity risk.
+            </p>
+        </div>
+        <p class="source-note">ACOG PB No. 190 [1]</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 7 — MACROSOMIA
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-macro" id="slide-7">
+        <div class="kicker">Fetal Growth · Macrosomia</div>
+        <h2 style="text-align:center;">
+            Suspected Macrosomia &nbsp;
+            <span style="color:#bc8cff;">EFW ≥ 4,500 g</span>
+        </h2>
+        <div class="divider" style="background:#bc8cff;"></div>
+
+        <div class="card-row" style="margin-top:1.2em;">
+            <div class="card" style="border-color:rgba(188,140,255,0.4); max-width:320px;">
+                <div style="text-align:center; margin-bottom:0.4em;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#bc8cff" stroke-width="1.5" width="44" height="44">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 8v4l3 3"/>
+                    </svg>
+                </div>
+                <h3 style="color:#bc8cff; text-align:center;">Timing</h3>
+                <p style="font-size:0.9rem; text-align:center; margin-top:0.4em; color:rgba(255,255,255,0.75);">
+                    Individualized; no universal gestational age threshold
+                </p>
+            </div>
+            <div class="card" style="border-color:rgba(248,81,73,0.4); max-width:320px;">
+                <div style="text-align:center; margin-bottom:0.4em;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#f85149" stroke-width="1.5" width="44" height="44">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                </div>
+                <h3 class="accent-red" style="text-align:center;">Shoulder Dystocia</h3>
+                <p style="font-size:0.9rem; text-align:center; margin-top:0.4em; color:rgba(255,255,255,0.75);">
+                    Risk is higher at any fetal weight in diabetic vs. non-diabetic pregnancies
+                </p>
+            </div>
+            <div class="card" style="border-color:rgba(240,136,62,0.4); max-width:320px;">
+                <div style="text-align:center; margin-bottom:0.4em;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#f0883e" stroke-width="1.5" width="44" height="44">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </div>
+                <h3 class="accent-orange" style="text-align:center;">Counseling</h3>
+                <p style="font-size:0.9rem; text-align:center; margin-top:0.4em; color:rgba(255,255,255,0.75);">
+                    Discuss risks/benefits of scheduled cesarean delivery
+                </p>
+            </div>
+        </div>
+
+        <div class="card" style="max-width:700px; margin-top:1em; border-color:rgba(188,140,255,0.2);">
+            <p style="font-size:0.95rem; text-align:center; color:rgba(255,255,255,0.8);">
+                Third-trimester ultrasound or clinical exam is reasonable to identify macrosomia.
+            </p>
+        </div>
+        <p class="source-note">ACOG PB No. 190 [1] · ACOG PB No. 227 [2]</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 8 — RISKS OF EARLY INDUCTION
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-risk" id="slide-8">
+        <div class="kicker">Neonatal Outcomes · Caution</div>
+        <h2 style="text-align:center;">
+            Early Induction in <span class="accent-green">Well-Controlled</span> GDM
+        </h2>
+        <div class="divider" style="background:#e3b341;"></div>
+
+        <p style="margin-top:0.5em; color:rgba(255,255,255,0.65); font-size:1rem;">
+            Induction &lt;39 weeks in well-controlled GDM is associated with increased neonatal morbidity
+        </p>
+
+        <div class="risk-chart">
+            <div class="risk-row">
+                <div class="risk-label" style="color:rgba(255,255,255,0.7);">Neonatal Hypoglycemia</div>
+                <div class="risk-bar-bg">
+                    <div class="risk-bar" style="width:70%; background:linear-gradient(90deg,#e3b341,#f0883e);">↑ Risk</div>
+                </div>
+            </div>
+            <div class="risk-row">
+                <div class="risk-label" style="color:rgba(255,255,255,0.7);">Hyperbilirubinemia</div>
+                <div class="risk-bar-bg">
+                    <div class="risk-bar" style="width:55%; background:linear-gradient(90deg,#e3b341,#f0883e);">↑ Risk</div>
+                </div>
+            </div>
+            <div class="risk-row">
+                <div class="risk-label" style="color:rgba(255,255,255,0.7);">NICU Admission</div>
+                <div class="risk-bar-bg">
+                    <div class="risk-bar" style="width:45%; background:linear-gradient(90deg,#e3b341,#f0883e);">↑ Risk</div>
+                </div>
+            </div>
+            <div class="risk-row">
+                <div class="risk-label" style="color:rgba(255,255,255,0.7);">Respiratory Morbidity</div>
+                <div class="risk-bar-bg">
+                    <div class="risk-bar" style="width:35%; background:linear-gradient(90deg,#e3b341,#f0883e);">↑ Risk</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="max-width:680px; margin-top:1.2em; border-color:rgba(227,179,65,0.3); background:rgba(227,179,65,0.06);">
+            <p style="font-size:0.95rem; text-align:center; color:rgba(255,255,255,0.85);">
+                Reserve early-term delivery for <span class="accent-yellow">poor glycemic control</span> or <span class="accent-yellow">concerning fetal status</span>.
+            </p>
+        </div>
+        <p class="source-note">ACOG PB No. 190 [1] · Supported by RCT data [5]</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 9 — NICE GUIDELINES
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-a1" id="slide-9">
+        <div class="kicker">International Perspective · NICE NG3</div>
+        <h2 style="text-align:center;">
+            NICE Guideline <span class="accent-blue">Comparison</span>
+        </h2>
+        <div class="divider" style="background:#58a6ff;"></div>
+
+        <div class="card-row" style="margin-top:1.2em;">
+            <div class="card" style="border-color:rgba(88,166,255,0.3); max-width:420px;">
+                <div class="badge badge-blue" style="margin-bottom:0.6em;">ACOG / SMFM</div>
+                <p style="font-size:0.95rem; text-align:left; color:rgba(255,255,255,0.8); line-height:1.6;">
+                    Tiered approach by glycemic control class (A1 vs. A2 vs. poor control). Delivery window: <strong>39–40<sup>6/7</sup> weeks</strong> for well-controlled GDM.
+                </p>
+            </div>
+            <div class="card" style="border-color:rgba(88,166,255,0.3); max-width:420px;">
+                <div class="badge badge-blue" style="margin-bottom:0.6em;">NICE NG3</div>
+                <p style="font-size:0.95rem; text-align:left; color:rgba(255,255,255,0.8); line-height:1.6;">
+                    Delivery no later than <strong>40+6 weeks</strong> for all women with GDM. Earlier elective birth if maternal or fetal complications arise.
+                </p>
+            </div>
+        </div>
+
+        <div class="card" style="max-width:700px; margin-top:1em; border-color:rgba(88,166,255,0.15);">
+            <p style="font-size:0.9rem; text-align:center; color:rgba(255,255,255,0.65);">
+                Both guidelines converge on avoiding delivery before 39 weeks in uncomplicated, well-controlled GDM.
+            </p>
+        </div>
+        <p class="source-note">NICE NG3 [4] · ACOG PB No. 190 [1]</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 10 — SUMMARY TABLE
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-summary" id="slide-10">
+        <div class="kicker">Clinical Reference</div>
+        <h2 style="text-align:center; margin-bottom:0.5em;">
+            Delivery Timing <span class="accent-blue">Summary</span>
+        </h2>
+        <div class="divider" style="background:#58a6ff; margin-bottom:1em;"></div>
+
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Clinical Scenario</th>
+                    <th>Recommended Delivery</th>
+                    <th>Key Consideration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="badge badge-green">A1GDM</span><br>
+                        <span style="font-size:0.85rem; color:rgba(255,255,255,0.6);">Diet-controlled, well-controlled, normal fetus</span>
+                    </td>
+                    <td><strong class="accent-green">39<sup>0/7</sup> – 40<sup>6/7</sup> wks</strong></td>
+                    <td style="font-size:0.85rem; color:rgba(255,255,255,0.7);">Expectant management with antepartum testing; no benefit to delivery &lt;39 wks</td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="badge badge-blue">A2GDM</span><br>
+                        <span style="font-size:0.85rem; color:rgba(255,255,255,0.6);">Medication-managed, well-controlled, normal fetus</span>
+                    </td>
+                    <td><strong class="accent-blue">39<sup>0/7</sup> – 39<sup>6/7</sup> wks</strong></td>
+                    <td style="font-size:0.85rem; color:rgba(255,255,255,0.7);">Induction at 38–39 wks may reduce LGA; shoulder dystocia 1.4% vs. 10%</td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="badge badge-orange">POOR CONTROL</span><br>
+                        <span style="font-size:0.85rem; color:rgba(255,255,255,0.6);">Diet or medication, suboptimal glycemia</span>
+                    </td>
+                    <td><strong class="accent-orange">37<sup>0/7</sup> – 38<sup>6/7</sup> wks</strong></td>
+                    <td style="font-size:0.85rem; color:rgba(255,255,255,0.7);">Balance prematurity vs. stillbirth risk; no clear glycemic threshold defined</td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="badge badge-red">REFRACTORY</span><br>
+                        <span style="font-size:0.85rem; color:rgba(255,255,255,0.6);">Failing inpatient management or abnormal testing</span>
+                    </td>
+                    <td><strong class="accent-red">34<sup>0/7</sup> – 36<sup>6/7</sup> wks</strong></td>
+                    <td style="font-size:0.85rem; color:rgba(255,255,255,0.7);">Reserve for refractory cases only; significant neonatal morbidity risk</td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="badge badge-purple">MACROSOMIA</span><br>
+                        <span style="font-size:0.85rem; color:rgba(255,255,255,0.6);">EFW ≥ 4,500 g</span>
+                    </td>
+                    <td><strong style="color:#bc8cff;">Individualized</strong></td>
+                    <td style="font-size:0.85rem; color:rgba(255,255,255,0.7);">Counsel re: cesarean delivery; shoulder dystocia risk elevated at any weight</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="source-note" style="margin-top:0.8em;">ACOG PB No. 190 [1] · ACOG PB No. 227 [2] · NICE NG3 [4]</p>
+    </div>
+
+</div><!-- /deck -->
+
+<!-- ─── Navigation Bar ─────────────────────────────────────────────────── -->
+<div class="nav">
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>← Prev</button>
+    <span class="nav-counter" id="navCounter">1 / 10</span>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    const progressFill = document.getElementById('progressFill');
+    const navCounter = document.getElementById('navCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function showSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === index);
+        });
+        progressFill.style.width = ((index + 1) / total * 100) + '%';
+        navCounter.textContent = (index + 1) + ' / ' + total;
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === total - 1;
+    }
+
+    function nextSlide() {
+        if (currentSlide < total - 1) {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;top:12px;left:12px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
