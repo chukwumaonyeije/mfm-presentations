@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mixed Connective Tissue Disease Preconception Counseling | OpenMFM</title>
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent:    #22d3ee;
+      --green:     #3fb950;
+      --red:       #f85149;
+      --orange:    #d29922;
+      --purple:    #bc8cff;
+      --teal:      #39d0d8;
+    }
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Deck / Slide ── */
+    #deck { width: 100%; height: 100dvh; position: relative; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+      overflow: hidden;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Typography ── */
+    .slide-label {
+      font-size: .75rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .6rem;
+    }
+    h1 { font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 300; line-height: 1.15; text-align: center; }
+    h2 { font-size: clamp(1.6rem, 3.5vw, 2.6rem); font-weight: 300; line-height: 1.2; text-align: center; }
+    .subtitle {
+      font-size: clamp(1rem, 2vw, 1.4rem); color: var(--muted);
+      text-align: center; margin-top: .8rem;
+    }
+    .accent { color: var(--accent); }
+    .green  { color: var(--green); }
+    .red    { color: var(--red); }
+    .orange { color: var(--orange); }
+    .purple { color: var(--purple); }
+    .teal   { color: var(--teal); }
+
+    /* ── Divider ── */
+    .divider {
+      width: 60px; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin: 1.2rem auto;
+    }
+
+    /* ── Pill / Badge ── */
+    .pill {
+      display: inline-block;
+      padding: .25rem .85rem;
+      border-radius: 999px;
+      font-size: .8rem; font-weight: 600; letter-spacing: .06em;
+    }
+    .pill-blue   { background: rgba(88,166,255,.15); color: var(--accent); border: 1px solid rgba(88,166,255,.35); }
+    .pill-red    { background: rgba(248,81,73,.15);  color: var(--red);    border: 1px solid rgba(248,81,73,.35); }
+    .pill-green  { background: rgba(63,185,80,.15);  color: var(--green);  border: 1px solid rgba(63,185,80,.35); }
+    .pill-orange { background: rgba(210,153,34,.15); color: var(--orange); border: 1px solid rgba(210,153,34,.35); }
+
+    /* ── Card Grid ── */
+    .card-grid {
+      display: grid;
+      gap: 1.1rem;
+      width: 100%;
+      max-width: 900px;
+      margin-top: 1.4rem;
+    }
+    .card-grid-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+    }
+    .card-icon { font-size: 1.8rem; margin-bottom: .5rem; }
+    .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: .35rem; }
+    .card p  { font-size: .85rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── Stat Row ── */
+    .stat-row {
+      display: flex; gap: 2.5rem;
+      justify-content: center; align-items: center;
+      margin-top: 1.6rem;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 700; line-height: 1; }
+    .stat-label { font-size: .8rem; color: var(--muted); margin-top: .3rem; letter-spacing: .05em; }
+
+    /* ── Table ── */
+    .med-table {
+      width: 100%; max-width: 920px;
+      border-collapse: collapse;
+      margin-top: 1.4rem;
+      font-size: .88rem;
+    }
+    .med-table th {
+      background: var(--surface);
+      color: var(--muted);
+      font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+      padding: .65rem 1rem; text-align: left;
+      border-bottom: 2px solid var(--border);
+    }
+    .med-table td {
+      padding: .65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .med-table tr:last-child td { border-bottom: none; }
+    .med-table tr:hover td { background: rgba(255,255,255,.03); }
+
+    .table-wrap {
+      width: 100%;
+      max-width: 920px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .table-wrap .med-table {
+      min-width: 720px;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      display: flex; gap: 0; align-items: stretch;
+      width: 100%; max-width: 880px;
+      margin-top: 1.6rem;
+    }
+    .tl-step {
+      flex: 1; position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem .9rem;
+      text-align: center;
+      margin: 0 .4rem;
+    }
+    .tl-step::after {
+      content: '→';
+      position: absolute; right: -1.1rem; top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted); font-size: 1.1rem;
+      z-index: 1;
+    }
+    .tl-step:last-child::after { display: none; }
+    .tl-step .tl-num {
+      font-size: 1.5rem; font-weight: 700; line-height: 1;
+      margin-bottom: .3rem;
+    }
+    .tl-step .tl-label { font-size: .8rem; color: var(--muted); line-height: 1.4; }
+
+    /* ── Warning Box ── */
+    .warn-box {
+      background: rgba(248,81,73,.1);
+      border: 1px solid rgba(248,81,73,.4);
+      border-radius: 10px;
+      padding: 1rem 1.6rem;
+      max-width: 700px;
+      margin-top: 1.2rem;
+      text-align: center;
+    }
+    .warn-box .warn-icon { font-size: 1.6rem; margin-bottom: .4rem; }
+    .warn-box p { font-size: .95rem; color: var(--text); line-height: 1.5; }
+
+    /* ── Info Box ── */
+    .info-box {
+      background: rgba(88,166,255,.08);
+      border: 1px solid rgba(88,166,255,.3);
+      border-radius: 10px;
+      padding: 1rem 1.6rem;
+      max-width: 700px;
+      margin-top: 1.2rem;
+      text-align: center;
+    }
+    .info-box p { font-size: .95rem; color: var(--text); line-height: 1.5; }
+
+    /* ── Antibody Row ── */
+    .ab-row {
+      display: flex; gap: 1.2rem;
+      width: 100%; max-width: 900px;
+      margin-top: 1.4rem;
+    }
+    .ab-card {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+    }
+    .ab-card .ab-title { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+    .ab-card ul { list-style: none; padding: 0; }
+    .ab-card ul li {
+      font-size: .85rem; color: var(--muted);
+      padding: .25rem 0;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.45;
+    }
+    .ab-card ul li:last-child { border-bottom: none; }
+    .ab-card ul li::before { content: '▸ '; color: var(--accent); }
+
+    /* ── MDT Circles ── */
+    .mdt-row {
+      display: flex; gap: 1.5rem;
+      justify-content: center;
+      margin-top: 1.6rem;
+    }
+    .mdt-circle {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      font-size: .8rem; font-weight: 600;
+      border: 2px solid;
+      padding: .5rem;
+      line-height: 1.3;
+    }
+    .mdt-circle .mdt-icon { font-size: 1.6rem; margin-bottom: .3rem; }
+
+    /* ── Navigation ── */
+    #nav {
+      position: fixed; bottom: 1.4rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1rem;
+      background: rgba(22,27,34,.85);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: .45rem 1.2rem;
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    #nav button {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 1.1rem;
+      padding: .2rem .5rem; border-radius: 4px;
+      transition: color .2s;
+    }
+    #nav button:hover { color: var(--text); }
+    #slide-counter { font-size: .8rem; color: var(--muted); min-width: 4rem; text-align: center; }
+
+    /* ── Branding ── */
+    .brand {
+      position: fixed; top: 1rem; right: 1.4rem;
+      font-size: .7rem; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--muted);
+      z-index: 100;
+    }
+    .brand span { color: var(--accent); }
+
+    .handout-link {
+      position: fixed; top: 1rem; left: 1.4rem;
+      z-index: 100;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid rgba(34,211,238,.35);
+      background: rgba(22,27,34,.85);
+      border-radius: 999px;
+      padding: .4rem .85rem;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      backdrop-filter: blur(8px);
+    }
+    .handout-link:hover { border-color: var(--accent); color: var(--text); }
+
+    /* ── Progress bar ── */
+    #progress {
+      position: fixed; top: 0; left: 0;
+      height: 3px; background: var(--accent);
+      transition: width .4s ease;
+      z-index: 200;
+    }
+
+    @media (max-width: 900px) {
+      html, body { overflow: hidden; }
+      #deck { height: 100dvh; }
+      .slide {
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 4.25rem 1rem 6.5rem;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      h1 { font-size: clamp(2rem, 12vw, 3rem); }
+      h2 { font-size: clamp(1.55rem, 8vw, 2.15rem); }
+      .subtitle { font-size: 1rem; }
+      .card-grid,
+      .card-grid-2,
+      .card-grid-3 {
+        grid-template-columns: 1fr;
+        max-width: none;
+      }
+      .card { padding: 1rem; }
+      .stat-row,
+      .ab-row,
+      .mdt-row,
+      .timeline {
+        flex-direction: column;
+        gap: .85rem;
+        align-items: stretch;
+      }
+      .stat-row > div[style*="width:1px"] { display: none; }
+      .tl-step { margin: 0; }
+      .tl-step::after { display: none; }
+      .mdt-circle {
+        width: 100%;
+        height: auto;
+        min-height: 82px;
+        border-radius: 10px;
+      }
+      .warn-box,
+      .info-box {
+        max-width: none;
+        padding: 1rem;
+      }
+      .brand {
+        top: .75rem;
+        right: .85rem;
+        font-size: .62rem;
+      }
+      .handout-link {
+        top: .65rem;
+        left: .75rem;
+        max-width: 48vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      #nav {
+        bottom: .75rem;
+        max-width: calc(100vw - 1rem);
+      }
+      body > div[style*="position:fixed"][style*="bottom:16px"][style*="left:16px"] {
+        bottom: 4.6rem !important;
+        left: .75rem !important;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .slide { padding: 4rem 6.5rem; }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/mctd-preconception/index.html">
+<meta name="description" content="Patient-centered preconception counseling deck for mixed connective tissue disease, including remission goals, cardiopulmonary and renal assessment, antibody screening, pregnancy-compatible medications, aspirin prophylaxis, fetal surveillance, postpartum flare planning, and a downloadable patient handout.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Mixed Connective Tissue Disease, MCTD, Autoimmune Disease, Preconception Counseling, High-Risk Pregnancy, Medication Safety, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/mctd-preconception/index.html">
+<meta property="og:title" content="Mixed Connective Tissue Disease Preconception Counseling - Patient Education | OpenMFM">
+<meta property="og:description" content="Patient-centered preconception counseling deck for mixed connective tissue disease, including remission goals, cardiopulmonary and renal assessment, antibody screening, pregnancy-compatible medications, aspirin prophylaxis, fetal surveillance, postpartum flare planning, and a downloadable patient handout.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mixed Connective Tissue Disease Preconception Counseling - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Patient-centered preconception counseling deck for mixed connective tissue disease, including remission goals, cardiopulmonary and renal assessment, antibody screening, pregnancy-compatible medications, aspirin prophylaxis, fetal surveillance, postpartum flare planning, and a downloadable patient handout.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Mixed Connective Tissue Disease Preconception Counseling - Patient Education",
+  "description": "Patient-centered preconception counseling deck for mixed connective tissue disease, including remission goals, cardiopulmonary and renal assessment, antibody screening, pregnancy-compatible medications, aspirin prophylaxis, fetal surveillance, postpartum flare planning, and a downloadable patient handout.",
+  "url": "https://openmfm.org/decks/mctd-preconception/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-05-19",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Mixed Connective Tissue Disease Preconception Counseling - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Mixed Connective Tissue Disease, MCTD, Autoimmune Disease, Preconception Counseling, High-Risk Pregnancy, Medication Safety, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<a class="handout-link" href="MCTD_Preconception_Patient_Handout.pdf" target="_blank" rel="noopener">Patient handout</a>
+<div class="brand">Open<span>MFM</span> · APA · 2026</div>
+
+<div id="deck">
+
+  <!-- ── Slide 1: Title ── -->
+  <div class="slide active">
+    <div class="slide-label">Maternal-Fetal Medicine · Preconception Counseling</div>
+    <h1>Mixed Connective<br>Tissue Disease</h1>
+    <div class="divider"></div>
+    <p class="subtitle">Preconception Optimization, Risk Stratification<br>and Medication Reconciliation</p>
+    <div style="margin-top:2rem; display:flex; gap:.8rem; flex-wrap:wrap; justify-content:center;">
+      <span class="pill pill-blue">ACOG / SMFM Aligned</span>
+      <span class="pill pill-orange">High-Risk Pregnancy</span>
+      <span class="pill pill-green">Preconception Visit</span>
+    </div>
+  </div>
+
+  <!-- ── Slide 2: Overview ── -->
+  <div class="slide">
+    <div class="slide-label">Overview</div>
+    <h2>What is MCTD?</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-3" style="max-width:820px;">
+      <div class="card">
+        <div class="card-icon">🧬</div>
+        <h3>Defining Feature</h3>
+        <p>Defined by <span class="accent">anti-U1RNP</span> antibodies with overlapping features of SLE, SSc, and PM/DM.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🫀</div>
+        <h3>Key Organ Risks</h3>
+        <p>Pulmonary arterial hypertension, interstitial lung disease, and renal involvement.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤰</div>
+        <h3>Pregnancy Outcome</h3>
+        <p>Live-birth rate <span class="green">~72%</span> with meticulous preconception evaluation.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 3: Preconception Goal ── -->
+  <div class="slide">
+    <div class="slide-label">Preconception Goal</div>
+    <h2>The Primary Objective</h2>
+    <div class="divider"></div>
+    <p class="subtitle" style="font-size:1.1rem; max-width:680px; margin:0 auto .5rem;">
+      Determine if the patient's physical reserve can tolerate the hemodynamic shifts of pregnancy without triggering disease flares or severe morbidity.
+    </p>
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num accent">6</div>
+        <div class="stat-label">Months of continuous<br>clinical remission required</div>
+      </div>
+      <div style="width:1px; height:60px; background:var(--border);"></div>
+      <div class="stat">
+        <div class="stat-num green">72%</div>
+        <div class="stat-label">Live-birth rate with<br>meticulous evaluation</div>
+      </div>
+      <div style="width:1px; height:60px; background:var(--border);"></div>
+      <div class="stat">
+        <div class="stat-num orange">3</div>
+        <div class="stat-label">Specialty teams<br>required (MFM, Rheum, Pulm/Neph)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 4: Cardiopulmonary Evaluation ── -->
+  <div class="slide">
+    <div class="slide-label">Organ Assessment · Cardiopulmonary</div>
+    <h2>Cardiopulmonary Evaluation</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-2" style="max-width:780px;">
+      <div class="card">
+        <div class="card-icon">🫁</div>
+        <h3 class="accent">Required Tests</h3>
+        <p>Baseline <strong>echocardiogram</strong> and <strong>pulmonary function tests</strong> before authorizing conception.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Conditions to Assess</h3>
+        <p>Pulmonary arterial hypertension (PAH) and interstitial lung disease (ILD) are primary concerns.</p>
+      </div>
+    </div>
+    <div class="warn-box" style="margin-top:1.2rem;">
+      <div class="warn-icon">⚠️</div>
+      <p><strong>Severe PAH is an absolute contraindication to pregnancy</strong> due to extreme maternal mortality risk.</p>
+    </div>
+  </div>
+
+  <!-- ── Slide 5: Renal Assessment ── -->
+  <div class="slide">
+    <div class="slide-label">Organ Assessment · Renal</div>
+    <h2>Renal Function Assessment</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-3" style="max-width:820px;">
+      <div class="card">
+        <div class="card-icon">🧪</div>
+        <h3>Serum Creatinine</h3>
+        <p>Establish baseline renal function before conception.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📉</div>
+        <h3>eGFR</h3>
+        <p>Estimated glomerular filtration rate to quantify renal reserve.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">💧</div>
+        <h3>Urine Protein : Cr</h3>
+        <p>Spot urine protein-to-creatinine ratio to detect subclinical nephritis.</p>
+      </div>
+    </div>
+    <div class="info-box">
+      <p>Active nephritis or baseline renal insufficiency strongly predicts <strong>superimposed preeclampsia</strong> and irreversible maternal renal decline.</p>
+    </div>
+  </div>
+
+  <!-- ── Slide 6: Serological Profiling ── -->
+  <div class="slide">
+    <div class="slide-label">Mandatory Serological Profiling</div>
+    <h2>Autoantibody Screening</h2>
+    <div class="divider"></div>
+    <p class="subtitle" style="font-size:1rem; max-width:640px; margin:0 auto 1rem;">
+      Overlapping autoantibody profiles dictate specific obstetrical surveillance protocols. Test <em>all</em> patients preconception.
+    </p>
+    <div class="ab-row">
+      <div class="ab-card">
+        <div class="ab-title accent">Antiphospholipid Antibodies (aPL)</div>
+        <ul>
+          <li>Lupus anticoagulant</li>
+          <li>Anticardiolipin IgG/IgM</li>
+          <li>Anti-β2-glycoprotein-I</li>
+        </ul>
+      </div>
+      <div class="ab-card">
+        <div class="ab-title purple">Anti-Ro/SSA &amp; Anti-La/SSB</div>
+        <ul>
+          <li>Cross placenta at 16 weeks</li>
+          <li>2% risk neonatal lupus</li>
+          <li>2% risk congenital heart block</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 7: aPL Clinical Impact ── -->
+  <div class="slide">
+    <div class="slide-label">Antiphospholipid Antibodies · Clinical Impact</div>
+    <h2>aPL-Positive: Clinical Implications</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-3" style="max-width:820px;">
+      <div class="card">
+        <div class="card-icon" style="color:var(--red)">🔁</div>
+        <h3 class="red">Recurrent Miscarriage</h3>
+        <p>Increased risk of early pregnancy loss via placental thrombosis.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="color:var(--orange)">📏</div>
+        <h3 class="orange">Fetal Growth Restriction</h3>
+        <p>Placental insufficiency secondary to antiphospholipid-mediated vasculopathy.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="color:var(--red)">🩺</div>
+        <h3 class="red">Early-Onset Preeclampsia</h3>
+        <p>Severe, early-onset preeclampsia with risk of maternal end-organ damage.</p>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:1.1rem;">
+      <p>aPL-positive patients require <strong>prophylactic or therapeutic LMWH</strong> and <strong>low-dose aspirin</strong> upon conception.</p>
+    </div>
+  </div>
+
+  <!-- ── Slide 8: Anti-Ro/SSA Surveillance ── -->
+  <div class="slide">
+    <div class="slide-label">Anti-Ro/SSA · Fetal Surveillance</div>
+    <h2>Anti-Ro/SSA Seropositive Patients</h2>
+    <div class="divider"></div>
+    <div class="stat-row" style="margin-bottom:1.4rem;">
+      <div class="stat">
+        <div class="stat-num purple">2%</div>
+        <div class="stat-label">Risk of neonatal lupus</div>
+      </div>
+      <div style="width:1px; height:60px; background:var(--border);"></div>
+      <div class="stat">
+        <div class="stat-num red">2%</div>
+        <div class="stat-label">Risk of congenital<br>complete heart block</div>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-num accent">16</div>
+        <div class="tl-label">Weeks GA<br>Antibodies begin crossing placenta</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-num accent">16–28</div>
+        <div class="tl-label">Weeks GA<br>Serial fetal echocardiography</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-num accent">28</div>
+        <div class="tl-label">Weeks GA<br>Surveillance period ends</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 9: Medication Table ── -->
+  <div class="slide">
+    <div class="slide-label">Medication Reconciliation</div>
+    <h2>Pregnancy-Safe vs. Contraindicated Agents</h2>
+    <div class="divider"></div>
+    <div class="table-wrap">
+    <table class="med-table">
+      <thead>
+        <tr>
+          <th>Medication</th>
+          <th>Status</th>
+          <th>Action / Recommendation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Hydroxychloroquine (HCQ)</strong></td>
+          <td><span class="pill pill-green">Safe</span></td>
+          <td>Continue throughout pregnancy; reduces flare frequency</td>
+        </tr>
+        <tr>
+          <td><strong>Azathioprine</strong></td>
+          <td><span class="pill pill-green">Safe</span></td>
+          <td>Maintain as steroid-sparing agent (≤2 mg/kg/day)</td>
+        </tr>
+        <tr>
+          <td><strong>Calcineurin Inhibitors</strong></td>
+          <td><span class="pill pill-green">Safe</span></td>
+          <td>Monitor maternal BP and renal function closely</td>
+        </tr>
+        <tr>
+          <td><strong>Low-dose Corticosteroids</strong></td>
+          <td><span class="pill pill-green">Safe</span></td>
+          <td>Prednisone ≤10 mg/day; lowest effective dose</td>
+        </tr>
+        <tr>
+          <td><strong>Methotrexate</strong></td>
+          <td><span class="pill pill-red">Contraindicated</span></td>
+          <td>Discontinue 1–3 months prior to conception</td>
+        </tr>
+        <tr>
+          <td><strong>Mycophenolate Mofetil</strong></td>
+          <td><span class="pill pill-red">Contraindicated</span></td>
+          <td>Discontinue ≥6 weeks prior; embryopathy risk</td>
+        </tr>
+        <tr>
+          <td><strong>Cyclophosphamide</strong></td>
+          <td><span class="pill pill-red">Contraindicated</span></td>
+          <td>Avoid; severe teratogenicity and gonadal toxicity</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- ── Slide 10: Aspirin & Hypertension ── -->
+  <div class="slide">
+    <div class="slide-label">Anticipated Complications · Hypertensive Disorders</div>
+    <h2>Preeclampsia Prevention</h2>
+    <div class="divider"></div>
+    <p class="subtitle" style="font-size:1rem; max-width:620px; margin:0 auto 1.2rem;">
+      MCTD profoundly increases the risk of preeclampsia via defective spiral artery remodeling.
+    </p>
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-num green">11–14</div>
+        <div class="tl-label">Weeks GA<br>Initiate low-dose aspirin</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-num green">150 mg</div>
+        <div class="tl-label">Nightly dosing<br>per ASPRE trial</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-num green">24+</div>
+        <div class="tl-label">Weeks GA<br>Serial umbilical Doppler &amp; biometry</div>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:1.1rem;">
+      <p>Placental insufficiency demands rigorous third-trimester surveillance for <strong>FGR</strong> and <strong>preterm birth</strong>.</p>
+    </div>
+  </div>
+
+  <!-- ── Slide 11: Multidisciplinary Team ── -->
+  <div class="slide">
+    <div class="slide-label">Multidisciplinary Coordination</div>
+    <h2>Coordinated Care Team</h2>
+    <div class="divider"></div>
+    <div class="mdt-row">
+      <div class="mdt-circle" style="border-color:var(--accent); color:var(--accent);">
+        <div class="mdt-icon">🤰</div>
+        MFM
+      </div>
+      <div class="mdt-circle" style="border-color:var(--purple); color:var(--purple);">
+        <div class="mdt-icon">🧬</div>
+        Rheumatology
+      </div>
+      <div class="mdt-circle" style="border-color:var(--teal); color:var(--teal);">
+        <div class="mdt-icon">🫁</div>
+        Pulmonology
+      </div>
+      <div class="mdt-circle" style="border-color:var(--orange); color:var(--orange);">
+        <div class="mdt-icon">💧</div>
+        Nephrology
+      </div>
+    </div>
+    <div class="warn-box" style="margin-top:1.2rem; background:rgba(210,153,34,.1); border-color:rgba(210,153,34,.4);">
+      <div class="warn-icon">⚡</div>
+      <p><strong>Postpartum flares are common</strong> due to precipitous drops in endogenous corticosteroids. A preemptive postpartum medication escalation plan is required.</p>
+    </div>
+  </div>
+
+  <!-- ── Slide 12: Summary ── -->
+  <div class="slide">
+    <div class="slide-label">Summary · Preconception Checklist</div>
+    <h2>Preconception Checklist</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-2" style="max-width:820px;">
+      <div class="card">
+        <h3 class="accent">✓ Disease Quiescence</h3>
+        <p>6 months continuous remission on pregnancy-safe medications before conception.</p>
+      </div>
+      <div class="card">
+        <h3 class="accent">✓ Cardiopulmonary</h3>
+        <p>Echo + PFTs. Rule out PAH — absolute contraindication to pregnancy.</p>
+      </div>
+      <div class="card">
+        <h3 class="accent">✓ Renal Baseline</h3>
+        <p>Creatinine, eGFR, spot urine protein : creatinine ratio.</p>
+      </div>
+      <div class="card">
+        <h3 class="accent">✓ Serology</h3>
+        <p>aPL panel (LAC, aCL, anti-β2GPI) and anti-Ro/SSA, anti-La/SSB.</p>
+      </div>
+      <div class="card">
+        <h3 class="accent">✓ Medication Transition</h3>
+        <p>Discontinue MTX, MMF, CYC well before stopping contraception.</p>
+      </div>
+      <div class="card">
+        <h3 class="accent">✓ MDT Coordination</h3>
+        <p>Establish MFM, Rheumatology, and Pulm/Neph co-management plan.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#deck -->
+
+<!-- ── Navigation ── -->
+<div id="nav">
+  <button id="btn-prev" title="Previous slide">&#8592;</button>
+  <span id="slide-counter">1 / 12</span>
+  <button id="btn-next" title="Next slide">&#8594;</button>
+</div>
+
+<script>
+  (function () {
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slide-counter');
+    const progress = document.getElementById('progress');
+    let current = 0;
+
+    function show(idx) {
+      slides[current].classList.remove('active');
+      current = (idx + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      counter.textContent = (current + 1) + ' / ' + slides.length;
+      progress.style.width = ((current + 1) / slides.length * 100) + '%';
+    }
+
+    document.getElementById('btn-next').addEventListener('click', () => show(current + 1));
+    document.getElementById('btn-prev').addEventListener('click', () => show(current - 1));
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); show(current + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); show(current - 1); }
+    });
+
+    // Touch / swipe
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 50) show(dx < 0 ? current + 1 : current - 1);
+    }, { passive: true });
+
+    show(0);
+  })();
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
