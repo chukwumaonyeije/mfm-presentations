@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Dictation to Ambient AI: A Clinician's Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --navy: #0f2240;
+    --navy-mid: #1a3a6b;
+    --teal: #0e8a7c;
+    --teal-light: #14b8a6;
+    --teal-glow: rgba(14,138,124,0.15);
+    --cream: #f5f0e8;
+    --warm-white: #faf8f4;
+    --slate: #94a3b8;
+    --gold: #d4a847;
+    --red-soft: #e05c5c;
+    --text-dark: #1e293b;
+    --slide-w: 900px;
+    --slide-h: 506px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0f1a;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    gap: 16px;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15,34,64,0.95);
+    border: 1px solid rgba(20,184,166,0.3);
+    border-radius: 40px;
+    padding: 10px 20px;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+  .nav button {
+    background: none;
+    border: none;
+    color: var(--teal-light);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 20px;
+    transition: background 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .nav button:hover { background: rgba(20,184,166,0.15); }
+  .nav button:disabled { color: #334155; cursor: default; }
+  .slide-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--slate);
+    min-width: 60px;
+    text-align: center;
+  }
+
+  /* SLIDE WRAPPER */
+  .slideshow {
+    width: var(--slide-w);
+    position: relative;
+  }
+
+  .slide {
+    display: none;
+    width: var(--slide-w);
+    height: var(--slide-h);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(20,184,166,0.1);
+  }
+  .slide.active { display: flex; }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    width: var(--slide-w);
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* ===================== SLIDE DESIGNS ===================== */
+
+  /* SLIDE 1 — TITLE */
+  .s1 {
+    background: var(--navy);
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 70px;
+  }
+  .s1::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(14,138,124,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .s1::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 200px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,168,71,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .s1 .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 20px;
+  }
+  .s1 h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    line-height: 1.15;
+    color: var(--warm-white);
+    margin-bottom: 24px;
+    max-width: 580px;
+  }
+  .s1 h1 em {
+    font-style: italic;
+    color: var(--teal-light);
+  }
+  .s1 .subtitle {
+    font-size: 15px;
+    color: var(--slate);
+    line-height: 1.6;
+    max-width: 480px;
+    margin-bottom: 32px;
+  }
+  .s1 .author-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .s1 .author-dot {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal), var(--navy-mid));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 14px;
+    color: white;
+    flex-shrink: 0;
+  }
+  .s1 .author-text {
+    font-size: 13px;
+    color: var(--slate);
+  }
+  .s1 .author-text strong {
+    display: block;
+    color: var(--cream);
+    font-size: 14px;
+  }
+  .s1 .slide-num {
+    position: absolute;
+    bottom: 24px; right: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(148,163,184,0.4);
+  }
+
+  /* SLIDE 2 — THE OLD WORLD */
+  .s2 {
+    background: #1a1a2e;
+    flex-direction: row;
+  }
+  .s2 .left-panel {
+    width: 340px;
+    flex-shrink: 0;
+    background: linear-gradient(160deg, #2d1f0e, #1a1208);
+    padding: 48px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    border-right: 1px solid rgba(212,168,71,0.2);
+  }
+  .s2 .left-panel::after {
+    content: '🎙️';
+    font-size: 80px;
+    position: absolute;
+    bottom: 20px; right: 20px;
+    opacity: 0.12;
+  }
+  .s2 .era-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .s2 .era-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--cream);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .s2 .era-desc {
+    font-size: 13px;
+    color: #a89070;
+    line-height: 1.65;
+  }
+  .s2 .right-panel {
+    flex: 1;
+    padding: 40px 40px 40px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+  }
+  .s2 .right-panel h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--slate);
+    margin-bottom: 4px;
+    font-weight: 400;
+  }
+  .pain-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .pain-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .pain-text {
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.55;
+  }
+  .pain-text strong {
+    display: block;
+    color: #cbd5e1;
+    font-size: 13.5px;
+    margin-bottom: 2px;
+  }
+
+  /* SLIDE 3 — THE SHIFT */
+  .s3 {
+    background: var(--navy);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 60px;
+    text-align: center;
+  }
+  .s3::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(14,138,124,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .s3 .shift-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 16px;
+  }
+  .s3 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--warm-white);
+    line-height: 1.2;
+    margin-bottom: 20px;
+    max-width: 640px;
+  }
+  .s3 h2 span { color: var(--teal-light); }
+  .s3 .shift-body {
+    font-size: 15px;
+    color: var(--slate);
+    line-height: 1.7;
+    max-width: 600px;
+    margin-bottom: 32px;
+  }
+  .timeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    max-width: 680px;
+  }
+  .tl-node {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+  .tl-dot {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .tl-dot.old { background: rgba(212,168,71,0.15); border: 2px solid rgba(212,168,71,0.4); }
+  .tl-dot.new { background: rgba(14,138,124,0.2); border: 2px solid rgba(14,138,124,0.5); }
+  .tl-dot.now { background: rgba(20,184,166,0.2); border: 2px solid var(--teal-light); }
+  .tl-label { font-size: 12px; color: var(--slate); line-height: 1.4; }
+  .tl-label strong { display: block; font-size: 13px; color: var(--cream); margin-bottom: 2px; }
+  .tl-arrow {
+    font-size: 18px;
+    color: rgba(148,163,184,0.3);
+    flex-shrink: 0;
+    padding: 0 4px;
+    margin-bottom: 24px;
+  }
+
+  /* SLIDE 4 — HOW AMBIENT WORKS */
+  .s4 {
+    background: #0d1f1e;
+    flex-direction: row;
+  }
+  .s4 .accent-bar {
+    width: 5px;
+    background: linear-gradient(180deg, var(--teal), transparent);
+    flex-shrink: 0;
+  }
+  .s4 .content {
+    flex: 1;
+    padding: 44px 44px 44px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .s4 .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 12px;
+  }
+  .s4 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    color: var(--warm-white);
+    margin-bottom: 24px;
+    line-height: 1.25;
+  }
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(14,138,124,0.2);
+    border: 1px solid rgba(20,184,166,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--teal-light);
+    flex-shrink: 0;
+  }
+  .step-body { font-size: 13.5px; color: #94a3b8; line-height: 1.55; padding-top: 4px; }
+  .step-body strong { color: var(--cream); display: block; margin-bottom: 2px; font-size: 14px; }
+  .s4 .side-panel {
+    width: 220px;
+    flex-shrink: 0;
+    background: rgba(14,138,124,0.06);
+    border-left: 1px solid rgba(14,138,124,0.15);
+    padding: 44px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+  }
+  .s4 .side-panel h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 4px;
+  }
+  .platform-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(14,138,124,0.1);
+    border: 1px solid rgba(20,184,166,0.2);
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: var(--teal-light);
+    white-space: nowrap;
+  }
+
+  /* SLIDE 5 — CLINICAL BENEFIT */
+  .s5 {
+    background: var(--navy);
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 60px;
+  }
+  .s5::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(14,138,124,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .s5 .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 12px;
+  }
+  .s5 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    color: var(--warm-white);
+    margin-bottom: 28px;
+  }
+  .benefit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .benefit-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(20,184,166,0.12);
+    border-radius: 10px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .benefit-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--teal);
+    border-radius: 2px 0 0 2px;
+  }
+  .benefit-card h4 {
+    font-size: 13.5px;
+    color: var(--cream);
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+  .benefit-card p {
+    font-size: 12.5px;
+    color: var(--slate);
+    line-height: 1.55;
+  }
+
+  /* SLIDE 6 — MAINSTREAM */
+  .s6 {
+    background: #0f1923;
+    flex-direction: column;
+    justify-content: center;
+    padding: 44px 60px;
+  }
+  .s6 .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .s6 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--warm-white);
+    margin-bottom: 8px;
+  }
+  .s6 .deck-sub {
+    font-size: 14px;
+    color: var(--slate);
+    margin-bottom: 28px;
+  }
+  .tool-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .tool-card {
+    flex: 1;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 18px 16px;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .tool-card .tool-icon { font-size: 28px; margin-bottom: 8px; }
+  .tool-card h4 { font-size: 13px; color: var(--cream); margin-bottom: 4px; }
+  .tool-card p { font-size: 11.5px; color: var(--slate); line-height: 1.5; }
+  .s6 .insight-box {
+    background: rgba(14,138,124,0.08);
+    border: 1px solid rgba(14,138,124,0.25);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--teal-light);
+    line-height: 1.6;
+  }
+  .s6 .insight-box strong { color: white; }
+
+  /* SLIDE 7 — CAVEATS */
+  .s7 {
+    background: #160d0d;
+    flex-direction: row;
+  }
+  .s7 .left {
+    width: 320px;
+    flex-shrink: 0;
+    background: rgba(224,92,92,0.06);
+    border-right: 1px solid rgba(224,92,92,0.15);
+    padding: 48px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .s7 .left .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red-soft);
+    margin-bottom: 12px;
+  }
+  .s7 .left h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--cream);
+    line-height: 1.25;
+    margin-bottom: 14px;
+  }
+  .s7 .left p {
+    font-size: 12.5px;
+    color: #9a7070;
+    line-height: 1.65;
+  }
+  .s7 .right {
+    flex: 1;
+    padding: 40px 40px 40px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+  }
+  .caveat-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .caveat-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+  .caveat-text { font-size: 13px; color: #94a3b8; line-height: 1.55; }
+  .caveat-text strong { color: var(--cream); display: block; margin-bottom: 2px; }
+
+  /* SLIDE 8 — GETTING STARTED */
+  .s8 {
+    background: var(--navy);
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 60px;
+  }
+  .s8::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(14,138,124,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .s8 .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 12px;
+  }
+  .s8 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--warm-white);
+    margin-bottom: 24px;
+  }
+  .roadmap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .roadmap-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+  .roadmap-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: rgba(14,138,124,0.15);
+    border: 1px solid rgba(20,184,166,0.3);
+    color: var(--teal-light);
+    border-radius: 4px;
+    padding: 3px 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .roadmap-text { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+  .roadmap-text strong { color: var(--cream); }
+
+  /* SLIDE 9 — CLOSING */
+  .s9 {
+    background: var(--navy);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 80px;
+  }
+  .s9::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(14,138,124,0.2) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .s9 .closing-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 20px;
+  }
+  .s9 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 40px;
+    color: var(--warm-white);
+    line-height: 1.2;
+    margin-bottom: 20px;
+    max-width: 600px;
+  }
+  .s9 h2 em { font-style: italic; color: var(--teal-light); }
+  .s9 .closing-body {
+    font-size: 15px;
+    color: var(--slate);
+    line-height: 1.7;
+    max-width: 540px;
+    margin-bottom: 32px;
+  }
+  .s9 .blog-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(14,138,124,0.15);
+    border: 1px solid rgba(20,184,166,0.35);
+    border-radius: 24px;
+    padding: 10px 22px;
+    font-size: 13px;
+    color: var(--teal-light);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+  .s9 .attr {
+    position: absolute;
+    bottom: 22px;
+    font-size: 11px;
+    color: rgba(148,163,184,0.4);
+  }
+
+  /* SLIDE NUM BADGE */
+  .slide-badge {
+    position: absolute;
+    bottom: 20px; right: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(148,163,184,0.3);
+  }
+
+  /* TITLE BAR */
+  .title-bar {
+    width: var(--slide-w);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px 8px;
+  }
+  .title-bar .deck-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(148,163,184,0.5);
+    letter-spacing: 1px;
+  }
+  .title-bar .brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(20,184,166,0.6);
+  }
+
+  @media (max-width: 768px) {
+    :root {
+      --slide-w: calc(100vw - 24px);
+      --slide-h: auto;
+    }
+
+    body {
+      align-items: stretch;
+      padding: 12px 12px 96px;
+      gap: 10px;
+    }
+
+    .title-bar,
+    .progress-bar,
+    .slideshow {
+      width: 100%;
+    }
+
+    .title-bar {
+      padding: 0 2px 6px;
+    }
+
+    .title-bar .deck-title,
+    .title-bar .brand {
+      font-size: 9px;
+      letter-spacing: 0.5px;
+    }
+
+    .slide {
+      width: 100%;
+      height: auto;
+      min-height: calc(100dvh - 142px);
+      max-height: none;
+      border-radius: 8px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      box-shadow: 0 14px 36px rgba(0,0,0,0.48), 0 0 0 1px rgba(20,184,166,0.12);
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    .s1,
+    .s3,
+    .s5,
+    .s6,
+    .s8,
+    .s9 {
+      padding: 34px 24px 54px;
+    }
+
+    .s1 h1 {
+      font-size: 34px;
+      max-width: 100%;
+    }
+
+    .s1 .subtitle,
+    .s3 .shift-body,
+    .s6 .deck-sub,
+    .s9 .closing-body {
+      max-width: 100%;
+      font-size: 14px;
+    }
+
+    .s2,
+    .s4,
+    .s7 {
+      flex-direction: column;
+    }
+
+    .s2 .left-panel,
+    .s2 .right-panel,
+    .s4 .content,
+    .s4 .side-panel,
+    .s7 .left,
+    .s7 .right {
+      width: 100%;
+      padding: 28px 24px;
+    }
+
+    .s3 h2,
+    .s4 h2,
+    .s5 h2,
+    .s6 h2,
+    .s7 h2,
+    .s8 h2,
+    .s9 h2 {
+      font-size: 28px;
+      line-height: 1.15;
+      max-width: 100%;
+    }
+
+    .timeline,
+    .tool-row,
+    .benefit-grid {
+      grid-template-columns: 1fr;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .tl-arrow {
+      transform: rotate(90deg);
+      align-self: center;
+      margin: 4px 0;
+    }
+
+    .steps,
+    .roadmap {
+      gap: 12px;
+    }
+
+    .step,
+    .roadmap-item,
+    .caveat-item,
+    .pain-item {
+      align-items: flex-start;
+    }
+
+    .blog-link {
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+    .s9 .attr {
+      position: static;
+      margin-top: 24px;
+    }
+
+    .slide-badge {
+      bottom: 14px;
+      right: 16px;
+    }
+
+    .nav {
+      bottom: 14px;
+      width: calc(100vw - 96px);
+      max-width: 310px;
+      justify-content: space-between;
+      padding: 9px 14px;
+    }
+  }
+</style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/ambient-scribe/index.html">
+<meta name="description" content="Clinician-facing slide deck on ambient AI scribes, tracing the shift from command-based dictation to passive clinical documentation, including workflow changes, patient-care benefits, mainstream transcription tools, implementation caveats, HIPAA considerations, and practical first steps for physician-developers.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Ambient Scribe, Clinical AI, Documentation, Digital Health, Physician Workflow, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/ambient-scribe/index.html">
+<meta property="og:title" content="From Dictation to Ambient Intelligence - Clinician AI Guide | OpenMFM">
+<meta property="og:description" content="Clinician-facing slide deck on ambient AI scribes, tracing the shift from command-based dictation to passive clinical documentation, including workflow changes, patient-care benefits, mainstream transcription tools, implementation caveats, HIPAA considerations, and practical first steps for physician-developers.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="From Dictation to Ambient Intelligence - Clinician AI Guide | OpenMFM">
+<meta name="twitter:description" content="Clinician-facing slide deck on ambient AI scribes, tracing the shift from command-based dictation to passive clinical documentation, including workflow changes, patient-care benefits, mainstream transcription tools, implementation caveats, HIPAA considerations, and practical first steps for physician-developers.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "From Dictation to Ambient Intelligence - Clinician AI Guide",
+  "description": "Clinician-facing slide deck on ambient AI scribes, tracing the shift from command-based dictation to passive clinical documentation, including workflow changes, patient-care benefits, mainstream transcription tools, implementation caveats, HIPAA considerations, and practical first steps for physician-developers.",
+  "url": "https://openmfm.org/decks/ambient-scribe/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-05-20",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "From Dictation to Ambient Intelligence - Clinician AI Guide"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Ambient Scribe, Clinical AI, Documentation, Digital Health, Physician Workflow, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div class="title-bar">
+  <span class="deck-title">DICTATION → AMBIENT AI</span>
+  <span class="brand">DoctorsWhoCode.blog</span>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-fill" id="progressFill" style="width:11.1%"></div>
+</div>
+
+<div class="slideshow">
+
+  <!-- SLIDE 1: TITLE -->
+  <div class="slide s1 active">
+    <div class="eyebrow">Atlanta Perinatal Associates · Clinical AI Series</div>
+    <h1>From <em>Dictation</em> to Ambient Intelligence</h1>
+    <p class="subtitle">Dragon NaturallySpeaking trained you to talk like a machine. Ambient AI learned to listen like a clinician. Here is what changed after 2022 and why it matters for your patients.</p>
+    <div class="author-line">
+      <div class="author-dot">CO</div>
+      <div class="author-text">
+        <strong>Chukwuma Onyeije, MD, FACOG</strong>
+        Maternal-Fetal Medicine · Atlanta Perinatal Associates
+      </div>
+    </div>
+    <div class="slide-badge">01 / 09</div>
+  </div>
+
+  <!-- SLIDE 2: THE OLD WORLD -->
+  <div class="slide s2">
+    <div class="left-panel">
+      <div class="era-label">Pre-2022 Era</div>
+      <div class="era-title">The Dragon Years</div>
+      <p class="era-desc">An acoustic model that heard your phonemes but did not understand your meaning. You adapted to it. It did not adapt to you.</p>
+    </div>
+    <div class="right-panel">
+      <h3>What it cost you</h3>
+      <div class="pain-item">
+        <div class="pain-icon">🎤</div>
+        <div class="pain-text">
+          <strong>You changed how you speak</strong>
+          Slower. Flatter. Announcing every comma and period. Non-American accents required months of retraining.
+        </div>
+      </div>
+      <div class="pain-item">
+        <div class="pain-icon">🖥️</div>
+        <div class="pain-text">
+          <strong>You turned away from the patient</strong>
+          The screen demanded your attention. Documentation was a competing task, not a byproduct of the encounter.
+        </div>
+      </div>
+      <div class="pain-item">
+        <div class="pain-icon">🧠</div>
+        <div class="pain-text">
+          <strong>Every word required a command</strong>
+          Dragon transcribed. It did not infer structure, populate sections, or follow clinical logic.
+        </div>
+      </div>
+    </div>
+    <div class="slide-badge">02 / 09</div>
+  </div>
+
+  <!-- SLIDE 3: THE SHIFT -->
+  <div class="slide s3">
+    <div class="shift-label">The Inflection Point</div>
+    <h2>2022 Changed the <span>Architecture</span> of the Problem</h2>
+    <p class="shift-body">Large language models did not just improve transcription accuracy. They added comprehension. The system stopped hearing words and started understanding clinical context.</p>
+    <div class="timeline">
+      <div class="tl-node">
+        <div class="tl-dot old">🎙️</div>
+        <div class="tl-label"><strong>Pre-2022</strong>Acoustic models. Phoneme matching. You speak, it transcribes.</div>
+      </div>
+      <div class="tl-arrow">→</div>
+      <div class="tl-node">
+        <div class="tl-dot new">🤖</div>
+        <div class="tl-label"><strong>2022–2023</strong>Transformer-based ASR. LLM post-processing. Structure inferred.</div>
+      </div>
+      <div class="tl-arrow">→</div>
+      <div class="tl-node">
+        <div class="tl-dot now">🩺</div>
+        <div class="tl-label"><strong>Now</strong>Ambient scribes. Passive listening. Note is a byproduct of care.</div>
+      </div>
+    </div>
+    <div class="slide-badge">03 / 09</div>
+  </div>
+
+  <!-- SLIDE 4: HOW AMBIENT WORKS -->
+  <div class="slide s4">
+    <div class="accent-bar"></div>
+    <div class="content">
+      <div class="section-tag">How It Works</div>
+      <h2>Ambient Scribes: The Clinical Workflow</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-body"><strong>You enter the room</strong>The ambient system activates. No microphone to position, no commands to speak.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-body"><strong>You talk to the patient</strong>The AI listens to the encounter in context. It understands who is speaking and what role each utterance plays in the clinical narrative.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-body"><strong>A structured draft appears</strong>Assessment, plan, HPI, ROS — populated according to clinical logic, not dictation sequence. You review and sign.</div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <h4>Platforms</h4>
+      <div class="platform-chip">🩺 Heidi AI</div>
+      <div class="platform-chip">🔵 Nuance DAX</div>
+      <div class="platform-chip">📋 Abridge</div>
+      <div class="platform-chip">🎧 Suki</div>
+      <div class="platform-chip">📝 Nabla</div>
+      <div class="platform-chip">🔬 DeepScribe</div>
+    </div>
+    <div class="slide-badge">04 / 09</div>
+  </div>
+
+  <!-- SLIDE 5: CLINICAL BENEFIT -->
+  <div class="slide s5">
+    <div class="section-tag">Why It Matters Clinically</div>
+    <h2>Four Benefits That Change Patient Care</h2>
+    <div class="benefit-grid">
+      <div class="benefit-card">
+        <h4>👁️ Gaze Direction</h4>
+        <p>When the scribe listens passively, the physician faces the patient. Full eye contact. No keyboard between a family and a serious diagnosis.</p>
+      </div>
+      <div class="benefit-card">
+        <h4>📊 Note Accuracy</h4>
+        <p>Reconstructing a conversation an hour later compresses and distorts. Ambient capture during the encounter produces a more faithful record.</p>
+      </div>
+      <div class="benefit-card">
+        <h4>⏱️ After-Hours Burden</h4>
+        <p>Notes completed at 9 PM on a Saturday represent a different kind of documentation failure. Ambient systems close that gap at the point of care.</p>
+      </div>
+      <div class="benefit-card">
+        <h4>🧠 Cognitive Load</h4>
+        <p>Dragon moved load from fingers to throat. Ambient moves it out of the encounter. Clinical reasoning is no longer competing with documentation management.</p>
+      </div>
+    </div>
+    <div class="slide-badge">05 / 09</div>
+  </div>
+
+  <!-- SLIDE 6: MAINSTREAM -->
+  <div class="slide s6">
+    <div class="section-tag">You Already Have Access</div>
+    <h2>Ambient Transcription Is Now Mainstream</h2>
+    <p class="deck-sub">Enterprise platforms are not the only entry point. These tools are already on your devices today.</p>
+    <div class="tool-row">
+      <div class="tool-card">
+        <div class="tool-icon">📄</div>
+        <h4>Microsoft Word</h4>
+        <p>Dictate button. Real-time transcription with punctuation inference. No training required.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">📝</div>
+        <h4>Google Docs</h4>
+        <p>Tools → Voice Typing. Continuous ambient capture in your browser. Handles natural speech patterns.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">📱</div>
+        <h4>iPhone / Android</h4>
+        <p>Tap the microphone on any keyboard. Post-transformer accuracy that rivals dedicated hardware from five years ago.</p>
+      </div>
+    </div>
+    <div class="insight-box">
+      <strong>For physician-developers:</strong> the transcription layer is commoditized. Apple, Google, and Microsoft solved it. The clinical intelligence layer — SOAP/APSO structuring, ICD-10 inference, follow-up flagging — is where the build opportunity lives.
+    </div>
+    <div class="slide-badge">06 / 09</div>
+  </div>
+
+  <!-- SLIDE 7: CAVEATS -->
+  <div class="slide s7">
+    <div class="left">
+      <div class="tag">Honest Assessment</div>
+      <h2>What Ambient Scribes Do Not Yet Solve</h2>
+      <p>These are drafting systems. The physician still reviews, edits, and signs. That responsibility has not changed. It should not change.</p>
+    </div>
+    <div class="right">
+      <div class="caveat-item">
+        <div class="caveat-icon">⚠️</div>
+        <div class="caveat-text"><strong>Hallucination Risk</strong>Ambient systems occasionally generate clinical content that was not spoken. Every note requires genuine review, not rubber-stamping.</div>
+      </div>
+      <div class="caveat-item">
+        <div class="caveat-icon">👥</div>
+        <div class="caveat-text"><strong>Multi-Speaker Environments</strong>Busy rooms with nurses, students, and family members can confuse speaker attribution and clinical intent.</div>
+      </div>
+      <div class="caveat-item">
+        <div class="caveat-icon">🔬</div>
+        <div class="caveat-text"><strong>Subspecialty Vocabulary</strong>MFM, neonatology, and other subspecialties use technical language that some general-purpose ambient systems handle imprecisely.</div>
+      </div>
+      <div class="caveat-item">
+        <div class="caveat-icon">🔒</div>
+        <div class="caveat-text"><strong>HIPAA Compliance</strong>Verify your platform's BAA, data retention policy, and de-identification approach before clinical deployment.</div>
+      </div>
+    </div>
+    <div class="slide-badge">07 / 09</div>
+  </div>
+
+  <!-- SLIDE 8: GETTING STARTED -->
+  <div class="slide s8">
+    <div class="section-tag">Practical Path Forward</div>
+    <h2>How to Start Experimenting Today</h2>
+    <div class="roadmap">
+      <div class="roadmap-item">
+        <div class="roadmap-badge">STEP 1</div>
+        <div class="roadmap-text"><strong>Start with Google Docs Voice Typing or Word Dictate</strong> — use it to draft a non-patient note or a clinical letter. Get a feel for ambient transcription quality without any HIPAA exposure.</div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-badge">STEP 2</div>
+        <div class="roadmap-text"><strong>Explore Heidi AI or Nabla free tiers</strong> — both offer trial access. Run a simulated encounter. Evaluate structured output quality against your documentation standard.</div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-badge">STEP 3</div>
+        <div class="roadmap-text"><strong>Evaluate enterprise options with your EHR vendor</strong> — Nuance DAX integrates with Epic and Dragon Medical One. Ask about BAA terms and pilot access before committing.</div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-badge">STEP 4</div>
+        <div class="roadmap-text"><strong>Read, review, sign</strong> — treat every AI-generated draft as a first draft requiring your clinical judgment. The note carries your signature and your license.</div>
+      </div>
+    </div>
+    <div class="slide-badge">08 / 09</div>
+  </div>
+
+  <!-- SLIDE 9: CLOSING -->
+  <div class="slide s9">
+    <div class="closing-tag">The Bottom Line</div>
+    <h2>Dragon taught us to speak to machines. The machines <em>finally learned to listen.</em></h2>
+    <p class="closing-body">Ambient AI is the most clinically meaningful documentation development of the past decade. Not because it saves time, though it does. Because it keeps the physician present with the patient where the care actually happens.</p>
+    <div class="blog-link">📖 doctorswhocode.blog/posts/dictation-before-after-llm</div>
+    <div class="attr">Chukwuma Onyeije, MD, FACOG · Atlanta Perinatal Associates · DoctorsWhoCode.blog</div>
+    <div class="slide-badge">09 / 09</div>
+  </div>
+
+</div>
+
+<nav class="nav">
+  <button id="prevBtn" onclick="changeSlide(-1)" disabled>&#8592;</button>
+  <span class="slide-counter" id="counter">1 / 9</span>
+  <button id="nextBtn" onclick="changeSlide(1)">&#8594;</button>
+</nav>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+
+  function changeSlide(dir) {
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(total - 1, current + dir));
+    slides[current].classList.add('active');
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+    document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+  });
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
