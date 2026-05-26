@@ -1003,6 +1003,98 @@
     color: rgba(148,163,184,0.28);
     text-transform: uppercase;
   }
+
+  /* ============================================================
+     RESPONSIVE — MOBILE (≤ 768px)
+  ============================================================ */
+  @media (max-width: 768px) {
+    :root { --slide-w: calc(100vw - 24px); --slide-h: auto; }
+    body { align-items: stretch; padding: 12px 12px 96px; gap: 10px; }
+    .slideshow, .progress-bar { width: 100%; }
+    .slide {
+      width: 100%; height: auto;
+      min-height: calc(100dvh - 130px); max-height: none;
+      border-radius: 8px; overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .slide.active { display: block; }
+
+    /* Title */
+    .s1 { padding: 40px 28px 56px; }
+    .s1 h1 { font-size: 28px; max-width: 100%; }
+    .s1 .subtitle { max-width: 100%; font-size: 13px; }
+
+    /* Ceiling */
+    .s2 { padding: 36px 28px 56px; }
+    .s2 h2 { font-size: 22px; }
+    .s2 .steps-list { max-width: 100%; }
+
+    /* Two-column → stacked */
+    .s3, .s7, .s21 { flex-direction: column; }
+    .s3 .left, .s7 .left { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 30px 24px 24px; }
+    .s3 .right, .s7 .right { padding: 24px 24px 40px; }
+    .s21 .left { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 32px 24px 24px; }
+    .s21 .right { padding: 24px 24px 40px; }
+
+    /* Labor comparison */
+    .s4 { flex-direction: column; }
+    .s4 .col { padding: 28px 24px; }
+    .s4 .col-left { border-right: none; border-bottom: 1px solid rgba(231,111,81,0.15); }
+
+    /* Agent definition */
+    .s5 { padding: 36px 28px 56px; }
+    .s5 h2 { font-size: 22px; }
+    .s5 .definition-bar { max-width: 100%; }
+    .s5 .comparison { grid-template-columns: 1fr; gap: 10px; }
+    .s5 .comp-box { height: auto; }
+    .s5 .arrow-col { display: none; }
+
+    /* Four workers grid */
+    .s6 { padding: 32px 24px 48px; }
+    .s6 h2 { font-size: 20px; }
+    .s6 .workers-grid { grid-template-columns: 1fr 1fr; }
+
+    /* ARR test */
+    .s7 .left { width: 100%; }
+
+    /* GPS check */
+    .s8 { padding: 32px 24px 48px; }
+    .s8 h2 { font-size: 20px; }
+    .s8 .gps-grid { grid-template-columns: 1fr; gap: 10px; }
+
+    /* Workflow header */
+    .wf-header { padding: 36px 28px 50px; }
+    .wf-header .wf-num { font-size: 60px; }
+    .wf-header h2 { font-size: 22px; max-width: 100%; }
+    .wf-header .hook { font-size: 13px; max-width: 100%; }
+    .wf-header .time-comparison { flex-direction: column; gap: 8px; align-items: flex-start; }
+    .wf-header .time-box { font-size: 10px; padding: 6px 12px; }
+
+    /* GPS panel */
+    .gps-slide { padding: 26px 22px 36px; }
+    .gps-slide .gps-row { grid-template-columns: 58px 1fr; }
+    .gps-slide .gps-value { font-size: 12px; }
+    .gps-slide .arr-chip { font-size: 9px; }
+
+    /* Workers detail */
+    .workers-slide { padding: 24px 22px 38px; }
+    .workers-slide .worker-text { font-size: 12px; }
+
+    /* Human checkpoint */
+    .checkpoint-slide { padding: 40px 28px 52px; }
+    .checkpoint-slide h2 { font-size: 20px; max-width: 100%; }
+    .checkpoint-slide .cp-text { max-width: 100%; font-size: 13px; }
+    .checkpoint-slide .cp-rule { max-width: 100%; }
+
+    /* Closer */
+    .s22 { padding: 44px 28px 56px; }
+    .s22 .closer-quote { font-size: 26px; max-width: 100%; }
+    .s22 .cta-row { flex-direction: column; gap: 10px; }
+    .s22 .brand-tag { left: 28px; }
+
+    /* Nav bar */
+    .nav { padding: 8px 16px; gap: 10px; }
+  }
 </style>
 <!-- openmfm-seo-injected -->
 <link rel="canonical" href="https://openmfm.org/decks/you-are-still-prompting-building-agents/index.html">
@@ -1684,6 +1776,31 @@
       e.preventDefault(); changeSlide(-1);
     }
   });
+
+  // VIEWPORT SCALE — proportionally fills any screen: laptop, desktop, 4K projector
+  function fitToViewport() {
+    const slideshow = document.querySelector('.slideshow');
+    const progressBar = document.querySelector('.progress-bar');
+    if (window.innerWidth <= 768) {
+      slideshow.style.transform = '';
+      slideshow.style.transformOrigin = '';
+      slideshow.style.marginBottom = '';
+      progressBar.style.width = '';
+      return;
+    }
+    const SLIDE_W = 900, SLIDE_H = 506;
+    const availW = window.innerWidth - 48;
+    const availH = window.innerHeight - 100;
+    const scale = Math.min(availW / SLIDE_W, availH / SLIDE_H, 1.6); // cap at 160% for very large projectors
+    const scaledW = Math.round(SLIDE_W * scale);
+    const scaledH = Math.round(SLIDE_H * scale);
+    slideshow.style.transformOrigin = 'top center';
+    slideshow.style.transform = 'scale(' + scale + ')';
+    slideshow.style.marginBottom = (scaledH - SLIDE_H + 20) + 'px';
+    progressBar.style.width = scaledW + 'px';
+  }
+  window.addEventListener('resize', fitToViewport);
+  fitToViewport();
 
   // Init progress bar
   document.getElementById('progressFill').style.width = (1 / total * 100) + '%';
