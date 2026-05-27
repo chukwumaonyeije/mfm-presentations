@@ -438,7 +438,6 @@ body::before {
   mask-image: linear-gradient(180deg, rgba(0,0,0,0.26), transparent 82%);
 }
 
-.slide,
 .slide-container,
 .slide-content,
 .presentation,
@@ -446,6 +445,13 @@ body::before {
 main,
 .container {
   position: relative;
+}
+
+.deck > .slide {
+  position: absolute;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  justify-content: safe center;
 }
 
 .slide,
@@ -518,6 +524,32 @@ button,
 .progress-fill {
   background: linear-gradient(90deg, #4ddcc2 0%, #79e09b 100%) !important;
   box-shadow: 0 0 18px rgba(77, 220, 194, 0.38);
+}
+
+@media (max-width: 768px), (max-height: 760px) {
+  body {
+    height: 100dvh;
+  }
+
+  .deck > .slide {
+    justify-content: flex-start;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .two-col,
+  .three-col {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .img-diagram,
+  .img-bg-card {
+    max-height: min(34dvh, 220px);
+  }
+
+  .nav {
+    padding: 0.55rem 0.75rem;
+  }
 }
 </style>
 </head>
