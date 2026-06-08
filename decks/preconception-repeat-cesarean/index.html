@@ -1,19 +1,756 @@
-﻿<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Preconception Counseling — Multiple Prior Cesarean Deliveries</title>
-  <meta name="description" content="Placeholder slide deck for preconception counseling after multiple prior cesarean deliveries.">
-  <link rel="stylesheet" href="../../shared/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preconception Counseling: Multiple Prior Cesarean Deliveries</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent:    #58a6ff;   /* blue  – data / headings */
+      --warn:      #f0883e;   /* orange – caution / action */
+      --danger:    #f85149;   /* red   – high-risk */
+      --safe:      #3fb950;   /* green – reassurance */
+      --gold:      #d29922;   /* amber – key stat */
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Deck & Slides ────────────────────────────────────────────── */
+    #deck { width: 100%; height: 100%; position: relative; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Typography ───────────────────────────────────────────────── */
+    .slide-label {
+      font-size: 0.75rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 300; color: var(--accent); line-height: 1.15; text-align: center; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 400; color: var(--accent); margin-bottom: 1.2rem; text-align: center; }
+    .subtitle { font-size: clamp(1rem, 1.8vw, 1.4rem); color: var(--muted); margin-top: 0.6rem; text-align: center; }
+    .byline   { font-size: 0.9rem; color: var(--muted); margin-top: 2rem; letter-spacing: 0.06em; }
+
+    /* ── Cards / Grids ────────────────────────────────────────────── */
+    .card-grid {
+      display: grid;
+      gap: 1rem;
+      width: 100%;
+      max-width: 900px;
+    }
+    .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .card-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .card .card-icon { font-size: 1.8rem; }
+    .card .card-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+    .card .card-body  { font-size: 1.05rem; color: var(--text); line-height: 1.4; }
+    .card.accent  { border-color: var(--accent); }
+    .card.warn    { border-color: var(--warn); }
+    .card.danger  { border-color: var(--danger); }
+    .card.safe    { border-color: var(--safe); }
+    .card.gold    { border-color: var(--gold); }
+
+    /* ── Risk Table ───────────────────────────────────────────────── */
+    .risk-table {
+      width: 100%; max-width: 860px;
+      border-collapse: collapse;
+      font-size: 1rem;
+    }
+    .risk-table th {
+      background: var(--surface);
+      color: var(--accent);
+      font-weight: 500;
+      padding: 0.7rem 1rem;
+      text-align: left;
+      border-bottom: 2px solid var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .risk-table td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .risk-table tr:last-child td { border-bottom: none; }
+    .risk-table .val-danger { color: var(--danger); font-weight: 600; }
+    .risk-table .val-warn   { color: var(--warn);   font-weight: 600; }
+    .risk-table .val-safe   { color: var(--safe);   font-weight: 600; }
+
+    /* ── Stat Callout ─────────────────────────────────────────────── */
+    .stat-row {
+      display: flex; gap: 1.4rem; flex-wrap: wrap;
+      justify-content: center; max-width: 900px; width: 100%;
+    }
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.8rem;
+      text-align: center; flex: 1; min-width: 160px;
+    }
+    .stat-box .stat-num  { font-size: 2.4rem; font-weight: 700; line-height: 1; }
+    .stat-box .stat-desc { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; line-height: 1.3; text-transform: uppercase; letter-spacing: 0.06em; }
+    .stat-box.danger .stat-num { color: var(--danger); }
+    .stat-box.warn   .stat-num { color: var(--warn);   }
+    .stat-box.gold   .stat-num { color: var(--gold);   }
+    .stat-box.safe   .stat-num { color: var(--safe);   }
+    .stat-box.accent .stat-num { color: var(--accent); }
+
+    /* ── Timeline ─────────────────────────────────────────────────── */
+    .timeline {
+      display: flex; flex-direction: column; gap: 0;
+      max-width: 780px; width: 100%;
+    }
+    .tl-item {
+      display: flex; gap: 1.2rem; align-items: flex-start;
+    }
+    .tl-left {
+      display: flex; flex-direction: column; align-items: center;
+      flex-shrink: 0; width: 2.4rem;
+    }
+    .tl-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0; margin-top: 0.3rem;
+    }
+    .tl-line {
+      width: 2px; flex: 1; background: var(--border); min-height: 1.6rem;
+    }
+    .tl-item:last-child .tl-line { display: none; }
+    .tl-content { padding-bottom: 1.2rem; }
+    .tl-heading { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .tl-body    { font-size: 0.9rem; color: var(--muted); margin-top: 0.2rem; line-height: 1.4; }
+
+    /* ── Pill Badge ───────────────────────────────────────────────── */
+    .badge {
+      display: inline-block; padding: 0.25em 0.8em;
+      border-radius: 999px; font-size: 0.78rem;
+      font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .badge.acog  { background: #1c2d40; color: var(--accent); border: 1px solid var(--accent); }
+    .badge.smfm  { background: #1e2d1e; color: var(--safe);   border: 1px solid var(--safe);   }
+    .badge.warn  { background: #2d1e0e; color: var(--warn);   border: 1px solid var(--warn);   }
+    .badge.danger{ background: #2d0e0e; color: var(--danger); border: 1px solid var(--danger); }
+
+    /* ── Navigation ───────────────────────────────────────────────── */
+    #nav {
+      position: fixed; bottom: 1.4rem; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1rem;
+      background: rgba(22,27,34,0.9); border: 1px solid var(--border);
+      border-radius: 999px; padding: 0.45rem 1.2rem;
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    #nav button {
+      background: none; border: none; color: var(--muted);
+      font-size: 1.1rem; cursor: pointer; padding: 0.2rem 0.5rem;
+      border-radius: 6px; transition: color 0.2s, background 0.2s;
+    }
+    #nav button:hover { color: var(--text); background: var(--border); }
+    #counter { font-size: 0.8rem; color: var(--muted); min-width: 3.5rem; text-align: center; }
+
+    /* ── Source footnote ──────────────────────────────────────────── */
+    .source {
+      position: absolute; bottom: 3.6rem; right: 2rem;
+      font-size: 0.68rem; color: var(--muted); text-align: right;
+    }
+
+    /* ── Divider ──────────────────────────────────────────────────── */
+    .divider { width: 60px; height: 3px; background: var(--accent); border-radius: 2px; margin: 0.8rem auto 1.4rem; }
+
+    @media (max-width: 768px) {
+      html, body {
+        height: 100dvh;
+        overflow: hidden;
+      }
+
+      #deck {
+        height: 100dvh;
+      }
+
+      .slide {
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 1.5rem 1rem 5.5rem;
+        min-height: 100dvh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .slide.active {
+        visibility: visible;
+      }
+
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.55rem; margin-bottom: 1rem; }
+      .subtitle { font-size: 1rem; }
+      .byline { margin-top: 1.25rem; }
+
+      .card-grid,
+      .card-grid.cols-2,
+      .card-grid.cols-3,
+      .card-grid.cols-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 1rem;
+      }
+
+      .stat-row {
+        flex-direction: column;
+      }
+
+      .risk-table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .source {
+        position: static;
+        margin-top: 1rem;
+        text-align: left;
+      }
+
+      #nav {
+        bottom: 12px;
+      }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/preconception-repeat-cesarean/index.html">
+<meta name="description" content="Provider education deck for counseling patients with multiple prior cesarean deliveries before pregnancy, including dose-dependent PAS and hysterectomy risk, contraindication to labor, preconception optimization, early ultrasound planning, and delivery timing.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Preconception Counseling, Multiple Prior Cesarean, Placenta Accreta Spectrum, Uterine Scar, Delivery Planning, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/preconception-repeat-cesarean/index.html">
+<meta property="og:title" content="Preconception Counseling: Multiple Prior Cesarean Deliveries - Provider Education | OpenMFM">
+<meta property="og:description" content="Provider education deck for counseling patients with multiple prior cesarean deliveries before pregnancy, including dose-dependent PAS and hysterectomy risk, contraindication to labor, preconception optimization, early ultrasound planning, and delivery timing.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Preconception Counseling: Multiple Prior Cesarean Deliveries - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Provider education deck for counseling patients with multiple prior cesarean deliveries before pregnancy, including dose-dependent PAS and hysterectomy risk, contraindication to labor, preconception optimization, early ultrasound planning, and delivery timing.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Preconception Counseling: Multiple Prior Cesarean Deliveries - Provider Education",
+  "description": "Provider education deck for counseling patients with multiple prior cesarean deliveries before pregnancy, including dose-dependent PAS and hysterectomy risk, contraindication to labor, preconception optimization, early ultrasound planning, and delivery timing.",
+  "url": "https://openmfm.org/decks/preconception-repeat-cesarean/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-06-08",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Preconception Counseling: Multiple Prior Cesarean Deliveries - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Preconception Counseling, Multiple Prior Cesarean, Placenta Accreta Spectrum, Uterine Scar, Delivery Planning, Provider Education"
+}
+</script>
 </head>
 <body>
-  <main>
+
+<div id="deck">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide active">
+    <div class="slide-label">Maternal-Fetal Medicine</div>
     <h1>Preconception Counseling</h1>
-    <h2>Multiple Prior Cesarean Deliveries (Placeholder)</h2>
-    <p>This is a placeholder for the OpenMFM presentation. Replace this file with the full HTML from <strong>preconception_repeat_cesarean.html</strong>.</p>
-    <p>Suggested filename for the original: <em>preconception_repeat_cesarean.html</em></p>
-    <p>When ready, update <code>landing-page/data/presentations.json</code> with the deck metadata.</p>
-  </main>
+    <div class="divider"></div>
+    <p class="subtitle">Multiple Prior Cesarean Deliveries</p>
+    <p class="subtitle" style="font-size:1rem; margin-top:0.4rem;">Risk Quantification &amp; Optimization Strategy</p>
+    <div style="display:flex; gap:0.6rem; margin-top:1.6rem; flex-wrap:wrap; justify-content:center;">
+      <span class="badge acog">ACOG</span>
+      <span class="badge smfm">SMFM</span>
+      <span class="badge warn">High-Risk OB</span>
+    </div>
+    <p class="byline">DoctorsWhoCode.blog &nbsp;·&nbsp; OpenMFM.org</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 2 — GOALS OF PRECONCEPTION ASSESSMENT
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Preconception Assessment</div>
+    <h2>Goals of Counseling</h2>
+    <div class="card-grid cols-2" style="max-width:780px;">
+      <div class="card accent">
+        <div class="card-icon">🎓</div>
+        <div class="card-title">Educate</div>
+        <div class="card-body">Inform on implications for future pregnancy</div>
+      </div>
+      <div class="card accent">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Assess</div>
+        <div class="card-body">Customize individual risk profile</div>
+      </div>
+      <div class="card warn">
+        <div class="card-icon">⚙️</div>
+        <div class="card-title">Optimize</div>
+        <div class="card-body">Intervene medically prior to conception</div>
+      </div>
+      <div class="card safe">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">Goal</div>
+        <div class="card-body">Minimize likelihood of poor perinatal outcomes</div>
+      </div>
+    </div>
+    <div class="source">ACOG Practice Bulletin; Preconception Care Guidelines</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 3 — COMPOUNDING SURGICAL RISKS
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Surgical Risk</div>
+    <h2>Compounding Risks with Each Cesarean</h2>
+    <div class="stat-row">
+      <div class="stat-box danger">
+        <div class="stat-num">≥4</div>
+        <div class="stat-desc">Prior Cesarean Deliveries</div>
+      </div>
+      <div class="stat-box warn">
+        <div class="stat-num">↑↑</div>
+        <div class="stat-desc">Progressive Maternal Morbidity</div>
+      </div>
+      <div class="stat-box gold">
+        <div class="stat-num">5th</div>
+        <div class="stat-desc">Anticipated Abdominal Surgery</div>
+      </div>
+    </div>
+    <p style="font-size:1rem; color:var(--muted); margin-top:1.4rem; max-width:680px; text-align:center; line-height:1.5;">
+      Serious maternal morbidity increases progressively with each prior cesarean delivery. Future reproductive plans are a central focus of counseling.
+    </p>
+    <div class="source">Silver RM et al. Obstet Gynecol. 2006</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 4 — PLACENTA ACCRETA SPECTRUM
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Placenta Accreta Spectrum</div>
+    <h2>PAS: The Primary Threat</h2>
+    <div class="card-grid" style="grid-template-columns:1fr; max-width:700px;">
+      <div class="card danger">
+        <div class="card-icon">🔴</div>
+        <div class="card-title">Most Life-Threatening Complication</div>
+        <div class="card-body">Risk shifts drastically based on placental location in the subsequent pregnancy.</div>
+      </div>
+      <div class="card warn">
+        <div class="card-icon">⚠️</div>
+        <div class="card-title">Anterior Placenta Previa</div>
+        <div class="card-body">Greater than <strong>50% risk</strong> of cesarean hysterectomy in the next pregnancy.</div>
+      </div>
+      <div class="card accent">
+        <div class="card-icon">🔬</div>
+        <div class="card-title">Mechanism</div>
+        <div class="card-body">Abnormal trophoblast invasion through prior uterine scar(s).</div>
+      </div>
+    </div>
+    <div class="source">Marshall NE et al. AJOG 2011; ACOG PB 183</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 5 — PAS RISK TABLE
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Quantitative Risk</div>
+    <h2>PAS Risk: Previa + ≥3 Prior Cesareans</h2>
+    <table class="risk-table">
+      <thead>
+        <tr>
+          <th>Complication</th>
+          <th>No Prior CD (Baseline)</th>
+          <th>≥3 Prior CDs + Previa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Placenta Accreta</td>
+          <td class="val-safe">3.3 – 4%</td>
+          <td class="val-danger">50 – 67%</td>
+        </tr>
+        <tr>
+          <td>Cesarean Hysterectomy</td>
+          <td class="val-safe">0.7 – 4%</td>
+          <td class="val-danger">50 – 67%</td>
+        </tr>
+        <tr>
+          <td>Composite Maternal Morbidity</td>
+          <td class="val-safe">15%</td>
+          <td class="val-danger">83% (OR 33.6; 95% CI 14.6–77.4)</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="source">Marshall NE et al. AJOG 2011</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 6 — SURGICAL INJURY & ADHESIONS
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Surgical Morbidity</div>
+    <h2>Adhesive Disease &amp; Visceral Injury</h2>
+    <div class="stat-row" style="margin-bottom:1.2rem;">
+      <div class="stat-box safe">
+        <div class="stat-num">0.6%</div>
+        <div class="stat-desc">Bladder Injury<br/>Standard Repeat CD</div>
+      </div>
+      <div class="stat-box danger">
+        <div class="stat-num">11.7%</div>
+        <div class="stat-desc">Bladder Injury<br/>PAS Cases</div>
+      </div>
+    </div>
+    <div class="card-grid cols-2" style="max-width:780px;">
+      <div class="card warn">
+        <div class="card-icon">🔗</div>
+        <div class="card-title">Dense Adhesions</div>
+        <div class="card-body">Distort anatomy; increase operative time and blood loss.</div>
+      </div>
+      <div class="card warn">
+        <div class="card-icon">🫀</div>
+        <div class="card-title">Bowel Injury</div>
+        <div class="card-body">Risk similarly elevated in repeat abdominal surgery.</div>
+      </div>
+    </div>
+    <div class="source">Nisenblat V et al. BJOG 2006; ACOG PB 183</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 7 — UTERINE RUPTURE
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Uterine Rupture</div>
+    <h2>Absolute Contraindication to Labor</h2>
+    <div class="card-grid" style="grid-template-columns:1fr; max-width:680px;">
+      <div class="card danger">
+        <div class="card-icon">🚫</div>
+        <div class="card-title">≥4 Prior Hysterotomies</div>
+        <div class="card-body"><strong>Absolute contraindication</strong> to trial of labor. Spontaneous labor must be precluded.</div>
+      </div>
+      <div class="card warn">
+        <div class="card-icon">📅</div>
+        <div class="card-title">Delivery Plan</div>
+        <div class="card-body">Elective, <strong>scheduled</strong> repeat cesarean delivery prior to onset of labor.</div>
+      </div>
+      <div class="card accent">
+        <div class="card-icon">📋</div>
+        <div class="card-title">Operative Reports</div>
+        <div class="card-body">Acquire and review all prior reports: incision type, adhesions, surgical complexity.</div>
+      </div>
+    </div>
+    <div class="source">ACOG PB 205; SMFM Consult Series</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 8 — MATERNAL OPTIMIZATION
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Preconception Optimization</div>
+    <h2>Maternal Optimization Prior to Conception</h2>
+    <div class="card-grid cols-3" style="max-width:900px;">
+      <div class="card warn">
+        <div class="card-icon">⚖️</div>
+        <div class="card-title">BMI / Obesity</div>
+        <div class="card-body">Individualized nutritional counseling. Excess GWG compounds surgical risk.</div>
+      </div>
+      <div class="card warn">
+        <div class="card-icon">💉</div>
+        <div class="card-title">Anemia</div>
+        <div class="card-body">Correct baseline Hgb. Maximize stores to reduce transfusion need.</div>
+      </div>
+      <div class="card warn">
+        <div class="card-icon">🫀</div>
+        <div class="card-title">Comorbidities</div>
+        <div class="card-body">Assess and manage hypertension, diabetes, and other medical conditions.</div>
+      </div>
+    </div>
+    <p style="font-size:0.9rem; color:var(--muted); margin-top:1.2rem; max-width:700px; text-align:center; line-height:1.5;">
+      Optimizing health prior to pregnancy improves both pregnancy and lifelong health outcomes.
+    </p>
+    <div class="source">ACOG CO 762; March of Dimes Preconception Guidelines</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 9 — WEIGHT MANAGEMENT
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Weight Management</div>
+    <h2>Gestational Weight Gain: Compounding Risks</h2>
+    <div class="card-grid cols-2" style="max-width:800px;">
+      <div class="card danger">
+        <div class="card-icon">📈</div>
+        <div class="card-title">Hypertensive Disorders</div>
+        <div class="card-body">Excess GWG significantly increases preeclampsia and gestational hypertension risk.</div>
+      </div>
+      <div class="card danger">
+        <div class="card-icon">🩸</div>
+        <div class="card-title">Gestational Diabetes</div>
+        <div class="card-body">Obesity amplifies GDM risk, adding to surgical complexity.</div>
+      </div>
+      <div class="card warn">
+        <div class="card-icon">👶</div>
+        <div class="card-title">Macrosomia</div>
+        <div class="card-body">Increases operative difficulty and blood loss during cesarean.</div>
+      </div>
+      <div class="card warn">
+        <div class="card-icon">⚖️</div>
+        <div class="card-title">Long-term Obesity</div>
+        <div class="card-body">Excess GWG compounds hazards of a 5th surgical delivery.</div>
+      </div>
+    </div>
+    <div class="source">ACOG CO 548; Siega-Riz AM et al. AJOG 2009</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 10 — REPRODUCTIVE LIFE PLANNING
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Reproductive Planning</div>
+    <h2>Reproductive Life Planning</h2>
+    <div class="card-grid" style="grid-template-columns:1fr; max-width:680px;">
+      <div class="card accent">
+        <div class="card-icon">👨‍👩‍👧‍👦</div>
+        <div class="card-title">Confirm Desired Family Size</div>
+        <div class="card-body">Reproductive goals must be explicitly discussed prior to any future conception.</div>
+      </div>
+      <div class="card safe">
+        <div class="card-icon">✂️</div>
+        <div class="card-title">Bilateral Salpingectomy</div>
+        <div class="card-body"><strong>Highly recommended</strong> at time of next cesarean delivery if family is complete. Also reduces ovarian cancer risk.</div>
+      </div>
+      <div class="card warn">
+        <div class="card-icon">📝</div>
+        <div class="card-title">Advance Counseling</div>
+        <div class="card-body">Document discussion of sterilization in preconception visit note.</div>
+      </div>
+    </div>
+    <div class="source">ACOG CO 774; SMFM Consult Series</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 11 — CLINICAL DIRECTIVES: FUTURE PREGNANCY
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Future Pregnancy Management</div>
+    <h2>Clinical Directives If Conception Occurs</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot" style="background:var(--accent);"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-heading">First Trimester — Scar Ectopic Surveillance</div>
+          <div class="tl-body">Transvaginal ultrasound to rule out cesarean scar ectopic pregnancy and map gestational sac location.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot" style="background:var(--warn);"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-heading">18–20 Weeks — PAS Screening</div>
+          <div class="tl-body">Detailed ultrasound for placenta previa and sonographic markers of PAS (lacunae, loss of clear zone, bladder wall irregularity).</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot" style="background:var(--danger);"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-heading">PAS Suspected — Multidisciplinary Referral</div>
+          <div class="tl-body">MFM specialist, tertiary center with massive transfusion protocol, GYN-ONC, urology, and interventional radiology.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot" style="background:var(--safe);"></div></div>
+        <div class="tl-content">
+          <div class="tl-heading">Delivery Planning</div>
+          <div class="tl-body">Scheduled cesarean 37+0–38+0 wks (standard); 34+0–35+6 wks if PAS confirmed.</div>
+        </div>
+      </div>
+    </div>
+    <div class="source">ACOG PB 183; SMFM PAS Consult Series 2018</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 12 — DELIVERY TIMING & CONSENT
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Delivery Planning</div>
+    <h2>Delivery Timing &amp; Informed Consent</h2>
+    <div class="card-grid cols-2" style="max-width:860px;">
+      <div class="card accent">
+        <div class="card-icon">📅</div>
+        <div class="card-title">Standard Scheduled CD</div>
+        <div class="card-body"><strong>37+0 – 38+0 weeks</strong> gestation to preclude spontaneous labor.</div>
+      </div>
+      <div class="card danger">
+        <div class="card-icon">⚡</div>
+        <div class="card-title">PAS Confirmed</div>
+        <div class="card-body"><strong>34+0 – 35+6 weeks</strong> to ensure a controlled surgical environment.</div>
+      </div>
+      <div class="card warn" style="grid-column: 1 / -1;">
+        <div class="card-icon">📋</div>
+        <div class="card-title">Advance Surgical Consent Must Include</div>
+        <div class="card-body" style="display:flex; gap:2rem; flex-wrap:wrap;">
+          <span>🩸 Massive Hemorrhage</span>
+          <span>🫀 Visceral Organ Injury</span>
+          <span>🔪 Unplanned Hysterectomy</span>
+          <span>🏥 ICU Admission</span>
+        </div>
+      </div>
+    </div>
+    <div class="source">ACOG PB 183; SMFM Consult 2018</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SLIDE 13 — SUMMARY / ACTION CHECKLIST
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Summary</div>
+    <h2>Preconception Action Checklist</h2>
+    <table class="risk-table" style="max-width:860px;">
+      <thead>
+        <tr>
+          <th>Action Item</th>
+          <th>Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Review all prior operative reports</td>
+          <td><span class="badge danger">Mandatory</span></td>
+        </tr>
+        <tr>
+          <td>Counsel on PAS / hysterectomy risk</td>
+          <td><span class="badge danger">Mandatory</span></td>
+        </tr>
+        <tr>
+          <td>Establish absolute contraindication to labor</td>
+          <td><span class="badge danger">Mandatory</span></td>
+        </tr>
+        <tr>
+          <td>Correct anemia; optimize BMI, BP, glucose</td>
+          <td><span class="badge warn">High Priority</span></td>
+        </tr>
+        <tr>
+          <td>Discuss reproductive life planning / salpingectomy</td>
+          <td><span class="badge warn">High Priority</span></td>
+        </tr>
+        <tr>
+          <td>Plan early first-trimester ultrasound in next pregnancy</td>
+          <td><span class="badge acog">Standard of Care</span></td>
+        </tr>
+        <tr>
+          <td>Identify tertiary center for delivery if PAS suspected</td>
+          <td><span class="badge acog">Standard of Care</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="source">ACOG / SMFM / NICE Guidelines</div>
+  </div>
+
+</div><!-- /#deck -->
+
+<!-- ── Navigation Bar ─────────────────────────────────────────── -->
+<div id="nav">
+  <button id="prevBtn" title="Previous (←)">&#8592;</button>
+  <span id="counter">1 / 13</span>
+  <button id="nextBtn" title="Next (→)">&#8594;</button>
+</div>
+
+<script>
+  (function () {
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const counter = document.getElementById('counter');
+    let current = 0;
+
+    function show(idx) {
+      slides[current].classList.remove('active');
+      current = (idx + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      counter.textContent = (current + 1) + ' / ' + slides.length;
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', () => show(current + 1));
+    document.getElementById('prevBtn').addEventListener('click', () => show(current - 1));
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); show(current + 1); }
+      if (e.key === 'ArrowLeft')                   { e.preventDefault(); show(current - 1); }
+    });
+
+    // Touch / swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 50) show(dx < 0 ? current + 1 : current - 1);
+    }, { passive: true });
+
+    show(0);
+  })();
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
 </body>
 </html>
