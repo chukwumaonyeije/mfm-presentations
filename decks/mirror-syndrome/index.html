@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mirror Syndrome (Ballantyne Syndrome) — MFM Clinical Discussion</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent:    #58a6ff;
+      --green:     #3fb950;
+      --orange:    #d29922;
+      --red:       #f85149;
+      --purple:    #bc8cff;
+      --teal:      #39d353;
+      --gold:      #e3b341;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Deck & Slides ────────────────────────────────────────── */
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Navigation ───────────────────────────────────────────── */
+    #nav {
+      position: fixed;
+      bottom: 1.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 100;
+    }
+    #nav button {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    #nav button:hover { background: #21262d; }
+    #slide-counter {
+      font-size: 0.85rem;
+      color: var(--muted);
+      min-width: 70px;
+      text-align: center;
+    }
+
+    /* ── Progress Bar ─────────────────────────────────────────── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: var(--accent);
+      transition: width 0.35s ease;
+      z-index: 100;
+    }
+
+    /* ── Branding Footer ──────────────────────────────────────── */
+    .brand-footer {
+      position: fixed;
+      bottom: 1.4rem;
+      right: 2rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Slide Number Badge ───────────────────────────────────── */
+    .slide-num {
+      position: fixed;
+      top: 1rem;
+      right: 1.5rem;
+      font-size: 0.72rem;
+      color: var(--border);
+    }
+
+    /* ── Typography ───────────────────────────────────────────── */
+    .slide-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    h1 {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--text);
+    }
+    h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 1.2rem;
+    }
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--accent);
+    }
+    .subtitle {
+      font-size: 1.25rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      font-weight: 300;
+    }
+
+    /* ── Cards & Grids ────────────────────────────────────────── */
+    .card-grid {
+      display: grid;
+      gap: 1rem;
+      width: 100%;
+      max-width: 900px;
+    }
+    .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .card-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.5rem;
+    }
+    .card .icon { font-size: 2rem; }
+    .card .label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .card .value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .card .desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* ── Stat Callout ─────────────────────────────────────────── */
+    .stat-row {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 900px;
+    }
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.6rem;
+      text-align: center;
+      min-width: 160px;
+    }
+    .stat-box .num {
+      font-size: 2.4rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .stat-box .lbl {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Flow Diagram ─────────────────────────────────────────── */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 960px;
+    }
+    .flow-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      font-size: 0.88rem;
+      text-align: center;
+      min-width: 120px;
+      max-width: 150px;
+      line-height: 1.35;
+    }
+    .flow-arrow {
+      color: var(--accent);
+      font-size: 1.4rem;
+      padding: 0 0.3rem;
+    }
+
+    /* ── Table ────────────────────────────────────────────────── */
+    .diff-table {
+      width: 100%;
+      max-width: 860px;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .diff-table th {
+      background: var(--surface);
+      color: var(--accent);
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-weight: 500;
+      border-bottom: 2px solid var(--border);
+    }
+    .diff-table td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .diff-table tr:last-child td { border-bottom: none; }
+    .diff-table .param { color: var(--muted); font-size: 0.82rem; }
+    .mirror-col { color: var(--orange); }
+    .pe-col { color: var(--accent); }
+
+    /* ── Split Callout ────────────────────────────────────────── */
+    .split-callout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      max-width: 800px;
+      width: 100%;
+    }
+    .callout-box {
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+      text-align: center;
+    }
+    .callout-box .big { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .callout-box .sub { font-size: 0.85rem; color: var(--muted); }
+    .callout-mirror { background: rgba(210,153,34,0.12); border: 1px solid var(--orange); }
+    .callout-mirror .big { color: var(--orange); }
+    .callout-pe { background: rgba(88,166,255,0.1); border: 1px solid var(--accent); }
+    .callout-pe .big { color: var(--accent); }
+
+    /* ── Decision Tree ────────────────────────────────────────── */
+    .decision-tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      max-width: 700px;
+      width: 100%;
+    }
+    .dt-node {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.65rem 1.4rem;
+      font-size: 0.9rem;
+      text-align: center;
+      width: 100%;
+    }
+    .dt-node.question { border-color: var(--accent); color: var(--accent); }
+    .dt-node.action-yes { border-color: var(--green); color: var(--green); }
+    .dt-node.action-no  { border-color: var(--red);   color: var(--red);   }
+    .dt-branches {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      width: 100%;
+    }
+    .dt-branch-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 0.3rem;
+    }
+    .dt-arrow { color: var(--muted); font-size: 1.2rem; }
+
+    /* ── Bullet List ──────────────────────────────────────────── */
+    .bullet-list {
+      list-style: none;
+      max-width: 800px;
+      width: 100%;
+    }
+    .bullet-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      padding: 0.55rem 0;
+      font-size: 1rem;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.45;
+    }
+    .bullet-list li:last-child { border-bottom: none; }
+    .bullet-list .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-top: 0.45rem;
+      flex-shrink: 0;
+    }
+    .bullet-list .dot.green { background: var(--green); }
+    .bullet-list .dot.orange { background: var(--orange); }
+    .bullet-list .dot.red { background: var(--red); }
+
+    /* ── Counseling Panels ────────────────────────────────────── */
+    .counsel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      max-width: 900px;
+      width: 100%;
+    }
+    .counsel-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 1.3rem;
+    }
+    .counsel-panel .q {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+    .counsel-panel .a {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* ── Takeaway List ────────────────────────────────────────── */
+    .takeaway-list {
+      list-style: none;
+      max-width: 820px;
+      width: 100%;
+    }
+    .takeaway-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.65rem 0;
+      font-size: 1rem;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.45;
+    }
+    .takeaway-list li:last-child { border-bottom: none; }
+    .takeaway-list .num {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 2rem;
+      line-height: 1.2;
+    }
+
+    /* ── Etiology Bar Chart ───────────────────────────────────── */
+    .etio-bars { max-width: 700px; width: 100%; }
+    .etio-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.7rem;
+    }
+    .etio-label { font-size: 0.85rem; min-width: 220px; color: var(--text); }
+    .etio-bar-wrap { flex: 1; background: var(--border); border-radius: 4px; height: 18px; }
+    .etio-bar { height: 18px; border-radius: 4px; }
+    .etio-pct { font-size: 0.82rem; color: var(--muted); min-width: 36px; text-align: right; }
+
+    /* ── Body Diagram ─────────────────────────────────────────── */
+    .body-diagram {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      max-width: 900px;
+      width: 100%;
+    }
+    .body-icon { font-size: 5rem; line-height: 1; }
+    .finding-list { list-style: none; flex: 1; }
+    .finding-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.45rem 0;
+      font-size: 0.92rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .finding-list li:last-child { border-bottom: none; }
+    .finding-pct {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.5rem;
+      font-size: 0.78rem;
+      color: var(--orange);
+      min-width: 50px;
+      text-align: center;
+    }
+
+    /* ── Ref Slide ────────────────────────────────────────────── */
+    .ref-list {
+      list-style: none;
+      max-width: 820px;
+      width: 100%;
+    }
+    .ref-list li {
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.4;
+    }
+    .ref-list li:last-child { border-bottom: none; }
+
+    /* ── Accent Colors ────────────────────────────────────────── */
+    .accent  { color: var(--accent); }
+    .green   { color: var(--green); }
+    .orange  { color: var(--orange); }
+    .red     { color: var(--red); }
+    .muted   { color: var(--muted); }
+    .gold    { color: var(--gold); }
+
+    /* ── Title Slide Specific ─────────────────────────────────── */
+    .title-slide { background: radial-gradient(ellipse at 60% 40%, #1a2332 0%, var(--bg) 70%); }
+    .title-slide h1 { font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 200; }
+    .title-divider {
+      width: 80px; height: 3px;
+      background: var(--accent);
+      margin: 1rem 0;
+      border-radius: 2px;
+    }
+    .title-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    .title-meta span {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 768px) {
+      html, body {
+        height: 100dvh;
+        overflow: hidden;
+      }
+
+      .deck {
+        height: 100dvh;
+      }
+
+      .slide {
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 2rem 1rem 6.5rem;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .slide.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .slide-tag,
+      .kicker {
+        font-size: 0.68rem;
+      }
+
+      .title-slide {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      .title-slide h1 {
+        font-size: clamp(2.3rem, 13vw, 3.5rem);
+      }
+
+      h2 {
+        font-size: clamp(1.6rem, 8vw, 2.35rem);
+      }
+
+      .card-grid,
+      .card-grid.cols-2,
+      .card-grid.cols-3,
+      .card-grid.cols-4,
+      .hydrops-fetus,
+      .diagnostic-split,
+      .counsel-grid,
+      .dt-branches,
+      .body-diagram {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+      }
+
+      .card,
+      .counsel-panel {
+        padding: 1rem;
+      }
+
+      .diff-table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .bullet-list li,
+      .takeaway-list li {
+        font-size: 0.92rem;
+      }
+
+      .etio-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+
+      .etio-label,
+      .etio-pct {
+        min-width: 0;
+        text-align: left;
+      }
+
+      #nav {
+        bottom: 0.75rem;
+        width: calc(100% - 2rem);
+        justify-content: center;
+        gap: 0.6rem;
+      }
+
+      #nav button {
+        padding: 0.5rem 0.8rem;
+      }
+
+      .brand-footer {
+        left: 1rem;
+        right: 1rem;
+        bottom: 4.25rem;
+        text-align: center;
+      }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/mirror-syndrome/index.html">
+<meta name="description" content="Clinician-focused slide deck on mirror syndrome in pregnancy, connecting fetal or placental hydrops with maternal edema, hemodilution, and preeclampsia-like disease. Covers diagnostic pattern recognition, differential diagnosis, maternal risk assessment, fetal evaluation, counseling, delivery decision-making, and postpartum resolution.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Mirror Syndrome, Ballantyne Syndrome, Hydrops Fetalis, Preeclampsia, Maternal Edema, Placental Dysfunction, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/mirror-syndrome/index.html">
+<meta property="og:title" content="Mirror Syndrome (Ballantyne Syndrome) - Provider Education | OpenMFM">
+<meta property="og:description" content="Clinician-focused slide deck on mirror syndrome in pregnancy, connecting fetal or placental hydrops with maternal edema, hemodilution, and preeclampsia-like disease. Covers diagnostic pattern recognition, differential diagnosis, maternal risk assessment, fetal evaluation, counseling, delivery decision-making, and postpartum resolution.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mirror Syndrome (Ballantyne Syndrome) - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Clinician-focused slide deck on mirror syndrome in pregnancy, connecting fetal or placental hydrops with maternal edema, hemodilution, and preeclampsia-like disease. Covers diagnostic pattern recognition, differential diagnosis, maternal risk assessment, fetal evaluation, counseling, delivery decision-making, and postpartum resolution.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Mirror Syndrome (Ballantyne Syndrome) - Provider Education",
+  "description": "Clinician-focused slide deck on mirror syndrome in pregnancy, connecting fetal or placental hydrops with maternal edema, hemodilution, and preeclampsia-like disease. Covers diagnostic pattern recognition, differential diagnosis, maternal risk assessment, fetal evaluation, counseling, delivery decision-making, and postpartum resolution.",
+  "url": "https://openmfm.org/decks/mirror-syndrome/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-06-09",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Mirror Syndrome (Ballantyne Syndrome) - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Mirror Syndrome, Ballantyne Syndrome, Hydrops Fetalis, Preeclampsia, Maternal Edema, Placental Dysfunction, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div class="brand-footer">DoctorsWhoCode.blog &nbsp;|&nbsp; OpenMFM.org</div>
+
+<div class="deck">
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 1 — TITLE                                           -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide title-slide active">
+    <div class="slide-tag">Maternal-Fetal Medicine &nbsp;·&nbsp; Clinical Discussion</div>
+    <h1>Mirror Syndrome</h1>
+    <div class="title-divider"></div>
+    <p class="subtitle">Ballantyne Syndrome: A Triad of Maternal, Fetal, and Placental Edema</p>
+    <div class="title-meta">
+      <span>Dr. C. Onyeije, MFM</span>
+      <span>First described 1892</span>
+      <span>Rare · Life-Threatening</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 2 — DEFINITION                                      -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Definition</div>
+    <h2>What Is Mirror Syndrome?</h2>
+    <div class="card-grid cols-3" style="max-width:860px;">
+      <div class="card">
+        <div class="icon">🤰</div>
+        <div class="label">Mother</div>
+        <div class="desc">Systemic edema, hemodilution, hypertension</div>
+      </div>
+      <div class="card" style="border-color:var(--orange);">
+        <div class="icon">🫀</div>
+        <div class="label">Placenta</div>
+        <div class="desc">Massive placentomegaly with fluid collection</div>
+      </div>
+      <div class="card">
+        <div class="icon">👶</div>
+        <div class="label">Fetus</div>
+        <div class="desc">Hydrops fetalis — ≥2 body cavity effusions</div>
+      </div>
+    </div>
+    <p style="font-size:0.9rem; color:var(--muted); margin-top:1.2rem; max-width:700px; text-align:center;">
+      Maternal fluid retention <span class="accent">"mirrors"</span> fetal hydrops — hence the name. First described by Ballantyne in 1892.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 3 — PATHOPHYSIOLOGY                                 -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Pathophysiology</div>
+    <h2>How It Develops</h2>
+    <div class="flow">
+      <div class="flow-step" style="border-color:var(--red);">Severe<br/>Fetal Hydrops</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color:var(--orange);">Placentomegaly<br/>+ Edema</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Anti-angiogenic<br/>Factor Release</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Endothelial<br/>Dysfunction</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color:var(--accent);">Massive Maternal<br/>Fluid Shifts</div>
+    </div>
+    <p style="font-size:0.85rem; color:var(--muted); margin-top:1.4rem; max-width:700px; text-align:center;">
+      Placental hyperplacentosis drives elevated hCG and release of vasoactive mediators, producing systemic maternal edema.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 4 — EPIDEMIOLOGY                                    -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Epidemiology</div>
+    <h2>How Common?</h2>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="num accent">~29%</div>
+        <div class="lbl">of severe fetal hydrops pregnancies</div>
+      </div>
+      <div class="stat-box">
+        <div class="num orange">22–28 wks</div>
+        <div class="lbl">Mean gestational age at onset</div>
+      </div>
+      <div class="stat-box">
+        <div class="num red">67.2%</div>
+        <div class="lbl">Fetal mortality rate</div>
+      </div>
+      <div class="stat-box">
+        <div class="num" style="color:var(--purple);">Rare</div>
+        <div class="lbl">Exact incidence unknown</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 5 — ETIOLOGY                                        -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Etiology</div>
+    <h2>Underlying Causes of Fetal Hydrops</h2>
+    <div class="etio-bars">
+      <div class="etio-row">
+        <div class="etio-label">Rh Isoimmunization</div>
+        <div class="etio-bar-wrap"><div class="etio-bar" style="width:29%;background:var(--orange);"></div></div>
+        <div class="etio-pct">29%</div>
+      </div>
+      <div class="etio-row">
+        <div class="etio-label">Twin-Twin Transfusion Syndrome (TTTS)</div>
+        <div class="etio-bar-wrap"><div class="etio-bar" style="width:18%;background:var(--accent);"></div></div>
+        <div class="etio-pct">18%</div>
+      </div>
+      <div class="etio-row">
+        <div class="etio-label">Parvovirus B19</div>
+        <div class="etio-bar-wrap"><div class="etio-bar" style="width:16%;background:var(--purple);"></div></div>
+        <div class="etio-pct">16%</div>
+      </div>
+      <div class="etio-row">
+        <div class="etio-label">Structural Anomalies (Ebstein, SCT)</div>
+        <div class="etio-bar-wrap"><div class="etio-bar" style="width:37%;background:var(--muted);"></div></div>
+        <div class="etio-pct">Other</div>
+      </div>
+    </div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-top:1rem;text-align:center;">
+      Any cause of immune or non-immune hydrops may trigger Mirror syndrome.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 6 — MATERNAL PRESENTATION                           -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Clinical Presentation</div>
+    <h2>Maternal Signs &amp; Symptoms</h2>
+    <div class="body-diagram">
+      <div class="body-icon">🤰</div>
+      <ul class="finding-list">
+        <li><span class="finding-pct">62.2%</span> Maternal edema (face, limbs, generalized)</li>
+        <li><span class="finding-pct">54.9%</span> Hypoalbuminemia</li>
+        <li><span class="finding-pct">39.0%</span> Anemia — secondary to hemodilution</li>
+        <li><span class="finding-pct">39.0%</span> New-onset hypertension</li>
+        <li><span class="finding-pct">Elevated</span> Serum hCG (hyperplacentosis)</li>
+        <li><span class="finding-pct">Variable</span> Headache, visual disturbances, elevated LFTs</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 7 — FETAL & PLACENTAL FINDINGS                      -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Fetal &amp; Placental Findings</div>
+    <h2>Fetal &amp; Placental Findings</h2>
+    <div class="card-grid cols-2" style="max-width:820px;">
+      <div class="card" style="border-color:var(--orange);">
+        <div class="icon">👶</div>
+        <div class="label">Fetal Hydrops</div>
+        <div class="desc">≥2 body cavity effusions<br/>Mean onset: <span class="orange">29 weeks</span> (vs. 31 wks in non-mirror hydrops)</div>
+      </div>
+      <div class="card" style="border-color:var(--accent);">
+        <div class="icon">📊</div>
+        <div class="label">Edema Severity</div>
+        <div class="desc">Fetal edema-to-BPD ratio:<br/><span class="accent">0.23</span> (Mirror) vs. 0.16 (non-mirror)</div>
+      </div>
+      <div class="card" style="border-color:var(--purple);">
+        <div class="icon">🫁</div>
+        <div class="label">Pleural / Ascites</div>
+        <div class="desc">Bilateral pleural effusions, ascites, skin edema, pericardial effusion</div>
+      </div>
+      <div class="card" style="border-color:var(--red);">
+        <div class="icon">🟥</div>
+        <div class="label">Placentomegaly</div>
+        <div class="desc">Massive placental edema with fluid collection — a hallmark finding</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 8 — DIFFERENTIAL DIAGNOSIS TABLE                    -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Differential Diagnosis</div>
+    <h2>Mirror Syndrome vs. Severe Preeclampsia</h2>
+    <table class="diff-table">
+      <thead>
+        <tr>
+          <th class="param">Parameter</th>
+          <th class="mirror-col">Mirror Syndrome</th>
+          <th class="pe-col">Severe Preeclampsia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="param">Hemodynamics</td>
+          <td class="mirror-col">Hemodilution ↓ Hct</td>
+          <td class="pe-col">Hemoconcentration ↑ Hct</td>
+        </tr>
+        <tr>
+          <td class="param">Oncotic Pressure</td>
+          <td class="mirror-col">Severe hypoalbuminemia</td>
+          <td class="pe-col">Mild–moderate decrease</td>
+        </tr>
+        <tr>
+          <td class="param">Fetal Status</td>
+          <td class="mirror-col">Always severe hydrops</td>
+          <td class="pe-col">IUGR or normal</td>
+        </tr>
+        <tr>
+          <td class="param">Placenta</td>
+          <td class="mirror-col">Placentomegaly + edema</td>
+          <td class="pe-col">Infarctions / insufficiency</td>
+        </tr>
+        <tr>
+          <td class="param">Uric Acid</td>
+          <td class="mirror-col">Normal–mildly elevated</td>
+          <td class="pe-col">Severely elevated</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 9 — DIAGNOSTIC HALLMARK                             -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Diagnostic Hallmark</div>
+    <h2>The Key Distinguishing Feature</h2>
+    <div class="split-callout">
+      <div class="callout-box callout-mirror">
+        <div class="big">HEMODILUTION</div>
+        <div style="font-size:1.1rem;color:var(--orange);margin:0.3rem 0;">↓ Hct &nbsp;·&nbsp; ↓ Albumin</div>
+        <div class="sub">Mirror Syndrome<br/>Anemia from fluid overload</div>
+      </div>
+      <div class="callout-box callout-pe">
+        <div class="big">HEMOCONCENTRATION</div>
+        <div style="font-size:1.1rem;color:var(--accent);margin:0.3rem 0;">↑ Hct &nbsp;·&nbsp; ↑ Uric Acid</div>
+        <div class="sub">Severe Preeclampsia<br/>Volume depletion</div>
+      </div>
+    </div>
+    <p style="font-size:0.85rem;color:var(--muted);margin-top:1.2rem;max-width:700px;text-align:center;">
+      Always evaluate for fetal hydrops when maternal edema is atypical or does not fit classic preeclampsia.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 10 — MANAGEMENT ALGORITHM                           -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Management</div>
+    <h2>Management Framework</h2>
+    <div class="decision-tree">
+      <div class="dt-node">1. Confirm diagnosis: fetal hydrops + maternal edema triad</div>
+      <div class="dt-arrow">↓</div>
+      <div class="dt-node">2. Determine etiology of fetal hydrops (Rh, TTTS, Parvo B19, structural)</div>
+      <div class="dt-arrow">↓</div>
+      <div class="dt-node">3. Maternal stabilization — ICU-level hemodynamic monitoring</div>
+      <div class="dt-arrow">↓</div>
+      <div class="dt-node question">Is the hydrops etiology reversible in utero?</div>
+      <div class="dt-branches">
+        <div>
+          <div class="dt-branch-label">YES →</div>
+          <div class="dt-node action-yes">Fetal therapy<br/>(IUT, fetoscopic laser, cardiac Rx)</div>
+        </div>
+        <div>
+          <div class="dt-branch-label">NO →</div>
+          <div class="dt-node action-no">Delivery or pregnancy termination<br/>regardless of gestational age</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 11 — FETAL THERAPY OPTIONS                          -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Fetal Therapy</div>
+    <h2>In-Utero Fetal Therapy Options</h2>
+    <div class="card-grid cols-3" style="max-width:900px;">
+      <div class="card" style="border-color:var(--green);">
+        <div class="icon">🩸</div>
+        <div class="label">Intrauterine Transfusion</div>
+        <div class="desc">Parvovirus B19<br/>Rh alloimmunization</div>
+      </div>
+      <div class="card" style="border-color:var(--accent);">
+        <div class="icon">🔬</div>
+        <div class="label">Fetoscopic Laser Ablation</div>
+        <div class="desc">Twin-Twin Transfusion Syndrome (TTTS)</div>
+      </div>
+      <div class="card" style="border-color:var(--purple);">
+        <div class="icon">💊</div>
+        <div class="label">Fetal Cardiac Therapy</div>
+        <div class="desc">Arrhythmia-driven hydrops<br/>Transplacental antiarrhythmics</div>
+      </div>
+    </div>
+    <p style="font-size:0.88rem;color:var(--green);margin-top:1.2rem;max-width:700px;text-align:center;">
+      Successful fetal therapy → reliable resolution of maternal symptoms
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 12 — DELIVERY INDICATIONS                           -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Delivery Indications</div>
+    <h2>When to Deliver</h2>
+    <ul class="bullet-list" style="max-width:740px;">
+      <li><span class="dot red"></span>Maternal pulmonary edema or cardiac decompensation</li>
+      <li><span class="dot red"></span>Refractory hypertension unresponsive to therapy</li>
+      <li><span class="dot orange"></span>Non-survivable fetal anomaly — lethal condition</li>
+      <li><span class="dot orange"></span>Failed or ineligible for in-utero fetal therapy</li>
+      <li><span class="dot green"></span>Delivery reliably resolves maternal fluid retention over days</li>
+    </ul>
+    <p style="font-size:0.85rem;color:var(--muted);margin-top:1rem;max-width:700px;text-align:center;">
+      Maternal safety strictly dictates the timeline for intervention — regardless of gestational age.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 13 — PATIENT COUNSELING                             -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Patient Counseling</div>
+    <h2>Counseling the Patient</h2>
+    <div class="counsel-grid">
+      <div class="counsel-panel">
+        <div class="q">What is this?</div>
+        <div class="a">Your body is retaining fluid as a direct response to your baby's severely swollen condition and placenta.</div>
+      </div>
+      <div class="counsel-panel">
+        <div class="q">Why does it matter?</div>
+        <div class="a">The fluid overload threatens your heart and lungs. <span class="accent">Your safety is the absolute priority.</span></div>
+      </div>
+      <div class="counsel-panel">
+        <div class="q">What is the prognosis?</div>
+        <div class="a">Fetal mortality is high — up to <span class="red">67%</span>. Survival depends entirely on whether the cause of fetal swelling can be reversed.</div>
+      </div>
+      <div class="counsel-panel">
+        <div class="q">What happens next?</div>
+        <div class="a">Treatment of the fetus, or delivery, will halt the disease process. Your symptoms will resolve over several days.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 14 — MATERNAL PROGNOSIS                             -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Maternal Outcomes</div>
+    <h2>Maternal Prognosis</h2>
+    <div class="card-grid cols-2" style="max-width:820px;">
+      <div class="card" style="border-color:var(--green);">
+        <div class="icon">✅</div>
+        <div class="label">After Delivery or Hydrops Resolution</div>
+        <div class="desc">Maternal symptoms <span class="green">reliably regress</span>. Edema, hypertension, and hemodilution normalize over days.</div>
+      </div>
+      <div class="card" style="border-color:var(--red);">
+        <div class="icon">⚠️</div>
+        <div class="label">Acute Risks</div>
+        <div class="desc">Pulmonary edema, cardiac decompensation — requires <span class="red">ICU-level</span> or high-acuity obstetric monitoring.</div>
+      </div>
+      <div class="card" style="border-color:var(--orange);">
+        <div class="icon">🏥</div>
+        <div class="label">Level of Care</div>
+        <div class="desc">High-acuity obstetric unit or ICU. Parallel maternal and fetal assessment required.</div>
+      </div>
+      <div class="card" style="border-color:var(--purple);">
+        <div class="icon">📉</div>
+        <div class="label">Maternal Mortality</div>
+        <div class="desc">Rare with prompt recognition and management. Delay in diagnosis increases risk.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 15 — CLINICAL TAKEAWAYS                             -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">Summary</div>
+    <h2>Clinical Takeaways</h2>
+    <ol class="takeaway-list">
+      <li><span class="num">1</span>Mirror syndrome = maternal + fetal + placental edema triad — a life-threatening obstetric emergency</li>
+      <li><span class="num">2</span>Distinguish from preeclampsia: <span class="orange">hemodilution</span> (↓ Hct, ↓ albumin) is the diagnostic key</li>
+      <li><span class="num">3</span>Fetal mortality up to <span class="red">67.2%</span> — etiology of hydrops drives prognosis and management</li>
+      <li><span class="num">4</span>Successful fetal therapy can resolve maternal disease — always evaluate reversibility</li>
+      <li><span class="num">5</span>Delivery is definitive treatment; maternal symptoms reliably resolve after intervention</li>
+    </ol>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE 16 — REFERENCES                                     -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-tag">References</div>
+    <h2>Key References</h2>
+    <ul class="ref-list">
+      <li>Ballantyne JW. The Bradshaw Lecture on Ante-Partum Haemorrhage. 1892. (First description of Mirror syndrome)</li>
+      <li>Braun T, et al. "Mirror syndrome: a systematic review of fetal associated conditions, maternal presentation and perinatal outcome." <em>J Perinat Med.</em> 2010. (PMC5889608)</li>
+      <li>Espinoza J, et al. "Mirror syndrome and severe fetal hydrops." <em>Ultrasound Obstet Gynecol.</em> 2006. (PMC4659014)</li>
+      <li>Llurba E, et al. "Mirror syndrome: clinical and pathophysiological review." <em>J Matern Fetal Neonatal Med.</em> 2020. (PMC10719984)</li>
+      <li>Tan YL, et al. "Mirror syndrome complicating twin-to-twin transfusion syndrome." <em>J Matern Fetal Neonatal Med.</em> 2020.</li>
+      <li>SMFM Consult Series: Fetal Hydrops — Society for Maternal-Fetal Medicine.</li>
+      <li>Children's Hospital Boston. Mirror Syndrome Clinical Overview. childrenshospital.org</li>
+      <li>DoctorsWhoCode.blog &nbsp;|&nbsp; OpenMFM.org</li>
+    </ul>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- NAVIGATION                                                 -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="nav">
+  <button onclick="prevSlide()">&#8592; Prev</button>
+  <span id="slide-counter">1 / 16</span>
+  <button onclick="nextSlide()">Next &#8594;</button>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const counter = document.getElementById('slide-counter');
+  const progressBar = document.getElementById('progress-bar');
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    counter.textContent = (index + 1) + ' / ' + total;
+    progressBar.style.width = ((index + 1) / total * 100) + '%';
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % total;
+    showSlide(currentSlide);
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + total) % total;
+    showSlide(currentSlide);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (dx < -50) nextSlide();
+    else if (dx > 50) prevSlide();
+  });
+
+  showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
