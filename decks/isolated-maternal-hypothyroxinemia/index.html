@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isolated Maternal Hypothyroxinemia — MFM Clinical Review</title>
+    <style>
+        /* ── Reset & Base ── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Deck & Slides ── */
+        .deck {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3.5rem 5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ── Slide accent bars ── */
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: var(--accent, #1f6feb);
+        }
+
+        /* ── Typography ── */
+        .slide-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent, #1f6feb);
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4.5vw, 3.8rem);
+            font-weight: 300;
+            line-height: 1.15;
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 0.4rem;
+        }
+
+        h2 {
+            font-size: clamp(1.4rem, 3vw, 2.4rem);
+            font-weight: 300;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 1.4rem;
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 1.8vw, 1.3rem);
+            color: #8b949e;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        /* ── Cards / Panels ── */
+        .card-row {
+            display: flex;
+            gap: 1.4rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 1.4rem 1.8rem;
+            flex: 1;
+            min-width: 220px;
+            max-width: 340px;
+        }
+
+        .card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent, #1f6feb);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .card p {
+            font-size: 0.92rem;
+            line-height: 1.65;
+            color: #c9d1d9;
+        }
+
+        .card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        .card .unit {
+            font-size: 0.8rem;
+            color: #8b949e;
+        }
+
+        .card .flag {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 0.3rem;
+        }
+
+        .flag-normal { background: #1a4731; color: #3fb950; }
+        .flag-low    { background: #5a1e1e; color: #f85149; }
+
+        /* ── Lab Result Box ── */
+        .lab-box {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 2rem 2.8rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .lab-box .lab-name {
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #8b949e;
+            margin-bottom: 0.3rem;
+        }
+
+        .lab-box .lab-val {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .lab-box .lab-ref {
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin-top: 0.4rem;
+        }
+
+        /* ── Comparison Table ── */
+        .compare-table {
+            width: 100%;
+            max-width: 900px;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .compare-table th {
+            background: #161b22;
+            color: var(--accent, #1f6feb);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid #30363d;
+            text-align: left;
+        }
+
+        .compare-table td {
+            padding: 0.75rem 1.2rem;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            vertical-align: top;
+            line-height: 1.5;
+        }
+
+        .compare-table tr:nth-child(even) td {
+            background: #0d1117;
+        }
+
+        .compare-table tr:nth-child(odd) td {
+            background: #161b22;
+        }
+
+        .compare-table .highlight-row td:first-child {
+            border-left: 3px solid #3fb950;
+        }
+
+        /* ── Action List ── */
+        .action-list {
+            list-style: none;
+            max-width: 820px;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .action-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.9rem 1.2rem;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            margin-bottom: 0.7rem;
+            font-size: 0.95rem;
+            color: #c9d1d9;
+            line-height: 1.55;
+        }
+
+        .action-list li .icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            margin-top: 0.05rem;
+        }
+
+        .action-list li strong {
+            color: #ffffff;
+        }
+
+        /* ── Mechanism Flow ── */
+        .flow-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1.2rem;
+            max-width: 900px;
+        }
+
+        .flow-box {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 0.8rem 1.2rem;
+            text-align: center;
+            font-size: 0.88rem;
+            color: #c9d1d9;
+            min-width: 140px;
+        }
+
+        .flow-box strong {
+            display: block;
+            color: #ffffff;
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .flow-arrow {
+            font-size: 1.4rem;
+            color: #30363d;
+        }
+
+        /* ── Evidence Badge ── */
+        .evidence-badge {
+            display: inline-block;
+            background: #1a3a5c;
+            color: #79c0ff;
+            border: 1px solid #1f6feb;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-left: 0.4rem;
+        }
+
+        /* ── Footer / Navigation ── */
+        .nav-bar {
+            background: #161b22;
+            border-top: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.55rem 2rem;
+            flex-shrink: 0;
+        }
+
+        .nav-bar .brand {
+            font-size: 0.72rem;
+            color: #8b949e;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .nav-bar .counter {
+            font-size: 0.8rem;
+            color: #8b949e;
+        }
+
+        .nav-bar .nav-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-btn {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            border-radius: 6px;
+            padding: 0.35rem 0.9rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover { background: #30363d; }
+
+        /* ── Slide-specific accent colors ── */
+        .slide-1 { --accent: #1f6feb; }
+        .slide-2 { --accent: #388bfd; }
+        .slide-3 { --accent: #d29922; }
+        .slide-4 { --accent: #bc8cff; }
+        .slide-5 { --accent: #f85149; }
+        .slide-6 { --accent: #3fb950; }
+        .slide-7 { --accent: #58a6ff; }
+
+        /* ── Utility ── */
+        .text-green { color: #3fb950; }
+        .text-red   { color: #f85149; }
+        .text-blue  { color: #79c0ff; }
+        .text-gold  { color: #e3b341; }
+        .text-muted { color: #8b949e; }
+        .mt-sm { margin-top: 0.5rem; }
+        .mt-md { margin-top: 1rem; }
+        .center { text-align: center; }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/isolated-maternal-hypothyroxinemia/index.html">
+<meta name="description" content="Clinician-focused 7-slide review of isolated maternal hypothyroxinemia (normal TSH, low Free T4) in the second trimester. Covers the definition and 2–4% prevalence, TBG-driven immunoassay artifact as the primary mechanism, differential diagnosis versus subclinical and overt hypothyroidism, ATA 2017 guidance against levothyroxine, and a 5-point action plan: reassurance, iodine sufficiency, TSH monitoring, TPO antibody risk stratification, and confirmatory testing options.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Thyroid Disorders, Hypothyroxinemia, Free T4, Endocrine, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/isolated-maternal-hypothyroxinemia/index.html">
+<meta property="og:title" content="Isolated Maternal Hypothyroxinemia - Provider Education | OpenMFM">
+<meta property="og:description" content="Clinician-focused 7-slide review of isolated maternal hypothyroxinemia (normal TSH, low Free T4) in the second trimester. Covers the definition and 2–4% prevalence, TBG-driven immunoassay artifact as the primary mechanism, differential diagnosis versus subclinical and overt hypothyroidism, ATA 2017 guidance against levothyroxine, and a 5-point action plan: reassurance, iodine sufficiency, TSH monitoring, TPO antibody risk stratification, and confirmatory testing options.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Isolated Maternal Hypothyroxinemia - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Clinician-focused 7-slide review of isolated maternal hypothyroxinemia (normal TSH, low Free T4) in the second trimester. Covers the definition and 2–4% prevalence, TBG-driven immunoassay artifact as the primary mechanism, differential diagnosis versus subclinical and overt hypothyroidism, ATA 2017 guidance against levothyroxine, and a 5-point action plan: reassurance, iodine sufficiency, TSH monitoring, TPO antibody risk stratification, and confirmatory testing options.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Isolated Maternal Hypothyroxinemia - Provider Education",
+  "description": "Clinician-focused 7-slide review of isolated maternal hypothyroxinemia (normal TSH, low Free T4) in the second trimester. Covers the definition and 2–4% prevalence, TBG-driven immunoassay artifact as the primary mechanism, differential diagnosis versus subclinical and overt hypothyroidism, ATA 2017 guidance against levothyroxine, and a 5-point action plan: reassurance, iodine sufficiency, TSH monitoring, TPO antibody risk stratification, and confirmatory testing options.",
+  "url": "https://openmfm.org/decks/isolated-maternal-hypothyroxinemia/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-06-10",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Isolated Maternal Hypothyroxinemia - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Thyroid Disorders, Hypothyroxinemia, Free T4, Endocrine, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div class="deck">
+
+    <!-- ══════════════════════════════════════════════════════════
+         SLIDE 1 — Title
+    ══════════════════════════════════════════════════════════ -->
+    <div class="slide slide-1 active">
+        <div class="slide-label">MFM Clinical Review · June 2026</div>
+        <h1>Isolated Maternal<br>Hypothyroxinemia</h1>
+        <p class="subtitle" style="margin-top:0.8rem; font-size:1.1rem;">
+            Normal TSH &nbsp;·&nbsp; Low Free T4 &nbsp;·&nbsp; Second Trimester
+        </p>
+        <div class="card-row" style="margin-top:2.5rem;">
+            <div class="lab-box" style="min-width:180px;">
+                <div class="lab-name">TSH</div>
+                <div class="lab-val" style="color:#3fb950;">2.20</div>
+                <div class="lab-ref">uIU/mL &nbsp;|&nbsp; Ref: 0.45–4.50</div>
+                <span class="flag flag-normal" style="margin-top:0.6rem;">NORMAL</span>
+            </div>
+            <div class="lab-box" style="min-width:180px;">
+                <div class="lab-name">Free T4</div>
+                <div class="lab-val" style="color:#f85149;">0.63</div>
+                <div class="lab-ref">ng/dL &nbsp;|&nbsp; Ref: 0.82–1.77</div>
+                <span class="flag flag-low" style="margin-top:0.6rem;">LOW ↓</span>
+            </div>
+        </div>
+        <p class="subtitle" style="margin-top:1.8rem; font-size:0.82rem;">
+            Labcorp Birmingham · Specimen: 06/05/2026 · Ordering Physician: Dr. Brown
+        </p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SLIDE 2 — Diagnosis
+    ══════════════════════════════════════════════════════════ -->
+    <div class="slide slide-2">
+        <div class="slide-label">Diagnosis</div>
+        <h2>What is Isolated Maternal Hypothyroxinemia?</h2>
+        <div class="card-row">
+            <div class="card">
+                <div class="card-icon">🔬</div>
+                <h3>Definition</h3>
+                <p>Normal serum TSH with a Free T4 below the reference range — in the absence of prior thyroid disease.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🤰</div>
+                <h3>Context</h3>
+                <p>Occurs in the 2nd and 3rd trimesters. Prevalence is estimated at <strong style="color:#fff;">2–4%</strong> of pregnancies.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">⚠️</div>
+                <h3>Key Distinction</h3>
+                <p>This is <strong style="color:#f85149;">not</strong> overt or subclinical hypothyroidism. TSH remains normal — the pituitary axis is intact.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SLIDE 3 — Physiology
+    ══════════════════════════════════════════════════════════ -->
+    <div class="slide slide-3">
+        <div class="slide-label">Pathophysiology</div>
+        <h2>Why Does Free T4 Appear Low?</h2>
+        <div class="flow-row">
+            <div class="flow-box">
+                <strong>Estrogen ↑</strong>
+                Hepatic TBG synthesis increases
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+                <strong>TBG ↑</strong>
+                Altered protein-binding kinetics
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+                <strong>Immunoassay Bias</strong>
+                Direct analog assay underestimates Free T4
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="border-color:#f85149;">
+                <strong style="color:#f85149;">Artifactually Low</strong>
+                Free T4 result reported
+            </div>
+        </div>
+        <div class="card-row" style="margin-top:1.4rem;">
+            <div class="card" style="max-width:500px;">
+                <h3>Assay Limitation</h3>
+                <p>Standard direct immunoassays are <strong style="color:#fff;">not validated for pregnancy</strong>. High TBG and lower albumin cause systematic underestimation in the 2nd–3rd trimesters. <span class="evidence-badge">ATA 2017</span></p>
+            </div>
+            <div class="card" style="max-width:400px;">
+                <h3>hCG Effect</h3>
+                <p>hCG-driven TSH suppression resolves by 2nd trimester. TSH normalizes while Free T4 physiologically declines. <span class="evidence-badge">SMFM</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SLIDE 4 — Comparison Table
+    ══════════════════════════════════════════════════════════ -->
+    <div class="slide slide-4">
+        <div class="slide-label">Differential Diagnosis</div>
+        <h2>IMH vs. Hypothyroidism in Pregnancy</h2>
+        <table class="compare-table">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th style="color:#3fb950;">Isolated Hypothyroxinemia <br><small style="font-weight:400;color:#8b949e;">(This Patient)</small></th>
+                    <th style="color:#f85149;">Subclinical / Overt Hypothyroidism</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="highlight-row">
+                    <td><strong>TSH Level</strong></td>
+                    <td class="text-green">Normal (0.2–3.0 mIU/L)</td>
+                    <td class="text-red">Elevated (&gt;2.5–4.0 mIU/L)</td>
+                </tr>
+                <tr>
+                    <td><strong>Free T4</strong></td>
+                    <td class="text-red">Low (assay artifact or iodine deficiency)</td>
+                    <td>Normal (subclinical) or Low (overt)</td>
+                </tr>
+                <tr>
+                    <td><strong>Primary Mechanism</strong></td>
+                    <td>TBG elevation / immunoassay interference</td>
+                    <td>Primary thyroid gland failure</td>
+                </tr>
+                <tr>
+                    <td><strong>Clinical Action</strong></td>
+                    <td class="text-green"><strong>Reassurance · Iodine · Monitor TSH</strong></td>
+                    <td class="text-red">Levothyroxine replacement</td>
+                </tr>
+                <tr>
+                    <td><strong>Levothyroxine?</strong></td>
+                    <td class="text-green"><strong>NOT indicated</strong></td>
+                    <td class="text-red">Indicated — titrate to TSH target</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SLIDE 5 — Evidence for No Treatment
+    ══════════════════════════════════════════════════════════ -->
+    <div class="slide slide-5">
+        <div class="slide-label">Evidence-Based Management</div>
+        <h2>Do Not Initiate Levothyroxine</h2>
+        <div class="card-row">
+            <div class="card" style="border-color:#f85149; max-width:360px;">
+                <div class="card-icon">🚫</div>
+                <h3 style="color:#f85149;">Not Recommended</h3>
+                <p>ATA guidelines <strong style="color:#fff;">strongly advise against</strong> thyroid hormone supplementation for isolated maternal hypothyroxinemia. <span class="evidence-badge">ATA 2017</span></p>
+            </div>
+            <div class="card" style="max-width:360px;">
+                <div class="card-icon">📊</div>
+                <h3>RCT Evidence</h3>
+                <p>Multiple large randomized controlled trials demonstrate <strong style="color:#fff;">no improvement</strong> in obstetric outcomes or child neurocognitive development with levothyroxine treatment.</p>
+            </div>
+            <div class="card" style="max-width:360px;">
+                <div class="card-icon">⚖️</div>
+                <h3>Risk vs. Benefit</h3>
+                <p>Unnecessary treatment introduces clinical burden and potential maternal/fetal risk — with <strong style="color:#fff;">no demonstrable benefit</strong>.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SLIDE 6 — Action Plan
+    ══════════════════════════════════════════════════════════ -->
+    <div class="slide slide-6">
+        <div class="slide-label">Clinical Action Plan</div>
+        <h2>Management Recommendations</h2>
+        <ul class="action-list">
+            <li>
+                <span class="icon">✅</span>
+                <div><strong>Reassurance:</strong> Confirm the physiological and artifactual basis of the low Free T4. No thyroid disease is present.</div>
+            </li>
+            <li>
+                <span class="icon">🥗</span>
+                <div><strong>Verify Iodine Sufficiency:</strong> Confirm prenatal vitamin contains <strong>150 µg iodine</strong>. Total recommended daily intake in pregnancy is <strong>250 µg</strong>. <span class="evidence-badge">ATA 2017</span></div>
+            </li>
+            <li>
+                <span class="icon">🔁</span>
+                <div><strong>Monitor TSH in 4–6 Weeks:</strong> Repeat serum TSH to confirm stability. <strong>Avoid repeat Free T4</strong> via direct immunoassay — artifact persists in later trimesters.</div>
+            </li>
+            <li>
+                <span class="icon">🧪</span>
+                <div><strong>Consider TPO Antibodies:</strong> TPOAb-positive status increases risk of progression to clinical hypothyroidism or postpartum thyroiditis. Risk-stratify if clinically indicated.</div>
+            </li>
+            <li>
+                <span class="icon">📐</span>
+                <div><strong>If Confirmation Needed:</strong> Order <strong>Total T4</strong> (expected ~1.5× non-pregnant range in 2nd–3rd trimester) or Free T4 by equilibrium dialysis / LC-MS/MS.</div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SLIDE 7 — Summary
+    ══════════════════════════════════════════════════════════ -->
+    <div class="slide slide-7">
+        <div class="slide-label">Summary</div>
+        <h2>Key Takeaways</h2>
+        <div class="card-row">
+            <div class="card" style="max-width:280px; text-align:center;">
+                <div class="card-icon">🟢</div>
+                <h3>TSH is Normal</h3>
+                <p>The pituitary-thyroid axis is intact. This is <strong style="color:#fff;">not hypothyroidism</strong>.</p>
+            </div>
+            <div class="card" style="max-width:280px; text-align:center;">
+                <div class="card-icon">🔬</div>
+                <h3>Assay Artifact</h3>
+                <p>Low Free T4 is a <strong style="color:#fff;">known limitation</strong> of direct immunoassays in the 2nd–3rd trimesters.</p>
+            </div>
+            <div class="card" style="max-width:280px; text-align:center;">
+                <div class="card-icon">🚫</div>
+                <h3>No Levothyroxine</h3>
+                <p>Treatment is <strong style="color:#fff;">not indicated</strong> and not supported by RCT evidence. <span class="evidence-badge">ATA</span></p>
+            </div>
+            <div class="card" style="max-width:280px; text-align:center;">
+                <div class="card-icon">📅</div>
+                <h3>Monitor &amp; Reassure</h3>
+                <p>Repeat TSH in <strong style="color:#fff;">4–6 weeks</strong>. Confirm iodine adequacy. Reassure patient.</p>
+            </div>
+        </div>
+        <p class="text-muted" style="font-size:0.78rem; margin-top:2rem; text-align:center;">
+            Reference: American Thyroid Association Guidelines for the Diagnosis and Management of Thyroid Disease During Pregnancy and the Postpartum (2017) &nbsp;·&nbsp; DoctorsWhoCode.blog
+        </p>
+    </div>
+
+</div><!-- /.deck -->
+
+<!-- ── Navigation Bar ── -->
+<div class="nav-bar">
+    <div class="brand">DoctorsWhoCode.blog &nbsp;·&nbsp; MFM Clinical Review</div>
+    <div class="nav-btns">
+        <button class="nav-btn" onclick="prevSlide()">&#8592; Prev</button>
+        <button class="nav-btn" onclick="nextSlide()">Next &#8594;</button>
+    </div>
+    <div class="counter" id="counter">1 / 7</div>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('counter');
+
+    function showSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === index);
+        });
+        counter.textContent = (index + 1) + ' / ' + slides.length;
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    // Touch / swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+    });
+
+    showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
