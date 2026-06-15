@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fetal Circulation: A Sonographer's Blueprint</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a2332;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    padding: 16px;
+  }
+
+  /* ── Slide viewer ── */
+  .viewer {
+    width: 100%;
+    max-width: 1100px;
+    position: relative;
+  }
+
+  .slide-wrap {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #0d1520;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  }
+
+  .slide-img {
+    display: none;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .slide-img.active { display: block; }
+
+  /* Click zones for prev/next */
+  .click-zone {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 20%;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .click-zone:hover { opacity: 1; }
+  .click-zone.left  { left: 0;  justify-content: flex-start; padding-left: 12px; }
+  .click-zone.right { right: 0; justify-content: flex-end;   padding-right: 12px; }
+
+  .arrow {
+    background: rgba(0,0,0,0.55);
+    color: #5eead4;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* ── Controls bar ── */
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .ctrl-btn {
+    background: #264653;
+    color: #5eead4;
+    border: 1px solid #2a9d8f;
+    border-radius: 50px;
+    padding: 9px 22px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .ctrl-btn:hover   { background: #2a9d8f; color: #fff; }
+  .ctrl-btn:disabled { background: #1a2332; color: #4a5568; border-color: #4a5568; cursor: default; }
+
+  .counter {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    min-width: 64px;
+    text-align: center;
+  }
+
+  /* ── Progress bar ── */
+  .progress-bar {
+    width: 100%;
+    max-width: 1100px;
+    height: 3px;
+    background: #2d3748;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #2a9d8f;
+    transition: width 0.3s ease;
+  }
+
+  /* ── Thumbnail strip ── */
+  .thumbs {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    overflow-x: auto;
+    width: 100%;
+    max-width: 1100px;
+    padding-bottom: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: #2a9d8f #1a2332;
+  }
+
+  .thumb {
+    flex-shrink: 0;
+    width: 110px;
+    aspect-ratio: 16/9;
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.15s, transform 0.15s;
+    opacity: 0.6;
+  }
+  .thumb:hover  { opacity: 0.9; transform: scale(1.04); }
+  .thumb.active { border-color: #2a9d8f; opacity: 1; }
+
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Fullscreen hint ── */
+  .hint {
+    color: #4a5568;
+    font-size: 0.75rem;
+    margin-top: 10px;
+    text-align: center;
+  }
+</style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/fetal-hemodynamics-blueprint/index.html">
+<meta name="description" content="Visually rich 12-slide sonographer blueprint for fetal hemodynamics. Features full anatomical diagrams of all three fetal shunts (DV, FO, DA), Doppler waveform illustrations, a diagnostic matrix of clinical red flags, aortic isthmus watershed physiology, the 4-step fetal-to-neonatal transition sequence, and the PFC vicious cycle — with echocardiography protocol checklist.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Fetal Circulation, Hemodynamics, Fetal Echocardiography, Fetal Shunts, Sonographer Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/fetal-hemodynamics-blueprint/index.html">
+<meta property="og:title" content="Fetal Circulation: A Sonographer's Blueprint - Sonographer Education | OpenMFM">
+<meta property="og:description" content="Visually rich 12-slide sonographer blueprint for fetal hemodynamics. Features full anatomical diagrams of all three fetal shunts (DV, FO, DA), Doppler waveform illustrations, a diagnostic matrix of clinical red flags, aortic isthmus watershed physiology, the 4-step fetal-to-neonatal transition sequence, and the PFC vicious cycle — with echocardiography protocol checklist.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fetal Circulation: A Sonographer's Blueprint - Sonographer Education | OpenMFM">
+<meta name="twitter:description" content="Visually rich 12-slide sonographer blueprint for fetal hemodynamics. Features full anatomical diagrams of all three fetal shunts (DV, FO, DA), Doppler waveform illustrations, a diagnostic matrix of clinical red flags, aortic isthmus watershed physiology, the 4-step fetal-to-neonatal transition sequence, and the PFC vicious cycle — with echocardiography protocol checklist.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Fetal Circulation: A Sonographer's Blueprint - Sonographer Education",
+  "description": "Visually rich 12-slide sonographer blueprint for fetal hemodynamics. Features full anatomical diagrams of all three fetal shunts (DV, FO, DA), Doppler waveform illustrations, a diagnostic matrix of clinical red flags, aortic isthmus watershed physiology, the 4-step fetal-to-neonatal transition sequence, and the PFC vicious cycle — with echocardiography protocol checklist.",
+  "url": "https://openmfm.org/decks/fetal-hemodynamics-blueprint/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-06-15",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Fetal Circulation: A Sonographer's Blueprint - Sonographer Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Fetal Circulation, Hemodynamics, Fetal Echocardiography, Fetal Shunts, Sonographer Education"
+}
+</script>
+</head>
+<body>
+
+<div class="progress-bar">
+  <div class="progress-fill" id="progress"></div>
+</div>
+
+<div class="viewer">
+  <div class="slide-wrap" id="slideWrap">
+
+    <!-- Click zones -->
+    <div class="click-zone left"  onclick="go(-1)"><div class="arrow">&#8592;</div></div>
+    <div class="click-zone right" onclick="go(1)"> <div class="arrow">&#8594;</div></div>
+
+    <img class="slide-img active" src="slides/slide_01.png" alt="Slide 1">
+    <img class="slide-img"        src="slides/slide_02.png" alt="Slide 2">
+    <img class="slide-img"        src="slides/slide_03.png" alt="Slide 3">
+    <img class="slide-img"        src="slides/slide_04.png" alt="Slide 4">
+    <img class="slide-img"        src="slides/slide_05.png" alt="Slide 5">
+    <img class="slide-img"        src="slides/slide_06.png" alt="Slide 6">
+    <img class="slide-img"        src="slides/slide_07.png" alt="Slide 7">
+    <img class="slide-img"        src="slides/slide_08.png" alt="Slide 8">
+    <img class="slide-img"        src="slides/slide_09.png" alt="Slide 9">
+    <img class="slide-img"        src="slides/slide_10.png" alt="Slide 10">
+    <img class="slide-img"        src="slides/slide_11.png" alt="Slide 11">
+    <img class="slide-img"        src="slides/slide_12.png" alt="Slide 12">
+  </div>
+</div>
+
+<div class="controls">
+  <button class="ctrl-btn" id="prevBtn" onclick="go(-1)" disabled>&#8592; Prev</button>
+  <span   class="counter"  id="counter">1 / 12</span>
+  <button class="ctrl-btn" id="nextBtn" onclick="go(1)">Next &#8594;</button>
+  <button class="ctrl-btn" onclick="toggleFS()" title="Fullscreen">&#x26F6;</button>
+</div>
+
+<div class="thumbs" id="thumbs"></div>
+
+<p class="hint">Arrow keys to navigate &nbsp;·&nbsp; Click image edges &nbsp;·&nbsp; ⛶ for fullscreen</p>
+
+<script>
+  const total  = 12;
+  let cur      = 1;
+  const imgs   = document.querySelectorAll('.slide-img');
+  const thumbC = document.getElementById('thumbs');
+
+  // Build thumbnails
+  for (let i = 1; i <= total; i++) {
+    const d   = document.createElement('div');
+    d.className = 'thumb' + (i === 1 ? ' active' : '');
+    d.onclick   = () => goTo(i);
+    const im  = document.createElement('img');
+    im.src    = `slides/slide_${String(i).padStart(2,'0')}.png`;
+    im.alt    = `Slide ${i}`;
+    im.loading = 'lazy';
+    d.appendChild(im);
+    thumbC.appendChild(d);
+  }
+
+  function goTo(n) {
+    imgs[cur - 1].classList.remove('active');
+    thumbC.children[cur - 1].classList.remove('active');
+    cur = Math.min(Math.max(n, 1), total);
+    imgs[cur - 1].classList.add('active');
+    thumbC.children[cur - 1].classList.add('active');
+    thumbC.children[cur - 1].scrollIntoView({ behavior: 'smooth', inline: 'nearest' });
+    document.getElementById('counter').textContent = cur + ' / ' + total;
+    document.getElementById('prevBtn').disabled = cur === 1;
+    document.getElementById('nextBtn').disabled = cur === total;
+    document.getElementById('progress').style.width = (cur / total * 100) + '%';
+  }
+
+  function go(d) { goTo(cur + d); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
+  });
+
+  function toggleFS() {
+    const el = document.getElementById('slideWrap');
+    if (!document.fullscreenElement) el.requestFullscreen();
+    else document.exitFullscreen();
+  }
+
+  // Init progress
+  document.getElementById('progress').style.width = (1 / total * 100) + '%';
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
