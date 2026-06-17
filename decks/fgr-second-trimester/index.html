@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Severe FGR in the Second Trimester — MFM Presentation</title>
+<style>
+  :root{
+    --bg:#07111c;
+    --panel:#0b1c2c;
+    --fg:#f4f7fb;
+    --muted:#b7c4d6;
+    --accent:#35d0ff;
+    --accent2:#ff4d6d;
+    --ok:#2ee6a6;
+    --warn:#ffd166;
+    --line:#16324a;
+    --purple:#bc8cff;
+    --orange:#f0883e;
+  }
+  html,body{height:100%; margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:var(--bg); color:var(--fg); overflow:hidden;}
+  .deck{height:100%; display:flex; flex-direction:column;}
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 16px; border-bottom:1px solid var(--line); background:rgba(11,28,44,0.6); backdrop-filter: blur(6px);
+    flex-shrink:0;
+  }
+  .title{font-weight:700; letter-spacing:.2px; font-size:14px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .meta{display:flex; gap:10px; align-items:center;}
+  .pill{border:1px solid var(--line); color:var(--muted); padding:4px 10px; border-radius:999px; font-size:12px; white-space:nowrap;}
+  .pill b{color:var(--fg);}
+  .progress{height:6px; background:#06101a; border-top:1px solid var(--line); border-bottom:1px solid var(--line); flex-shrink:0;}
+  .bar{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--ok)); transition: width 0.3s ease;}
+  .slides{flex:1; position:relative; overflow:hidden;}
+  section.slide{
+    position:absolute; inset:0; padding:24px 32px;
+    display:grid; grid-template-rows:auto 1fr auto; gap:16px;
+    opacity:0; transform: translateX(18px); transition: opacity .25s ease, transform .25s ease;
+    pointer-events:none;
+    box-sizing:border-box;
+  }
+  section.slide.active{opacity:1; transform: translateX(0); pointer-events:auto;}
+  
+  /* Typography */
+  .h1{font-size:clamp(28px, 4.5vw, 44px); line-height:1.15; font-weight:800; color:var(--fg); letter-spacing:.2px; margin-bottom:4px;}
+  .h2{font-size:clamp(20px, 3.2vw, 32px); line-height:1.2; font-weight:800; color:var(--fg); margin-bottom:4px;}
+  .sub{color:var(--muted); font-size:clamp(14px, 1.8vw, 17px); line-height:1.4; max-width:960px; margin-bottom:8px;}
+  .subtitle{font-size:clamp(15px, 2vw, 20px); color:var(--muted); margin-top:8px; font-weight:300;}
+  .divider{width:60px; height:2px; background:var(--accent); margin:12px 0;}
+  
+  .section-label{
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:6px;
+    font-weight:700;
+  }
+  
+  /* Grid & Columns */
+  .grid{display:grid; gap:16px; align-content:start;}
+  .cols-2{grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));}
+  .cols-3{grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));}
+  .cols-4{grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));}
+  
+  /* Badges */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border: 1px solid transparent;
+  }
+  .badge-blue { background: rgba(53,208,255,0.1); color: var(--accent); border-color: rgba(53,208,255,0.3); }
+  .badge-green { background: rgba(46,230,166,0.1); color: var(--ok); border-color: rgba(46,230,166,0.3); }
+  .badge-orange { background: rgba(240,136,62,0.1); color: var(--orange); border-color: rgba(240,136,62,0.3); }
+  .badge-red { background: rgba(255,77,109,0.1); color: var(--accent2); border-color: rgba(255,77,109,0.3); }
+  .badge-purple { background: rgba(188,140,255,0.1); color: var(--purple); border-color: rgba(188,140,255,0.3); }
+  
+  /* Stat boxes */
+  .stat-row{ display:flex; gap:16px; justify-content:start; margin-top:8px; flex-wrap:wrap; }
+  .stat-box {
+    background: linear-gradient(180deg, rgba(11,28,44,.85), rgba(9,22,35,.85));
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+    flex: 1 1 180px;
+  }
+  .stat-box .stat-val {
+    font-size: clamp(24px, 3.5vw, 36px);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+  .stat-box .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+  
+  /* Card row */
+  .card-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .card {
+    background: linear-gradient(180deg, rgba(11,28,44,.85), rgba(9,22,35,.85));
+    border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    box-sizing:border-box;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-row .card {
+    align-items: center;
+    text-align: center;
+  }
+  .card .icon { font-size: 28px; margin-bottom: 8px; }
+  .card .card-title { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .card .card-body { font-size: 13px; color: var(--muted); line-height: 1.45; }
+  
+  /* Col blocks */
+  .col-block {
+    background: rgba(11,28,44,.5);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+  .col-block h3 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .col-block ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .col-block ul li {
+    font-size: clamp(12px, 1.3vw, 15px);
+    color: var(--fg);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.4;
+  }
+  .col-block ul li:last-child { border-bottom: none; }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  
+  /* Timeline */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .tl-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .tl-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20px;
+    flex-shrink: 0;
+  }
+  .tl-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .tl-line {
+    width: 2px;
+    flex: 1;
+    min-height: 24px;
+    background: var(--line);
+  }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-body {
+    padding-bottom: 10px;
+  }
+  .tl-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--fg);
+  }
+  .tl-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+  
+  /* Doppler Hierarchy */
+  .doppler-ladder {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .dl-step {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(11,28,44,.5);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 16px;
+  }
+  .dl-num {
+    font-size: 18px;
+    font-weight: 800;
+    min-width: 24px;
+    text-align: center;
+  }
+  .dl-text {
+    font-size: 14px;
+    color: var(--fg);
+    line-height: 1.4;
+  }
+  .dl-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  
+  /* Warning & Info Banners */
+  .warning-banner {
+    background: rgba(255,77,109,0.08);
+    border: 1px solid rgba(255,77,109,0.3);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: clamp(12px, 1.3vw, 15px);
+    color: var(--accent2);
+    text-align: center;
+    margin-top: 10px;
+    line-height: 1.45;
+  }
+  .info-banner {
+    background: rgba(53,208,255,0.08);
+    border: 1px solid rgba(53,208,255,0.3);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: clamp(12px, 1.3vw, 15px);
+    color: var(--accent);
+    text-align: center;
+    margin-top: 10px;
+    line-height: 1.45;
+  }
+  
+  /* Table styling */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: clamp(11px, 1.2vw, 13px);
+  }
+  .compare-table th {
+    background: var(--panel);
+    color: var(--accent);
+    font-weight: 600;
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid var(--line);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+  .compare-table td {
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    vertical-align: top;
+    line-height: 1.4;
+  }
+  .compare-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  
+  .footer{display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:12px; border-top:1px solid var(--line); padding-top:8px; flex-shrink:0;}
+  .keys{opacity:.9}
+  .kbd{border:1px solid var(--line); border-bottom-width:2px; padding:1px 6px; border-radius:6px; color:var(--muted); font-size:11px;}
+  
+  /* Slide Overrides */
+  .slide.title-slide-custom {
+    background: linear-gradient(135deg, #07111c 0%, #0b1c2c 100%);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .slide.title-slide-custom .logo {
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  
+  /* Responsive viewport tweaks */
+  @media (max-width: 768px) {
+    section.slide { padding: 16px; gap: 12px; }
+    .cols-2, .cols-3, .cols-4, .card-row { grid-template-columns: 1fr; }
+    .stat-row { flex-direction: column; }
+    .topbar { padding: 8px 12px; }
+    .title { font-size: 12px; }
+    .keys { display: none; }
+  }
+  @media print{
+    .topbar, .progress{ display:none; }
+    section.slide{ position:relative; opacity:1; transform:none; page-break-after:always; pointer-events:auto; display:grid !important; height:auto; }
+    body{ background:white; color:black; overflow:visible; }
+    .card, .col-block, .stat-box { background:none; border-color:#ccc; box-shadow:none; color:black; }
+  }
+</style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/fgr-second-trimester/index.html">
+<meta name="description" content="Clinician education slide deck covering severe early-onset FGR diagnosed between 18 and 21 weeks gestation. Details chromosomal, structural, infectious, and placental etiologies; outlines a comprehensive diagnostic workup; contrasts early vs. late FGR phenotypes; and presents the escalating Doppler surveillance hierarchy (UA, MCA, DV, cCTG) to guide delivery planning.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Fetal Growth Restriction, Second Trimester, Doppler, Early-Onset FGR, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/fgr-second-trimester/index.html">
+<meta property="og:title" content="Severe Fetal Growth Restriction in the Second Trimester — Provider Education | OpenMFM">
+<meta property="og:description" content="Clinician education slide deck covering severe early-onset FGR diagnosed between 18 and 21 weeks gestation. Details chromosomal, structural, infectious, and placental etiologies; outlines a comprehensive diagnostic workup; contrasts early vs. late FGR phenotypes; and presents the escalating Doppler surveillance hierarchy (UA, MCA, DV, cCTG) to guide delivery planning.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Severe Fetal Growth Restriction in the Second Trimester — Provider Education | OpenMFM">
+<meta name="twitter:description" content="Clinician education slide deck covering severe early-onset FGR diagnosed between 18 and 21 weeks gestation. Details chromosomal, structural, infectious, and placental etiologies; outlines a comprehensive diagnostic workup; contrasts early vs. late FGR phenotypes; and presents the escalating Doppler surveillance hierarchy (UA, MCA, DV, cCTG) to guide delivery planning.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Severe Fetal Growth Restriction in the Second Trimester — Provider Education",
+  "description": "Clinician education slide deck covering severe early-onset FGR diagnosed between 18 and 21 weeks gestation. Details chromosomal, structural, infectious, and placental etiologies; outlines a comprehensive diagnostic workup; contrasts early vs. late FGR phenotypes; and presents the escalating Doppler surveillance hierarchy (UA, MCA, DV, cCTG) to guide delivery planning.",
+  "url": "https://openmfm.org/decks/fgr-second-trimester/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-06-16",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Severe Fetal Growth Restriction in the Second Trimester — Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Fetal Growth Restriction, Second Trimester, Doppler, Early-Onset FGR, Provider Education"
+}
+</script>
+</head>
+<body>
+<div class="deck">
+  <div class="topbar">
+    <div class="title">Severe FGR in the Second Trimester — <b>MFM Clinical Education</b></div>
+    <div class="meta">
+      <div class="pill"><b id="idx">1</b> / <span id="tot">8</span></div>
+      <div class="pill">Clinical Review</div>
+      <div class="pill keys"><span class="kbd">←</span> <span class="kbd">→</span> <span class="kbd">Space</span> <span class="kbd">Home</span> <span class="kbd">End</span></div>
+    </div>
+  </div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+
+  <div class="slides" id="slides">
+
+    <!-- Slide 1 -->
+    <section class="slide active">
+      <div class="k">Slide 1 of 8</div>
+      <div class="slide title-slide-custom">
+        <div class="logo">Atlanta Perinatal Associates &nbsp;·&nbsp; MFM Clinical Education</div>
+        <div class="section-label">Maternal-Fetal Medicine</div>
+        <h1 class="h1">Severe Fetal Growth Restriction<br>in the Second Trimester</h1>
+        <div class="divider" style="margin:16px auto;"></div>
+        <p class="subtitle">Diagnosis &nbsp;·&nbsp; Prognosis &nbsp;·&nbsp; Surveillance</p>
+        <div style="margin-top:20px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+          <span class="badge badge-blue">SMFM Guideline-Consistent</span>
+          <span class="badge badge-orange">18–21 Weeks</span>
+          <span class="badge badge-red">Severe Phenotype</span>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>MFM Education Series</span>
+      </div>
+    </section>
+
+    <!-- Slide 2 -->
+    <section class="slide">
+      <div>
+        <div class="section-label">Definition</div>
+        <div class="h2">Early-Onset FGR: A Severe Phenotype</div>
+        <div class="sub">Clinical threshold and occurrence rates before viability.</div>
+      </div>
+      <div class="grid">
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-val">&lt; 10<sup>th</sup></div>
+            <div class="stat-label">EFW or AC percentile<br>before 32 weeks</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">0.5–1%</div>
+            <div class="stat-label">Prevalence of<br>early-onset FGR</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">18–21<sup>wk</sup></div>
+            <div class="stat-label">Highest pretest probability<br>of intrinsic fetal defects</div>
+          </div>
+        </div>
+        <div class="info-banner" style="margin-top:10px;">
+          At 18–21 weeks, intrinsic fetal causes (aneuploidy, structural anomaly, infection) outweigh isolated placental insufficiency.
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>MFM Education Series</span>
+      </div>
+    </section>
+
+    <!-- Slide 3 -->
+    <section class="slide">
+      <div>
+        <div class="section-label">Etiology</div>
+        <div class="h2">Primary Causes at 18–21 Weeks</div>
+        <div class="sub">Determining the underlying driver is key to mapping clinical course.</div>
+      </div>
+      <div class="grid">
+        <div class="card-row">
+          <div class="card">
+            <div class="icon">🧬</div>
+            <div class="card-title">Chromosomal</div>
+            <div class="card-body">Trisomy 13, 18, 21<br>Triploidy</div>
+          </div>
+          <div class="card">
+            <div class="icon">🫀</div>
+            <div class="card-title">Structural</div>
+            <div class="card-body">Congenital heart disease<br>Gastroschisis</div>
+          </div>
+          <div class="card">
+            <div class="icon">🦠</div>
+            <div class="card-title">Infectious</div>
+            <div class="card-body">CMV · Toxoplasmosis<br>Syphilis · Rubella</div>
+          </div>
+          <div class="card">
+            <div class="icon">🩸</div>
+            <div class="card-title">Placental</div>
+            <div class="card-body">Severe insufficiency<br>Maternal hypertension<br>Pregestational diabetes</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>MFM Education Series</span>
+      </div>
+    </section>
+
+    <!-- Slide 4 -->
+    <section class="slide">
+      <div>
+        <div class="section-label">Evaluation</div>
+        <div class="h2">Comprehensive Diagnostic Workup</div>
+        <div class="sub">Recommended sequential assessments to map risk and rule out etiologies.</div>
+      </div>
+      <div class="grid">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left">
+              <div class="tl-dot" style="background:var(--accent);"></div>
+              <div class="tl-line"></div>
+            </div>
+            <div class="tl-body">
+              <div class="tl-title">Detailed Anatomical Survey</div>
+              <div class="tl-desc">Comprehensive ultrasound — structural malformations and aneuploidy markers</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left">
+              <div class="tl-dot" style="background:var(--purple);"></div>
+              <div class="tl-line"></div>
+            </div>
+            <div class="tl-body">
+              <div class="tl-title">Genetic Testing</div>
+              <div class="tl-desc">Amniocentesis with chromosomal microarray; UA Doppler often abnormal with aneuploidy</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left">
+              <div class="tl-dot" style="background:var(--orange);"></div>
+              <div class="tl-line"></div>
+            </div>
+            <div class="tl-body">
+              <div class="tl-title">Infectious Disease Screening</div>
+              <div class="tl-desc">Maternal TORCH serology; amniotic fluid PCR if echogenic bowel or calcifications present</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left">
+              <div class="tl-dot" style="background:var(--ok);"></div>
+              <div class="tl-line"></div>
+            </div>
+            <div class="tl-body">
+              <div class="tl-title">Doppler Ultrasonography</div>
+              <div class="tl-desc">Umbilical artery (UA) and uterine artery (UtA) — assess placental vascular perfusion</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left">
+              <div class="tl-dot" style="background:var(--warn);"></div>
+              <div class="tl-line"></div>
+            </div>
+            <div class="tl-body">
+              <div class="tl-title">Maternal Comorbidity Evaluation</div>
+              <div class="tl-desc">Chronic hypertension, pregestational diabetes, antiphospholipid syndrome — present in &gt;80% of maternal-driven cases</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>MFM Education Series</span>
+      </div>
+    </section>
+
+    <!-- Slide 5 -->
+    <section class="slide">
+      <div>
+        <div class="section-label">Prognosis</div>
+        <div class="h2">A Guarded Prognosis</div>
+        <div class="sub">Balancing expectations and severity benchmarks in extreme early FGR.</div>
+      </div>
+      <div class="grid">
+        <div class="grid cols-2">
+          <div class="col-block">
+            <h3>Outcome Risks</h3>
+            <ul>
+              <li><span class="dot" style="background:var(--accent2); display:inline-block;"></span> Stillbirth and neonatal death</li>
+              <li><span class="dot" style="background:var(--accent2); display:inline-block;"></span> Indicated extreme preterm birth</li>
+              <li><span class="dot" style="background:var(--orange); display:inline-block;"></span> High NICU admission rate</li>
+              <li><span class="dot" style="background:var(--orange); display:inline-block;"></span> High mortality if delivery &lt; 34 weeks</li>
+            </ul>
+          </div>
+          <div class="col-block">
+            <h3>Prognostic Predictors</h3>
+            <ul>
+              <li><span class="dot" style="background:var(--accent); display:inline-block;"></span> EFW z-score</li>
+              <li><span class="dot" style="background:var(--accent); display:inline-block;"></span> Gestational age at diagnosis</li>
+              <li><span class="dot" style="background:var(--purple); display:inline-block;"></span> Umbilical artery Doppler category</li>
+              <li><span class="dot" style="background:var(--accent2); display:inline-block;"></span> AREDV = impending decompensation</li>
+            </ul>
+          </div>
+        </div>
+        <div class="warning-banner">
+          Absent or reversed end-diastolic velocity (AREDV) in the umbilical artery signifies impending fetal decompensation and right heart strain.
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>MFM Education Series</span>
+      </div>
+    </section>
+
+    <!-- Slide 6 -->
+    <section class="slide">
+      <div>
+        <div class="section-label">Management</div>
+        <div class="h2">Surveillance Strategy</div>
+        <div class="sub">Evidence-based recommendations for monitoring early severe FGR.</div>
+      </div>
+      <div class="grid">
+        <div class="grid cols-2">
+          <div class="col-block" style="border-color:rgba(255,77,109,0.4);">
+            <h3 style="color:var(--accent2);">Not Recommended</h3>
+            <ul>
+              <li><span class="dot" style="background:var(--accent2); display:inline-block;"></span> Heparin / LMWH</li>
+              <li><span class="dot" style="background:var(--accent2); display:inline-block;"></span> Sildenafil</li>
+              <li><span class="dot" style="background:var(--accent2); display:inline-block;"></span> Dietary modifications</li>
+              <li><span class="dot" style="background:var(--accent2); display:inline-block;"></span> Bed rest</li>
+            </ul>
+          </div>
+          <div class="col-block" style="border-color:rgba(46,230,166,0.4);">
+            <h3 style="color:var(--ok);">Recommended Protocol</h3>
+            <ul>
+              <li><span class="dot" style="background:var(--ok); display:inline-block;"></span> Serial biometry every 2–4 weeks</li>
+              <li><span class="dot" style="background:var(--ok); display:inline-block;"></span> Weekly UA Doppler once viable</li>
+              <li><span class="dot" style="background:var(--accent); display:inline-block;"></span> Ductus venosus (DV) Doppler</li>
+              <li><span class="dot" style="background:var(--accent); display:inline-block;"></span> Computerized CTG (cCTG)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-banner">
+          Delaying delivery until DV pulsatility index or cCTG short-term variation is abnormal improves long-term neurological outcomes (&lt; 32 weeks).
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>MFM Education Series</span>
+      </div>
+    </section>
+
+    <!-- Slide 7 -->
+    <section class="slide">
+      <div>
+        <div class="section-label">Doppler Surveillance</div>
+        <div class="h2">Escalating Doppler Hierarchy</div>
+        <div class="sub">Hemodynamic transition steps in worsening placental resistance.</div>
+      </div>
+      <div class="grid">
+        <div class="doppler-ladder">
+          <div class="dl-step">
+            <div class="dl-num" style="color:var(--ok);">1</div>
+            <div class="dl-text">
+              <strong>Umbilical Artery (UA)</strong> — Baseline placental resistance
+              <div class="dl-sub">Elevated PI → absent → reversed end-diastolic velocity (AREDV)</div>
+            </div>
+          </div>
+          <div class="dl-step">
+            <div class="dl-num" style="color:var(--accent);">2</div>
+            <div class="dl-text">
+              <strong>Middle Cerebral Artery (MCA)</strong> — Brain-sparing response
+              <div class="dl-sub">Reduced PI indicates redistribution; used more in late FGR</div>
+            </div>
+          </div>
+          <div class="dl-step">
+            <div class="dl-num" style="color:var(--orange);">3</div>
+            <div class="dl-text">
+              <strong>Ductus Venosus (DV)</strong> — Cardiac preload marker
+              <div class="dl-sub">Elevated PI or absent/reversed A-wave → venous compromise</div>
+            </div>
+          </div>
+          <div class="dl-step">
+            <div class="dl-num" style="color:var(--accent2);">4</div>
+            <div class="dl-text">
+              <strong>Computerized CTG (cCTG)</strong> — Short-term variation (STV)
+              <div class="dl-sub">STV &lt; 3 ms = critical threshold; guides delivery timing</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>MFM Education Series</span>
+      </div>
+    </section>
+
+    <!-- Slide 8 -->
+    <section class="slide">
+      <div>
+        <div class="section-label">Clinical Distinction</div>
+        <div class="h2">Early vs. Late-Onset FGR</div>
+        <div class="sub">Key differentiators between early and late phenotypes.</div>
+      </div>
+      <div class="grid">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Characteristic</th>
+              <th>Early-Onset FGR (&lt; 32 wk)</th>
+              <th>Late-Onset FGR (≥ 32 wk)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Prevalence</td>
+              <td><span class="badge badge-red">0.5%–1%</span></td>
+              <td><span class="badge badge-orange">5%–10%</span></td>
+            </tr>
+            <tr>
+              <td>Primary Etiology</td>
+              <td>Placental insufficiency, aneuploidy, infection</td>
+              <td>Milder placental dysfunction</td>
+            </tr>
+            <tr>
+              <td>Umbilical Artery Doppler</td>
+              <td><span class="badge badge-red">Typically abnormal (AREDV common)</span></td>
+              <td><span class="badge badge-green">Typically normal</span></td>
+            </tr>
+            <tr>
+              <td>Maternal Hypertensive Risk</td>
+              <td>High — up to 70% of cases</td>
+              <td>Lower association</td>
+            </tr>
+            <tr>
+              <td>Monitoring Focus</td>
+              <td>DV Doppler · cCTG · Prematurity balance</td>
+              <td>MCA Doppler · Cerebroplacental ratio (CPR)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>MFM Education Series</span>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('section.slide'));
+  const tot = slides.length;
+  const idxEl = document.getElementById('idx');
+  const totEl = document.getElementById('tot');
+  const bar = document.getElementById('bar');
+  if (totEl) totEl.textContent = tot;
+
+  let i = 0;
+  function show(n){
+    if (tot === 0) return;
+    i = Math.max(0, Math.min(tot-1, n));
+    slides.forEach((s, k)=> s.classList.toggle('active', k===i));
+    if (idxEl) idxEl.textContent = (i+1);
+    if (bar) bar.style.width = ((i+1)/tot*100).toFixed(1) + '%';
+    // Improve accessibility
+    slides[i].setAttribute('aria-hidden', 'false');
+    slides.forEach((s,k)=>{ if(k!==i) s.setAttribute('aria-hidden','true'); });
+  }
+  function next(){ show(i+1); }
+  function prev(){ show(i-1); }
+
+  document.addEventListener('keydown', (e)=>{
+    const key = e.key;
+    if(key==='ArrowRight' || key===' ' || key==='PageDown'){ e.preventDefault(); next(); }
+    if(key==='ArrowLeft' || key==='PageUp'){ e.preventDefault(); prev(); }
+    if(key==='Home'){ e.preventDefault(); show(0); }
+    if(key==='End'){ e.preventDefault(); show(tot-1); }
+  });
+
+  // Click / tap navigation zones
+  document.addEventListener('click', (e)=>{
+    const x = e.clientX / window.innerWidth;
+    if(x < 0.33) prev();
+    else next();
+  });
+
+  // Swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) > 50) dx < 0 ? next() : prev();
+  });
+
+  // Init
+  show(0);
+})();
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

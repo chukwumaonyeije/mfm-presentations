@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FGR: What It Is and Why It Matters — Intern Orientation 2026</title>
+<style>
+  :root{
+    --bg:#07111c;
+    --panel:#0b1c2c;
+    --fg:#f4f7fb;
+    --muted:#b7c4d6;
+    --accent:#35d0ff;
+    --accent2:#ff4d6d;
+    --ok:#2ee6a6;
+    --warn:#ffd166;
+    --line:#16324a;
+  }
+  html,body{height:100%; margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:var(--bg); color:var(--fg); overflow:hidden;}
+  .deck{height:100%; display:flex; flex-direction:column;}
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 16px; border-bottom:1px solid var(--line); background:rgba(11,28,44,0.6); backdrop-filter: blur(6px);
+    flex-shrink:0;
+  }
+  .title{font-weight:700; letter-spacing:.2px; font-size:14px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .meta{display:flex; gap:10px; align-items:center;}
+  .pill{border:1px solid var(--line); color:var(--muted); padding:4px 10px; border-radius:999px; font-size:12px; white-space:nowrap;}
+  .pill b{color:var(--fg);}
+  .progress{height:6px; background:#06101a; border-top:1px solid var(--line); border-bottom:1px solid var(--line); flex-shrink:0;}
+  .bar{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--ok)); transition: width 0.3s ease;}
+  .slides{flex:1; position:relative; overflow:hidden;}
+  section.slide{
+    position:absolute; inset:0; padding:24px 32px;
+    display:grid; grid-template-rows:auto 1fr auto; gap:16px;
+    opacity:0; transform: translateX(18px); transition: opacity .25s ease, transform .25s ease;
+    pointer-events:none;
+    box-sizing:border-box;
+  }
+  section.slide.active{opacity:1; transform: translateX(0); pointer-events:auto;}
+  
+  /* Typography */
+  .h1{font-size:clamp(28px, 4.5vw, 44px); line-height:1.1; font-weight:800; color:var(--accent); letter-spacing:.2px; margin-bottom:4px;}
+  .h2{font-size:clamp(20px, 3.2vw, 28px); line-height:1.2; font-weight:800; color:var(--fg); margin-bottom:4px;}
+  .sub{color:var(--muted); font-size:clamp(14px, 1.8vw, 17px); line-height:1.4; max-width:960px; margin-bottom:8px;}
+  
+  /* Grid & Columns */
+  .grid{display:grid; gap:16px; align-content:start;}
+  .cols-2{grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));}
+  .cols-3{grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));}
+  
+  .card{
+    background:linear-gradient(180deg, rgba(11,28,44,.85), rgba(9,22,35,.85));
+    border:1px solid var(--line); border-radius:14px; padding:16px 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    box-sizing:border-box;
+  }
+  .col-card{
+    background:rgba(11,28,44,.5);
+    border-left:4px solid var(--accent);
+    border-top:1px solid var(--line);
+    border-right:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    border-radius:8px;
+    padding:16px;
+  }
+  .col-card.accent{ border-left-color: var(--accent2); }
+  .col-card.warning{ border-left-color: var(--accent2); background: rgba(255,77,109,.05); border-color: rgba(255,77,109,.2); }
+  .col-card.success{ border-left-color: var(--ok); background: rgba(46,230,166,.05); border-color: rgba(46,230,166,.2); }
+  
+  .col-card h3{ font-size:16px; font-weight:700; color:var(--accent); margin-bottom:8px; }
+  .col-card.accent h3{ color:var(--accent2); }
+  .col-card.warning h3{ color:var(--accent2); }
+  .col-card.success h3{ color:var(--ok); }
+  
+  .k{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.2px; margin-bottom:4px;}
+  ul{margin:6px 0 0 0; padding-left:20px;}
+  li{margin:6px 0; font-size:clamp(13px, 1.4vw, 16px); line-height:1.4;}
+  .big{font-size:clamp(15px, 1.8vw, 20px); line-height:1.4; font-weight:500;}
+  .em{color:var(--accent); font-weight:800;}
+  .danger{color:var(--accent2); font-weight:800;}
+  .ok{color:var(--ok); font-weight:800;}
+  .warn{color:var(--warn); font-weight:800;}
+  .footer{display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:12px; border-top:1px solid var(--line); padding-top:8px; flex-shrink:0;}
+  .keys{opacity:.9}
+  .kbd{border:1px solid var(--line); border-bottom-width:2px; padding:1px 6px; border-radius:6px; color:var(--muted); font-size:11px;}
+  .tagrow{display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;}
+  .tag{border:1px solid var(--line); padding:4px 8px; border-radius:10px; font-size:12px; color:var(--muted);}
+  .tag b{color:var(--fg);}
+  
+  /* Visuals & Callouts */
+  .callout{
+    border-left:5px solid var(--accent);
+    background:rgba(53,208,255,.05);
+    padding:12px 16px; border-radius:8px; border-top:1px solid rgba(53,208,255,.15); border-right:1px solid rgba(53,208,255,.15); border-bottom:1px solid rgba(53,208,255,.15);
+    font-size:clamp(13px, 1.4vw, 16px); line-height:1.45;
+  }
+  .callout.red{ border-left-color: var(--accent2); background:rgba(255,77,109,.05); border-color: rgba(255,77,109,.15); }
+  .callout.green{ border-left-color: var(--ok); background:rgba(46,230,166,.05); border-color: rgba(46,230,166,.15); }
+  .callout.gold{ border-left-color: var(--warn); background:rgba(255,209,102,.05); border-color: rgba(255,209,102,.15); }
+  
+  .stat-row{ display:flex; gap:10px; flex-wrap:wrap; margin:8px 0; }
+  .stat-pill{ background:var(--panel); border:1px solid var(--line); color:var(--fg); border-radius:50px; padding:4px 12px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .stat-pill.light{ border-color:var(--accent); color:var(--accent); }
+  .stat-pill.teal{ border-color:var(--ok); color:var(--ok); }
+  
+  /* Table styling */
+  table{ width:100%; border-collapse:collapse; font-size:clamp(11px, 1.2vw, 14px); margin-top:8px; }
+  th{ background:var(--panel); color:var(--accent); padding:6px 10px; text-align:left; font-weight:600; border-bottom:1px solid var(--line); }
+  td{ padding:6px 10px; border-bottom:1px solid var(--line); color:var(--muted); vertical-align:top; line-height:1.35; }
+  tr:nth-child(even) td{ background:rgba(255,255,255,0.02); }
+  
+  /* Phase steps */
+  .phase-bar{ display:flex; gap:8px; margin:8px 0; }
+  .phase-step{ flex:1; background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:8px; font-size:12px; font-weight:600; text-align:center; color:var(--muted); }
+  .phase-step.active{ border-color:var(--accent); color:var(--accent); background:rgba(53,208,255,.05); }
+  
+  /* Doppler elements */
+  .doppler-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:8px; }
+  .doppler-card{ border-radius:8px; padding:10px; text-align:center; font-size:12px; font-weight:600; line-height:1.35; border-width:2px; border-style:solid; }
+  .d-normal{ background:rgba(46,230,166,.05); color:var(--ok); border-color:var(--ok); }
+  .d-elev{ background:rgba(255,209,102,.05); color:var(--warn); border-color:var(--warn); }
+  .d-absent{ background:rgba(240,136,62,.05); color:#f0883e; border-color:#f0883e; }
+  .d-rev{ background:rgba(255,77,109,.05); color:var(--accent2); border-color:var(--accent2); }
+  
+  /* Engine box */
+  .engine-row{ display:flex; gap:12px; align-items:center; margin-top:8px; }
+  .engine-box{ flex:1; border-radius:10px; padding:14px; font-size:clamp(12px, 1.3vw, 15px); line-height:1.4; border-width:2px; border-style:solid; }
+  .engine-box.prob{ background:rgba(53,208,255,.03); border-color:var(--accent); }
+  .engine-box.det{ background:rgba(46,230,166,.03); border-color:var(--ok); }
+  .engine-box h3{ font-size:15px; font-weight:700; margin-bottom:6px; }
+  .engine-arrow{ font-size:24px; color:var(--accent); font-weight:900; }
+  
+  /* Custom slides styling */
+  .slide.title-slide{ background:linear-gradient(135deg, #07111c 0%, #0b1c2c 100%); justify-content:center; align-items:flex-start; }
+  .slide.title-slide h1{ font-size:clamp(32px, 6vw, 56px); margin-bottom:10px; color:var(--fg); }
+  .slide.title-slide h2{ font-size:clamp(18px, 3.5vw, 26px); font-weight:400; color:var(--accent); margin-bottom:24px; }
+  .slide.title-slide .meta{ display:block; font-size:14px; color:var(--muted); line-height:1.6; }
+  .slide.title-slide .meta strong{ color:var(--fg); }
+  
+  .slide.closing-slide{ background:linear-gradient(135deg, #0b1c2c 0%, #07111c 100%); justify-content:center; align-items:center; text-align:center; }
+  .slide.closing-slide h1{ font-size:clamp(28px, 5vw, 44px); color:var(--fg); margin-bottom:16px; }
+  .slide.closing-slide p{ font-size:clamp(14px, 1.8vw, 18px); color:var(--muted); max-width:720px; line-height:1.5; margin:0 auto 12px; }
+  .slide.closing-slide strong{ color:var(--accent); }
+  
+  /* Responsive viewport tweaks */
+  @media (max-width: 768px) {
+    section.slide { padding: 16px; gap: 12px; }
+    .cols-2, .cols-3, .engine-row { grid-template-columns: 1fr; flex-direction: column; }
+    .engine-arrow { transform: rotate(90deg); margin: 4px 0; }
+    .topbar { padding: 8px 12px; }
+    .title { font-size: 12px; }
+    .keys { display: none; }
+  }
+  @media print{
+    .topbar, .progress{ display:none; }
+    section.slide{ position:relative; opacity:1; transform:none; page-break-after:always; pointer-events:auto; display:grid !important; height:auto; }
+    body{ background:white; color:black; overflow:visible; }
+    .card, .col-card, .callout{ background:none; border-color:#ccc; box-shadow:none; color:black; }
+  }
+</style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/fgr-intern-orientation/index.html">
+<meta name="description" content="Orientation slide deck for the Atlanta Perinatal Associates Summer 2026 Clinical Research Sprint. Explains the clinical significance of FGR, diagnostic criteria under SMFM #52, short- and long-term risks, the concept of the 'detection gap', and the study design comparing a probabilistic LLM engine with a deterministic rules engine.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Fetal Growth Restriction, Clinical Research, AI in Medicine, Provider Education, Intern Orientation">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/fgr-intern-orientation/index.html">
+<meta property="og:title" content="FGR: What It Is and Why It Matters — Intern Orientation 2026 | OpenMFM">
+<meta property="og:description" content="Orientation slide deck for the Atlanta Perinatal Associates Summer 2026 Clinical Research Sprint. Explains the clinical significance of FGR, diagnostic criteria under SMFM #52, short- and long-term risks, the concept of the 'detection gap', and the study design comparing a probabilistic LLM engine with a deterministic rules engine.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FGR: What It Is and Why It Matters — Intern Orientation 2026 | OpenMFM">
+<meta name="twitter:description" content="Orientation slide deck for the Atlanta Perinatal Associates Summer 2026 Clinical Research Sprint. Explains the clinical significance of FGR, diagnostic criteria under SMFM #52, short- and long-term risks, the concept of the 'detection gap', and the study design comparing a probabilistic LLM engine with a deterministic rules engine.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "FGR: What It Is and Why It Matters — Intern Orientation 2026",
+  "description": "Orientation slide deck for the Atlanta Perinatal Associates Summer 2026 Clinical Research Sprint. Explains the clinical significance of FGR, diagnostic criteria under SMFM #52, short- and long-term risks, the concept of the 'detection gap', and the study design comparing a probabilistic LLM engine with a deterministic rules engine.",
+  "url": "https://openmfm.org/decks/fgr-intern-orientation/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-06-16",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "FGR: What It Is and Why It Matters — Intern Orientation 2026"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Fetal Growth Restriction, Clinical Research, AI in Medicine, Provider Education, Intern Orientation"
+}
+</script>
+</head>
+<body>
+<div class="deck">
+  <div class="topbar">
+    <div class="title">FGR: What It Is and Why It Matters — <b>Intern Orientation</b></div>
+    <div class="meta">
+      <div class="pill"><b id="idx">1</b> / <span id="tot">15</span></div>
+      <div class="pill">Summer Research Sprint</div>
+      <div class="pill keys"><span class="kbd">←</span> <span class="kbd">→</span> <span class="kbd">Space</span> <span class="kbd">Home</span> <span class="kbd">End</span></div>
+    </div>
+  </div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+
+  <div class="slides" id="slides">
+
+    <!-- Slide 1 -->
+    <section class="slide active">
+      <div class="k">Slide 1 of 15</div>
+      <div class="slide title-slide">
+        <h1>Fetal Growth Restriction</h1>
+        <h2>What It Is and Why It Matters</h2>
+        <div class="meta">
+          <strong>Chukwuma Onyeije, MD, FACOG</strong><br/>
+          Medical Director, Atlanta Perinatal Associates<br/>
+          Founder, DoctorsWhoCode.blog · OpenMFM.org<br/>
+          Intern Orientation · June 2026
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 2 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Welcome, Interns!</div>
+        <div class="sub">Summer 2026 Clinical Research Sprint at Atlanta Perinatal Associates.</div>
+      </div>
+      <div class="grid">
+        <div class="callout gold">
+          <strong>Our Central Question:</strong> Can AI-assisted review of the medical record identify patients at risk for FGR <em>earlier and more consistently</em> than traditional clinical workflows — while keeping physicians responsible for all clinical decisions?
+        </div>
+        <div class="grid cols-2">
+          <div class="col-card">
+            <h3>Your Team</h3>
+            <ul>
+              <li>Matthew Nwazue — <b>Kennesaw State</b></li>
+              <li>Teyah Walker — <b>Tuskegee University</b></li>
+              <li>Dayyid Dixon — <b>Albany State</b></li>
+              <li>India Williams — <b>Morris Brown College</b></li>
+            </ul>
+          </div>
+          <div class="col-card success">
+            <h3>Collaboration Partners</h3>
+            <ul>
+              <li>APA Physicians</li>
+              <li>Serelora Software Developers</li>
+              <li>OpenMFM.org / DoctorsWhoCode.blog</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 3 -->
+    <section class="slide">
+      <div>
+        <div class="h2">What Is Fetal Growth Restriction?</div>
+        <div class="sub">FGR is a high-risk pregnancy condition where a fetus fails to reach its growth potential.</div>
+      </div>
+      <div class="grid">
+        <div class="callout">
+          <strong>Key Insight:</strong> FGR is not simply "a small baby." It describes a pathological process, not just a size measurement.
+        </div>
+        <table>
+          <thead>
+            <tr><th>Concept</th><th>Definition</th><th>Clinical Significance</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>SGA</strong> (Small for Gestational Age)</td>
+              <td>Fetal size &lt; 10th percentile for gestational age</td>
+              <td>Statistical descriptor; may be constitutionally normal</td>
+            </tr>
+            <tr>
+              <td><strong>FGR</strong> (Fetal Growth Restriction)</td>
+              <td>Fetus failing to reach its genetic growth potential</td>
+              <td>Pathological; associated with placental insufficiency</td>
+            </tr>
+            <tr>
+              <td><strong>Constitutionally Small</strong></td>
+              <td>Small but otherwise healthy fetus with normal Dopplers</td>
+              <td>Requires surveillance to distinguish from true FGR</td>
+            </tr>
+            <tr>
+              <td><strong>Placental Insufficiency</strong></td>
+              <td>Impaired placental blood flow limiting fetal nutrients</td>
+              <td>The primary mechanism driving FGR in most cases</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 4 -->
+    <section class="slide">
+      <div>
+        <div class="h2">How Is FGR Diagnosed?</div>
+        <div class="sub">Diagnosis relies primarily on ultrasound biometry and Doppler velocimetry.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="col-card">
+          <h3>Primary Biometric Criteria</h3>
+          <ul>
+            <li><strong>Estimated Fetal Weight (EFW) &lt; 10th percentile</strong></li>
+            <li><strong>Abdominal Circumference (AC) &lt; 10th percentile</strong></li>
+            <li>Declining growth velocity across serial scans (crossing percentile lines)</li>
+          </ul>
+        </div>
+        <div class="col-card success">
+          <h3>Early vs. Late Onset FGR</h3>
+          <ul>
+            <li><strong>Early-onset (&lt; 32 weeks):</strong> More severe; strongly associated with placental insufficiency and abnormal Dopplers; higher risk of adverse outcomes</li>
+            <li><strong>Late-onset (≥ 32 weeks):</strong> More common; often subtle; may have normal Dopplers; still carries elevated risk</li>
+          </ul>
+        </div>
+        <div class="callout" style="grid-column: span 2;">
+          <strong>Key Frameworks:</strong> SMFM Consult Series #52 (primary guidelines) · FIGO Initiative · Delphi Consensus (Gordijn et al., 2016)
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 5 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Doppler Ultrasound in FGR</div>
+        <div class="sub">Umbilical artery (UA) Doppler measures placental resistance and is the cornerstone of FGR surveillance.</div>
+      </div>
+      <div class="grid">
+        <div class="doppler-grid">
+          <div class="doppler-card d-normal">
+            <div style="font-size:1.4rem;">✅</div>
+            <strong>Normal</strong><br/>
+            Diastolic flow present<br/>
+            <span style="font-size:10px; opacity:0.8;">Routine surveillance</span>
+          </div>
+          <div class="doppler-card d-elev">
+            <div style="font-size:1.4rem;">⚠️</div>
+            <strong>Elevated S/D</strong><br/>
+            Increased resistance<br/>
+            <span style="font-size:10px; opacity:0.8;">Increased surveillance</span>
+          </div>
+          <div class="doppler-card d-absent">
+            <div style="font-size:1.4rem;">🔶</div>
+            <strong>Absent EDV</strong><br/>
+            Severe insufficiency<br/>
+            <span style="font-size:10px; opacity:0.8;">Hospitalization / delivery</span>
+          </div>
+          <div class="doppler-card d-rev">
+            <div style="font-size:1.4rem;">🔴</div>
+            <strong>Reversed EDV</strong><br/>
+            Critical finding<br/>
+            <span style="font-size:10px; opacity:0.8;">Urgent delivery planning</span>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:10px;">
+          <strong>Surveillance Note:</strong> MCA Doppler, Ductus Venosus, and Uterine Artery Dopplers are used in specific clinical scenarios but are <em>not</em> routine management drivers under SMFM #52.
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 6 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Why FGR Matters: The Stakes</div>
+        <div class="sub">FGR is associated with a spectrum of adverse short-term and long-term outcomes.</div>
+      </div>
+      <div class="grid">
+        <div class="stat-row">
+          <div class="stat-pill light">Leading cause of stillbirth</div>
+          <div class="stat-pill">Preterm birth risk</div>
+          <div class="stat-pill teal">NICU admission</div>
+          <div class="stat-pill light">Long-term neurodevelopment</div>
+        </div>
+        <div class="grid cols-2">
+          <div class="col-card warning">
+            <h3>Short-Term Risks</h3>
+            <ul>
+              <li>Stillbirth (severe Doppler abnormalities)</li>
+              <li>Preterm birth (iatrogenic/spontaneous)</li>
+              <li>Neonatal hypoglycemia, polycythemia</li>
+              <li>Respiratory distress syndrome</li>
+              <li>NICU admission</li>
+            </ul>
+          </div>
+          <div class="col-card">
+            <h3>Long-Term Risks</h3>
+            <ul>
+              <li>Neurodevelopmental delay (TRUFFLE study)</li>
+              <li>Cardiovascular disease in adulthood</li>
+              <li>Metabolic syndrome</li>
+              <li>Impaired cognitive function</li>
+              <li>Increased risk of chronic disease</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 7 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Maternal and Pregnancy Risk Factors</div>
+        <div class="sub">Identifying patients at elevated risk for FGR relies on a thorough review of maternal and pregnancy history.</div>
+      </div>
+      <div class="grid">
+        <table>
+          <thead>
+            <tr><th>Category</th><th>Risk Factors</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Maternal Medical</strong></td>
+              <td>Chronic hypertension, preeclampsia, pregestational diabetes, autoimmune disease (lupus, APS), renal disease, thrombophilia</td>
+            </tr>
+            <tr>
+              <td><strong>Obstetric History</strong></td>
+              <td>Prior FGR, prior stillbirth, prior preeclampsia, prior preterm birth</td>
+            </tr>
+            <tr>
+              <td><strong>Current Pregnancy</strong></td>
+              <td>Multiple gestation, placental abnormalities (previa, abruption), cord abnormalities (single umbilical artery), IVF conception</td>
+            </tr>
+            <tr>
+              <td><strong>Lifestyle / Demo</strong></td>
+              <td>Smoking, substance use, low pre-pregnancy BMI, advanced maternal age, socioeconomic factors</td>
+            </tr>
+            <tr>
+              <td><strong>Prevention Window</strong></td>
+              <td>Low-dose aspirin (started ≤ 16 weeks) reduces preeclampsia and associated FGR risk in high-risk patients (ASPRE trial)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 8 -->
+    <section class="slide">
+      <div>
+        <div class="h2">The Detection Gap: Our Core Problem</div>
+        <div class="sub">The interval between when FGR was first identifiable in the record and when it was formally documented.</div>
+      </div>
+      <div class="grid">
+        <div class="callout red">
+          <strong>Why this matters:</strong> Every week of delay in recognizing FGR is a week of missed surveillance, missed aspirin initiation, and potentially missed opportunity to prevent stillbirth.
+        </div>
+        <div class="grid cols-2">
+          <div class="col-card">
+            <h3>Earliest-Identifiable Point</h3>
+            <p>The gestational age at which the available record first contained enough information to meet FGR criteria — based on data available at that time.</p>
+          </div>
+          <div class="col-card warning">
+            <h3>Delayed Detection</h3>
+            <p>FGR detection that occurred later than a pre-specified acceptable interval, or was not recognized antenatally at all before delivery.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 9 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Key Evidence: The TRUFFLE Study</div>
+        <div class="sub">LANDMARK TRIAL (Trial of Randomized Umbilical and Fetal Flow in Europe) in early-onset FGR.</div>
+      </div>
+      <div class="grid">
+        <div class="callout">
+          <strong>TRUFFLE Question:</strong> In very preterm FGR (26–32 weeks), should delivery timing be guided by <em>ductus venosus (DV) Doppler</em> changes or by <em>CTG short-term variation (STV)</em>?
+        </div>
+        <div class="grid cols-2">
+          <div class="col-card success">
+            <h3>Key Finding</h3>
+            <p>Delivery triggered by <strong>DV changes</strong> (absent/reversed a-wave) was associated with the best 2-year neurodevelopmental outcomes compared to CTG-based triggers alone.</p>
+          </div>
+          <div class="col-card">
+            <h3>Why It Matters to Us</h3>
+            <ul>
+              <li>Demonstrates that <em>timing</em> of delivery in FGR profoundly affects long-term outcomes</li>
+              <li>Supports the value of structured, guideline-based surveillance</li>
+              <li>Reinforces why missed/delayed FGR detection has lasting consequences</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Lees CC, et al. TRUFFLE Study Group. Lancet. 2015;385(9983):2162–2172.</span>
+      </div>
+    </section>
+
+    <!-- Slide 10 -->
+    <section class="slide">
+      <div>
+        <div class="h2">The Two-Engine AI Model</div>
+        <div class="sub">An architecture designed to be transparent, auditable, and physician-supervised.</div>
+      </div>
+      <div class="grid">
+        <div class="engine-row">
+          <div class="engine-box prob">
+            <h3>🔍 Probabilistic Engine</h3>
+            <p><strong>What it does:</strong> Reads unstructured clinical text — notes, ultrasound reports, consultation letters — and extracts possible FGR-relevant signals.</p>
+            <p><strong>Technology:</strong> Large Language Model (LLM)</p>
+          </div>
+          <div class="engine-arrow">→</div>
+          <div class="engine-box det">
+            <h3>⚙️ Deterministic Engine</h3>
+            <p><strong>What it does:</strong> Applies fixed, rule-based guideline logic (SMFM #52 via FGRManager) to the extracted data to recommend surveillance and timing.</p>
+            <p><strong>Technology:</strong> FGRManager rule engine</p>
+          </div>
+        </div>
+        <div class="callout gold">
+          <strong>The Physician Checkpoint:</strong> Both engines surface information for physician review. A physician — not the AI — makes all clinical decisions.
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 11 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Our Study Design: Two Linked Phases</div>
+        <div class="sub">Structured steps to validate and test the AI-assisted review logic.</div>
+      </div>
+      <div class="grid">
+        <div class="phase-bar">
+          <div class="phase-step active">Phase A: Retrospective Study</div>
+          <div class="phase-step">→</div>
+          <div class="phase-step">Phase B: Prospective Silent Pilot</div>
+        </div>
+        <div class="grid cols-2">
+          <div class="col-card">
+            <h3>Phase A: Diagnostic Accuracy</h3>
+            <ul>
+              <li>Review prior APA pregnancies with growth ultrasound data</li>
+              <li>Determine when FGR criteria were met and measure the detection gap</li>
+              <li>Test whether AI-assisted review would have flagged cases earlier</li>
+              <li><strong>Reference standard:</strong> Physician adjudication panel</li>
+            </ul>
+          </div>
+          <div class="col-card success">
+            <h3>Phase B: Silent Pilot</h3>
+            <ul>
+              <li>AI runs <em>silently</em> in parallel with usual care</li>
+              <li>No change to patient management during the pilot</li>
+              <li>Measures: alert rate, positive predictive value, safety</li>
+              <li>Prerequisite for any clinician-facing implementation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 12 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Your Role This Summer</div>
+        <div class="sub">You are research team members, not clinicians. Your contributions are essential.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="col-card success">
+          <h3>✅ You WILL Do</h3>
+          <ul>
+            <li>Review and summarize assigned literature</li>
+            <li>Abstract approved data fields from records (after training)</li>
+            <li>Help maintain the data dictionary and perform QA checks</li>
+            <li>Map clinical workflows and identify detection gaps</li>
+            <li>Prepare figures, tables, posters, and manuscript sections</li>
+          </ul>
+        </div>
+        <div class="col-card warning">
+          <h3>🚫 You Will NOT Do</h3>
+          <ul>
+            <li>Make or suggest clinical diagnoses</li>
+            <li>Change any clinical documentation in the records</li>
+            <li>Use patient information in personal AI tools (OpenAI, etc.)</li>
+            <li>Contact patients about the study</li>
+            <li>Share PHI outside approved APA secure systems</li>
+          </ul>
+        </div>
+        <div class="callout gold" style="grid-column: span 2;">
+          <strong>Golden Rule:</strong> When in doubt, document the uncertainty and escalate to your supervisor. The correct response to ambiguity is never guessing.
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 13 -->
+    <section class="slide">
+      <div>
+        <div class="h2">Week 1: Building Your Foundation</div>
+        <div class="sub">Learning the ropes. No production chart abstraction begins until you understand the clinical terms.</div>
+      </div>
+      <div class="grid">
+        <table>
+          <thead>
+            <tr><th>Day</th><th>Focus</th><th>Deliverable</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Day 1</strong></td>
+              <td>Orientation · Why FGR matters · Privacy onboarding</td>
+              <td>One-page reflection: "Why missed FGR detection matters"</td>
+            </tr>
+            <tr>
+              <td><strong>Day 2</strong></td>
+              <td>SGA vs. FGR · SMFM, FIGO, Delphi frameworks</td>
+              <td>Comparison table: SGA / FGR / Constitutional / Placental insufficiency</td>
+            </tr>
+            <tr>
+              <td><strong>Day 3</strong></td>
+              <td>Placenta · Doppler categories · Surveillance logic</td>
+              <td>Doppler category summary with student-level definitions</td>
+            </tr>
+            <tr>
+              <td><strong>Day 4</strong></td>
+              <td>Data dictionary · Workflow mapping · Documented vs. inferred data</td>
+              <td>Data dictionary contributions for assigned variables</td>
+            </tr>
+            <tr>
+              <td><strong>Day 5</strong></td>
+              <td>Literature synthesis · Abstraction examples · Competency check</td>
+              <td>Literature review outline · Gap analysis · Readiness sign-off</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 14 -->
+    <section class="slide">
+      <div>
+        <div class="h2">What You Will Produce This Summer</div>
+        <div class="sub">By the end of the sprint, you will have contributed to a suite of academic, data, and technical products.</div>
+      </div>
+      <div class="grid cols-2">
+        <div class="col-card">
+          <h3>📄 Academic Products</h3>
+          <ul>
+            <li>Annotated bibliography</li>
+            <li>2–3 page literature review</li>
+            <li>One-page gap analysis</li>
+            <li>Poster or slide contribution</li>
+            <li>Manuscript paragraph, table, or figure draft</li>
+          </ul>
+        </div>
+        <div class="col-card success">
+          <h3>📊 Data &amp; Technical Products</h3>
+          <ul>
+            <li>Completed chart abstraction forms</li>
+            <li>Data dictionary entries</li>
+            <li>Double-abstraction quality-assurance notes</li>
+            <li>Clinical workflow map</li>
+            <li>AI logic documentation in plain language</li>
+            <li>Validation notes and missingness summary</li>
+          </ul>
+        </div>
+        <div class="callout gold" style="grid-column: span 2;">
+          <strong>Bigger Picture:</strong> This work supports abstract submission, a regional conference presentation, and a peer-reviewed manuscript — all with your name on it.
+        </div>
+      </div>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR</span>
+      </div>
+    </section>
+
+    <!-- Slide 15 -->
+    <section class="slide closing-slide">
+      <h1>Let's Make a Difference</h1>
+      <p>This project is about disciplined clinical research, not technology enthusiasm. The goal is to learn whether structured, AI-assisted review can help APA surface FGR risk <strong>earlier, more consistently, and more equitably</strong> — for mothers and babies throughout metropolitan Atlanta.</p>
+      <br/>
+      <p><strong>Welcome to the team. Let's get to work.</strong></p>
+      <br/>
+      <p style="font-size:13px; opacity:0.7;">Chukwuma Onyeije, MD, FACOG · Medical Director, Atlanta Perinatal Associates<br/>
+      DoctorsWhoCode.blog · OpenMFM.org · CodeCraftMD</p>
+      <div class="footer">
+        <span>Atlanta Perinatal Associates</span>
+        <span>AI-Assisted Detection of FGR · Summer 2026</span>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('section.slide'));
+  const tot = slides.length;
+  const idxEl = document.getElementById('idx');
+  const totEl = document.getElementById('tot');
+  const bar = document.getElementById('bar');
+  if (totEl) totEl.textContent = tot;
+
+  let i = 0;
+  function show(n){
+    if (tot === 0) return;
+    i = Math.max(0, Math.min(tot-1, n));
+    slides.forEach((s, k)=> s.classList.toggle('active', k===i));
+    if (idxEl) idxEl.textContent = (i+1);
+    if (bar) bar.style.width = ((i+1)/tot*100).toFixed(1) + '%';
+    // Improve accessibility
+    slides[i].setAttribute('aria-hidden', 'false');
+    slides.forEach((s,k)=>{ if(k!==i) s.setAttribute('aria-hidden','true'); });
+  }
+  function next(){ show(i+1); }
+  function prev(){ show(i-1); }
+
+  document.addEventListener('keydown', (e)=>{
+    const key = e.key;
+    if(key==='ArrowRight' || key===' ' || key==='PageDown'){ e.preventDefault(); next(); }
+    if(key==='ArrowLeft' || key==='PageUp'){ e.preventDefault(); prev(); }
+    if(key==='Home'){ e.preventDefault(); show(0); }
+    if(key==='End'){ e.preventDefault(); show(tot-1); }
+  });
+
+  // Click / tap navigation zones
+  document.addEventListener('click', (e)=>{
+    const x = e.clientX / window.innerWidth;
+    if(x < 0.33) prev();
+    else next();
+  });
+
+  // Swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) > 50) dx < 0 ? next() : prev();
+  });
+
+  // Init
+  show(0);
+})();
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
