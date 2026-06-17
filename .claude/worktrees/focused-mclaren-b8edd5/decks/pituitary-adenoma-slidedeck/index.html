@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pituitary Adenoma in Pregnancy | Atlanta Perinatal Associates</title>
+    <style>
+        /* ─── Reset & Base ─────────────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:        #0d1117;
+            --surface:   #161b22;
+            --border:    #30363d;
+            --text:      #e6edf3;
+            --muted:     #8b949e;
+            --accent:    #58a6ff;   /* blue  – highlight / info */
+            --green:     #3fb950;   /* green – reassurance */
+            --amber:     #d29922;   /* amber – caution / action */
+            --red:       #f85149;   /* red   – warning */
+            --teal:      #39d353;
+            --purple:    #bc8cff;
+        }
+
+        html, body {
+            height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+        }
+
+        /* ─── Deck & Slides ─────────────────────────────────────────────── */
+        .deck {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease;
+        }
+        .slide.active { opacity: 1; visibility: visible; }
+
+        /* ─── Typography ────────────────────────────────────────────────── */
+        .slide-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.6rem;
+        }
+        h1 { font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 300; line-height: 1.15; }
+        h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 300; line-height: 1.2; }
+        h3 { font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 400; }
+        p, li { font-size: clamp(1rem, 1.6vw, 1.35rem); line-height: 1.65; }
+
+        .accent  { color: var(--accent); }
+        .green   { color: var(--green); }
+        .amber   { color: var(--amber); }
+        .red     { color: var(--red); }
+        .purple  { color: var(--purple); }
+        .muted   { color: var(--muted); }
+
+        /* ─── Layout Helpers ────────────────────────────────────────────── */
+        .center { text-align: center; }
+        .col { display: flex; flex-direction: column; gap: 1rem; }
+        .row { display: flex; flex-direction: row; gap: 2rem; align-items: flex-start; }
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.4rem 1.8rem;
+        }
+        .pill {
+            display: inline-block;
+            padding: 0.25rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+        .pill-green  { background: rgba(63,185,80,0.15);  color: var(--green); }
+        .pill-amber  { background: rgba(210,153,34,0.15); color: var(--amber); }
+        .pill-red    { background: rgba(248,81,73,0.15);  color: var(--red); }
+        .pill-blue   { background: rgba(88,166,255,0.15); color: var(--accent); }
+
+        /* ─── Divider ───────────────────────────────────────────────────── */
+        .divider {
+            width: 60px; height: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+            margin: 0.8rem auto;
+        }
+
+        /* ─── Icon Circles ──────────────────────────────────────────────── */
+        .icon-circle {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+        .ic-blue   { background: rgba(88,166,255,0.15); }
+        .ic-green  { background: rgba(63,185,80,0.15); }
+        .ic-amber  { background: rgba(210,153,34,0.15); }
+        .ic-red    { background: rgba(248,81,73,0.15); }
+        .ic-purple { background: rgba(188,140,255,0.15); }
+
+        /* ─── Risk Table ────────────────────────────────────────────────── */
+        .risk-table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+        .risk-table th {
+            background: var(--surface);
+            color: var(--muted);
+            font-weight: 500;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.7rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .risk-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+        .risk-table tr:last-child td { border-bottom: none; }
+
+        /* ─── Timeline ──────────────────────────────────────────────────── */
+        .timeline { display: flex; flex-direction: column; gap: 0; width: 100%; max-width: 680px; }
+        .tl-item { display: flex; gap: 1.2rem; align-items: flex-start; }
+        .tl-left { display: flex; flex-direction: column; align-items: center; width: 40px; flex-shrink: 0; }
+        .tl-dot {
+            width: 14px; height: 14px; border-radius: 50%;
+            background: var(--accent); flex-shrink: 0; margin-top: 4px;
+        }
+        .tl-line { width: 2px; flex: 1; background: var(--border); min-height: 32px; }
+        .tl-content { padding-bottom: 1.4rem; }
+        .tl-week { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+        .tl-text { font-size: 1.05rem; }
+
+        /* ─── Navigation ────────────────────────────────────────────────── */
+        .nav {
+            position: fixed;
+            bottom: 1.8rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 100;
+        }
+        .nav-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .nav-btn:hover { background: var(--border); border-color: var(--accent); }
+        .nav-counter { color: var(--muted); font-size: 0.85rem; min-width: 60px; text-align: center; }
+
+        /* ─── Progress Bar ──────────────────────────────────────────────── */
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: var(--accent);
+            transition: width 0.4s ease;
+            z-index: 200;
+        }
+
+        /* ─── Branding ──────────────────────────────────────────────────── */
+        .brand {
+            position: fixed;
+            top: 1rem; right: 1.5rem;
+            font-size: 0.7rem;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* ─── Slide-specific overrides ──────────────────────────────────── */
+        #slide-title { background: radial-gradient(ellipse at 60% 40%, #1a2540 0%, var(--bg) 70%); }
+        #slide-emergency { background: radial-gradient(ellipse at 50% 50%, #2a1010 0%, var(--bg) 70%); }
+        #slide-partnership { background: radial-gradient(ellipse at 50% 50%, #0d1f2d 0%, var(--bg) 70%); }
+        /* 2026 refresh overrides */
+        :root {
+            --bg: #08131f;
+            --surface: rgba(10, 24, 39, 0.9);
+            --border: rgba(131, 193, 255, 0.16);
+            --text: #f5f9fc;
+            --muted: #b7c7d8;
+            --accent: #6db9ff;
+            --green: #75e09e;
+            --amber: #ffb760;
+            --red: #ff6f78;
+            --teal: #52decf;
+            --purple: #b8b7ff;
+        }
+
+        html, body {
+            background:
+                radial-gradient(circle at top left, rgba(109, 185, 255, 0.18), transparent 26%),
+                radial-gradient(circle at 82% 12%, rgba(82, 222, 207, 0.12), transparent 20%),
+                linear-gradient(180deg, #08131f 0%, #06101a 100%);
+            font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
+        }
+
+        .deck::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+            background-size: 46px 46px;
+            mask-image: linear-gradient(180deg, rgba(0,0,0,0.22), transparent 80%);
+            pointer-events: none;
+        }
+
+        .slide {
+            padding: 4rem 5rem 6rem;
+            background: linear-gradient(180deg, rgba(8, 19, 31, 0.72), rgba(8, 19, 31, 0.3));
+        }
+
+        h1, h2 { letter-spacing: -0.035em; font-weight: 700; text-wrap: balance; }
+
+        .card {
+            background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
+            border: 1px solid rgba(131, 193, 255, 0.16);
+            border-radius: 18px;
+            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav {
+            bottom: 1.2rem;
+            padding: 0.55rem 0.7rem;
+            border: 1px solid rgba(131, 193, 255, 0.16);
+            border-radius: 999px;
+            background: rgba(7, 17, 28, 0.72);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+        }
+
+        .nav button {
+            border-radius: 999px;
+            background: rgba(14, 30, 48, 0.92);
+            border-color: rgba(131, 193, 255, 0.18);
+        }
+
+        .nav button:hover { background: rgba(31, 74, 116, 0.9); }
+        .progress-bar, #progress-bar { height: 4px; background: linear-gradient(90deg, #6db9ff 0%, #52decf 100%); box-shadow: 0 0 18px rgba(109, 185, 255, 0.45); }
+        #slide-counter, .counter { color: #dce8f7; font-weight: 600; }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/pituitary-adenoma-slidedeck/index.html">
+<meta name="description" content="Patient education guide to pituitary adenoma in pregnancy: prolactinoma vs. non-functioning adenoma, micro vs. macroadenoma growth risk, dopamine agonist management, visual field monitoring, pituitary apoplexy recognition, and postpartum care.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Pituitary Adenoma, Prolactinoma, Endocrine, Neuro, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/pituitary-adenoma-slidedeck/index.html">
+<meta property="og:title" content="Pituitary Adenoma in Pregnancy - Patient Education | OpenMFM">
+<meta property="og:description" content="Patient education guide to pituitary adenoma in pregnancy: prolactinoma vs. non-functioning adenoma, micro vs. macroadenoma growth risk, dopamine agonist management, visual field monitoring, pituitary apoplexy recognition, and postpartum care.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pituitary Adenoma in Pregnancy - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Patient education guide to pituitary adenoma in pregnancy: prolactinoma vs. non-functioning adenoma, micro vs. macroadenoma growth risk, dopamine agonist management, visual field monitoring, pituitary apoplexy recognition, and postpartum care.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Pituitary Adenoma in Pregnancy - Patient Education",
+  "description": "Patient education guide to pituitary adenoma in pregnancy: prolactinoma vs. non-functioning adenoma, micro vs. macroadenoma growth risk, dopamine agonist management, visual field monitoring, pituitary apoplexy recognition, and postpartum care.",
+  "url": "https://openmfm.org/decks/pituitary-adenoma-slidedeck/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-17",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Pituitary Adenoma in Pregnancy - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Pituitary Adenoma, Prolactinoma, Endocrine, Neuro, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="brand">Atlanta Perinatal Associates</div>
+
+<div class="deck">
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 1 — Title
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide active center" id="slide-title">
+        <div class="slide-label">Patient Education</div>
+        <h1>Pituitary Adenoma<br><span class="accent">in Pregnancy</span></h1>
+        <div class="divider"></div>
+        <p class="muted" style="margin-top:1rem;">Understanding your condition and what to expect</p>
+        <p style="margin-top:2.5rem; font-size:0.9rem; color:var(--muted);">
+            Maternal-Fetal Medicine &nbsp;·&nbsp; Atlanta Perinatal Associates
+        </p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 2 — What is a Pituitary Adenoma?
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide center" id="slide-what">
+        <div class="icon-circle ic-blue">🧠</div>
+        <div class="slide-label">What Is This?</div>
+        <h2>Pituitary Adenoma</h2>
+        <div class="divider"></div>
+        <p style="max-width:640px; margin-top:1rem;">
+            A <strong class="accent">benign (non-cancerous) growth</strong> on the pituitary gland —
+            a pea-sized gland at the base of your brain that controls important hormones.
+        </p>
+        <div class="pill pill-green" style="margin-top:1.5rem;">Not cancer &nbsp;✓</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 3 — The Pituitary Gland
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-gland">
+        <div class="slide-label">Background</div>
+        <h2 class="center">Your Pituitary Gland<br><span class="accent">During Pregnancy</span></h2>
+        <div class="divider"></div>
+        <div class="row" style="margin-top:1.5rem; justify-content:center; flex-wrap:wrap; gap:1.5rem;">
+            <div class="card" style="max-width:280px; text-align:center;">
+                <div style="font-size:2.2rem; margin-bottom:0.5rem;">📈</div>
+                <h3 class="accent">70–120%</h3>
+                <p class="muted" style="font-size:0.95rem; margin-top:0.4rem;">Normal increase in pituitary volume during pregnancy</p>
+            </div>
+            <div class="card" style="max-width:280px; text-align:center;">
+                <div style="font-size:2.2rem; margin-bottom:0.5rem;">🔬</div>
+                <h3 class="accent">Estrogen</h3>
+                <p class="muted" style="font-size:0.95rem; margin-top:0.4rem;">The pregnancy hormone that drives this normal enlargement</p>
+            </div>
+            <div class="card" style="max-width:280px; text-align:center;">
+                <div style="font-size:2.2rem; margin-bottom:0.5rem;">✅</div>
+                <h3 class="green">Normal</h3>
+                <p class="muted" style="font-size:0.95rem; margin-top:0.4rem;">This enlargement is a healthy, expected part of pregnancy</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 4 — Types of Adenomas
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-types">
+        <div class="slide-label">Types</div>
+        <h2 class="center">Types of Pituitary Adenomas</h2>
+        <div class="divider"></div>
+        <div class="row" style="margin-top:1.5rem; justify-content:center; flex-wrap:wrap; gap:1.2rem;">
+            <div class="card" style="max-width:260px; text-align:center;">
+                <div style="font-size:2rem; margin-bottom:0.6rem;">🔵</div>
+                <h3 class="accent">Prolactinoma</h3>
+                <p class="muted" style="font-size:0.9rem; margin-top:0.4rem;">Most common type. Produces extra prolactin (a milk hormone).</p>
+            </div>
+            <div class="card" style="max-width:260px; text-align:center;">
+                <div style="font-size:2rem; margin-bottom:0.6rem;">⚪</div>
+                <h3>Non-Functioning</h3>
+                <p class="muted" style="font-size:0.9rem; margin-top:0.4rem;">Does not produce excess hormones. Generally lower risk in pregnancy.</p>
+            </div>
+            <div class="card" style="max-width:260px; text-align:center;">
+                <div style="font-size:2rem; margin-bottom:0.6rem;">🟡</div>
+                <h3 class="amber">Other Types</h3>
+                <p class="muted" style="font-size:0.9rem; margin-top:0.4rem;">Rare. Include ACTH- or GH-secreting tumors. Require specialist care.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 5 — Size Matters: Micro vs Macro
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-size">
+        <div class="slide-label">Risk Stratification</div>
+        <h2 class="center">Size Matters</h2>
+        <div class="divider"></div>
+        <div class="row" style="margin-top:1.5rem; justify-content:center; gap:2rem; flex-wrap:wrap;">
+            <div class="card" style="max-width:320px; border-color:var(--green);">
+                <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.8rem;">
+                    <span style="font-size:1.8rem;">🟢</span>
+                    <h3 class="green">Microadenoma</h3>
+                </div>
+                <p class="muted" style="font-size:0.9rem;">Smaller than <strong class="text">10 mm</strong></p>
+                <p style="margin-top:0.8rem; font-size:1.1rem;">
+                    Risk of growth: <strong class="green">&lt; 5%</strong>
+                </p>
+                <p class="muted" style="font-size:0.85rem; margin-top:0.5rem;">Low risk. Close monitoring is usually all that is needed.</p>
+            </div>
+            <div class="card" style="max-width:320px; border-color:var(--amber);">
+                <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.8rem;">
+                    <span style="font-size:1.8rem;">🟡</span>
+                    <h3 class="amber">Macroadenoma</h3>
+                </div>
+                <p class="muted" style="font-size:0.9rem;">10 mm or larger</p>
+                <p style="margin-top:0.8rem; font-size:1.1rem;">
+                    Risk of growth: <strong class="amber">20–31%</strong>
+                </p>
+                <p class="muted" style="font-size:0.85rem; margin-top:0.5rem;">Requires more frequent monitoring during pregnancy.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 6 — Medication Management
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide center" id="slide-meds">
+        <div class="icon-circle ic-amber">💊</div>
+        <div class="slide-label">Medication</div>
+        <h2>Your Medication<br><span class="amber">During Pregnancy</span></h2>
+        <div class="divider"></div>
+        <p style="max-width:620px; margin-top:1rem;">
+            Dopamine agonist medications (e.g., cabergoline, bromocriptine) are typically
+            <strong class="amber">stopped at conception</strong> to minimize fetal exposure.
+        </p>
+        <p style="max-width:620px; margin-top:1rem; color:var(--muted); font-size:1rem;">
+            Your MFM specialist will guide you on when — and whether — to restart after delivery.
+        </p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 7 — Monitoring Timeline
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-monitoring">
+        <div class="slide-label">Monitoring</div>
+        <h2 class="center">What We Watch For</h2>
+        <div class="divider"></div>
+        <div class="timeline" style="margin-top:1.5rem;">
+            <div class="tl-item">
+                <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+                <div class="tl-content">
+                    <div class="tl-week">Every Visit</div>
+                    <div class="tl-text">Ask about <strong class="accent">headaches</strong> and <strong class="accent">vision changes</strong></div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-left"><div class="tl-dot" style="background:var(--amber);"></div><div class="tl-line"></div></div>
+                <div class="tl-content">
+                    <div class="tl-week">Every Trimester (Macroadenoma)</div>
+                    <div class="tl-text"><strong class="amber">Visual field testing</strong> — checks your peripheral vision</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-left"><div class="tl-dot" style="background:var(--green);"></div><div class="tl-line"></div></div>
+                <div class="tl-content">
+                    <div class="tl-week">If Symptoms Develop</div>
+                    <div class="tl-text"><strong class="green">MRI without contrast</strong> — safe in pregnancy, no radiation</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-left"><div class="tl-dot" style="background:var(--muted);"></div></div>
+                <div class="tl-content">
+                    <div class="tl-week">Not Recommended</div>
+                    <div class="tl-text" style="color:var(--muted);">Serial prolactin blood tests — unreliable in pregnancy (levels rise 10-fold normally)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 8 — Symptoms to Report
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-symptoms">
+        <div class="slide-label">Action Items</div>
+        <h2 class="center">Symptoms to Report <span class="amber">Promptly</span></h2>
+        <div class="divider"></div>
+        <div class="row" style="margin-top:1.5rem; justify-content:center; flex-wrap:wrap; gap:1.2rem;">
+            <div class="card" style="max-width:220px; text-align:center; border-color:var(--amber);">
+                <div style="font-size:2.2rem; margin-bottom:0.5rem;">🤕</div>
+                <h3 class="amber">Headache</h3>
+                <p class="muted" style="font-size:0.9rem; margin-top:0.4rem;">New, persistent, or worsening</p>
+            </div>
+            <div class="card" style="max-width:220px; text-align:center; border-color:var(--amber);">
+                <div style="font-size:2.2rem; margin-bottom:0.5rem;">👁️</div>
+                <h3 class="amber">Vision Changes</h3>
+                <p class="muted" style="font-size:0.9rem; margin-top:0.4rem;">Blurring, double vision, or loss of side vision</p>
+            </div>
+            <div class="card" style="max-width:220px; text-align:center; border-color:var(--red);">
+                <div style="font-size:2.2rem; margin-bottom:0.5rem;">⚡</div>
+                <h3 class="red">Sudden Severe Headache</h3>
+                <p class="muted" style="font-size:0.9rem; margin-top:0.4rem;">Go to the emergency room immediately</p>
+            </div>
+        </div>
+        <p class="muted" style="margin-top:1.5rem; font-size:0.95rem; text-align:center;">
+            Most patients have no symptoms at all — but we want to know right away if you do.
+        </p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 9 — Rare Emergency: Pituitary Apoplexy
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-emergency">
+        <div class="slide-label">Rare Complication</div>
+        <h2 class="center">Pituitary Apoplexy<br><span class="red">A Rare Emergency</span></h2>
+        <div class="divider" style="background:var(--red);"></div>
+        <div class="row" style="margin-top:1.5rem; justify-content:center; flex-wrap:wrap; gap:1.5rem;">
+            <div class="card" style="max-width:280px; border-color:var(--red);">
+                <h3 class="red" style="margin-bottom:0.6rem;">What It Is</h3>
+                <p style="font-size:0.95rem;">A sudden bleed or loss of blood supply inside the adenoma. Very uncommon.</p>
+            </div>
+            <div class="card" style="max-width:280px;">
+                <h3 class="amber" style="margin-bottom:0.6rem;">Signs</h3>
+                <p style="font-size:0.95rem;">"Thunderclap" headache, nausea, vision loss, or eye movement problems.</p>
+            </div>
+            <div class="card" style="max-width:280px; border-color:var(--green);">
+                <h3 class="green" style="margin-bottom:0.6rem;">Outcome</h3>
+                <p style="font-size:0.95rem;">Treatable. Most reported cases have excellent outcomes for mother and baby.</p>
+            </div>
+        </div>
+        <div class="pill pill-blue" style="margin-top:1.5rem;">Call 911 or go to the ER for sudden severe headache</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 10 — Labor & Delivery
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-delivery">
+        <div class="slide-label">Labor &amp; Delivery</div>
+        <h2 class="center">Delivering Your Baby</h2>
+        <div class="divider"></div>
+        <div class="row" style="margin-top:1.5rem; justify-content:center; flex-wrap:wrap; gap:1.5rem;">
+            <div class="card" style="max-width:300px; text-align:center; border-color:var(--green);">
+                <div style="font-size:2.2rem; margin-bottom:0.5rem;">🤱</div>
+                <h3 class="green">Vaginal Delivery</h3>
+                <p class="muted" style="font-size:0.9rem; margin-top:0.4rem;">Safe and appropriate for most women with pituitary adenomas.</p>
+            </div>
+            <div class="card" style="max-width:300px; text-align:center;">
+                <div style="font-size:2.2rem; margin-bottom:0.5rem;">🏥</div>
+                <h3>Cesarean Section</h3>
+                <p class="muted" style="font-size:0.9rem; margin-top:0.4rem;">Reserved for standard obstetric reasons, not the adenoma itself.</p>
+            </div>
+            <div class="card" style="max-width:300px; text-align:center; border-color:var(--amber);">
+                <div style="font-size:2.2rem; margin-bottom:0.5rem;">💉</div>
+                <h3 class="amber">Stress-Dose Steroids</h3>
+                <p class="muted" style="font-size:0.9rem; margin-top:0.4rem;">If your pituitary function is low, you will receive special medication during labor.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 11 — Postpartum & Breastfeeding
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-postpartum">
+        <div class="slide-label">After Delivery</div>
+        <h2 class="center">Postpartum Care</h2>
+        <div class="divider"></div>
+        <div class="row" style="margin-top:1.5rem; justify-content:center; flex-wrap:wrap; gap:1.5rem;">
+            <div class="card" style="max-width:300px; text-align:center; border-color:var(--green);">
+                <div style="font-size:2.2rem; margin-bottom:0.5rem;">🍼</div>
+                <h3 class="green">Breastfeeding</h3>
+                <p class="muted" style="font-size:0.9rem; margin-top:0.4rem;">Generally safe for micro- and stable macroadenomas. Discuss with your team.</p>
+            </div>
+            <div class="card" style="max-width:300px; text-align:center;">
+                <div style="font-size:2.2rem; margin-bottom:0.5rem;">💊</div>
+                <h3>Restarting Medication</h3>
+                <p class="muted" style="font-size:0.9rem; margin-top:0.4rem;">Usually resumed after breastfeeding ends, or sooner if the tumor grows.</p>
+            </div>
+            <div class="card" style="max-width:300px; text-align:center; border-color:var(--accent);">
+                <div style="font-size:2.2rem; margin-bottom:0.5rem;">📷</div>
+                <h3 class="accent">Follow-up MRI</h3>
+                <p class="muted" style="font-size:0.9rem; margin-top:0.4rem;">Scheduled postpartum to assess tumor size and guide long-term management.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 12 — Risk Summary Table
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide-table">
+        <div class="slide-label">Summary</div>
+        <h2 class="center">Risk at a Glance</h2>
+        <div class="divider"></div>
+        <div style="margin-top:1.2rem; overflow-x:auto; width:100%; max-width:860px;">
+            <table class="risk-table">
+                <thead>
+                    <tr>
+                        <th>Adenoma Type</th>
+                        <th>Growth Risk</th>
+                        <th>Key Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Microprolactinoma (&lt;10 mm)</td>
+                        <td><span class="pill pill-green">&lt; 5% — Low</span></td>
+                        <td>Stop medication; clinical monitoring</td>
+                    </tr>
+                    <tr>
+                        <td>Macroprolactinoma (≥10 mm)</td>
+                        <td><span class="pill pill-amber">20–31% — Moderate</span></td>
+                        <td>Monthly visual field exams; restart medication if growth</td>
+                    </tr>
+                    <tr>
+                        <td>Resected Macroadenoma</td>
+                        <td><span class="pill pill-green">&lt; 5% — Low</span></td>
+                        <td>Clinical monitoring; usually safe off medication</td>
+                    </tr>
+                    <tr>
+                        <td>Non-Functioning (Micro)</td>
+                        <td><span class="pill pill-green">Very Low</span></td>
+                        <td>Routine prenatal care</td>
+                    </tr>
+                    <tr>
+                        <td>Non-Functioning (Macro)</td>
+                        <td><span class="pill pill-amber">Low–Moderate</span></td>
+                        <td>Visual field monitoring; MRI if symptoms</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 13 — Your Questions
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide center" id="slide-questions">
+        <div class="icon-circle ic-purple">❓</div>
+        <div class="slide-label">Common Questions</div>
+        <h2>Questions We Often Hear</h2>
+        <div class="divider"></div>
+        <div class="col" style="margin-top:1.2rem; max-width:680px; text-align:left; gap:1rem;">
+            <div class="card">
+                <p><strong class="accent">Will this harm my baby?</strong><br>
+                <span class="muted" style="font-size:0.95rem;">Most adenomas do not affect the baby. We monitor closely to keep both of you safe.</span></p>
+            </div>
+            <div class="card">
+                <p><strong class="accent">Can I have a normal pregnancy?</strong><br>
+                <span class="muted" style="font-size:0.95rem;">Yes. The majority of patients with pituitary adenomas have healthy pregnancies.</span></p>
+            </div>
+            <div class="card">
+                <p><strong class="accent">Do I need surgery during pregnancy?</strong><br>
+                <span class="muted" style="font-size:0.95rem;">Rarely. Surgery is reserved for significant, progressive vision loss that does not respond to medication.</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SLIDE 14 — Partnership
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="slide center" id="slide-partnership">
+        <div class="icon-circle ic-green">🤝</div>
+        <div class="slide-label">Our Commitment</div>
+        <h2>We Are Your Partners</h2>
+        <div class="divider" style="background:var(--green);"></div>
+        <p style="max-width:620px; margin-top:1rem;">
+            You are not alone. Our team — including your MFM specialist, endocrinologist,
+            and neurosurgeon when needed — will work together to support a safe, healthy pregnancy.
+        </p>
+        <div class="row" style="margin-top:2rem; justify-content:center; gap:1.5rem; flex-wrap:wrap;">
+            <div class="pill pill-green">Personalized care plan</div>
+            <div class="pill pill-blue">Multidisciplinary team</div>
+            <div class="pill pill-blue">Evidence-based monitoring</div>
+        </div>
+        <p style="margin-top:2.5rem; font-size:0.9rem; color:var(--muted);">
+            Atlanta Perinatal Associates &nbsp;·&nbsp; Maternal-Fetal Medicine
+        </p>
+    </div>
+
+</div><!-- /.deck -->
+
+<!-- ─── Navigation ──────────────────────────────────────────────────────── -->
+<nav class="nav">
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()">&#8592; Prev</button>
+    <span class="nav-counter" id="navCounter">1 / 14</span>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next &#8594;</button>
+</nav>
+
+<script>
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total  = slides.length;
+    const bar    = document.getElementById('progressBar');
+    const counter = document.getElementById('navCounter');
+
+    function showSlide(idx) {
+        slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+        bar.style.width = ((idx + 1) / total * 100) + '%';
+        counter.textContent = (idx + 1) + ' / ' + total;
+    }
+
+    function nextSlide() {
+        current = (current + 1) % total;
+        showSlide(current);
+    }
+
+    function prevSlide() {
+        current = (current - 1 + total) % total;
+        showSlide(current);
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    // Touch / swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; });
+    document.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+    });
+
+    showSlide(current);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

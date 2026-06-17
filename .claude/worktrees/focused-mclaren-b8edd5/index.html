@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MFM Presentations — Open-Source Maternal-Fetal Medicine Education Library</title>
+  <meta name="description" content="106 open-source, evidence-based Maternal-Fetal Medicine presentations and 13 interactive clinical tools for patients and providers. Covers gestational diabetes, preeclampsia, fetal growth restriction, fetal anomalies, genetics, and more. Created by a Maternal-Fetal Medicine specialist.">
+  <meta name="author" content="Dr. Chukwuma Onyeije, MFM Specialist">
+  <meta name="keywords" content="maternal fetal medicine, MFM, high-risk pregnancy, patient education, preeclampsia, gestational diabetes, fetal growth restriction, fetal anomalies, obstetrics, perinatology">
+
+  <!-- Open Graph (Facebook, LinkedIn, WhatsApp previews) -->
+  <meta property="og:title" content="MFM Presentations — Open-Source Clinical Education Library">
+  <meta property="og:description" content="106 open-source evidence-based Maternal-Fetal Medicine presentations and 13 interactive clinical tools for patients and providers. Covers high-risk pregnancy, genetics, fetal anomalies, and more.">
+  <meta property="og:url" content="https://chukwumaonyeije.github.io/mfm-presentations/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="MFM Presentations">
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MFM Presentations — Open-Source Clinical Education Library">
+  <meta name="twitter:description" content="106 open-source evidence-based MFM presentations and 13 interactive tools for patients and providers. High-risk pregnancy, genetics, fetal anomalies, and more.">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://chukwumaonyeije.github.io/mfm-presentations/">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MFM Presentations",
+    "url": "https://chukwumaonyeije.github.io/mfm-presentations/",
+    "description": "Open-source Maternal-Fetal Medicine educational presentations for patients and providers",
+    "author": {
+      "@type": "Person",
+      "name": "Dr. Chukwuma Onyeije",
+      "jobTitle": "Maternal-Fetal Medicine Specialist"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://chukwumaonyeije.github.io/mfm-presentations/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- Favicon Configuration -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#0b1c2c">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="MFM Presentations">
+
+  <!-- SEO: Show all cards if JS is disabled or not yet executed (search engine crawlers) -->
+  <noscript>
+    <style>.card.hidden { display: block !important; }</style>
+  </noscript>
+  <style>
+    :root {
+      --bg: #07111c;
+      --panel: #0b1c2c;
+      --fg: #f4f7fb;
+      --muted: #b7c4d6;
+      --accent: #35d0ff;
+      --accent2: #ff4d6d;
+      --line: #16324a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 24px 32px;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--fg);
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 18px;
+    }
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 48px 32px;
+    }
+    .intro {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 48px;
+    }
+    .intro p {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .presentations {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(11,28,44,.92), rgba(9,22,35,.92));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 24px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+    .card h2 {
+      font-size: 24px;
+      color: var(--fg);
+      margin-bottom: 12px;
+    }
+    .card p {
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-size: 16px;
+    }
+    .tag {
+      display: inline-block;
+      background: rgba(53,208,255,.1);
+      border: 1px solid rgba(53,208,255,.3);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-right: 8px;
+      margin-bottom: 16px;
+    }
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--bg);
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-right: 8px;
+      margin-top: 8px;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(53,208,255,.4);
+    }
+    .btn-video {
+      background: #ff4d6d;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-video:hover {
+      box-shadow: 0 8px 24px rgba(255,77,109,.4);
+    }
+    .btn-video::before {
+      content: '🎥';
+      font-size: 18px;
+    }
+    .video-badge {
+      display: inline-block;
+      background: rgba(255,77,109,.15);
+      border: 1px solid rgba(255,77,109,.4);
+      color: #ff4d6d;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-right: 8px;
+      margin-bottom: 16px;
+    }
+    .video-badge::before {
+      content: '🎥 ';
+    }
+    .card.has-video {
+      border-color: rgba(255,77,109,.3);
+    }
+    .card.has-video:hover {
+      border-color: #ff4d6d;
+    }
+    .infographic-badge {
+      display: inline-block;
+      background: rgba(129,199,132,.15);
+      border: 1px solid rgba(129,199,132,.4);
+      color: #81c784;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-right: 8px;
+      margin-bottom: 16px;
+    }
+    .infographic-badge::before {
+      content: '📊 ';
+    }
+    .btn-infographic {
+      background: #81c784;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-infographic:hover {
+      box-shadow: 0 8px 24px rgba(129,199,132,.4);
+    }
+    .btn-infographic::before {
+      content: '📊';
+      font-size: 18px;
+    }
+    .card.has-infographic {
+      border-color: rgba(129,199,132,.3);
+    }
+    .card.has-infographic:hover {
+      border-color: #81c784;
+    }
+    .pdf-badge {
+      display: inline-block;
+      background: rgba(255,152,0,.15);
+      border: 1px solid rgba(255,152,0,.4);
+      color: #ff9800;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-right: 8px;
+      margin-bottom: 16px;
+    }
+    .pdf-badge::before {
+      content: '📄 ';
+    }
+    .btn-pdf {
+      background: #ff9800;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-pdf:hover {
+      box-shadow: 0 8px 24px rgba(255,152,0,.4);
+    }
+    .btn-pdf::before {
+      content: '📄';
+      font-size: 18px;
+    }
+    .card.has-pdf {
+      border-color: rgba(255,152,0,.3);
+    }
+    .card.has-pdf:hover {
+      border-color: #ff9800;
+    }
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    footer {
+      background: var(--panel);
+      border-top: 1px solid var(--line);
+      padding: 24px 32px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+    .disclaimer {
+      background: rgba(255,77,109,.08);
+      border: 1px solid rgba(255,77,109,.25);
+      border-left: 4px solid var(--accent2);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 48px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .disclaimer strong {
+      color: var(--accent2);
+    }
+    .search-container {
+      margin-bottom: 32px;
+    }
+    .search-box {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 16px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--fg);
+      transition: border-color 0.2s;
+    }
+    .search-box:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .search-box::placeholder {
+      color: var(--muted);
+    }
+    .search-results {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .card.hidden {
+      display: none;
+    }
+    .microsite-card-hidden {
+      display: none !important;
+    }
+    #microsites-show-more {
+      background: var(--panel);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: none;
+    }
+    #microsites-show-more:hover {
+      background: rgba(53,208,255,.1);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(53,208,255,.25);
+    }
+    .filter-container {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .search-input {
+      flex-grow: 1;
+      padding: 16px 20px;
+      font-size: 16px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--fg);
+      transition: border-color 0.2s;
+      min-width: 200px;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .search-input::placeholder {
+      color: var(--muted);
+    }
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .filter-select {
+      padding: 14px 16px;
+      font-size: 14px;
+      min-width: 200px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--fg);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .filter-results {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin-top: 48px;
+    }
+    .pagination button {
+      background: var(--panel);
+      border: 2px solid var(--line);
+      color: var(--fg);
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pagination button:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: rgba(53,208,255,.1);
+      transform: translateY(-2px);
+    }
+    .pagination button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .pagination .page-info {
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 500;
+    }
+    /* ── Site Navigation ── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      height: 50px;
+    }
+    .site-nav .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--fg);
+      text-decoration: none;
+      margin-right: auto;
+    }
+    .site-nav .nav-brand span { color: var(--accent); }
+    .site-nav a.nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 0 16px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .site-nav a.nav-link:hover { color: var(--fg); }
+    .site-nav a.nav-link.active { color: var(--accent); border-bottom-color: var(--accent); }
+    @media (max-width: 600px) {
+      .site-nav { padding: 0 12px; }
+      .site-nav .nav-brand { font-size: 14px; }
+      .site-nav a.nav-link { padding: 0 10px; font-size: 13px; }
+    }
+    /* ── Scope tabs ── */
+    .tab-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .tab-btn {
+      background: var(--panel);
+      border: 2px solid var(--line);
+      color: var(--muted);
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { border-color: var(--accent); color: var(--fg); }
+    .tab-btn.active {
+      background: rgba(53,208,255,.1);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    /* ── Recently Added badge ── */
+    .new-badge {
+      background: rgba(57,208,180,.15) !important;
+      border-color: rgba(57,208,180,.4) !important;
+      color: #39d0b4 !important;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="https://openmfm.org" class="nav-brand">open<span>MFM</span></a>
+    <a href="https://openmfm.org" class="nav-link" id="nav-home">&#x2190; Home</a>
+    <a href="https://openmfm.org/library" class="nav-link" id="nav-library">Library</a>
+    <a href="https://openmfm.org/interactive" class="nav-link" id="nav-interactive">Interactive Tools</a>
+  </nav>
+  <script>
+    (function(){
+      var p = window.location.pathname;
+      if (p === '/interactive') document.getElementById('nav-interactive').classList.add('active');
+      else if (p === '/library') document.getElementById('nav-library').classList.add('active');
+    })();
+  </script>
+  <header>
+    <h1>MFM Presentations & Clinical Consultations</h1>
+    <p class="subtitle">Evidence-based educational resources for maternal-fetal medicine</p>
+  </header>
+
+  <main>
+    <div class="intro">
+      <p>
+        Welcome to our collection of high-quality, evidence-based presentations for Maternal-Fetal Medicine clinicians and patients. 
+        These presentations are designed for teaching, consultation, and shared decision-making in obstetric care.
+      </p>
+    </div>
+
+    <div class="tab-row">
+      <button class="tab-btn active" id="tab-presentations">&#x1F4DA; Presentations</button>
+      <button class="tab-btn" id="tab-interactive">&#x1F310; Interactive Tools</button>
+    </div>
+
+    <div id="filter-bar" class="filter-container">
+      <input
+        type="text"
+        id="searchBox"
+        class="search-input"
+        placeholder="🔍 Search 106+ presentations..."
+        autocomplete="off"
+      >
+      <div class="filter-group">
+        <label for="tag-filter">Filter by Tag:</label>
+        <select id="tag-filter" class="filter-select"></select>
+      </div>
+    </div>
+
+    <div class="presentations">
+      <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+        <h2>Potter Syndrome vs Potter Sequence - Provider Education</h2>
+        <p>Featured physician-facing deck for doctors on Potter syndrome versus Potter sequence, including the pathophysiology of prolonged oligohydramnios, bilateral renal agenesis, classic sonographic findings, differential diagnosis, prognosis, delivery considerations, and counseling points for obstetric and MFM practice.</p>
+        <div>
+          <span class="tag new-tag">✦ Featured</span>
+          <span class="tag" style="background: rgba(255,77,109,.15); border-color: rgba(255,77,109,.4); color: #ff8aa0;">For Doctors</span>
+          <span class="tag">Potter Syndrome</span>
+          <span class="tag">Potter Sequence</span>
+          <span class="tag">Bilateral Renal Agenesis</span>
+          <span class="tag">Prenatal Ultrasound</span>
+          <span class="tag">Provider Education</span>
+        </div>
+        <a href="decks/potter-syndrome-vs-potter-sequence/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Sickle Cell SS Disease in Pregnancy &#x2014; First-Visit Workup</h2>
+        <p>Structured first-visit evaluation framework for HbSS disease in pregnancy: hematology baselines, transfusion safety workup (extended red cell phenotyping, alloantibody screen), renal and hepatic assessment, preeclampsia risk and aspirin prophylaxis, iron and vitamin D status, and infectious disease testing. Emphasizes preventing alloimmunization before complications arise.</p>
+        <div>
+          <span class="tag">Sickle Cell Disease</span>
+          <span class="tag">Hematology</span>
+          <span class="tag">High-Risk Pregnancy</span>
+          <span class="tag">Transfusion Safety</span>
+          <span class="tag">Provider Education</span>
+        </div>
+        <a href="decks/sickle-cell-pregnancy/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Sickle Cell Disease in Pregnancy &#x2014; Patient Handout</h2>
+        <p>Patient-friendly guide for pregnant women with HbSS sickle cell disease: what SCD means in pregnancy, why first-visit bloodwork matters, care team roles, hydroxyurea safety, baby aspirin at 12 weeks, genetic counseling, warning signs, and a first-visit checklist. Written at an accessible reading level.</p>
+        <div>
+          <span class="tag">Sickle Cell Disease</span>
+          <span class="tag">Hematology</span>
+          <span class="tag">High-Risk Pregnancy</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/sickle-cell-pregnancy/patient_handout.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Cleft Lip &amp; Cleft Palate - Patient Education</h2>
+        <p>OpenMFM patient counseling deck on prenatal cleft lip and cleft palate, including what ultrasound can and cannot show, associated genetic considerations, feeding planning, cleft-team referral, and the typical treatment timeline after birth.</p>
+        <div>
+          <span class="tag">Cleft Lip</span>
+          <span class="tag">Cleft Palate</span>
+          <span class="tag">Fetal Anomaly</span>
+          <span class="tag">Prenatal Ultrasound</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/cleft-lip-cleft-palate/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Buprenorphine in Pregnancy - Patient &amp; Provider Education</h2>
+        <p>Dual-audience OpenMFM deck on buprenorphine in pregnancy, including OUD assessment, treatment setting selection, informed consent, induction timing and protocol, buprenorphine/naloxone use, lactation, monitoring, pain control, and patient counseling. Based on Dartmouth-Hitchcock CARPP guidance with ACOG-, SMFM-, and SAMHSA-aligned framing.</p>
+        <div>
+          <span class="tag">Buprenorphine</span>
+          <span class="tag">Opioid Use Disorder</span>
+          <span class="tag">Substance Use in Pregnancy</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Provider Education</span>
+        </div>
+        <a href="decks/buprenorphine-in-pregnancy/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>HealthBench Professional - Provider Education</h2>
+        <p>Clinician-facing review of HealthBench Professional and the April 22, 2026 OpenAI clinician release, covering benchmark design, physician adjudication, domain-level results, adversarial robustness, limitations, and practical implications for evaluating LLMs in real clinical conversations.</p>
+        <div>
+          <span class="tag">HealthBench Professional</span>
+          <span class="tag">Clinical AI</span>
+          <span class="tag">Large Language Models</span>
+          <span class="tag">Provider Education</span>
+          <span class="tag">Medical Research</span>
+        </div>
+        <a href="decks/healthbench-professional/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Trisomy 13 (Patau Syndrome) - Patient Counseling</h2>
+        <p>Patient counseling on Trisomy 13: NIPT performance and PPV limitations, why false positives occur (confined placental mosaicism, vanishing twin), characteristic sonographic findings, diagnostic confirmation via amniocentesis or CVS, prognosis, and shared decision-making pathway.</p>
+        <div>
+          <span class="tag">Trisomy 13</span>
+          <span class="tag">Patau Syndrome</span>
+          <span class="tag">Chromosomal Anomalies</span>
+          <span class="tag">NIPT</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/trisomy13-counseling/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Opioid Use Disorder &amp; NOWS in Pregnancy - Provider Education</h2>
+        <p>Evidence-based clinical guide to opioid use disorder (OUD) and neonatal opioid withdrawal syndrome (NOWS) in pregnancy: placental transfer, NOWS symptoms, obstetric complications, analgesic hierarchy, and postpartum surveillance. Based on ACOG, SMFM, and SAMHSA guidelines.</p>
+        <div>
+          <span class="tag">Opioid Use Disorder</span>
+          <span class="tag">NOWS</span>
+          <span class="tag">Substance Use in Pregnancy</span>
+          <span class="tag">Provider Education</span>
+        </div>
+        <a href="decks/opioid-use-disorder-nows/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Suspected Large Baby at 38 Weeks - Induction Counseling</h2>
+        <p>Patient education on induction of labor at 38 weeks when ultrasound suggests a large-for-gestational-age fetus, including what the estimate means, risks of ongoing growth, 2026 randomized-trial meta-analysis data, safety tradeoffs, and shared decision-making points.</p>
+        <div>
+          <span class="tag new-tag">✦ Updated</span>
+          <span class="tag">LGA</span>
+          <span class="tag">Macrosomia</span>
+          <span class="tag">Induction of Labor</span>
+          <span class="tag">Shared Decision-Making</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/induction-38wk-LGA/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Early Fetal Heart Rate at 6 Weeks - Patient Education</h2>
+        <p>Patient education on early fetal heart rate at 6 weeks, including expected ranges, how borderline or slow measurements are interpreted, why repeat ultrasound matters, and when to seek care.</p>
+        <div>
+          <span class="tag new-tag">❖ New</span>
+          <span class="tag">Early Fetal Heart Rate</span>
+          <span class="tag">Fetal Bradycardia</span>
+          <span class="tag">First Trimester Ultrasound</span>
+          <span class="tag">Early Pregnancy</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/fetal-bradycardia-6-weeks/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Managing Hypothyroidism During Pregnancy - Patient Education</h2>
+        <p>Patient-focused guide to hypothyroidism management in pregnancy: why thyroid health matters for fetal brain development, levothyroxine dose adjustments, TSH monitoring targets, subclinical hypothyroidism, medication timing, and postpartum care. Based on ACOG and SMFM guidelines.</p>
+        <div>
+          <span class="tag">Hypothyroidism</span>
+          <span class="tag">Thyroid Disorders</span>
+          <span class="tag">Endocrine</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/hypothyroidism-pregnancy/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Alcohol During Pregnancy - Patient Education</h2>
+        <p>Patient education on alcohol during pregnancy, including fetal alcohol spectrum disorder risk, trimester-specific effects, screening tools, neonatal implications, and support resources. Emphasizes that no safe amount of alcohol in pregnancy has been established.</p>
+        <div>
+          <span class="tag">Alcohol in Pregnancy</span>
+          <span class="tag">FASD</span>
+          <span class="tag">Substance Use</span>
+          <span class="tag">Prenatal Counseling</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/alcohol-during-pregnancy/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Atrial Fibrillation During Pregnancy - Patient Education</h2>
+        <p>Patient education on AFib during pregnancy: what it is, why pregnancy triggers it, trimester-by-trimester management, safe vs. contraindicated medications, fetal effects, delivery planning, and warning signs. Based on 2023 ACC/AHA/ACCP/HRS AFib Guidelines and 2023 HRS Arrhythmia in Pregnancy Consensus Statement.</p>
+        <div>
+          <span class="tag">Atrial Fibrillation</span>
+          <span class="tag">Cardiac Arrhythmia</span>
+          <span class="tag">Heart Disease in Pregnancy</span>
+          <span class="tag">Anticoagulation</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/afib-pregnancy/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>22q11.2 Deletion Syndrome — NIPT Counseling - Patient Education</h2>
+        <p>Patient counseling for a high-risk NIPT result for 22q11.2 Deletion Syndrome (DiGeorge/Velo-Cardio-Facial Syndrome): what NIPT screens for, positive predictive value by clinical scenario (18–75%), why false positives occur, confirmatory testing with chromosomal microarray (CMA), prenatal imaging workup, multisystem clinical features, inheritance and recurrence risk, and a multidisciplinary care pathway. Based on ACMG 2023 guidelines.</p>
+        <div>
+          <span class="tag">22q11.2 Deletion</span>
+          <span class="tag">DiGeorge Syndrome</span>
+          <span class="tag">NIPT</span>
+          <span class="tag">Prenatal Genetics</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/22q11-nipt-counseling/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Postpartum Furosemide (Lasix) Protocol - Provider Education</h2>
+        <p>Evidence-based provider protocol for postpartum furosemide 20 mg + KCl 20 mEq daily &times; 5 days in hypertensive disorders of pregnancy; based on the Lopes Perdigao et al. RCT (<em>Hypertension</em> 2021) showing NNT=13 and 60% reduction in persistent postpartum hypertension. Greater Atlanta Women&#x2019;s Healthcare OB Call Group protocol, March 2026.</p>
+        <div>
+          <span class="tag">Postpartum Hypertension</span>
+          <span class="tag">Preeclampsia</span>
+          <span class="tag">Furosemide</span>
+          <span class="tag">Call Group Protocol</span>
+          <span class="tag">Provider Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/postpartum-furosemide-protocol/index.html" class="btn">View Presentation</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Extended-Release vs Sublingual Buprenorphine in Pregnancy - Provider Education</h2>
+        <p>Journal club presentation of the first RCT comparing weekly extended-release buprenorphine (ER-BUP) to daily sublingual buprenorphine (SL-BUP) in pregnancy through 12 months post partum: primary opioid abstinence outcomes, NOWS severity, maternal safety, and postpartum adherence. Based on Winhusen TJ et al., JAMA Intern Med 2026.</p>
+        <div>
+          <span class="tag">Opioid Use Disorder</span>
+          <span class="tag">Buprenorphine</span>
+          <span class="tag">Substance Use in Pregnancy</span>
+          <span class="tag">Neonatal Opioid Withdrawal</span>
+          <span class="tag">Provider Education</span>
+        </div>
+        <a href="decks/er-vs-sl-buprenorphine-pregnancy/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Antenatal Corticosteroids at 21–23 Weeks - Provider Education</h2>
+        <p>Evidence-based clinical review of ACS use at periviable gestational ages: survival rates, biologic plausibility, key studies (Ehret 2018, Rossi 2021, Travers 2022, Chawla 2022), ACOG/SMFM 2021 GRADE recommendations, and shared decision-making framework. Based on Battarbee AN, Obstet Gynecol 2024.</p>
+        <div>
+          <span class="tag">Antenatal Corticosteroids</span>
+          <span class="tag">Periviability</span>
+          <span class="tag">Prematurity</span>
+          <span class="tag">Neonatology</span>
+          <span class="tag">Provider Education</span>
+        </div>
+        <a href="decks/acs-periviability/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Periviable Birth - Patient Education</h2>
+        <p>Patient education on periviable birth (20–25+6 weeks): survival rates by gestational week, landmark 2025 University of Iowa 21-week data, factors that improve outcomes, the NICU journey, shared decision-making, and the evolving frontier of viability. Based on ACOG/SMFM guidelines.</p>
+        <div>
+          <span class="tag">Periviability</span>
+          <span class="tag">Limits of Viability</span>
+          <span class="tag">Prematurity</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/periviable-birth/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Umbilical Vein Varix &amp; Persistent Right Umbilical Vein - Patient Education</h2>
+        <p>Patient education on two uncommon umbilical vein findings — umbilical vein varix (focal dilation ≥9 mm) and persistent right umbilical vein (PRUV) — covering anatomy, ultrasound diagnosis, isolated vs. non-isolated prognosis, serial monitoring with Doppler, delivery timing, and questions to ask your MFM specialist.</p>
+        <div>
+          <span class="tag">Umbilical Vein Varix</span>
+          <span class="tag">Persistent Right Umbilical Vein</span>
+          <span class="tag">Fetal Anomaly</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/umbilical-vein-varix-pruv/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Multiple Sclerosis &amp; Pregnancy - Preconception Counseling</h2>
+        <p>Patient preconception counseling for women with multiple sclerosis: fertility and genetic risk, disease-modifying therapy safety and washout requirements, optimal timing for conception, pregnancy course, postpartum relapse risk, and breastfeeding medication compatibility.</p>
+        <div>
+          <span class="tag">Multiple Sclerosis</span>
+          <span class="tag">Neurology</span>
+          <span class="tag">Disease-Modifying Therapy</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/ms-preconception-counseling/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Early Fetal Cardiac Imaging - Patient Education</h2>
+        <p>Patient education on early fetal cardiac imaging (13–16 weeks): indications for referral, three key screening views, capabilities and limitations of early imaging versus the standard 18–22 week echo, EIF soft marker counseling, fetal cardiac MRI, and next steps after a finding.</p>
+        <div>
+          <span class="tag">Fetal Echocardiography</span>
+          <span class="tag">Congenital Heart Disease</span>
+          <span class="tag">Fetal Cardiology</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/early-fetal-cardiac-imaging/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Consanguinity &amp; Pregnancy - Patient Education</h2>
+        <p>Patient counseling guide on consanguinity in pregnancy: shared DNA and recessive variant risk by degree of relatedness, autosomal recessive disorders, congenital anomalies including cardiac and neural tube defects, genetic screening options, and reproductive counseling.</p>
+        <div>
+          <span class="tag">Consanguinity</span>
+          <span class="tag">Genetics</span>
+          <span class="tag">Recessive Disorders</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/consanguinity-counseling/index.html" class="btn">View Presentation</a>
+      </div>
+      <div class="card">
+        <h2>Universal Cervical Length Screening - Provider Education</h2>
+        <p>Evidence-based clinical guide to universal cervical length screening: burden of preterm birth, transvaginal measurement technique, short cervix thresholds, vaginal progesterone and cerclage indications, multiple gestation considerations, racial disparities, cost-effectiveness, and ACOG/SMFM management algorithm.</p>
+        <div>
+          <span class="tag">Cervical Length</span>
+          <span class="tag">Preterm Birth</span>
+          <span class="tag">Universal Screening</span>
+          <span class="tag">Progesterone</span>
+          <span class="tag">Provider Education</span>
+        </div>
+        <a href="decks/cervical-length-screening-slides/index.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Pituitary Adenoma in Pregnancy - Patient Education</h2>
+        <p>Patient education guide to pituitary adenoma in pregnancy: prolactinoma vs. non-functioning adenoma, micro vs. macroadenoma growth risk, dopamine agonist management, visual field monitoring, pituitary apoplexy recognition, and postpartum care.</p>
+        <div>
+          <span class="tag">Pituitary Adenoma</span>
+          <span class="tag">Prolactinoma</span>
+          <span class="tag">Endocrine</span>
+          <span class="tag">Neuro</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/pituitary-adenoma-slidedeck/index.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Hydrops Fetalis - Patient &amp; Provider Education</h2>
+        <p>OpenMFM guide to hydrops fetalis for patients and clinicians, covering immune and non-immune causes, structured diagnostic workup, treatable conditions, maternal mirror syndrome surveillance, prognosis, and next-step counseling.</p>
+        <div>
+          <span class="tag">Hydrops Fetalis</span>
+          <span class="tag">Fetal Edema</span>
+          <span class="tag">High-Risk Pregnancy</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Provider Education</span>
+          <span class="tag">12 Slides</span>
+        </div>
+        <a href="decks/hydrops-fetalis-slides/hydrops_fetalis_slides.html" class="btn" style="background: #81c784;">View Presentation (Updated)</a>
+      </div>
+
+      <div class="card">
+        <h2>Physiologic Midgut Herniation - Patient Education</h2>
+        <p>OpenMFM explanation of physiologic midgut herniation in early pregnancy, showing why this first-trimester ultrasound finding is normal, when it should resolve, and when persistent herniation requires evaluation for omphalocele.</p>
+        <div>
+          <span class="tag">First Trimester</span>
+          <span class="tag">Embryology</span>
+          <span class="tag">Ultrasound</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">8 Slides</span>
+        </div>
+        <a href="decks/midgut-herniation/midgut_herniation_slides.html" class="btn" style="background: #81c784;">View Presentation (New)</a>
+      </div>
+
+      <div class="card">
+        <h2>Cholestasis of Pregnancy (ICP) - Patient Education</h2>
+        <p>Comprehensive patient guide to intrahepatic cholestasis of pregnancy (ICP), covering what ICP is, why bile acids build up in the third trimester, the hallmark symptom of intense palms-and-soles itching, diagnosis by serum bile acid levels, treatment with ursodeoxycholic acid (UDCA), serial monitoring with NSTs and labs, delivery timing by severity (mild 37–39 wks, moderate 36–39 wks, severe ~36 wks), risks to baby, post-delivery recovery, and recurrence risk in future pregnancies.</p>
+        <div>
+          <span class="tag">Cholestasis</span>
+          <span class="tag">ICP</span>
+          <span class="tag">Liver Disease</span>
+          <span class="tag">Third Trimester</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/cholestasis-of-pregnancy-icp/cholestasis-pregnancy-patient-education.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Cystic Fibrosis Carrier Status - Patient Counseling</h2>
+        <p>Comprehensive patient guide to cystic fibrosis carrier status, including what it means to be a CF carrier, how cystic fibrosis is inherited, the significance of CFTR mutations, partner testing recommendations, reproductive options when both partners are carriers, and what to expect during your pregnancy.</p>
+        <div>
+          <span class="tag">Cystic Fibrosis</span>
+          <span class="tag">Carrier Screening</span>
+          <span class="tag">Genetics</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/cystic-fibrosis-carrier/CF_Carrier_Consultation.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Multiple Fetal Anomalies & Aneuploidy Screening - Patient Education</h2>
+        <p>Comprehensive patient-friendly guide to understanding multiple fetal anomalies found on ultrasound and the association with chromosomal abnormalities. Covers what multiple anomalies mean, genetic testing options including amniocentesis, NIPT considerations, prognosis assessment, and counseling for difficult decision-making during pregnancy.</p>
+        <div>
+          <span class="tag">Multiple Anomalies</span>
+          <span class="tag">Aneuploidy</span>
+          <span class="tag">Genetic Testing</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/multiple-anomalies-aneuploidy/fetal_anomalies_patient_education.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Missed Abortion (Missed Miscarriage) - Patient Education</h2>
+        <p>Compassionate patient guide to understanding missed abortion (missed miscarriage), including what it means when the pregnancy stops developing, causes, diagnosis through ultrasound, management options (expectant, medical, or surgical), what to expect during treatment, emotional support, and guidance for future pregnancies.</p>
+        <div>
+          <span class="tag">Missed Abortion</span>
+          <span class="tag">Pregnancy Loss</span>
+          <span class="tag">Patient Counseling</span>
+          <span class="tag">Management Options</span>
+        </div>
+        <a href="decks/missed-abortion/missed-abortion-patient-education.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Antidepressants During Pregnancy - Patient Education</h2>
+        <p>Comprehensive patient guide to understanding antidepressant use during pregnancy, including safety considerations, risks and benefits of treatment versus untreated depression, specific medication profiles (SSRIs, SNRIs), and evidence-based counseling for mental health management during pregnancy.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Antidepressants</span>
+          <span class="tag">Mental Health</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Medication Safety</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/antidepressants-pregnancy/antidepressants_pregnancy_slideshow.html" class="btn">View Presentation</a>
+          <a href="decks/antidepressants-pregnancy/antidepressants.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Atrial Septal Aneurysm - Patient Education</h2>
+        <p>Patient-friendly guide to understanding atrial septal aneurysm (ASA) in your baby's heart, including what it means, causes, monitoring strategies, potential outcomes, and what to expect after birth.</p>
+        <div>
+          <span class="tag">Atrial Septal Aneurysm</span>
+          <span class="tag">Fetal Cardiology</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/atrial-septal-aneurysm/atrial-septal-aneurysm.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Isolated Third Ventricle Dilation - Patient Education</h2>
+        <p>Comprehensive patient guide to understanding isolated third ventricle dilation found on fetal ultrasound, including what the third ventricle is, measurement criteria, monitoring protocols, potential causes, and what to expect throughout pregnancy.</p>
+        <div>
+          <span class="tag">Third Ventricle</span>
+          <span class="tag">Fetal Neuroradiology</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/isolated-third-ventricle-dilation/isolated-third-ventricle.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Asthma During Pregnancy - Patient Education</h2>
+        <p>Comprehensive patient guide to managing asthma during pregnancy, including medication safety, symptom control, monitoring strategies, and ensuring optimal outcomes for both mother and baby.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Asthma</span>
+          <span class="tag">Respiratory Disease</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Medication Safety</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/asthma-in-pregnancy/asthma-in-pregnancy.html" class="btn">View Presentation</a>
+          <a href="decks/asthma-in-pregnancy/asthma-in-pregnancy-infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card has-pdf">
+        <h2>Acetaminophen (Tylenol) During Pregnancy - Patient Education</h2>
+        <p>Patient-friendly guide to safe acetaminophen use during pregnancy, including dosing recommendations, what conditions it treats, safety considerations, and alternatives for pain management. Includes comprehensive PDF slideshow on neurodevelopmental research.</p>
+        <div>
+          <span class="pdf-badge">PDF Slideshow Available</span>
+          <span class="tag">Acetaminophen</span>
+          <span class="tag">Pain Management</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Medication Safety</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/tylenol-in-pregnancy/acetaminophen_pregnancy_patient_education.html" class="btn">View Presentation</a>
+          <a href="decks/tylenol-in-pregnancy/Prenatal_Paracetamol_Neurodevelopment_Fact_Versus_Fear (1).pdf" target="_blank" class="btn btn-pdf">View PDF Slideshow</a>
+        </div>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Crohn's Disease & IBD in Pregnancy - Patient Education</h2>
+        <p>Comprehensive patient guide to managing inflammatory bowel disease and Crohn's disease during pregnancy, including medication safety, disease activity monitoring, nutrition, pregnancy outcomes, and maintaining remission for optimal maternal and fetal health.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Crohn's Disease</span>
+          <span class="tag">IBD</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Medication Safety</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/crohns-disease/crohns-disease.html" class="btn">View Presentation</a>
+          <a href="decks/crohns-disease/chrons-disease-infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>First Trimester Screening: Nuchal Translucency & NIPT - Patient Education</h2>
+        <p>Patient-friendly comprehensive guide to first trimester screening, including nuchal translucency (NT) measurement, NIPT testing, what results mean, timing of tests, and understanding chromosomal screening options in early pregnancy.</p>
+        <div>
+          <span class="tag">Nuchal Translucency</span>
+          <span class="tag">NIPT</span>
+          <span class="tag">First Trimester Screening</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/nuchal-nt-NIPT/nuchal-nt-NIPT.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Cannabis Use During Pregnancy - Patient Education</h2>
+        <p>Patient-centered guide to understanding the risks of cannabis use during pregnancy, including effects on fetal development, pregnancy complications, neonatal outcomes, and evidence-based recommendations for cessation.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Cannabis</span>
+          <span class="tag">Substance Use</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Harm Reduction</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/canibis-in-pregnancy/canibis-in-pregnancy.html" class="btn">View Presentation</a>
+          <a href="decks/canibis-in-pregnancy/cannabis in pregnancy infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Pregnancy and Ramadan Fasting - Patient Education</h2>
+        <p>Comprehensive patient guide to fasting during Ramadan while pregnant, including safety considerations, health risks and benefits, medical advice on when to fast or not fast, nutritional guidance for Suhoor and Iftar, hydration strategies, monitoring signs of concern, and culturally sensitive counseling for Muslim patients navigating religious obligations during pregnancy.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Ramadan</span>
+          <span class="tag">Fasting</span>
+          <span class="tag">Cultural Sensitivity</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/pregnancy-ramadan/pregnancy_ramadan_slides.html" class="btn">View Presentation</a>
+          <a href="decks/pregnancy-ramadan/ramadan  png.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Chronic Hypertension in Pregnancy - Provider Guide</h2>
+        <p>Comprehensive clinical guide for providers on managing chronic hypertension in pregnancy, including diagnosis, classification, risk assessment, antihypertensive therapy, monitoring protocols, and prevention of superimposed preeclampsia.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Chronic Hypertension</span>
+          <span class="tag">Clinical Management</span>
+          <span class="tag">Provider Education</span>
+          <span class="tag">Antihypertensive Therapy</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/chronic-hypertension-providers/chronic_hypertension_pregnancy.html" class="btn">View Presentation</a>
+          <a href="decks/chronic-hypertension-providers/chtn-provider.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Hepatitis C During Pregnancy - Patient Education</h2>
+        <p>Patient-friendly guide to understanding hepatitis C in pregnancy, including transmission risks, monitoring, treatment considerations, breastfeeding guidance, and what to expect for mother and baby.</p>
+        <div>
+          <span class="tag">Hepatitis C</span>
+          <span class="tag">Infectious Disease</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Vertical Transmission</span>
+        </div>
+        <a href="decks/hepatitis-c/hepatitis-c-pregnancy.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Hepatitis B During Pregnancy - Patient Education</h2>
+        <p>Comprehensive patient-friendly guide to understanding hepatitis B in pregnancy, including testing, transmission prevention, treatment options, vaccination for your baby, and ensuring optimal maternal and neonatal outcomes.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Hepatitis B</span>
+          <span class="tag">Infectious Disease</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Vertical Transmission</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/hepatitis-b-in-pregnancy/hepatitis-b-in-pregnancy.html" class="btn">View Presentation</a>
+          <a href="decks/hepatitis-b-in-pregnancy/hepatitis-b-infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Late Prenatal Care - Patient Education</h2>
+        <p>Comprehensive patient guide for those beginning prenatal care in the second or third trimester, covering essential screenings, catch-up testing, monitoring protocols, and what to expect throughout the rest of pregnancy.</p>
+        <div>
+          <span class="tag">Late Prenatal Care</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Prenatal Screening</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/late-prenatal-care/index.html" class="btn">View Presentation (Old)</a>
+          <a href="decks/late-prenatal-care/late-prenatal-care-new.html" class="btn" style="background: #81c784;">View Presentation (New)</a>
+        </div>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Fetal Pericardial Effusion - Patient Education</h2>
+        <p>Patient-friendly guide to understanding fetal pericardial effusion, including what it means, causes, monitoring strategies, potential complications, and management approaches during pregnancy.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Pericardial Effusion</span>
+          <span class="tag">Fetal Cardiology</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/pericardial-effusion/index.html" class="btn">View Presentation (Old)</a>
+          <a href="decks/pericardial-effusion/fetal_pericardial_effusion_patient_education-new.html" class="btn" style="background: #81c784;">View Presentation (New)</a>
+          <a href="decks/pericardial-effusion/Infographic Creator-effusion2.html" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Intracranial Hypertension (Idiopathic Intracranial Hypertension) in Pregnancy - Patient Education</h2>
+        <p>Comprehensive patient guide to understanding intracranial hypertension (IIH/pseudotumor cerebri) during pregnancy, including symptoms, diagnosis, monitoring, medication management, vision protection, and delivery planning for optimal maternal outcomes.</p>
+        <div>
+          <span class="tag">Intracranial Hypertension</span>
+          <span class="tag">IIH</span>
+          <span class="tag">Pseudotumor Cerebri</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/intracranial-hypertension-iih-pregnancy/iih_pregnancy_slides.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Grand Multiparity - Patient Education</h2>
+        <p>Patient-friendly guide to grand multiparity (having had 5 or more previous births), including definition, potential risks, monitoring strategies, labor and delivery considerations, and ensuring optimal outcomes for mother and baby in high parity pregnancies.</p>
+        <div>
+          <span class="tag">Grand Multiparity</span>
+          <span class="tag">High Parity</span>
+          <span class="tag">Risk Assessment</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/grand-multiparity/grand_multiparity.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Large for Gestational Age (LGA) Fetus - Patient Counseling</h2>
+        <p>Comprehensive patient guide to understanding large for gestational age babies, including causes (gestational diabetes, maternal factors), potential risks, monitoring strategies, delivery considerations, and management approaches for macrosomia and fetal overgrowth.</p>
+        <div>
+          <span class="tag" style="background:#1e3a2f;color:#4ade80;border:1px solid #166534;">&#10003; Recently Updated</span>
+          <span class="tag">Large for Gestational Age</span>
+          <span class="tag">LGA</span>
+          <span class="tag">Macrosomia</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/lga-fetus/lga_counseling.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Fetal Arrhythmias - Patient Education</h2>
+        <p>Patient-friendly guide to fetal heart rhythm abnormalities, including types of arrhythmias (tachycardia, bradycardia, irregular rhythms), causes, monitoring with fetal echocardiography, treatment options, and what to expect for your baby's cardiac health during pregnancy and after birth.</p>
+        <div>
+          <span class="tag">Fetal Arrhythmias</span>
+          <span class="tag">Fetal Cardiology</span>
+          <span class="tag">Heart Rhythm</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/fetal_arrhythmias/fetal_arrhythmias.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Fetal Pyelectasis - Patient Education</h2>
+        <p>Comprehensive patient guide to understanding fetal pyelectasis (kidney swelling), including what it means, measurement criteria, monitoring protocols, potential causes, and what to expect after birth.</p>
+        <div>
+          <span class="tag">Pyelectasis</span>
+          <span class="tag">Fetal Kidneys</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/pyelectasis-patient-present/pyelectasis_patient_presentation.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Bilateral Renal Agenesis - Patient Education</h2>
+        <p>Compassionate patient counseling on bilateral renal agenesis (absence of both kidneys), including diagnosis, prognosis, pregnancy management options, and support resources for decision-making during this difficult time.</p>
+        <div>
+          <span class="tag">Bilateral Renal Agenesis</span>
+          <span class="tag">Fetal Kidneys</span>
+          <span class="tag">Patient Counseling</span>
+          <span class="tag">Lethal Anomaly</span>
+        </div>
+        <a href="decks/bilateral-renal-agenesis/index.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Fetal Clubfoot - Patient Consultation Guide</h2>
+        <p>Patient-friendly guide to understanding fetal clubfoot diagnosis, including what clubfoot is, causes, treatment options (Ponseti method), long-term outcomes, and what to expect after birth.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Clubfoot</span>
+          <span class="tag">Talipes</span>
+          <span class="tag">Orthopedic</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/fetal-club-foot-deformity/clubfoot_patient_consultation-old.html" class="btn">View Presentation (Old)</a>
+          <a href="decks/fetal-club-foot-deformity/index.html" class="btn" style="background: #81c784;">View Presentation (New)</a>
+          <a href="decks/fetal-club-foot-deformity/Infographic Creator-clubfoot.html" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card has-video has-infographic">
+        <h2>Low PAPP-A in Pregnancy - Patient Guide</h2>
+        <p>Comprehensive patient education on low pregnancy-associated plasma protein A (PAPP-A) test results, including what it means, potential risks, monitoring strategies, and evidence-based management throughout pregnancy.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">PAPP-A</span>
+          <span class="tag">First Trimester Screening</span>
+          <span class="tag">Risk Assessment</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/low-papp-a-test/low_papp_a_patient_presentation.html" class="btn">View Presentation</a>
+          <a href="decks/low-papp-a-test/low-papp-a-test.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+          <a href="https://share.descript.com/view/6oM2FW70OnB" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+      <div class="card has-video has-infographic">
+        <h2>Subchorionic Hematoma - Patient Education</h2>
+        <p>Patient-friendly guide to understanding subchorionic hematoma in pregnancy, including what it is, potential symptoms, size classifications, outcomes, and monitoring strategies.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Subchorionic Hematoma</span>
+          <span class="tag">First Trimester Bleeding</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/subchorionic-hematoma/subchorionic_hematoma_patient_education.html" class="btn">View Presentation</a>
+          <a href="decks/subchorionic-hematoma/subchorionc-hematoma.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+          <a href="https://share.descript.com/view/cdmeeWbjWJk" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+      <div class="card has-video has-infographic">
+        <h2>Morbid Obesity in Pregnancy - Patient Education</h2>
+        <p>Patient-friendly guide to morbid obesity and pregnancy, covering risks, monitoring strategies, nutrition, and delivery planning for optimal maternal and fetal outcomes.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Morbid Obesity</span>
+          <span class="tag">High-Risk Pregnancy</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+        <a href="decks/morbid-obesity/index.html" class="btn">View Presentation (Old)</a>
+          <a href="decks/morbid-obesity/morbid-obesity-updated.html" class="btn" style="background: #81c784;">View Presentation (New)</a>
+          <a href="decks/morbid-obesity/morbid-obesity.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+          <a href="https://share.descript.com/view/Wj6OwH3lWSo" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Hemoglobinopathies in Pregnancy - Patient Education</h2>
+        <p>Patient-friendly guide to hemoglobin traits and hemoglobinopathies in pregnancy, including screening, genetic counseling, and pregnancy management.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Hemoglobinopathies</span>
+          <span class="tag">Genetic Screening</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/hemoglobinopathies/hemoglobin_traits_pregnancy_patient_education.html" class="btn">View Presentation</a>
+          <a href="decks/hemoglobinopathies/hemoglobinopathies.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card has-video has-infographic">
+        <h2>Gestational Diabetes - Patient Guide</h2>
+        <p>Comprehensive patient education on gestational diabetes: mechanism, screening, A1 vs A2 classification, blood sugar targets, nutrition, exercise, insulin vs metformin, fetal surveillance, delivery timing, and long-term diabetes prevention. Based on ACOG, SMFM, and ADA 2025 guidelines.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Gestational Diabetes</span>
+          <span class="tag">Blood Sugar Management</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/basic-gdm/index.html" class="btn">View Presentation</a>
+          <a href="decks/basic-gdm/gdm-guide.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+          <a href="https://share.descript.com/view/unh4hYOFa9a" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Placental Chorioangioma</h2>
+        <p>Educational presentation on placental chorioangioma tumors, their effects on pregnancy, and monitoring strategies for maternal and fetal well-being.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Placental Abnormalities</span>
+          <span class="tag">Monitoring</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/placental-chorioangioma/placental_chorioangioma_presentation.html" class="btn">View Presentation</a>
+          <a href="decks/placental-chorioangioma/Placental_Chorioangioma.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Understanding Fetal Growth Restriction - Patient Education</h2>
+        <p>Comprehensive patient guide to fetal growth restriction: initial workup including amniocentesis, TORCH infection panel, autoimmune testing, Doppler surveillance, and delivery timing per ACOG and SMFM guidelines.</p>
+        <div>
+          <span class="tag">Fetal Growth Restriction</span>
+          <span class="tag">IUGR</span>
+          <span class="tag">Amniocentesis</span>
+          <span class="tag">TORCH Infections</span>
+          <span class="tag">Antiphospholipid Syndrome</span>
+          <span class="tag">Doppler Studies</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/fetal-growth-restriction-patients/index.html" class="btn">View Presentation</a>
+        </div>
+      </div>
+
+      <div class="card has-video has-infographic">
+        <h2>Fibroids During Pregnancy - Patient Education</h2>
+        <p>Comprehensive patient guide to understanding uterine fibroids in pregnancy, including types, potential complications, monitoring, and management strategies. Now available in interactive Reveal.js format with progressive content reveal.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Fibroids</span>
+          <span class="tag">Leiomyomas</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/fibroids/index.html" class="btn">View Presentation (Reveal.js)</a>
+          <a href="decks/fibroids/fibroids.html" class="btn">View Classic</a>
+          <a href="decks/fibroids/fibroids-in-pregnancy.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+          <a href="https://share.descript.com/view/zLrRdsxytYV" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+      <div class="card has-video has-infographic">
+        <h2>Type 1 Diabetes in Pregnancy - Patient Education</h2>
+        <p>Comprehensive patient guide to Type 1 diabetes management during pregnancy, covering insulin therapy, blood glucose monitoring, risks, and achieving optimal outcomes for both mother and baby. Now available in interactive Reveal.js format with progressive content reveal.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Type 1 Diabetes</span>
+          <span class="tag">Insulin Management</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/type-1-diabetes/index.html" class="btn">View Presentation (Reveal.js)</a>
+          <a href="decks/type-1-diabetes/type1_diabetes_pregnancy.html" class="btn">View Classic</a>
+          <a href="decks/type-1-diabetes/Type1Diabetes-Infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+          <a href="https://share.descript.com/view/xZxkwQ1Qam4" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+      <div class="card has-video has-infographic">
+        <h2>Type 2 Diabetes in Pregnancy - Patient Education</h2>
+        <p>Comprehensive patient guide to managing Type 2 diabetes during pregnancy, including blood sugar control, medication management, monitoring, and reducing risks for mother and baby.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Type 2 Diabetes</span>
+          <span class="tag">Diabetes Management</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/type-2-diabetes/index.html" class="btn">View Presentation (Old)</a>
+          <a href="decks/type-2-diabetes/pregestational_t2dm_slides.html" class="btn" style="background: #81c784;">View Presentation (New)</a>
+          <a href="decks/type-2-diabetes/Type2Diabetes-infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+          <a href="https://share.descript.com/view/xZxkwQ1Qam4" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>NIPT Testing - Non-Invasive Prenatal Testing Guide</h2>
+        <p>Comprehensive patient guide to understanding NIPT (Non-Invasive Prenatal Testing), including what it screens for, accuracy rates, timing, and interpreting results.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">NIPT</span>
+          <span class="tag">Genetic Screening</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/nipt-testing/nipt-testing.html" class="btn">View Presentation</a>
+          <a href="decks/nipt-testing/NIPT-infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+
+      <div class="card has-infographic">
+        <h2>Hypo-Coiled Umbilical Cord - Patient Education</h2>
+        <p>Patient-friendly guide to understanding hypo-coiled umbilical cord findings on ultrasound, including what it means, potential risks, monitoring strategies, and what to expect throughout pregnancy.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Umbilical Cord</span>
+          <span class="tag">Hypo-Coiling</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/hypocoiled-umbilical/hypocoiled-umbilical.html" class="btn">View Presentation</a>
+          <a href="decks/hypocoiled-umbilical/hypocoiled.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Dilated Coronary Sinus - Patient Education</h2>
+        <p>Patient-friendly guide to understanding dilated coronary sinus finding on fetal ultrasound, including causes like PLSVC, clinical significance, further testing needed, and what it means for your baby's heart health.</p>
+        <div>
+          <span class="tag">Fetal Cardiology</span>
+          <span class="tag">Dilated Coronary Sinus</span>
+          <span class="tag">PLSVC</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/complex-heart-defects/dilated_coronary_sinus_presentation.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Breech Presentation & External Cephalic Version - Patient Guide</h2>
+        <p>Comprehensive patient education on breech position, what it means for delivery, and the external cephalic version procedure to turn your baby, including risks, benefits, and alternatives.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Breech Presentation</span>
+          <span class="tag">External Cephalic Version</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/external-cephalic-version-breech/index.html" class="btn">View Presentation (Old)</a>
+          <a href="decks/external-cephalic-version-breech/Breech Presentation & External Cephalic Version.html" class="btn" style="background: #81c784;">View Presentation (New)</a>
+          <a href="decks/external-cephalic-version-breech/breech-infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Chronic Hypertension & Morbid Obesity in Pregnancy</h2>
+        <p>Patient care plan for managing pregnancy with chronic hypertension and morbid obesity, including monitoring, medications, lifestyle modifications, and delivery planning.</p>
+        <div>
+          <span class="tag">Chronic Hypertension</span>
+          <span class="tag">Morbid Obesity</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/chtn-and-morbid-obesity/chtn-and-morbid-obesity.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card has-video has-infographic">
+        <h2>Spinal Muscular Atrophy Carrier Status - Patient Counseling</h2>
+        <p>Patient education on SMA carrier status, genetic inheritance patterns, partner testing recommendations, and reproductive options when both partners are carriers.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Genetics</span>
+          <span class="tag">SMA Carrier</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/spinal-muscular-atrophy-carrier/index.html" class="btn">View Presentation (Old)</a>
+          <a href="decks/spinal-muscular-atrophy-carrier/sma_carrier_improved-new.html" class="btn" style="background: #81c784;">View Presentation (New)</a>
+          <a href="decks/spinal-muscular-atrophy-carrier/spinal-musc-atrophy-infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+          <a href="https://share.descript.com/view/hAfVENo3Ka5" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+
+      <div class="card has-video">
+        <h2>Fetal Echocardiography - Clinical Overview</h2>
+        <p>Comprehensive guide to fetal echocardiography including cardiac anatomy, screening protocols, views, common congenital heart defects, and indications for specialized cardiac imaging.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="tag">Fetal Echocardiography</span>
+          <span class="tag">Cardiac Imaging</span>
+          <span class="tag">Congenital Heart Disease</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/fetal-echocardiography/fetal-echocardiography.html" class="btn">View Presentation</a>
+          <a href="https://share.descript.com/view/qZ6xu87tjr1" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+      <div class="card has-video">
+        <h2>Gestational Dating Bootcamp - Sonographer Training</h2>
+        <p>Comprehensive sonographer training on accurate gestational age assessment, dating criteria, measurement techniques, and resolving discrepancies in pregnancy dating.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="tag">Gestational Age</span>
+          <span class="tag">Dating Criteria</span>
+          <span class="tag">Sonographer Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/gestational-dating/gestational_dating_bootcamp.html" class="btn">View Presentation</a>
+          <a href="https://share.descript.com/view/SxeEvF2pyJS" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+      <div class="card has-video">
+        <h2>Short Interval Pregnancy - Patient Counseling</h2>
+        <p>Patient education on short interpregnancy intervals, including risks, recommendations, and optimal timing for conception after previous delivery.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="tag">Interpregnancy Interval</span>
+          <span class="tag">Family Planning</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/short-interval-pregnancy/short-interval.html" class="btn">View Presentation</a>
+          <a href="https://share.descript.com/view/iMVQTNpDkPK" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Dichorionic-Diamniotic Twins - Patient Counseling</h2>
+        <p>Comprehensive patient guide to di-di twin pregnancies, including monitoring protocols, delivery planning, and what to expect throughout pregnancy.</p>
+        <div>
+          <span class="tag">Twin Pregnancy</span>
+          <span class="tag">Di-Di Twins</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/dichorionic-twins/di-di-twins.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card has-video">
+        <h2>Advanced Maternal Age - Patient Education</h2>
+        <p>Patient-centered presentation on pregnancy over age 35, including risks, screening options, monitoring recommendations, and evidence-based counseling for older mothers.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="tag">Advanced Maternal Age</span>
+          <span class="tag">Risk Counseling</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/advanced-maternal-age-patient/advanced_maternal_age_patient_education.html" class="btn">View Presentation</a>
+          <a href="https://share.descript.com/view/B3DWCLx4Jcw" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Hypoplastic Left Heart Syndrome - Patient Handout</h2>
+        <p>Patient-friendly prenatal counseling on hypoplastic left heart syndrome, including what HLHS means, what to expect during pregnancy, delivery planning, newborn care, and common next questions.</p>
+        <div>
+          <span class="tag">HLHS</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Prenatal Counseling</span>
+          <span class="pdf-badge">PDF</span>
+        </div>
+        <a href="decks/hlhs-sonography/index.html" class="btn">View Presentation</a>
+        <a href="decks/hlhs-sonography/hypoplastic-left-heart-syndrome-patient-handout.pdf" class="btn btn-pdf">Download PDF</a>
+      </div>
+
+      <div class="card">
+        <h2>Gastric Bypass Surgery and Pregnancy</h2>
+        <p>Clinical management guide for pregnancy after gastric bypass surgery, including nutritional considerations, monitoring requirements, and potential complications.</p>
+        <div>
+          <span class="tag">Bariatric Surgery</span>
+          <span class="tag">Nutrition</span>
+          <span class="tag">Clinical Management</span>
+        </div>
+        <a href="decks/gastric-bypass/gastric-bypass.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Echogenic Intracardiac Focus (EIF) - Patient Education</h2>
+        <p>Patient education on echogenic intracardiac focus: what the bright spot means, why it is now classified as a normal variant, how ACOG/SMFM guidelines advise against additional testing when EIF is isolated and prior genetic screening is normal, and what to expect during and after pregnancy.</p>
+        <div>
+          <span class="tag">EIF</span>
+          <span class="tag">Soft Markers</span>
+          <span class="tag">Fetal Ultrasound</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/eif-patient/index.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Fetal Pyelectasis & Hydronephrosis - Sonographer Guide</h2>
+        <p>Comprehensive sonographer education on fetal renal pelvis dilation, pyelectasis, and hydronephrosis including measurement techniques, grading systems, and clinical significance.</p>
+        <div>
+          <span class="tag">Fetal Ultrasound</span>
+          <span class="tag">Renal Abnormalities</span>
+          <span class="tag">Sonographer Education</span>
+        </div>
+        <a href="decks/pyelectasis-hydronephrosis/pyelectasis_hydronephrosis_sonographer_presentation.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>HIV and Pregnancy - Clinical Management</h2>
+        <p>Comprehensive clinical guide to managing HIV in pregnancy, including antiretroviral therapy, prevention of mother-to-child transmission, and delivery planning.</p>
+        <div>
+          <span class="tag">HIV</span>
+          <span class="tag">Infectious Disease</span>
+          <span class="tag">Clinical Management</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/hiv-pregnancy/index.html" class="btn">View Presentation (Old)</a>
+          <a href="decks/hiv-pregnancy/HIV_Pregnancy_Slides - new.html" class="btn" style="background: #81c784;">View Presentation (New)</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Anemia in Pregnancy - Patient Education</h2>
+        <p>Comprehensive patient guide to anemia during pregnancy, including iron deficiency anemia, causes, symptoms, diagnosis, iron supplementation, dietary recommendations, monitoring strategies, and ensuring optimal maternal and fetal health through adequate hemoglobin levels and red blood cell production.</p>
+        <div>
+          <span class="tag">Anemia</span>
+          <span class="tag">Iron Deficiency</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Nutrition</span>
+        </div>
+        <a href="decks/anemia-in-pregnancy/anemia_in_pregnancy.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Placenta Accreta Spectrum - Patient Education</h2>
+        <p>Patient-friendly guide to placenta accreta spectrum disorders, including diagnosis, risks, delivery planning, and what to expect during pregnancy and birth.</p>
+        <div>
+          <span class="tag">Placenta Accreta</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">High-Risk</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/placenta-accreta-spectrum/index.html" class="btn">View Presentation (Old)</a>
+          <a href="decks/placenta-accreta-spectrum/PAS_Patient_Education.html" class="btn" style="background: #81c784;">View Presentation (New)</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Previous Myomectomy in Pregnancy - Patient Education</h2>
+        <p>Comprehensive patient guide for pregnancy after myomectomy surgery, including monitoring requirements, risks, delivery planning, uterine rupture considerations, and ensuring optimal outcomes for mother and baby after fibroid removal surgery.</p>
+        <div>
+          <span class="tag" style="background:#1e3a2f;color:#4ade80;border:1px solid #166534;">&#10003; Recently Updated</span>
+          <span class="tag">Myomectomy</span>
+          <span class="tag">Fibroid Surgery</span>
+          <span class="tag">Uterine Scar</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/previous-myomectomy/myomectomy_patient_education.html" class="btn">View Presentation (Old)</a>
+          <a href="decks/previous-myomectomy/index.html" class="btn" style="background: #81c784;">View Presentation (New)</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Galactosemia Carrier Status - Patient Counseling</h2>
+        <p>Comprehensive patient education on galactosemia carrier status, genetic inheritance patterns, newborn screening, and feeding management considerations.</p>
+        <div>
+          <span class="tag">Genetics</span>
+          <span class="tag">Carrier Screening</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/galactosemia-carrier-status/galactosemia_carrier_presentation.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Thyroid Management in Pregnancy</h2>
+        <p>Comprehensive guide to thyroid disorders in pregnancy, including hyperthyroidism, hypothyroidism, monitoring requirements, and medication management.</p>
+        <div>
+          <span class="tag">Thyroid Disorders</span>
+          <span class="tag">Endocrine</span>
+          <span class="tag">Management</span>
+        </div>
+        <a href="decks/thyroid-manaagement-pregnancy/index2.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Obesity & Circumvallate Placenta</h2>
+        <p>Clinical presentation on obesity in pregnancy and circumvallate placenta, including risks, complications, and management strategies.</p>
+        <div>
+          <span class="tag">Obesity</span>
+          <span class="tag">Placental Abnormalities</span>
+          <span class="tag">Risk Assessment</span>
+        </div>
+        <a href="decks/obesity-circumvallate/obesity-circumvallate.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>MCDA Twin Pregnancy Counseling</h2>
+        <p>Patient counseling guide for monochorionic diamniotic twin pregnancies, including risks, monitoring protocols, and management of twin-specific complications.</p>
+        <div>
+          <span class="tag">Twin Pregnancy</span>
+          <span class="tag">MCDA</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/mcda-twins/twin_pregnancy_counseling.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Preterm Birth - Clinical Management</h2>
+        <p>Comprehensive clinical guide to preterm birth risk assessment, prevention strategies, and evidence-based management approaches for healthcare providers.</p>
+        <div>
+          <span class="tag">Preterm Birth</span>
+          <span class="tag">Prevention</span>
+          <span class="tag">Clinical Management</span>
+        </div>
+        <a href="decks/preterm-birth/preterm-birth.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Hypertensive Disorders in Pregnancy - Provider Guide</h2>
+        <p>Detailed clinical overview of hypertensive disorders in pregnancy, including classification, diagnosis, monitoring, and management strategies for obstetric providers.</p>
+        <div>
+          <span class="tag">Hypertensive Disorders</span>
+          <span class="tag">Preeclampsia</span>
+          <span class="tag">Clinical Management</span>
+        </div>
+        <a href="decks/hypertensive-disorders-doctors/hypertensive_disorders_pregnancy.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Fetal Neuroradiology</h2>
+        <p>Educational presentation on fetal brain imaging, neurological abnormalities, and interpretation of fetal neuroradiology findings in prenatal diagnosis.</p>
+        <div>
+          <span class="tag">Neuroradiology</span>
+          <span class="tag">Fetal Imaging</span>
+          <span class="tag">Diagnosis</span>
+        </div>
+        <a href="decks/fetal-neuroradiology/fetal-neuroradiology.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>FGR + Absent End-Diastolic Flow at 35 Weeks</h2>
+        <p>Clinical approach to late-preterm fetal growth restriction with absent umbilical artery end-diastolic velocity (AEDV).</p>
+        <div>
+          <span class="tag">FGR</span>
+          <span class="tag">Doppler</span>
+          <span class="tag">Placental Insufficiency</span>
+        </div>
+        <a href="decks/fgr-ua-aedv-35w/index.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>IUGR and Doppler</h2>
+        <p>Comprehensive overview of intrauterine growth restriction and the role of Doppler velocimetry in diagnosis and management.</p>
+        <div>
+          <span class="tag">IUGR</span>
+          <span class="tag">Doppler</span>
+          <span class="tag">Surveillance</span>
+        </div>
+        <a href="decks/iugr-and-doppler/IUGR and Abnormal Doppler.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Preeclampsia - Provider Education</h2>
+        <p>Evidence-based clinical update on preeclampsia: pathophysiology, ACOG 2019 diagnostic criteria, severe features, aspirin prophylaxis (ASPRE trial), surveillance, acute BP management, magnesium sulfate, delivery timing, HELLP syndrome, postpartum management, and long-term cardiovascular risk counseling.</p>
+        <div>
+          <span class="tag">Preeclampsia</span>
+          <span class="tag">Hypertension</span>
+          <span class="tag">HELLP Syndrome</span>
+          <span class="tag">Provider Education</span>
+        </div>
+        <a href="decks/preeclampsia/index.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>High-Risk Pregnancy Care - Patient Education (SGA)</h2>
+        <p>Patient-friendly presentation on small for gestational age (SGA) babies, including what it means, monitoring, and care planning.</p>
+        <div>
+          <span class="tag">Patient Education</span>
+          <span class="tag">SGA</span>
+          <span class="tag">Monitoring</span>
+        </div>
+        <a href="decks/patient education-sga/pregnancy_education_slideshow.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Advanced Maternal Age & Preterm Delivery Risk</h2>
+        <p>Patient education on high-risk pregnancy monitoring for women 35+ with history of preterm delivery, including cervical assessment and care planning.</p>
+        <div>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Advanced Maternal Age</span>
+          <span class="tag">Preterm Delivery</span>
+        </div>
+        <a href="decks/ama-ptd/ama-ptd.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Cervical Incompetence & Cerclage</h2>
+        <p>Understanding cervical insufficiency in pregnancy and the role of cerclage procedures in preventing preterm birth.</p>
+        <div>
+          <span class="tag">Cervical Insufficiency</span>
+          <span class="tag">Cerclage</span>
+          <span class="tag">Preterm Prevention</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/cervical-incompetence-cerclage/index.html" class="btn">View Presentation (Old)</a>
+          <a href="decks/cervical-incompetence-cerclage/cerclage_presentation-new.html" class="btn" style="background: #81c784;">View Presentation (New)</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Factor V Leiden in Pregnancy</h2>
+        <p>Patient guide to Factor V Leiden thrombophilia in pregnancy, including risks, monitoring, and blood clot prevention strategies.</p>
+        <div>
+          <span class="tag">Thrombophilia</span>
+          <span class="tag">Blood Clots</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/factor-v-leiden/factor_v_leiden_pregnancy_presentation.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Preconception Counseling Guide</h2>
+        <p>Comprehensive guide for patients preparing for pregnancy, covering health optimization, risk assessment, and planning for a healthy conception.</p>
+        <div>
+          <span class="tag">Preconception</span>
+          <span class="tag">Planning</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/preconception-counseling/preconception_counseling_guide.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>PPROM - Clinical Management for Providers</h2>
+        <p>Comprehensive evidence-based clinical approach to preterm premature rupture of membranes, including GA-specific protocols, diagnosis, antibiotics, corticosteroids, and delivery timing. Now available in interactive Reveal.js format with progressive content reveal and color-coded evidence levels.</p>
+        <div>
+          <span class="tag">PPROM</span>
+          <span class="tag">Preterm</span>
+          <span class="tag">Clinical Management</span>
+          <span class="tag">Provider Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/pprom-doctors/index.html" class="btn">View Presentation (Reveal.js)</a>
+          <a href="decks/pprom-doctors/pprom-doctors.html" class="btn">View Classic</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Jacobs Syndrome (47,XYY) - Patient Education</h2>
+        <p>Comprehensive patient guide to Jacobs syndrome (47,XYY), including genetic basis, clinical features, developmental considerations, and counseling for prenatal diagnosis.</p>
+        <div>
+          <span class="tag">Genetics</span>
+          <span class="tag">Sex Chromosome Aneuploidy</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/jacobs-syndrome-XYY/jacobs-syndrome-XYY.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Alpha Thalassemia Trait in Pregnancy - Patient Education</h2>
+        <p>Comprehensive patient guide to understanding alpha thalassemia trait in pregnancy, including genetic inheritance patterns, potential risks, screening recommendations, and what it means for you and your baby.</p>
+        <div>
+          <span class="tag">Alpha Thalassemia</span>
+          <span class="tag">Genetics</span>
+          <span class="tag">Carrier Screening</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/alpha-thallasemia/alpha-thalassemia.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Sickle Cell Carrier Status - Patient Counseling</h2>
+        <p>Patient education on sickle cell trait and carrier status, including genetic inheritance patterns, partner testing recommendations, and understanding what it means to carry the sickle cell gene.</p>
+        <div>
+          <span class="tag">Genetics</span>
+          <span class="tag">Sickle Cell Trait</span>
+          <span class="tag">Carrier Screening</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/sickle-cell-carrier-status/sickle-cell-carrier-status.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Twins Delivery Timing - Patient Education</h2>
+        <p>Comprehensive patient guide to optimal timing of delivery for twin pregnancies, including chorionicity-based recommendations, monitoring protocols, and evidence-based delivery planning for dichorionic and monochorionic twins.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Twin Pregnancy</span>
+          <span class="tag">Delivery Timing</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/twins-delivery-timing/twins-delivery-timing.html" class="btn">View Presentation</a>
+          <a href="decks/twins-delivery-timing/twin delivery infographic(1).png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card has-video has-infographic">
+        <h2>Syphilis Testing & Treatment in Pregnancy - Patient Education</h2>
+        <p>Patient-friendly guide to understanding syphilis screening during pregnancy, including what the infection is, why testing matters, treatment options, and protecting your baby from congenital syphilis.</p>
+        <div>
+          <span class="video-badge">Video Available</span>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Syphilis</span>
+          <span class="tag">Infectious Disease</span>
+          <span class="tag">STI Screening</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/syphilis-in-pregnancy/syphilis-in-pregnancy.html" class="btn">View Presentation</a>
+          <a href="decks/syphilis-in-pregnancy/syphilis-in-pregnancy-infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+          <a href="https://share.descript.com/view/7Nw4iPPpTxV" target="_blank" class="btn btn-video">Watch Video</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Menopausal Hormone Therapy - Patient Education</h2>
+        <p>Comprehensive patient guide to menopausal hormone therapy (MHT), including symptoms of menopause, hormone replacement options, benefits and risks, contraindications, non-hormonal alternatives, and individualized treatment approaches for managing menopausal symptoms and long-term health.</p>
+        <div>
+          <span class="tag">Menopause</span>
+          <span class="tag">Hormone Therapy</span>
+          <span class="tag">Women's Health</span>
+          <span class="tag">GYN</span>
+        </div>
+        <a href="decks/menopausal-therapy/menopausal_therapy_onyeije.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Women's Health Screening Across the Lifespan - Clinical Guide</h2>
+        <p>Comprehensive clinical guide to evidence-based screening recommendations for women across all life stages, including cervical cancer screening, breast cancer screening, STI testing, osteoporosis assessment, cardiovascular risk, and age-appropriate preventive care from adolescence through menopause and beyond.</p>
+        <div>
+          <span class="tag">Women's Health</span>
+          <span class="tag">Preventive Care</span>
+          <span class="tag">Screening Guidelines</span>
+          <span class="tag">GYN</span>
+        </div>
+        <a href="decks/screening-lifespan-n-onyeije/screening_lifespan_onyeije.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card has-infographic">
+        <h2>Choroid Plexus Cysts in Pregnancy - Patient Education</h2>
+        <p>Comprehensive patient-friendly guide to understanding choroid plexus cysts (CPC) found on fetal ultrasound, including what they are, how common they are, their association with chromosomal abnormalities, monitoring strategies, and what to expect throughout pregnancy and after birth.</p>
+        <div>
+          <span class="infographic-badge">Infographic Available</span>
+          <span class="tag">Choroid Plexus Cysts</span>
+          <span class="tag">Fetal Neuroradiology</span>
+          <span class="tag">Patient Education</span>
+          <span class="tag">Genetic Counseling</span>
+        </div>
+        <div class="button-group">
+          <a href="decks/choroid-plexus-cyst/choroid_plexus_cyst_patient_education.html" class="btn">View Presentation</a>
+          <a href="decks/choroid-plexus-cyst/cpc_v2_final-infographic.png" target="_blank" class="btn btn-infographic">View Infographic</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Single Umbilical Artery (Two-Vessel Cord) - Patient Education</h2>
+        <p>Patient-friendly guide to understanding single umbilical artery (SUA), also known as a two-vessel cord, found on fetal ultrasound. Covers what it means, how common it is, associated risks, recommended evaluation for structural or chromosomal abnormalities, growth monitoring strategies, and what to expect for your baby.</p>
+        <div>
+          <span class="tag">Single Umbilical Artery</span>
+          <span class="tag">Umbilical Cord</span>
+          <span class="tag">Two-Vessel Cord</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/single-umbilical-artery/single_umbilical_artery.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>UNITY Fetal Antigen Testing - Provider Education</h2>
+        <p>Comprehensive provider guide to UNITY fetal antigen screening, including the expanded antigen panel, hemolytic disease of the fetus and newborn (HDFN), fetal and neonatal alloimmune thrombocytopenia (FNAIT), clinical indications, interpretation of results, and evidence-based management strategies for alloimmunized pregnancies.</p>
+        <div>
+          <span class="tag">UNITY Screen</span>
+          <span class="tag">Fetal Antigen Testing</span>
+          <span class="tag">HDFN</span>
+          <span class="tag">FNAIT</span>
+          <span class="tag">Provider Education</span>
+        </div>
+        <a href="decks/unity-fetal-antigen/unity_fetal_antigen_slides.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Vein of Galen Malformation - Patient Education</h2>
+        <p>Comprehensive patient guide to vein of Galen malformation (VOGM), a rare fetal brain vascular anomaly. Covers what it is, how it is diagnosed on prenatal ultrasound and MRI, spectrum of severity, associated findings, neonatal presentation, treatment options including embolization, long-term outcomes, and counseling for families navigating this complex diagnosis.</p>
+        <div>
+          <span class="tag">Vein of Galen</span>
+          <span class="tag">Fetal Neuroradiology</span>
+          <span class="tag">Vascular Anomaly</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/vein-of-galen-malformation/index.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Fetal Kick Counting - Patient Education</h2>
+        <p>Comprehensive patient guide to fetal kick counting, including what it is, why it matters, how to perform the count, recommended methods (Cardiff Count-to-Ten, Daily Fetal Movement Count), when to be concerned, and when to call your provider. Empowers pregnant patients to monitor their baby's well-being through daily movement tracking.</p>
+        <div>
+          <span class="tag">Fetal Movement</span>
+          <span class="tag">Kick Counting</span>
+          <span class="tag">Fetal Well-Being</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/fetal-kick-count-slides/fetal_kick_counting_slides.html" class="btn">View Presentation</a>
+      </div>
+
+      <div class="card">
+        <h2>Interstitial Pregnancy - Patient Education</h2>
+        <p>Patient education guide to interstitial pregnancy, a rare but life-threatening form of ectopic pregnancy where implantation occurs in the intramural segment of the fallopian tube. Covers anatomy, ultrasound diagnosis with the interstitial line sign, symptoms, risk factors, management options including methotrexate and cornual resection, and counseling for future pregnancies.</p>
+        <div>
+          <span class="tag">Interstitial Pregnancy</span>
+          <span class="tag">Ectopic Pregnancy</span>
+          <span class="tag">High-Risk Pregnancy</span>
+          <span class="tag">Patient Education</span>
+        </div>
+        <a href="decks/interstitial-pregnancy/interstitial_pregnancy.html" class="btn">View Presentation</a>
+      </div>
+
+    </div>
+
+    <!-- Interactive Tools Teaser -->
+    <div style="margin-top: 64px; margin-bottom: 48px; text-align: center;">
+      
+      <h2 style="font-size: 28px; font-weight: 700; color: var(--fg); margin-bottom: 16px;">&#x1F310; Interactive Clinical Tools</h2>
+      <p style="color: var(--muted); font-size: 16px; margin-bottom: 32px; max-width: 640px; margin-left: auto; margin-right: auto; line-height: 1.7;">
+        13 evidence-based calculators, screeners, and patient education microsites — now on their own dedicated page with search and filtering.
+      </p>
+      <a href="https://openmfm.org/interactive" class="btn" style="font-size: 17px; padding: 14px 32px; display: inline-block;">
+        &#x1F4CA; Explore Interactive Tools &#x2192;
+      </a>
+      <div style="display:none" id="microsites-container"><!-- cfDNA Navigator / NIPT Decision Guide -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>cfDNA Navigator - NIPT Decision Guide</h2>
+          <p>Interactive patient decision guide for cell-free DNA prenatal screening (NIPT). Covers whether to pursue NIPT based on age, risk factors, and patient values — and explains what a positive result means, including condition-specific and age-stratified positive predictive values (PPV).</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag">NIPT</span>
+            <span class="tag">cfDNA Screening</span>
+            <span class="tag">Prenatal Genetics</span>
+          </div>
+          <div class="button-group">
+            <a href="microsites/understanding-nipt-testing/index.html" class="btn" style="background: var(--accent);">🧬 Launch Guide</a>
+          </div>
+        </div>
+        <!-- VOGM Screener -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>Vein of Galen Malformation - Prenatal Risk Stratification Screener</h2>
+          <p>Interactive prenatal risk stratification and counseling tool for Vein of Galen Malformation (VOGM). Evaluates fetal MRI brain parenchymal findings, cardiac hemodynamics, malformation morphology, and systemic findings to generate a tiered risk assessment with evidence-based clinical recommendations.</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag">Vein of Galen</span>
+            <span class="tag">Fetal MRI</span>
+            <span class="tag">Right Heart Strain</span>
+          </div>
+          <div class="button-group">
+            <a href="microsites/vogm-screener/index.html" class="btn" style="background: var(--accent);">📊 Launch Screener</a>
+          </div>
+        </div>
+        <!-- Periviability -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>Periviability Counseling Resource - Interactive Microsite</h2>
+          <p>A dual-audience periviability counseling resource covering survival and morbidity outcomes by gestational age (22–25 weeks), prognostic factors, family decision-support questions, key clinical terminology, and ACOG/SMFM guideline references — for patients, families, and clinicians.</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag">Periviability</span>
+            <span class="tag">Prematurity</span>
+            <span class="tag">Neonatal Outcomes</span>
+          </div>
+          <div class="button-group">
+            <a href="microsites/periviability/index.html" class="btn" style="background: var(--accent);">👨‍👩‍👧 Launch Resource</a>
+          </div>
+        </div>
+        <!-- Cervical Length Screening -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>Cervical Length Screening &amp; Preterm Prevention - Interactive Microsite</h2>
+          <p>Interactive cervical length screening tool and patient education resource covering measurement thresholds, risk stratification, progesterone therapy, cerclage indications, pessary considerations, and ACOG/SMFM guideline-based preterm prevention strategies.</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag">Cervical Length</span>
+            <span class="tag">Preterm Birth</span>
+            <span class="tag">Screening Tool</span>
+            <span class="tag">Patient Education</span>
+          </div>
+          <div class="button-group">
+            <a href="microsites/cervical-length-screening/index.html" class="btn" style="background: var(--accent);">📊 Launch Screener</a>
+          </div>
+        </div>
+
+        <!-- Preeclampsia Screener -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>Preeclampsia Screener - Interactive Risk Calculator</h2>
+          <p>Evidence-based preeclampsia risk assessment tool for patients and clinicians. Calculate personalized risk scores using maternal characteristics, medical history, and biomarkers. Includes ACOG and USPSTF guideline-based recommendations for aspirin prophylaxis, surveillance protocols, and patient counseling resources.</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag">Preeclampsia</span>
+            <span class="tag">Risk Calculator</span>
+            <span class="tag">Clinical Tool</span>
+            <span class="tag">Aspirin Prophylaxis</span>
+          </div>
+          <div class="button-group">
+            <a href="https://www.preeclampsia-screener.com/" target="_blank" rel="noopener" class="btn" style="background: var(--accent);">📊 Launch Screener</a>
+          </div>
+        </div>
+
+        <!-- Vitamin K Deficiency Bleeding -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>Vitamin K Deficiency Bleeding (VKDB) - Interactive Microsite</h2>
+          <p>Comprehensive dual-audience microsite covering neonatal Vitamin K prophylaxis. Patient-facing section explains why newborns need the Vitamin K shot, safety considerations, and common myths. Clinician toolkit includes 60-second counseling scripts, documentation templates for informed consent/refusal, and evidence-based responses to common misconceptions.</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag">Vitamin K</span>
+            <span class="tag">Newborn Care</span>
+            <span class="tag">Patient Education</span>
+            <span class="tag">Clinician Toolkit</span>
+          </div>
+          <div class="button-group">
+            <a href="microsites/vitamin-k-deficiency-bleeding/index.html" class="btn" style="background: var(--accent);">👨‍👩‍👧 For Parents</a>
+            <a href="microsites/vitamin-k-deficiency-bleeding/clinicians.html" class="btn" style="background: #ff4d6d;">👨‍⚕️ For Clinicians</a>
+          </div>
+        </div>
+
+        <!-- GDM Screener -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>GDM Screener - Gestational Diabetes Risk Assessment</h2>
+          <p>Interactive clinical decision support tool for determining when to screen for Gestational Diabetes Mellitus (GDM). Step-by-step risk assessment covering BMI thresholds, high-risk factors, and additional risk factors. Provides evidence-based recommendations for early vs. routine screening timing based on ACOG 2024 guidelines and Practice Bulletin No. 190.</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag">Gestational Diabetes</span>
+            <span class="tag">Risk Assessment</span>
+            <span class="tag">Clinical Tool</span>
+            <span class="tag">ACOG 2024</span>
+          </div>
+          <div class="button-group">
+            <a href="microsites/gdm-screener/index.html" class="btn" style="background: var(--accent);">📊 Launch Screener</a>
+          </div>
+        </div>
+
+        <!-- HTN in Pregnancy Screener -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>HTN in Pregnancy Screener - Hypertension Classification Tool</h2>
+          <p>Comprehensive clinical decision support tool for classifying and managing hypertensive disorders in pregnancy. Features blood pressure classification, gestational age-based diagnosis, severe features assessment, and risk factor evaluation for aspirin prophylaxis. Includes evidence-based treatment recommendations and delivery timing guidance based on ACOG Practice Bulletin No. 222 and CHAP 2022 guidelines.</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag">Hypertension</span>
+            <span class="tag">Preeclampsia</span>
+            <span class="tag">Clinical Tool</span>
+            <span class="tag">ACOG PB 222</span>
+          </div>
+          <div class="button-group">
+            <a href="microsites/htn-screener/index.html" class="btn" style="background: var(--accent);">📊 Launch Screener</a>
+          </div>
+        </div>
+
+        <!-- Fetal Growth Calculator -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>Fetal Growth Biometry Calculator - Multi-Standard Percentile Tool</h2>
+          <p>Comprehensive fetal biometry calculator with automated percentile calculations using INTERGROWTH-21st, Hadlock, and WHO growth standards. Features Hadlock formula EFW computation, Doppler indices interpretation (UA-PI, MCA-PI, MCA-PSV), FGR/SGA/LGA classification, and delivery timing recommendations. Includes color-coded results and clinical management guidance.</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag">Fetal Growth</span>
+            <span class="tag">Biometry Calculator</span>
+            <span class="tag">Doppler</span>
+            <span class="tag">Clinical Tool</span>
+          </div>
+          <div class="button-group">
+            <a href="microsites/fetal-growth-calculator/index.html" class="btn" style="background: var(--accent);">📊 Launch Calculator</a>
+          </div>
+        </div>
+
+        <!-- FGRManager -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>FGRManager — FGR Surveillance &amp; Delivery Timing Tool</h2>
+          <p>Interactive clinical decision-support tool for managing pregnancies complicated by fetal growth restriction (FGR). Implements SMFM Consult Series #52 delivery-timing thresholds driven by umbilical artery (UA) Doppler category. Provides risk tier, delivery countdown, surveillance schedule (NST/BPP, Doppler intervals, growth scan cadence), corticosteroid eligibility, BPP alert system, and one-click EMR summary export.</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag">FGRManager</span>
+            <span class="tag">Fetal Growth Restriction</span>
+            <span class="tag">SMFM #52</span>
+            <span class="tag">Doppler Surveillance</span>
+            <span class="tag">Delivery Timing</span>
+            <span class="tag">Clinical Tool</span>
+          </div>
+          <div class="button-group">
+            <a href="microsites/FGRManager/landing.html" class="btn" style="background: var(--accent);">📋 Overview</a>
+            <a href="microsites/FGRManager/index.html" class="btn" style="background: #ff4d6d;">🩺 Launch Tool</a>
+          </div>
+        </div>
+
+        <!-- Preterm Birth Risk Assessment -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>Previous Preterm Birth Risk - Interactive Patient Assessment</h2>
+          <p>Step-by-step interactive risk assessment tool for patients with a history of preterm birth. Evaluates clinical risk factors across a multi-step workflow, generates personalized risk stratification (high/moderate/low), and provides evidence-based recommendations including cervical length surveillance, progesterone therapy, and cerclage candidacy. Features dark mode and detailed reference modals.</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag">Preterm Birth</span>
+            <span class="tag">Risk Assessment</span>
+            <span class="tag">Patient Education</span>
+            <span class="tag">Clinical Tool</span>
+          </div>
+          <div class="button-group">
+            <a href="microsites/preterm-birth-microsite/preterm_birth_microsite.html" class="btn" style="background: var(--accent);">🩺 Launch Tool</a>
+          </div>
+        </div>
+
+        <!-- Hydrops Fetalis Microsite -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>Hydrops Fetalis - Interactive Patient &amp; Family Microsite</h2>
+          <p>Comprehensive interactive educational resource for patients and families facing a hydrops fetalis diagnosis. Explores immune and non-immune causes, diagnostic evaluation, ultrasound findings, management approaches, prognosis, and practical guidance for navigating this challenging diagnosis during pregnancy.</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag">Hydrops Fetalis</span>
+            <span class="tag">Patient Education</span>
+            <span class="tag">Fetal Edema</span>
+            <span class="tag">Family Counseling</span>
+          </div>
+          <div class="button-group">
+            <a href="microsites/hydrops-fetalis-microsite/hydrops_microsite.html" class="btn" style="background: var(--accent);">👨‍👩‍👧 View Microsite</a>
+          </div>
+        </div>
+
+        <!-- Fetal Kick Count Microsite -->
+        <div class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, rgba(53,208,255,.08), rgba(53,208,255,.02));">
+          <h2>Fetal Kick Count - Interactive Patient Education Microsite</h2>
+          <p>Comprehensive interactive microsite for patients on fetal kick counting and fetal movement monitoring. Covers kick count methods, how to track movements, what counts as a kick, when to call your provider, and evidence-based guidance on recognizing decreased fetal movement. Features patient-friendly visuals and step-by-step instructions. Now includes a dedicated mobile-optimized version.</p>
+          <div>
+            <span class="tag" style="background: rgba(53,208,255,.15); border-color: rgba(53,208,255,.4);">🌐 Microsite</span>
+            <span class="tag" style="background: rgba(168,85,247,.15); border-color: rgba(168,85,247,.4); color: #c084fc;">📱 Mobile Friendly</span>
+            <span class="tag">Fetal Movement</span>
+            <span class="tag">Kick Counting</span>
+            <span class="tag">Patient Education</span>
+            <span class="tag">Fetal Well-Being</span>
+          </div>
+          <div class="button-group">
+            <a href="microsites/fetal-kick-count-microsite/fetal-kick-count-microsite.html" class="btn" style="background: var(--accent);">👶 View Microsite</a>
+            <a href="microsites/fetal-kick-count-microsite/fetal-kick-count-mobile-final.html" class="btn" style="background: #c084fc; color: #07111c;">📱 Mobile Version</a>
+          </div>
+        </div>
+
+        <!-- Placeholder: Aneuploidy Risk Calculator -->
+        <div class="card" style="border: 2px solid rgba(129,199,132,.4); background: linear-gradient(180deg, rgba(129,199,132,.08), rgba(129,199,132,.02)); opacity: 0.6;">
+          <h2>Aneuploidy Risk Calculator & Screening Guide - Coming Soon</h2>
+          <p>Integrated first and second trimester aneuploidy risk calculator. Incorporates maternal age, biochemical markers (PAPP-A, hCG, AFP, uE3, inhibin), NT measurement, and ultrasound findings. Provides adjusted risk estimates, screening performance metrics, and genetic counseling resources for trisomy 21, 18, and 13.</p>
+          <div>
+            <span class="tag" style="background: rgba(129,199,132,.15); border-color: rgba(129,199,132,.4);">🚧 In Development</span>
+            <span class="tag">Aneuploidy Screening</span>
+            <span class="tag">Risk Calculator</span>
+            <span class="tag">Genetic Counseling</span>
+          </div>
+          <div class="button-group">
+            <button class="btn" style="background: var(--muted); cursor: not-allowed;" disabled>Coming Soon</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="filter-results" class="filter-results"></div>
+
+    <div class="disclaimer">
+      <strong>⚠️ Medical Disclaimer:</strong> These presentations are educational tools and do not constitute medical advice. 
+      Clinical decisions should be individualized based on current evidence, local protocols, patient circumstances, and provider judgment. 
+      Always consult current ACOG, SMFM, and institutional guidelines.
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      Created by <strong>Dr. Chukwuma Onyeije</strong>, Maternal-Fetal Medicine Specialist &mdash;
+      <a href="https://github.com/chukwumaonyeije/mfm-presentations" target="_blank" rel="noopener">View on GitHub</a>
+    </p>
+    <p style="margin-top: 8px; font-size: 12px;">
+      106 open-source presentations &bull; 13 interactive microsites &bull; Evidence-based MFM education
+    </p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchBox  = document.getElementById('searchBox');
+      const tagFilter  = document.getElementById('tag-filter');
+      const filterResults = document.getElementById('filter-results');
+      const presContainer = document.querySelector('.presentations:not(#microsites-container)');
+      const msContainer   = document.getElementById('microsites-container');
+      const presCards  = Array.from(presContainer.querySelectorAll('.card'));
+      const msCards    = Array.from(msContainer.querySelectorAll('.card'));
+
+      let activeTab    = 'presentations';
+      let currentCards = presCards;
+
+      // ── "Recently Added" badge on first 3 presentation cards ──
+      presCards.slice(0, 3).forEach(card => {
+        const badge = document.createElement('span');
+        badge.className = 'tag new-badge';
+        badge.textContent = '\u2756 New';
+        const tagsDiv = card.querySelector('div');
+        if (tagsDiv) tagsDiv.prepend(badge);
+      });
+
+      // ── Tag dropdown ──
+      function buildTagDropdown(cards) {
+        const allTags = new Set();
+        cards.forEach(card => {
+          card.querySelectorAll('.tag').forEach(t => {
+            const txt = t.textContent.trim();
+            if (!txt.includes('\u2756') && !txt.includes('\uD83C\uDF10') && txt !== 'Microsite') allTags.add(txt);
+          });
+        });
+        tagFilter.innerHTML = '<option value="all">All Tags</option>';
+        [...allTags].sort().forEach(tag => {
+          const opt = document.createElement('option');
+          opt.value = tag; opt.textContent = tag;
+          tagFilter.appendChild(opt);
+        });
+      }
+
+      // ── URL state ──
+      function updateURL() {
+        const params = new URLSearchParams();
+        if (activeTab !== 'presentations') params.set('tab', activeTab);
+        const q = searchBox.value.trim();
+        if (q) params.set('q', q);
+        const tag = tagFilter.value;
+        if (tag && tag !== 'all') params.set('tag', tag);
+        const qs = params.toString();
+        history.replaceState(null, '', qs ? '?' + qs : window.location.pathname);
+      }
+
+      // ── Filter ──
+      function applyFilters() {
+        const term = searchBox.value.toLowerCase().trim();
+        const selectedTag = tagFilter.value;
+        const label = activeTab === 'presentations' ? 'presentations' : 'interactive tools';
+        let visible = 0;
+
+        currentCards.forEach(card => {
+          const title = (card.querySelector('h2,h3')?.textContent || '').toLowerCase();
+          const desc  = (card.querySelector('p')?.textContent || '').toLowerCase();
+          const cardTags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent.trim());
+          const matchSearch = !term || `${title} ${desc} ${cardTags.join(' ')}`.includes(term);
+          const matchTag    = selectedTag === 'all' || cardTags.includes(selectedTag);
+          if (matchSearch && matchTag) { card.classList.remove('hidden'); visible++; }
+          else card.classList.add('hidden');
+        });
+
+        if (!term && selectedTag === 'all') {
+          filterResults.textContent = `Showing all ${currentCards.length} ${label}`;
+        } else if (visible === 0) {
+          filterResults.textContent = `No ${label} found`;
+        } else {
+          filterResults.textContent = `Showing ${visible} of ${currentCards.length} ${label}`;
+        }
+        updateURL();
+      }
+
+      // ── Tab switch ──
+      function switchTab(tab) {
+        activeTab = tab;
+        document.getElementById('tab-presentations').classList.toggle('active', tab === 'presentations');
+        document.getElementById('tab-interactive').classList.toggle('active', tab === 'interactive');
+
+        if (tab === 'presentations') {
+          presContainer.style.display = '';
+          msContainer.style.display = 'none';
+          currentCards = presCards;
+          searchBox.placeholder = '\uD83D\uDD0D Search 106+ presentations...';
+        } else {
+          presContainer.style.display = 'none';
+          msContainer.style.display = '';
+          currentCards = msCards;
+          searchBox.placeholder = '\uD83D\uDD0D Search 13 interactive tools...';
+        }
+        buildTagDropdown(currentCards);
+        searchBox.value = '';
+        tagFilter.value = 'all';
+        currentCards.forEach(c => c.classList.remove('hidden'));
+        applyFilters();
+      }
+
+      // ── Init from URL params ──
+      const params  = new URLSearchParams(window.location.search);
+      const initTab = params.get('tab') || 'presentations';
+      const initQ   = params.get('q') || '';
+      const initTag = params.get('tag') || 'all';
+
+      buildTagDropdown(presCards);
+
+      if (initTab === 'interactive') {
+        switchTab('interactive');
+      } else {
+        presContainer.style.display = '';
+        msContainer.style.display = 'none';
+      }
+
+      if (initQ) searchBox.value = initQ;
+      if (initTag !== 'all') tagFilter.value = initTag;
+
+      currentCards.forEach(c => c.classList.remove('hidden'));
+      applyFilters();
+
+      let searchTimeout;
+      searchBox.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(applyFilters, 150);
+      });
+      tagFilter.addEventListener('change', applyFilters);
+      document.getElementById('tab-presentations').addEventListener('click', () => switchTab('presentations'));
+      document.getElementById('tab-interactive').addEventListener('click', () => switchTab('interactive'));
+    });
+  </script>
+</body>
+</html>

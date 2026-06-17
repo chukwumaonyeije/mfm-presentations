@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hepatitis B During Pregnancy: What You Need to Know</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2332 0%, #2d3e50 100%);
+            color: #e8eef2;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slide-container {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100vh;
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 6rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+            color: #7dd3fc;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            color: #7dd3fc;
+            line-height: 1.3;
+        }
+
+        h3 {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: #93c5fd;
+        }
+
+        p, li {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            max-width: 900px;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #cbd5e1;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-box {
+            background: rgba(56, 189, 248, 0.15);
+            border-left: 4px solid #38bdf8;
+            padding: 1.5rem 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .reassurance-box {
+            background: rgba(52, 211, 153, 0.15);
+            border-left: 4px solid #34d399;
+            padding: 1.5rem 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 4px;
+        }
+
+        .action-box {
+            background: rgba(251, 146, 60, 0.15);
+            border-left: 4px solid #fb923c;
+            padding: 1.5rem 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 2rem auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: #7dd3fc;
+        }
+
+        .card p {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 1000px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: #38bdf8;
+        }
+
+        .timeline-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: #38bdf8;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            border: 4px solid #1a2332;
+        }
+
+        .timeline-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #93c5fd;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-text {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+        }
+
+        ul {
+            list-style: none;
+            max-width: 800px;
+            margin: 1rem auto;
+        }
+
+        li {
+            padding-left: 2rem;
+            position: relative;
+            text-align: left;
+        }
+
+        li::before {
+            content: '•';
+            color: #38bdf8;
+            font-size: 2rem;
+            position: absolute;
+            left: 0;
+            top: -0.2rem;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background: rgba(56, 189, 248, 0.2);
+            border: 1px solid #38bdf8;
+            color: #7dd3fc;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .nav-button:hover {
+            background: rgba(56, 189, 248, 0.3);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            color: #94a3b8;
+            font-size: 1rem;
+            z-index: 1000;
+        }
+
+        .emphasis {
+            color: #34d399;
+            font-weight: 600;
+        }
+
+        .warning {
+            color: #fb923c;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            max-width: 900px;
+            margin: 2rem auto;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.3rem;
+        }
+
+        th {
+            background: rgba(56, 189, 248, 0.15);
+            color: #7dd3fc;
+            font-weight: 600;
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            p, li {
+                font-size: 1.2rem;
+            }
+
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                flex-direction: column;
+            }
+
+            .timeline::before {
+                display: none;
+            }
+        }
+    </style>
+
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/hepatitis-b-in-pregnancy/hepatitis-b-in-pregnancy.html">
+<meta name="description" content="Explains hepatitis B in pregnancy: HBsAg screening, vertical transmission risk, antiviral therapy for high viral loads, and neonatal immunoprophylaxis at delivery.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Hepatitis B, Infectious Disease, Patient Education, Vertical Transmission">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/hepatitis-b-in-pregnancy/hepatitis-b-in-pregnancy.html">
+<meta property="og:title" content="Hepatitis B During Pregnancy - Patient Education | OpenMFM">
+<meta property="og:description" content="Explains hepatitis B in pregnancy: HBsAg screening, vertical transmission risk, antiviral therapy for high viral loads, and neonatal immunoprophylaxis at delivery.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hepatitis B During Pregnancy - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Explains hepatitis B in pregnancy: HBsAg screening, vertical transmission risk, antiviral therapy for high viral loads, and neonatal immunoprophylaxis at delivery.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Hepatitis B During Pregnancy - Patient Education",
+  "description": "Explains hepatitis B in pregnancy: HBsAg screening, vertical transmission risk, antiviral therapy for high viral loads, and neonatal immunoprophylaxis at delivery.",
+  "url": "https://openmfm.org/decks/hepatitis-b-in-pregnancy/hepatitis-b-in-pregnancy.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-14",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Hepatitis B During Pregnancy - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Hepatitis B, Infectious Disease, Patient Education, Vertical Transmission"
+}
+</script>
+<style>
+/* 2026 refresh overrides */
+:root {
+  --refresh-bg: #08131f;
+  --refresh-surface: rgba(11, 26, 42, 0.88);
+  --refresh-surface-strong: rgba(15, 34, 54, 0.94);
+  --refresh-line: rgba(133, 201, 255, 0.16);
+  --refresh-text: #f4f8fc;
+  --refresh-muted: #b5c8d8;
+  --refresh-accent: #4ddcc2;
+  --refresh-accent-warm: #ffbd63;
+}
+
+html, body {
+  background:
+    radial-gradient(circle at top left, rgba(77, 220, 194, 0.16), transparent 24%),
+    radial-gradient(circle at 85% 16%, rgba(255, 189, 99, 0.12), transparent 20%),
+    linear-gradient(180deg, #08131f 0%, #06101a 100%) !important;
+  color: var(--refresh-text) !important;
+  font-family: "Aptos", "Segoe UI", system-ui, sans-serif !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.26), transparent 82%);
+}
+
+.slide,
+.slide-container,
+.slide-content,
+.presentation,
+.deck,
+main,
+.container {
+  position: relative;
+}
+
+.slide,
+.slide-content,
+.panel,
+.card,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+ul.references,
+table,
+.grid-item {
+  border-radius: 18px !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24) !important;
+}
+
+.card,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+.grid-item,
+table,
+blockquote {
+  background: var(--refresh-surface) !important;
+  border: 1px solid var(--refresh-line) !important;
+  backdrop-filter: blur(10px);
+}
+
+h1, h2, h3, h4, .slide-title {
+  color: var(--refresh-text) !important;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+p, li, td, th, .subtitle, .muted, small {
+  color: var(--refresh-muted) !important;
+}
+
+strong, b, .accent, .highlight, .key-point, a {
+  color: var(--refresh-accent) !important;
+}
+
+button,
+.nav button,
+.controls button,
+.btn,
+.button {
+  border-radius: 999px !important;
+  border: 1px solid var(--refresh-line) !important;
+  background: var(--refresh-surface-strong) !important;
+  color: var(--refresh-text) !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22) !important;
+}
+
+.progress,
+.progress-bar,
+#progressBar,
+.progress-fill {
+  background: linear-gradient(90deg, #4ddcc2 0%, #79e09b 100%) !important;
+  box-shadow: 0 0 18px rgba(77, 220, 194, 0.38);
+}
+</style>
+</head>
+<body>
+    <div class="slide-container" id="slideContainer">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <div class="icon">🤰</div>
+            <h1>Hepatitis B During Pregnancy</h1>
+            <p class="subtitle">What You Need to Know to Keep You and Your Baby Healthy</p>
+            <div class="reassurance-box">
+                <p><strong>Good news:</strong> With proper care, we can protect your baby and support your health throughout pregnancy.</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: What is Hepatitis B -->
+        <div class="slide">
+            <h2>What Is Hepatitis B?</h2>
+            <div class="highlight-box">
+                <p><strong>Hepatitis B is a virus that affects the liver.</strong></p>
+                <p>Some people clear the infection on their own. Others carry it long-term (chronic infection).</p>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>How You Get It</h3>
+                    <p>• Contact with infected blood</p>
+                    <p>• Sexual contact</p>
+                    <p>• Birth (mother to baby)</p>
+                </div>
+                <div class="card">
+                    <h3>Important to Know</h3>
+                    <p>• Many people have no symptoms</p>
+                    <p>• You can't tell by looking</p>
+                    <p>• That's why we test everyone</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Why We Test Everyone -->
+        <div class="slide">
+            <h2>Why We Test Every Pregnant Person</h2>
+            <p>Testing helps us identify who needs extra care and protection for their baby.</p>
+            <div class="reassurance-box">
+                <p><strong>We test at your first prenatal visit—it's routine care.</strong></p>
+                <p>This gives us time to plan and protect your baby before delivery.</p>
+            </div>
+            <ul>
+                <li>Early detection allows early protection</li>
+                <li>We can give the right treatments at the right time</li>
+                <li>Most babies born to mothers with hepatitis B stay healthy with proper care</li>
+            </ul>
+        </div>
+
+        <!-- Slide 4: Understanding Your Test Results -->
+        <div class="slide">
+            <h2>Understanding Your Test Results</h2>
+            <p>We check three things in your blood:</p>
+            <table>
+                <tr>
+                    <th>Test</th>
+                    <th>What It Tells Us</th>
+                </tr>
+                <tr>
+                    <td><strong>HBsAg</strong><br>(Surface Antigen)</td>
+                    <td>Shows if you currently have hepatitis B</td>
+                </tr>
+                <tr>
+                    <td><strong>Anti-HBs</strong><br>(Surface Antibody)</td>
+                    <td>Shows if you're protected (from vaccine or past infection)</td>
+                </tr>
+                <tr>
+                    <td><strong>Anti-HBc</strong><br>(Core Antibody)</td>
+                    <td>Shows if you've ever been exposed</td>
+                </tr>
+            </table>
+            <p style="margin-top: 1.5rem;">Your doctor will explain what your specific results mean for you.</p>
+        </div>
+
+        <!-- Slide 5: If You Have Hepatitis B -->
+        <div class="slide">
+            <h2>If You Have Hepatitis B</h2>
+            <p>We'll do additional tests to understand your specific situation:</p>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Viral Load Test</h3>
+                    <p>Measures the amount of virus in your blood (HBV DNA).</p>
+                    <p>Higher amounts may need medication to protect baby.</p>
+                </div>
+                <div class="card">
+                    <h3>Liver Function Tests</h3>
+                    <p>Checks how well your liver is working.</p>
+                    <p>Helps us monitor your health during pregnancy.</p>
+                </div>
+            </div>
+            <div class="reassurance-box" style="margin-top: 2rem;">
+                <p><strong>Remember:</strong> Having hepatitis B doesn't mean you can't have a healthy pregnancy. We'll work together to keep you both safe.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Protecting Your Baby with Medication -->
+        <div class="slide">
+            <h2>Protecting Your Baby: Medication</h2>
+            <p>If your viral load is high, we may recommend medication in the third trimester.</p>
+            <div class="highlight-box">
+                <p><strong>When:</strong> Usually starts between 28-32 weeks of pregnancy</p>
+                <p><strong>Why:</strong> Lowers the amount of virus, reducing the chance of passing it to baby</p>
+                <p><strong>Medicine:</strong> Tenofovir (TDF) is safe and effective during pregnancy</p>
+            </div>
+            <div class="reassurance-box">
+                <p>This medication has been used safely in thousands of pregnancies. Your care team will discuss benefits and answer your questions.</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Timeline of Care -->
+        <div class="slide">
+            <h2>Your Care Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">First Visit</div>
+                    <div class="timeline-text">Screening tests</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">Second Trimester</div>
+                    <div class="timeline-text">Viral load check if positive</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">28-32 Weeks</div>
+                    <div class="timeline-text">Start medication if needed</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">At Birth</div>
+                    <div class="timeline-text">Baby gets vaccine + protection</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">After Birth</div>
+                    <div class="timeline-text">Follow-up care for you</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: At Delivery -->
+        <div class="slide">
+            <h2>At Delivery: Protecting Your Baby</h2>
+            <div class="highlight-box">
+                <p><strong>Your baby will receive two things within 12 hours of birth:</strong></p>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Hepatitis B Vaccine</h3>
+                    <p>First dose of the vaccine series.</p>
+                    <p>Helps baby's immune system protect itself.</p>
+                </div>
+                <div class="card">
+                    <h3>HBIG (Immune Globulin)</h3>
+                    <p>Provides immediate protection.</p>
+                    <p>Works right away while vaccine builds immunity.</p>
+                </div>
+            </div>
+            <div class="reassurance-box" style="margin-top: 2rem;">
+                <p><strong>These two steps together are 95% effective</strong> at preventing transmission to your baby. If you received medication, protection is even higher.</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Can I Deliver Vaginally -->
+        <div class="slide">
+            <h2>Can I Deliver Vaginally?</h2>
+            <div class="reassurance-box">
+                <p style="font-size: 1.8rem;"><strong>Yes.</strong> Vaginal delivery is safe when baby receives protection at birth.</p>
+            </div>
+            <p>You do not need a cesarean section just because you have hepatitis B.</p>
+            <p>Your delivery plan will be based on your overall health and your baby's health—just like any other pregnancy.</p>
+        </div>
+
+        <!-- Slide 10: Breastfeeding -->
+        <div class="slide">
+            <h2>Can I Breastfeed?</h2>
+            <div class="reassurance-box">
+                <p style="font-size: 1.8rem;"><strong>Yes.</strong> Breastfeeding is safe and encouraged.</p>
+            </div>
+            <ul>
+                <li>Hepatitis B does not pass through breast milk</li>
+                <li>Your baby has protection from the vaccine and HBIG</li>
+                <li>If you're taking medication (tenofovir), it's safe while breastfeeding</li>
+                <li>Breastfeeding provides important health benefits for you and baby</li>
+            </ul>
+            <p style="margin-top: 1.5rem;">If your nipples crack or bleed, check with your doctor—we'll help you continue safely.</p>
+        </div>
+
+        <!-- Slide 11: After Baby Arrives -->
+        <div class="slide">
+            <h2>After Baby Arrives: Your Care</h2>
+            <div class="action-box">
+                <p><strong>Important:</strong> Your liver needs monitoring after delivery. Hormone changes can affect how your body manages the virus.</p>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>What We'll Monitor</h3>
+                    <p>• Liver function tests (ALT)</p>
+                    <p>• Every 3-6 months at first</p>
+                    <p>• More often if needed</p>
+                </div>
+                <div class="card">
+                    <h3>Long-Term Care</h3>
+                    <p>• Connection to liver specialist</p>
+                    <p>• Regular monitoring for life</p>
+                    <p>• Treatment if needed</p>
+                </div>
+            </div>
+            <p style="margin-top: 1.5rem;">We'll help you connect with the right doctors for ongoing care.</p>
+        </div>
+
+        <!-- Slide 12: Baby's Follow-Up -->
+        <div class="slide">
+            <h2>Your Baby's Follow-Up Care</h2>
+            <p>Your baby will need to complete the vaccine series and be tested:</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">At Birth</div>
+                    <div class="timeline-text">Dose 1 + HBIG</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">1-2 Months</div>
+                    <div class="timeline-text">Dose 2</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">6 Months</div>
+                    <div class="timeline-text">Dose 3</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-label">9-12 Months</div>
+                    <div class="timeline-text">Blood test to confirm protection</div>
+                </div>
+            </div>
+            <p style="margin-top: 2rem;">Your baby's pediatrician will track this schedule. Keep them informed about your hepatitis B status.</p>
+        </div>
+
+        <!-- Slide 13: Family and Partner Care -->
+        <div class="slide">
+            <h2>Protecting Your Family</h2>
+            <div class="highlight-box">
+                <p>Hepatitis B can spread through close contact. Let's protect your whole household.</p>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Your Partner Should</h3>
+                    <p>• Get tested for hepatitis B</p>
+                    <p>• Get vaccinated if not immune</p>
+                    <p>• Complete the 3-dose series</p>
+                </div>
+                <div class="card">
+                    <h3>At Home</h3>
+                    <p>• Don't share razors or toothbrushes</p>
+                    <p>• Cover any cuts or sores</p>
+                    <p>• Regular household contact is safe</p>
+                </div>
+            </div>
+            <p style="margin-top: 1.5rem;">Future children should be vaccinated at birth, just like this baby.</p>
+        </div>
+
+        <!-- Slide 14: Common Questions -->
+        <div class="slide">
+            <h2>Common Questions</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Will this affect my pregnancy?</h3>
+                    <p>Most people with hepatitis B have healthy pregnancies. We monitor closely to catch any issues early.</p>
+                </div>
+                <div class="card">
+                    <h3>What if I need a C-section for other reasons?</h3>
+                    <p>That's fine. Baby still gets the same protection at birth.</p>
+                </div>
+                <div class="card">
+                    <h3>Can I have more children?</h3>
+                    <p>Yes. We'll use the same protective approach for future pregnancies.</p>
+                </div>
+                <div class="card">
+                    <h3>Do I need to tell people?</h3>
+                    <p>It's your private medical information. Share with healthcare providers and close contacts who may need testing.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: What You Can Do -->
+        <div class="slide">
+            <h2>What You Can Do</h2>
+            <div class="action-box">
+                <h3 style="color: #fb923c; margin-bottom: 1rem;">Active Steps to Protect Your Health</h3>
+                <ul style="margin-left: 0;">
+                    <li>Attend all prenatal appointments</li>
+                    <li>Take medication exactly as prescribed</li>
+                    <li>Avoid alcohol completely</li>
+                    <li>Tell all healthcare providers about your hepatitis B status</li>
+                    <li>Encourage your partner to get tested and vaccinated</li>
+                    <li>Ask questions—your care team is here to help</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 16: Your Care Team -->
+        <div class="slide">
+            <h2>Your Care Team Is Here for You</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="icon">👨‍⚕️</div>
+                    <h3>OB Provider</h3>
+                    <p>Manages your pregnancy and coordinates care</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🔬</div>
+                    <h3>Maternal-Fetal Medicine</h3>
+                    <p>Specialist care if needed for high-risk monitoring</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🏥</div>
+                    <h3>Liver Specialist</h3>
+                    <p>Long-term care for your liver health</p>
+                </div>
+            </div>
+            <div class="reassurance-box" style="margin-top: 2rem;">
+                <p>We're all working together with one goal: a healthy pregnancy and a healthy baby.</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+            <div class="highlight-box">
+                <ul style="font-size: 1.4rem;">
+                    <li><span class="emphasis">We can protect your baby.</span> Proper care is highly effective.</li>
+                    <li><span class="emphasis">You can have a healthy pregnancy.</span> Hepatitis B is manageable.</li>
+                    <li><span class="emphasis">Medication is safe when needed.</span> It greatly reduces transmission risk.</li>
+                    <li><span class="emphasis">Vaginal delivery and breastfeeding are safe.</span> Baby receives protection.</li>
+                    <li><span class="emphasis">Follow-up care matters.</span> For both you and baby after birth.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 18: Summary -->
+        <div class="slide">
+            <h2>Remember</h2>
+            <div class="reassurance-box" style="max-width: 900px;">
+                <p style="font-size: 1.8rem; line-height: 1.8;">You are not alone in this. Hepatitis B during pregnancy is something we manage successfully every day. With proper monitoring, medication when needed, and protection for your baby at birth, <strong>most babies born to mothers with hepatitis B stay healthy.</strong></p>
+            </div>
+            <p style="margin-top: 2rem; font-size: 1.6rem;">Your care team will guide you through each step. Ask questions anytime.</p>
+        </div>
+
+        <!-- Slide 19: Contact Information -->
+        <div class="slide">
+            <h2>Questions?</h2>
+            <div class="icon">📞</div>
+            <div class="action-box">
+                <h3 style="color: #fb923c; margin-bottom: 1rem;">When to Call Your Provider</h3>
+                <ul style="margin-left: 0;">
+                    <li>New symptoms (yellowing skin/eyes, dark urine, severe fatigue)</li>
+                    <li>Questions about your test results or medication</li>
+                    <li>Concerns about your baby's health</li>
+                    <li>You need help connecting to a liver specialist</li>
+                </ul>
+            </div>
+            <p style="margin-top: 2rem; font-size: 1.5rem;">Never hesitate to reach out. We're here to support you.</p>
+        </div>
+
+    </div>
+
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">19</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-button" id="prevBtn">← Previous</button>
+        <button class="nav-button" id="nextBtn">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slideContainer = document.getElementById('slideContainer');
+        const currentSlideSpan = document.getElementById('currentSlide');
+        const totalSlidesSpan = document.getElementById('totalSlides');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        totalSlidesSpan.textContent = totalSlides;
+
+        function updateSlide() {
+            slideContainer.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            currentSlideSpan.textContent = currentSlide + 1;
+            
+            // Update button states
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+            
+            prevBtn.style.opacity = currentSlide === 0 ? '0.5' : '1';
+            nextBtn.style.opacity = currentSlide === totalSlides - 1 ? '0.5' : '1';
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Button navigation
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        // Touch navigation
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        slideContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        slideContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchStartX - touchEndX > 50) {
+                nextSlide();
+            }
+            if (touchEndX - touchStartX > 50) {
+                prevSlide();
+            }
+        }
+
+        // Click navigation (click on right/left side of slide)
+        slideContainer.addEventListener('click', (e) => {
+            const clickX = e.clientX;
+            const windowWidth = window.innerWidth;
+            
+            if (clickX > windowWidth * 0.66) {
+                nextSlide();
+            } else if (clickX < windowWidth * 0.33) {
+                prevSlide();
+            }
+        });
+
+        // Initialize
+        updateSlide();
+    </script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

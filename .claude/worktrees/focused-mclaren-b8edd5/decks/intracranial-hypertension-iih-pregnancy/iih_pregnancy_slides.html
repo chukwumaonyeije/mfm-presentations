@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IIH in Pregnancy — Patient Education | MFM</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface2:  #1f2937;
+      --teal:      #2dd4bf;
+      --teal-dim:  #0f766e;
+      --blue:      #60a5fa;
+      --blue-dim:  #1d4ed8;
+      --green:     #4ade80;
+      --green-dim: #166534;
+      --orange:    #fb923c;
+      --orange-dim:#9a3412;
+      --red:       #f87171;
+      --red-dim:   #7f1d1d;
+      --text:      #e2e8f0;
+      --muted:     #94a3b8;
+      --border:    rgba(255,255,255,0.08);
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ─── Deck & Slides ─────────────────────────────────────────── */
+    .deck {
+      width: 100vw; height: 100vh;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 4rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+      text-align: center;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ─── Navigation ────────────────────────────────────────────── */
+    .nav {
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 2rem;
+      padding: 0.5rem 1.2rem;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+    .nav button {
+      background: none; border: none; cursor: pointer;
+      color: var(--teal); font-size: 1.3rem;
+      padding: 0.2rem 0.5rem;
+      transition: color 0.2s;
+    }
+    .nav button:hover { color: #fff; }
+    .nav button:disabled { color: var(--muted); cursor: default; }
+    #slide-counter {
+      font-size: 0.85rem; color: var(--muted);
+      min-width: 4rem; text-align: center;
+    }
+
+    /* ─── Progress bar ──────────────────────────────────────────── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0;
+      height: 3px; background: var(--teal);
+      transition: width 0.4s ease;
+      z-index: 200;
+    }
+
+    /* ─── Typography ────────────────────────────────────────────── */
+    .slide-tag {
+      font-size: 0.7rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--teal);
+      margin-bottom: 0.6rem; font-weight: 600;
+    }
+    h1 { font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 300; line-height: 1.15; }
+    h2 { font-size: clamp(1.5rem, 3.5vw, 2.5rem); font-weight: 300; line-height: 1.2; }
+    h3 { font-size: clamp(1.1rem, 2.5vw, 1.6rem); font-weight: 400; }
+    .subtitle { font-size: clamp(1rem, 2vw, 1.35rem); color: var(--muted); margin-top: 0.8rem; }
+    .body-text { font-size: clamp(0.95rem, 1.8vw, 1.2rem); line-height: 1.7; color: var(--text); max-width: 820px; }
+    .small-note { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; }
+
+    /* ─── Accent line ───────────────────────────────────────────── */
+    .accent-line {
+      width: 60px; height: 3px;
+      background: var(--teal);
+      border-radius: 2px;
+      margin: 1rem auto;
+    }
+
+    /* ─── Badges ────────────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-top: 1rem;
+    }
+    .badge-green  { background: var(--green-dim);  color: var(--green);  border: 1px solid var(--green); }
+    .badge-orange { background: var(--orange-dim); color: var(--orange); border: 1px solid var(--orange); }
+    .badge-blue   { background: var(--blue-dim);   color: var(--blue);   border: 1px solid var(--blue); }
+    .badge-teal   { background: var(--teal-dim);   color: var(--teal);   border: 1px solid var(--teal); }
+    .badge-red    { background: var(--red-dim);    color: var(--red);    border: 1px solid var(--red); }
+
+    /* ─── Icon Grid ─────────────────────────────────────────────── */
+    .icon-grid {
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 1.4rem;
+      margin-top: 1.5rem; max-width: 900px;
+    }
+    .icon-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.2rem 1.5rem;
+      min-width: 160px; max-width: 200px;
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.5rem;
+    }
+    .icon-card .icon { font-size: 2rem; }
+    .icon-card .label {
+      font-size: 0.85rem; color: var(--muted);
+      text-align: center; line-height: 1.4;
+    }
+    .icon-card .value {
+      font-size: 1rem; font-weight: 600;
+      color: var(--text); text-align: center;
+    }
+
+    /* ─── Two-column layout ─────────────────────────────────────── */
+    .two-col {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5rem; max-width: 900px;
+      margin-top: 1.5rem; width: 100%;
+    }
+    .col-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.4rem 1.6rem;
+      text-align: left;
+    }
+    .col-card h3 { color: var(--teal); margin-bottom: 0.6rem; font-size: 1rem; }
+    .col-card p, .col-card li {
+      font-size: 0.9rem; color: var(--muted); line-height: 1.6;
+    }
+    .col-card ul { padding-left: 1.1rem; }
+    .col-card li { margin-bottom: 0.3rem; }
+
+    /* ─── Timeline ──────────────────────────────────────────────── */
+    .timeline {
+      display: flex; flex-direction: column;
+      gap: 0; max-width: 700px; width: 100%;
+      margin-top: 1.5rem;
+    }
+    .timeline-item {
+      display: flex; align-items: flex-start; gap: 1.2rem;
+      position: relative;
+    }
+    .timeline-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 1.4rem; top: 3rem;
+      width: 2px; height: calc(100% - 0.5rem);
+      background: var(--teal-dim);
+    }
+    .tl-num {
+      width: 2.8rem; height: 2.8rem; min-width: 2.8rem;
+      background: var(--teal-dim);
+      border: 2px solid var(--teal);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1rem; color: var(--teal);
+      z-index: 1;
+    }
+    .tl-body { padding: 0.3rem 0 1.4rem; text-align: left; }
+    .tl-title { font-size: 1rem; font-weight: 600; color: var(--text); }
+    .tl-desc { font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem; line-height: 1.5; }
+
+    /* ─── Severity bar ──────────────────────────────────────────── */
+    .severity-bar {
+      display: flex; width: 100%; max-width: 820px;
+      border-radius: 1rem; overflow: hidden;
+      margin-top: 1.5rem; border: 1px solid var(--border);
+    }
+    .sev-segment {
+      flex: 1; padding: 1.2rem 1rem;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.4rem;
+    }
+    .sev-segment .sev-label {
+      font-size: 0.7rem; letter-spacing: 0.12em;
+      text-transform: uppercase; font-weight: 700;
+    }
+    .sev-segment .sev-title { font-size: 0.95rem; font-weight: 600; }
+    .sev-segment .sev-desc { font-size: 0.78rem; color: var(--muted); text-align: center; line-height: 1.4; }
+    .sev-mild   { background: rgba(74,222,128,0.08); border-right: 1px solid var(--border); }
+    .sev-mod    { background: rgba(251,146,60,0.08); border-right: 1px solid var(--border); }
+    .sev-severe { background: rgba(248,113,113,0.08); }
+    .sev-mild .sev-label   { color: var(--green); }
+    .sev-mod .sev-label    { color: var(--orange); }
+    .sev-severe .sev-label { color: var(--red); }
+
+    /* ─── Alert card ────────────────────────────────────────────── */
+    .alert-card {
+      background: rgba(248,113,113,0.07);
+      border: 1px solid var(--red);
+      border-radius: 1rem;
+      padding: 1.4rem 2rem;
+      max-width: 700px; width: 100%;
+      margin-top: 1.2rem;
+    }
+    .alert-card ul { list-style: none; padding: 0; }
+    .alert-card li {
+      font-size: 0.95rem; color: var(--text);
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(248,113,113,0.15);
+      display: flex; align-items: center; gap: 0.7rem;
+    }
+    .alert-card li:last-child { border-bottom: none; }
+    .alert-card li::before { content: '⚠'; font-size: 1rem; }
+
+    /* ─── Checklist ─────────────────────────────────────────────── */
+    .checklist {
+      list-style: none; padding: 0;
+      max-width: 680px; width: 100%;
+      margin-top: 1.4rem;
+    }
+    .checklist li {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 0.9rem 1.2rem;
+      margin-bottom: 0.7rem;
+      font-size: 0.95rem; color: var(--text);
+      text-align: left;
+    }
+    .checklist li .check-icon {
+      width: 1.6rem; height: 1.6rem; min-width: 1.6rem;
+      border: 2px solid var(--teal);
+      border-radius: 0.3rem;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--teal); font-size: 0.9rem;
+    }
+
+    /* ─── Summary 3-col ─────────────────────────────────────────── */
+    .summary-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem; max-width: 900px; width: 100%;
+      margin-top: 1.5rem;
+    }
+    .summary-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.4rem 1.2rem;
+    }
+    .summary-card .s-tag {
+      font-size: 0.65rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--teal);
+      font-weight: 700; margin-bottom: 0.5rem;
+    }
+    .summary-card .s-title {
+      font-size: 1rem; font-weight: 600;
+      color: var(--text); margin-bottom: 0.4rem;
+    }
+    .summary-card .s-desc {
+      font-size: 0.82rem; color: var(--muted); line-height: 1.5;
+    }
+
+    /* ─── Team diagram ──────────────────────────────────────────── */
+    .team-grid {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+      justify-content: center; max-width: 860px;
+      margin-top: 1.5rem;
+    }
+    .team-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.4rem 1.6rem;
+      flex: 1; min-width: 200px; max-width: 240px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.6rem;
+    }
+    .team-card .team-icon { font-size: 2.2rem; }
+    .team-card .team-role {
+      font-size: 0.7rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--teal);
+      font-weight: 700;
+    }
+    .team-card .team-name {
+      font-size: 1rem; font-weight: 600; color: var(--text);
+    }
+    .team-card .team-desc {
+      font-size: 0.8rem; color: var(--muted);
+      text-align: center; line-height: 1.4;
+    }
+
+    /* ─── Venn-like connector ───────────────────────────────────── */
+    .connector {
+      display: flex; align-items: center;
+      gap: 0; margin-top: 1rem;
+    }
+    .connector-line {
+      height: 2px; flex: 1;
+      background: linear-gradient(to right, transparent, var(--teal), transparent);
+    }
+    .connector-center {
+      background: var(--teal-dim);
+      border: 2px solid var(--teal);
+      border-radius: 50%;
+      width: 2.5rem; height: 2.5rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; color: var(--teal);
+    }
+
+    /* ─── Footer ────────────────────────────────────────────────── */
+    .slide-footer {
+      position: fixed; bottom: 4.5rem; left: 50%; transform: translateX(-50%);
+      font-size: 0.7rem; color: rgba(148,163,184,0.4);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ─── Title slide specifics ─────────────────────────────────── */
+    .title-slide { background: radial-gradient(ellipse at 30% 40%, rgba(45,212,191,0.06) 0%, transparent 60%), var(--bg); }
+    .title-slide h1 { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 200; max-width: 780px; }
+    .title-slide .subtitle { font-size: clamp(0.9rem, 1.8vw, 1.2rem); }
+    .title-mfm-tag {
+      font-size: 0.7rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--teal);
+      font-weight: 700; margin-bottom: 1.2rem;
+      border: 1px solid var(--teal-dim);
+      padding: 0.3rem 1rem; border-radius: 2rem;
+    }
+
+    /* ─── Responsive ────────────────────────────────────────────── */
+    @media (max-width: 700px) {
+      .two-col, .summary-grid { grid-template-columns: 1fr; }
+      .severity-bar { flex-direction: column; }
+      .sev-segment { border-right: none; border-bottom: 1px solid var(--border); }
+      .slide { padding: 2rem 1.5rem; }
+      .team-grid { flex-direction: column; align-items: center; }
+    }
+  </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/nr2gNB7nXPdpg6zkqdAJ03IDgThW6VuMCvpSf0Qy-e-Z8lgM-XaD2I7GIqbfQLwP_RWSgR0PaLQ-ZnuJ2HcLajwIILTDCbukss2kBf6Mufi3ChgVRBo3gRKLsiXHgrEMvgwq7gS2bvNBwf_iULbD1Isvs4_vKWUjbrklWdGjHsJ5DAr77maIwDPFzLd1UDlQ3WDi3O5gLUXBC0rgJ1tSg-4PrZssXEHLznYcue6q7u7VpkGbNPfirpfI95Phn1E40X9wvsp6iu3ak4TWSf99Ccg3ftMnf8Ub2RoG6RgZ_cWJ3O9KYGIAGZe1yLurGlS4_ILzA6Acmlu8Pw9VvP60KJt4IxiPASk2kOzEdk7PpTmXtq3e3diOXBSGRWExvOaQbqdSCBHcBdvWpDx2gTJwYCI2LdHxOfNX86ehGWyND2XyqDcnT7thgf98-gvulnwnS-S3hUMFx09abxmEzw6rPoPUuCIcVPy_3GsVbdXxy0Sp3FbpZ2qTIYLlBVs5gF5YWyIqd44-b2IJ1pZfEWNRU7T06JyktlyG1DIRlFXAjGFZzAEl37twN9AjiVDulGJBs1m1n-DemPlTpPL3u-4g4jLhuOWamwmf5gV1dDBa16S52Y59nPYJpcIjA7lje7dwjYAhSukOqEwjxGd9QwxQpWDQQoipqqf4W-GUb0Yn7Kz3_lvqY0wwrE8c0tBCU84OcHHVW5-YYRuVo3a6F18hOrlh2_bm-IHE9XRc9O-amnKrRGySd0rL3RJdXKRufYVVE6gnCFApS5H10DPOqYZyylttWIrSlyF4C49zoMxVnW_oyh1YQ7nmp4ep17893fX610ldeOcKFx488FssR2beAe8PVG14l2ceuKRel6UYkr7wixwU1xrlhjHJRN_fl1W2TmP58hpSsW2eK9pU31MEaPgcg5RPhsP2-4YGviK3VsBT7VNAw_DSPrKYgdxuQJ0DSacHCujV95i1bg0gn_N4R0ygL8bQQWSlNFuqSs8335aYfcyfP9IUzCvS5lMAnzzwlbKpeSTgTlTauLsbkrh5G72Evcnn-AUWBLruKy44uaH2XxWstHfTSneLcz7rg78emwEQNASWIhAo61wUggvQ1kLM4iF_F7q70AQB3iFMDfc99hfWfuWx7f5oD5j-zU2jqdjG3pDonm86cv3EzymIs6IqEChF2RmhSwJP17kzLk1ZNwPWP_EAdvlbvrFjfrqYNnPkQfPX0zigwFveNmXYLKvW2et7mFg7YXI-p6G2AoH_y0JqEosBeDhW4FaPfLM-UXqnBCFq2ghZiAWybPW5qzs0-RFJFePmwmvQChMxjxeGUSgSKw9cAh0185r1xBsFA2jrS2-ccHP6SEb06KtB8cHCjaCXjZi3JBjZdfjCxoN2Ek-vWoLkyldrm_nomBdWV-oYRkJDVjWdsbUyuU9WcXKYHY0h1-mX2iuQ6-1FzVbD3p9ti3quWWBeMOS8TtbRf2dOoWXOfnadNock7Aw28MvZbFkI1zs05FB5zB5Ywl7LEKIemN3qRrsNZxX7OYIlAIWQcAiUIVSnqsMmLPXqboinIVOYDaqr8XwLQU-wIAVsfHR7NPv1GfndGR2jNCvob4vzFc06AJ4xSuINwWfRwv3Cku5yld415FEoplSzX-Y_hOdQUHwbb2W6c-2K3Sgy0wPQXO9X6dt0cqtb77MJ9cyyZ_u5'></script>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/intracranial-hypertension-iih-pregnancy/iih_pregnancy_slides.html">
+<meta name="description" content="Explains idiopathic intracranial hypertension (pseudotumor cerebri) in pregnancy: headache, papilledema, lumbar puncture, acetazolamide safety, and delivery planning.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Intracranial Hypertension, IIH, Pseudotumor Cerebri, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/intracranial-hypertension-iih-pregnancy/iih_pregnancy_slides.html">
+<meta property="og:title" content="Intracranial Hypertension (Idiopathic Intracranial Hypertension) in Pregnancy - Patient Education | OpenMFM">
+<meta property="og:description" content="Explains idiopathic intracranial hypertension (pseudotumor cerebri) in pregnancy: headache, papilledema, lumbar puncture, acetazolamide safety, and delivery planning.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Intracranial Hypertension (Idiopathic Intracranial Hypertension) in Pregnancy - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Explains idiopathic intracranial hypertension (pseudotumor cerebri) in pregnancy: headache, papilledema, lumbar puncture, acetazolamide safety, and delivery planning.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Intracranial Hypertension (Idiopathic Intracranial Hypertension) in Pregnancy - Patient Education",
+  "description": "Explains idiopathic intracranial hypertension (pseudotumor cerebri) in pregnancy: headache, papilledema, lumbar puncture, acetazolamide safety, and delivery planning.",
+  "url": "https://openmfm.org/decks/intracranial-hypertension-iih-pregnancy/iih_pregnancy_slides.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-14",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Intracranial Hypertension (Idiopathic Intracranial Hypertension) in Pregnancy - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Intracranial Hypertension, IIH, Pseudotumor Cerebri, Patient Education"
+}
+</script>
+<style>
+/* 2026 refresh overrides */
+:root {
+  --refresh-bg: #08131f;
+  --refresh-surface: rgba(11, 26, 42, 0.88);
+  --refresh-surface-strong: rgba(15, 34, 54, 0.94);
+  --refresh-line: rgba(133, 201, 255, 0.16);
+  --refresh-text: #f4f8fc;
+  --refresh-muted: #b5c8d8;
+  --refresh-accent: #4ddcc2;
+  --refresh-accent-warm: #ffbd63;
+}
+
+html, body {
+  background:
+    radial-gradient(circle at top left, rgba(77, 220, 194, 0.16), transparent 24%),
+    radial-gradient(circle at 85% 16%, rgba(255, 189, 99, 0.12), transparent 20%),
+    linear-gradient(180deg, #08131f 0%, #06101a 100%) !important;
+  color: var(--refresh-text) !important;
+  font-family: "Aptos", "Segoe UI", system-ui, sans-serif !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.26), transparent 82%);
+}
+
+.slide,
+.slide-container,
+.slide-content,
+.presentation,
+.deck,
+main,
+.container {
+  position: relative;
+}
+
+.slide,
+.slide-content,
+.panel,
+.card,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+ul.references,
+table,
+.grid-item {
+  border-radius: 18px !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24) !important;
+}
+
+.card,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+.grid-item,
+table,
+blockquote {
+  background: var(--refresh-surface) !important;
+  border: 1px solid var(--refresh-line) !important;
+  backdrop-filter: blur(10px);
+}
+
+h1, h2, h3, h4, .slide-title {
+  color: var(--refresh-text) !important;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+p, li, td, th, .subtitle, .muted, small {
+  color: var(--refresh-muted) !important;
+}
+
+strong, b, .accent, .highlight, .key-point, a {
+  color: var(--refresh-accent) !important;
+}
+
+button,
+.nav button,
+.controls button,
+.btn,
+.button {
+  border-radius: 999px !important;
+  border: 1px solid var(--refresh-line) !important;
+  background: var(--refresh-surface-strong) !important;
+  color: var(--refresh-text) !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22) !important;
+}
+
+.progress,
+.progress-bar,
+#progressBar,
+.progress-fill {
+  background: linear-gradient(90deg, #4ddcc2 0%, #79e09b 100%) !important;
+  box-shadow: 0 0 18px rgba(77, 220, 194, 0.38);
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="deck">
+
+  <!-- ── SLIDE 1: Title ─────────────────────────────────────── -->
+  <div class="slide title-slide active" id="s1">
+    <div class="title-mfm-tag">Maternal-Fetal Medicine · Patient Education Series</div>
+    <h1>Idiopathic Intracranial Hypertension in Pregnancy</h1>
+    <div class="accent-line"></div>
+    <p class="subtitle">Understanding Your Diagnosis &amp; Your Care Plan</p>
+    <div class="badge badge-teal" style="margin-top:2rem;">Dr. C. Onyeije, MFM Specialist</div>
+  </div>
+
+  <!-- ── SLIDE 2: What Is IIH? ──────────────────────────────── -->
+  <div class="slide" id="s2">
+    <div class="slide-tag">What Is This?</div>
+    <h2>What Is Idiopathic Intracranial Hypertension?</h2>
+    <div class="accent-line"></div>
+    <p class="body-text">Pressure inside the skull is higher than normal — without a tumor or blockage causing it.</p>
+    <div class="icon-grid">
+      <div class="icon-card">
+        <span class="icon">🧠</span>
+        <span class="value">"Idiopathic"</span>
+        <span class="label">No identifiable structural cause</span>
+      </div>
+      <div class="icon-card">
+        <span class="icon">💧</span>
+        <span class="value">Elevated CSF Pressure</span>
+        <span class="label">Cerebrospinal fluid builds up around the brain</span>
+      </div>
+      <div class="icon-card">
+        <span class="icon">👁️</span>
+        <span class="value">Vision Risk</span>
+        <span class="label">Can affect the optic nerve if untreated</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 3: How Common? ───────────────────────────────── -->
+  <div class="slide" id="s3">
+    <div class="slide-tag">What Is This?</div>
+    <h2>IIH Is Rare — But Manageable</h2>
+    <div class="accent-line"></div>
+    <div class="icon-grid">
+      <div class="icon-card">
+        <span class="icon">👩</span>
+        <span class="value">Childbearing Age</span>
+        <span class="label">Primarily affects women of reproductive age</span>
+      </div>
+      <div class="icon-card">
+        <span class="icon">⚖️</span>
+        <span class="value">Weight Gain</span>
+        <span class="label">Gestational weight gain can worsen symptoms</span>
+      </div>
+      <div class="icon-card">
+        <span class="icon">🤰</span>
+        <span class="value">Not Caused by Pregnancy</span>
+        <span class="label">Pregnancy itself does NOT cause IIH</span>
+      </div>
+    </div>
+    <div class="badge badge-green">Most pregnancies with IIH have excellent outcomes</div>
+  </div>
+
+  <!-- ── SLIDE 4: Symptoms ──────────────────────────────────── -->
+  <div class="slide" id="s4">
+    <div class="slide-tag">What Is This?</div>
+    <h2>Symptoms to Know</h2>
+    <div class="accent-line"></div>
+    <div class="icon-grid">
+      <div class="icon-card">
+        <span class="icon">🤕</span>
+        <span class="value">Daily Headache</span>
+        <span class="label">Pulsating, persistent — most common symptom (~63%)</span>
+      </div>
+      <div class="icon-card">
+        <span class="icon">👁️</span>
+        <span class="value">Visual Changes</span>
+        <span class="label">Blurred or double vision (~67% of patients)</span>
+      </div>
+      <div class="icon-card">
+        <span class="icon">🌊</span>
+        <span class="value">Visual Blackouts</span>
+        <span class="label">Brief, transient visual obscurations</span>
+      </div>
+      <div class="icon-card">
+        <span class="icon">🤢</span>
+        <span class="value">Nausea</span>
+        <span class="label">Often accompanies headache</span>
+      </div>
+    </div>
+    <p class="small-note">Symptoms are similar to those experienced outside of pregnancy</p>
+  </div>
+
+  <!-- ── SLIDE 5: Why It Matters ────────────────────────────── -->
+  <div class="slide" id="s5">
+    <div class="slide-tag">Why Does It Matter?</div>
+    <h2>The Main Concern: Protecting Your Vision</h2>
+    <div class="accent-line"></div>
+    <p class="body-text">Without treatment, increased pressure can damage the optic nerve — the nerve that connects your eye to your brain — and cause <strong style="color:var(--orange)">permanent vision loss</strong>.</p>
+    <div class="two-col" style="margin-top:1.5rem; max-width:700px;">
+      <div class="col-card" style="border-color:var(--orange-dim);">
+        <h3 style="color:var(--orange);">Papilledema</h3>
+        <p>Swelling of the optic nerve head — the earliest sign of damage. Detected on eye exam.</p>
+      </div>
+      <div class="col-card" style="border-color:var(--teal-dim);">
+        <h3>Why Early Diagnosis Matters</h3>
+        <p>Catching and treating IIH early prevents vision loss. Regular monitoring is key.</p>
+      </div>
+    </div>
+    <div class="badge badge-orange">Early diagnosis = vision protection</div>
+  </div>
+
+  <!-- ── SLIDE 6: Diagnosis Overview ───────────────────────── -->
+  <div class="slide" id="s6">
+    <div class="slide-tag">What Happens Next?</div>
+    <h2>3 Steps to Confirm the Diagnosis</h2>
+    <div class="accent-line"></div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="tl-num">1</div>
+        <div class="tl-body">
+          <div class="tl-title">🧲 MRI of the Brain</div>
+          <div class="tl-desc">Rules out tumors, clots, or other causes. No contrast dye is used in pregnancy.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-num">2</div>
+        <div class="tl-body">
+          <div class="tl-title">💉 Lumbar Puncture</div>
+          <div class="tl-desc">Measures spinal fluid pressure. A reading &gt;25 cm H₂O confirms elevated pressure.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-num">3</div>
+        <div class="tl-body">
+          <div class="tl-title">👁️ Ophthalmology Exam</div>
+          <div class="tl-desc">Checks for optic nerve swelling (papilledema) and maps your visual fields.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 7: Lumbar Puncture ──────────────────────────── -->
+  <div class="slide" id="s7">
+    <div class="slide-tag">What Happens Next?</div>
+    <h2>What Is a Lumbar Puncture?</h2>
+    <div class="accent-line"></div>
+    <p class="body-text">A thin needle is placed in the lower back to measure and sample spinal fluid. It is safe during pregnancy.</p>
+    <div class="two-col" style="max-width:720px;">
+      <div class="col-card">
+        <h3>How It's Done</h3>
+        <ul>
+          <li>You lie on your side (lateral decubitus position)</li>
+          <li>Local numbing medicine is used first</li>
+          <li>Pressure is measured before fluid is collected</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h3>What It Tells Us</h3>
+        <ul>
+          <li>Opening pressure &gt;25 cm H₂O = elevated</li>
+          <li>Normal fluid composition confirms IIH</li>
+          <li>Can also provide temporary relief</li>
+        </ul>
+      </div>
+    </div>
+    <div class="badge badge-green">Performed lying on your side — safe for you and your baby</div>
+  </div>
+
+  <!-- ── SLIDE 8: Eye Monitoring ────────────────────────────── -->
+  <div class="slide" id="s8">
+    <div class="slide-tag">What Happens Next?</div>
+    <h2>Your Eyes Are a Window to Your Brain</h2>
+    <div class="accent-line"></div>
+    <p class="body-text">Regular eye exams track the health of your optic nerve throughout your pregnancy.</p>
+    <div class="two-col" style="max-width:720px;">
+      <div class="col-card" style="border-color:var(--blue-dim);">
+        <h3 style="color:var(--blue);">Visual Field Testing</h3>
+        <p>Maps your peripheral (side) vision. Detects early changes before you notice them.</p>
+        <p style="margin-top:0.5rem; font-size:0.8rem;">Also called: automated perimetry</p>
+      </div>
+      <div class="col-card" style="border-color:var(--blue-dim);">
+        <h3 style="color:var(--blue);">OCT Scan</h3>
+        <p>Optical Coherence Tomography — uses light waves to measure optic nerve thickness. No radiation.</p>
+        <p style="margin-top:0.5rem; font-size:0.8rem;">Painless and non-invasive</p>
+      </div>
+    </div>
+    <div class="badge badge-blue">Painless · Non-invasive · No radiation</div>
+  </div>
+
+  <!-- ── SLIDE 9: Treatment Overview ───────────────────────── -->
+  <div class="slide" id="s9">
+    <div class="slide-tag">What Happens Next?</div>
+    <h2>Treatment Is Tailored to You</h2>
+    <div class="accent-line"></div>
+    <div class="severity-bar">
+      <div class="sev-segment sev-mild">
+        <span class="sev-label">Mild</span>
+        <span class="sev-title">Monitoring</span>
+        <span class="sev-desc">Weight management + close follow-up</span>
+      </div>
+      <div class="sev-segment sev-mod">
+        <span class="sev-label">Moderate</span>
+        <span class="sev-title">Medication</span>
+        <span class="sev-desc">Acetazolamide after the first trimester</span>
+      </div>
+      <div class="sev-segment sev-severe">
+        <span class="sev-label">Severe</span>
+        <span class="sev-title">Procedures</span>
+        <span class="sev-desc">Serial lumbar punctures or surgery (rare)</span>
+      </div>
+    </div>
+    <p class="small-note" style="margin-top:1.2rem;">Your team will choose the safest option for you and your baby</p>
+  </div>
+
+  <!-- ── SLIDE 10: Acetazolamide ────────────────────────────── -->
+  <div class="slide" id="s10">
+    <div class="slide-tag">What Happens Next?</div>
+    <h2>The Main Medication: Acetazolamide</h2>
+    <div class="accent-line"></div>
+    <p class="body-text">Reduces spinal fluid production. Generally used after the first trimester when it is considered safe.</p>
+    <div class="two-col" style="max-width:720px;">
+      <div class="col-card" style="border-color:var(--green-dim);">
+        <h3 style="color:var(--green);">Benefits</h3>
+        <ul>
+          <li>Reduces headaches and optic nerve swelling</li>
+          <li>First-line treatment for moderate IIH</li>
+          <li>Well-studied in pregnancy (after 1st trimester)</li>
+        </ul>
+      </div>
+      <div class="col-card" style="border-color:var(--orange-dim);">
+        <h3 style="color:var(--orange);">Important Notes</h3>
+        <ul>
+          <li>Avoided during the first trimester</li>
+          <li>Discuss breastfeeding plans with your doctor</li>
+          <li>Regular monitoring while on medication</li>
+        </ul>
+      </div>
+    </div>
+    <div class="badge badge-blue">Evidence-based · ACOG/SMFM aligned</div>
+  </div>
+
+  <!-- ── SLIDE 11: Delivery Planning ───────────────────────── -->
+  <div class="slide" id="s11">
+    <div class="slide-tag">What Happens Next?</div>
+    <h2>How Will I Deliver My Baby?</h2>
+    <div class="accent-line"></div>
+    <p class="body-text">IIH alone does <strong style="color:var(--green)">NOT</strong> require a cesarean section. Vaginal delivery is the goal.</p>
+    <div class="icon-grid" style="margin-top:1.5rem;">
+      <div class="icon-card" style="border-color:var(--green-dim);">
+        <span class="icon">🤱</span>
+        <span class="value" style="color:var(--green);">Vaginal Delivery</span>
+        <span class="label">Recommended as the standard approach</span>
+      </div>
+      <div class="icon-card" style="border-color:var(--blue-dim);">
+        <span class="icon">💉</span>
+        <span class="value" style="color:var(--blue);">Regional Anesthesia</span>
+        <span class="label">Epidural or spinal — safe, may even lower pressure</span>
+      </div>
+      <div class="icon-card" style="border-color:var(--border);">
+        <span class="icon">🏥</span>
+        <span class="value">C-Section</span>
+        <span class="label">Only if needed for standard obstetric reasons</span>
+      </div>
+    </div>
+    <div class="badge badge-green">Your delivery plan is based on YOUR needs</div>
+  </div>
+
+  <!-- ── SLIDE 12: Baby's Safety ────────────────────────────── -->
+  <div class="slide" id="s12">
+    <div class="slide-tag">Why Does It Matter?</div>
+    <h2>What About My Baby?</h2>
+    <div class="accent-line"></div>
+    <p class="body-text">IIH does not increase the risk of miscarriage, preterm birth, or preeclampsia.</p>
+    <div class="icon-grid" style="margin-top:1.5rem;">
+      <div class="icon-card" style="border-color:var(--green-dim);">
+        <span class="icon">✅</span>
+        <span class="label">No increased miscarriage risk</span>
+      </div>
+      <div class="icon-card" style="border-color:var(--green-dim);">
+        <span class="icon">✅</span>
+        <span class="label">No increased preterm labor risk</span>
+      </div>
+      <div class="icon-card" style="border-color:var(--green-dim);">
+        <span class="icon">✅</span>
+        <span class="label">No increased preeclampsia risk</span>
+      </div>
+      <div class="icon-card" style="border-color:var(--teal-dim);">
+        <span class="icon">👀</span>
+        <span class="label">Close monitoring throughout pregnancy</span>
+      </div>
+    </div>
+    <div class="badge badge-green">Evidence is reassuring for most pregnancies</div>
+  </div>
+
+  <!-- ── SLIDE 13: Your Care Team ──────────────────────────── -->
+  <div class="slide" id="s13">
+    <div class="slide-tag">What Happens Next?</div>
+    <h2>You Have a Full Team Behind You</h2>
+    <div class="accent-line"></div>
+    <div class="team-grid">
+      <div class="team-card">
+        <span class="team-icon">👩‍⚕️</span>
+        <span class="team-role">High-Risk OB</span>
+        <span class="team-name">Maternal-Fetal Medicine</span>
+        <span class="team-desc">Manages your high-risk pregnancy and coordinates your care</span>
+      </div>
+      <div class="team-card" style="border-color:var(--teal-dim);">
+        <span class="team-icon">🧠</span>
+        <span class="team-role">Neurology</span>
+        <span class="team-name">Neurologist</span>
+        <span class="team-desc">Manages intracranial pressure and medication decisions</span>
+      </div>
+      <div class="team-card">
+        <span class="team-icon">👁️</span>
+        <span class="team-role">Eye Care</span>
+        <span class="team-name">Ophthalmology</span>
+        <span class="team-desc">Monitors optic nerve health and visual fields</span>
+      </div>
+    </div>
+    <p class="small-note" style="margin-top:1.2rem;">Coordinated multidisciplinary care = best outcomes for you and your baby</p>
+  </div>
+
+  <!-- ── SLIDE 14: Warning Signs ───────────────────────────── -->
+  <div class="slide" id="s14">
+    <div class="slide-tag">What Can I Do?</div>
+    <h2>Call Your Doctor If You Notice…</h2>
+    <div class="accent-line"></div>
+    <div class="alert-card">
+      <ul>
+        <li>Sudden severe headache — "the worst of your life"</li>
+        <li>Rapid vision changes or sudden vision loss</li>
+        <li>New or worsening double vision</li>
+        <li>High blood pressure combined with headache</li>
+      </ul>
+    </div>
+    <div class="badge badge-red" style="margin-top:1.2rem;">Do not wait — contact your care team immediately</div>
+    <p class="small-note" style="margin-top:0.8rem;">High blood pressure + headache may indicate preeclampsia — always report this promptly</p>
+  </div>
+
+  <!-- ── SLIDE 15: What You Can Do ─────────────────────────── -->
+  <div class="slide" id="s15">
+    <div class="slide-tag">What Can I Do?</div>
+    <h2>Your Role in Your Care</h2>
+    <div class="accent-line"></div>
+    <ul class="checklist">
+      <li>
+        <span class="check-icon">✓</span>
+        Attend all scheduled appointments — MFM, neurology, and ophthalmology
+      </li>
+      <li>
+        <span class="check-icon">✓</span>
+        Follow your doctor's guidance on gestational weight gain
+      </li>
+      <li>
+        <span class="check-icon">✓</span>
+        Take all medications as prescribed and on schedule
+      </li>
+      <li>
+        <span class="check-icon">✓</span>
+        Report any new or worsening symptoms to your care team promptly
+      </li>
+    </ul>
+    <div class="badge badge-teal">You are an active partner in your care</div>
+  </div>
+
+  <!-- ── SLIDE 16: Long-Term Outlook ───────────────────────── -->
+  <div class="slide" id="s16">
+    <div class="slide-tag">Looking Ahead</div>
+    <h2>Vision &amp; Future Pregnancies</h2>
+    <div class="accent-line"></div>
+    <p class="body-text">With proper management, long-term visual outcomes are generally excellent.</p>
+    <div class="two-col" style="max-width:720px;">
+      <div class="col-card" style="border-color:var(--green-dim);">
+        <h3 style="color:var(--green);">Visual Outcomes</h3>
+        <p>Long-term vision outcomes are comparable to non-pregnant patients with IIH when treatment is received.</p>
+      </div>
+      <div class="col-card" style="border-color:var(--blue-dim);">
+        <h3 style="color:var(--blue);">Future Pregnancies</h3>
+        <p>Discuss future pregnancy plans with your MFM team before conceiving. Postpartum monitoring continues.</p>
+      </div>
+    </div>
+    <div class="badge badge-green">Most women do very well with ongoing care</div>
+  </div>
+
+  <!-- ── SLIDE 17: Summary ──────────────────────────────────── -->
+  <div class="slide" id="s17">
+    <div class="slide-tag">Summary</div>
+    <h2>What We Know. What We Do. Together.</h2>
+    <div class="accent-line"></div>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="s-tag">What Is It?</div>
+        <div class="s-title">Elevated Brain Pressure</div>
+        <div class="s-desc">No structural cause — diagnosed by lumbar puncture and imaging</div>
+      </div>
+      <div class="summary-card" style="border-color:var(--orange-dim);">
+        <div class="s-tag" style="color:var(--orange);">Why It Matters</div>
+        <div class="s-title">Vision Protection</div>
+        <div class="s-desc">The optic nerve must be monitored and protected throughout pregnancy</div>
+      </div>
+      <div class="summary-card" style="border-color:var(--green-dim);">
+        <div class="s-tag" style="color:var(--green);">What's Next</div>
+        <div class="s-title">Monitoring + Safe Delivery</div>
+        <div class="s-desc">Treatment, regular exams, and vaginal delivery as the goal</div>
+      </div>
+    </div>
+    <p class="body-text" style="margin-top:1.5rem; font-size:1rem; color:var(--muted);">Your questions matter. Your care team is here.</p>
+  </div>
+
+  <!-- ── SLIDE 18: Questions & Resources ───────────────────── -->
+  <div class="slide" id="s18">
+    <div class="slide-tag">Your Care Team</div>
+    <h2>Questions? We Are Here.</h2>
+    <div class="accent-line"></div>
+    <div class="icon-grid" style="margin-top:1.5rem;">
+      <div class="icon-card" style="border-color:var(--teal-dim); min-width:200px;">
+        <span class="icon">👩‍⚕️</span>
+        <span class="value">MFM Specialist</span>
+        <span class="label">Ask about your overall pregnancy plan and monitoring schedule</span>
+      </div>
+      <div class="icon-card" style="border-color:var(--teal-dim); min-width:200px;">
+        <span class="icon">👁️</span>
+        <span class="value">Ophthalmologist</span>
+        <span class="label">Ask about your visual field results and optic nerve health</span>
+      </div>
+      <div class="icon-card" style="border-color:var(--teal-dim); min-width:200px;">
+        <span class="icon">🧠</span>
+        <span class="value">Neurologist</span>
+        <span class="label">Ask about medication timing, dosing, and pressure management</span>
+      </div>
+    </div>
+    <div style="margin-top:2rem; padding:1rem 2rem; border-top:1px solid var(--border); text-align:center;">
+      <p style="font-size:0.8rem; color:var(--muted); letter-spacing:0.05em;">
+        Maternal-Fetal Medicine Patient Education &nbsp;·&nbsp; Dr. C. Onyeije, MFM Specialist
+      </p>
+    </div>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- Navigation -->
+<div class="nav">
+  <button id="btn-prev" onclick="prevSlide()" title="Previous (←)" disabled>&#8592;</button>
+  <span id="slide-counter">1 / 18</span>
+  <button id="btn-next" onclick="nextSlide()" title="Next (→)">&#8594;</button>
+</div>
+
+<div class="slide-footer">IIH in Pregnancy · Patient Education · MFM</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+    document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function nextSlide() { if (current < total - 1) showSlide(current + 1); }
+  function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+  }, { passive: true });
+
+  // Init
+  showSlide(0);
+</script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

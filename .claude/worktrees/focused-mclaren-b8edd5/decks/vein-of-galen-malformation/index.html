@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0d1117">
+    <title>Vein of Galen Malformation | MFM Patient Education</title>
+    <style>
+        /* ===== RESET ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ===== DESIGN TOKENS ===== */
+        :root {
+            --bg:       #0d1117;
+            --surface:  #161b22;
+            --surface2: #21262d;
+            --border:   #30363d;
+            --text:     #e6edf3;
+            --muted:    #8b949e;
+            --accent:   #58a6ff;
+            --green:    #3fb950;
+            --yellow:   #d29922;
+            --orange:   #f0883e;
+            --red:      #f85149;
+            --purple:   #bc8cff;
+            --brand:    #1f6feb;
+
+            /* Spacing scale */
+            --sp-xs:  0.35rem;
+            --sp-sm:  0.6rem;
+            --sp-md:  1rem;
+            --sp-lg:  1.5rem;
+            --sp-xl:  2.2rem;
+
+            /* Nav height reserved at bottom */
+            --nav-h: 4rem;
+        }
+
+        /* ===== BASE ===== */
+        html {
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            /* Mobile: allow natural scroll; Desktop: lock to viewport */
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
+
+        /* ===== PROGRESS BAR ===== */
+        #progressBar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: var(--accent);
+            transition: width 0.35s ease;
+            z-index: 300;
+            pointer-events: none;
+        }
+
+        /* ===== SLIDE NUMBER ===== */
+        #slideNum {
+            position: fixed;
+            top: env(safe-area-inset-top, 0.6rem);
+            right: max(env(safe-area-inset-right, 0px), 1rem);
+            margin-top: 0.6rem;
+            font-size: 0.7rem;
+            color: var(--muted);
+            z-index: 200;
+            pointer-events: none;
+            background: rgba(13,17,23,0.7);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            backdrop-filter: blur(6px);
+        }
+
+        /* ===== DECK ===== */
+        .deck {
+            width: 100%;
+            position: relative;
+        }
+
+        /* ===== SLIDE (DESKTOP: full-viewport; MOBILE: natural height + scroll) ===== */
+        .slide {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: clamp(1rem, 4vw, 3rem) clamp(1rem, 5vw, 4rem);
+            padding-bottom: calc(var(--nav-h) + 1.5rem);
+            min-height: 100dvh;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Desktop: center content vertically */
+        @media (min-width: 768px) {
+            .slide {
+                justify-content: center;
+                overflow: hidden;
+                height: 100dvh;
+                position: absolute;
+                top: 0; left: 0;
+                visibility: hidden;
+            }
+            .slide.active {
+                position: relative;
+                visibility: visible;
+                height: 100dvh;
+            }
+            .deck {
+                height: 100dvh;
+                overflow: hidden;
+            }
+            body {
+                overflow: hidden;
+                height: 100dvh;
+            }
+        }
+
+        /* ===== SLIDE HEADER ===== */
+        .slide-header {
+            text-align: center;
+            margin-bottom: var(--sp-lg);
+            flex-shrink: 0;
+        }
+        .slide-label {
+            font-size: clamp(0.6rem, 1.5vw, 0.72rem);
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: var(--sp-sm);
+        }
+        h1.deck-title {
+            font-size: clamp(2rem, 7vw, 4rem);
+            font-weight: 300;
+            line-height: 1.15;
+            color: var(--text);
+        }
+        h2.slide-title {
+            font-size: clamp(1.25rem, 4vw, 2.4rem);
+            font-weight: 300;
+            line-height: 1.2;
+            color: var(--text);
+        }
+        .accent-line {
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+            margin: 0.75rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* ===== SUBTITLE / BODY TEXT ===== */
+        .subtitle {
+            font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+            color: var(--muted);
+            text-align: center;
+            margin-top: var(--sp-sm);
+            max-width: 640px;
+            line-height: 1.55;
+        }
+
+        /* ===== CARD GRID ===== */
+        .card-grid {
+            display: grid;
+            gap: clamp(0.6rem, 1.5vw, 1.2rem);
+            width: 100%;
+            max-width: 1100px;
+        }
+        /* Default: single column on mobile */
+        .card-grid.cols-2,
+        .card-grid.cols-3,
+        .card-grid.cols-4 { grid-template-columns: 1fr; }
+
+        @media (min-width: 480px) {
+            .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+            .card-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+            .card-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+        }
+        @media (min-width: 900px) {
+            .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+            .card-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: clamp(0.9rem, 2vw, 1.4rem) clamp(1rem, 2vw, 1.6rem);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-xs);
+        }
+        .card .card-icon { font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1; }
+        .card .card-title {
+            font-size: clamp(0.72rem, 1.5vw, 0.85rem);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+        }
+        .card .card-body {
+            font-size: clamp(0.8rem, 1.6vw, 0.98rem);
+            color: var(--text);
+            line-height: 1.5;
+        }
+        .card.green  { border-color: var(--green);  } .card.green  .card-title { color: var(--green);  }
+        .card.yellow { border-color: var(--yellow); } .card.yellow .card-title { color: var(--yellow); }
+        .card.orange { border-color: var(--orange); } .card.orange .card-title { color: var(--orange); }
+        .card.red    { border-color: var(--red);    } .card.red    .card-title { color: var(--red);    }
+        .card.purple { border-color: var(--purple); } .card.purple .card-title { color: var(--purple); }
+        .card.accent { border-color: var(--accent); }
+
+        /* ===== TABLE (scrollable wrapper on mobile) ===== */
+        .table-wrap {
+            width: 100%;
+            max-width: 1100px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .data-table {
+            width: 100%;
+            min-width: 520px;
+            border-collapse: collapse;
+            font-size: clamp(0.72rem, 1.3vw, 0.92rem);
+        }
+        .data-table th {
+            background: var(--surface2);
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            padding: 0.65rem 0.9rem;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            white-space: nowrap;
+        }
+        .data-table td {
+            padding: 0.6rem 0.9rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            vertical-align: top;
+            line-height: 1.45;
+        }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:nth-child(even) td { background: var(--surface); }
+        .data-table tr:nth-child(odd)  td { background: var(--bg); }
+
+        /* ===== BADGES ===== */
+        .badge {
+            display: inline-block;
+            padding: 0.12em 0.5em;
+            border-radius: 4px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .badge-green  { background: rgba(63,185,80,0.18);  color: var(--green);  border: 1px solid var(--green);  }
+        .badge-yellow { background: rgba(210,153,34,0.18); color: var(--yellow); border: 1px solid var(--yellow); }
+        .badge-orange { background: rgba(240,136,62,0.18); color: var(--orange); border: 1px solid var(--orange); }
+        .badge-red    { background: rgba(248,81,73,0.18);  color: var(--red);    border: 1px solid var(--red);    }
+        .badge-accent { background: rgba(88,166,255,0.18); color: var(--accent); border: 1px solid var(--accent); }
+        .badge-purple { background: rgba(188,140,255,0.18);color: var(--purple); border: 1px solid var(--purple); }
+
+        /* ===== TIMELINE ===== */
+        /* Horizontal on desktop, vertical on mobile */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            width: 100%;
+            max-width: 700px;
+        }
+        .tl-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+        }
+        .tl-dot {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            border: 2px solid;
+        }
+        .tl-dot.green  { background: rgba(63,185,80,0.18);  border-color: var(--green);  color: var(--green);  }
+        .tl-dot.yellow { background: rgba(210,153,34,0.18); border-color: var(--yellow); color: var(--yellow); }
+        .tl-dot.orange { background: rgba(240,136,62,0.18); border-color: var(--orange); color: var(--orange); }
+        .tl-dot.red    { background: rgba(248,81,73,0.18);  border-color: var(--red);    color: var(--red);    }
+        .tl-content { flex: 1; }
+        .tl-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+        .tl-desc {
+            font-size: clamp(0.75rem, 1.4vw, 0.88rem);
+            color: var(--muted);
+            margin-top: 0.2rem;
+            line-height: 1.4;
+        }
+        .text-green  { color: var(--green);  }
+        .text-yellow { color: var(--yellow); }
+        .text-orange { color: var(--orange); }
+        .text-red    { color: var(--red);    }
+        .text-accent { color: var(--accent); }
+        .text-muted  { color: var(--muted);  }
+        .text-purple { color: var(--purple); }
+
+        /* Horizontal timeline on wider screens */
+        @media (min-width: 700px) {
+            .timeline {
+                flex-direction: row;
+                align-items: flex-start;
+                max-width: 1000px;
+                gap: 0;
+            }
+            .tl-item {
+                flex: 1;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                border-radius: 0;
+                border: none;
+                background: transparent;
+                padding: 0 0.5rem;
+                position: relative;
+            }
+            .tl-item:not(:last-child)::after {
+                content: '';
+                position: absolute;
+                top: 20px;
+                left: 50%;
+                width: 100%;
+                height: 2px;
+                background: var(--border);
+                z-index: 0;
+            }
+            .tl-dot { z-index: 1; }
+            .tl-content { text-align: center; margin-top: 0.5rem; }
+            .tl-desc { max-width: 130px; margin: 0.2rem auto 0; }
+        }
+
+        /* ===== HIGHLIGHT BOX ===== */
+        .highlight-box {
+            background: var(--surface);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 10px 10px 0;
+            padding: 0.9rem 1.2rem;
+            max-width: 900px;
+            width: 100%;
+        }
+        .highlight-box.warn    { border-left-color: var(--red); }
+        .highlight-box.ok      { border-left-color: var(--green); }
+        .highlight-box.caution { border-left-color: var(--yellow); }
+        .highlight-box .hb-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.35rem;
+            color: var(--accent);
+        }
+        .highlight-box.warn    .hb-label { color: var(--red); }
+        .highlight-box.ok      .hb-label { color: var(--green); }
+        .highlight-box.caution .hb-label { color: var(--yellow); }
+        .highlight-box .hb-text {
+            font-size: clamp(0.82rem, 1.5vw, 1rem);
+            color: var(--text);
+            line-height: 1.55;
+        }
+
+        /* ===== ANATOMY WRAP (side-by-side → stacked) ===== */
+        .anatomy-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            max-width: 1100px;
+            width: 100%;
+        }
+        .anatomy-svg {
+            width: 100%;
+            max-width: 280px;
+            flex-shrink: 0;
+        }
+        .anatomy-notes {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            width: 100%;
+        }
+        @media (min-width: 768px) {
+            .anatomy-wrap { flex-direction: row; gap: 2.5rem; }
+            .anatomy-svg { max-width: 300px; }
+        }
+        .anatomy-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.6rem 0.9rem;
+        }
+        .anatomy-note .note-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+        .anatomy-note .note-text {
+            font-size: clamp(0.78rem, 1.4vw, 0.93rem);
+            line-height: 1.45;
+            color: var(--text);
+        }
+
+        /* ===== FLOW DIAGRAM ===== */
+        .flow-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1.2rem;
+            width: 100%;
+            max-width: 1100px;
+        }
+        @media (min-width: 768px) {
+            .flow-wrap { flex-direction: row; gap: 2rem; align-items: flex-start; }
+        }
+        .flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            width: 100%;
+        }
+        @media (min-width: 768px) {
+            .flow { flex: 0 0 300px; }
+        }
+        .flow-box {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            text-align: center;
+            font-size: clamp(0.78rem, 1.4vw, 0.95rem);
+            line-height: 1.4;
+            color: var(--text);
+        }
+        .flow-box.accent  { border-color: var(--accent);  background: rgba(88,166,255,0.08);  }
+        .flow-box.yellow  { border-color: var(--yellow);  background: rgba(210,153,34,0.08);  }
+        .flow-box.orange  { border-color: var(--orange);  background: rgba(240,136,62,0.08);  }
+        .flow-box.red     { border-color: var(--red);     background: rgba(248,81,73,0.08);   }
+        .flow-arrow { font-size: 1.1rem; color: var(--muted); line-height: 1; }
+
+        /* ===== PILL LIST ===== */
+        .pill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            justify-content: center;
+            max-width: 700px;
+        }
+        .pill {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 0.4rem 1rem;
+            font-size: clamp(0.78rem, 1.5vw, 0.92rem);
+            color: var(--text);
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            height: var(--nav-h);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            background: rgba(13,17,23,0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border);
+            z-index: 100;
+            padding: 0 1rem;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        .nav-btn {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 8px;
+            /* Larger tap target on mobile */
+            padding: 0.6rem 1.4rem;
+            min-width: 80px;
+            min-height: 44px;
+            cursor: pointer;
+            font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+            font-family: inherit;
+            transition: background 0.2s, border-color 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .nav-btn:hover, .nav-btn:active { background: var(--brand); border-color: var(--accent); }
+        .nav-counter {
+            font-size: 0.78rem;
+            color: var(--muted);
+            min-width: 55px;
+            text-align: center;
+        }
+
+        /* ===== FOOTER BRAND ===== */
+        .footer-brand {
+            position: fixed;
+            bottom: calc(var(--nav-h) + 0.4rem);
+            right: max(env(safe-area-inset-right, 0px), 1rem);
+            font-size: 0.6rem;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            pointer-events: none;
+            display: none; /* hide on mobile to save space */
+        }
+        @media (min-width: 768px) {
+            .footer-brand { display: block; }
+        }
+
+        /* ===== TITLE SLIDE BG ===== */
+        .title-slide-bg {
+            background: radial-gradient(ellipse at 60% 40%, rgba(31,111,235,0.18) 0%, transparent 65%),
+                        radial-gradient(ellipse at 20% 80%, rgba(188,140,255,0.10) 0%, transparent 55%),
+                        var(--bg);
+        }
+
+        /* ===== UTILITY ===== */
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .gap-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(0.6rem, 1.5vw, 1rem);
+            width: 100%;
+            max-width: 1100px;
+        }
+        .w-full { width: 100%; max-width: 1100px; }
+
+        /* ===== SWIPE HINT (mobile only) ===== */
+        .swipe-hint {
+            font-size: 0.65rem;
+            color: var(--muted);
+            text-align: center;
+            margin-top: 0.5rem;
+            letter-spacing: 0.06em;
+        }
+        @media (min-width: 768px) { .swipe-hint { display: none; } }
+
+        /* ===== SLIDE-SPECIFIC OVERRIDES FOR MOBILE ===== */
+        /* Ensure tables on slide 5, 6, 13 are always scrollable */
+        #s5 .table-wrap,
+        #s6 .table-wrap,
+        #s13 .table-wrap { max-height: calc(100dvh - 14rem); overflow-y: auto; }
+
+        /* Reduce header margin on content-heavy slides */
+        @media (max-width: 767px) {
+            .slide-header { margin-bottom: 0.8rem; }
+            .mt-3 { margin-top: 0.8rem; }
+            .mt-2 { margin-top: 0.6rem; }
+            .card { padding: 0.8rem 1rem; }
+            .anatomy-note { padding: 0.5rem 0.75rem; }
+        }
+    </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/jYd-MZg1BkDB_BFC1S3nkzj0z-MMQeV_TJrs7TSQx5z0OZ7hfcQx80U4jB9wmndzT0_OYrPuZzkczn2OYfLmIUg0GI_obuwLWTCLtpQ-ngwv8_cYQM4e9MLdPEkSEHFrGZoqqLw4K7th-R21iAU31UupTL5aOZ001HxR37ikB7rTf35myBdDQp0xf2Wn82yFZIkjPqm4KEbPaq5n8f74HbIgaQyFgdiZS1cbyo7Y0r8H1s5MA3W_ym6lCEoVxO5rXotnQtXKx0GC9Fu9HZefWXP0cb0c8NnxQ_oMFunJ_Eh_zZpJ6tlmBLsfNDzwEOOXEqGZT74HLPftadWCZU9nOwFV7-GL2Vd-tTtpjTtkjqj1Yp7YjFuhBvN-7lwvrfZ_elDdXx4hZsKThzackBXokoFtBIT1P4zigUIHxXuj-tf2oumrxCeY9i64fytesy-MzzjzdQbnBZXqRpWaTa3frDFJ6Ju6hOsIf_ucBeWjO-QzOpLw3G6VbIB8iPWCWegCya6ARU74pMUuVWPmSOOzb6Wsu6VeKOI9vpT1VTPZtXTSIRmwMjF7PkQ5D1A5O_PxLYjkhN5F2j9sSqu4m_QxkgBEFLie19LvuUsxHQV102sOUVsK-dv0Pl3uyRalf7oq3D70rcEOIKXolh_xZHN-hhCJNtiuzkb480QkAVCcUYjza7XHkbhvpGrns0Rvl2a9CV-ghsffhgIA2Eg7LwExv7N4yloqHR91lzkmv8hdf47rhQJK-CRsos0s9IhaeXtM37uF7h3F7iIMHvaRAm71dpXep92I7zlVoSkwjdnsmnt-y6E6VRaiKzMbFioovb2itbmj_wSTHOWAI-h3unze6GGQJ-9iAHA3YIkicXJG0N2obhAfcqskRMFHED_myUFCn49x_DpY5hCW04tfjMb9uglfCULOmJoRLAOezj8oz6Ju9AOPGLkjqgtLnaEL-Paw9_4zF3uAf4MOYW4CbP8Rakt9INKNYffVB20V4gnmkThdBBY8eI2OwIbZhqzIjodubgEDGdyayDpdlU5XrYwQiWZcCwTVpPvnStP0yY36s8im8kHFbt80sLkTGRp2C4zMZ5O9B2AgkLkopGISkKpGTbTxYCDHaQqhaEHzKirb6Ih6RGVVVIR3b9hXmQzOq9M75Gaz0U8z7A6EKAW3EmwrhBuBpk1lOdwCzA-s6Iywe5WhnC5v_QQHntMYMuqMlE_Q5AkT6EOmwGFlSgI2ZrFEXISisILGSJEuToue2Q2fYkoCQfTiHfWijKc4a7D9tcF9O7LTl6TtFnLmZ4FNvodd4U_vgQUHl1d6zfQ5rt5isi1QvjfpTcMQIjNC_Fh_qV0kbvdwZxwwblQ5N8ENJHVqGi_IDW6TWD22MOG3Yz9TEGPhVEfbRqIN4fY_zwPdIrLeuLxhnDSkn2aqapRruX_4wDFv4Q_c8I8K4OAfB3fVE696vMdtx0hn7bf02PFkLwaQHLOgjFbJ8Mvmacl5RjCifgoEwgHaHzbaQSUDwFPedBLgzoUMKtI-2MtvFwmcTaC1AR6uIt7mKwExJ9rhAEdXTevkpeOJinatXCPfvPDugLUwS2avoHeOXEv6LzJMRIclnEqsMiwKWsaFHdvOs5K0GBZrNjY2lfagrzM9PYbce_oSdTu3H6Q38ZQS1hGXIksuoqgwh-p9'></script>
+
+<style>
+/* 2026 refresh overrides */
+:root {
+  --refresh-bg: #08131f;
+  --refresh-surface: rgba(11, 26, 42, 0.88);
+  --refresh-surface-strong: rgba(15, 34, 54, 0.94);
+  --refresh-line: rgba(133, 201, 255, 0.16);
+  --refresh-text: #f4f8fc;
+  --refresh-muted: #b5c8d8;
+  --refresh-accent: #4ddcc2;
+}
+html, body {
+  background:
+    radial-gradient(circle at top left, rgba(77, 220, 194, 0.16), transparent 24%),
+    radial-gradient(circle at 85% 16%, rgba(255, 189, 99, 0.12), transparent 20%),
+    linear-gradient(180deg, #08131f 0%, #06101a 100%) !important;
+  color: var(--refresh-text) !important;
+  font-family: "Aptos", "Segoe UI", system-ui, sans-serif !important;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.26), transparent 82%);
+}
+.card,
+.panel,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+.grid-item,
+.slide,
+.slide-content,
+.slide-container,
+table,
+blockquote {
+  border-radius: 18px !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24) !important;
+}
+.card,
+.panel,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+.grid-item,
+table,
+blockquote {
+  background: var(--refresh-surface) !important;
+  border: 1px solid var(--refresh-line) !important;
+  backdrop-filter: blur(10px);
+}
+h1, h2, h3, h4, .slide-title {
+  color: var(--refresh-text) !important;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+p, li, td, th, .subtitle, .muted, small {
+  color: var(--refresh-muted) !important;
+}
+strong, b, .accent, .highlight, .key-point, a {
+  color: var(--refresh-accent) !important;
+}
+button,
+.nav button,
+.controls button,
+.btn,
+.button {
+  border-radius: 999px !important;
+  border: 1px solid var(--refresh-line) !important;
+  background: var(--refresh-surface-strong) !important;
+  color: var(--refresh-text) !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22) !important;
+}
+.progress,
+.progress-bar,
+#progressBar,
+.progress-fill {
+  background: linear-gradient(90deg, #4ddcc2 0%, #79e09b 100%) !important;
+  box-shadow: 0 0 18px rgba(77, 220, 194, 0.38);
+}
+</style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/vein-of-galen-malformation/index.html">
+<meta name="description" content="Explains vein of Galen malformation: arteriovenous shunting, high-output cardiac failure, ultrasound and MRI diagnosis, neonatal management, and neurodevelopmental prognosis.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Vein of Galen, Fetal Vascular Anomaly, Fetal Neuroradiology, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/vein-of-galen-malformation/index.html">
+<meta property="og:title" content="Vein of Galen Malformation — Patient Education | OpenMFM">
+<meta property="og:description" content="Explains vein of Galen malformation: arteriovenous shunting, high-output cardiac failure, ultrasound and MRI diagnosis, neonatal management, and neurodevelopmental prognosis.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Vein of Galen Malformation — Patient Education | OpenMFM">
+<meta name="twitter:description" content="Explains vein of Galen malformation: arteriovenous shunting, high-output cardiac failure, ultrasound and MRI diagnosis, neonatal management, and neurodevelopmental prognosis.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Vein of Galen Malformation — Patient Education",
+  "description": "Explains vein of Galen malformation: arteriovenous shunting, high-output cardiac failure, ultrasound and MRI diagnosis, neonatal management, and neurodevelopmental prognosis.",
+  "url": "https://openmfm.org/decks/vein-of-galen-malformation/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-26",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Vein of Galen Malformation — Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Vein of Galen, Fetal Vascular Anomaly, Fetal Neuroradiology, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div id="progressBar"></div>
+<div id="slideNum"></div>
+
+<div class="deck" id="deck">
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 1: TITLE
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide active title-slide-bg" id="s1">
+        <div class="slide-header">
+            <div class="slide-label">Atlanta Perinatal Associates · MFM Patient Education</div>
+            <h1 class="deck-title">Vein of Galen<br>Malformation</h1>
+            <div class="accent-line"></div>
+            <p class="subtitle mt-2">Prenatal Diagnosis &amp; Management<br>A Guide for Expectant Families</p>
+        </div>
+        <div class="pill-list mt-2">
+            <span class="pill">🧠 Fetal Neurovascular</span>
+            <span class="pill">❤️ Fetal Cardiology</span>
+            <span class="pill">🔬 Evidence-Based</span>
+        </div>
+        <p class="swipe-hint mt-2">Swipe left/right or use buttons below to navigate</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 2: WHAT IS VGAM?
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s2">
+        <div class="slide-header">
+            <div class="slide-label">Definition</div>
+            <h2 class="slide-title">What Is a Vein of Galen Malformation?</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="anatomy-wrap mt-2">
+            <div class="anatomy-svg">
+                <svg viewBox="0 0 340 320" xmlns="http://www.w3.org/2000/svg" width="100%">
+                    <ellipse cx="170" cy="150" rx="145" ry="130" fill="none" stroke="#30363d" stroke-width="2"/>
+                    <path d="M60 120 Q90 100 120 115 Q150 130 180 110 Q210 90 240 115 Q270 140 280 160" fill="none" stroke="#21262d" stroke-width="2"/>
+                    <path d="M55 160 Q85 145 115 158 Q145 172 175 155 Q205 138 235 158 Q265 178 282 195" fill="none" stroke="#21262d" stroke-width="2"/>
+                    <line x1="100" y1="80" x2="155" y2="145" stroke="#f85149" stroke-width="2.5" stroke-dasharray="5,3"/>
+                    <line x1="240" y1="80" x2="185" y2="145" stroke="#f85149" stroke-width="2.5" stroke-dasharray="5,3"/>
+                    <line x1="80"  y1="140" x2="150" y2="155" stroke="#f85149" stroke-width="2" stroke-dasharray="5,3"/>
+                    <line x1="260" y1="140" x2="190" y2="155" stroke="#f85149" stroke-width="2" stroke-dasharray="5,3"/>
+                    <ellipse cx="170" cy="158" rx="28" ry="22" fill="rgba(248,81,73,0.25)" stroke="#f85149" stroke-width="2.5"/>
+                    <text x="170" y="162" text-anchor="middle" fill="#f85149" font-size="9" font-weight="700">VGAM</text>
+                    <path d="M170 180 Q170 220 170 250" stroke="#58a6ff" stroke-width="3" fill="none"/>
+                    <polygon points="165,250 175,250 170,262" fill="#58a6ff"/>
+                    <text x="95"  y="72"  fill="#f85149" font-size="10" font-weight="600">Arterial Feeders</text>
+                    <text x="130" y="280" fill="#58a6ff" font-size="10" font-weight="600">Draining Vein</text>
+                    <text x="30"  y="135" fill="#8b949e" font-size="9">ACA</text>
+                    <text x="272" y="135" fill="#8b949e" font-size="9">PCA</text>
+                </svg>
+            </div>
+            <div class="anatomy-notes">
+                <div class="anatomy-note">
+                    <div class="note-dot" style="background:#f85149"></div>
+                    <div class="note-text"><strong>Rare condition</strong> — affects ~1 in 25,000 births; ~30% of pediatric vascular brain malformations.</div>
+                </div>
+                <div class="anatomy-note">
+                    <div class="note-dot" style="background:#f0883e"></div>
+                    <div class="note-text"><strong>Abnormal connection</strong> — arteries connect directly to a large central vein, bypassing the normal capillary network.</div>
+                </div>
+                <div class="anatomy-note">
+                    <div class="note-dot" style="background:#58a6ff"></div>
+                    <div class="note-text"><strong>Not the true vein</strong> — involves a primitive embryonic precursor, not the actual Vein of Galen.</div>
+                </div>
+                <div class="anatomy-note">
+                    <div class="note-dot" style="background:#3fb950"></div>
+                    <div class="note-text"><strong>Treatable</strong> — endovascular embolization is effective at specialized centers.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 3: EMBRYOLOGY
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s3">
+        <div class="slide-header">
+            <div class="slide-label">Embryology &amp; Cause</div>
+            <h2 class="slide-title">How Does It Develop?</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="gap-col mt-2">
+            <div class="timeline">
+                <div class="tl-item">
+                    <div class="tl-dot green">6</div>
+                    <div class="tl-content">
+                        <div class="tl-label text-green">Week 6</div>
+                        <div class="tl-desc">Primitive median prosencephalic vein forms in the developing brain</div>
+                    </div>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-dot yellow">6–11</div>
+                    <div class="tl-content">
+                        <div class="tl-label text-yellow">Weeks 6–11</div>
+                        <div class="tl-desc">Normally, this vein involutes and is replaced by the true Vein of Galen</div>
+                    </div>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-dot orange">✕</div>
+                    <div class="tl-content">
+                        <div class="tl-label text-orange">Error</div>
+                        <div class="tl-desc">In VGAM, the primitive vein <em>persists</em> and arterial feeders connect directly to it</div>
+                    </div>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-dot red">→</div>
+                    <div class="tl-content">
+                        <div class="tl-label text-red">Result</div>
+                        <div class="tl-desc">High-flow arteriovenous shunt — no capillary resistance — massive blood diversion</div>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box mt-1">
+                <div class="hb-label">Key Concept</div>
+                <div class="hb-text">The malformation is <strong>not inherited</strong> and is not caused by anything the parents did. It is a sporadic developmental event occurring in the first trimester.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 4: PATHOPHYSIOLOGY
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s4">
+        <div class="slide-header">
+            <div class="slide-label">Pathophysiology</div>
+            <h2 class="slide-title">How Does It Affect the Baby?</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="flow-wrap mt-2">
+            <div class="flow">
+                <div class="flow-box accent"><strong>VGAM Shunt</strong><br><span style="font-size:0.8em;color:var(--muted)">No capillary resistance</span></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-box yellow"><strong>Massive blood diverted to brain</strong><br><span style="font-size:0.8em;color:var(--muted)">"Cerebral steal"</span></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-box orange"><strong>Increased SVC return to heart</strong><br><span style="font-size:0.8em;color:var(--muted)">Right atrium &amp; ventricle dilate</span></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-box red"><strong>High-output cardiac state</strong><br><span style="font-size:0.8em;color:var(--muted)">Heart compensates with increased output</span></div>
+            </div>
+            <div class="anatomy-notes">
+                <div class="anatomy-note">
+                    <div class="note-dot" style="background:#58a6ff"></div>
+                    <div class="note-text"><strong>Placental buffer:</strong> The low-resistance placenta partially offsets the shunt during pregnancy, making fetal heart failure less severe than after birth.</div>
+                </div>
+                <div class="anatomy-note">
+                    <div class="note-dot" style="background:#d29922"></div>
+                    <div class="note-text"><strong>Pseudo-coarctation:</strong> The aortic arch may appear narrow — often functional due to reduced isthmus flow from cerebral steal, not a true structural defect.</div>
+                </div>
+                <div class="anatomy-note">
+                    <div class="note-dot" style="background:#f0883e"></div>
+                    <div class="note-text"><strong>Brain at risk:</strong> Venous hypertension from the shunt can cause white matter injury or "melting brain" syndrome in severe cases.</div>
+                </div>
+                <div class="anatomy-note">
+                    <div class="note-dot" style="background:#f85149"></div>
+                    <div class="note-text"><strong>Birth transition is critical:</strong> Removing the placenta at delivery suddenly increases systemic resistance, dramatically worsening the shunt physiology.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 5: CLINICAL STAGING
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s5">
+        <div class="slide-header">
+            <div class="slide-label">Clinical Staging Algorithm</div>
+            <h2 class="slide-title">How We Classify Your Baby's Condition</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="w-full mt-2">
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Stage</th>
+                            <th>Status</th>
+                            <th>Key Findings</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-green">Stage 1</span></td>
+                            <td class="text-green"><strong>Compensated</strong></td>
+                            <td>Cardiomegaly (CT ratio &gt;0.5), SVC/MPA dilation, antegrade isthmus flow</td>
+                            <td>Serial Echo/US every 3–7 days; Fetal MRI at 34–35 weeks</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-yellow">Stage 2</span></td>
+                            <td class="text-yellow"><strong>Impending Failure</strong></td>
+                            <td>Pericardial effusion, tricuspid regurgitation (TR), reversed diastolic aortic isthmus flow</td>
+                            <td>Monitoring every 48 hours; consider antenatal steroids</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-orange">Stage 3</span></td>
+                            <td class="text-orange"><strong>Decompensated</strong></td>
+                            <td>Overt hydrops (ascites, pleural effusion, skin edema), RV/LV dysfunction</td>
+                            <td>Immediate delivery after steroid course at tertiary center</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-red">Stage 4</span></td>
+                            <td class="text-red"><strong>Neurological Injury</strong></td>
+                            <td>Encephalomalacia, white matter injury, or "melting brain" on MRI</td>
+                            <td>Multidisciplinary ethics review; reassess goals of care</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="highlight-box caution mt-2">
+            <div class="hb-label">Current Status</div>
+            <div class="hb-text">Your baby is at <strong>Stage 1–2</strong>: compensated high-output physiology with early markers (small pericardial effusion, aortic arch hypoplasia). Close monitoring is underway.</div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 6: MONITORING
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s6">
+        <div class="slide-header">
+            <div class="slide-label">Surveillance Protocol</div>
+            <h2 class="slide-title">How We Monitor Your Baby</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="w-full mt-2">
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Test</th>
+                            <th>What We Measure</th>
+                            <th>Why It Matters</th>
+                            <th>Threshold</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🫀 <strong>Fetal Echo</strong></td>
+                            <td>Combined Cardiac Output (CCO)</td>
+                            <td>Measures total heart workload</td>
+                            <td><span class="badge badge-red">&gt;600 mL/kg/min = failure risk</span></td>
+                        </tr>
+                        <tr>
+                            <td>🌊 <strong>Doppler US</strong></td>
+                            <td>Aortic isthmus flow direction</td>
+                            <td>Detects critical systemic steal</td>
+                            <td><span class="badge badge-red">Reversed flow = severe shunt</span></td>
+                        </tr>
+                        <tr>
+                            <td>📐 <strong>VGAM Volume</strong></td>
+                            <td>Size of venous varix</td>
+                            <td>Predicts postnatal outcome</td>
+                            <td><span class="badge badge-orange">≥20,000 mm³ = poor prognosis</span></td>
+                        </tr>
+                        <tr>
+                            <td>🧲 <strong>Fetal MRI</strong></td>
+                            <td>Brain parenchyma integrity</td>
+                            <td>Detects brain injury early</td>
+                            <td><span class="badge badge-yellow">Injury in ~10–15% of cases</span></td>
+                        </tr>
+                        <tr>
+                            <td>🔬 <strong>Aortic Arch</strong></td>
+                            <td>True vs. pseudo-coarctation</td>
+                            <td>Guides postnatal cardiac plan</td>
+                            <td><span class="badge badge-accent">Pseudo-coarctation resolves with embolization</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 7: DELIVERY TIMING
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s7">
+        <div class="slide-header">
+            <div class="slide-label">Delivery Planning</div>
+            <h2 class="slide-title">When Will My Baby Be Delivered?</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="gap-col mt-2">
+            <div class="card-grid cols-3 w-full">
+                <div class="card green">
+                    <div class="card-icon">✅</div>
+                    <div class="card-title">Stable (34–36 wks)</div>
+                    <div class="card-body">Continue pregnancy. Twice-weekly fetal echo. Baseline fetal MRI. Target <strong>37⁰–38⁰ weeks</strong>.</div>
+                </div>
+                <div class="card yellow">
+                    <div class="card-icon">⚠️</div>
+                    <div class="card-title">Deterioration (&lt;37 wks)</div>
+                    <div class="card-body">If hydrops develops or Doppler shows reversed isthmus flow: <strong>deliver after 48-hr betamethasone course</strong>.</div>
+                </div>
+                <div class="card accent">
+                    <div class="card-icon">🏥</div>
+                    <div class="card-title">Late Gestation (37+ wks)</div>
+                    <div class="card-body">Planned delivery — Cesarean or controlled induction with <strong>all specialty teams present</strong>.</div>
+                </div>
+            </div>
+            <div class="highlight-box warn">
+                <div class="hb-label">⚠️ Critical Requirement</div>
+                <div class="hb-text">Delivery <strong>MUST</strong> occur at a <strong>Level IV NICU</strong> with 24/7 access to pediatric neuro-interventional radiology for emergency embolization within 24–48 hours of birth.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 8: IMMEDIATE DELIVERY TRIGGERS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s8">
+        <div class="slide-header">
+            <div class="slide-label">Urgent Delivery Criteria</div>
+            <h2 class="slide-title">Signs That Require Immediate Delivery</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="card-grid cols-2 mt-2" style="max-width:900px;">
+            <div class="card red">
+                <div class="card-icon">💧</div>
+                <div class="card-title">Overt Hydrops</div>
+                <div class="card-body">Fluid in <strong>2 or more compartments</strong> — ascites, pleural effusion, skin edema, or pericardial effusion. Signals fetal heart failure.</div>
+            </div>
+            <div class="card red">
+                <div class="card-icon">🧠</div>
+                <div class="card-title">Brain Parenchymal Injury</div>
+                <div class="card-body">New white matter injury or encephalomalacia on MRI. Continuing the pregnancy risks further neurological damage.</div>
+            </div>
+            <div class="card orange">
+                <div class="card-icon">🌊</div>
+                <div class="card-title">Reversed Isthmus Flow</div>
+                <div class="card-body">Persistent reversed diastolic flow in the aortic isthmus <em>and</em> umbilical artery — indicates critical systemic steal and impending demise.</div>
+            </div>
+            <div class="card orange">
+                <div class="card-icon">📉</div>
+                <div class="card-title">Cardiac Decompensation</div>
+                <div class="card-body">Progressive RV/LV dysfunction, worsening tricuspid regurgitation, or CCO exceeding 600 mL/kg/min despite monitoring.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 9: PRE-DELIVERY WORKUP
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s9">
+        <div class="slide-header">
+            <div class="slide-label">Pre-Delivery Preparation</div>
+            <h2 class="slide-title">Critical Workup Before Delivery</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="card-grid cols-3 mt-2" style="max-width:1050px;">
+            <div class="card accent">
+                <div class="card-icon">🫀</div>
+                <div class="card-title">Fetal Echocardiogram</div>
+                <div class="card-body">Measure <strong>Combined Cardiac Output (CCO)</strong>. A CCO &gt;600 mL/kg/min predicts severe neonatal heart failure.</div>
+            </div>
+            <div class="card purple">
+                <div class="card-icon">🩻</div>
+                <div class="card-title">Aortic Arch Assessment</div>
+                <div class="card-body">Distinguish <strong>true coarctation</strong> from <strong>pseudo-coarctation</strong>. Pseudo-coarctation often resolves after the shunt is treated.</div>
+            </div>
+            <div class="card yellow">
+                <div class="card-icon">📐</div>
+                <div class="card-title">VGAM Volume</div>
+                <div class="card-body">Calculate venous varix volume. A volume <strong>≥20,000 mm³</strong> is a significant predictor of poor postnatal outcome.</div>
+            </div>
+            <div class="card green">
+                <div class="card-icon">🧲</div>
+                <div class="card-title">Fetal MRI</div>
+                <div class="card-body">Exclude existing brain parenchymal injury. Occurs in ~10–15% of prenatally diagnosed cases.</div>
+            </div>
+            <div class="card orange">
+                <div class="card-icon">👥</div>
+                <div class="card-title">Team Coordination</div>
+                <div class="card-body">Confirm presence of <strong>Neurosurgery, Cardiology, NICU, and Interventional Radiology</strong> at time of delivery.</div>
+            </div>
+            <div class="card red">
+                <div class="card-icon">💉</div>
+                <div class="card-title">Antenatal Steroids</div>
+                <div class="card-body">Betamethasone course if delivery anticipated before 37 weeks to accelerate fetal lung maturity.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 10: BIRTH TRANSITION
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s10">
+        <div class="slide-header">
+            <div class="slide-label">Neonatal Transition</div>
+            <h2 class="slide-title">The Most Critical Moment: Birth</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="flow-wrap mt-2">
+            <div class="flow">
+                <div class="flow-box accent"><strong>Umbilical cord clamped</strong></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-box yellow"><strong>Placental low-resistance circuit removed</strong></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-box orange"><strong>Systemic vascular resistance surges</strong></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-box red"><strong>More blood forced through brain shunt</strong></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-box red"><strong>Acute neonatal heart failure + PPHN</strong></div>
+            </div>
+            <div class="anatomy-notes">
+                <div class="anatomy-note">
+                    <div class="note-dot" style="background:#f85149"></div>
+                    <div class="note-text"><strong>Refractory PPHN:</strong> Massive SVC return causes suprasystemic pulmonary pressures. High-dose inhaled nitric oxide and milrinone are frequently required.</div>
+                </div>
+                <div class="anatomy-note">
+                    <div class="note-dot" style="background:#f0883e"></div>
+                    <div class="note-text"><strong>Prostaglandin E1 (PGE1):</strong> Often necessary to maintain ductal patency, providing a "pop-off" for the overloaded right ventricle and ensuring systemic perfusion.</div>
+                </div>
+                <div class="anatomy-note">
+                    <div class="note-dot" style="background:#d29922"></div>
+                    <div class="note-text"><strong>Emergency embolization:</strong> If the neonate cannot be stabilized medically, emergency endovascular embolization of primary feeders must be performed regardless of weight.</div>
+                </div>
+                <div class="anatomy-note">
+                    <div class="note-dot" style="background:#58a6ff"></div>
+                    <div class="note-text"><strong>NICU team ready:</strong> All specialists must be present at delivery — this is not a routine NICU admission.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 11: TREATMENT — EMBOLIZATION
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s11">
+        <div class="slide-header">
+            <div class="slide-label">Definitive Treatment</div>
+            <h2 class="slide-title">Endovascular Embolization</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="gap-col mt-2">
+            <div class="card-grid cols-3 w-full">
+                <div class="card accent">
+                    <div class="card-icon">🩺</div>
+                    <div class="card-title">What Is It?</div>
+                    <div class="card-body">A catheter is guided through blood vessels to the malformation. Small coils or glue are used to block the abnormal arterial feeders.</div>
+                </div>
+                <div class="card green">
+                    <div class="card-icon">⏱️</div>
+                    <div class="card-title">When Is It Done?</div>
+                    <div class="card-body">Ideally at <strong>4–6 months of age</strong> when the baby is stable. Emergency embolization within <strong>24–48 hours</strong> if medically unstable at birth.</div>
+                </div>
+                <div class="card purple">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">Goal</div>
+                    <div class="card-body">Reduce or eliminate the high-flow shunt, allowing the heart to normalize and protecting the brain from venous hypertension.</div>
+                </div>
+            </div>
+            <div class="highlight-box ok">
+                <div class="hb-label">Prognosis</div>
+                <div class="hb-text">With successful embolization at a specialized center, <strong>neurodevelopmental outcomes are favorable in the majority of cases</strong> when brain injury is absent at diagnosis. Long-term follow-up with neurology and cardiology is essential.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 12: YOUR CARE TEAM
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s12">
+        <div class="slide-header">
+            <div class="slide-label">Multidisciplinary Team</div>
+            <h2 class="slide-title">Your Baby's Care Team</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="card-grid cols-4 mt-2" style="max-width:1100px;">
+            <div class="card accent">
+                <div class="card-icon">🤰</div>
+                <div class="card-title">Maternal-Fetal Medicine</div>
+                <div class="card-body">Coordinates prenatal monitoring, delivery planning, and maternal care throughout pregnancy.</div>
+            </div>
+            <div class="card green">
+                <div class="card-icon">❤️</div>
+                <div class="card-title">Pediatric Cardiology</div>
+                <div class="card-body">Interprets fetal echocardiograms and manages cardiac physiology before and after birth.</div>
+            </div>
+            <div class="card purple">
+                <div class="card-icon">🧠</div>
+                <div class="card-title">Neuro-Interventional Radiology</div>
+                <div class="card-body">Performs endovascular embolization — the definitive treatment for the malformation.</div>
+            </div>
+            <div class="card yellow">
+                <div class="card-icon">👶</div>
+                <div class="card-title">Neonatology (NICU)</div>
+                <div class="card-body">Provides immediate stabilization at birth and ongoing intensive neonatal care.</div>
+            </div>
+            <div class="card orange">
+                <div class="card-icon">🔪</div>
+                <div class="card-title">Pediatric Neurosurgery</div>
+                <div class="card-body">Available for surgical management if endovascular approach is insufficient.</div>
+            </div>
+            <div class="card red">
+                <div class="card-icon">🫁</div>
+                <div class="card-title">Pulmonology</div>
+                <div class="card-body">Manages pulmonary hypertension (PPHN) with inhaled nitric oxide and ventilatory support.</div>
+            </div>
+            <div class="card green" style="grid-column: span 2;">
+                <div class="card-icon">🤝</div>
+                <div class="card-title">Social Work &amp; Ethics</div>
+                <div class="card-body">Provides family support, counseling resources, and facilitates goals-of-care discussions. You are never alone in this journey.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 13: CLINICAL RECOMMENDATIONS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s13">
+        <div class="slide-header">
+            <div class="slide-label">Evidence-Based Recommendations</div>
+            <h2 class="slide-title">Clinical Guideline Summary</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="w-full mt-2">
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Recommendation</th>
+                            <th>Grade</th>
+                            <th>Evidence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Serial fetal echocardiograms (weekly or bi-weekly) to monitor CCO and RV function</td>
+                            <td><span class="badge badge-green">Class I</span></td>
+                            <td><span class="badge badge-accent">Level B</span></td>
+                        </tr>
+                        <tr>
+                            <td>Fetal MRI after 30 weeks to assess for parenchymal brain injury</td>
+                            <td><span class="badge badge-green">Class I</span></td>
+                            <td><span class="badge badge-accent">Level B</span></td>
+                        </tr>
+                        <tr>
+                            <td>Target delivery at 37⁰–38⁰ weeks in stable cases without hydrops or brain injury</td>
+                            <td><span class="badge badge-yellow">Class IIa</span></td>
+                            <td><span class="badge badge-purple">Level C</span></td>
+                        </tr>
+                        <tr>
+                            <td>Initiate Prostaglandin E1 post-delivery to maintain ductal patency and RV "pop-off"</td>
+                            <td><span class="badge badge-yellow">Class IIa</span></td>
+                            <td><span class="badge badge-accent">Level B</span></td>
+                        </tr>
+                        <tr>
+                            <td>Delivery at Level IV NICU with 24/7 pediatric neuro-interventional radiology</td>
+                            <td><span class="badge badge-green">Class I</span></td>
+                            <td><span class="badge badge-accent">Level B</span></td>
+                        </tr>
+                        <tr>
+                            <td>Multidisciplinary ethics review for Stage 4 neurological injury cases</td>
+                            <td><span class="badge badge-yellow">Class IIa</span></td>
+                            <td><span class="badge badge-purple">Level C</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <p class="text-muted mt-2" style="font-size:0.68rem; text-align:center;">Based on SMFM, AAP NeoReviews, AJOG, and published cohort studies. Grading adapted from ACC/AHA classification system.</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 14: KEY TAKEAWAYS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide" id="s14">
+        <div class="slide-header">
+            <div class="slide-label">Summary</div>
+            <h2 class="slide-title">What You Need to Know</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="card-grid cols-2 mt-2" style="max-width:900px;">
+            <div class="card green">
+                <div class="card-icon">🔍</div>
+                <div class="card-title">We Are Watching Closely</div>
+                <div class="card-body">Twice-weekly ultrasounds and echocardiograms ensure we detect any change in your baby's condition immediately.</div>
+            </div>
+            <div class="card accent">
+                <div class="card-icon">🎯</div>
+                <div class="card-title">Goal: 37–38 Weeks</div>
+                <div class="card-body">Reaching near-term allows your baby to be as mature as possible for the neonatal interventions ahead.</div>
+            </div>
+            <div class="card purple">
+                <div class="card-icon">🏥</div>
+                <div class="card-title">Specialized Center Only</div>
+                <div class="card-body">Delivery must occur where all specialists — including neuro-interventional radiology — are immediately available.</div>
+            </div>
+            <div class="card orange">
+                <div class="card-icon">💪</div>
+                <div class="card-title">Treatment Exists</div>
+                <div class="card-body">Endovascular embolization is effective. With no brain injury at diagnosis, the majority of children achieve favorable neurodevelopmental outcomes.</div>
+            </div>
+        </div>
+        <div class="highlight-box ok mt-2">
+            <div class="hb-label">Our Commitment</div>
+            <div class="hb-text">You have a dedicated team of specialists working together. Every decision will be made with your baby's best interest and your family's values at the center.</div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SLIDE 15: QUESTIONS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="slide title-slide-bg" id="s15">
+        <div class="slide-header">
+            <div class="slide-label">Atlanta Perinatal Associates</div>
+            <h2 class="slide-title">Questions &amp; Discussion</h2>
+            <div class="accent-line"></div>
+            <p class="subtitle mt-2">We are here to answer every question.<br>No question is too small.</p>
+        </div>
+        <div class="card-grid cols-3 mt-2" style="max-width:900px;">
+            <div class="card accent">
+                <div class="card-icon">💬</div>
+                <div class="card-title">Ask Us Anything</div>
+                <div class="card-body">About the diagnosis, the monitoring plan, the delivery location, or what to expect after birth.</div>
+            </div>
+            <div class="card green">
+                <div class="card-icon">📞</div>
+                <div class="card-title">Between Visits</div>
+                <div class="card-body">Contact our office immediately if you notice decreased fetal movement or feel unwell.</div>
+            </div>
+            <div class="card purple">
+                <div class="card-icon">🤝</div>
+                <div class="card-title">Support Resources</div>
+                <div class="card-body">Our social work team can connect you with support groups and counseling services for families facing similar diagnoses.</div>
+            </div>
+        </div>
+        <p class="text-muted mt-3" style="font-size:0.65rem; text-align:center;">
+            References: NeoCardio Lab · Pediatrics PMC · Frontiers Neurology · AJOG · AAP NeoReviews · Surgical Neurology International · Springer Pediatric Cardiology · PubMed cohort studies
+        </p>
+    </div>
+
+</div><!-- /deck -->
+
+<!-- NAVIGATION BAR -->
+<nav class="nav">
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()" aria-label="Previous slide">← Prev</button>
+    <span class="nav-counter" id="navCounter" aria-live="polite">1 / 15</span>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()" aria-label="Next slide">Next →</button>
+</nav>
+
+<div class="footer-brand">Atlanta Perinatal Associates · DoctorsWhoCode.blog</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progressBar');
+    const slideNum = document.getElementById('slideNum');
+    const navCounter = document.getElementById('navCounter');
+    let current = 0;
+    const total = slides.length;
+
+    function updateUI() {
+        const pct = ((current + 1) / total) * 100;
+        progressBar.style.width = pct + '%';
+        const label = (current + 1) + ' / ' + total;
+        navCounter.textContent = label;
+        slideNum.textContent = label;
+    }
+
+    function showSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === index);
+        });
+        current = index;
+        updateUI();
+        // Scroll to top of slide on mobile
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function nextSlide() {
+        showSlide((current + 1) % total);
+    }
+
+    function prevSlide() {
+        showSlide((current - 1 + total) % total);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft')               { e.preventDefault(); prevSlide(); }
+    });
+
+    // Touch / swipe navigation
+    let touchStartX = 0;
+    let touchStartY = 0;
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].screenX - touchStartX;
+        const dy = e.changedTouches[0].screenY - touchStartY;
+        // Only trigger if horizontal swipe is dominant
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 45) {
+            if (dx < 0) nextSlide();
+            else        prevSlide();
+        }
+    }, { passive: true });
+
+    // Initialize
+    showSlide(0);
+</script>
+
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

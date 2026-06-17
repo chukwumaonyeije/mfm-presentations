@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antenatal Corticosteroids at 21–23 Weeks | Dr. Onyeije</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface2:  #21262d;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent:    #58a6ff;   /* blue  – evidence / highlight */
+      --green:     #3fb950;   /* green – benefit / reassurance */
+      --orange:    #d29922;   /* amber – caution / action */
+      --red:       #f85149;   /* red   – risk / harm */
+      --purple:    #bc8cff;   /* purple – guideline */
+      --font:      'Segoe UI', system-ui, sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      overflow: hidden;
+    }
+
+    /* ── Deck & Slides ── */
+    .deck { width: 100%; height: 100%; position: relative; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Slide Number & Progress ── */
+    .progress-bar {
+      position: fixed; bottom: 0; left: 0;
+      height: 3px; background: var(--accent);
+      transition: width 0.4s ease;
+      z-index: 100;
+    }
+    .slide-counter {
+      position: fixed; bottom: 1rem; right: 1.5rem;
+      font-size: 0.8rem; color: var(--muted);
+      z-index: 100;
+    }
+
+    /* ── Navigation Arrows ── */
+    .nav-btn {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 1.4rem;
+      width: 2.8rem; height: 2.8rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, color 0.2s;
+      z-index: 100;
+    }
+    .nav-btn:hover { background: rgba(88,166,255,0.15); color: var(--accent); }
+    #btn-prev { left: 1rem; }
+    #btn-next { right: 1rem; }
+
+    /* ── Typography ── */
+    .eyebrow {
+      font-size: 0.75rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300; line-height: 1.15; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 300; line-height: 1.2; }
+    h3 { font-size: clamp(1rem, 2vw, 1.4rem); font-weight: 400; color: var(--muted); }
+    p  { font-size: clamp(0.9rem, 1.5vw, 1.1rem); line-height: 1.7; color: var(--text); max-width: 760px; text-align: center; }
+
+    .accent  { color: var(--accent); }
+    .green   { color: var(--green); }
+    .orange  { color: var(--orange); }
+    .red     { color: var(--red); }
+    .purple  { color: var(--purple); }
+    .muted   { color: var(--muted); }
+
+    /* ── Pill / Badge ── */
+    .badge {
+      display: inline-block;
+      padding: 0.2em 0.7em;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .badge-blue   { background: rgba(88,166,255,0.15); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+    .badge-green  { background: rgba(63,185,80,0.15);  color: var(--green);  border: 1px solid rgba(63,185,80,0.3); }
+    .badge-orange { background: rgba(210,153,34,0.15); color: var(--orange); border: 1px solid rgba(210,153,34,0.3); }
+    .badge-red    { background: rgba(248,81,73,0.15);  color: var(--red);    border: 1px solid rgba(248,81,73,0.3); }
+    .badge-purple { background: rgba(188,140,255,0.15);color: var(--purple); border: 1px solid rgba(188,140,255,0.3); }
+
+    /* ── Divider ── */
+    .divider { width: 60px; height: 2px; background: var(--accent); margin: 1rem auto; border-radius: 2px; }
+
+    /* ── Card Grid ── */
+    .card-grid {
+      display: grid;
+      gap: 1rem;
+      width: 100%;
+      max-width: 900px;
+    }
+    .card-grid-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .card-grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      text-align: center;
+    }
+    .card .card-label {
+      font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .card .card-value {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 600;
+    }
+    .card .card-sub {
+      font-size: 0.72rem; color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      width: 100%;
+      max-width: 860px;
+      position: relative;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 1.1rem;
+      left: 1.5rem;
+      right: 1.5rem;
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .tl-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .tl-dot {
+      width: 1.4rem; height: 1.4rem;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      margin-bottom: 0.6rem;
+      flex-shrink: 0;
+    }
+    .tl-dot.active-dot { background: var(--accent); border-color: var(--accent); }
+    .tl-year { font-size: 0.75rem; font-weight: 700; color: var(--accent); margin-bottom: 0.25rem; }
+    .tl-text { font-size: 0.72rem; color: var(--muted); text-align: center; line-height: 1.4; max-width: 110px; }
+
+    /* ── Stat Row ── */
+    .stat-row {
+      display: flex;
+      gap: 1.2rem;
+      align-items: stretch;
+      width: 100%;
+      max-width: 900px;
+    }
+    .stat-box {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .stat-box .stat-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+    .stat-box .stat-val   { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; }
+    .stat-box .stat-ci    { font-size: 0.7rem; color: var(--muted); }
+    .stat-box .stat-note  { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; line-height: 1.4; }
+
+    /* ── Guideline Table ── */
+    .gl-table {
+      width: 100%;
+      max-width: 860px;
+      border-collapse: collapse;
+    }
+    .gl-table th, .gl-table td {
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--border);
+      font-size: 0.82rem;
+      text-align: center;
+    }
+    .gl-table th {
+      background: var(--surface2);
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.7rem;
+    }
+    .gl-table td { background: var(--surface); }
+    .gl-table tr:hover td { background: var(--surface2); }
+
+    /* ── Two-column layout ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 900px;
+    }
+    .col-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+    }
+    .col-block h4 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.8rem;
+    }
+    .col-block ul {
+      list-style: none;
+      padding: 0;
+    }
+    .col-block ul li {
+      font-size: 0.82rem;
+      color: var(--muted);
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.5;
+    }
+    .col-block ul li:last-child { border-bottom: none; }
+    .col-block ul li strong { color: var(--text); }
+
+    /* ── Footnote ── */
+    .footnote {
+      position: absolute;
+      bottom: 1.8rem;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
+
+    /* ── Branding strip ── */
+    .brand-strip {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--purple));
+      z-index: 200;
+    }
+
+    /* ── Slide-specific backgrounds ── */
+    .slide-title { background: radial-gradient(ellipse at 70% 40%, rgba(88,166,255,0.07) 0%, transparent 70%), var(--bg); }
+    .slide-dark  { background: var(--bg); }
+
+    /* ── Responsive tweaks ── */
+    @media (max-width: 768px) {
+      .card-grid-4 { grid-template-columns: 1fr 1fr; }
+      .card-grid-3 { grid-template-columns: 1fr 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+      .stat-row { flex-direction: column; }
+      .slide { padding: 2rem 2rem; }
+    }
+    /* 2026 refresh overrides */
+    :root {
+      --bg: #09111d;
+      --surface: rgba(12, 24, 39, 0.9);
+      --surface2: rgba(20, 34, 52, 0.94);
+      --border: rgba(133, 193, 255, 0.16);
+      --text: #f6f9fd;
+      --muted: #b8c7d8;
+      --accent: #6ebaff;
+      --green: #77df9a;
+      --orange: #ffb85f;
+      --red: #ff6a70;
+      --purple: #b7b2ff;
+    }
+
+    html, body {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(110, 186, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 100% 10%, rgba(183, 178, 255, 0.12), transparent 20%),
+        linear-gradient(180deg, #09111d 0%, #060d17 100%);
+      color: var(--text);
+      font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
+    }
+
+    .deck::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(transparent 0%, rgba(255,255,255,0.03) 100%);
+      pointer-events: none;
+    }
+
+    .slide {
+      padding: 4.1rem 5.2rem 5.6rem;
+      background: linear-gradient(180deg, rgba(8, 19, 31, 0.72), rgba(8, 18, 29, 0.38));
+    }
+
+    h1, h2 {
+      letter-spacing: -0.03em;
+      font-weight: 680;
+      text-wrap: balance;
+    }
+
+    h3, p {
+      color: var(--muted);
+      text-wrap: balance;
+    }
+
+    .card,
+    .stat-box {
+      background: linear-gradient(180deg, rgba(14, 29, 46, 0.92), rgba(10, 21, 35, 0.92));
+      border-radius: 18px;
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
+      border-color: rgba(133, 193, 255, 0.14);
+    }
+
+    .gl-table th,
+    .gl-table td {
+      border-color: rgba(133, 193, 255, 0.14);
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: linear-gradient(90deg, #6ebaff 0%, #77df9a 100%);
+      box-shadow: 0 0 18px rgba(110, 186, 255, 0.45);
+    }
+
+    .slide-counter {
+      right: 1.4rem;
+      bottom: 1.2rem;
+      padding: 0.45rem 0.8rem;
+      border: 1px solid rgba(133, 193, 255, 0.16);
+      border-radius: 999px;
+      background: rgba(7, 16, 27, 0.74);
+      backdrop-filter: blur(12px);
+      color: #dce8f7;
+    }
+
+    .nav-btn {
+      background: rgba(9, 22, 35, 0.78);
+      border: 1px solid rgba(133, 193, 255, 0.18);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+    }
+
+    .nav-btn:hover {
+      background: rgba(26, 59, 92, 0.88);
+      color: #f6f9fd;
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/acs-periviability/index.html">
+<meta name="description" content="Evidence-based clinical review of antenatal corticosteroid (ACS) use at 21–23 weeks gestation: periviable survival rates, biologic plausibility, key observational studies (Ehret 2018, Rossi 2021, Travers 2022, Chawla 2022), ACOG/SMFM 2021 GRADE recommendations by gestational age, and a shared decision-making framework. Based on Battarbee AN, Obstet Gynecol 2024.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Antenatal Corticosteroids, Periviability, Prematurity, Neonatology, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/acs-periviability/index.html">
+<meta property="og:title" content="Antenatal Corticosteroids at 21–23 Weeks - Provider Education | OpenMFM">
+<meta property="og:description" content="Evidence-based clinical review of antenatal corticosteroid (ACS) use at 21–23 weeks gestation: periviable survival rates, biologic plausibility, key observational studies (Ehret 2018, Rossi 2021, Travers 2022, Chawla 2022), ACOG/SMFM 2021 GRADE recommendations by gestational age, and a shared decision-making framework. Based on Battarbee AN, Obstet Gynecol 2024.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Antenatal Corticosteroids at 21–23 Weeks - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Evidence-based clinical review of antenatal corticosteroid (ACS) use at 21–23 weeks gestation: periviable survival rates, biologic plausibility, key observational studies (Ehret 2018, Rossi 2021, Travers 2022, Chawla 2022), ACOG/SMFM 2021 GRADE recommendations by gestational age, and a shared decision-making framework. Based on Battarbee AN, Obstet Gynecol 2024.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Antenatal Corticosteroids at 21–23 Weeks - Provider Education",
+  "description": "Evidence-based clinical review of antenatal corticosteroid (ACS) use at 21–23 weeks gestation: periviable survival rates, biologic plausibility, key observational studies (Ehret 2018, Rossi 2021, Travers 2022, Chawla 2022), ACOG/SMFM 2021 GRADE recommendations by gestational age, and a shared decision-making framework. Based on Battarbee AN, Obstet Gynecol 2024.",
+  "url": "https://openmfm.org/decks/acs-periviability/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-23",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Antenatal Corticosteroids at 21–23 Weeks - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Antenatal Corticosteroids, Periviability, Prematurity, Neonatology, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div class="brand-strip"></div>
+<div class="progress-bar" id="progress"></div>
+<div class="slide-counter" id="counter">1 / 10</div>
+
+<button class="nav-btn" id="btn-prev" onclick="prevSlide()">&#8592;</button>
+<button class="nav-btn" id="btn-next" onclick="nextSlide()">&#8594;</button>
+
+<div class="deck">
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SLIDE 1 — Title
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="slide slide-title active" id="s1">
+    <div class="eyebrow">Clinical Evidence Review</div>
+    <h1>Antenatal Corticosteroids<br><span class="accent">at 21–23 Weeks</span></h1>
+    <div class="divider"></div>
+    <h3>Navigating Periviable Birth with Evidence</h3>
+    <br/>
+    <p style="font-size:0.8rem; color:var(--muted);">
+      Battarbee AN. <em>Obstet Gynecol.</em> 2024;143(1):35–43. PMC10840910<br/>
+      Presented by Chukwuma Onyeije, MD, FACOG · Atlanta Perinatal Associates
+    </p>
+    <div class="footnote">Use ← → arrow keys or on-screen buttons to navigate</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SLIDE 2 — The Clinical Problem
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="slide slide-dark" id="s2">
+    <div class="eyebrow">The Clinical Problem</div>
+    <h2>Periviable Birth</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-4" style="margin-top:1.2rem;">
+      <div class="card">
+        <div class="card-label">Gestational Age</div>
+        <div class="card-value accent">21 wks</div>
+        <div class="card-sub">Survival &lt;1%</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Gestational Age</div>
+        <div class="card-value orange">22 wks</div>
+        <div class="card-sub">Survival 5–30%</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Gestational Age</div>
+        <div class="card-value green">23 wks</div>
+        <div class="card-sub">Survival 25–50%</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Gestational Age</div>
+        <div class="card-value" style="color:var(--purple);">24 wks</div>
+        <div class="card-sub">Survival 50–80%</div>
+      </div>
+    </div>
+    <br/>
+    <p>Periviable birth is defined as delivery from <strong>20 0/7 to 25 6/7 weeks</strong>. Neonates face extreme risks of death, IVH, BPD, NEC, and neurodevelopmental impairment.</p>
+    <div class="footnote">NICHD/SMFM/AAP/ACOG Joint Workshop, 2013</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SLIDE 3 — History of ACS
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="slide slide-dark" id="s3">
+    <div class="eyebrow">Historical Context</div>
+    <h2>Evolving Guidelines for ACS</h2>
+    <div class="divider"></div>
+    <div class="timeline" style="margin-top:1.5rem;">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1972</div>
+        <div class="tl-text">First RCT demonstrating ACS reduces neonatal respiratory morbidity</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1994</div>
+        <div class="tl-text">NIH Consensus: ACS indicated 24–34 weeks</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2013</div>
+        <div class="tl-text">NICHD: Consider ACS at 22 wks only if delivery expected ≥23 wks</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2017</div>
+        <div class="tl-text">ACOG/SMFM: ACS <em>not recommended</em> at ≤22 wks</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot active-dot"></div>
+        <div class="tl-year">2021</div>
+        <div class="tl-text">ACOG/SMFM Practice Advisory: ACS <strong>should be considered</strong> at 22 wks</div>
+      </div>
+    </div>
+    <br/>
+    <p><span class="orange">Key tension:</span> Resuscitation was offered at 22 weeks, but steroids were not recommended — a clinical inconsistency that prompted re-evaluation.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SLIDE 4 — Biologic Plausibility
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="slide slide-dark" id="s4">
+    <div class="eyebrow">Mechanism</div>
+    <h2>Why ACS May Work at 21–23 Weeks</h2>
+    <div class="divider"></div>
+    <div class="two-col" style="margin-top:1.2rem;">
+      <div class="col-block">
+        <h4 class="accent">Lung Development at 21–23 Weeks</h4>
+        <ul>
+          <li><strong>Canalicular phase:</strong> conducting airways and alveoli forming</li>
+          <li><strong>Air-blood barrier</strong> being established</li>
+          <li><strong>Surfactant</strong> beginning to appear</li>
+          <li>In vitro data: corticosteroids increase <strong>epithelial maturation</strong> and lamellar bodies in 12–24 wk fetal lung tissue</li>
+        </ul>
+      </div>
+      <div class="col-block">
+        <h4 class="green">Observed Neonatal Benefits</h4>
+        <ul>
+          <li>Reduced <strong>early mortality</strong></li>
+          <li>Reduced <strong>severe IVH / PVL</strong></li>
+          <li>Reduced <strong>NEC</strong></li>
+          <li>Improved <strong>survival to discharge</strong></li>
+          <li>Improved <strong>survival without major morbidity</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footnote">Biologic plausibility supported by in vitro studies reviewed at 2013 NICHD Joint Workshop</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SLIDE 5 — Key Study: Ehret 2018 (VON)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="slide slide-dark" id="s5">
+    <div class="eyebrow">Key Study · Ehret 2018 · Vermont Oxford Network · N=33,472</div>
+    <h2>Survival to Discharge with ACS</h2>
+    <div class="divider"></div>
+    <div class="stat-row" style="margin-top:1.2rem;">
+      <div class="stat-box">
+        <div class="stat-label">22 Weeks</div>
+        <div class="stat-val orange">aRR 2.11</div>
+        <div class="stat-ci">95% CI 1.68–2.65</div>
+        <div class="stat-note">38.5% vs 17.7% survival to discharge with vs without ACS</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">23 Weeks</div>
+        <div class="stat-val green">aRR 1.54</div>
+        <div class="stat-ci">95% CI 1.40–1.70</div>
+        <div class="stat-note">Significant survival benefit confirmed</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Morbidity</div>
+        <div class="stat-val accent">↑ Survival</div>
+        <div class="stat-ci">without major morbidity</div>
+        <div class="stat-note">Chronic lung disease rates were <em>unchanged</em> by ACS</div>
+      </div>
+    </div>
+    <br/>
+    <p><span class="badge badge-orange">Caution</span>&nbsp; Chorioamnionitis more common in ACS-exposed group (25.5% vs 19.5%)</p>
+    <div class="footnote">Ehret DEA et al. Pediatrics 2018; 22-25 wk deliveries at Level 3/4 NICUs</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SLIDE 6 — Key Study: Rossi 2021 (NCHS)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="slide slide-dark" id="s6">
+    <div class="eyebrow">Key Study · Rossi 2021 · NCHS · N=10,627</div>
+    <h2>Infant Survival to 1 Year of Life</h2>
+    <div class="divider"></div>
+    <div class="stat-row" style="margin-top:1.2rem;">
+      <div class="stat-box">
+        <div class="stat-label">22 Weeks — Survival ×1 yr</div>
+        <div class="stat-val green">aRR 1.6</div>
+        <div class="stat-ci">95% CI 1.2–2.1</div>
+        <div class="stat-note">ACS associated with higher infant survival to 1 year</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">23 Weeks — Survival ×1 yr</div>
+        <div class="stat-val green">aRR 1.4</div>
+        <div class="stat-ci">95% CI 1.3–1.6</div>
+        <div class="stat-note">Consistent benefit confirmed at 23 weeks</div>
+      </div>
+    </div>
+    <br/>
+    <div class="two-col" style="max-width:860px;">
+      <div class="col-block">
+        <h4 class="orange">Maternal Safety Signal</h4>
+        <ul>
+          <li><strong>22 wks:</strong> Adverse maternal outcomes 7.5% (ACS) vs 3.4% (no ACS)</li>
+          <li><strong>23 wks:</strong> Adverse maternal outcomes 5.5% (ACS) vs 3.0% (no ACS)</li>
+          <li>Composite: transfusion, unplanned surgery, ICU admission</li>
+        </ul>
+      </div>
+      <div class="col-block">
+        <h4 class="orange">Infection Signal</h4>
+        <ul>
+          <li>Chorioamnionitis higher at 23 wks in ACS group (11.1% vs 5.9%)</li>
+          <li>Possible mechanism: ACS may delay delivery → prolonged exposure to infection</li>
+          <li>Causality <strong>not established</strong> in observational data</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footnote">Rossi RM et al. Am J Perinatol 2021 · Population-based cohort · 22–23 wk neonates receiving resuscitation</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SLIDE 7 — Key Study: Travers 2022 (NRN)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="slide slide-dark" id="s7">
+    <div class="eyebrow">Key Study · Travers 2022 · NICHD NRN · N=8,967</div>
+    <h2>Beyond Survival: Intracranial Protection</h2>
+    <div class="divider"></div>
+    <div class="stat-row" style="margin-top:1.2rem;">
+      <div class="stat-box">
+        <div class="stat-label">22 Weeks</div>
+        <div class="stat-val accent">↓ ICH/PVL</div>
+        <div class="stat-ci">Statistically significant</div>
+        <div class="stat-note">ACS reduced severe IVH or PVL even at 22 weeks</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Early Mortality</div>
+        <div class="stat-val green">↓ Death</div>
+        <div class="stat-ci">≤12 hours of life</div>
+        <div class="stat-note">ACS reduced early mortality across all periviable weeks</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Mechanism Insight</div>
+        <div class="stat-val purple">IVH</div>
+        <div class="stat-ci">Primary mediator</div>
+        <div class="stat-note">Mortality benefit partially mediated by reduction in intracranial morbidity</div>
+      </div>
+    </div>
+    <br/>
+    <p>Respiratory benefit of ACS at periviable ages remains <span class="orange">conflicting</span> across studies. Intracranial protection may be the primary mechanism of survival benefit.</p>
+    <div class="footnote">Travers CP et al. Pediatrics 2022 · 22–25 wk deliveries with BW 401–1000g · NICHD NRN 2006–2018</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SLIDE 8 — Key Study: Chawla 2022 (NRN) — ACS at 21 Weeks
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="slide slide-dark" id="s8">
+    <div class="eyebrow">Key Study · Chawla 2022 · NICHD NRN · N=431</div>
+    <h2>ACS Administered at 21–22 Weeks</h2>
+    <div class="divider"></div>
+    <div class="stat-row" style="margin-top:1.2rem;">
+      <div class="stat-box">
+        <div class="stat-label">Survival to Discharge</div>
+        <div class="stat-val green">aOR 1.95</div>
+        <div class="stat-ci">95% CI 1.07–3.56</div>
+        <div class="stat-note">Complete ACS course vs no ACS</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Survival Without Major Morbidity</div>
+        <div class="stat-val green">aOR 2.74</div>
+        <div class="stat-ci">95% CI 1.19–6.30</div>
+        <div class="stat-note">Complete ACS course vs no ACS</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Neonatal Sepsis</div>
+        <div class="stat-val orange">↑ Risk</div>
+        <div class="stat-ci">Complete vs partial ACS</div>
+        <div class="stat-note">No difference in sepsis <em>or death</em> combined (aOR 1.11)</div>
+      </div>
+    </div>
+    <br/>
+    <p><span class="badge badge-orange">Limitation</span>&nbsp; Only <strong>17 neonates</strong> received ACS at 21 weeks. Data insufficient to draw firm conclusions at 21 weeks.</p>
+    <div class="footnote">Chawla S et al. J Pediatr 2022 · Betamethasone administered 21 0/7–22 6/7 wks · Delivery at 22–23 wks</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SLIDE 9 — ACOG/SMFM Guideline Summary
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="slide slide-dark" id="s9">
+    <div class="eyebrow">Current Guideline · ACOG/SMFM 2021 Practice Advisory</div>
+    <h2>ACS Recommendations by Gestational Age</h2>
+    <div class="divider"></div>
+    <table class="gl-table" style="margin-top:1.2rem;">
+      <thead>
+        <tr>
+          <th>Gestational Age</th>
+          <th>ACS Recommendation</th>
+          <th>GRADE</th>
+          <th>Evidence Quality</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>20 0/7 – 21 6/7</td>
+          <td><span class="badge badge-red">Not Recommended</span></td>
+          <td>1A</td>
+          <td>Strong · High-quality evidence</td>
+        </tr>
+        <tr>
+          <td>22 0/7 – 22 6/7</td>
+          <td><span class="badge badge-orange">Consider</span></td>
+          <td>2C</td>
+          <td>Weak · Low-quality evidence</td>
+        </tr>
+        <tr>
+          <td>23 0/7 – 23 6/7</td>
+          <td><span class="badge badge-orange">Consider</span></td>
+          <td>2B</td>
+          <td>Weak · Moderate-quality evidence</td>
+        </tr>
+        <tr>
+          <td>24 0/7 – 24 6/7</td>
+          <td><span class="badge badge-green">Recommended</span></td>
+          <td>1B</td>
+          <td>Strong · Moderate-quality evidence</td>
+        </tr>
+        <tr>
+          <td>25 0/7 – 25 6/7</td>
+          <td><span class="badge badge-green">Recommended</span></td>
+          <td>1B</td>
+          <td>Strong · Moderate-quality evidence</td>
+        </tr>
+      </tbody>
+    </table>
+    <br/>
+    <p style="font-size:0.78rem; color:var(--muted);">Regimen: Betamethasone 12 mg IM × 2 doses, 24 hours apart <em>or</em> Dexamethasone 6 mg IM × 4 doses, every 12 hours</p>
+    <div class="footnote">ACOG/SMFM Practice Advisory, September 2021 · GRADE adapted from Norton ME et al. AJOG 2021</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SLIDE 10 — Clinical Decision Framework
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="slide slide-dark" id="s10">
+    <div class="eyebrow">Clinical Action</div>
+    <h2>Shared Decision-Making Framework</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-3" style="margin-top:1.2rem;">
+      <div class="card">
+        <div class="card-label" style="color:var(--accent);">Step 1</div>
+        <div class="card-value" style="font-size:1.1rem; color:var(--accent);">Establish Goals</div>
+        <div class="card-sub" style="font-size:0.78rem; margin-top:0.5rem; line-height:1.5;">Determine patient's desire: trial of intensive care vs. comfort-focused care</div>
+      </div>
+      <div class="card">
+        <div class="card-label" style="color:var(--purple);">Step 2</div>
+        <div class="card-value" style="font-size:1.1rem; color:var(--purple);">Multidisciplinary Counseling</div>
+        <div class="card-sub" style="font-size:0.78rem; margin-top:0.5rem; line-height:1.5;">MFM + Neonatology aligned on prognosis, resuscitation plan, and ACS timing</div>
+      </div>
+      <div class="card">
+        <div class="card-label" style="color:var(--green);">Step 3</div>
+        <div class="card-value" style="font-size:1.1rem; color:var(--green);">Concordant Management</div>
+        <div class="card-sub" style="font-size:0.78rem; margin-top:0.5rem; line-height:1.5;">ACS administration must align with postnatal resuscitation plan — steroids without resuscitation is inconsistent</div>
+      </div>
+    </div>
+    <br/>
+    <div class="two-col" style="max-width:860px;">
+      <div class="col-block">
+        <h4 class="green">Factors Favoring ACS at 22–23 wks</h4>
+        <ul>
+          <li>Neonatal resuscitation is planned</li>
+          <li>Birthweight 500–699g (strongest data)</li>
+          <li>Singleton gestation</li>
+          <li>Delivery anticipated within 7 days</li>
+        </ul>
+      </div>
+      <div class="col-block">
+        <h4 class="orange">Ongoing Research Needs</h4>
+        <ul>
+          <li>Efficacy at 21 weeks (very limited data)</li>
+          <li>Optimal timing of ACS relative to delivery</li>
+          <li>Long-term neurodevelopmental outcomes</li>
+          <li>Diverse, non-tertiary-center populations</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footnote">Battarbee AN. Obstet Gynecol 2024;143(1):35–43 · PMC10840910 · Atlanta Perinatal Associates</div>
+  </div>
+
+</div><!-- /deck -->
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total  = slides.length;
+  const progress = document.getElementById('progress');
+  const counter  = document.getElementById('counter');
+
+  function showSlide(idx) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === idx);
+    });
+    progress.style.width = ((idx + 1) / total * 100) + '%';
+    counter.textContent  = (idx + 1) + ' / ' + total;
+  }
+
+  function nextSlide() {
+    current = (current + 1) % total;
+    showSlide(current);
+  }
+
+  function prevSlide() {
+    current = (current - 1 + total) % total;
+    showSlide(current);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft')               { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

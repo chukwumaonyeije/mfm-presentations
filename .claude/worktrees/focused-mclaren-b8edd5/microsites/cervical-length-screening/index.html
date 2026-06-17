@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cervical Length Screening & Preterm Prevention | OpenMFM.org</title>
+<style>
+  :root {
+    --bg-dark: #0d1117;
+    --bg-card: #161b22;
+    --bg-card-alt: #1c2128;
+    --accent: #58d9f9;
+    --accent-dim: #1a3d4d;
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
+    --border: rgba(255,255,255,0.08);
+    --border-accent: rgba(88,217,249,0.25);
+    --green: #3fb950;
+    --green-bg: rgba(63,185,80,0.1);
+    --amber: #d29922;
+    --amber-bg: rgba(210,153,34,0.1);
+    --red: #f85149;
+    --red-bg: rgba(248,81,73,0.1);
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Layout ── */
+  .container { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(160deg, #0d1117 0%, #0e1d26 60%, #0d1117 100%);
+    border-bottom: 1px solid var(--border-accent);
+    padding: 56px 20px 44px;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    color: var(--text-primary);
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 580px;
+    margin: 0 auto 22px;
+  }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid var(--border-accent);
+  }
+
+  /* ── Sections ── */
+  section { padding: 48px 0; }
+  section + section { border-top: 1px solid var(--border); }
+  .section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 28px;
+  }
+
+  /* ── Decision Tool ── */
+  .tool-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .tool-header {
+    background: var(--accent-dim);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tool-header-icon {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .tool-header-icon svg { width: 16px; height: 16px; }
+  .tool-header-text { font-size: 14px; font-weight: 600; color: var(--accent); }
+  .tool-body { padding: 28px 24px; }
+
+  .step-block { margin-bottom: 28px; }
+  .step-label {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .step-num {
+    width: 20px; height: 20px;
+    background: var(--accent);
+    color: var(--bg-dark);
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-question { font-size: 15px; color: var(--text-primary); margin-bottom: 12px; }
+
+  .radio-group { display: flex; flex-wrap: wrap; gap: 10px; }
+  .radio-btn {
+    flex: 1; min-width: 130px;
+    padding: 12px 16px;
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: center;
+    transition: all .15s ease;
+    user-select: none;
+  }
+  .radio-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+  .radio-btn.selected {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .radio-btn input { display: none; }
+
+  /* CL slider */
+  .cl-input-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .cl-number-wrap { position: relative; }
+  .cl-number {
+    width: 90px;
+    padding: 11px 14px;
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .cl-number:focus { border-color: var(--accent); }
+  .cl-unit { font-size: 12px; color: var(--text-secondary); margin-top: 4px; text-align: center; }
+  .cl-slider-wrap { flex: 1; min-width: 180px; }
+  input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--bg-card-alt);
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid var(--bg-dark);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid var(--bg-dark);
+  }
+  .slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-secondary); margin-top: 6px; }
+
+  .threshold-bar {
+    margin-top: 14px;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--red) 0%, var(--red) 35%, var(--amber) 35%, var(--amber) 54%, var(--green) 54%, var(--green) 100%);
+    position: relative;
+  }
+  .threshold-labels { display: flex; justify-content: space-between; font-size: 11px; margin-top: 4px; }
+  .threshold-labels span:first-child { color: var(--red); }
+  .threshold-labels span:nth-child(2) { color: var(--amber); }
+  .threshold-labels span:last-child { color: var(--green); }
+
+  /* Result */
+  #result-section { display: none; margin-top: 28px; }
+  .result-card {
+    border-radius: var(--radius-lg);
+    border: 1px solid;
+    overflow: hidden;
+  }
+  .result-card.routine { border-color: var(--green); background: var(--green-bg); }
+  .result-card.moderate { border-color: var(--amber); background: var(--amber-bg); }
+  .result-card.high { border-color: var(--red); background: var(--red-bg); }
+
+  .result-header {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .result-card.routine .result-header { background: rgba(63,185,80,0.15); }
+  .result-card.moderate .result-header { background: rgba(210,153,34,0.15); }
+  .result-card.high .result-header { background: rgba(248,81,73,0.15); }
+
+  .result-icon { font-size: 22px; line-height: 1; }
+  .result-tier-label { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .result-card.routine .result-tier-label { color: var(--green); }
+  .result-card.moderate .result-tier-label { color: var(--amber); }
+  .result-card.high .result-tier-label { color: var(--red); }
+
+  .result-body { padding: 20px; }
+  .result-headline { font-size: 17px; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; }
+  .result-explanation { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px; }
+
+  .action-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .action-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--text-primary);
+  }
+  .action-bullet { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  .result-citation {
+    font-size: 11px;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    font-style: italic;
+  }
+
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    padding: 10px 18px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: opacity .15s;
+  }
+  .btn:hover { opacity: .85; }
+  .btn-print { background: var(--accent); color: var(--bg-dark); }
+  .btn-reset { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
+
+  /* ── Anatomy SVG section ── */
+  .anatomy-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  @media(max-width:600px){ .anatomy-wrap { grid-template-columns: 1fr; } }
+  .anatomy-text p { font-size: 14px; color: var(--text-secondary); margin-bottom: 12px; }
+  .anatomy-text p:last-child { margin-bottom: 0; }
+
+  .callout {
+    background: var(--accent-dim);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--accent);
+    margin-top: 14px;
+  }
+
+  /* ── Accordion ── */
+  .accordion { display: flex; flex-direction: column; gap: 10px; }
+  .acc-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .acc-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    gap: 12px;
+  }
+  .acc-trigger:hover { background: rgba(255,255,255,0.03); }
+  .acc-icon {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
+    font-size: 16px;
+    transition: transform .2s;
+  }
+  .acc-item.open .acc-icon { transform: rotate(45deg); }
+  .acc-body {
+    display: none;
+    padding: 0 20px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+  .acc-item.open .acc-body { display: block; }
+  .acc-body p { margin-bottom: 10px; }
+  .acc-body p:last-child { margin-bottom: 0; }
+  .acc-body strong { color: var(--text-primary); font-weight: 500; }
+  .acc-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .acc-badge-green { background: var(--green-bg); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+  .acc-badge-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(210,153,34,0.3); }
+  .acc-badge-blue { background: rgba(88,217,249,0.1); color: var(--accent); border: 1px solid var(--border-accent); }
+
+  /* ── Warning card ── */
+  .warning-card {
+    background: var(--red-bg);
+    border: 1px solid rgba(248,81,73,0.4);
+    border-radius: var(--radius-lg);
+    padding: 24px 26px;
+  }
+  .warning-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--red);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .warning-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .warning-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text-primary);
+  }
+  .warning-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--red);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  /* ── Pessary callout ── */
+  .info-callout {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+  .info-callout strong { color: var(--text-primary); }
+
+  /* ── References ── */
+  .ref-toggle-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 18px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: border-color .15s;
+  }
+  .ref-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+  #ref-list { display: none; margin-top: 16px; }
+  .ref-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .ref-item:last-child { border-bottom: none; }
+  .ref-item strong { color: var(--text-primary); }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 20px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+  footer a { color: var(--accent); }
+
+  /* ── Print styles ── */
+  @media print {
+    body { background: #fff; color: #111; font-size: 13px; }
+    .hero, .tool-card .tool-header, .tool-body > .step-block,
+    #result-section .btn-row, .anatomy-wrap, .accordion,
+    .warning-card, .info-callout, #ref-toggle-btn, footer,
+    .tag-row, .hero-eyebrow { display: none !important; }
+    .tool-card { border: none; }
+    #result-section { display: block !important; }
+    .result-card { border: 2px solid #333; background: none; }
+    .result-header { background: #f5f5f5; }
+    .result-tier-label, .result-headline { color: #111; }
+    .result-explanation, .action-item { color: #333; }
+    .print-warning { display: block !important; }
+    section { padding: 20px 0; }
+    section + section { border-top: 1px solid #ddd; }
+  }
+  .print-warning {
+    display: none;
+    font-size: 11px;
+    color: #666;
+    margin-top: 16px;
+    font-style: italic;
+  }
+
+  /* Hidden steps */
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <p class="hero-eyebrow">OpenMFM.org — Interactive Clinical Tools</p>
+  <h1>Cervical Length Screening &amp;<br><span>Preterm Prevention</span></h1>
+  <p class="hero-sub">Evidence-based decision support for patients and clinicians. Guidance per SMFM Consult Series and ACOG Practice Bulletins.</p>
+  <div class="tag-row">
+    <span class="tag">Cervical Length</span>
+    <span class="tag">Vaginal Progesterone</span>
+    <span class="tag">Cerclage</span>
+    <span class="tag">Preterm Birth</span>
+    <span class="tag">SMFM 2022</span>
+    <span class="tag">ACOG PB #234</span>
+  </div>
+</header>
+
+<main>
+
+<!-- ── SECTION 1: INTERACTIVE TOOL ── -->
+<section id="tool-section">
+  <div class="container">
+    <h2 class="section-title">Interactive Screening Tool</h2>
+    <p class="section-sub">Answer three questions to see personalized guidance based on your cervical length measurement.</p>
+
+    <div class="tool-card">
+      <div class="tool-header">
+        <div class="tool-header-icon">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 1v14M1 8h14" stroke="#0d1117" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="tool-header-text">Clinical Decision Support — Not a substitute for provider judgment</span>
+      </div>
+
+      <div class="tool-body">
+
+        <!-- Step 1: Plurality -->
+        <div class="step-block" id="step1">
+          <div class="step-label"><span class="step-num">1</span> Pregnancy type</div>
+          <p class="step-question">Is this a singleton or twin pregnancy?</p>
+          <div class="radio-group" role="radiogroup" aria-label="Pregnancy type">
+            <label class="radio-btn" id="lbl-singleton">
+              <input type="radio" name="plurality" value="singleton"> Singleton
+            </label>
+            <label class="radio-btn" id="lbl-twin">
+              <input type="radio" name="plurality" value="twin"> Twin (or higher order)
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 2: Prior PTB (singleton only) -->
+        <div class="step-block hidden" id="step2">
+          <div class="step-label"><span class="step-num">2</span> Obstetric history</div>
+          <p class="step-question">Has this patient had a <strong>prior spontaneous preterm birth before 34 weeks?</strong></p>
+          <div class="radio-group" role="radiogroup" aria-label="Prior preterm birth">
+            <label class="radio-btn" id="lbl-ptb-yes">
+              <input type="radio" name="priorPTB" value="yes"> Yes — prior sPTB &lt; 34 wks
+            </label>
+            <label class="radio-btn" id="lbl-ptb-no">
+              <input type="radio" name="priorPTB" value="no"> No prior preterm birth
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 3: Cervical length -->
+        <div class="step-block hidden" id="step3">
+          <div class="step-label"><span class="step-num">3</span> Cervical length measurement</div>
+          <p class="step-question">Enter the cervical length in millimeters (transvaginal ultrasound, 18–24 weeks).</p>
+          <div class="cl-input-row">
+            <div class="cl-number-wrap">
+              <input type="number" id="cl-number" class="cl-number" min="5" max="60" value="" placeholder="—" aria-label="Cervical length in millimeters">
+              <div class="cl-unit">mm</div>
+            </div>
+            <div class="cl-slider-wrap">
+              <input type="range" id="cl-slider" min="5" max="50" value="25" aria-label="Cervical length slider">
+              <div class="slider-labels"><span>5 mm</span><span>25 mm</span><span>50 mm</span></div>
+              <div class="threshold-bar" aria-hidden="true"></div>
+              <div class="threshold-labels">
+                <span>High risk (&lt;20 mm)</span>
+                <span>Moderate (20–24 mm)</span>
+                <span>Normal (25+ mm)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div id="result-section" aria-live="polite">
+          <div id="result-card" class="result-card">
+            <div class="result-header">
+              <span class="result-icon" id="result-icon"></span>
+              <span class="result-tier-label" id="result-tier"></span>
+            </div>
+            <div class="result-body">
+              <div class="result-headline" id="result-headline"></div>
+              <div class="result-explanation" id="result-explanation"></div>
+              <ul class="action-list" id="action-list"></ul>
+              <div class="result-citation" id="result-citation"></div>
+              <div class="btn-row" style="margin-top:16px;">
+                <button class="btn btn-print" onclick="window.print()">Print patient summary</button>
+                <button class="btn btn-reset" id="reset-btn">Start over</button>
+              </div>
+              <p class="print-warning">This summary is generated from the OpenMFM.org cervical length screening tool. Clinical decisions should be made in partnership with your healthcare provider.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 2: WHAT IS CERVICAL LENGTH ── -->
+<section id="explainer">
+  <div class="container">
+    <h2 class="section-title">What is cervical length?</h2>
+    <p class="section-sub">A plain-language explanation of why this measurement matters.</p>
+
+    <div class="anatomy-wrap">
+      <div class="anatomy-text">
+        <p>The <strong>cervix</strong> is the lower part of the uterus that connects to the vagina. During pregnancy, it stays firm and closed to keep the baby safely inside. As the body prepares for birth, the cervix gradually softens and shortens.</p>
+        <p>Normally, the cervix measures between 3 and 5 centimeters (30–50 mm) in mid-pregnancy. A cervix shorter than 25 mm before 37 weeks is a sign that the body may be getting ready for birth too early.</p>
+        <p>Cervical length is measured using <strong>transvaginal ultrasound</strong> — a small probe placed gently at the entrance to the vagina. It is safe during pregnancy and gives a much more accurate measurement than an abdominal ultrasound.</p>
+        <p>Screening is typically offered between <strong>18 and 24 weeks</strong> of pregnancy.</p>
+        <div class="callout">Transvaginal ultrasound is safe during pregnancy and does not increase the risk of preterm birth or infection.</div>
+      </div>
+
+      <!-- Anatomical SVG -->
+      <svg viewBox="0 0 260 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram of uterus and cervix showing cervical length measurement" style="max-width:260px;width:100%;display:block;margin:0 auto;">
+        <defs>
+          <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#58d9f9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- Uterus body -->
+        <ellipse cx="130" cy="110" rx="72" ry="80" fill="#1c2128" stroke="#3fb950" stroke-width="1.5"/>
+        <!-- Uterus label -->
+        <text x="130" y="95" text-anchor="middle" fill="#8b949e" font-size="11" font-family="-apple-system,sans-serif">Uterus</text>
+        <!-- Baby silhouette simplified -->
+        <ellipse cx="130" cy="115" rx="36" ry="44" fill="rgba(88,217,249,0.06)" stroke="rgba(88,217,249,0.2)" stroke-width="1" stroke-dasharray="4 3"/>
+        <circle cx="130" cy="90" r="14" fill="rgba(88,217,249,0.08)" stroke="rgba(88,217,249,0.15)" stroke-width="1"/>
+
+        <!-- Cervix -->
+        <rect x="108" y="188" width="44" height="52" rx="4" fill="#1a3d4d" stroke="#58d9f9" stroke-width="1.5"/>
+        <text x="150" y="200" fill="#58d9f9" font-size="10" font-family="-apple-system,sans-serif">Cervix</text>
+        <line x1="148" y1="198" x2="153" y2="204" stroke="#58d9f9" stroke-width="0.8"/>
+
+        <!-- Internal os label -->
+        <circle cx="130" cy="190" r="3" fill="#d29922"/>
+        <text x="82" y="193" text-anchor="end" fill="#d29922" font-size="10" font-family="-apple-system,sans-serif">Internal os</text>
+        <line x1="82" y1="191" x2="125" y2="191" stroke="#d29922" stroke-width="0.7" stroke-dasharray="3 2"/>
+
+        <!-- External os label -->
+        <circle cx="130" cy="240" r="3" fill="#d29922"/>
+        <text x="82" y="243" text-anchor="end" fill="#d29922" font-size="10" font-family="-apple-system,sans-serif">External os</text>
+        <line x1="82" y1="241" x2="125" y2="241" stroke="#d29922" stroke-width="0.7" stroke-dasharray="3 2"/>
+
+        <!-- CL measurement line -->
+        <line x1="158" y1="191" x2="158" y2="241" stroke="#58d9f9" stroke-width="1.5" marker-start="url(#arr2)" marker-end="url(#arr2)"/>
+        <text x="168" y="218" fill="#58d9f9" font-size="10" font-family="-apple-system,sans-serif" font-weight="500">CL</text>
+
+        <!-- Vagina -->
+        <path d="M108 240 Q108 270 118 285 Q130 295 142 285 Q152 270 152 240" fill="#1c2128" stroke="#8b949e" stroke-width="1"/>
+        <text x="130" y="285" text-anchor="middle" fill="#8b949e" font-size="10" font-family="-apple-system,sans-serif">Vagina</text>
+
+        <!-- Normal range note -->
+        <text x="130" y="305" text-anchor="middle" fill="#8b949e" font-size="9" font-family="-apple-system,sans-serif">Normal CL: 30–50 mm at 18–24 wks</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 3: INTERVENTIONS ── -->
+<section id="interventions">
+  <div class="container">
+    <h2 class="section-title">Interventions explained</h2>
+    <p class="section-sub">Plain-language explanations of the evidence-based options for a short cervix.</p>
+
+    <div class="accordion">
+
+      <div class="acc-item" id="acc-prog">
+        <button class="acc-trigger" aria-expanded="false">
+          <span>Vaginal progesterone</span>
+          <span style="display:flex;align-items:center;gap:8px;">
+            <span class="acc-badge acc-badge-green">Singletons with CL &le; 20 mm</span>
+            <span class="acc-icon">+</span>
+          </span>
+        </button>
+        <div class="acc-body">
+          <p><strong>What it is:</strong> Vaginal progesterone is a hormone medication inserted vaginally each night. It is not a contraceptive. It works locally in the cervix and uterus to help delay labor.</p>
+          <p><strong>Who it is for:</strong> Singleton pregnancies with a cervical length of 20 mm or less, with no prior preterm birth. It may also be used alongside cerclage in higher-risk patients.</p>
+          <p><strong>How to use it:</strong> Insert one 200 mg suppository (or 90 mg bioadhesive gel) vaginally at bedtime. Most patients continue until 36–37 weeks of pregnancy.</p>
+          <p><strong>What to expect:</strong> Minimal side effects — some patients notice mild discharge. It does not cause birth defects. It reduces the risk of early preterm birth but does not eliminate it entirely.</p>
+          <p><strong>Evidence:</strong> The PREGNANT trial (Hassan et al., 2011) showed a 45% reduction in preterm birth before 33 weeks in patients with a CL of 10–20 mm who used vaginal progesterone compared to those who did not.</p>
+          <p><strong>Important note:</strong> Vaginal progesterone has not been shown to benefit low-risk patients with normal cervical length (PROLONG trial, 2019). It is targeted specifically to those with a short cervix.</p>
+        </div>
+      </div>
+
+      <div class="acc-item" id="acc-cercl">
+        <button class="acc-trigger" aria-expanded="false">
+          <span>Cervical cerclage</span>
+          <span style="display:flex;align-items:center;gap:8px;">
+            <span class="acc-badge acc-badge-amber">Prior sPTB + CL &lt; 25 mm</span>
+            <span class="acc-icon">+</span>
+          </span>
+        </button>
+        <div class="acc-body">
+          <p><strong>What it is:</strong> Cerclage is a procedure in which a stitch (suture) is placed around the cervix to provide physical support and help keep it closed during pregnancy.</p>
+          <p><strong>Who it is for:</strong> Both conditions must be present: (1) a prior spontaneous preterm birth before 34 weeks, AND (2) a cervical length less than 25 mm in the current singleton pregnancy. Cerclage alone is not recommended for a short cervix without prior preterm birth history.</p>
+          <p><strong>The procedure:</strong> Cerclage is typically performed under spinal or epidural anesthesia in a hospital or outpatient surgical setting. The most common type (McDonald cerclage) uses a suture placed around the cervix through the vagina. It takes about 30 minutes.</p>
+          <p><strong>Recovery:</strong> Most patients go home the same day. Light activity restrictions for 24–48 hours. Pelvic rest (no intercourse) is usually recommended. Heavy lifting is avoided for 1 week. Many patients resume normal daily activities within a few days.</p>
+          <p><strong>Removal:</strong> The cerclage stitch is typically removed at 36–37 weeks, or earlier if labor begins or preterm rupture of membranes occurs. Removal is done in the office and takes only a few minutes.</p>
+          <p><strong>Evidence:</strong> A meta-analysis by Berghella et al. found that cerclage combined with vaginal progesterone reduces recurrent preterm birth by approximately 30% in patients with prior sPTB and a short cervix.</p>
+          <p><strong>Types:</strong> The McDonald technique is the most common. The Shirodkar technique is a slightly deeper placement sometimes used in specific cases. Transabdominal cerclage is reserved for cases where transvaginal cerclage is not feasible.</p>
+        </div>
+      </div>
+
+      <div class="acc-item" id="acc-surv">
+        <button class="acc-trigger" aria-expanded="false">
+          <span>Surveillance and monitoring schedule</span>
+          <span style="display:flex;align-items:center;gap:8px;">
+            <span class="acc-badge acc-badge-blue">For all short CL patients</span>
+            <span class="acc-icon">+</span>
+          </span>
+        </button>
+        <div class="acc-body">
+          <p><strong>Serial cervical length checks:</strong> After a short cervix is identified, repeat transvaginal ultrasound measurements are done every 2–4 weeks to track any further shortening.</p>
+          <p><strong>Antenatal corticosteroids (ACS):</strong> If delivery before 34 weeks appears likely, a short course of corticosteroid injections (betamethasone) is given to help the baby's lungs mature. This is one of the most effective interventions available for improving newborn outcomes after preterm birth. The timing of this discussion depends on gestational age and rate of cervical change.</p>
+          <p><strong>Magnesium sulfate for neuroprotection:</strong> If delivery before 32 weeks appears imminent, magnesium sulfate is administered intravenously to reduce the risk of cerebral palsy in the newborn. This is given in the hospital.</p>
+          <p><strong>Hospital and NICU counseling:</strong> If the pregnancy is remote from term (especially before 28 weeks) and delivery appears possible, your provider may arrange a tour of the neonatal intensive care unit (NICU) and a meeting with a neonatologist so you can understand what to expect.</p>
+          <p><strong>Activity restriction:</strong> Bed rest and activity restriction have not been shown in clinical trials to prevent preterm birth and are not routinely recommended. Discuss any specific activity limitations with your provider based on your individual situation.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 4: WARNING SIGNS ── -->
+<section id="warning">
+  <div class="container">
+    <h2 class="section-title">Warning signs — call your provider</h2>
+    <p class="section-sub">Know when to reach out right away, especially if you have a short cervix.</p>
+
+    <div class="warning-card">
+      <div class="warning-title">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M9 1L17 17H1L9 1Z" stroke="#f85149" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M9 7v4M9 13.5v.5" stroke="#f85149" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Contact your provider or go to labor and delivery if you notice:
+      </div>
+      <ul class="warning-list">
+        <li class="warning-item"><span class="warning-dot"></span><span><strong>Pelvic pressure or heaviness</strong> before 37 weeks — a feeling that the baby is "pushing down" or "falling out"</span></li>
+        <li class="warning-item"><span class="warning-dot"></span><span><strong>Regular contractions</strong> — tightening or cramping that comes and goes more than 4 times in an hour</span></li>
+        <li class="warning-item"><span class="warning-dot"></span><span><strong>Low back pain</strong> that comes and goes in a rhythmic pattern, especially if new or different from usual</span></li>
+        <li class="warning-item"><span class="warning-dot"></span><span><strong>Change in vaginal discharge</strong> — more than usual, watery, mucus-like, bloody, or a sudden gush of fluid</span></li>
+        <li class="warning-item"><span class="warning-dot"></span><span><strong>Abdominal cramping</strong> with or without diarrhea before 37 weeks</span></li>
+        <li class="warning-item"><span class="warning-dot"></span><span><strong>Decreased fetal movement</strong> — fewer than 10 movements in 2 hours after 28 weeks (kick count)</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 5: PESSARY NOTE ── -->
+<section id="pessary">
+  <div class="container">
+    <h2 class="section-title">A note on the cervical pessary</h2>
+    <p class="section-sub">An intervention used in other countries, but not currently recommended in the US.</p>
+    <div class="info-callout">
+      <p>The <strong>cervical pessary</strong> (Arabin pessary) is a ring-shaped silicone device placed around the cervix. It is widely used in several European countries for short cervix management.</p>
+      <p style="margin-top:10px;">However, the PROLONG trial (2019), a large randomized controlled trial conducted in low-risk singleton pregnancies, found no benefit from the pessary compared to placebo. Based on this and related evidence, <strong>SMFM and ACOG do not recommend the cervical pessary for routine use</strong> in the United States for singleton pregnancies with a short cervix.</p>
+      <p style="margin-top:10px;">Research is ongoing, including trials examining pessary use in twin pregnancies and other specific populations. Discuss with your MFM specialist if you have questions about emerging evidence in this area.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 6: REFERENCES ── -->
+<section id="references">
+  <div class="container">
+    <h2 class="section-title">Guideline references</h2>
+    <p class="section-sub">All recommendations are grounded in peer-reviewed guidelines and clinical trials.</p>
+
+    <button class="ref-toggle-btn" id="ref-toggle">
+      <span>Show references</span>
+      <span>&#9660;</span>
+    </button>
+
+    <div id="ref-list">
+      <div class="ref-item"><strong>SMFM Consult Series #10 (updated 2022).</strong> Cervical length screening for prevention of preterm birth. Society for Maternal-Fetal Medicine. <em>Am J Obstet Gynecol.</em></div>
+      <div class="ref-item"><strong>ACOG Practice Bulletin #234 (2021).</strong> Cerclage for the Management of Cervical Insufficiency. American College of Obstetricians and Gynecologists. <em>Obstet Gynecol.</em> 2021;137(6):e172–e185.</div>
+      <div class="ref-item"><strong>ACOG Practice Bulletin #130 (2012, reaffirmed 2022).</strong> Prediction and Prevention of Preterm Birth. <em>Obstet Gynecol.</em></div>
+      <div class="ref-item"><strong>Hassan SS, et al. (PREGNANT trial, 2011).</strong> Vaginal progesterone reduces the rate of preterm birth in women with a sonographic short cervix. <em>Ultrasound Obstet Gynecol.</em> 2011;38(1):18–31.</div>
+      <div class="ref-item"><strong>Romero R, et al. (2012).</strong> Vaginal progesterone in women with an asymptomatic sonographic short cervix in the midtrimester decreases preterm delivery and neonatal morbidity: a systematic review and metaanalysis of individual patient data. <em>Am J Obstet Gynecol.</em> 206(2):124.e1–19.</div>
+      <div class="ref-item"><strong>Norman JE, et al. (PROLONG trial, 2019).</strong> Vaginal progesterone prophylaxis for preterm birth (the PROLONG trial). <em>BJOG.</em> 2021;128(2):320–327.</div>
+      <div class="ref-item"><strong>Berghella V, et al. (2011).</strong> Cerclage for short cervix on ultrasound in women with singleton gestations and previous preterm birth: meta-analysis of trials using individual patient-level data. <em>Obstet Gynecol.</em> 117(3):663–671.</div>
+      <div class="ref-item"><strong>SMFM Consult Series #56 (2020).</strong> Short cervical length and the risk of spontaneous preterm birth in twin gestations. <em>Am J Obstet Gynecol.</em></div>
+      <div class="ref-item"><strong>Conde-Agudelo A, Romero R (PROLONG pessary, 2019).</strong> Vaginal progesterone to prevent preterm birth in pregnant women with a sonographic short cervix: clinical and public health implications. <em>Am J Obstet Gynecol.</em></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>Built by <a href="https://openmfm.org" target="_blank" rel="noopener">OpenMFM.org</a> — Evidence-based maternal-fetal medicine education</p>
+  <p style="margin-top:6px;">Chukwuma Onyeije, MD, FACOG | Atlanta Perinatal Associates</p>
+  <p style="margin-top:10px;font-size:12px;color:#4d5566;">This tool is for educational purposes only. It does not replace clinical judgment or the advice of a qualified healthcare provider. Clinical decisions should always be made in partnership with your care team.</p>
+</footer>
+
+<script>
+  // ── State ──
+  const state = { plurality: null, priorPTB: null, cl: null };
+
+  // ── Recommendation engine ──
+  function getRecommendation(s) {
+    const cl = s.cl;
+    if (cl === null) return null;
+
+    // Routine
+    if (cl >= 25 && s.plurality !== 'twin') {
+      return {
+        tier: 'routine', icon: '✓', tierLabel: 'Normal — Routine Care',
+        headline: 'Your cervical length is within the normal range.',
+        explanation: 'A cervical length of ' + cl + ' mm at this gestational age is reassuring. No additional intervention is needed for cervical length alone at this time. Continue with routine prenatal care as scheduled.',
+        actions: [
+          { icon: '📅', text: 'Continue routine prenatal appointments as scheduled.' },
+          { icon: '🔍', text: 'If you develop any warning signs of preterm labor, contact your provider promptly.' },
+          { icon: 'ℹ️', text: 'Your provider may check your cervical length again if you develop symptoms.' }
+        ],
+        citation: 'Per SMFM Consult Series #10 and ACOG PB #130: cervical length ≥ 25 mm is considered normal in a singleton pregnancy at 18–24 weeks.'
+      };
+    }
+
+    // Twin pathways
+    if (s.plurality === 'twin') {
+      if (cl >= 25) {
+        return {
+          tier: 'routine', icon: '✓', tierLabel: 'Twin — Routine Surveillance',
+          headline: 'Cervical length is in the normal range for a twin pregnancy.',
+          explanation: 'A cervical length of ' + cl + ' mm is within normal limits for a twin pregnancy at this gestational age. Serial cervical length monitoring is still recommended in twin pregnancies.',
+          actions: [
+            { icon: '📅', text: 'Serial cervical length checks every 2–4 weeks are typically recommended for twin pregnancies.' },
+            { icon: '👩‍⚕️', text: 'Continue close follow-up with your MFM specialist for twin-specific surveillance.' },
+            { icon: '⚠️', text: 'Know the warning signs of preterm labor and contact your provider right away if they occur.' }
+          ],
+          citation: 'Per SMFM Consult Series #56 (2020): twin pregnancies warrant serial CL surveillance; no routine intervention for CL ≥ 25 mm.'
+        };
+      } else if (cl >= 20) {
+        return {
+          tier: 'moderate', icon: '⚠', tierLabel: 'Twin — Increased Vigilance',
+          headline: 'Cervical length is shorter than expected in a twin pregnancy.',
+          explanation: 'A cervical length of ' + cl + ' mm in a twin pregnancy warrants increased monitoring. In twin pregnancies, current evidence does not support a specific intervention that has been proven to prevent preterm birth when the cervix is short. Close surveillance is the primary approach.',
+          actions: [
+            { icon: '🔁', text: 'Serial cervical length monitoring every 2 weeks.' },
+            { icon: '👩‍⚕️', text: 'Referral to or continued care with a maternal-fetal medicine (MFM) specialist.' },
+            { icon: '💊', text: 'Discussion of antenatal corticosteroids if delivery before 34 weeks appears possible.' },
+            { icon: '🏥', text: 'Counseling about signs of preterm labor and when to go to the hospital.' }
+          ],
+          citation: 'Per SMFM Consult Series #56: no intervention (progesterone, cerclage, pessary) has shown clear benefit for short CL in twins. Surveillance and timely ACS are the mainstay.'
+        };
+      } else {
+        return {
+          tier: 'high', icon: '!', tierLabel: 'Twin — High Risk, MFM Referral',
+          headline: 'Cervical length is significantly short in a twin pregnancy.',
+          explanation: 'A cervical length of ' + cl + ' mm in a twin pregnancy represents a high risk for preterm birth. Referral to or continued management by an MFM specialist is strongly recommended. Close surveillance, hospital preparation, and timely corticosteroid administration are critical.',
+          actions: [
+            { icon: '🏥', text: 'MFM specialist referral or continued co-management.' },
+            { icon: '🔁', text: 'Serial cervical length monitoring every 1–2 weeks.' },
+            { icon: '💉', text: 'Discuss antenatal corticosteroids (betamethasone) now if delivery before 34 weeks is a significant risk.' },
+            { icon: '🧠', text: 'If delivery before 32 weeks appears imminent, discuss magnesium sulfate for fetal neuroprotection.' },
+            { icon: '👶', text: 'Consider NICU counseling and potential hospital transfer if very preterm delivery is possible.' }
+          ],
+          citation: 'Per SMFM Consult Series #56 and ACOG PB #130: CL < 20 mm in twins warrants intensified surveillance and MFM co-management.'
+        };
+      }
+    }
+
+    // Singleton pathways
+    const priorPTB = s.priorPTB === 'yes';
+
+    if (cl >= 25) {
+      // Already handled above, but safety net
+      return {
+        tier: 'routine', icon: '✓', tierLabel: 'Normal — Routine Care',
+        headline: 'Your cervical length is within the normal range.',
+        explanation: 'A cervical length of ' + cl + ' mm is normal at 18–24 weeks. No additional cervical intervention is needed at this time.',
+        actions: [
+          { icon: '📅', text: 'Continue routine prenatal care as scheduled.' },
+          { icon: '⚠️', text: 'Know the warning signs of preterm labor. Contact your provider if symptoms develop.' }
+        ],
+        citation: 'Per SMFM Consult Series #10 and ACOG PB #130: CL ≥ 25 mm is normal in singleton pregnancy at 18–24 weeks.'
+      };
+    }
+
+    if (cl >= 20 && cl < 25) {
+      if (priorPTB) {
+        return {
+          tier: 'high', icon: '!', tierLabel: 'High Risk — Cerclage Discussion',
+          headline: 'Short cervix with prior preterm birth — cerclage candidacy should be evaluated.',
+          explanation: 'A cervical length of ' + cl + ' mm combined with your history of a spontaneous preterm birth before 34 weeks meets the criteria for evaluating cerclage placement. This combination is associated with a significantly elevated risk of recurrent preterm birth. Both cerclage and vaginal progesterone are typically recommended.',
+          actions: [
+            { icon: '🧵', text: 'Discuss cerclage placement with your MFM specialist. The evidence supports cerclage in this clinical setting (prior sPTB + CL < 25 mm).' },
+            { icon: '💊', text: 'Begin vaginal progesterone 200 mg nightly (or 90 mg gel) — cerclage and progesterone together provide better outcomes than either alone.' },
+            { icon: '🔁', text: 'Serial cervical length monitoring every 2 weeks.' },
+            { icon: '💉', text: 'Discuss antenatal corticosteroid timing if delivery before 34 weeks becomes more likely.' }
+          ],
+          citation: 'Per ACOG PB #234 and Berghella et al. meta-analysis: cerclage is indicated in singleton pregnancies with prior sPTB < 34 wks and CL < 25 mm. Reduces recurrent PTB by ~30%.'
+        };
+      } else {
+        return {
+          tier: 'moderate', icon: '⚠', tierLabel: 'Moderate Risk — Progesterone Recommended',
+          headline: 'Short cervix — vaginal progesterone is recommended.',
+          explanation: 'A cervical length of ' + cl + ' mm without prior preterm birth places you in a moderately elevated risk category. Vaginal progesterone has been shown to reduce the risk of early preterm birth in this setting and is the recommended intervention.',
+          actions: [
+            { icon: '💊', text: 'Begin vaginal progesterone: 200 mg suppository inserted vaginally at bedtime (or 90 mg bioadhesive gel). Continue until 36–37 weeks.' },
+            { icon: '🔁', text: 'Serial cervical length monitoring every 2–4 weeks.' },
+            { icon: '📅', text: 'Increased prenatal visit frequency — discuss schedule with your provider.' },
+            { icon: '⚠️', text: 'Review warning signs of preterm labor and know when to call.' }
+          ],
+          citation: 'Per SMFM Consult Series #10 and Romero et al. meta-analysis (2012): vaginal progesterone for CL < 25 mm in asymptomatic singletons without prior PTB reduces preterm birth rate.'
+        };
+      }
+    }
+
+    // CL < 20 mm
+    if (priorPTB) {
+      return {
+        tier: 'high', icon: '!', tierLabel: 'High Risk — Cerclage + Progesterone',
+        headline: 'Very short cervix with prior preterm birth — urgent cerclage evaluation.',
+        explanation: 'A cervical length of ' + cl + ' mm with a history of prior spontaneous preterm birth before 34 weeks represents a high-risk combination. Prompt evaluation for cerclage placement and initiation of vaginal progesterone are strongly recommended. This situation warrants urgent MFM involvement.',
+        actions: [
+          { icon: '⏱️', text: 'Urgent evaluation for cerclage by an MFM specialist — timing matters when CL is significantly shortened.' },
+          { icon: '💊', text: 'Begin vaginal progesterone 200 mg nightly immediately if not already started.' },
+          { icon: '🔁', text: 'Serial cervical length monitoring every 1–2 weeks after intervention.' },
+          { icon: '💉', text: 'Discuss antenatal corticosteroids now — if delivery before 34 weeks is plausible, early counseling is appropriate.' },
+          { icon: '🧠', text: 'If gestational age is < 32 weeks and delivery appears imminent, magnesium sulfate for neuroprotection should be planned.' }
+        ],
+        citation: 'Per ACOG PB #234, SMFM Consult #10, and Berghella et al.: CL < 20 mm + prior sPTB = highest risk group. Cerclage + progesterone combination is evidence-supported.'
+      };
+    } else {
+      return {
+        tier: 'high', icon: '!', tierLabel: 'High Risk — Progesterone, Close Surveillance',
+        headline: 'Very short cervix — vaginal progesterone is strongly indicated.',
+        explanation: 'A cervical length of ' + cl + ' mm in a singleton pregnancy without prior preterm birth places you in the highest-risk category for preterm birth. Vaginal progesterone reduces risk in this group and should be started promptly. Cerclage is not typically offered when there is no prior preterm birth, but close monitoring is essential.',
+        actions: [
+          { icon: '💊', text: 'Begin vaginal progesterone 200 mg nightly immediately (or 90 mg bioadhesive gel). This is the primary evidence-based intervention for this group.' },
+          { icon: '🔁', text: 'Serial cervical length monitoring every 1–2 weeks.' },
+          { icon: '👩‍⚕️', text: 'MFM co-management is recommended for CL < 20 mm.' },
+          { icon: '💉', text: 'Discuss timing of antenatal corticosteroids with your MFM specialist.' },
+          { icon: '🏥', text: 'If very preterm (< 28 wks), discuss hospital level of care and potential transfer to a center with a Level III NICU.' }
+        ],
+        citation: 'Per SMFM Consult Series #10 and PREGNANT trial (Hassan 2011): vaginal progesterone for CL ≤ 20 mm (10–20 mm in trial) in singletons without prior PTB reduces preterm birth before 33 wks by 45%.'
+      };
+    }
+  }
+
+  function showResult() {
+    if (state.cl === null || state.cl === '') return;
+    const rec = getRecommendation(state);
+    if (!rec) return;
+
+    const resultSection = document.getElementById('result-section');
+    const card = document.getElementById('result-card');
+    card.className = 'result-card ' + rec.tier;
+    document.getElementById('result-icon').textContent = rec.icon;
+    document.getElementById('result-tier').textContent = rec.tierLabel;
+    document.getElementById('result-headline').textContent = rec.headline;
+    document.getElementById('result-explanation').textContent = rec.explanation;
+
+    const actionList = document.getElementById('action-list');
+    actionList.innerHTML = '';
+    rec.actions.forEach(a => {
+      const li = document.createElement('li');
+      li.className = 'action-item';
+      li.innerHTML = '<span class="action-bullet" aria-hidden="true">' + a.icon + '</span><span>' + a.text + '</span>';
+      actionList.appendChild(li);
+    });
+
+    document.getElementById('result-citation').textContent = rec.citation;
+    resultSection.style.display = 'block';
+    resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // ── Step visibility logic ──
+  function updateStepVisibility() {
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+
+    if (state.plurality === 'twin') {
+      step2.classList.add('hidden');
+      step3.classList.remove('hidden');
+    } else if (state.plurality === 'singleton') {
+      step2.classList.remove('hidden');
+      if (state.priorPTB !== null) {
+        step3.classList.remove('hidden');
+      }
+    }
+  }
+
+  // ── Radio buttons ──
+  function initRadioGroup(name, labels, onSelect) {
+    labels.forEach(({ id, value }) => {
+      const lbl = document.getElementById(id);
+      lbl.addEventListener('click', () => {
+        labels.forEach(l => document.getElementById(l.id).classList.remove('selected'));
+        lbl.classList.add('selected');
+        onSelect(value);
+      });
+    });
+  }
+
+  initRadioGroup('plurality', [
+    { id: 'lbl-singleton', value: 'singleton' },
+    { id: 'lbl-twin', value: 'twin' }
+  ], (val) => {
+    state.plurality = val;
+    state.priorPTB = null;
+    document.getElementById('lbl-ptb-yes').classList.remove('selected');
+    document.getElementById('lbl-ptb-no').classList.remove('selected');
+    document.getElementById('result-section').style.display = 'none';
+    updateStepVisibility();
+  });
+
+  initRadioGroup('priorPTB', [
+    { id: 'lbl-ptb-yes', value: 'yes' },
+    { id: 'lbl-ptb-no', value: 'no' }
+  ], (val) => {
+    state.priorPTB = val;
+    updateStepVisibility();
+    if (state.cl !== null) showResult();
+  });
+
+  // ── CL input sync ──
+  const clNumber = document.getElementById('cl-number');
+  const clSlider = document.getElementById('cl-slider');
+
+  clNumber.addEventListener('input', () => {
+    const v = parseInt(clNumber.value);
+    if (!isNaN(v) && v >= 5 && v <= 60) {
+      clSlider.value = Math.min(v, 50);
+      state.cl = v;
+      if (state.plurality === 'twin' || (state.plurality === 'singleton' && state.priorPTB !== null)) {
+        showResult();
+      }
+    }
+  });
+
+  clSlider.addEventListener('input', () => {
+    const v = parseInt(clSlider.value);
+    clNumber.value = v;
+    state.cl = v;
+    if (state.plurality === 'twin' || (state.plurality === 'singleton' && state.priorPTB !== null)) {
+      showResult();
+    }
+  });
+
+  // ── Reset ──
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    state.plurality = null;
+    state.priorPTB = null;
+    state.cl = null;
+    ['lbl-singleton','lbl-twin','lbl-ptb-yes','lbl-ptb-no'].forEach(id => {
+      document.getElementById(id).classList.remove('selected');
+    });
+    clNumber.value = '';
+    clSlider.value = 25;
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('step3').classList.add('hidden');
+    document.getElementById('result-section').style.display = 'none';
+    document.getElementById('step1').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // ── Accordion ──
+  document.querySelectorAll('.acc-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.acc-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+      btn.setAttribute('aria-expanded', !isOpen);
+    });
+  });
+
+  // ── References toggle ──
+  document.getElementById('ref-toggle').addEventListener('click', () => {
+    const list = document.getElementById('ref-list');
+    const btn = document.getElementById('ref-toggle');
+    const isHidden = list.style.display === 'none' || list.style.display === '';
+    list.style.display = isHidden ? 'block' : 'none';
+    btn.querySelector('span:first-child').textContent = isHidden ? 'Hide references' : 'Show references';
+  });
+</script>
+
+</body>
+</html>

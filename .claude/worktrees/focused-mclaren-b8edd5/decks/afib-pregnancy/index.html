@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atrial Fibrillation During Pregnancy | Atlanta Perinatal Associates</title>
+    <style>
+        /* ─── Base Reset ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── Deck Container ─────────────────────────────────────── */
+        .deck {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ─── Slide Base ─────────────────────────────────────────── */
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease;
+        }
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ─── Typography ─────────────────────────────────────────── */
+        .slide-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #58a6ff;
+            margin-bottom: 0.6rem;
+        }
+        h1 {
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 300;
+            line-height: 1.15;
+            text-align: center;
+            color: #ffffff;
+        }
+        h2 {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 300;
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 1.2rem;
+        }
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.35rem);
+            color: #8b949e;
+            text-align: center;
+            margin-top: 0.8rem;
+            max-width: 700px;
+        }
+        .body-text {
+            font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+            line-height: 1.75;
+            text-align: center;
+            max-width: 780px;
+            color: #c9d1d9;
+        }
+
+        /* ─── Accent Colors ──────────────────────────────────────── */
+        .accent-blue  { color: #58a6ff; }
+        .accent-green { color: #3fb950; }
+        .accent-amber { color: #d29922; }
+        .accent-red   { color: #f85149; }
+        .accent-teal  { color: #39d353; }
+
+        /* ─── Divider ────────────────────────────────────────────── */
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: #58a6ff;
+            border-radius: 2px;
+            margin: 1rem auto;
+        }
+
+        /* ─── Icon Block ─────────────────────────────────────────── */
+        .icon-block {
+            font-size: clamp(3.5rem, 7vw, 5.5rem);
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+
+        /* ─── Card Grid ──────────────────────────────────────────── */
+        .card-grid {
+            display: grid;
+            gap: 1.2rem;
+            width: 100%;
+            max-width: 960px;
+        }
+        .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+        .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.4rem 1.6rem;
+            text-align: center;
+        }
+        .card .card-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .card .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.4rem;
+        }
+        .card .card-body {
+            font-size: 0.88rem;
+            color: #8b949e;
+            line-height: 1.6;
+        }
+        .card.blue-border  { border-color: #58a6ff; }
+        .card.green-border { border-color: #3fb950; }
+        .card.amber-border { border-color: #d29922; }
+        .card.red-border   { border-color: #f85149; }
+
+        /* ─── Trimester Timeline ─────────────────────────────────── */
+        .trimester-bar {
+            display: flex;
+            width: 100%;
+            max-width: 900px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1.2rem 0;
+            height: 52px;
+        }
+        .t-seg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            flex: 1;
+            color: #fff;
+        }
+        .t-seg.t1 { background: #1f4e79; }
+        .t-seg.t2 { background: #1a5c2e; }
+        .t-seg.t3 { background: #6b3a00; }
+        .t-seg.active-t { filter: brightness(1.5); }
+
+        /* ─── Pill Tags ──────────────────────────────────────────── */
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .pill {
+            padding: 0.4rem 1.1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .pill-green  { background: #0d2818; color: #3fb950; border: 1px solid #3fb950; }
+        .pill-red    { background: #2d0f0e; color: #f85149; border: 1px solid #f85149; }
+        .pill-blue   { background: #0d1f3c; color: #58a6ff; border: 1px solid #58a6ff; }
+        .pill-amber  { background: #2b1d00; color: #d29922; border: 1px solid #d29922; }
+
+        /* ─── Two-Column Layout ──────────────────────────────────── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            width: 100%;
+            max-width: 960px;
+            align-items: start;
+        }
+        .col-panel {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        .col-panel h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: #ffffff;
+        }
+        .col-panel ul {
+            list-style: none;
+            padding: 0;
+        }
+        .col-panel ul li {
+            font-size: 0.9rem;
+            color: #c9d1d9;
+            padding: 0.35rem 0;
+            border-bottom: 1px solid #21262d;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        .col-panel ul li:last-child { border-bottom: none; }
+        .col-panel ul li .dot { flex-shrink: 0; margin-top: 0.2rem; }
+
+        /* ─── Alert Box ──────────────────────────────────────────── */
+        .alert-box {
+            background: #2d0f0e;
+            border: 1px solid #f85149;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            max-width: 760px;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #ffa198;
+            margin-top: 1rem;
+        }
+        .reassure-box {
+            background: #0d2818;
+            border: 1px solid #3fb950;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            max-width: 760px;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #7ee787;
+            margin-top: 1rem;
+        }
+
+        /* ─── Progress Bar ───────────────────────────────────────── */
+        #progress-bar {
+            height: 3px;
+            background: #58a6ff;
+            transition: width 0.4s ease;
+        }
+
+        /* ─── Navigation ─────────────────────────────────────────── */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 2rem;
+            background: #0d1117;
+            border-top: 1px solid #21262d;
+        }
+        .nav-btn {
+            background: #161b22;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            padding: 0.45rem 1.3rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .nav-btn:hover { background: #21262d; border-color: #58a6ff; color: #58a6ff; }
+        .nav-btn:disabled { opacity: 0.3; cursor: default; }
+        #slide-counter {
+            font-size: 0.82rem;
+            color: #8b949e;
+            letter-spacing: 0.06em;
+        }
+        .branding {
+            font-size: 0.72rem;
+            color: #484f58;
+            text-align: center;
+            padding-bottom: 0.3rem;
+        }
+
+        /* ─── Slide-specific Backgrounds ────────────────────────── */
+        #slide-1 {
+            background: radial-gradient(ellipse at 60% 40%, #0d2040 0%, #0d1117 70%);
+        }
+        #slide-11 {
+            background: radial-gradient(ellipse at 40% 60%, #0d2818 0%, #0d1117 70%);
+        }
+
+        /* ─── Responsive (Mobile) ────────────────────────────────── */
+        @media (max-width: 700px) {
+            body { overflow: auto; height: auto; }
+            .deck { overflow: visible; height: auto; min-height: calc(100vh - 90px); }
+            .slide {
+                position: relative;
+                padding: 2rem 1.4rem;
+                opacity: 0;
+                visibility: hidden;
+                display: none;
+            }
+            .slide.active {
+                opacity: 1;
+                visibility: visible;
+                display: flex;
+            }
+            .card-grid.cols-2,
+            .card-grid.cols-3 { grid-template-columns: 1fr; }
+            .two-col { grid-template-columns: 1fr; gap: 1rem; }
+            .trimester-bar { flex-direction: column; height: auto; border-radius: 8px; overflow: hidden; }
+            .t-seg { padding: 0.5rem; font-size: 0.78rem; }
+            .pill-row { gap: 0.5rem; }
+            h1 { font-size: clamp(1.8rem, 8vw, 3rem); }
+            h2 { font-size: clamp(1.3rem, 6vw, 2rem); }
+            .nav-bar { padding: 0.6rem 1rem; }
+        }
+        /* 2026 refresh overrides */
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(94, 177, 255, 0.18), transparent 24%),
+                radial-gradient(circle at 85% 12%, rgba(89, 224, 170, 0.14), transparent 20%),
+                linear-gradient(180deg, #08121d 0%, #06101a 100%);
+            font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
+        }
+
+        .deck::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+            background-size: 44px 44px;
+            mask-image: linear-gradient(180deg, rgba(0,0,0,0.24), transparent 82%);
+            pointer-events: none;
+        }
+
+        .slide {
+            padding: 4.2rem 5rem 6rem;
+            background: linear-gradient(180deg, rgba(8, 19, 31, 0.7), rgba(8, 19, 31, 0.3));
+        }
+
+        h1, h2 {
+            letter-spacing: -0.035em;
+            font-weight: 700;
+            text-wrap: balance;
+        }
+
+        .subtitle,
+        .body-text,
+        .card .card-body,
+        .col-panel ul li {
+            color: #b8c7d8;
+        }
+
+        .card,
+        .col-panel {
+            background: linear-gradient(180deg, rgba(13, 28, 45, 0.92), rgba(9, 20, 33, 0.92));
+            border: 1px solid rgba(134, 193, 255, 0.16);
+            border-radius: 18px;
+            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+            backdrop-filter: blur(10px);
+        }
+
+        .pill {
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+        }
+
+        #progress-bar {
+            height: 4px;
+            background: linear-gradient(90deg, #5eb1ff 0%, #59e0aa 100%);
+            box-shadow: 0 0 18px rgba(94, 177, 255, 0.45);
+        }
+
+        .nav-bar {
+            bottom: 1.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.65rem 0.8rem;
+            border: 1px solid rgba(134, 193, 255, 0.16);
+            border-radius: 999px;
+            background: rgba(7, 17, 28, 0.74);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+            width: auto;
+        }
+
+        .nav-btn {
+            border-radius: 999px;
+            background: rgba(14, 30, 48, 0.92);
+            border-color: rgba(134, 193, 255, 0.18);
+        }
+
+        .nav-btn:hover {
+            background: rgba(33, 73, 113, 0.92);
+            color: #f6f9fd;
+        }
+
+        #slide-counter {
+            color: #dce9f8;
+            font-weight: 600;
+            min-width: 7rem;
+        }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/afib-pregnancy/index.html">
+<meta name="description" content="Patient education deck on atrial fibrillation (AFib) during pregnancy: what AFib is, why pregnancy triggers it, trimester-by-trimester management, safe vs. contraindicated medications, effects on fetal growth and delivery planning, and warning signs requiring immediate attention. Based on the 2023 ACC/AHA/ACCP/HRS AFib Guidelines and 2023 HRS Arrhythmia in Pregnancy Consensus Statement.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Atrial Fibrillation, Cardiac Arrhythmia, Heart Disease in Pregnancy, Anticoagulation, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/afib-pregnancy/index.html">
+<meta property="og:title" content="Atrial Fibrillation During Pregnancy - Patient Education | OpenMFM">
+<meta property="og:description" content="Patient education deck on atrial fibrillation (AFib) during pregnancy: what AFib is, why pregnancy triggers it, trimester-by-trimester management, safe vs. contraindicated medications, effects on fetal growth and delivery planning, and warning signs requiring immediate attention. Based on the 2023 ACC/AHA/ACCP/HRS AFib Guidelines and 2023 HRS Arrhythmia in Pregnancy Consensus Statement.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Atrial Fibrillation During Pregnancy - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Patient education deck on atrial fibrillation (AFib) during pregnancy: what AFib is, why pregnancy triggers it, trimester-by-trimester management, safe vs. contraindicated medications, effects on fetal growth and delivery planning, and warning signs requiring immediate attention. Based on the 2023 ACC/AHA/ACCP/HRS AFib Guidelines and 2023 HRS Arrhythmia in Pregnancy Consensus Statement.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Atrial Fibrillation During Pregnancy - Patient Education",
+  "description": "Patient education deck on atrial fibrillation (AFib) during pregnancy: what AFib is, why pregnancy triggers it, trimester-by-trimester management, safe vs. contraindicated medications, effects on fetal growth and delivery planning, and warning signs requiring immediate attention. Based on the 2023 ACC/AHA/ACCP/HRS AFib Guidelines and 2023 HRS Arrhythmia in Pregnancy Consensus Statement.",
+  "url": "https://openmfm.org/decks/afib-pregnancy/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-25",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Atrial Fibrillation During Pregnancy - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Atrial Fibrillation, Cardiac Arrhythmia, Heart Disease in Pregnancy, Anticoagulation, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar" style="width: 9.09%;"></div>
+
+<!-- Deck -->
+<div class="deck">
+
+    <!-- ─── SLIDE 1: Title ──────────────────────────────────────── -->
+    <div class="slide active" id="slide-1">
+        <div class="icon-block">🫀</div>
+        <div class="slide-label">Maternal-Fetal Medicine · Patient Education</div>
+        <h1>Atrial Fibrillation<br>During Pregnancy</h1>
+        <div class="divider"></div>
+        <p class="subtitle">Understanding your heart rhythm — and what it means for you and your baby</p>
+        <p class="body-text" style="margin-top:1.5rem; font-size:0.85rem; color:#484f58;">
+            Based on 2023 ACC/AHA/HRS Guidelines &nbsp;|&nbsp; Atlanta Perinatal Associates
+        </p>
+    </div>
+
+    <!-- ─── SLIDE 2: What is AFib? ──────────────────────────────── -->
+    <div class="slide" id="slide-2">
+        <div class="slide-label">Understanding the Condition</div>
+        <h2>What is Atrial Fibrillation?</h2>
+        <div class="divider"></div>
+        <div class="card-grid cols-3" style="margin-top:1rem;">
+            <div class="card blue-border">
+                <div class="card-icon">💓</div>
+                <div class="card-title">Normal Rhythm</div>
+                <div class="card-body">Upper and lower heart chambers beat in a coordinated, regular pattern.</div>
+            </div>
+            <div class="card amber-border">
+                <div class="card-icon">⚡</div>
+                <div class="card-title">AFib Rhythm</div>
+                <div class="card-body">Upper chambers beat rapidly and irregularly — out of sync with the lower chambers.</div>
+            </div>
+            <div class="card green-border">
+                <div class="card-icon">📊</div>
+                <div class="card-title">How Common?</div>
+                <div class="card-body">Affects approximately 27–166 per 100,000 pregnancies. Uncommon, but manageable.</div>
+            </div>
+        </div>
+        <div class="reassure-box" style="margin-top:1.4rem;">
+            AFib is uncommon in pregnancy. With the right care team, most patients have healthy outcomes.
+        </div>
+    </div>
+
+    <!-- ─── SLIDE 3: Why Does AFib Happen? ─────────────────────── -->
+    <div class="slide" id="slide-3">
+        <div class="slide-label">Causes &amp; Triggers</div>
+        <h2>Why Does AFib Happen in Pregnancy?</h2>
+        <div class="divider"></div>
+        <div class="two-col" style="margin-top:0.8rem;">
+            <div class="col-panel">
+                <h3 class="accent-blue">🩺 Pregnancy Changes</h3>
+                <ul>
+                    <li><span class="dot accent-blue">▸</span> Blood volume increases 30–50%</li>
+                    <li><span class="dot accent-blue">▸</span> Heart rate naturally rises 10–20 bpm</li>
+                    <li><span class="dot accent-blue">▸</span> Hormones make the heart more sensitive</li>
+                    <li><span class="dot accent-blue">▸</span> Higher sympathetic (adrenaline) tone</li>
+                </ul>
+            </div>
+            <div class="col-panel">
+                <h3 class="accent-amber">⚠️ Additional Risk Factors</h3>
+                <ul>
+                    <li><span class="dot accent-amber">▸</span> Pre-existing heart valve disease</li>
+                    <li><span class="dot accent-amber">▸</span> Congenital heart disease</li>
+                    <li><span class="dot accent-amber">▸</span> Thyroid overactivity (hyperthyroidism)</li>
+                    <li><span class="dot accent-amber">▸</span> Electrolyte imbalances</li>
+                </ul>
+            </div>
+        </div>
+        <p class="body-text" style="margin-top:1.2rem; font-size:0.9rem; color:#8b949e;">
+            Peak occurrence: weeks 23–30 of pregnancy (late 2nd / early 3rd trimester)
+        </p>
+    </div>
+
+    <!-- ─── SLIDE 4: Trimester Overview ────────────────────────── -->
+    <div class="slide" id="slide-4">
+        <div class="slide-label">Clinical Course</div>
+        <h2>AFib Across the Three Trimesters</h2>
+        <div class="divider"></div>
+        <div class="trimester-bar" style="margin-top:1rem;">
+            <div class="t-seg t1">1st Trimester<br><span style="font-weight:300; font-size:0.75rem;">Wks 1–12</span></div>
+            <div class="t-seg t2">2nd Trimester<br><span style="font-weight:300; font-size:0.75rem;">Wks 13–27</span></div>
+            <div class="t-seg t3">3rd Trimester<br><span style="font-weight:300; font-size:0.75rem;">Wks 28–40</span></div>
+        </div>
+        <div class="card-grid cols-3" style="margin-top:0.8rem;">
+            <div class="card blue-border">
+                <div class="card-icon" style="font-size:1.5rem;">🌱</div>
+                <div class="card-title" style="color:#58a6ff;">1st Trimester</div>
+                <div class="card-body">Baby's organs are forming. Lower hemodynamic stress. We focus on avoiding medications.</div>
+            </div>
+            <div class="card green-border">
+                <div class="card-icon" style="font-size:1.5rem;">📈</div>
+                <div class="card-title" style="color:#3fb950;">2nd Trimester</div>
+                <div class="card-body">Blood volume expands rapidly. AFib most likely to occur. Careful monitoring is key.</div>
+            </div>
+            <div class="card amber-border">
+                <div class="card-icon" style="font-size:1.5rem;">🏁</div>
+                <div class="card-title" style="color:#d29922;">3rd Trimester</div>
+                <div class="card-body">Maximum heart load. We prepare for safe delivery and manage blood thinners carefully.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── SLIDE 5: First Trimester Treatment ─────────────────── -->
+    <div class="slide" id="slide-5">
+        <div class="slide-label">Treatment · First Trimester</div>
+        <div class="trimester-bar" style="max-width:600px; margin-bottom:1rem;">
+            <div class="t-seg t1 active-t">1st Trimester · Weeks 1–12</div>
+        </div>
+        <h2>First Trimester Care</h2>
+        <div class="divider"></div>
+        <div class="card-grid cols-2" style="margin-top:0.8rem; max-width:800px;">
+            <div class="card blue-border">
+                <div class="card-icon">🚫</div>
+                <div class="card-title">Medication Caution</div>
+                <div class="card-body">We avoid starting new heart medications while your baby's organs are forming (organogenesis).</div>
+            </div>
+            <div class="card green-border">
+                <div class="card-icon">⚡</div>
+                <div class="card-title">Electric Cardioversion</div>
+                <div class="card-body">A safe, controlled electrical reset of your heart rhythm — safe for you and your baby at any stage.</div>
+            </div>
+            <div class="card blue-border">
+                <div class="card-icon">💉</div>
+                <div class="card-title">Blood Thinners</div>
+                <div class="card-body">Heparin injections are preferred. They do not cross the placenta and protect you from blood clots.</div>
+            </div>
+            <div class="card amber-border">
+                <div class="card-icon">👁️</div>
+                <div class="card-title">Close Monitoring</div>
+                <div class="card-body">Frequent visits to monitor your heart and your baby's growth and well-being.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── SLIDE 6: Second Trimester Treatment ────────────────── -->
+    <div class="slide" id="slide-6">
+        <div class="slide-label">Treatment · Second Trimester</div>
+        <div class="trimester-bar" style="max-width:600px; margin-bottom:1rem;">
+            <div class="t-seg t2 active-t">2nd Trimester · Weeks 13–27</div>
+        </div>
+        <h2>Second Trimester Care</h2>
+        <div class="divider"></div>
+        <div class="card-grid cols-3" style="margin-top:0.8rem;">
+            <div class="card blue-border">
+                <div class="card-icon">💊</div>
+                <div class="card-title">Rate Control</div>
+                <div class="card-body">Metoprolol or propranolol (beta-blockers) and digoxin slow the heart rate safely.</div>
+            </div>
+            <div class="card green-border">
+                <div class="card-icon">🎵</div>
+                <div class="card-title">Rhythm Control</div>
+                <div class="card-body">Flecainide or sotalol may restore normal rhythm in patients without structural heart disease.</div>
+            </div>
+            <div class="card amber-border">
+                <div class="card-icon">🛡️</div>
+                <div class="card-title">Anticoagulation</div>
+                <div class="card-body">Blood thinners (LMWH or warfarin) are used if your stroke risk is elevated.</div>
+            </div>
+        </div>
+        <div class="reassure-box" style="margin-top:1.2rem;">
+            These medications have long safety records in pregnancy. Your team will choose the safest option for you.
+        </div>
+    </div>
+
+    <!-- ─── SLIDE 7: Third Trimester Treatment ─────────────────── -->
+    <div class="slide" id="slide-7">
+        <div class="slide-label">Treatment · Third Trimester</div>
+        <div class="trimester-bar" style="max-width:600px; margin-bottom:1rem;">
+            <div class="t-seg t3 active-t">3rd Trimester · Weeks 28–40</div>
+        </div>
+        <h2>Third Trimester Care</h2>
+        <div class="divider"></div>
+        <div class="two-col" style="margin-top:0.8rem;">
+            <div class="col-panel">
+                <h3 class="accent-amber">📋 Delivery Planning</h3>
+                <ul>
+                    <li><span class="dot accent-amber">▸</span> Blood thinners stopped ~36 hours before labor</li>
+                    <li><span class="dot accent-amber">▸</span> Switch to faster-acting blood thinner near delivery</li>
+                    <li><span class="dot accent-amber">▸</span> Most patients can have a vaginal delivery</li>
+                </ul>
+            </div>
+            <div class="col-panel">
+                <h3 class="accent-blue">🩺 Ongoing Treatment</h3>
+                <ul>
+                    <li><span class="dot accent-blue">▸</span> Heart rate control continues as in 2nd trimester</li>
+                    <li><span class="dot accent-blue">▸</span> Frequent fetal monitoring (non-stress tests)</li>
+                    <li><span class="dot accent-blue">▸</span> Cardiology and MFM team coordinate care</li>
+                </ul>
+            </div>
+        </div>
+        <div class="reassure-box" style="margin-top:1.2rem;">
+            Your delivery plan will be carefully prepared in advance by your entire care team.
+        </div>
+    </div>
+
+    <!-- ─── SLIDE 8: Medications ────────────────────────────────── -->
+    <div class="slide" id="slide-8">
+        <div class="slide-label">Medications</div>
+        <h2>Medications: What's Safe &amp; What to Avoid</h2>
+        <div class="divider"></div>
+        <div class="two-col" style="margin-top:1rem;">
+            <div class="col-panel" style="border-color:#3fb950;">
+                <h3 class="accent-green">✅ Generally Safe</h3>
+                <ul>
+                    <li><span class="dot accent-green">▸</span> Metoprolol / Propranolol (beta-blockers)</li>
+                    <li><span class="dot accent-green">▸</span> Digoxin (heart rate control)</li>
+                    <li><span class="dot accent-green">▸</span> Flecainide / Sotalol (rhythm control)</li>
+                    <li><span class="dot accent-green">▸</span> Heparin / LMWH (blood clot prevention)</li>
+                </ul>
+            </div>
+            <div class="col-panel" style="border-color:#f85149;">
+                <h3 class="accent-red">🚫 Avoid During Pregnancy</h3>
+                <ul>
+                    <li><span class="dot accent-red">▸</span> Atenolol — linked to growth restriction</li>
+                    <li><span class="dot accent-red">▸</span> Amiodarone — affects baby's thyroid; emergencies only</li>
+                    <li><span class="dot accent-red">▸</span> DOACs (apixaban, rivaroxaban) — insufficient safety data</li>
+                </ul>
+            </div>
+        </div>
+        <p class="body-text" style="margin-top:1rem; font-size:0.85rem; color:#8b949e;">
+            All medication decisions are individualized. Your team will always weigh benefits and risks together with you.
+        </p>
+    </div>
+
+    <!-- ─── SLIDE 9: Fetal Effects ──────────────────────────────── -->
+    <div class="slide" id="slide-9">
+        <div class="slide-label">Effects on Your Baby</div>
+        <h2>How AFib Can Affect Your Baby</h2>
+        <div class="divider"></div>
+        <div class="card-grid cols-2" style="margin-top:1rem; max-width:860px;">
+            <div class="card amber-border">
+                <div class="card-icon">🩸</div>
+                <div class="card-title">Blood Flow</div>
+                <div class="card-body">Maternal tachycardia or low blood pressure can temporarily reduce blood flow to the baby (fetal hypoperfusion). Prompt treatment prevents this.</div>
+            </div>
+            <div class="card amber-border">
+                <div class="card-icon">📏</div>
+                <div class="card-title">Growth</div>
+                <div class="card-body">Well-controlled AFib rarely causes growth restriction. Atenolol is the main medication linked to smaller birth weight — and we avoid it.</div>
+            </div>
+            <div class="card blue-border">
+                <div class="card-icon">⏱️</div>
+                <div class="card-title">Preterm Birth</div>
+                <div class="card-body">Severe, uncontrolled AFib may require early delivery. Careful management greatly reduces this risk.</div>
+            </div>
+            <div class="card green-border">
+                <div class="card-icon">🌟</div>
+                <div class="card-title">Good News</div>
+                <div class="card-body">AFib without structural heart disease is associated with favorable pregnancy outcomes when managed appropriately.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── SLIDE 10: Warning Signs ─────────────────────────────── -->
+    <div class="slide" id="slide-10">
+        <div class="slide-label">When to Seek Help</div>
+        <h2>Call Your Doctor Immediately If You Notice:</h2>
+        <div class="divider"></div>
+        <div class="card-grid cols-3" style="margin-top:1rem;">
+            <div class="card red-border">
+                <div class="card-icon">💗</div>
+                <div class="card-title">Rapid or Irregular Heartbeat</div>
+                <div class="card-body">A sudden fluttering or pounding sensation in your chest.</div>
+            </div>
+            <div class="card red-border">
+                <div class="card-icon">😮‍💨</div>
+                <div class="card-title">Severe Shortness of Breath</div>
+                <div class="card-body">Difficulty breathing at rest or with minimal activity.</div>
+            </div>
+            <div class="card red-border">
+                <div class="card-icon">😵</div>
+                <div class="card-title">Dizziness or Fainting</div>
+                <div class="card-body">Lightheadedness, near-fainting, or loss of consciousness.</div>
+            </div>
+            <div class="card red-border">
+                <div class="card-icon">🫁</div>
+                <div class="card-title">Chest Pain or Pressure</div>
+                <div class="card-body">Any tightness, pressure, or pain in your chest area.</div>
+            </div>
+            <div class="card red-border">
+                <div class="card-icon">🦵</div>
+                <div class="card-title">Sudden Leg Swelling</div>
+                <div class="card-body">Rapid or asymmetric swelling in one or both legs.</div>
+            </div>
+            <div class="card amber-border">
+                <div class="card-icon">📞</div>
+                <div class="card-title">When in Doubt</div>
+                <div class="card-body">Always call. We would rather hear from you than have you wait.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── SLIDE 11: Partnership / Closing ─────────────────────── -->
+    <div class="slide" id="slide-11">
+        <div class="icon-block">🤝</div>
+        <div class="slide-label">Partnering for a Healthy Pregnancy</div>
+        <h2>You Are Not Alone in This</h2>
+        <div class="divider"></div>
+        <p class="body-text">
+            AFib during pregnancy requires careful monitoring — but successful management is very common.<br>
+            Your MFM and cardiology team will guide every step.
+        </p>
+        <div class="pill-row" style="margin-top:1.4rem;">
+            <span class="pill pill-blue">Regular Monitoring</span>
+            <span class="pill pill-green">Safe Medications</span>
+            <span class="pill pill-green">Healthy Baby</span>
+            <span class="pill pill-blue">Vaginal Delivery Often Possible</span>
+            <span class="pill pill-amber">AFib Often Improves After Delivery</span>
+        </div>
+        <div class="reassure-box" style="margin-top:1.4rem;">
+            Work closely with your team, attend all appointments, and never hesitate to call with concerns.
+        </div>
+        <p style="font-size:0.75rem; color:#484f58; margin-top:1.2rem; text-align:center;">
+            2023 ACC/AHA/ACCP/HRS AFib Guidelines &nbsp;|&nbsp; 2023 HRS Arrhythmia in Pregnancy Consensus Statement
+        </p>
+    </div>
+
+</div><!-- end .deck -->
+
+<!-- Navigation -->
+<div class="nav-bar">
+    <button class="nav-btn" id="btn-prev" onclick="prevSlide()" disabled>← Previous</button>
+    <div>
+        <div id="slide-counter" style="text-align:center;">Slide 1 of 11</div>
+        <div class="branding">Atlanta Perinatal Associates · DoctorsWhoCode.blog</div>
+    </div>
+    <button class="nav-btn" id="btn-next" onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    const progressBar = document.getElementById('progress-bar');
+    const counter = document.getElementById('slide-counter');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+
+    function updateUI() {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === current);
+        });
+        const pct = ((current + 1) / total * 100).toFixed(2);
+        progressBar.style.width = pct + '%';
+        counter.textContent = 'Slide ' + (current + 1) + ' of ' + total;
+        btnPrev.disabled = current === 0;
+        btnNext.disabled = current === total - 1;
+    }
+
+    function nextSlide() {
+        if (current < total - 1) { current++; updateUI(); }
+    }
+
+    function prevSlide() {
+        if (current > 0) { current--; updateUI(); }
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    updateUI();
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

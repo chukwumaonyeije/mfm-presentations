@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menopausal Therapy: An Evidence-Based Approach | Nwaozichi Onyeije, CNM</title>
+    <style>
+        /* ============================================================
+           RESET & BASE
+        ============================================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg-dark:    #0d1117;
+            --bg-card:    #161b22;
+            --bg-card2:   #1c2230;
+            --accent-teal:#00c9b1;
+            --accent-blue:#3b82f6;
+            --accent-rose:#f472b6;
+            --accent-gold:#fbbf24;
+            --accent-lime:#86efac;
+            --text-main:  #e6edf3;
+            --text-muted: #8b949e;
+            --border:     #30363d;
+        }
+
+        html, body {
+            width: 100%; height: 100%;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+        }
+
+        /* ============================================================
+           DECK & SLIDE FRAMEWORK
+        ============================================================ */
+        #deck {
+            width: 100vw; height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 3rem 4rem;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.45s ease;
+        }
+        .slide.active { opacity: 1; visibility: visible; }
+
+        /* ============================================================
+           NAVIGATION BAR
+        ============================================================ */
+        #nav {
+            position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 1rem;
+            background: rgba(22,27,34,0.92);
+            border: 1px solid var(--border);
+            border-radius: 2rem;
+            padding: 0.5rem 1.25rem;
+            z-index: 999;
+            backdrop-filter: blur(8px);
+        }
+        #nav button {
+            background: none; border: none; cursor: pointer;
+            color: var(--text-main); font-size: 1.25rem;
+            width: 2.2rem; height: 2.2rem;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        #nav button:hover { background: var(--bg-card2); }
+        #slide-counter {
+            font-size: 0.85rem; color: var(--text-muted);
+            min-width: 4rem; text-align: center;
+        }
+
+        /* ============================================================
+           PROGRESS BAR
+        ============================================================ */
+        #progress-bar {
+            position: fixed; top: 0; left: 0;
+            height: 3px; background: var(--accent-teal);
+            transition: width 0.4s ease;
+            z-index: 998;
+        }
+
+        /* ============================================================
+           TYPOGRAPHY UTILITIES
+        ============================================================ */
+        .slide-title {
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            text-align: center;
+            margin-bottom: 0.4em;
+        }
+        .slide-subtitle {
+            font-size: clamp(0.95rem, 1.6vw, 1.3rem);
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .accent-teal  { color: var(--accent-teal); }
+        .accent-blue  { color: var(--accent-blue); }
+        .accent-rose  { color: var(--accent-rose); }
+        .accent-gold  { color: var(--accent-gold); }
+        .accent-lime  { color: var(--accent-lime); }
+
+        /* ============================================================
+           CARD GRID
+        ============================================================ */
+        .card-grid {
+            display: grid;
+            gap: 1rem;
+            width: 100%; max-width: 1100px;
+        }
+        .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .card-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.25rem 1.5rem;
+        }
+        .card h3 {
+            font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .card p, .card li {
+            font-size: clamp(0.78rem, 1.15vw, 0.95rem);
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+        .card ul { padding-left: 1.1em; }
+        .card .stat {
+            font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.3rem;
+        }
+
+        /* ============================================================
+           TABLE
+        ============================================================ */
+        .data-table {
+            width: 100%; max-width: 1000px;
+            border-collapse: collapse;
+            font-size: clamp(0.75rem, 1.1vw, 0.92rem);
+        }
+        .data-table th {
+            background: var(--bg-card2);
+            color: var(--accent-teal);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-size: 0.78rem;
+            padding: 0.7rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .data-table td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-main);
+            vertical-align: top;
+        }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: var(--bg-card2); }
+
+        /* ============================================================
+           BADGE / PILL
+        ============================================================ */
+        .badge {
+            display: inline-block;
+            padding: 0.2em 0.7em;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .badge-green  { background: rgba(134,239,172,0.15); color: var(--accent-lime); }
+        .badge-blue   { background: rgba(59,130,246,0.15);  color: var(--accent-blue); }
+        .badge-rose   { background: rgba(244,114,182,0.15); color: var(--accent-rose); }
+        .badge-gold   { background: rgba(251,191,36,0.15);  color: var(--accent-gold); }
+        .badge-teal   { background: rgba(0,201,177,0.15);   color: var(--accent-teal); }
+
+        /* ============================================================
+           TIMELINE
+        ============================================================ */
+        .timeline {
+            display: flex; align-items: flex-start;
+            gap: 0; width: 100%; max-width: 900px;
+        }
+        .tl-step {
+            flex: 1; text-align: center; position: relative;
+        }
+        .tl-step::before {
+            content: '';
+            position: absolute; top: 1rem; left: 50%; right: -50%;
+            height: 2px; background: var(--border);
+            z-index: 0;
+        }
+        .tl-step:last-child::before { display: none; }
+        .tl-dot {
+            width: 2rem; height: 2rem;
+            border-radius: 50%;
+            background: var(--bg-card2);
+            border: 2px solid var(--accent-teal);
+            margin: 0 auto 0.6rem;
+            position: relative; z-index: 1;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: 700; color: var(--accent-teal);
+        }
+        .tl-label {
+            font-size: clamp(0.7rem, 1vw, 0.85rem);
+            color: var(--text-muted);
+            padding: 0 0.3rem;
+        }
+        .tl-label strong { display: block; color: var(--text-main); margin-bottom: 0.2rem; }
+
+        /* ============================================================
+           ICON ROW
+        ============================================================ */
+        .icon-row {
+            display: flex; gap: 1.5rem; flex-wrap: wrap;
+            justify-content: center; width: 100%; max-width: 1000px;
+        }
+        .icon-item {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 0.5rem; width: 130px; text-align: center;
+        }
+        .icon-circle {
+            width: 3.5rem; height: 3.5rem;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+        }
+        .icon-item p {
+            font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;
+        }
+        .icon-item strong { display: block; font-size: 0.85rem; color: var(--text-main); }
+
+        /* ============================================================
+           DIVIDER
+        ============================================================ */
+        .h-divider {
+            width: 3rem; height: 3px;
+            background: var(--accent-teal);
+            border-radius: 2px;
+            margin: 0.6rem auto 1.2rem;
+        }
+
+        /* ============================================================
+           EVIDENCE LEVEL INDICATOR
+        ============================================================ */
+        .evidence-bar {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.75rem; color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+        .ev-dot {
+            width: 0.55rem; height: 0.55rem;
+            border-radius: 50%;
+        }
+
+        /* ============================================================
+           SLIDE-SPECIFIC BACKGROUNDS
+        ============================================================ */
+        .slide-title-bg {
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,201,177,0.08) 0%, transparent 70%),
+                var(--bg-dark);
+        }
+        .slide-section-bg {
+            background:
+                radial-gradient(ellipse 60% 50% at 20% 50%, rgba(59,130,246,0.07) 0%, transparent 70%),
+                var(--bg-dark);
+        }
+
+        /* ============================================================
+           CITATION FOOTNOTE
+        ============================================================ */
+        .cite {
+            position: fixed; bottom: 4.5rem; left: 50%; transform: translateX(-50%);
+            font-size: 0.65rem; color: var(--text-muted);
+            max-width: 900px; text-align: center;
+            opacity: 0.7;
+        }
+
+        /* ============================================================
+           SLIDE NUMBER INDICATOR (TOP RIGHT)
+        ============================================================ */
+        #slide-label {
+            position: fixed; top: 1rem; right: 1.5rem;
+            font-size: 0.7rem; color: var(--text-muted);
+            letter-spacing: 0.08em; text-transform: uppercase;
+        }
+
+        /* ============================================================
+           PRESENTER NAME (TOP LEFT)
+        ============================================================ */
+        #presenter-tag {
+            position: fixed; top: 1rem; left: 1.5rem;
+            font-size: 0.7rem; color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        /* ============================================================
+           RESPONSIVE TWEAKS
+        ============================================================ */
+        @media (max-width: 768px) {
+            .slide { padding: 2rem 1.5rem; }
+            .card-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+            .card-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+            .timeline { flex-direction: column; }
+            .tl-step::before { display: none; }
+        }
+    </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/foBXV3iK9wvlpBTWcbCARPstDBBYE1d-s7zg3u99fR85Ppr0lQq8PJf0wYZpObSNC2UM5O3tb3MULAI0vXuQ9Zz-E3Z1BiDEdg2D97og4IZ5pRqDYZHuzHdvrfaWZZiQ6M8WUYy1EJtRrORhJ-OXQodH6TBCiFu_qPfG5C_wCQOgEx0_RB73GX0A1gtdI_yotqIpoy22BFkpLTMw9beetyfXg4VhgLZSw4dVKqkOeZUgAhMwXAscEalYtaY4wbsEAJmk6N-X6rX7VkG_SPAdB7CLNiZRvxXypMcLo9g3VF4BnkFlxfiZDipc15M-RzyYIvFGBuh8Mj0E1querYMR4Bd87RgXslklwaFTMvI55VTiEb_SDFp2Y0TJM0SfMG4JCN52oSf2pBRw1KwgHZtOIfd4ONlAfkWQAWLSGFYZE9KY-B1nKKLNa6cYDgrek-L8cp4tNhlmsDXeiZIACH3q91itS83u9UjiUEcWREj86zYil-lelH0jLfnoq0BRjFfZ9DobCPrkaJRzZx1J1KxM6ObvIrlys0fpWiYNXU18PwH7xLI1CB1SYiesWqIn93WO5joh0-dXkQDI2FJpRm9UwuycaVF8mZ6c2dpY85gk-3X1bz42yPWAENnwzxJambqdf44Qs7rXrCP7_CuCTlfGPLVAc1xOkHyH4y-rjVS--2x_6suEiOMKGyG8Cw9Ym0gRgWkoDgj-7RWTFpo2rgMixJZuWUUeTGRgDSp8tyfo-h0ye76bYdN1XoiXOhyQmGN_HZ3kWEQo_Y-IMqckil3ykB0NT2rEcHqmZCKTUnX-HuR1kzRnrShGdZoic_ig6elJMjxqVhj641_4lYF0qy7XeUw0i-7fvEV7C8jKFQxWS4jrrukBeNq5cS1A-Lj4ztH0V0NZD8ixuV_s__uXFRQ8J0phbq9wKep_bfioVAP7dvMpvVDwbDVx79ZKdRCE6YeMYwjcMTt5SjHlqSqzpEUulp60BWEkH23b6UAZc3_fBJtOxHPQRtDKkaIFXQpkFCt1kelt6Hh4LMcrZrLhDoTf3YGkW3fwFPZ2DYz2T5a92MJW0ixvNWOyGCn4BpZIE5qPBZiQYie7K0uKwN_3gNITSd55GmGCjwE--604xERFcr3Qgp-rW4_S-GNlmPjT2-VjjAVUJF7orppd6gCt4XC0M5WXZo4nLhSVgSxe0p6TFaje9JCOvxhlIB-9VPX6rCg5YpyVdqHjHhF_IEkU-iInARZVXxIq9E9JDx7YjIdNEoLaw5FONfOo0oikg-ZweV72pVC1Lx9gWftOMBRVAEYY7q6I4MXv2gYgNnsw-Zk5tBrfGbEsoNEmgezAbv4LzX_kDjvdzNEY-nOz89qVqccu5ZlZd_AxQbfVnv0E_dVppF1T1CaE4zFn0jhU_i4kgbeB3Rbh7o_VBfPmroencCm-RVupKYf4dC2SPnmhj5ZcB5T9UDaExligYN6SmNq7it4_tPSJCsXdIwN-OE1QCxr6ZFkOmzY4mRiT_CwyKPtOYkU-IYS4FNraLZMJMDb0EQ7w7PgVe6qORAGAwZmr_bcC_4Jt3-0477frYlOrBz7kv9zz5cxHCPE2w2bAahA-lby22e2O8puH4x8mDAkYcW9nOUh7QE6XCTmnyoDLLQl3UIu1WBBK1xwj9esx9QilqMsx7_H5bDo4'></script>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/menopausal-therapy/menopausal_therapy_onyeije.html">
+<meta name="description" content="Covers menopausal hormone therapy (MHT): estrogen and progesterone options, benefits for vasomotor symptoms and bone density, cardiovascular risk, and breast cancer considerations.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Menopause, Hormone Therapy, Women's Health, GYN">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/menopausal-therapy/menopausal_therapy_onyeije.html">
+<meta property="og:title" content="Menopausal Hormone Therapy - Patient Education | OpenMFM">
+<meta property="og:description" content="Covers menopausal hormone therapy (MHT): estrogen and progesterone options, benefits for vasomotor symptoms and bone density, cardiovascular risk, and breast cancer considerations.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Menopausal Hormone Therapy - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Covers menopausal hormone therapy (MHT): estrogen and progesterone options, benefits for vasomotor symptoms and bone density, cardiovascular risk, and breast cancer considerations.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Menopausal Hormone Therapy - Patient Education",
+  "description": "Covers menopausal hormone therapy (MHT): estrogen and progesterone options, benefits for vasomotor symptoms and bone density, cardiovascular risk, and breast cancer considerations.",
+  "url": "https://openmfm.org/decks/menopausal-therapy/menopausal_therapy_onyeije.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-14",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Menopausal Hormone Therapy - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Menopause, Hormone Therapy, Women's Health, GYN"
+}
+</script>
+<style>
+/* 2026 refresh overrides */
+:root {
+  --refresh-bg: #08131f;
+  --refresh-surface: rgba(11, 26, 42, 0.88);
+  --refresh-surface-strong: rgba(15, 34, 54, 0.94);
+  --refresh-line: rgba(133, 201, 255, 0.16);
+  --refresh-text: #f4f8fc;
+  --refresh-muted: #b5c8d8;
+  --refresh-accent: #4ddcc2;
+  --refresh-accent-warm: #ffbd63;
+}
+
+html, body {
+  background:
+    radial-gradient(circle at top left, rgba(77, 220, 194, 0.16), transparent 24%),
+    radial-gradient(circle at 85% 16%, rgba(255, 189, 99, 0.12), transparent 20%),
+    linear-gradient(180deg, #08131f 0%, #06101a 100%) !important;
+  color: var(--refresh-text) !important;
+  font-family: "Aptos", "Segoe UI", system-ui, sans-serif !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.26), transparent 82%);
+}
+
+.slide,
+.slide-container,
+.slide-content,
+.presentation,
+.deck,
+main,
+.container {
+  position: relative;
+}
+
+.slide,
+.slide-content,
+.panel,
+.card,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+ul.references,
+table,
+.grid-item {
+  border-radius: 18px !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24) !important;
+}
+
+.card,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+.grid-item,
+table,
+blockquote {
+  background: var(--refresh-surface) !important;
+  border: 1px solid var(--refresh-line) !important;
+  backdrop-filter: blur(10px);
+}
+
+h1, h2, h3, h4, .slide-title {
+  color: var(--refresh-text) !important;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+p, li, td, th, .subtitle, .muted, small {
+  color: var(--refresh-muted) !important;
+}
+
+strong, b, .accent, .highlight, .key-point, a {
+  color: var(--refresh-accent) !important;
+}
+
+button,
+.nav button,
+.controls button,
+.btn,
+.button {
+  border-radius: 999px !important;
+  border: 1px solid var(--refresh-line) !important;
+  background: var(--refresh-surface-strong) !important;
+  color: var(--refresh-text) !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22) !important;
+}
+
+.progress,
+.progress-bar,
+#progressBar,
+.progress-fill {
+  background: linear-gradient(90deg, #4ddcc2 0%, #79e09b 100%) !important;
+  box-shadow: 0 0 18px rgba(77, 220, 194, 0.38);
+}
+</style>
+</head>
+<body>
+
+<!-- Fixed chrome -->
+<div id="progress-bar"></div>
+<div id="presenter-tag">Nwaozichi Onyeije, CNM</div>
+<div id="slide-label"></div>
+
+<div id="deck">
+
+    <!-- ============================================================
+         SLIDE 1 — TITLE
+    ============================================================ -->
+    <div class="slide slide-title-bg active" id="s1">
+        <div style="text-align:center; max-width:800px;">
+            <p class="badge badge-teal" style="margin-bottom:1.5rem;">Evidence-Based Clinical Education</p>
+            <h1 class="slide-title" style="font-size:clamp(2rem,4.5vw,3.6rem); font-weight:200; margin-bottom:0.6rem;">
+                Menopause &amp; Perimenopause
+            </h1>
+            <h2 class="slide-title accent-teal" style="font-size:clamp(1.2rem,2.5vw,2rem); font-weight:400; margin-bottom:1.5rem;">
+                Pathology, Hormonal, Dietary &amp; Ancillary Therapies
+            </h2>
+            <div class="h-divider"></div>
+            <p style="font-size:clamp(0.9rem,1.4vw,1.1rem); color:var(--text-muted); margin-bottom:0.4rem;">
+                Nwaozichi Onyeije, CNM
+            </p>
+            <p style="font-size:0.8rem; color:var(--text-muted);">
+                Current Evidence Review &nbsp;|&nbsp; 2024–2025 Literature
+            </p>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 2 — LEARNING OBJECTIVES
+    ============================================================ -->
+    <div class="slide" id="s2">
+        <h2 class="slide-title">Learning Objectives</h2>
+        <div class="h-divider"></div>
+        <div class="card-grid cols-2" style="max-width:900px;">
+            <div class="card">
+                <h3 class="accent-teal">01 &nbsp;Pathophysiology</h3>
+                <p>Understand the hormonal cascade driving perimenopause and menopause, including VMS and GSM.</p>
+            </div>
+            <div class="card">
+                <h3 class="accent-blue">02 &nbsp;Hormonal Therapy</h3>
+                <p>Apply current evidence for MHT indications, timing, formulations, and risk stratification.</p>
+            </div>
+            <div class="card">
+                <h3 class="accent-gold">03 &nbsp;Dietary Approaches</h3>
+                <p>Evaluate phytoestrogens, Mediterranean diet, and nutritional strategies for symptom management.</p>
+            </div>
+            <div class="card">
+                <h3 class="accent-rose">04 &nbsp;Ancillary Therapies</h3>
+                <p>Review non-hormonal pharmacologic options, CBT, acupuncture, and supplement evidence.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 3 — SECTION HEADER: PATHOPHYSIOLOGY
+    ============================================================ -->
+    <div class="slide slide-section-bg" id="s3">
+        <p class="badge badge-blue" style="margin-bottom:1rem;">Section 1</p>
+        <h2 class="slide-title" style="font-size:clamp(2rem,4vw,3.2rem);">
+            Pathophysiology of <span class="accent-blue">Menopause</span>
+        </h2>
+        <div class="h-divider" style="background:var(--accent-blue);"></div>
+        <p class="slide-subtitle">The hormonal transition and its systemic consequences</p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 4 — STAGES OF MENOPAUSE
+    ============================================================ -->
+    <div class="slide" id="s4">
+        <h2 class="slide-title">Stages of the Menopausal Transition</h2>
+        <div class="h-divider"></div>
+        <div class="timeline" style="max-width:1000px; margin-bottom:1.5rem;">
+            <div class="tl-step">
+                <div class="tl-dot">1</div>
+                <div class="tl-label">
+                    <strong>Premenopause</strong>
+                    Regular cycles<br>Subtle hormonal shifts
+                </div>
+            </div>
+            <div class="tl-step">
+                <div class="tl-dot" style="border-color:var(--accent-blue);">2</div>
+                <div class="tl-label">
+                    <strong>Perimenopause</strong>
+                    Irregular cycles<br>VMS onset<br>~2–8 years
+                </div>
+            </div>
+            <div class="tl-step">
+                <div class="tl-dot" style="border-color:var(--accent-rose);">3</div>
+                <div class="tl-label">
+                    <strong>Menopause</strong>
+                    12 months amenorrhea<br>Median age 51
+                </div>
+            </div>
+            <div class="tl-step">
+                <div class="tl-dot" style="border-color:var(--accent-gold);">4</div>
+                <div class="tl-label">
+                    <strong>Postmenopause</strong>
+                    Stable low estrogen<br>Long-term health risks
+                </div>
+            </div>
+        </div>
+        <p style="font-size:0.82rem; color:var(--text-muted); text-align:center;">
+            STRAW+10 Staging System &nbsp;|&nbsp; Harlow et al., 2012
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 5 — HORMONAL CASCADE
+    ============================================================ -->
+    <div class="slide" id="s5">
+        <h2 class="slide-title">The Hormonal Cascade</h2>
+        <div class="h-divider"></div>
+        <div class="card-grid cols-3" style="max-width:950px;">
+            <div class="card" style="border-color:rgba(0,201,177,0.3);">
+                <h3 class="accent-teal">Ovarian Reserve ↓</h3>
+                <p>Declining follicular pool → reduced inhibin B → rising FSH</p>
+                <div class="evidence-bar" style="margin-top:0.6rem;">
+                    <div class="ev-dot" style="background:var(--accent-teal);"></div>
+                    FSH &gt;25 IU/L supports diagnosis
+                </div>
+            </div>
+            <div class="card" style="border-color:rgba(59,130,246,0.3);">
+                <h3 class="accent-blue">Estradiol ↓↓</h3>
+                <p>Hypothalamic thermoregulatory dysregulation → vasomotor instability</p>
+                <div class="evidence-bar" style="margin-top:0.6rem;">
+                    <div class="ev-dot" style="background:var(--accent-blue);"></div>
+                    E2 &lt;20 pg/mL postmenopause
+                </div>
+            </div>
+            <div class="card" style="border-color:rgba(244,114,182,0.3);">
+                <h3 class="accent-rose">Progesterone ↓</h3>
+                <p>Anovulatory cycles → irregular bleeding; sleep disruption</p>
+                <div class="evidence-bar" style="margin-top:0.6rem;">
+                    <div class="ev-dot" style="background:var(--accent-rose);"></div>
+                    Luteal phase insufficiency
+                </div>
+            </div>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-top:1.2rem;">
+            Santoro et al., J Clin Endocrinol Metab 2021
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 6 — VMS EPIDEMIOLOGY
+    ============================================================ -->
+    <div class="slide" id="s6">
+        <h2 class="slide-title">Vasomotor Symptoms (VMS)</h2>
+        <p class="slide-subtitle">The most common and bothersome symptom of the menopausal transition</p>
+        <div class="card-grid cols-4" style="max-width:1000px;">
+            <div class="card" style="text-align:center;">
+                <div class="stat accent-teal">75%</div>
+                <p>of women aged 45–55 experience VMS</p>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div class="stat accent-blue">7 yrs</div>
+                <p>median duration of bothersome hot flushes</p>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div class="stat accent-gold">10+</div>
+                <p>years of VMS in some women post-menopause</p>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div class="stat accent-rose">↑ CVD</div>
+                <p>VMS linked to elevated cardiovascular risk markers</p>
+            </div>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            Korean Society of Menopause Guidelines 2025 &nbsp;|&nbsp; SWAN Study
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 7 — GSM
+    ============================================================ -->
+    <div class="slide" id="s7">
+        <h2 class="slide-title">Genitourinary Syndrome of Menopause <span class="accent-rose">(GSM)</span></h2>
+        <div class="h-divider" style="background:var(--accent-rose);"></div>
+        <div class="card-grid cols-2" style="max-width:900px;">
+            <div class="card">
+                <h3 class="accent-rose">Symptoms</h3>
+                <ul>
+                    <li>Vaginal dryness, burning, irritation</li>
+                    <li>Dyspareunia &amp; decreased libido</li>
+                    <li>Urinary urgency, frequency, recurrent UTIs</li>
+                    <li>Stress urinary incontinence</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 class="accent-teal">Pathophysiology</h3>
+                <ul>
+                    <li>Estrogen receptors throughout urogenital tract</li>
+                    <li>Atrophy of vaginal epithelium (↑ parabasal cells)</li>
+                    <li>↑ vaginal pH (&gt;5.0)</li>
+                    <li>Thinning of urethral mucosa</li>
+                </ul>
+            </div>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            Unlike VMS, GSM does not resolve without treatment &nbsp;|&nbsp; ACOG 2020
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 8 — SYSTEMIC CONSEQUENCES
+    ============================================================ -->
+    <div class="slide" id="s8">
+        <h2 class="slide-title">Systemic Consequences of Estrogen Deficiency</h2>
+        <div class="h-divider"></div>
+        <div class="card-grid cols-3" style="max-width:950px;">
+            <div class="card">
+                <h3 class="accent-gold">🦴 Bone</h3>
+                <p>Accelerated bone resorption; up to 20% trabecular bone loss in first 5 years post-menopause. Fracture risk rises sharply.</p>
+            </div>
+            <div class="card">
+                <h3 class="accent-rose">❤️ Cardiovascular</h3>
+                <p>Loss of estrogen's cardioprotective effects: ↑ LDL, ↑ visceral fat, ↑ arterial stiffness, ↑ coronary artery disease risk.</p>
+            </div>
+            <div class="card">
+                <h3 class="accent-blue">🧠 Cognition &amp; Mood</h3>
+                <p>Sleep disruption, depressive symptoms, and verbal memory changes. "Window of opportunity" for neuroprotection.</p>
+            </div>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            IMS White Paper 2024 &nbsp;|&nbsp; WHI Long-Term Follow-Up Data
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 9 — SECTION HEADER: HORMONAL THERAPY
+    ============================================================ -->
+    <div class="slide slide-section-bg" id="s9">
+        <p class="badge badge-teal" style="margin-bottom:1rem;">Section 2</p>
+        <h2 class="slide-title" style="font-size:clamp(2rem,4vw,3.2rem);">
+            <span class="accent-teal">Hormonal</span> Therapies
+        </h2>
+        <div class="h-divider"></div>
+        <p class="slide-subtitle">MHT: Indications, Formulations, Timing, and Risk</p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 10 — MHT INDICATIONS & CONTRAINDICATIONS
+    ============================================================ -->
+    <div class="slide" id="s10">
+        <h2 class="slide-title">MHT: Indications &amp; Contraindications</h2>
+        <div class="h-divider"></div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>✅ Indications</th>
+                    <th>⛔ Absolute Contraindications</th>
+                    <th>⚠️ Relative Cautions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Moderate–severe VMS</td>
+                    <td>Unexplained vaginal bleeding</td>
+                    <td>Controlled hypertension</td>
+                </tr>
+                <tr>
+                    <td>Genitourinary syndrome of menopause</td>
+                    <td>Estrogen-dependent malignancy (breast, endometrial)</td>
+                    <td>BMI &gt;30</td>
+                </tr>
+                <tr>
+                    <td>Osteoporosis prevention/treatment (&lt;60 yrs)</td>
+                    <td>Active thromboembolic disease (DVT/PE)</td>
+                    <td>Migraine with aura</td>
+                </tr>
+                <tr>
+                    <td>Premature ovarian insufficiency (POI)</td>
+                    <td>Active liver disease / gallbladder disease</td>
+                    <td>Family history of breast cancer</td>
+                </tr>
+                <tr>
+                    <td>Prevention of mood symptoms in perimenopause</td>
+                    <td>Uncontrolled cardiovascular disease / stroke</td>
+                    <td>Hypertriglyceridemia</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:0.8rem;">
+            NAMS 2022 Position Statement &nbsp;|&nbsp; Korean Society of Menopause 2025 &nbsp;|&nbsp; ACOG Practice Bulletin
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 11 — THE TIMING HYPOTHESIS
+    ============================================================ -->
+    <div class="slide" id="s11">
+        <h2 class="slide-title">The <span class="accent-teal">"Timing Hypothesis"</span></h2>
+        <p class="slide-subtitle">When MHT is started matters as much as whether it is started</p>
+        <div class="card-grid cols-3" style="max-width:950px;">
+            <div class="card" style="border-color:rgba(134,239,172,0.3);">
+                <h3 class="accent-lime">✅ Optimal Window</h3>
+                <p>Age &lt;60 years <strong>or</strong> within 10 years of final menstrual period</p>
+                <p style="margin-top:0.5rem;">Cardiovascular &amp; cognitive benefits most likely</p>
+            </div>
+            <div class="card" style="border-color:rgba(251,191,36,0.3);">
+                <h3 class="accent-gold">⚠️ Caution Zone</h3>
+                <p>Age 60–65 or 10–15 years post-menopause</p>
+                <p style="margin-top:0.5rem;">Individualized shared decision-making required</p>
+            </div>
+            <div class="card" style="border-color:rgba(244,114,182,0.3);">
+                <h3 class="accent-rose">⛔ Late Initiation</h3>
+                <p>Age &gt;65 or &gt;15 years post-menopause</p>
+                <p style="margin-top:0.5rem;">↑ Risk of cardiovascular events &amp; dementia; generally avoid</p>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            WHI Reanalysis &nbsp;|&nbsp; Rossouw et al. &nbsp;|&nbsp; Manson et al., NEJM 2013 &nbsp;|&nbsp; IMS 2024
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 12 — FORMULATIONS
+    ============================================================ -->
+    <div class="slide" id="s12">
+        <h2 class="slide-title">MHT Formulations</h2>
+        <div class="h-divider"></div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Formulation</th>
+                    <th>Route</th>
+                    <th>Key Advantage</th>
+                    <th>Indication</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Estrogen-only (ET)</strong></td>
+                    <td>Oral, transdermal, vaginal</td>
+                    <td>Lower breast cancer risk vs. EPT</td>
+                    <td>Post-hysterectomy</td>
+                </tr>
+                <tr>
+                    <td><strong>Estrogen + Progestogen (EPT)</strong></td>
+                    <td>Oral, transdermal, patch</td>
+                    <td>Endometrial protection</td>
+                    <td>Intact uterus</td>
+                </tr>
+                <tr>
+                    <td><strong>Micronized Progesterone</strong></td>
+                    <td>Oral (Prometrium)</td>
+                    <td>Favorable metabolic &amp; sleep profile</td>
+                    <td>Preferred progestogen</td>
+                </tr>
+                <tr>
+                    <td><strong>CE / Bazedoxifene (TSEC)</strong></td>
+                    <td>Oral (Duavee)</td>
+                    <td>No progestogen; ↓ breast density</td>
+                    <td>Intact uterus; breast concerns</td>
+                </tr>
+                <tr>
+                    <td><strong>Low-dose vaginal estrogen</strong></td>
+                    <td>Vaginal cream, ring, tablet</td>
+                    <td>Minimal systemic absorption</td>
+                    <td>GSM (first-line)</td>
+                </tr>
+                <tr>
+                    <td><strong>Tibolone</strong></td>
+                    <td>Oral</td>
+                    <td>Improves sexual function &amp; mood</td>
+                    <td>Postmenopausal (not available in US)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:0.8rem;">
+            NAMS 2022 &nbsp;|&nbsp; Endocrine Society &nbsp;|&nbsp; Korean Society of Menopause 2025
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 13 — TRANSDERMAL vs ORAL
+    ============================================================ -->
+    <div class="slide" id="s13">
+        <h2 class="slide-title">Transdermal vs. Oral Estrogen</h2>
+        <p class="slide-subtitle">Route of administration influences risk profile</p>
+        <div class="card-grid cols-2" style="max-width:900px;">
+            <div class="card" style="border-color:rgba(0,201,177,0.3);">
+                <h3 class="accent-teal">Transdermal (Preferred)</h3>
+                <ul>
+                    <li>Avoids first-pass hepatic metabolism</li>
+                    <li>Lower VTE risk vs. oral estrogen</li>
+                    <li>No ↑ in triglycerides</li>
+                    <li>More stable serum estradiol levels</li>
+                    <li>Preferred in women with migraine, hypertension, or VTE risk</li>
+                </ul>
+            </div>
+            <div class="card" style="border-color:rgba(59,130,246,0.3);">
+                <h3 class="accent-blue">Oral</h3>
+                <ul>
+                    <li>Convenient and well-studied</li>
+                    <li>↑ SHBG (may reduce androgen availability)</li>
+                    <li>Small ↑ VTE risk (2–4x baseline)</li>
+                    <li>May ↑ triglycerides</li>
+                    <li>Favorable lipid effects (↑ HDL, ↓ LDL)</li>
+                </ul>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            BMJ 2015 Cohort Study &nbsp;|&nbsp; ESTHER Study &nbsp;|&nbsp; IMS 2024 White Paper
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 14 — MHT & BREAST CANCER
+    ============================================================ -->
+    <div class="slide" id="s14">
+        <h2 class="slide-title">MHT &amp; Breast Cancer Risk</h2>
+        <div class="h-divider" style="background:var(--accent-rose);"></div>
+        <div class="card-grid cols-3" style="max-width:950px;">
+            <div class="card" style="border-color:rgba(134,239,172,0.3);">
+                <h3 class="accent-lime">ET Alone</h3>
+                <p>Estrogen-only therapy (post-hysterectomy) may actually <strong>reduce</strong> breast cancer risk in some analyses.</p>
+                <div class="evidence-bar" style="margin-top:0.5rem;">
+                    <div class="ev-dot" style="background:var(--accent-lime);"></div>
+                    WHI ET arm: HR 0.77
+                </div>
+            </div>
+            <div class="card" style="border-color:rgba(251,191,36,0.3);">
+                <h3 class="accent-gold">EPT (Synthetic Progestogen)</h3>
+                <p>Small but real ↑ in breast cancer risk with &gt;5 years of use. Approximately 1 additional case per 1,000 women/year.</p>
+                <div class="evidence-bar" style="margin-top:0.5rem;">
+                    <div class="ev-dot" style="background:var(--accent-gold);"></div>
+                    Lancet 2019 meta-analysis
+                </div>
+            </div>
+            <div class="card" style="border-color:rgba(0,201,177,0.3);">
+                <h3 class="accent-teal">Micronized Progesterone</h3>
+                <p>May carry a lower breast cancer risk than synthetic progestogens. Preferred for women with breast cancer concerns.</p>
+                <div class="evidence-bar" style="margin-top:0.5rem;">
+                    <div class="ev-dot" style="background:var(--accent-teal);"></div>
+                    E3N Cohort Study (France)
+                </div>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            Absolute risk remains small; context of individual risk factors is essential in counseling
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 15 — MHT & CARDIOVASCULAR
+    ============================================================ -->
+    <div class="slide" id="s15">
+        <h2 class="slide-title">MHT &amp; Cardiovascular Health</h2>
+        <div class="h-divider" style="background:var(--accent-rose);"></div>
+        <div class="card-grid cols-2" style="max-width:900px;">
+            <div class="card">
+                <h3 class="accent-lime">Benefits (Early Initiation)</h3>
+                <ul>
+                    <li>25–50% reduction in fatal cardiovascular events when started early (JAMA 2026 updated labeling)</li>
+                    <li>Favorable lipid profile: ↑ HDL, ↓ LDL</li>
+                    <li>Reduced visceral adiposity</li>
+                    <li>↓ Type 2 diabetes incidence</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 class="accent-rose">Risks (Late Initiation)</h3>
+                <ul>
+                    <li>Oral estrogen: small ↑ VTE risk (2–4×)</li>
+                    <li>Transdermal estrogen: no significant VTE ↑</li>
+                    <li>Initiation &gt;10 years post-menopause: ↑ coronary events</li>
+                    <li>Stroke risk: small ↑ with oral estrogen</li>
+                </ul>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            Makary et al., JAMA 2026 &nbsp;|&nbsp; WHI Long-Term Follow-Up &nbsp;|&nbsp; ESTHER Study
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 16 — MHT & BONE HEALTH
+    ============================================================ -->
+    <div class="slide" id="s16">
+        <h2 class="slide-title">MHT &amp; Bone Health</h2>
+        <div class="h-divider" style="background:var(--accent-gold);"></div>
+        <div class="card-grid cols-2" style="max-width:900px;">
+            <div class="card">
+                <h3 class="accent-gold">Efficacy</h3>
+                <ul>
+                    <li>Standard-dose EPT: +4.5% lumbar spine BMD, +3.7% femoral neck BMD (WHI)</li>
+                    <li>Reduces fractures at hip, spine, and non-spinal sites</li>
+                    <li>Benefits extend even to women without osteoporosis</li>
+                    <li>Essential for women with POI until age of natural menopause</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 class="accent-rose">Key Caveat</h3>
+                <ul>
+                    <li>Bone protection is <strong>lost rapidly</strong> after stopping MHT</li>
+                    <li>Low-dose estrogen also improves BMD</li>
+                    <li>MHT preferred over bisphosphonates in women &lt;60 with VMS + osteoporosis</li>
+                    <li>Annual reassessment of benefit-risk ratio recommended</li>
+                </ul>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            Korean Society of Menopause 2025 &nbsp;|&nbsp; NAMS 2022 &nbsp;|&nbsp; Endocrine Society
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 17 — SECTION HEADER: DIETARY THERAPIES
+    ============================================================ -->
+    <div class="slide slide-section-bg" id="s17">
+        <p class="badge badge-gold" style="margin-bottom:1rem;">Section 3</p>
+        <h2 class="slide-title" style="font-size:clamp(2rem,4vw,3.2rem);">
+            <span class="accent-gold">Dietary</span> Therapies
+        </h2>
+        <div class="h-divider" style="background:var(--accent-gold);"></div>
+        <p class="slide-subtitle">Nutritional strategies for symptom management and long-term health</p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 18 — PHYTOESTROGENS
+    ============================================================ -->
+    <div class="slide" id="s18">
+        <h2 class="slide-title">Phytoestrogens</h2>
+        <p class="slide-subtitle">Plant-derived compounds with weak estrogenic activity</p>
+        <div class="card-grid cols-3" style="max-width:950px;">
+            <div class="card">
+                <h3 class="accent-gold">Isoflavones (Soy)</h3>
+                <ul>
+                    <li>Genistein, daidzein, formononetin</li>
+                    <li>2025 meta-analysis: modest ↓ in hot flash frequency &amp; severity</li>
+                    <li>Safe for most women; no significant estrogenic effects on breast tissue</li>
+                    <li>40–80 mg/day studied in trials</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 class="accent-teal">Lignans (Flaxseed)</h3>
+                <ul>
+                    <li>Converted to enterolactone by gut bacteria</li>
+                    <li>Weaker evidence for VMS relief</li>
+                    <li>Cardioprotective &amp; anti-inflammatory benefits</li>
+                    <li>1–2 tbsp ground flaxseed daily</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 class="accent-blue">Equol Producers</h3>
+                <ul>
+                    <li>~30–50% of Western women convert daidzein → equol</li>
+                    <li>Equol producers show greater VMS benefit from soy</li>
+                    <li>Gut microbiome plays a key role</li>
+                    <li>Testing available but not routine</li>
+                </ul>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            Luan et al., PeerJ 2025 &nbsp;|&nbsp; Viscardi et al., J Nutr 2025 &nbsp;|&nbsp; NAMS Nonhormone Position Statement 2023
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 19 — MEDITERRANEAN DIET
+    ============================================================ -->
+    <div class="slide" id="s19">
+        <h2 class="slide-title">The Mediterranean Diet</h2>
+        <div class="h-divider" style="background:var(--accent-gold);"></div>
+        <div class="card-grid cols-2" style="max-width:900px;">
+            <div class="card">
+                <h3 class="accent-gold">Key Components</h3>
+                <ul>
+                    <li>High: fruits, vegetables, legumes, whole grains</li>
+                    <li>Moderate: fish, poultry, dairy</li>
+                    <li>Primary fat: extra-virgin olive oil</li>
+                    <li>Low: red meat, processed foods, added sugar</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 class="accent-lime">Evidence for Menopause</h3>
+                <ul>
+                    <li>↓ frequency and severity of hot flashes</li>
+                    <li>Legumes + olive oil: ↓ total menopausal symptom score</li>
+                    <li>High-fat / high-sugar diet: 23% ↑ risk of VMS</li>
+                    <li>Cardioprotective, bone-protective, anti-inflammatory</li>
+                </ul>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            Sci Reports 2025 &nbsp;|&nbsp; AJCN Prospective Cohort &nbsp;|&nbsp; PMC 2022 Review
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 20 — DIETARY STRATEGIES SUMMARY TABLE
+    ============================================================ -->
+    <div class="slide" id="s20">
+        <h2 class="slide-title">Dietary Strategies: Evidence Summary</h2>
+        <div class="h-divider" style="background:var(--accent-gold);"></div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Strategy</th>
+                    <th>Target Symptom</th>
+                    <th>Evidence Level</th>
+                    <th>Recommendation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Soy isoflavones (40–80 mg/day)</td>
+                    <td>VMS (hot flashes)</td>
+                    <td><span class="badge badge-blue">Moderate</span></td>
+                    <td>Reasonable first-line dietary option</td>
+                </tr>
+                <tr>
+                    <td>Mediterranean diet</td>
+                    <td>VMS, CVD, bone, mood</td>
+                    <td><span class="badge badge-blue">Moderate</span></td>
+                    <td>Strongly recommended for overall health</td>
+                </tr>
+                <tr>
+                    <td>Ground flaxseed (1–2 tbsp/day)</td>
+                    <td>VMS, cardiovascular</td>
+                    <td><span class="badge badge-gold">Low–Moderate</span></td>
+                    <td>Reasonable adjunct; safe</td>
+                </tr>
+                <tr>
+                    <td>Calcium (1,200 mg/day) + Vit D (800–2,000 IU)</td>
+                    <td>Bone health</td>
+                    <td><span class="badge badge-green">Strong</span></td>
+                    <td>Recommended for all postmenopausal women</td>
+                </tr>
+                <tr>
+                    <td>Omega-3 fatty acids</td>
+                    <td>Mood, cardiovascular</td>
+                    <td><span class="badge badge-gold">Low–Moderate</span></td>
+                    <td>Adjunctive; anti-inflammatory benefit</td>
+                </tr>
+                <tr>
+                    <td>Avoid high-fat / high-sugar diet</td>
+                    <td>VMS, weight, CVD</td>
+                    <td><span class="badge badge-blue">Moderate</span></td>
+                    <td>Strongly advised</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 21 — SECTION HEADER: ANCILLARY THERAPIES
+    ============================================================ -->
+    <div class="slide slide-section-bg" id="s21">
+        <p class="badge badge-rose" style="margin-bottom:1rem;">Section 4</p>
+        <h2 class="slide-title" style="font-size:clamp(2rem,4vw,3.2rem);">
+            <span class="accent-rose">Ancillary</span> Therapies
+        </h2>
+        <div class="h-divider" style="background:var(--accent-rose);"></div>
+        <p class="slide-subtitle">Non-hormonal pharmacologic, behavioral, and complementary approaches</p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 22 — LIFESTYLE: EXERCISE
+    ============================================================ -->
+    <div class="slide" id="s22">
+        <h2 class="slide-title">Exercise &amp; Physical Activity</h2>
+        <div class="h-divider"></div>
+        <div class="icon-row">
+            <div class="icon-item">
+                <div class="icon-circle" style="background:rgba(0,201,177,0.15);">🏃</div>
+                <strong>Aerobic</strong>
+                <p>150 min/week moderate intensity; ↓ VMS bother, ↑ sleep quality</p>
+            </div>
+            <div class="icon-item">
+                <div class="icon-circle" style="background:rgba(59,130,246,0.15);">🏋️</div>
+                <strong>Resistance Training</strong>
+                <p>2–3×/week; preserves muscle mass, ↑ BMD, ↓ metabolic risk</p>
+            </div>
+            <div class="icon-item">
+                <div class="icon-circle" style="background:rgba(251,191,36,0.15);">🧘</div>
+                <strong>Mind-Body</strong>
+                <p>Yoga, tai chi: ↓ anxiety, ↓ sleep disturbance, modest VMS benefit</p>
+            </div>
+            <div class="icon-item">
+                <div class="icon-circle" style="background:rgba(244,114,182,0.15);">⚖️</div>
+                <strong>Weight Management</strong>
+                <p>Obesity ↑ VMS severity; weight loss reduces hot flash frequency</p>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1.2rem;">
+            JAPA Systematic Review 2025 &nbsp;|&nbsp; Sci Direct Exercise Review 2024 &nbsp;|&nbsp; NAMS 2023
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 23 — NON-HORMONAL PHARMACOLOGY: SSRIs/SNRIs
+    ============================================================ -->
+    <div class="slide" id="s23">
+        <h2 class="slide-title">Non-Hormonal Pharmacotherapy</h2>
+        <p class="slide-subtitle">SSRIs, SNRIs &amp; Gabapentinoids for VMS</p>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Agent</th>
+                    <th>Class</th>
+                    <th>Efficacy (VMS ↓)</th>
+                    <th>Key Consideration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Paroxetine 7.5 mg</strong></td>
+                    <td>SSRI</td>
+                    <td>~33–65% ↓ frequency</td>
+                    <td>Only FDA-approved non-hormonal for VMS (Brisdelle)</td>
+                </tr>
+                <tr>
+                    <td><strong>Venlafaxine 37.5–75 mg</strong></td>
+                    <td>SNRI</td>
+                    <td>~40–60% ↓ frequency</td>
+                    <td>Preferred in women with comorbid depression/anxiety</td>
+                </tr>
+                <tr>
+                    <td><strong>Desvenlafaxine 100–150 mg</strong></td>
+                    <td>SNRI</td>
+                    <td>~50–60% ↓ frequency</td>
+                    <td>Good tolerability profile</td>
+                </tr>
+                <tr>
+                    <td><strong>Gabapentin 300 mg TID</strong></td>
+                    <td>Gabapentinoid</td>
+                    <td>~45% ↓ frequency</td>
+                    <td>Useful for sleep disturbance; sedation side effect</td>
+                </tr>
+                <tr>
+                    <td><strong>Oxybutynin 2.5–5 mg</strong></td>
+                    <td>Anticholinergic</td>
+                    <td>~50–73% ↓ frequency</td>
+                    <td>Emerging evidence; dry mouth common</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:0.8rem;">
+            Huang et al., PMC 2025 &nbsp;|&nbsp; NAMS Nonhormone Position Statement 2023
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 24 — FEZOLINETANT (NK3 ANTAGONIST)
+    ============================================================ -->
+    <div class="slide" id="s24">
+        <h2 class="slide-title"><span class="accent-teal">Fezolinetant</span> (Veozah)</h2>
+        <p class="slide-subtitle">A novel, non-hormonal NK3 receptor antagonist — FDA approved May 2023</p>
+        <div class="card-grid cols-2" style="max-width:900px;">
+            <div class="card" style="border-color:rgba(0,201,177,0.3);">
+                <h3 class="accent-teal">Mechanism of Action</h3>
+                <p>Selectively blocks neurokinin 3 (NK3) receptors in the hypothalamic thermoregulatory center, directly reducing the neuronal signaling that triggers hot flashes — without hormonal activity.</p>
+            </div>
+            <div class="card" style="border-color:rgba(134,239,172,0.3);">
+                <h3 class="accent-lime">Clinical Evidence</h3>
+                <ul>
+                    <li>SKYLIGHT 1 &amp; 2 Phase 3 trials: significant ↓ in VMS frequency &amp; severity</li>
+                    <li>Onset of action: within 1 week</li>
+                    <li>Dose: 45 mg once daily</li>
+                    <li>Improves sleep quality and quality of life</li>
+                    <li>Safe for women with contraindications to MHT</li>
+                </ul>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            Lederman et al., Lancet 2023 &nbsp;|&nbsp; Nappi et al., 2025 &nbsp;|&nbsp; Elendu et al., Ann Med Surg 2025
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 25 — CBT
+    ============================================================ -->
+    <div class="slide" id="s25">
+        <h2 class="slide-title">Cognitive Behavioral Therapy <span class="accent-blue">(CBT)</span></h2>
+        <div class="h-divider" style="background:var(--accent-blue);"></div>
+        <div class="card-grid cols-2" style="max-width:900px;">
+            <div class="card">
+                <h3 class="accent-blue">What CBT Targets</h3>
+                <ul>
+                    <li>Catastrophic thinking about hot flashes</li>
+                    <li>Sleep disturbance &amp; insomnia</li>
+                    <li>Anxiety and depressive symptoms</li>
+                    <li>Perceived bother of VMS (not frequency)</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 class="accent-lime">Evidence</h3>
+                <ul>
+                    <li>46% ↓ in daily interference from hot flashes (Muñiz et al., 2025)</li>
+                    <li>28% ↓ in hot flash frequency</li>
+                    <li>Effective in-person and via digital delivery</li>
+                    <li>NAMS &amp; NICE: recommended non-hormonal option</li>
+                    <li>Particularly useful when MHT is contraindicated</li>
+                </ul>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            Muñiz et al., PMC 2025 &nbsp;|&nbsp; NICE Menopause Guideline 2023 &nbsp;|&nbsp; Crandall et al., JAMA 2023
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 26 — ACUPUNCTURE
+    ============================================================ -->
+    <div class="slide" id="s26">
+        <h2 class="slide-title">Acupuncture</h2>
+        <div class="h-divider"></div>
+        <div class="card-grid cols-2" style="max-width:900px;">
+            <div class="card">
+                <h3 class="accent-gold">What the Evidence Shows</h3>
+                <ul>
+                    <li>Meta-analyses: ↓ VMS frequency &amp; severity vs. no treatment</li>
+                    <li>~40% reduction in hot flash scores in some RCTs</li>
+                    <li>Improvements in sleep quality and quality of life</li>
+                    <li>Benefits sustained for up to 6 months post-treatment</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 class="accent-rose">Limitations</h3>
+                <ul>
+                    <li>No significant advantage over <em>sham</em> acupuncture in some trials</li>
+                    <li>Strong placebo response in VMS trials</li>
+                    <li>Inconsistent protocols across studies</li>
+                    <li>NAMS: insufficient evidence to recommend routinely</li>
+                </ul>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            ACP RCT (Annals of Internal Medicine 2016) &nbsp;|&nbsp; Ee et al., Menopause 2017 &nbsp;|&nbsp; NAMS 2023
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 27 — SUPPLEMENTS
+    ============================================================ -->
+    <div class="slide" id="s27">
+        <h2 class="slide-title">Herbal Supplements &amp; Nutraceuticals</h2>
+        <div class="h-divider"></div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Supplement</th>
+                    <th>Proposed Benefit</th>
+                    <th>Evidence</th>
+                    <th>Safety Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Black Cohosh</strong></td>
+                    <td>VMS reduction</td>
+                    <td><span class="badge badge-gold">Inconsistent</span></td>
+                    <td>Rare hepatotoxicity; avoid in liver disease</td>
+                </tr>
+                <tr>
+                    <td><strong>Vitamin E (400–800 IU)</strong></td>
+                    <td>Mild VMS relief</td>
+                    <td><span class="badge badge-gold">Low</span></td>
+                    <td>Generally safe; antioxidant benefit</td>
+                </tr>
+                <tr>
+                    <td><strong>Magnesium (320–400 mg)</strong></td>
+                    <td>Sleep, mood, bone</td>
+                    <td><span class="badge badge-blue">Moderate</span></td>
+                    <td>Well-tolerated; GI side effects at high doses</td>
+                </tr>
+                <tr>
+                    <td><strong>Melatonin (0.5–3 mg)</strong></td>
+                    <td>Sleep disturbance</td>
+                    <td><span class="badge badge-blue">Moderate</span></td>
+                    <td>Safe short-term; circadian rhythm support</td>
+                </tr>
+                <tr>
+                    <td><strong>Red Clover Isoflavones</strong></td>
+                    <td>VMS</td>
+                    <td><span class="badge badge-gold">Low–Moderate</span></td>
+                    <td>Avoid in estrogen-sensitive conditions</td>
+                </tr>
+                <tr>
+                    <td><strong>Valerian Root</strong></td>
+                    <td>Sleep, anxiety</td>
+                    <td><span class="badge badge-gold">Low</span></td>
+                    <td>Generally safe; drug interactions possible</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:0.8rem;">
+            NCCIH &nbsp;|&nbsp; NAMS Nonhormone Statement 2023 &nbsp;|&nbsp; Korean Society of Menopause 2025
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 28 — SHARED DECISION-MAKING FRAMEWORK
+    ============================================================ -->
+    <div class="slide" id="s28">
+        <h2 class="slide-title">Shared Decision-Making Framework</h2>
+        <div class="h-divider"></div>
+        <div class="card-grid cols-3" style="max-width:950px;">
+            <div class="card" style="border-color:rgba(0,201,177,0.3);">
+                <h3 class="accent-teal">Step 1: Assess</h3>
+                <ul>
+                    <li>Symptom burden (VMS, GSM, mood, sleep)</li>
+                    <li>Cardiovascular risk profile</li>
+                    <li>Personal &amp; family cancer history</li>
+                    <li>Bone mineral density</li>
+                    <li>Patient preferences &amp; values</li>
+                </ul>
+            </div>
+            <div class="card" style="border-color:rgba(59,130,246,0.3);">
+                <h3 class="accent-blue">Step 2: Stratify</h3>
+                <ul>
+                    <li>Age &amp; years since menopause</li>
+                    <li>Uterus present or absent</li>
+                    <li>MHT candidate vs. non-candidate</li>
+                    <li>Identify contraindications</li>
+                    <li>Assess patient readiness for therapy</li>
+                </ul>
+            </div>
+            <div class="card" style="border-color:rgba(251,191,36,0.3);">
+                <h3 class="accent-gold">Step 3: Individualize</h3>
+                <ul>
+                    <li>Lowest effective dose</li>
+                    <li>Preferred route (transdermal preferred)</li>
+                    <li>Combine with lifestyle &amp; dietary measures</li>
+                    <li>Reassess annually</li>
+                    <li>No arbitrary duration limit if benefits outweigh risks</li>
+                </ul>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            ACOG 2025 &nbsp;|&nbsp; NAMS 2022 &nbsp;|&nbsp; FDA Updated Labeling November 2025
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 29 — COMPREHENSIVE THERAPY ALGORITHM
+    ============================================================ -->
+    <div class="slide" id="s29">
+        <h2 class="slide-title">Therapy Selection Algorithm</h2>
+        <div class="h-divider"></div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Clinical Scenario</th>
+                    <th>First-Line</th>
+                    <th>Alternative</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Moderate–severe VMS, no contraindications, &lt;60 yrs</td>
+                    <td><span class="badge badge-teal">Transdermal E2 + Micronized P4</span></td>
+                    <td>Oral EPT; CE/BZA</td>
+                </tr>
+                <tr>
+                    <td>VMS + contraindication to MHT (e.g., breast cancer)</td>
+                    <td><span class="badge badge-blue">Fezolinetant 45 mg/day</span></td>
+                    <td>Venlafaxine; Paroxetine 7.5 mg; CBT</td>
+                </tr>
+                <tr>
+                    <td>GSM only (no systemic VMS)</td>
+                    <td><span class="badge badge-teal">Low-dose vaginal estrogen</span></td>
+                    <td>Ospemifene; vaginal DHEA (prasterone)</td>
+                </tr>
+                <tr>
+                    <td>VMS + osteoporosis, intact uterus</td>
+                    <td><span class="badge badge-teal">EPT or CE/BZA</span></td>
+                    <td>MHT + bisphosphonate if severe osteoporosis</td>
+                </tr>
+                <tr>
+                    <td>Mild VMS, prefers non-pharmacologic</td>
+                    <td><span class="badge badge-gold">Mediterranean diet + Soy + Exercise</span></td>
+                    <td>CBT; acupuncture; supplements</td>
+                </tr>
+                <tr>
+                    <td>VMS + depression/anxiety</td>
+                    <td><span class="badge badge-blue">Venlafaxine or Desvenlafaxine</span></td>
+                    <td>MHT + antidepressant; CBT</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 30 — FDA 2025 LABEL UPDATE
+    ============================================================ -->
+    <div class="slide" id="s30">
+        <h2 class="slide-title"><span class="accent-teal">FDA 2025</span> Hormone Therapy Label Update</h2>
+        <div class="h-divider"></div>
+        <div class="card-grid cols-2" style="max-width:900px;">
+            <div class="card" style="border-color:rgba(0,201,177,0.3);">
+                <h3 class="accent-teal">What Changed (Nov 10, 2025)</h3>
+                <ul>
+                    <li>Reversed 23 years of restrictive "black box" framing</li>
+                    <li>Acknowledges 25–50% reduction in fatal cardiovascular events with early initiation</li>
+                    <li>Removes requirement to use "lowest dose for shortest time" as a universal mandate</li>
+                    <li>Supports individualized, shared decision-making</li>
+                </ul>
+            </div>
+            <div class="card" style="border-color:rgba(134,239,172,0.3);">
+                <h3 class="accent-lime">Clinical Implications</h3>
+                <ul>
+                    <li>Improved patient access to MHT</li>
+                    <li>Clinicians empowered to counsel without outdated fear-based framing</li>
+                    <li>Reinforces timing hypothesis in labeling</li>
+                    <li>ACOG commends the update as overdue</li>
+                </ul>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:1rem;">
+            Makary et al., JAMA 2026 &nbsp;|&nbsp; ACOG Press Release Nov 2025 &nbsp;|&nbsp; FDA.gov
+        </p>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 31 — KEY TAKEAWAYS
+    ============================================================ -->
+    <div class="slide" id="s31">
+        <h2 class="slide-title">Key Clinical Takeaways</h2>
+        <div class="h-divider"></div>
+        <div class="card-grid cols-2" style="max-width:900px;">
+            <div class="card" style="border-color:rgba(0,201,177,0.3);">
+                <h3 class="accent-teal">Hormonal Therapy</h3>
+                <ul>
+                    <li>MHT remains the most effective treatment for VMS</li>
+                    <li>Timing matters: initiate within 10 years of menopause</li>
+                    <li>Transdermal estrogen + micronized progesterone is preferred</li>
+                    <li>Low-dose vaginal estrogen is first-line for GSM</li>
+                </ul>
+            </div>
+            <div class="card" style="border-color:rgba(251,191,36,0.3);">
+                <h3 class="accent-gold">Dietary &amp; Lifestyle</h3>
+                <ul>
+                    <li>Mediterranean diet reduces VMS and supports long-term health</li>
+                    <li>Soy isoflavones offer modest, safe VMS relief</li>
+                    <li>150 min/week aerobic + resistance training is the standard</li>
+                    <li>Weight management reduces VMS severity</li>
+                </ul>
+            </div>
+            <div class="card" style="border-color:rgba(59,130,246,0.3);">
+                <h3 class="accent-blue">Non-Hormonal Options</h3>
+                <ul>
+                    <li>Fezolinetant: first-in-class NK3 antagonist; highly effective</li>
+                    <li>SSRIs/SNRIs: moderate efficacy; ideal with comorbid mood disorders</li>
+                    <li>CBT: reduces VMS bother and improves sleep</li>
+                </ul>
+            </div>
+            <div class="card" style="border-color:rgba(244,114,182,0.3);">
+                <h3 class="accent-rose">Practice Principles</h3>
+                <ul>
+                    <li>Individualized, shared decision-making is essential</li>
+                    <li>No arbitrary duration limit for MHT if benefits outweigh risks</li>
+                    <li>Annual reassessment of therapy and risk profile</li>
+                    <li>Empower patients with accurate, updated information</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 32 — REFERENCES
+    ============================================================ -->
+    <div class="slide" id="s32">
+        <h2 class="slide-title" style="font-size:clamp(1.4rem,2.5vw,2rem);">Selected References</h2>
+        <div class="h-divider"></div>
+        <div style="max-width:950px; width:100%; display:grid; grid-template-columns:1fr 1fr; gap:0.4rem 2rem; font-size:clamp(0.62rem,0.9vw,0.78rem); color:var(--text-muted); line-height:1.5;">
+            <p>1. Korean Society of Menopause. <em>2025 MHT Guidelines.</em> J Menopausal Med. 2025;31(2):53–84.</p>
+            <p>2. NAMS. <em>2022 Hormone Therapy Position Statement.</em> Menopause. 2022;29(7):767–794.</p>
+            <p>3. Makary MA et al. <em>Updated Labeling for Menopausal HT.</em> JAMA. 2026.</p>
+            <p>4. Lederman S et al. <em>Fezolinetant (SKYLIGHT 1).</em> Lancet. 2023;401:1091–1102.</p>
+            <p>5. Luan H et al. <em>Soy isoflavones &amp; menopausal symptoms.</em> PeerJ. 2025.</p>
+            <p>6. Viscardi G et al. <em>Soy isoflavones &amp; estrogenicity.</em> J Nutr. 2025.</p>
+            <p>7. Muñiz V et al. <em>CBT &amp; Clinical Hypnosis for Hot Flashes.</em> PMC. 2025.</p>
+            <p>8. Huang AJ et al. <em>Nonhormonal Treatment of VMS.</em> PMC. 2025.</p>
+            <p>9. Nappi RE et al. <em>Fezolinetant for VMS.</em> Gynecol Endocrinol. 2025.</p>
+            <p>10. Sci Reports. <em>Mediterranean diet &amp; vasomotor symptoms.</em> 2025.</p>
+            <p>11. JAPA. <em>Lifestyle interventions in perimenopause.</em> 2025.</p>
+            <p>12. Crandall CJ et al. <em>Management of menopausal symptoms.</em> JAMA. 2023;329:405–420.</p>
+            <p>13. NAMS. <em>2023 Nonhormone Therapy Position Statement.</em> Menopause. 2023;30(6).</p>
+            <p>14. Santoro N et al. <em>The menopause transition.</em> J Clin Endocrinol Metab. 2021;106:1–15.</p>
+            <p>15. ACOG. <em>Hormone Therapy for Menopause.</em> acog.org. 2025.</p>
+            <p>16. IMS Writing Group. <em>2024 IMS White Paper on MHT.</em> Climacteric. 2024.</p>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 33 — CLOSING
+    ============================================================ -->
+    <div class="slide slide-title-bg" id="s33">
+        <div style="text-align:center; max-width:750px;">
+            <div style="font-size:3rem; margin-bottom:1rem;">🌿</div>
+            <h2 class="slide-title" style="font-size:clamp(1.8rem,3.5vw,2.8rem); font-weight:200;">
+                Thank You
+            </h2>
+            <div class="h-divider"></div>
+            <p style="font-size:clamp(0.9rem,1.4vw,1.1rem); color:var(--text-muted); margin-bottom:1.5rem;">
+                Questions &amp; Discussion
+            </p>
+            <div style="display:inline-flex; flex-direction:column; align-items:center; gap:0.3rem; padding:1rem 2rem; border:1px solid var(--border); border-radius:0.75rem; background:var(--bg-card);">
+                <p style="font-size:1rem; font-weight:600; color:var(--text-main);">Nwaozichi Onyeije, CNM</p>
+                <p style="font-size:0.82rem; color:var(--text-muted);">Evidence-Based Menopausal Care</p>
+            </div>
+            <p style="font-size:0.72rem; color:var(--text-muted); margin-top:1.5rem;">
+                Slides prepared using current literature (2023–2025) &nbsp;|&nbsp; For educational purposes
+            </p>
+        </div>
+    </div>
+
+</div><!-- /#deck -->
+
+<!-- Navigation -->
+<nav id="nav">
+    <button id="btn-prev" onclick="prevSlide()" title="Previous (←)">&#8592;</button>
+    <span id="slide-counter">1 / 33</span>
+    <button id="btn-next" onclick="nextSlide()" title="Next (→)">&#8594;</button>
+</nav>
+
+<script>
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    const counter = document.getElementById('slide-counter');
+    const label = document.getElementById('slide-label');
+    const bar = document.getElementById('progress-bar');
+
+    const SLIDE_TITLES = [
+        "Title", "Objectives", "Pathophysiology", "Stages",
+        "Hormonal Cascade", "VMS Epidemiology", "GSM", "Systemic Consequences",
+        "Hormonal Therapy", "Indications", "Timing Hypothesis", "Formulations",
+        "Transdermal vs Oral", "Breast Cancer", "Cardiovascular", "Bone Health",
+        "Dietary Therapies", "Phytoestrogens", "Mediterranean Diet", "Dietary Summary",
+        "Ancillary Therapies", "Exercise", "SSRIs/SNRIs", "Fezolinetant",
+        "CBT", "Acupuncture", "Supplements", "Decision-Making",
+        "Algorithm", "FDA 2025", "Key Takeaways", "References", "Closing"
+    ];
+
+    function showSlide(idx) {
+        slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+        counter.textContent = (idx + 1) + ' / ' + total;
+        label.textContent = SLIDE_TITLES[idx] || '';
+        bar.style.width = ((idx + 1) / total * 100) + '%';
+    }
+
+    function nextSlide() {
+        current = (current + 1) % total;
+        showSlide(current);
+    }
+
+    function prevSlide() {
+        current = (current - 1 + total) % total;
+        showSlide(current);
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+        else if (e.key === 'Home') { current = 0; showSlide(current); }
+        else if (e.key === 'End') { current = total - 1; showSlide(current); }
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+    }, { passive: true });
+
+    // Initialize
+    showSlide(current);
+</script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

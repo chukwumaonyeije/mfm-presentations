@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Cholestasis of Pregnancy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slide-container {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100vh;
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 80px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            font-weight: 600;
+            margin-bottom: 40px;
+            line-height: 1.3;
+        }
+
+        p, li {
+            font-size: 1.5em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-width: 900px;
+        }
+
+        .subtitle {
+            font-size: 1.8em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            background: rgba(59, 130, 246, 0.3);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .reassurance {
+            background: rgba(34, 197, 94, 0.3);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .action {
+            background: rgba(249, 115, 22, 0.3);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 50px;
+            margin: 30px auto;
+            max-width: 900px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .column-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: left;
+        }
+
+        .column-box h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            max-width: 1000px;
+            margin: 30px auto;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 20px;
+            text-align: left;
+            font-size: 1.3em;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+
+        tr:not(:last-child) td {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        ul {
+            text-align: left;
+            max-width: 800px;
+            margin: 20px auto;
+            list-style-position: inside;
+        }
+
+        li {
+            margin-bottom: 15px;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .icon {
+            font-size: 4em;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 30px;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            p, li {
+                font-size: 1.2em;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            th, td {
+                padding: 15px;
+                font-size: 1.1em;
+            }
+
+            .navigation {
+                bottom: 20px;
+                padding: 12px 20px;
+            }
+
+            .nav-btn {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+        /* 2026 refresh overrides */
+        body {
+            font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(102, 126, 234, 0.18), transparent 24%),
+                radial-gradient(circle at 85% 12%, rgba(118, 75, 162, 0.14), transparent 18%),
+                linear-gradient(180deg, #08131f 0%, #0e1630 100%);
+        }
+        .info-box, .column-box, table {
+            border-radius: 18px;
+            box-shadow: 0 18px 34px rgba(0,0,0,0.24);
+            backdrop-filter: blur(10px);
+        }
+        h1, h2 { letter-spacing: -0.03em; text-wrap: balance; }
+    </style>
+
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/cholestasis-of-pregnancy-icp/cholestasis-pregnancy-patient-education.html">
+<meta name="description" content="Covers intrahepatic cholestasis of pregnancy (ICP): bile acid elevation, intense pruritus, UDCA treatment, serial NST monitoring, and delivery timing by severity.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Cholestasis, ICP, Liver Disease, Third Trimester, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/cholestasis-of-pregnancy-icp/cholestasis-pregnancy-patient-education.html">
+<meta property="og:title" content="Cholestasis of Pregnancy (ICP) - Patient Education | OpenMFM">
+<meta property="og:description" content="Covers intrahepatic cholestasis of pregnancy (ICP): bile acid elevation, intense pruritus, UDCA treatment, serial NST monitoring, and delivery timing by severity.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cholestasis of Pregnancy (ICP) - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Covers intrahepatic cholestasis of pregnancy (ICP): bile acid elevation, intense pruritus, UDCA treatment, serial NST monitoring, and delivery timing by severity.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Cholestasis of Pregnancy (ICP) - Patient Education",
+  "description": "Covers intrahepatic cholestasis of pregnancy (ICP): bile acid elevation, intense pruritus, UDCA treatment, serial NST monitoring, and delivery timing by severity.",
+  "url": "https://openmfm.org/decks/cholestasis-of-pregnancy-icp/cholestasis-pregnancy-patient-education.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-14",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Cholestasis of Pregnancy (ICP) - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Cholestasis, ICP, Liver Disease, Third Trimester, Patient Education"
+}
+</script>
+</head>
+<body>
+    <div class="slide-container" id="slideContainer">
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <div class="icon">🤰</div>
+            <h1>Understanding Cholestasis of Pregnancy</h1>
+            <p class="subtitle">Information for expectant mothers</p>
+            <p>We'll walk through this together.</p>
+        </div>
+
+        <!-- Slide 2: What is it? -->
+        <div class="slide">
+            <h2>What is cholestasis of pregnancy?</h2>
+            <div class="info-box">
+                <p><span class="highlight">Cholestasis of pregnancy</span> (also called ICP) is a liver condition that can happen in the third trimester.</p>
+                <p style="margin-top: 25px;">It causes <span class="highlight">bile acids</span>—substances your liver makes to help digest food—to build up in your blood.</p>
+                <p style="margin-top: 25px;">This buildup causes itching and can affect your baby.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: What causes it? -->
+        <div class="slide">
+            <h2>What causes it?</h2>
+            <div class="info-box">
+                <p>We don't know the exact cause, but three things work together:</p>
+                <ul>
+                    <li><strong>Pregnancy hormones:</strong> High levels in late pregnancy can slow bile flow</li>
+                    <li><strong>Genetics:</strong> Some people have genes that make this more likely</li>
+                    <li><strong>Timing:</strong> It usually starts after 28 weeks of pregnancy</li>
+                </ul>
+                <p style="margin-top: 25px;"><span class="reassurance">This is not caused by anything you did or didn't do.</span></p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Symptoms -->
+        <div class="slide">
+            <h2>What will I feel?</h2>
+            <div class="info-box">
+                <p>The main symptom is <span class="highlight">intense itching</span>, especially on your:</p>
+                <ul>
+                    <li>Palms of your hands</li>
+                    <li>Soles of your feet</li>
+                    <li>Arms and legs</li>
+                </ul>
+                <p style="margin-top: 25px;">The itching is often worse at night.</p>
+                <p>You won't see a rash, but the itching can be very uncomfortable.</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Why it matters -->
+        <div class="slide">
+            <h2>Why does this matter?</h2>
+            <div class="two-column">
+                <div class="column-box">
+                    <h3>For You</h3>
+                    <p>• Uncomfortable itching</p>
+                    <p>• Possible sleep problems</p>
+                    <p><span class="reassurance">Usually no long-term effects</span></p>
+                </div>
+                <div class="column-box">
+                    <h3>For Your Baby</h3>
+                    <p>• High bile acids can affect the baby's heart rhythm</p>
+                    <p>• Risk increases with bile acid levels</p>
+                    <p><span class="reassurance">We monitor closely to keep baby safe</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: How is it diagnosed? -->
+        <div class="slide">
+            <h2>How do we diagnose it?</h2>
+            <div class="info-box">
+                <p><span class="action">Blood test:</span> We measure bile acid levels in your blood.</p>
+                <p style="margin-top: 25px;">Cholestasis is confirmed when bile acids are <span class="highlight">10 μmol/L or higher</span>.</p>
+                <p style="margin-top: 25px;">We'll also check your liver function with the same blood draw.</p>
+                <p style="margin-top: 25px;"><span class="reassurance">Results usually come back within a few days.</span></p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Treatment -->
+        <div class="slide">
+            <h2>How do we treat it?</h2>
+            <div class="info-box">
+                <p><span class="action">Medication:</span> We'll prescribe <span class="highlight">ursodeoxycholic acid (UDCA)</span>.</p>
+                <p style="margin-top: 25px;">This medicine helps:</p>
+                <ul>
+                    <li>Reduce itching (you should feel better within a week or two)</li>
+                    <li>Lower bile acid levels</li>
+                    <li>Improve liver function</li>
+                </ul>
+                <p style="margin-top: 25px;"><span class="reassurance">UDCA is safe for you and your baby.</span></p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Monitoring -->
+        <div class="slide">
+            <h2>How will we monitor you?</h2>
+            <div class="info-box">
+                <p><span class="action">Regular blood tests:</span> We'll check your bile acid levels every 1-2 weeks.</p>
+                <p style="margin-top: 25px;"><span class="action">Fetal monitoring:</span> We'll track your baby's heart rate with NSTs (non-stress tests).</p>
+                <p style="margin-top: 25px;">These tests help us know when it's safest to deliver your baby.</p>
+                <p style="margin-top: 25px;"><span class="reassurance">Our team will stay in close contact with you.</span></p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Delivery timing table -->
+        <div class="slide">
+            <h2>When will we deliver your baby?</h2>
+            <p style="margin-bottom: 30px;">Delivery timing depends on your <span class="highlight">highest bile acid level</span>:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bile Acid Level</th>
+                        <th>Severity</th>
+                        <th>Delivery Timing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>10–39 μmol/L</td>
+                        <td>Mild</td>
+                        <td>37–39 weeks</td>
+                    </tr>
+                    <tr>
+                        <td>40–99 μmol/L</td>
+                        <td>Moderate</td>
+                        <td>36–39 weeks</td>
+                    </tr>
+                    <tr>
+                        <td>100+ μmol/L</td>
+                        <td>Severe</td>
+                        <td>Around 36 weeks</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 10: Understanding the risks -->
+        <div class="slide">
+            <h2>What are the risks?</h2>
+            <div class="info-box">
+                <p><span class="reassurance">With mild to moderate levels (under 100), the risk to your baby is similar to any other pregnancy.</span></p>
+                <p style="margin-top: 25px;">With severe levels (100 or higher), risks increase after 36 weeks.</p>
+                <p style="margin-top: 25px;">This is why we plan delivery carefully based on your levels.</p>
+                <p style="margin-top: 25px;"><span class="action">Important:</span> If your itching gets much worse or you develop yellowing of your skin, call us right away.</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: After delivery -->
+        <div class="slide">
+            <h2>What happens after delivery?</h2>
+            <div class="info-box">
+                <p><span class="reassurance">Good news: Itching usually stops within 1-2 days after birth.</span></p>
+                <p style="margin-top: 25px;">We'll check your bile acids and liver function 6-12 weeks after delivery to make sure everything returns to normal.</p>
+                <p style="margin-top: 25px;">This follow-up helps us rule out any underlying liver problems.</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Future pregnancies -->
+        <div class="slide">
+            <h2>What about future pregnancies?</h2>
+            <div class="info-box">
+                <p>Cholestasis has a <span class="highlight">60-90% chance of returning</span> in your next pregnancy.</p>
+                <p style="margin-top: 25px;"><span class="action">If you get pregnant again:</span></p>
+                <ul>
+                    <li>Tell your doctor about your history</li>
+                    <li>We'll monitor you starting around 28 weeks</li>
+                    <li>We can start treatment early if symptoms return</li>
+                </ul>
+                <p style="margin-top: 25px;"><span class="reassurance">With close monitoring, most women go on to have healthy babies.</span></p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Summary -->
+        <div class="slide">
+            <h2>We're here to support you</h2>
+            <div class="info-box">
+                <p><strong>What we'll do together:</strong></p>
+                <ul>
+                    <li>Monitor your bile acid levels regularly</li>
+                    <li>Manage your symptoms with medication</li>
+                    <li>Watch your baby closely</li>
+                    <li>Plan the safest delivery timing for you both</li>
+                </ul>
+                <p style="margin-top: 30px;"><span class="reassurance">You're not alone in this. Our team is with you every step of the way.</span></p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Questions -->
+        <div class="slide">
+            <div class="icon">💬</div>
+            <h2>Questions?</h2>
+            <p>Please ask our team anything you're wondering about.</p>
+            <p style="margin-top: 30px;">We're here to help you feel informed and supported.</p>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">14</span></span>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slideContainer = document.getElementById('slideContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentSlideSpan = document.getElementById('currentSlide');
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function updateSlide() {
+            slideContainer.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            currentSlideSpan.textContent = currentSlide + 1;
+            
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= totalSlides) currentSlide = totalSlides - 1;
+            updateSlide();
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'Home') {
+                currentSlide = 0;
+                updateSlide();
+            }
+            if (e.key === 'End') {
+                currentSlide = totalSlides - 1;
+                updateSlide();
+            }
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        slideContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        slideContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) changeSlide(1);
+            if (touchEndX > touchStartX + 50) changeSlide(-1);
+        }
+
+        updateSlide();
+    </script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

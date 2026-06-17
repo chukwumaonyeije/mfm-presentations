@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hydrops Fetalis | OpenMFM Patient Education</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #0f1d30;
+      --border:    #17324d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent:    #22d3ee;
+      --green:     #3fb950;
+      --orange:    #f0883e;
+      --red:       #f85149;
+      --purple:    #bc8cff;
+      --teal:      #39d353;
+      --gold:      #e3b341;
+      --font-sans: 'Space Grotesk', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      overflow: hidden;
+    }
+
+    /* ─── Deck & Slide ─────────────────────────────────────── */
+    .deck {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3.5rem 5rem 4.75rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ─── Slide Counter ─────────────────────────────────────── */
+    .slide-counter {
+      position: fixed;
+      bottom: 1.4rem; right: 2rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      z-index: 100;
+    }
+
+    /* ─── Navigation Arrows ─────────────────────────────────── */
+    .nav-btn {
+      position: fixed;
+      top: 50%; transform: translateY(-50%);
+      background: rgba(88,166,255,0.12);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      width: 2.8rem; height: 2.8rem;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+      z-index: 100;
+    }
+    .nav-btn:hover { background: rgba(88,166,255,0.25); }
+    .nav-btn.prev { left: 1.2rem; }
+    .nav-btn.next { right: 1.2rem; }
+
+    /* ─── Progress Bar ──────────────────────────────────────── */
+    .progress-bar {
+      position: fixed; bottom: 0; left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--purple));
+      transition: width 0.4s ease;
+      z-index: 100;
+    }
+
+    /* ─── Typography ────────────────────────────────────────── */
+    .slide-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--text);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+      margin-bottom: 1rem;
+      font-family: var(--font-sans);
+    }
+
+    .subtitle {
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      color: var(--muted);
+      text-align: center;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+
+    .body-text {
+      font-size: clamp(1rem, 1.8vw, 1.25rem);
+      color: var(--text);
+      text-align: center;
+      max-width: 780px;
+      line-height: 1.7;
+    }
+
+    /* ─── Accent Line ───────────────────────────────────────── */
+    .accent-line {
+      width: 60px; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--purple));
+      border-radius: 2px;
+      margin: 1rem auto;
+    }
+
+    /* ─── Icon Grid ─────────────────────────────────────────── */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 900px;
+      margin-top: 1.5rem;
+    }
+
+    .icon-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 1rem;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .icon-card:hover { border-color: var(--accent); }
+
+    .icon-card .icon {
+      font-size: 2.4rem;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    .icon-card .label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+
+    .icon-card .desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* ─── Highlight Boxes ───────────────────────────────────── */
+    .highlight-box {
+      border-radius: 12px;
+      padding: 1.2rem 1.8rem;
+      margin: 0.5rem 0;
+      border-left: 4px solid;
+      text-align: left;
+      max-width: 820px;
+      width: 100%;
+    }
+    .highlight-box.blue  { background: rgba(88,166,255,0.08); border-color: var(--accent); }
+    .highlight-box.green { background: rgba(63,185,80,0.08);  border-color: var(--green); }
+    .highlight-box.orange{ background: rgba(240,136,62,0.08); border-color: var(--orange); }
+    .highlight-box.purple{ background: rgba(188,140,255,0.08);border-color: var(--purple); }
+
+    .highlight-box .box-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .highlight-box.blue   .box-title { color: var(--accent); }
+    .highlight-box.green  .box-title { color: var(--green); }
+    .highlight-box.orange .box-title { color: var(--orange); }
+    .highlight-box.purple .box-title { color: var(--purple); }
+
+    .highlight-box p {
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ─── Data Table ────────────────────────────────────────── */
+    .data-table {
+      width: 100%;
+      max-width: 820px;
+      border-collapse: collapse;
+      margin-top: 1.2rem;
+      font-size: 0.92rem;
+    }
+    .data-table th {
+      background: rgba(88,166,255,0.15);
+      color: var(--accent);
+      font-weight: 600;
+      padding: 0.7rem 1rem;
+      text-align: left;
+      border-bottom: 2px solid var(--accent);
+      letter-spacing: 0.05em;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .data-table td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: rgba(88,166,255,0.04); }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-green  { background: rgba(63,185,80,0.18);  color: var(--green); }
+    .badge-orange { background: rgba(240,136,62,0.18); color: var(--orange); }
+    .badge-blue   { background: rgba(88,166,255,0.18); color: var(--accent); }
+    .badge-purple { background: rgba(188,140,255,0.18);color: var(--purple); }
+    .badge-red    { background: rgba(248,81,73,0.18);  color: var(--red); }
+
+    /* ─── Step List ─────────────────────────────────────────── */
+    .step-list {
+      list-style: none;
+      max-width: 820px;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    .step-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 2rem; height: 2rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.55;
+      padding-top: 0.2rem;
+    }
+    .step-text strong { color: var(--accent); }
+
+    /* ─── Two-Column Layout ─────────────────────────────────── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      max-width: 900px;
+      width: 100%;
+      margin-top: 1.2rem;
+    }
+
+    /* ─── Big Stat ──────────────────────────────────────────── */
+    .stat-row {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 1.8rem;
+      text-align: center;
+      min-width: 160px;
+    }
+    .stat-card .stat-num {
+      font-size: 2.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-card .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      line-height: 1.4;
+    }
+
+    /* ─── Anatomy Diagram (SVG-based) ───────────────────────── */
+    .anatomy-container {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      max-width: 860px;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    /* ─── Footer Brand ──────────────────────────────────────── */
+    .slide-brand {
+      position: fixed;
+      bottom: 1.4rem; left: 2rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── Title Slide Specific ──────────────────────────────── */
+    #slide-1 { background: radial-gradient(ellipse at 60% 40%, rgba(88,166,255,0.08) 0%, transparent 70%), var(--bg); }
+    #slide-1 h1 { font-size: clamp(2.8rem, 6vw, 4.5rem); font-weight: 200; }
+    #slide-1 .accent-line { width: 100px; }
+
+    /* ─── Closing Slide ─────────────────────────────────────── */
+    #slide-12 { background: radial-gradient(ellipse at 40% 60%, rgba(63,185,80,0.07) 0%, transparent 70%), var(--bg); }
+
+    /* ─── Responsive ────────────────────────────────────────── */
+    @media (max-width: 700px) {
+      .slide {
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 4.5rem 1.25rem 6rem;
+      }
+      .slide-counter {
+        right: 1rem;
+        bottom: 0.85rem;
+      }
+      .slide-brand {
+        left: 1rem;
+        bottom: 0.85rem;
+        max-width: calc(100vw - 7rem);
+      }
+      .nav-btn {
+        top: auto;
+        bottom: 3rem;
+        transform: none;
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+      .nav-btn.prev { left: 1rem; }
+      .nav-btn.next { right: 1rem; }
+      .two-col { grid-template-columns: 1fr; }
+      .icon-grid { grid-template-columns: 1fr !important; }
+      .stat-row { gap: 0.9rem; }
+      .stat-card {
+        width: 100%;
+        min-width: 0;
+      }
+      .data-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .step-list li { gap: 0.75rem; }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/hydrops-fetalis-slides/hydrops_fetalis_slides.html">
+<meta name="description" content="Comprehensive guide to hydrops fetalis: immune vs. non-immune causes, ultrasound diagnosis, MCA Doppler for fetal anemia, management options, and perinatal prognosis.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Hydrops Fetalis, Fetal Edema, High-Risk Pregnancy, Patient Education, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/hydrops-fetalis-slides/hydrops_fetalis_slides.html">
+<meta property="og:title" content="Hydrops Fetalis - Patient &amp; Provider Education | OpenMFM">
+<meta property="og:description" content="Comprehensive guide to hydrops fetalis: immune vs. non-immune causes, ultrasound diagnosis, MCA Doppler for fetal anemia, management options, and perinatal prognosis.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hydrops Fetalis - Patient &amp; Provider Education | OpenMFM">
+<meta name="twitter:description" content="Comprehensive guide to hydrops fetalis: immune vs. non-immune causes, ultrasound diagnosis, MCA Doppler for fetal anemia, management options, and perinatal prognosis.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Hydrops Fetalis - Patient & Provider Education",
+  "description": "Comprehensive guide to hydrops fetalis: immune vs. non-immune causes, ultrasound diagnosis, MCA Doppler for fetal anemia, management options, and perinatal prognosis.",
+  "url": "https://openmfm.org/decks/hydrops-fetalis-slides/hydrops_fetalis_slides.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-04-03",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Hydrops Fetalis - Patient & Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Hydrops Fetalis, Fetal Edema, High-Risk Pregnancy, Patient Education, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE DECK
+════════════════════════════════════════════════════════════ -->
+<div class="deck">
+
+  <!-- ── SLIDE 1: Title ──────────────────────────────────── -->
+  <div class="slide active" id="slide-1">
+    <div class="slide-label">Patient Education</div>
+    <h1>Hydrops Fetalis</h1>
+    <div class="accent-line"></div>
+    <p class="subtitle">Understanding your baby's diagnosis, and the plan we build with you.</p>
+    <div class="stat-row" style="margin-top:2.5rem;">
+      <div class="stat-card">
+        <div class="stat-num">≥2</div>
+        <div class="stat-label">Fluid compartments<br>affected</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">~90%</div>
+        <div class="stat-label">Cases are<br>non-immune</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">65%</div>
+        <div class="stat-label">Cause identified<br>prenatally</div>
+      </div>
+    </div>
+    <p class="subtitle" style="margin-top:2rem; font-size:0.9rem;">
+      OpenMFM.org &nbsp;·&nbsp; Maternal-Fetal Medicine
+    </p>
+  </div>
+
+  <!-- ── SLIDE 2: What is Hydrops Fetalis? ──────────────── -->
+  <div class="slide" id="slide-2">
+    <div class="slide-label">What Is This?</div>
+    <h2>What is Hydrops Fetalis?</h2>
+    <div class="accent-line"></div>
+    <p class="body-text">
+      Hydrops fetalis means your baby has <strong style="color:var(--accent)">abnormal fluid buildup</strong> in two or more body spaces. This is an ultrasound finding, not a diagnosis by itself. It tells us the baby needs a careful, structured evaluation.
+    </p>
+    <div class="icon-grid" style="margin-top:2rem; grid-template-columns: repeat(4, 1fr);">
+      <div class="icon-card">
+        <span class="icon">🫀</span>
+        <div class="label">Pericardium</div>
+        <div class="desc">Fluid around the heart</div>
+      </div>
+      <div class="icon-card">
+        <span class="icon">🫁</span>
+        <div class="label">Pleural Space</div>
+        <div class="desc">Fluid around the lungs</div>
+      </div>
+      <div class="icon-card">
+        <span class="icon">🫃</span>
+        <div class="label">Abdomen</div>
+        <div class="desc">Fluid in the belly (ascites)</div>
+      </div>
+      <div class="icon-card">
+        <span class="icon">🧬</span>
+        <div class="label">Skin Edema</div>
+        <div class="desc">Swelling &gt;5 mm under skin</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 3: Two Types ──────────────────────────────── -->
+  <div class="slide" id="slide-3">
+    <div class="slide-label">Classification</div>
+    <h2>Two Types of Hydrops</h2>
+    <div class="accent-line"></div>
+    <div class="two-col" style="margin-top:1.5rem;">
+      <div class="highlight-box blue">
+        <div class="box-title">🩸 Immune Hydrops</div>
+        <p>Caused by maternal antibodies attacking fetal red blood cells (e.g., Rh incompatibility). Now <strong>rare</strong> due to anti-D immunoglobulin prevention.</p>
+      </div>
+      <div class="highlight-box orange">
+        <div class="box-title">🔬 Non-Immune Hydrops (NIHF)</div>
+        <p>Accounts for <strong>~90% of cases</strong>. No red cell destruction. Caused by heart conditions, genetics, infections, or other factors. This is our focus.</p>
+      </div>
+    </div>
+    <div class="highlight-box green" style="margin-top:1rem;">
+      <div class="box-title">✅ First Step: Rule Out Immune Cause</div>
+      <p>A simple maternal blood test, the indirect Coombs test, confirms whether this is immune or non-immune hydrops. This is always our first step.</p>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 4: Why Does This Happen? ─────────────────── -->
+  <div class="slide" id="slide-4">
+    <div class="slide-label">Causes</div>
+    <h2>Why Does Fluid Build Up?</h2>
+    <div class="accent-line"></div>
+    <p class="body-text" style="margin-bottom:1.2rem;">
+      Fluid accumulates when the baby's body cannot maintain normal fluid balance. Four main mechanisms are involved:
+    </p>
+    <ul class="step-list">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Heart strain</strong> keeps venous pressure high and pushes fluid into tissues.</div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Low protein</strong> lowers the pressure that normally keeps fluid inside blood vessels.</div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Blocked lymph flow</strong> prevents normal drainage.</div>
+      </li>
+      <li>
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>Capillary damage</strong> makes vessel walls leaky, so fluid escapes into surrounding tissue.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ── SLIDE 5: Common Causes Table ───────────────────── -->
+  <div class="slide" id="slide-5">
+    <div class="slide-label">Etiology</div>
+    <h2>What Can Cause Hydrops?</h2>
+    <div class="accent-line"></div>
+    <div style="width:100%; overflow-x:auto;">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Frequency</th>
+          <th>Examples</th>
+          <th>Treatable?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>❤️ Cardiovascular</td>
+          <td>20–25%</td>
+          <td>Rapid heart rhythm (SVT), structural heart defects</td>
+          <td><span class="badge badge-green">Often Yes</span></td>
+        </tr>
+        <tr>
+          <td>🧬 Genetic</td>
+          <td>13–35%</td>
+          <td>Chromosomal differences, Noonan syndrome, metabolic disorders</td>
+          <td><span class="badge badge-orange">Varies</span></td>
+        </tr>
+        <tr>
+          <td>🦠 Infectious</td>
+          <td>5–10%</td>
+          <td>Parvovirus B19, syphilis (treatable), CMV</td>
+          <td><span class="badge badge-green">Sometimes</span></td>
+        </tr>
+        <tr>
+          <td>🩸 Hematologic</td>
+          <td>5–10%</td>
+          <td>Fetal anemia, alpha-thalassemia</td>
+          <td><span class="badge badge-green">Often Yes</span></td>
+        </tr>
+        <tr>
+          <td>❓ Idiopathic</td>
+          <td>15–30%</td>
+          <td>No cause found after full workup</td>
+          <td><span class="badge badge-blue">Monitoring</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 6: Diagnostic Tests ──────────────────────── -->
+  <div class="slide" id="slide-6">
+    <div class="slide-label">Evaluation</div>
+    <h2>How We Find the Cause</h2>
+    <div class="accent-line"></div>
+    <div class="icon-grid" style="grid-template-columns: repeat(3, 1fr); max-width:820px;">
+      <div class="icon-card">
+        <span class="icon">🔬</span>
+        <div class="label">Maternal Blood Tests</div>
+        <div class="desc">Coombs test, blood count, infection screening (parvovirus, syphilis, CMV, toxo)</div>
+      </div>
+      <div class="icon-card">
+        <span class="icon">📡</span>
+        <div class="label">Detailed Ultrasound</div>
+        <div class="desc">Level II anatomy survey of the heart, lungs, abdomen, placenta, and amniotic fluid</div>
+      </div>
+      <div class="icon-card">
+        <span class="icon">❤️‍🩺</span>
+        <div class="label">Fetal Echocardiogram</div>
+        <div class="desc">Specialized heart ultrasound to detect rhythm problems or structural defects</div>
+      </div>
+      <div class="icon-card">
+        <span class="icon">🩸</span>
+        <div class="label">MCA Doppler</div>
+        <div class="desc">Measures blood flow to the baby's brain and screens for fetal anemia without a needle</div>
+      </div>
+      <div class="icon-card">
+        <span class="icon">💉</span>
+        <div class="label">Amniocentesis</div>
+        <div class="desc">Samples amniotic fluid for genetic testing, infection PCR, and metabolic studies</div>
+      </div>
+      <div class="icon-card">
+        <span class="icon">🧬</span>
+        <div class="label">Genetic Testing</div>
+        <div class="desc">Chromosomal microarray and exome sequencing to identify genetic causes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 7: Genetic Testing Deep Dive ─────────────── -->
+  <div class="slide" id="slide-7">
+    <div class="slide-label">Genetic Testing</div>
+    <h2>Understanding Genetic Testing</h2>
+    <div class="accent-line"></div>
+    <p class="body-text" style="margin-bottom:1.2rem;">
+      Genetic factors explain up to <strong style="color:var(--accent)">35% of NIHF cases</strong>. We offer a stepwise approach:
+    </p>
+    <ul class="step-list">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Chromosomal Microarray (CMA)</strong> is the first-tier test. It detects extra or missing chromosomal material, including conditions like Trisomy 21 or Turner syndrome.</div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Exome Sequencing</strong> is the next step if CMA is normal. It identifies single-gene disorders such as Noonan syndrome and adds a <strong>25-29% additional diagnostic yield</strong>.</div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Metabolic Studies</strong> can detect rare lysosomal storage diseases when sequencing is inconclusive.</div>
+      </li>
+    </ul>
+    <div class="highlight-box purple" style="margin-top:0.8rem;">
+      <div class="box-title">🧬 Why This Matters</div>
+      <p>Identifying a genetic cause helps us understand prognosis, plan care, and assess recurrence risk in future pregnancies. Genetic counseling is offered at every step.</p>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 8: Treatable Causes ──────────────────────── -->
+  <div class="slide" id="slide-8">
+    <div class="slide-label">Treatment</div>
+    <h2>When Hydrops Can Be Treated</h2>
+    <div class="accent-line"></div>
+    <p class="body-text" style="margin-bottom:1.2rem;">
+      Identifying a treatable cause is our primary goal. Several conditions can be addressed <strong style="color:var(--green)">before birth</strong>:
+    </p>
+    <div class="icon-grid" style="grid-template-columns: repeat(2, 1fr); max-width:700px;">
+      <div class="icon-card" style="border-color: rgba(63,185,80,0.4);">
+        <span class="icon">💊</span>
+        <div class="label" style="color:var(--green)">Fetal Arrhythmia</div>
+        <div class="desc">Medication given to the mother crosses the placenta to regulate the baby's heart rhythm (SVT, atrial flutter)</div>
+      </div>
+      <div class="icon-card" style="border-color: rgba(63,185,80,0.4);">
+        <span class="icon">🩸</span>
+        <div class="label" style="color:var(--green)">Fetal Anemia</div>
+        <div class="desc">Intrauterine blood transfusion (IUT) can treat anemia from parvovirus B19 or other causes</div>
+      </div>
+      <div class="icon-card" style="border-color: rgba(63,185,80,0.4);">
+        <span class="icon">🦠</span>
+        <div class="label" style="color:var(--green)">Syphilis</div>
+        <div class="desc">Maternal penicillin treatment can reverse hydrops caused by congenital syphilis</div>
+      </div>
+      <div class="icon-card" style="border-color: rgba(63,185,80,0.4);">
+        <span class="icon">🫁</span>
+        <div class="label" style="color:var(--green)">Lung Masses (CPAM)</div>
+        <div class="desc">Corticosteroids or a fetal shunt procedure can relieve pressure from lung masses</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 9: Monitoring Your Health ────────────────── -->
+  <div class="slide" id="slide-9">
+    <div class="slide-label">Your Safety</div>
+    <h2>Monitoring Your Health</h2>
+    <div class="accent-line"></div>
+    <p class="body-text" style="margin-bottom:1.2rem;">
+      In some cases, the mother's body develops changes that mirror the baby's condition. This is called <strong style="color:var(--orange)">Mirror Syndrome</strong>, also called Ballantyne syndrome.
+    </p>
+    <div class="highlight-box orange">
+      <div class="box-title">⚠️ What Is Mirror Syndrome?</div>
+      <p>This rare condition causes swelling, high blood pressure, and protein in the urine, similar to preeclampsia. It improves when fetal hydrops is treated or the baby is delivered.</p>
+    </div>
+    <div class="highlight-box green" style="margin-top:1rem;">
+      <div class="box-title">✅ How We Monitor You</div>
+      <p>At every visit we will check your <strong>blood pressure</strong>, monitor for <strong>swelling</strong>, and test your <strong>urine for protein</strong>. Please report any sudden weight gain, headaches, or difficulty breathing immediately.</p>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 10: What Happens Next? ───────────────────── -->
+  <div class="slide" id="slide-10">
+    <div class="slide-label">What Happens Next?</div>
+    <h2>Your Care Plan</h2>
+    <div class="accent-line"></div>
+    <ul class="step-list">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Complete the workup</strong> first. We gather the key test results before major management decisions. This may take 1-2 weeks.</div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Multidisciplinary review</strong> brings MFM, cardiology, genetics, and neonatal teams together when needed.</div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Treatment if applicable</strong> follows when we identify a treatable cause. We will review the options, risks, and expected outcomes with you.</div>
+      </li>
+      <li>
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>Ongoing surveillance</strong> continues with serial ultrasounds and maternal monitoring.</div>
+      </li>
+      <li>
+        <div class="step-num">5</div>
+        <div class="step-text"><strong>Delivery planning</strong> is based on the baby's condition, gestational age, and maternal status.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ── SLIDE 11: Prognosis ─────────────────────────────── -->
+  <div class="slide" id="slide-11">
+    <div class="slide-label">Prognosis</div>
+    <h2>What to Expect</h2>
+    <div class="accent-line"></div>
+    <p class="body-text" style="margin-bottom:1.5rem;">
+      Outcomes depend heavily on the <strong style="color:var(--accent)">underlying cause</strong>. Finding and treating the cause significantly improves the outlook.
+    </p>
+    <div class="two-col">
+      <div class="highlight-box green">
+        <div class="box-title">🟢 Favorable Prognosis</div>
+        <p>Treatable causes (arrhythmia, parvovirus anemia, syphilis) often resolve completely with appropriate therapy. Survival rates improve substantially when a cause is identified and treated.</p>
+      </div>
+      <div class="highlight-box blue">
+        <div class="box-title">🔵 Uncertain Prognosis</div>
+        <p>When no cause is found (idiopathic), outcomes are less predictable. We will provide honest, compassionate counseling and support all decisions you make for your family.</p>
+      </div>
+    </div>
+    <div class="highlight-box purple" style="margin-top:1rem;">
+      <div class="box-title">🧬 Genetic Counseling</div>
+      <p>Regardless of outcome, genetic counseling helps you understand recurrence risks and options for future pregnancies. This is an integral part of our care.</p>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 12: Partnership & Closing ────────────────── -->
+  <div class="slide" id="slide-12">
+    <div class="slide-label">Our Partnership</div>
+    <h1 style="font-size:clamp(2rem,4.5vw,3.2rem);">You Are Not Alone</h1>
+    <div class="accent-line"></div>
+    <p class="body-text" style="margin-bottom:2rem;">
+      Our team is committed to walking this journey with you, providing current evidence-based care while honoring your values and your family's needs.
+    </p>
+    <div class="icon-grid" style="grid-template-columns: repeat(3, 1fr); max-width:700px;">
+      <div class="icon-card">
+        <span class="icon">👩‍⚕️</span>
+        <div class="label">Your MFM Team</div>
+        <div class="desc">Maternal-Fetal Medicine specialists available throughout your pregnancy</div>
+      </div>
+      <div class="icon-card">
+        <span class="icon">🧬</span>
+        <div class="label">Genetic Counseling</div>
+        <div class="desc">Expert guidance on test results, recurrence risk, and family planning</div>
+      </div>
+      <div class="icon-card">
+        <span class="icon">💬</span>
+        <div class="label">Open Communication</div>
+        <div class="desc">We encourage questions at every visit. No question is too small.</div>
+      </div>
+    </div>
+    <p class="subtitle" style="margin-top:2rem; font-size:0.85rem; color:var(--muted);">
+      Based on SMFM Consult Series #75 (2024) &nbsp;·&nbsp; SMFM Clinical Guideline #7 (2015)<br>
+      OpenMFM.org &nbsp;·&nbsp; DoctorsWhoCode.blog
+    </p>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- ─── Navigation Controls ───────────────────────────── -->
+<button class="nav-btn prev" onclick="prevSlide()" aria-label="Previous slide">&#8592;</button>
+<button class="nav-btn next" onclick="nextSlide()" aria-label="Next slide">&#8594;</button>
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter">1 / 12</div>
+<div class="slide-brand">OpenMFM.org &nbsp;·&nbsp; MFM</div>
+
+<!-- ─── JavaScript ────────────────────────────────────── -->
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let current = 0;
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    document.getElementById('slideCounter').textContent = `${index + 1} / ${totalSlides}`;
+    const pct = ((index + 1) / totalSlides) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  function nextSlide() {
+    current = (current + 1) % totalSlides;
+    showSlide(current);
+  }
+
+  function prevSlide() {
+    current = (current - 1 + totalSlides) % totalSlides;
+    showSlide(current);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

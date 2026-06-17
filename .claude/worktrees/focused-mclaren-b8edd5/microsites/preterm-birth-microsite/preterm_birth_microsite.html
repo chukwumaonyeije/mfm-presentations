@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previous Preterm Birth: Understanding Your Risk</title>
+    <style>
+        :root {
+            --background-color-light: #f8f9fa;
+            --card-background-light: #ffffff;
+            --text-color-light: #212529;
+            --heading-color-light: #1a5f5f;
+            --primary-color: #1a5f5f;
+            --primary-hover: #144a4a;
+            --border-color: #dee2e6;
+            --accent-color: #e8f5f5;
+            --warning-color: #fff3cd;
+            --warning-border: #ffc107;
+            --danger-color: #f8d7da;
+            --danger-border: #dc3545;
+            --success-color: #d4edda;
+            --success-border: #28a745;
+            --background-color-dark: #121212;
+            --card-background-dark: #1e1e1e;
+            --text-color-dark: #e0e0e0;
+            --heading-color-dark: #20c997;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 2rem 1rem;
+            background-color: var(--background-color-light);
+            color: var(--text-color-light);
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+        body.dark-mode { background-color: var(--background-color-dark); color: var(--text-color-dark); }
+        .container { max-width: 720px; margin: 0 auto; }
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem;
+        }
+        .header-btn, .dark-mode-toggle {
+            background: none; border: 1px solid var(--border-color);
+            border-radius: 20px; padding: 0.4rem 0.9rem;
+            cursor: pointer; color: inherit; font-size: 0.85rem;
+        }
+        .header-btn:hover, .dark-mode-toggle:hover { background-color: var(--accent-color); }
+        body.dark-mode .header-btn:hover, body.dark-mode .dark-mode-toggle:hover { background-color: #2a3b3b; }
+        .hero {
+            background: linear-gradient(135deg, #1a5f5f 0%, #20c997 100%);
+            color: white; border-radius: 12px; padding: 2rem;
+            margin-bottom: 1.5rem; text-align: center;
+        }
+        .hero h1 { color: white; font-size: 1.6rem; margin: 0 0 0.5rem 0; }
+        .hero p { margin: 0; opacity: 0.9; font-size: 0.95rem; }
+        .card {
+            background-color: var(--card-background-light);
+            border-radius: 12px; padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border-color);
+        }
+        body.dark-mode .card { background-color: var(--card-background-dark); border-color: #333; }
+        h2 { color: var(--heading-color-light); font-weight: 700; font-size: 1.25rem; margin-top: 0; }
+        body.dark-mode h2 { color: var(--heading-color-dark); }
+        .step-indicator { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.25rem; }
+        .step-badge {
+            background-color: var(--primary-color); color: white;
+            border-radius: 20px; padding: 0.2rem 0.75rem;
+            font-size: 0.8rem; font-weight: 600;
+        }
+        .step-title-small { font-size: 0.8rem; color: #6c757d; }
+        .progress-bar-outer {
+            background-color: var(--border-color); border-radius: 10px;
+            height: 6px; margin-bottom: 1.5rem;
+        }
+        .progress-bar-inner {
+            background: linear-gradient(90deg, #1a5f5f, #20c997);
+            height: 6px; border-radius: 10px; transition: width 0.4s ease;
+        }
+        .risk-factor {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            padding: 0.9rem 1rem; border: 1.5px dashed var(--border-color);
+            border-radius: 10px; margin-bottom: 0.75rem; cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .risk-factor:hover { border-color: #20c997; background-color: #f0faf9; }
+        body.dark-mode .risk-factor:hover { background-color: #1e2e2e; }
+        .risk-factor.selected {
+            border-style: solid; border-color: var(--primary-color);
+            background-color: #edf7f7;
+        }
+        body.dark-mode .risk-factor.selected { background-color: #2a3b3b; border-color: #20c997; }
+        .risk-factor .factor-text { flex: 1; margin: 0; font-size: 0.95rem; }
+        .risk-factor .factor-text p { margin: 0; }
+        .risk-factor .factor-text small { display: block; color: #6c757d; font-size: 0.8rem; margin-top: 0.2rem; }
+        body.dark-mode .risk-factor .factor-text small { color: #aaa; }
+        .check-icon { font-size: 1.1rem; margin-left: 1rem; min-width: 1.5rem; text-align: center; color: var(--primary-color); }
+        body.dark-mode .check-icon { color: #20c997; }
+        .instruction-box {
+            background-color: var(--accent-color);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 8px 8px 0;
+            padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.9rem;
+        }
+        body.dark-mode .instruction-box { background-color: #1e2e2e; border-left-color: #20c997; }
+        .btn {
+            background-color: var(--primary-color); color: white; border: none;
+            padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer;
+            font-size: 0.95rem; font-weight: 600; transition: background-color 0.2s;
+        }
+        .btn:hover { background-color: var(--primary-hover); }
+        .btn-outline {
+            background: none; color: var(--primary-color);
+            border: 1.5px solid var(--primary-color);
+            padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer;
+            font-size: 0.95rem; font-weight: 600; transition: all 0.2s;
+        }
+        .btn-outline:hover { background-color: var(--accent-color); }
+        body.dark-mode .btn-outline { color: #20c997; border-color: #20c997; }
+        .result-card { border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; }
+        .result-card.high-risk { background-color: var(--danger-color); border: 1px solid var(--danger-border); }
+        .result-card.moderate-risk { background-color: var(--warning-color); border: 1px solid var(--warning-border); }
+        .result-card.low-risk { background-color: var(--success-color); border: 1px solid var(--success-border); }
+        body.dark-mode .result-card.high-risk { background-color: #3b1a1a; border-color: #dc3545; }
+        body.dark-mode .result-card.moderate-risk { background-color: #3b2e0a; border-color: #ffc107; }
+        body.dark-mode .result-card.low-risk { background-color: #0f2a1a; border-color: #28a745; }
+        .result-title { font-size: 1.2rem; font-weight: 700; margin: 0 0 0.5rem 0; }
+        .result-assessment { font-size: 0.9rem; margin: 0; }
+        .recommendation-section { margin-top: 1.25rem; }
+        .recommendation-section h3 { color: var(--heading-color-light); font-size: 1rem; margin: 0 0 0.75rem 0; }
+        body.dark-mode .recommendation-section h3 { color: var(--heading-color-dark); }
+        .recommendation-item {
+            display: flex; align-items: flex-start; gap: 0.75rem;
+            padding: 0.75rem; border-radius: 8px;
+            background-color: var(--accent-color); margin-bottom: 0.6rem; font-size: 0.9rem;
+        }
+        body.dark-mode .recommendation-item { background-color: #1e2e2e; }
+        .recommendation-item .icon { font-size: 1.1rem; min-width: 1.5rem; }
+        .clinical-note {
+            font-size: 0.8rem; color: #6c757d;
+            border-top: 1px solid var(--border-color);
+            padding-top: 0.75rem; margin-top: 1rem;
+        }
+        body.dark-mode .clinical-note { color: #aaa; }
+        .footer { text-align: center; margin-top: 1.5rem; font-size: 0.78rem; color: #6c757d; }
+        .modal {
+            display: none; position: fixed; z-index: 100;
+            left: 0; top: 0; width: 100%; height: 100%;
+            overflow: auto; background-color: rgba(0,0,0,0.65);
+        }
+        .modal-content {
+            background-color: var(--card-background-light);
+            margin: 5% auto; padding: 2rem;
+            border: 1px solid #888; width: 90%; max-width: 640px;
+            border-radius: 12px; max-height: 85vh; overflow-y: auto;
+        }
+        body.dark-mode .modal-content { background-color: var(--card-background-dark); color: var(--text-color-dark); }
+        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; line-height: 1; }
+        .close-btn:hover { color: #333; }
+        body.dark-mode .close-btn:hover { color: #eee; }
+        .modal-content h2 { margin-top: 0; }
+        .modal-content h3 { color: var(--heading-color-light); font-size: 1rem; margin-top: 1.25rem; }
+        body.dark-mode .modal-content h3 { color: var(--heading-color-dark); }
+        .modal-content p, .modal-content li { font-size: 0.9rem; }
+        .modal-content ul { padding-left: 1.25rem; }
+        .modal-content li { margin-bottom: 0.4rem; }
+        .info-box {
+            background-color: var(--accent-color);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 8px 8px 0;
+            padding: 0.75rem 1rem; margin: 1rem 0; font-size: 0.88rem;
+        }
+        body.dark-mode .info-box { background-color: #1e2e2e; border-left-color: #20c997; }
+        .warning-box {
+            background-color: var(--warning-color);
+            border-left: 4px solid var(--warning-border);
+            border-radius: 0 8px 8px 0;
+            padding: 0.75rem 1rem; margin: 1rem 0; font-size: 0.88rem;
+        }
+        body.dark-mode .warning-box { background-color: #3b2e0a; border-left-color: #ffc107; }
+        .modal-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.75rem 0; }
+        .modal-table th { background-color: var(--primary-color); color: white; padding: 0.5rem 0.75rem; text-align: left; }
+        .modal-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border-color); }
+        .modal-table tr:nth-child(even) td { background-color: var(--accent-color); }
+        body.dark-mode .modal-table tr:nth-child(even) td { background-color: #1e2e2e; }
+        .source-tag {
+            display: inline-block; background-color: #e9ecef; color: #495057;
+            border-radius: 4px; padding: 0.1rem 0.4rem;
+            font-size: 0.72rem; font-weight: 600; margin-left: 0.3rem;
+        }
+        body.dark-mode .source-tag { background-color: #333; color: #aaa; }
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.3rem; }
+            .card { padding: 1.25rem; }
+            .header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/Nc6luhYjMkrOIC_p_3Jr_7FDbqRSkLk5FhvrX3ZfnCAqd9-fQV3-HGXotzt-DuTkkJfEN4viFC-eHe-GJkYp9G5x1NfhFT0CD7lR5Vi3qclv7zyNjo9N8tD17R4TxLRhN_Uu7TNAQbxeybUza4Px5Ta8jb2SKdeC_qqX6mlVPfi2RSuS3fZvOB2r6DRU4G53OF-BsMfADQZe5b-mDZZTzjXiZo-QjAByqAfyXWADODOpyfbu7HXNF3gw_rkuKAskEuHh6fEEtkgcVY4YqTBsPc7uRNTv8Idfn2vPLd49xMLpm1ryqiexwUrRUhArQ0E0desLE5zB7zD0dc1oTlsTp077s5S4tQnWvU9fjHrYdYCICWABxBzok0Ov6XV3Z8enJzMzNrvFVfF-vTL62xxUu8MZsQcvnASRCRzZPkGO4GFdZf7UtSJAiq0MMiTFtYFleivOy3ACZNth63oNBFN_bG6efzTy3yBUzUMBTRv-Lmgrf6No-jeLVGWMUwjpmfx57oPsSFVV4v_4XvRvb68SvRsx83l-qR2FZbtC6iePkFosbGQRAPmwibG76phySq2tVhOLt8wPdOlikVMkNSf1DSziAcZgm1ILTqRAJ_SReund9DeXf3YaPHD89GDXXG_aMqsRxqk_6pAWeXrjBqeINm8C2Lz8YeKszAxBEz2TXGZ_0Xpdfc9Pre-9g0J-LKNoFJVjX57tgvmC6uwF5grsOppjqf2TpzCdSPn8YjJXv_TU7YDeWNuBKHDpu3tvTHN4DSi1phCXceS2iE0acZ-pMsefThBk5CfKiRBXuPAfqM6nudz9RuvlzIvip943kujGnJrlna9K0BaFSFgyei3kDnn6_Zl84EcrGMSOJP67j3nfjtDa7TppRrzq8YlD1CAFVqmx7lRCEmVpqJoS-S8MxBZQpcb0R3j7874cSa5LGHUwKfGToVx2tAt2fd3jQAULxBfygsyDGwnQDUNqVbV11Urm23Vft30IvM-ggwiJhUgHlhuQDA3ziODB5X8ljEO6mvCyreUeYVQ_kW_VSbgnuhKXysxjjAWLH1JtBPuAg5nbTd23emkNAeLozwxGi__yAZTfEoudMeLTmBqb2-4lZmD14IkybqfDXE1D-s4n62Q8-s4BtbOzg8dp_vSWXin8r4uDVlsz4OXzdieyBqfTdzjMDNMTXaRDpr8rwK08qLPJhC7jEWloqsezsEBywlo_uPa7_ODxdlYKVriGnB3dWKh0MG59Fa4k-rOfWQuuvpP1RZxFvuA7ZrMNaf9EKrwsQ0p_JfqoyX74sa5rPlGo3X_Y-FNZXbuEgHRMDfh17L7xUJqIemXJQPcUDbd73J5AUKW8ckUX6O1T_rSY8OvPGqiLHYv5k40N4my243nT9sji-dSwbEd8t4xNSrY--M5bw85LjugV7baGCPNkLmeeJIW3_m1Iq7xgoytLGUfJQ5TIRQA8wYtFOwhp_Lzi9cg891mIOghhFES1hfDpYIlN-AT8AXfxEK23zyT6OXTisD9N4QOeRdYwOD9Rv1e7JpiXD8VsmQonayZXeWUb4UlSZHzIqmT7jt3RnsILoVR15RBH4d75dWRDXI2Ren9wc_zVfJU6epoPkUo42iCIk4cVrAkSiWO2eItt_xkDNKlFaupuYncB7zP_J1Ca'></script></head>
+<body>
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <button class="header-btn" id="aboutBtn">&#9432; About This Tool</button>
+        <a href="https://doctorswhocode.blog/" target="_blank" style="color: inherit; text-decoration: none; font-size: 0.8rem;">Created by DoctorsWhoCode</a>
+        <button class="dark-mode-toggle" id="darkModeToggle">&#9790; Dark Mode</button>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>Previous Preterm Birth</h1>
+        <p>A patient-centered guide to understanding your risk and your options in a future pregnancy</p>
+    </div>
+
+    <!-- SCREENER CARD -->
+    <div class="card" id="screenerCard"></div>
+
+    <div class="footer">
+        <p>&#9888;&#65039; INFORMATIONAL USE ONLY &mdash; This tool does NOT provide medical advice. All clinical decisions must be made with a qualified healthcare provider.<br>
+        Content based on ACOG Practice Bulletin No. 234 (2021), ACOG Practice Advisory (Updated April 2025), and SMFM guidelines.</p>
+    </div>
+</div>
+
+<!-- ABOUT MODAL -->
+<div id="aboutModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeModal">&times;</span>
+        <h2>About Preterm Birth</h2>
+
+        <div class="info-box">
+            <strong>What is preterm birth?</strong> Preterm birth (PTB) is delivery before 37 completed weeks of pregnancy. It is the leading cause of newborn illness worldwide. Babies born prematurely may face health challenges due to incomplete development of the lungs, brain, and other organ systems.
+        </div>
+
+        <h3>Why Does a Prior Preterm Birth Matter?</h3>
+        <p>Having had a spontaneous preterm birth in a previous pregnancy is the <strong>single most important risk factor</strong> for having another. Your risk is approximately 1.5 to 2 times higher than someone without this history. This does not mean another preterm birth will happen &mdash; it means your care team will monitor you more closely and discuss options to help reduce that risk.</p>
+        <p>It is also important to know that <strong>you are not at fault</strong>. Preterm birth is a complex medical condition with many contributing causes, including infection, inflammation, cervical factors, and structural issues. Many patients experience feelings of guilt or anxiety after a preterm birth &mdash; these feelings are understandable, but preterm birth is not a personal failure.</p>
+
+        <h3>How We Assess Your Risk</h3>
+        <p>Risk assessment combines your obstetric history with findings from your current pregnancy, especially <strong>cervical length measured by transvaginal ultrasound</strong>. A cervix shorter than 25 mm before 24 weeks of pregnancy is associated with a higher risk of preterm birth and may change your management plan.</p>
+
+        <table class="modal-table">
+            <thead>
+                <tr><th>Clinical Feature</th><th>What It Means</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Prior spontaneous PTB</td>
+                    <td>1.5&ndash;2&times; increased recurrence risk <span class="source-tag">ACOG PB 234</span></td>
+                </tr>
+                <tr>
+                    <td>Cervical length &lt;25 mm before 24 wks</td>
+                    <td>Significantly elevated risk; may change management <span class="source-tag">SMFM</span></td>
+                </tr>
+                <tr>
+                    <td>Short interpregnancy interval (&lt;18 months)</td>
+                    <td>Associated with increased PTB and low birth weight <span class="source-tag">ACOG</span></td>
+                </tr>
+                <tr>
+                    <td>Structural uterine or cervical anomalies</td>
+                    <td>May contribute to cervical insufficiency <span class="source-tag">ACOG</span></td>
+                </tr>
+                <tr>
+                    <td>Multiple gestation (twins, triplets)</td>
+                    <td>Substantially higher PTB risk independent of history <span class="source-tag">SMFM</span></td>
+                </tr>
+                <tr>
+                    <td>Infection / inflammation</td>
+                    <td>Vaginal and urinary infections are associated with preterm labor <span class="source-tag">ACOG</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Evidence-Based Management Options</h3>
+        <p>Your provider will tailor a plan based on your specific history and findings. The major evidence-based options are:</p>
+        <ul>
+            <li><strong>Serial cervical length screening:</strong> Transvaginal ultrasound every 1&ndash;2 weeks from 16 to 24 weeks is recommended for all patients with a prior spontaneous PTB. <span class="source-tag">ACOG PB 234</span></li>
+            <li><strong>Vaginal progesterone:</strong> Recommended when a short cervix (&lt;25 mm) is found. As of the 2025 ACOG Practice Advisory, vaginal progesterone is <em>not</em> recommended in the absence of a short cervix for recurrence prevention alone. <span class="source-tag">ACOG Advisory 2025</span></li>
+            <li><strong>Intramuscular 17-OHPC (Makena):</strong> The FDA withdrew approval in April 2023 due to insufficient evidence of effectiveness in the broad population. It is no longer routinely recommended. Compounded formulations may be discussed in specific circumstances. <span class="source-tag">ACOG Advisory 2025</span></li>
+            <li><strong>Cervical cerclage:</strong> A stitch placed in the cervix. May be considered when you have a prior PTB <em>and</em> a cervical length &lt;25 mm before 24 weeks. <span class="source-tag">ACOG / SMFM</span></li>
+            <li><strong>Antenatal corticosteroids:</strong> If preterm birth appears imminent between 24 and 34 weeks, a course of steroid injections is the single most effective intervention to help your baby's lungs and brain mature, reducing the risk of serious complications. <span class="source-tag">ACOG</span></li>
+            <li><strong>Magnesium sulfate for neuroprotection:</strong> May be given if delivery before 32 weeks is anticipated, to reduce the risk of cerebral palsy. <span class="source-tag">ACOG</span></li>
+        </ul>
+
+        <h3>What Does NOT Work</h3>
+        <div class="warning-box">
+            <strong>Bed rest and activity restriction are NOT recommended</strong> and have not been shown to reduce the risk of preterm birth. Exercise is generally safe and is not associated with increased PTB risk in most pregnancies. <span class="source-tag">ACOG</span>
+        </div>
+
+        <h3>Warning Signs of Preterm Labor</h3>
+        <p>Contact your provider immediately if you experience any of the following before 37 weeks:</p>
+        <ul>
+            <li>Regular uterine contractions (more than 4&ndash;6 per hour)</li>
+            <li>Pelvic pressure or low back pain that comes and goes</li>
+            <li>Fluid leaking from the vagina</li>
+            <li>Vaginal bleeding</li>
+            <li>A feeling that the baby is pushing down</li>
+        </ul>
+        <p><em>Important: Over 70% of women admitted for "threatened preterm labor" do not deliver within seven days. A true diagnosis of preterm labor requires both regular contractions AND documented cervical change. Less than 10% of women presenting with symptoms will deliver within one week.</em> <span class="source-tag">ACOG PB 171</span></p>
+
+        <h3>Planning for Future Pregnancies</h3>
+        <p>If you have had a preterm birth, spacing your next pregnancy at least <strong>18 months</strong> after delivery is associated with better outcomes. Pregnancies spaced less than 6 months apart carry a higher risk of PTB and low birth weight. Your provider can discuss family planning options to help you time a future pregnancy optimally.</p>
+
+        <h3>The Emotional Side of Preterm Birth</h3>
+        <p>Experiencing a preterm birth can be emotionally difficult. Many patients describe feelings of guilt, anxiety, fatalism, or fear about future pregnancies. These feelings are completely understandable and valid. Research shows that patients do better when they receive <strong>clear, honest, personalized information</strong> about their specific risk &mdash; rather than vague reassurances. You deserve to understand your situation and to be an active partner in your care plan.</p>
+        <p>If you are struggling emotionally, please speak with your provider. Support resources, counseling, and peer support groups are available and can make a meaningful difference.</p>
+
+        <div class="info-box">
+            <strong>Sources:</strong> ACOG Practice Bulletin No. 234 (2021) &bull; ACOG Practice Advisory on Progestogen Supplementation (Updated April 2025) &bull; SMFM Consult Series &bull; ACOG FAQ087 on Preterm Labor and Birth
+        </div>
+    </div>
+</div>
+
+<script>
+    const MICROSITE_CONFIG = {
+        title: "Previous Preterm Birth: Understanding Your Risk",
+        steps: [
+            {
+                title: "Your Pregnancy History",
+                instruction: "Select all that apply to your previous pregnancies. You may select more than one.",
+                factors: [
+                    { id: "prior_sptb_lt34", text: "Spontaneous preterm birth before 34 weeks", detail: "Includes preterm labor or preterm premature rupture of membranes (PPROM)" },
+                    { id: "prior_sptb_34_37", text: "Spontaneous preterm birth between 34 and 37 weeks", detail: "Late preterm birth &mdash; still associated with increased recurrence risk" },
+                    { id: "prior_cerclage", text: "Had a cervical cerclage in a prior pregnancy", detail: "A stitch placed in the cervix to help prevent early delivery" },
+                    { id: "short_interval", text: "Less than 18 months between this pregnancy and your last delivery", detail: "Short interpregnancy intervals are associated with higher PTB risk" },
+                    { id: "none_prior", text: "None of the above &mdash; no prior preterm birth", detail: "This is your first pregnancy, or you have had no prior preterm birth" }
+                ]
+            },
+            {
+                title: "Current Pregnancy Findings",
+                instruction: "Select all that apply based on your current prenatal care. You may select more than one.",
+                factors: [
+                    { id: "short_cx_lt25", text: "Cervical length less than 25 mm on ultrasound", detail: "Measured by transvaginal ultrasound before 24 weeks of pregnancy" },
+                    { id: "short_cx_25_30", text: "Cervical length between 25 and 30 mm on ultrasound", detail: "Borderline short &mdash; may warrant closer monitoring" },
+                    { id: "normal_cx", text: "Normal cervical length (greater than 30 mm) on ultrasound", detail: "" },
+                    { id: "cx_not_checked", text: "Cervical length has not been checked yet", detail: "Serial cervical length screening is recommended for patients with prior PTB" },
+                    { id: "twins", text: "Carrying twins or higher-order multiples", detail: "Multiple gestations carry a substantially higher baseline PTB risk" }
+                ]
+            },
+            {
+                title: "Additional Risk Factors",
+                instruction: "Select all that apply. These factors may further inform your care plan.",
+                factors: [
+                    { id: "uterine_anomaly", text: "Known uterine or cervical structural abnormality", detail: "Such as a bicornuate uterus, uterine septum, or prior LEEP/cone biopsy" },
+                    { id: "infection", text: "History of vaginal or urinary tract infections during pregnancy", detail: "Infection and inflammation are associated with preterm labor" },
+                    { id: "smoking", text: "Current or recent tobacco use", detail: "Smoking is an independent risk factor for preterm birth" },
+                    { id: "stress", text: "High psychosocial stress or limited support system", detail: "Stress and social factors can influence preterm birth risk" },
+                    { id: "none_additional", text: "None of the above", detail: "" }
+                ]
+            }
+        ],
+        results: {
+            calculate: function(sel) {
+                const s0 = sel[0] || [], s1 = sel[1] || [], s2 = sel[2] || [];
+                const noPrior = s0.includes("none_prior");
+                const priorLt34 = s0.includes("prior_sptb_lt34");
+                const prior3437 = s0.includes("prior_sptb_34_37");
+                const priorCerclage = s0.includes("prior_cerclage");
+                const shortInterval = s0.includes("short_interval");
+                const shortCxLt25 = s1.includes("short_cx_lt25");
+                const shortCx2530 = s1.includes("short_cx_25_30");
+                const normalCx = s1.includes("normal_cx");
+                const cxNotChecked = s1.includes("cx_not_checked");
+                const twins = s1.includes("twins");
+                const uterineAnomaly = s2.includes("uterine_anomaly");
+                const infection = s2.includes("infection");
+                const smoking = s2.includes("smoking");
+                const stress = s2.includes("stress");
+                const hasPriorPTB = priorLt34 || prior3437 || priorCerclage;
+
+                let riskLevel, riskTitle, assessment, recs = [];
+
+                if (noPrior && !twins) {
+                    riskLevel = "low";
+                    riskTitle = "No History of Preterm Birth Identified";
+                    assessment = "Based on your responses, you do not have a prior spontaneous preterm birth. This screener is designed primarily for patients with that history. Routine prenatal care is appropriate. Use the 'About This Tool' button to learn more about warning signs.";
+                    recs = [
+                        { icon: "&#10003;", text: "Continue routine prenatal care with your provider." },
+                        { icon: "&#10003;", text: "Discuss any new symptoms &mdash; contractions, pelvic pressure, or fluid leaking &mdash; with your provider promptly." },
+                        { icon: "&#128218;", text: "Review the 'About This Tool' section to learn the warning signs of preterm labor." }
+                    ];
+                } else if (hasPriorPTB && shortCxLt25) {
+                    riskLevel = "high";
+                    riskTitle = "High Risk: Prior PTB + Short Cervix (&lt;25 mm)";
+                    assessment = "You have a history of spontaneous preterm birth AND a short cervix (less than 25 mm). This combination places you in a high-risk category and warrants a detailed, individualized management discussion with your provider or a Maternal-Fetal Medicine specialist.";
+                    recs = [
+                        { icon: "&#128203;", text: "<strong>Vaginal progesterone</strong> is recommended when a short cervix is identified. (ACOG Practice Advisory, April 2025)" },
+                        { icon: "&#128203;", text: "<strong>Cervical cerclage</strong> may be considered given your combined history of prior PTB and short cervix before 24 weeks. Discuss with your MFM specialist. (ACOG / SMFM)" },
+                        { icon: "&#128203;", text: "<strong>Serial cervical length monitoring</strong> every 1&ndash;2 weeks is recommended to track any further shortening." },
+                        { icon: "&#128203;", text: "If delivery appears imminent between 24 and 34 weeks, <strong>antenatal corticosteroids</strong> (steroid injections) are the most effective intervention for your baby's lung and brain maturity. (ACOG)" },
+                        { icon: "&#128203;", text: "Referral to or co-management with a <strong>Maternal-Fetal Medicine (MFM) specialist</strong> is strongly recommended." },
+                        { icon: "&#9888;&#65039;", text: "Know the warning signs of preterm labor and contact your provider immediately if they occur." }
+                    ];
+                } else if (hasPriorPTB && (normalCx || shortCx2530)) {
+                    riskLevel = "moderate";
+                    riskTitle = "Elevated Risk: Prior PTB, Cervix Currently Normal or Borderline";
+                    assessment = "You have a history of spontaneous preterm birth. Your cervical length is currently normal or borderline. Your risk remains elevated compared to the general population, and close monitoring is essential throughout this pregnancy.";
+                    recs = [
+                        { icon: "&#128203;", text: "<strong>Serial cervical length screening</strong> every 1&ndash;2 weeks from 16 to 24 weeks is the standard of care. (ACOG PB 234)" },
+                        { icon: "&#128203;", text: "<strong>Vaginal progesterone is NOT currently recommended</strong> in the absence of a short cervix for recurrence prevention alone. (ACOG Practice Advisory, April 2025)" },
+                        { icon: "&#128203;", text: "<strong>Intramuscular 17-OHPC (Makena) is no longer routinely recommended</strong> following the FDA's April 2023 withdrawal of approval. Discuss compounded options with your provider if applicable." },
+                        { icon: "&#128203;", text: "Discuss a <strong>collaborative action plan</strong> with your provider, including clear criteria for what to do if your cervix shortens." },
+                        { icon: "&#9888;&#65039;", text: "Know the warning signs of preterm labor: regular contractions, pelvic pressure, fluid leaking, or vaginal bleeding before 37 weeks." }
+                    ];
+                } else if (hasPriorPTB && cxNotChecked) {
+                    riskLevel = "moderate";
+                    riskTitle = "Action Needed: Cervical Length Not Yet Assessed";
+                    assessment = "You have a history of spontaneous preterm birth, but your cervical length has not yet been measured in this pregnancy. Cervical length screening is an important and recommended part of your care.";
+                    recs = [
+                        { icon: "&#9888;&#65039;", text: "<strong>Request a transvaginal ultrasound for cervical length measurement</strong> as soon as possible, ideally starting at 16 weeks. (ACOG PB 234)" },
+                        { icon: "&#128203;", text: "Serial cervical length screening every 1&ndash;2 weeks from 16 to 24 weeks is the standard of care for patients with prior spontaneous PTB." },
+                        { icon: "&#128203;", text: "Discuss your full history and a <strong>personalized management plan</strong> with your provider or an MFM specialist." }
+                    ];
+                } else if (twins) {
+                    riskLevel = "moderate";
+                    riskTitle = "Elevated Risk: Multiple Gestation";
+                    assessment = "Twin and higher-order multiple pregnancies carry a substantially higher baseline risk of preterm birth, independent of other history. Specialized monitoring is standard care.";
+                    recs = [
+                        { icon: "&#128203;", text: "Routine cervical length screening and close monitoring are standard for multiple gestations." },
+                        { icon: "&#128203;", text: "<strong>Progesterone and cerclage are NOT recommended</strong> for preterm birth prevention in uncomplicated twin pregnancies without a short cervix. (SMFM Consult Series #70)" },
+                        { icon: "&#128203;", text: "Discuss your specific risk and individualized care plan with your provider or MFM specialist." }
+                    ];
+                } else if (hasPriorPTB) {
+                    riskLevel = "moderate";
+                    riskTitle = "Elevated Risk: Prior Preterm Birth";
+                    assessment = "You have a history of spontaneous preterm birth. Your specific management plan will depend on your cervical length findings and full clinical history. Serial monitoring is essential.";
+                    recs = [
+                        { icon: "&#128203;", text: "<strong>Serial cervical length screening</strong> is recommended starting at 16 weeks." },
+                        { icon: "&#128203;", text: "Discuss your complete history with your provider to develop a personalized care plan." },
+                        { icon: "&#9888;&#65039;", text: "Know the warning signs of preterm labor and contact your provider promptly if they occur." }
+                    ];
+                } else {
+                    riskLevel = "low";
+                    riskTitle = "Low Risk Profile";
+                    assessment = "Based on your responses, no significant preterm birth risk factors were identified. Continue routine prenatal care and discuss any concerns with your provider.";
+                    recs = [
+                        { icon: "&#10003;", text: "Continue routine prenatal care." },
+                        { icon: "&#128218;", text: "Review the 'About This Tool' section to learn the warning signs of preterm labor." }
+                    ];
+                }
+
+                let additionalNotes = [];
+                if (uterineAnomaly) additionalNotes.push("Uterine or cervical structural abnormalities may increase your risk further. Discuss with your provider.");
+                if (infection) additionalNotes.push("Vaginal and urinary infections during pregnancy are associated with preterm labor. Prompt treatment is important.");
+                if (smoking) additionalNotes.push("Tobacco cessation is strongly recommended. Smoking is an independent risk factor for preterm birth.");
+                if (stress) additionalNotes.push("Psychosocial stress and limited support are associated with adverse pregnancy outcomes. Ask your care team about available resources.");
+                if (shortInterval) additionalNotes.push("A short interpregnancy interval (less than 18 months) is an independent risk factor for preterm birth and low birth weight.");
+
+                return { riskLevel, riskTitle, assessment, recs, additionalNotes };
+            }
+        }
+    };
+
+    let currentStep = 0;
+    let selections = {};
+    const screenerCard = document.getElementById('screenerCard');
+
+    function renderStep(stepIndex) {
+        const step = MICROSITE_CONFIG.steps[stepIndex];
+        const total = MICROSITE_CONFIG.steps.length;
+        const pct = Math.round((stepIndex / total) * 100);
+
+        const factorsHtml = step.factors.map(f => {
+            const sel = (selections[stepIndex] || []).includes(f.id);
+            return `<div class="risk-factor ${sel ? 'selected' : ''}" data-step="${stepIndex}" data-factor="${f.id}">
+                <div class="factor-text"><p>${f.text}</p>${f.detail ? `<small>${f.detail}</small>` : ''}</div>
+                <span class="check-icon">${sel ? '&#10003;' : '&#9675;'}</span>
+            </div>`;
+        }).join('');
+
+        screenerCard.innerHTML = `
+            <div class="step-indicator">
+                <span class="step-badge">Step ${stepIndex + 1} of ${total}</span>
+                <span class="step-title-small">${step.title}</span>
+            </div>
+            <div class="progress-bar-outer"><div class="progress-bar-inner" style="width:${pct}%"></div></div>
+            <h2>${step.title}</h2>
+            <div class="instruction-box">${step.instruction}</div>
+            ${factorsHtml}
+            <div style="display:flex;justify-content:space-between;margin-top:1.5rem;gap:1rem;">
+                ${stepIndex > 0 ? '<button class="btn-outline" id="backBtn">&#8592; Back</button>' : '<div></div>'}
+                <button class="btn" id="nextBtn">${stepIndex === total - 1 ? 'See My Results &#8594;' : 'Next &#8594;'}</button>
+            </div>`;
+    }
+
+    function renderResults() {
+        const r = MICROSITE_CONFIG.results.calculate(selections);
+        const recsHtml = r.recs.map(rec => `<div class="recommendation-item"><span class="icon">${rec.icon}</span><span>${rec.text}</span></div>`).join('');
+        const notesHtml = r.additionalNotes.length > 0
+            ? `<div style="margin-top:1rem;"><h3>Additional Considerations</h3>${r.additionalNotes.map(n => `<div class="recommendation-item"><span class="icon">&#9432;</span><span>${n}</span></div>`).join('')}</div>`
+            : '';
+
+        screenerCard.innerHTML = `
+            <div class="progress-bar-outer"><div class="progress-bar-inner" style="width:100%"></div></div>
+            <div class="result-card ${r.riskLevel}-risk">
+                <p class="result-title">${r.riskTitle}</p>
+                <p class="result-assessment">${r.assessment}</p>
+            </div>
+            <div class="recommendation-section">
+                <h3>Recommended Next Steps</h3>
+                ${recsHtml}
+            </div>
+            ${notesHtml}
+            <p class="clinical-note">
+                <strong>Clinical Note:</strong> This tool is based on ACOG Practice Bulletin No. 234 (2021), the ACOG Practice Advisory on Progestogen Supplementation (Updated April 2025), and SMFM guidelines. Clinical diagnosis of preterm labor is often imprecise; less than 10% of women presenting with symptoms will deliver within one week. All decisions must be made in partnership with a qualified healthcare provider.
+            </p>
+            <div style="display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;">
+                <button class="btn-outline" id="restartBtn">&#8635; Start Over</button>
+                <button class="btn" id="aboutBtnResult">&#9432; Learn More</button>
+            </div>`;
+
+        document.getElementById('aboutBtnResult').onclick = () => { document.getElementById('aboutModal').style.display = 'block'; };
+    }
+
+    screenerCard.addEventListener('click', (e) => {
+        const factorEl = e.target.closest('.risk-factor');
+        if (factorEl) {
+            const step = parseInt(factorEl.dataset.step);
+            const factor = factorEl.dataset.factor;
+            if (!selections[step]) selections[step] = [];
+            const noneIds = ["none_prior", "none_additional"];
+            const isNone = noneIds.includes(factor);
+            if (isNone) {
+                selections[step] = [factor];
+            } else {
+                noneIds.forEach(nid => { const i = selections[step].indexOf(nid); if (i > -1) selections[step].splice(i, 1); });
+                const idx = selections[step].indexOf(factor);
+                if (idx > -1) selections[step].splice(idx, 1); else selections[step].push(factor);
+            }
+            renderStep(currentStep);
+        }
+        if (e.target.id === 'nextBtn') {
+            if (currentStep < MICROSITE_CONFIG.steps.length - 1) { currentStep++; renderStep(currentStep); }
+            else renderResults();
+        } else if (e.target.id === 'backBtn') { currentStep--; renderStep(currentStep); }
+        else if (e.target.id === 'restartBtn') { currentStep = 0; selections = {}; renderStep(currentStep); }
+    });
+
+    const modal = document.getElementById('aboutModal');
+    document.getElementById('aboutBtn').onclick = () => modal.style.display = 'block';
+    document.getElementById('closeModal').onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+
+    const darkToggle = document.getElementById('darkModeToggle');
+    darkToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        darkToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+
+    renderStep(0);
+</script>
+</body>
+</html>

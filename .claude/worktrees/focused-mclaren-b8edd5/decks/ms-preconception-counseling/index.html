@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS &amp; Pregnancy: Preconception Counseling</title>
+    <style>
+        /* ===== BASE ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0d0d0d;
+            color: #e8e8e8;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== DECK & SLIDES ===== */
+        .deck {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3em 5em;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        .slide-label {
+            font-size: 0.75em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #5b8dee;
+            margin-bottom: 0.6em;
+        }
+
+        h1 {
+            font-size: 3.2em;
+            font-weight: 700;
+            line-height: 1.15;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            font-weight: 600;
+            line-height: 1.2;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #a0b4d4;
+            text-align: center;
+            margin-top: 0.5em;
+            max-width: 700px;
+        }
+
+        .body-text {
+            font-size: 1.35em;
+            line-height: 1.7;
+            text-align: center;
+            max-width: 780px;
+            color: #d4dce8;
+            margin-top: 1em;
+        }
+
+        /* ===== ACCENT COLORS ===== */
+        .accent-blue  { color: #5b8dee; }
+        .accent-green { color: #4ecb8d; }
+        .accent-amber { color: #f5a623; }
+        .accent-red   { color: #e05c5c; }
+        .accent-teal  { color: #38c9c9; }
+
+        /* ===== DIVIDER ===== */
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: #5b8dee;
+            border-radius: 2px;
+            margin: 0.8em auto;
+        }
+
+        /* ===== ICON CIRCLE ===== */
+        .icon-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4em;
+            margin-bottom: 0.6em;
+        }
+
+        .icon-blue  { background: rgba(91,141,238,0.15); border: 2px solid #5b8dee; }
+        .icon-green { background: rgba(78,203,141,0.15); border: 2px solid #4ecb8d; }
+        .icon-amber { background: rgba(245,166,35,0.15);  border: 2px solid #f5a623; }
+        .icon-red   { background: rgba(224,92,92,0.15);   border: 2px solid #e05c5c; }
+        .icon-teal  { background: rgba(56,201,201,0.15);  border: 2px solid #38c9c9; }
+
+        /* ===== CARDS ===== */
+        .card-row {
+            display: flex;
+            gap: 1.4em;
+            margin-top: 1.4em;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: #1a1a2e;
+            border-radius: 14px;
+            padding: 1.4em 1.8em;
+            min-width: 200px;
+            max-width: 280px;
+            text-align: center;
+            border: 1px solid #2a2a4a;
+        }
+
+        .card .card-icon { font-size: 2em; margin-bottom: 0.3em; }
+        .card .card-title { font-size: 1em; font-weight: 700; color: #fff; margin-bottom: 0.3em; }
+        .card .card-body  { font-size: 0.88em; color: #b0bcd4; line-height: 1.5; }
+
+        /* ===== PILL BADGES ===== */
+        .pill {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 0.3em 1em;
+            font-size: 0.82em;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin: 0.25em;
+        }
+
+        .pill-green { background: rgba(78,203,141,0.18); color: #4ecb8d; border: 1px solid #4ecb8d; }
+        .pill-amber { background: rgba(245,166,35,0.18);  color: #f5a623; border: 1px solid #f5a623; }
+        .pill-red   { background: rgba(224,92,92,0.18);   color: #e05c5c; border: 1px solid #e05c5c; }
+        .pill-blue  { background: rgba(91,141,238,0.18);  color: #5b8dee; border: 1px solid #5b8dee; }
+
+        /* ===== MEDICATION TABLE ===== */
+        .med-table {
+            width: 100%;
+            max-width: 900px;
+            border-collapse: collapse;
+            margin-top: 1.2em;
+            font-size: 0.92em;
+        }
+
+        .med-table th {
+            background: #1a1a2e;
+            color: #a0b4d4;
+            font-weight: 600;
+            padding: 0.7em 1em;
+            text-align: left;
+            border-bottom: 2px solid #2a2a4a;
+            font-size: 0.85em;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .med-table td {
+            padding: 0.65em 1em;
+            border-bottom: 1px solid #1e1e30;
+            vertical-align: middle;
+            color: #d0d8e8;
+        }
+
+        .med-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+        /* ===== TIMELINE ===== */
+        .timeline {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            margin-top: 1.8em;
+            max-width: 860px;
+            width: 100%;
+        }
+
+        .tl-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .tl-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 22px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: #2a2a4a;
+        }
+
+        .tl-dot {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #1a1a2e;
+            border: 2px solid #5b8dee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5em;
+            font-size: 1.1em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tl-label {
+            font-size: 0.78em;
+            color: #5b8dee;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .tl-text {
+            font-size: 0.82em;
+            color: #a0b4d4;
+            margin-top: 0.3em;
+            line-height: 1.4;
+        }
+
+        /* ===== CHECKLIST ===== */
+        .checklist {
+            list-style: none;
+            margin-top: 1.2em;
+            text-align: left;
+            max-width: 680px;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8em;
+            font-size: 1.15em;
+            color: #d0d8e8;
+            margin-bottom: 0.8em;
+            line-height: 1.5;
+        }
+
+        .checklist li .check-icon {
+            font-size: 1.1em;
+            margin-top: 0.1em;
+            flex-shrink: 0;
+        }
+
+        /* ===== STAT BOXES ===== */
+        .stat-row {
+            display: flex;
+            gap: 2em;
+            margin-top: 1.4em;
+            justify-content: center;
+        }
+
+        .stat-box {
+            background: #1a1a2e;
+            border-radius: 14px;
+            padding: 1.2em 2em;
+            text-align: center;
+            border: 1px solid #2a2a4a;
+            min-width: 160px;
+        }
+
+        .stat-number {
+            font-size: 2.8em;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-desc {
+            font-size: 0.82em;
+            color: #a0b4d4;
+            margin-top: 0.4em;
+            line-height: 1.4;
+        }
+
+        /* ===== FOOTER / PROGRESS ===== */
+        .progress-bar-container {
+            height: 3px;
+            background: #1a1a2e;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #5b8dee, #38c9c9);
+            transition: width 0.4s ease;
+        }
+
+        .nav-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5em 2em;
+            background: #0d0d0d;
+            border-top: 1px solid #1a1a2e;
+        }
+
+        .nav-btn {
+            background: #1a1a2e;
+            color: #a0b4d4;
+            border: 1px solid #2a2a4a;
+            border-radius: 8px;
+            padding: 0.4em 1.2em;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover { background: #252545; color: #fff; }
+        .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+        .slide-counter {
+            font-size: 0.8em;
+            color: #5b8dee;
+            letter-spacing: 0.08em;
+        }
+
+        .branding {
+            font-size: 0.7em;
+            color: #3a3a5a;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* ===== TITLE SLIDE GRADIENT ===== */
+        .slide-title-bg {
+            background: radial-gradient(ellipse at 60% 40%, rgba(91,141,238,0.12) 0%, transparent 70%),
+                        radial-gradient(ellipse at 30% 70%, rgba(56,201,201,0.08) 0%, transparent 60%),
+                        #0d0d0d;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.5em; }
+            .body-text { font-size: 1em; }
+            .slide { padding: 2em 2em; }
+            .card-row { flex-direction: column; align-items: center; }
+            .stat-row { flex-direction: column; align-items: center; }
+            .timeline { flex-direction: column; gap: 1em; }
+            .tl-step::after { display: none; }
+        }
+        /* 2026 refresh overrides */
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(91, 141, 238, 0.18), transparent 26%),
+                radial-gradient(circle at 86% 14%, rgba(56, 201, 201, 0.12), transparent 18%),
+                linear-gradient(180deg, #08131f 0%, #06101a 100%);
+            font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
+        }
+
+        .deck::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+            background-size: 46px 46px;
+            mask-image: linear-gradient(180deg, rgba(0,0,0,0.22), transparent 80%);
+            pointer-events: none;
+        }
+
+        .slide {
+            padding: 4rem 5rem 6rem;
+            background: linear-gradient(180deg, rgba(8, 19, 31, 0.72), rgba(8, 19, 31, 0.3));
+        }
+
+        h1, h2 { letter-spacing: -0.035em; text-wrap: balance; }
+
+        .card {
+            background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
+            border: 1px solid rgba(131, 193, 255, 0.16);
+            border-radius: 18px;
+            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+            backdrop-filter: blur(10px);
+        }
+
+        #progress-bar, .progress-bar {
+            height: 4px;
+            background: linear-gradient(90deg, #5b8dee 0%, #38c9c9 100%);
+            box-shadow: 0 0 18px rgba(91, 141, 238, 0.42);
+        }
+
+        .nav, .nav-bar {
+            bottom: 1.2rem;
+            padding: 0.55rem 0.7rem;
+            border: 1px solid rgba(131, 193, 255, 0.16);
+            border-radius: 999px;
+            background: rgba(7, 17, 28, 0.72);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+        }
+
+        .nav button, .nav-btn {
+            border-radius: 999px;
+            background: rgba(14, 30, 48, 0.92);
+            border-color: rgba(131, 193, 255, 0.18);
+        }
+
+        .nav button:hover, .nav-btn:hover { background: rgba(31, 74, 116, 0.9); }
+        #counter, .counter, #slide-counter { color: #dce8f7; font-weight: 600; }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/ms-preconception-counseling/index.html">
+<meta name="description" content="Patient preconception counseling for women with multiple sclerosis: fertility and genetic risk, optimal timing for conception, disease-modifying therapy safety and washout requirements, pregnancy course and relapse patterns, labor and delivery considerations, postpartum relapse risk, breastfeeding compatibility, and a step-by-step action plan. Based on ACOG, SMFM, and ECTRIMS/EAN guidelines.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Multiple Sclerosis, Neurology, Disease-Modifying Therapy, Preconception Counseling, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/ms-preconception-counseling/index.html">
+<meta property="og:title" content="Multiple Sclerosis &amp; Pregnancy - Preconception Counseling | OpenMFM">
+<meta property="og:description" content="Patient preconception counseling for women with multiple sclerosis: fertility and genetic risk, optimal timing for conception, disease-modifying therapy safety and washout requirements, pregnancy course and relapse patterns, labor and delivery considerations, postpartum relapse risk, breastfeeding compatibility, and a step-by-step action plan. Based on ACOG, SMFM, and ECTRIMS/EAN guidelines.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Multiple Sclerosis &amp; Pregnancy - Preconception Counseling | OpenMFM">
+<meta name="twitter:description" content="Patient preconception counseling for women with multiple sclerosis: fertility and genetic risk, optimal timing for conception, disease-modifying therapy safety and washout requirements, pregnancy course and relapse patterns, labor and delivery considerations, postpartum relapse risk, breastfeeding compatibility, and a step-by-step action plan. Based on ACOG, SMFM, and ECTRIMS/EAN guidelines.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Multiple Sclerosis & Pregnancy - Preconception Counseling",
+  "description": "Patient preconception counseling for women with multiple sclerosis: fertility and genetic risk, optimal timing for conception, disease-modifying therapy safety and washout requirements, pregnancy course and relapse patterns, labor and delivery considerations, postpartum relapse risk, breastfeeding compatibility, and a step-by-step action plan. Based on ACOG, SMFM, and ECTRIMS/EAN guidelines.",
+  "url": "https://openmfm.org/decks/ms-preconception-counseling/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-19",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Multiple Sclerosis & Pregnancy - Preconception Counseling"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Multiple Sclerosis, Neurology, Disease-Modifying Therapy, Preconception Counseling, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+    <!-- ===== SLIDE 1: TITLE ===== -->
+    <div class="slide slide-title-bg active" id="slide-1">
+        <div class="icon-circle icon-blue" style="margin-bottom:0.8em;">🧠</div>
+        <div class="slide-label">Atlanta Perinatal Associates &nbsp;·&nbsp; Maternal-Fetal Medicine</div>
+        <h1>Multiple Sclerosis<br>&amp; Pregnancy</h1>
+        <div class="divider"></div>
+        <p class="subtitle">Preconception Counseling — A Partnership for Your Healthiest Pregnancy</p>
+        <p class="body-text" style="font-size:1em; margin-top:1.6em; color:#5a6a80;">
+            Use ← → arrow keys or the buttons below to navigate
+        </p>
+    </div>
+
+    <!-- ===== SLIDE 2: OVERVIEW ===== -->
+    <div class="slide" id="slide-2">
+        <div class="slide-label">Overview</div>
+        <h2>What We Will Cover Today</h2>
+        <div class="divider"></div>
+        <div class="card-row">
+            <div class="card">
+                <div class="card-icon">🌱</div>
+                <div class="card-title">Fertility</div>
+                <div class="card-body">MS does not impair your ability to conceive</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">⚖️</div>
+                <div class="card-title">Medications</div>
+                <div class="card-body">Safe transitions before and during pregnancy</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">📅</div>
+                <div class="card-title">Timing</div>
+                <div class="card-body">Optimizing disease stability before conception</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">👶</div>
+                <div class="card-title">Postpartum</div>
+                <div class="card-body">Protecting you after delivery</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SLIDE 3: FERTILITY & GENETICS ===== -->
+    <div class="slide" id="slide-3">
+        <div class="slide-label">Fertility &amp; Genetics</div>
+        <h2>Good News About Fertility &amp; Genetics</h2>
+        <div class="divider"></div>
+        <div class="stat-row">
+            <div class="stat-box">
+                <div class="stat-number accent-green">✓</div>
+                <div class="stat-desc">MS does <strong>not</strong> impair fertility or ovarian reserve</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number accent-blue">2–3.5%</div>
+                <div class="stat-desc">Child's risk of MS with <strong>one</strong> affected parent</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number accent-amber">~20%</div>
+                <div class="stat-desc">Risk only if <strong>both</strong> parents are affected</div>
+            </div>
+        </div>
+        <p class="body-text" style="margin-top:1.4em; font-size:1.1em;">
+            IVF is generally safe. Certain GnRH protocols may carry a small relapse risk — we will review your specific plan.
+        </p>
+    </div>
+
+    <!-- ===== SLIDE 4: TIMING & STABILITY ===== -->
+    <div class="slide" id="slide-4">
+        <div class="slide-label">Disease Stability</div>
+        <h2>The Ideal Window for Conception</h2>
+        <div class="divider"></div>
+        <div class="timeline">
+            <div class="tl-step">
+                <div class="tl-dot">🩺</div>
+                <div class="tl-label">Now</div>
+                <div class="tl-text">Review disease activity &amp; MRI</div>
+            </div>
+            <div class="tl-step">
+                <div class="tl-dot" style="border-color:#f5a623;">💊</div>
+                <div class="tl-label">Months 1–3</div>
+                <div class="tl-text">Transition medications safely</div>
+            </div>
+            <div class="tl-step">
+                <div class="tl-dot" style="border-color:#4ecb8d;">📋</div>
+                <div class="tl-label">Month 6–12</div>
+                <div class="tl-text">Confirm clinical &amp; MRI stability</div>
+            </div>
+            <div class="tl-step">
+                <div class="tl-dot" style="border-color:#38c9c9;">🌸</div>
+                <div class="tl-label">Conception</div>
+                <div class="tl-text">Attempt pregnancy when stable</div>
+            </div>
+        </div>
+        <p class="body-text" style="margin-top:1.6em; font-size:1.05em;">
+            <span class="accent-blue">Goal:</span> At least <strong>6–12 months</strong> of stability before stopping high-efficacy therapies.
+        </p>
+    </div>
+
+    <!-- ===== SLIDE 5: MEDICATION OVERVIEW ===== -->
+    <div class="slide" id="slide-5">
+        <div class="slide-label">Medication Safety</div>
+        <h2>Understanding Your Medication Options</h2>
+        <div class="divider"></div>
+        <div class="card-row" style="margin-top:1em;">
+            <div class="card" style="border-color:#4ecb8d55;">
+                <div class="card-icon">🟢</div>
+                <div class="card-title" style="color:#4ecb8d;">Generally Safe</div>
+                <div class="card-body">Injectable platform therapies may be continued</div>
+            </div>
+            <div class="card" style="border-color:#f5a62355;">
+                <div class="card-icon">🟡</div>
+                <div class="card-title" style="color:#f5a623;">Requires Planning</div>
+                <div class="card-body">High-efficacy monoclonals — timing &amp; monitoring needed</div>
+            </div>
+            <div class="card" style="border-color:#e05c5c55;">
+                <div class="card-icon">🔴</div>
+                <div class="card-title" style="color:#e05c5c;">Must Stop Before Pregnancy</div>
+                <div class="card-body">Oral agents &amp; teratogens — washout required</div>
+            </div>
+        </div>
+        <p class="body-text" style="font-size:1em; margin-top:1.2em;">
+            Every plan is individualized. We balance <span class="accent-amber">relapse risk</span> against <span class="accent-red">fetal safety</span>.
+        </p>
+    </div>
+
+    <!-- ===== SLIDE 6: MEDICATION TABLE ===== -->
+    <div class="slide" id="slide-6">
+        <div class="slide-label">Medication Guide</div>
+        <h2>Your Medication Safety Reference</h2>
+        <div class="divider" style="margin-bottom:0.8em;"></div>
+        <table class="med-table">
+            <thead>
+                <tr>
+                    <th>Medication</th>
+                    <th>Status</th>
+                    <th>Key Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Glatiramer acetate / Interferon-β</td>
+                    <td><span class="pill pill-green">✓ Safe</span></td>
+                    <td>May continue through conception</td>
+                </tr>
+                <tr>
+                    <td>Natalizumab</td>
+                    <td><span class="pill pill-amber">⚠ Plan</span></td>
+                    <td>May continue into 2nd/3rd trimester in high-risk patients</td>
+                </tr>
+                <tr>
+                    <td>Ocrelizumab / Rituximab</td>
+                    <td><span class="pill pill-amber">⚠ Plan</span></td>
+                    <td>Contraception 6–12 months after last dose; monitor infant B-cells</td>
+                </tr>
+                <tr>
+                    <td>Fingolimod / Siponimod</td>
+                    <td><span class="pill pill-red">✗ Stop</span></td>
+                    <td>2-month washout required; rebound risk if stopped abruptly</td>
+                </tr>
+                <tr>
+                    <td>Teriflunomide</td>
+                    <td><span class="pill pill-red">✗ Stop</span></td>
+                    <td>Accelerated elimination required; confirm plasma level &lt;0.02 mg/L</td>
+                </tr>
+                <tr>
+                    <td>Cladribine / Alemtuzumab</td>
+                    <td><span class="pill pill-blue">✓ Complete First</span></td>
+                    <td>Complete treatment 4–6 months before conception; no further dosing needed</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ===== SLIDE 7: PREGNANCY COURSE ===== -->
+    <div class="slide" id="slide-7">
+        <div class="slide-label">During Pregnancy</div>
+        <h2>What to Expect During Pregnancy</h2>
+        <div class="divider"></div>
+        <div class="card-row">
+            <div class="card" style="border-color:#4ecb8d55; max-width:320px;">
+                <div class="card-icon">📉</div>
+                <div class="card-title" style="color:#4ecb8d;">Relapse Rate Decreases</div>
+                <div class="card-body">Especially in the 3rd trimester — pregnancy has a natural protective effect</div>
+            </div>
+            <div class="card" style="border-color:#5b8dee55; max-width:320px;">
+                <div class="card-icon">🤝</div>
+                <div class="card-title" style="color:#5b8dee;">Multidisciplinary Care</div>
+                <div class="card-body">Your neurologist and MFM team will coordinate your care throughout pregnancy</div>
+            </div>
+            <div class="card" style="border-color:#f5a62355; max-width:320px;">
+                <div class="card-icon">🌿</div>
+                <div class="card-title" style="color:#f5a623;">Folic Acid</div>
+                <div class="card-body">Start 5 mg daily at least 3 months before conception</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SLIDE 8: LABOR & DELIVERY ===== -->
+    <div class="slide" id="slide-8">
+        <div class="slide-label">Labor &amp; Delivery</div>
+        <h2>Labor &amp; Delivery — What You Should Know</h2>
+        <div class="divider"></div>
+        <ul class="checklist">
+            <li>
+                <span class="check-icon accent-green">✔</span>
+                <span>MS is <strong>not a contraindication</strong> to any mode of delivery.</span>
+            </li>
+            <li>
+                <span class="check-icon accent-green">✔</span>
+                <span><strong>Vaginal delivery</strong> is generally preferred and encouraged.</span>
+            </li>
+            <li>
+                <span class="check-icon accent-green">✔</span>
+                <span>All obstetric anesthesia — including <strong>epidurals and spinal blocks</strong> — is safe and does not increase relapse risk.</span>
+            </li>
+            <li>
+                <span class="check-icon accent-amber">⚠</span>
+                <span>Fatigue may affect the second stage of labor; instrumental assistance may occasionally be needed.</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- ===== SLIDE 9: POSTPARTUM ===== -->
+    <div class="slide" id="slide-9">
+        <div class="slide-label">Postpartum</div>
+        <h2>The Postpartum Period — Our Priority</h2>
+        <div class="divider"></div>
+        <div class="stat-row">
+            <div class="stat-box" style="border-color:#e05c5c55;">
+                <div class="stat-number accent-red">↑</div>
+                <div class="stat-desc">Relapse risk is <strong>highest</strong> in the first 3 months postpartum</div>
+            </div>
+            <div class="stat-box" style="border-color:#4ecb8d55;">
+                <div class="stat-number accent-green">🤱</div>
+                <div class="stat-desc">Breastfeeding may offer <strong>modest protection</strong> against early relapses</div>
+            </div>
+            <div class="stat-box" style="border-color:#5b8dee55;">
+                <div class="stat-number accent-blue">💊</div>
+                <div class="stat-desc">We will plan <strong>prompt resumption</strong> of your DMT after delivery</div>
+            </div>
+        </div>
+        <p class="body-text" style="font-size:1em; margin-top:1.2em;">
+            High-risk patients may benefit from <span class="accent-teal">IVIG</span> or early DMT restart. We will individualize your postpartum plan.
+        </p>
+    </div>
+
+    <!-- ===== SLIDE 10: BREASTFEEDING ===== -->
+    <div class="slide" id="slide-10">
+        <div class="slide-label">Breastfeeding</div>
+        <h2>Breastfeeding &amp; Medications</h2>
+        <div class="divider"></div>
+        <table class="med-table" style="max-width:760px;">
+            <thead>
+                <tr>
+                    <th>Medication</th>
+                    <th>Breastfeeding</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Glatiramer acetate / Interferon-β</td>
+                    <td><span class="pill pill-green">✓ Compatible</span> — large molecules, low infant absorption</td>
+                </tr>
+                <tr>
+                    <td>Ocrelizumab / Rituximab</td>
+                    <td><span class="pill pill-amber">⚠ Limited Data</span> — breast milk levels very low; discuss with your team</td>
+                </tr>
+                <tr>
+                    <td>Fingolimod / Teriflunomide</td>
+                    <td><span class="pill pill-red">✗ Avoid</span> — small molecules may transfer into breast milk</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="body-text" style="font-size:1.05em; margin-top:1.2em;">
+            Breastfeeding is <span class="accent-green">encouraged</span>. We will select a medication compatible with nursing whenever possible.
+        </p>
+    </div>
+
+    <!-- ===== SLIDE 11: ACTION PLAN ===== -->
+    <div class="slide" id="slide-11">
+        <div class="slide-label">Next Steps</div>
+        <h2>Your Preconception Action Plan</h2>
+        <div class="divider"></div>
+        <ul class="checklist">
+            <li>
+                <span class="check-icon accent-blue">①</span>
+                <span>Start <strong>folic acid 5 mg daily</strong> — at least 3 months before trying to conceive.</span>
+            </li>
+            <li>
+                <span class="check-icon accent-blue">②</span>
+                <span>Schedule a <strong>neurology review</strong> to assess disease stability and plan medication transitions.</span>
+            </li>
+            <li>
+                <span class="check-icon accent-blue">③</span>
+                <span>Confirm <strong>6–12 months of clinical and MRI stability</strong> before stopping high-efficacy therapies.</span>
+            </li>
+            <li>
+                <span class="check-icon accent-blue">④</span>
+                <span>Continue <strong>regular MFM visits</strong> — we will co-manage your care with your neurologist.</span>
+            </li>
+            <li>
+                <span class="check-icon accent-blue">⑤</span>
+                <span>Discuss your <strong>postpartum plan</strong> now, including medication resumption and breastfeeding goals.</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- ===== SLIDE 12: CLOSING ===== -->
+    <div class="slide slide-title-bg" id="slide-12">
+        <div class="icon-circle icon-teal" style="margin-bottom:0.8em;">🤝</div>
+        <div class="slide-label">Atlanta Perinatal Associates</div>
+        <h2>You Are Not Alone in This Journey</h2>
+        <div class="divider" style="background:#38c9c9;"></div>
+        <p class="subtitle" style="color:#a0c4c4;">
+            MS and a healthy pregnancy are not mutually exclusive. With careful planning and a dedicated team, most patients with MS have excellent pregnancy outcomes.
+        </p>
+        <p class="body-text" style="margin-top:1.6em; font-size:0.95em; color:#5a6a80;">
+            ACOG Practice Bulletin &nbsp;·&nbsp; SMFM Guidelines &nbsp;·&nbsp; ECTRIMS/EAN Recommendations<br>
+            <em>Content reviewed for guideline consistency. Slides support physician-led counseling.</em>
+        </p>
+    </div>
+
+</div><!-- end .deck -->
+
+<!-- ===== PROGRESS BAR ===== -->
+<div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar" style="width: 8.33%;"></div>
+</div>
+
+<!-- ===== NAVIGATION FOOTER ===== -->
+<div class="nav-footer">
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>← Prev</button>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:0.2em;">
+        <span class="slide-counter" id="slideCounter">1 / 12</span>
+        <span class="branding">Atlanta Perinatal Associates · MFM</span>
+    </div>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+
+    function showSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === index);
+        });
+        document.getElementById('slideCounter').textContent = (index + 1) + ' / ' + total;
+        document.getElementById('progressBar').style.width = ((index + 1) / total * 100) + '%';
+        document.getElementById('prevBtn').disabled = index === 0;
+        document.getElementById('nextBtn').disabled = index === total - 1;
+    }
+
+    function nextSlide() {
+        if (currentSlide < total - 1) {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

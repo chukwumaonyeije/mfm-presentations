@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interstitial Pregnancy — Patient Education | MFM</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --teal:      #2dd4bf;
+      --teal-dim:  #134e4a;
+      --amber:     #fbbf24;
+      --amber-dim: #451a03;
+      --red:       #f87171;
+      --red-dim:   #450a0a;
+      --green:     #4ade80;
+      --green-dim: #052e16;
+      --blue:      #60a5fa;
+      --blue-dim:  #1e3a5f;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ─── Deck & Slides ─────────────────────────────────────────────── */
+    .deck { width: 100%; height: 100%; position: relative; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 4rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ─── Progress Bar ──────────────────────────────────────────────── */
+    #progress-bar {
+      position: fixed; bottom: 0; left: 0;
+      height: 3px;
+      background: var(--teal);
+      transition: width 0.4s ease;
+      z-index: 100;
+    }
+
+    /* ─── Desktop Navigation ────────────────────────────────────────── */
+    .nav-btn {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(45,212,191,0.12);
+      border: 1px solid var(--teal);
+      color: var(--teal);
+      width: 2.6rem; height: 2.6rem;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+      z-index: 50;
+    }
+    .nav-btn:hover { background: rgba(45,212,191,0.25); }
+    #btn-prev { left: 1rem; }
+    #btn-next { right: 1rem; }
+
+    /* ─── Mobile Bottom Navigation Bar ─────────────────────────────── */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(13,17,23,0.97);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 0.5rem 0.9rem;
+      z-index: 100;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+    .mob-btn {
+      background: rgba(45,212,191,0.12);
+      border: 1px solid var(--teal);
+      color: var(--teal);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mob-btn:active { background: rgba(45,212,191,0.3); }
+    .mob-info {
+      font-size: 0.73rem;
+      color: var(--muted);
+      text-align: center;
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    /* ─── Slide Counter (desktop) ───────────────────────────────────── */
+    #slide-counter {
+      position: fixed; bottom: 0.8rem; right: 1.2rem;
+      font-size: 0.75rem; color: var(--muted);
+      z-index: 100;
+    }
+
+    /* ─── Typography ────────────────────────────────────────────────── */
+    .slide-title {
+      font-size: clamp(1.6rem, 4.5vw, 3.4rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      color: var(--teal);
+      text-align: center;
+      line-height: 1.15;
+      margin-bottom: 0.35em;
+    }
+    .slide-subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.35rem);
+      color: var(--muted);
+      text-align: center;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+    .slide-body {
+      font-size: clamp(0.9rem, 1.6vw, 1.2rem);
+      line-height: 1.7;
+      color: var(--text);
+      text-align: center;
+      max-width: 820px;
+    }
+    .label {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    /* ─── Accent Pills ──────────────────────────────────────────────── */
+    .pill {
+      display: inline-block;
+      padding: 0.25em 0.85em;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin: 0.2em;
+    }
+    .pill-teal  { background: var(--teal-dim);  color: var(--teal);  border: 1px solid var(--teal); }
+    .pill-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber); }
+    .pill-red   { background: var(--red-dim);   color: var(--red);   border: 1px solid var(--red); }
+    .pill-green { background: var(--green-dim); color: var(--green); border: 1px solid var(--green); }
+    .pill-blue  { background: var(--blue-dim);  color: var(--blue);  border: 1px solid var(--blue); }
+
+    /* ─── Table Scroll Wrapper ──────────────────────────────────────── */
+    .table-scroll {
+      width: 100%;
+      max-width: 860px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
+    }
+
+    /* ─── Tables ────────────────────────────────────────────────────── */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 480px;
+      font-size: clamp(0.78rem, 1.35vw, 1rem);
+    }
+    th {
+      background: var(--teal-dim);
+      color: var(--teal);
+      padding: 0.65em 1em;
+      text-align: left;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--teal);
+    }
+    td {
+      padding: 0.6em 1em;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.025); }
+
+    /* ─── Icon Grid ─────────────────────────────────────────────────── */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 1rem;
+      max-width: 860px;
+      width: 100%;
+    }
+    .icon-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 0.8rem;
+      text-align: center;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.5rem;
+    }
+    .icon-card .icon { font-size: 1.9rem; }
+    .icon-card .icon-label {
+      font-size: 0.82rem;
+      color: var(--text);
+      line-height: 1.35;
+    }
+
+    /* ─── Timeline ──────────────────────────────────────────────────── */
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      max-width: 860px;
+      width: 100%;
+      position: relative;
+    }
+    .tl-step {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .tl-step::before {
+      content: '';
+      position: absolute;
+      top: 1rem; left: 50%;
+      width: 100%; height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .tl-step:last-child::before { display: none; }
+    .tl-dot {
+      width: 2rem; height: 2rem;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 600;
+      position: relative; z-index: 1;
+    }
+    .tl-text {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.5rem;
+      padding: 0 0.3rem;
+      line-height: 1.35;
+    }
+
+    /* ─── Stat Boxes ────────────────────────────────────────────────── */
+    .stat-row {
+      display: flex; gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 860px;
+    }
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 2rem;
+      text-align: center;
+      min-width: 160px;
+    }
+    .stat-num {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 200;
+      line-height: 1;
+    }
+    .stat-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+      line-height: 1.4;
+    }
+
+    /* ─── Two-column layout ─────────────────────────────────────────── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      max-width: 860px;
+      width: 100%;
+    }
+    .col-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+    }
+    .col-card h3 {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 0.7rem;
+    }
+    .col-card ul {
+      list-style: none;
+      padding: 0;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .col-card ul li::before { content: '› '; color: var(--teal); }
+
+    /* ─── Alert Box ─────────────────────────────────────────────────── */
+    .alert-box {
+      background: var(--red-dim);
+      border: 1px solid var(--red);
+      border-radius: 10px;
+      padding: 1.2rem 1.8rem;
+      max-width: 680px;
+      text-align: center;
+      width: 100%;
+    }
+    .alert-box .alert-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .alert-box p { font-size: 1rem; color: var(--red); line-height: 1.6; }
+
+    /* ─── Reassurance Box ───────────────────────────────────────────── */
+    .reassure-box {
+      background: var(--green-dim);
+      border: 1px solid var(--green);
+      border-radius: 10px;
+      padding: 1.2rem 1.8rem;
+      max-width: 680px;
+      text-align: center;
+      width: 100%;
+    }
+    .reassure-box p { font-size: 1rem; color: var(--green); line-height: 1.6; }
+
+    /* ─── Footer ────────────────────────────────────────────────────── */
+    .slide-footer {
+      position: absolute; bottom: 1.4rem;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-align: center;
+      width: 100%;
+      padding: 0 1rem;
+    }
+
+    /* ─── Anatomy SVG Slide ─────────────────────────────────────────── */
+    .anatomy-wrap {
+      display: flex; gap: 3rem; align-items: center;
+      max-width: 860px; width: 100%;
+    }
+    .anatomy-wrap svg { flex-shrink: 0; }
+    .anatomy-legend { flex: 1; }
+    .legend-item {
+      display: flex; align-items: center; gap: 0.7rem;
+      margin-bottom: 0.7rem;
+      font-size: 0.9rem;
+    }
+    .legend-dot {
+      width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+    }
+
+    /* ─── Diagnosis Layout (Slide 6) ────────────────────────────────── */
+    .diag-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 1.8rem;
+      max-width: 920px;
+      width: 100%;
+      align-items: start;
+    }
+    .diag-us-panel {
+      background: #030303;
+      border-radius: 10px;
+      border: 1px solid #1e1e1e;
+      overflow: hidden;
+      line-height: 0;
+    }
+    .diag-us-panel svg { width: 100%; height: auto; display: block; }
+    .diag-cards { display: flex; flex-direction: column; gap: 0.9rem; }
+
+    /* ─── Ultrasound Sign Cards (Slide 7) ───────────────────────────── */
+    .us-signs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      max-width: 920px;
+      width: 100%;
+    }
+    .us-sign-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .us-image { background: #030303; line-height: 0; }
+    .us-image svg { width: 100%; height: auto; display: block; }
+    .us-sign-body { padding: 0.85rem 1rem; flex: 1; }
+    .us-sign-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--amber);
+      margin-bottom: 0.35rem;
+      line-height: 1.3;
+    }
+    .us-sign-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .us-sign-badge {
+      display: inline-block;
+      margin-top: 0.5rem;
+      background: var(--teal-dim);
+      border: 1px solid var(--teal);
+      color: var(--teal);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.15em 0.5em;
+      border-radius: 4px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MOBILE RESPONSIVE  (≤ 768px)
+    ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Slides become scrollable; start at top */
+      .slide {
+        padding: 1.5rem 1rem 5.8rem;
+        padding-top: 2rem;
+        justify-content: flex-start;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      /* Progress bar moves to top on mobile */
+      #progress-bar { bottom: auto; top: 0; }
+
+      /* Hide desktop nav & counter; show mobile bar */
+      .nav-btn { display: none; }
+      .mobile-nav { display: flex; }
+      #slide-counter { display: none; }
+
+      /* Footer becomes inline (not absolute) */
+      .slide-footer {
+        position: relative;
+        bottom: auto;
+        margin-top: 1.2rem;
+        padding: 0;
+        text-align: center;
+      }
+
+      /* Typography */
+      .slide-title { font-size: clamp(1.35rem, 5.5vw, 2rem); }
+      .slide-subtitle { font-size: 0.9rem; margin-bottom: 0.9rem; }
+      .slide-body { font-size: 0.88rem; }
+      .label { font-size: 0.65rem; }
+
+      /* Two-col → single col */
+      .two-col { grid-template-columns: 1fr; gap: 0.75rem; }
+
+      /* Anatomy → stacked */
+      .anatomy-wrap {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+      }
+      .anatomy-wrap svg { width: 180px; height: auto; }
+
+      /* Diagnosis layout → stacked */
+      .diag-layout {
+        grid-template-columns: 1fr;
+        gap: 0.9rem;
+      }
+      .diag-us-panel { max-width: 260px; margin: 0 auto; }
+
+      /* Timeline → vertical */
+      .timeline {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+      }
+      .tl-step {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.9rem;
+        flex: none;
+        width: 100%;
+      }
+      .tl-step::before { display: none; }
+      .tl-dot { flex-shrink: 0; }
+      .tl-text {
+        text-align: left;
+        margin-top: 0;
+        font-size: 0.84rem;
+        color: var(--text);
+      }
+
+      /* Stats */
+      .stat-row { gap: 0.75rem; }
+      .stat-box {
+        min-width: 0;
+        flex: 1 1 calc(50% - 0.38rem);
+        padding: 1rem 1rem;
+      }
+      .stat-num { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+
+      /* Icon grids */
+      .icon-grid { grid-template-columns: repeat(2, 1fr); gap: 0.65rem; }
+      .icon-card { padding: 0.8rem 0.6rem; }
+      .icon-card .icon { font-size: 1.5rem; }
+      .icon-card .icon-label { font-size: 0.78rem; }
+
+      /* US sign cards → horizontal list */
+      .us-signs-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+      .us-sign-card { flex-direction: row; }
+      .us-image { width: 110px; flex-shrink: 0; }
+      .us-sign-body { padding: 0.7rem 0.8rem; }
+      .us-sign-name { font-size: 0.82rem; }
+      .us-sign-desc { font-size: 0.73rem; }
+
+      /* Alert / Reassure boxes */
+      .alert-box { padding: 0.9rem 1.1rem; }
+      .alert-box p { font-size: 0.88rem; }
+      .reassure-box { padding: 0.9rem 1.1rem; }
+      .reassure-box p { font-size: 0.88rem; }
+    }
+
+    @media (max-width: 480px) {
+      .slide { padding: 1.2rem 0.8rem 5.8rem; padding-top: 1.8rem; }
+      .stat-box { flex: 1 1 100%; }
+    }
+  </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/a1L4qxdrT8CcaFvqLSVFenKNPgtg3n7LzBFHVPhGDg6gEc914lJK5HAo7v0uKP6niBDjDirO28WpRLlAz08QyEJcP5zZImo33ZMIecRaN2dCcNnI2xGDYkRuvwsxz_t3swsOhhZ-0b8t3v0FILWVb9YYsC1XPXNW7900KXmkRBgscyKWfaPP8qYqCJjr1OePBdM-Ug50t22gcEft17Q_m3h9IIOHl5yz5ThbrCt66MhMGRJrBnT8m3jZ2bNsGJ7zqt8wHDLyWfHpBNO7rK5W5oxG6OcRWZ2nnZOVtcxUWL1pBiqW1xhoenuagZmGWVGeH0bQsDRPFqR6wSuewjjgyZJX871hp7q1Hby70rDtY8TPrnAAv62oE1f6upZOrvRHCVZkNzDDTWabH8u3Y3WJXcOaT1RS1rWArMF2PeG8yECeySa-p_5oE6tr-PJzzLZCglJNGblThKu-rEfijmi_luqrxFT_HTHpYSS2U0qeiSS0TFHKHhFzU1HWRKM5S-RpeXaPW-9kVatRZr3KcPdJQQ_5FzHRjGmZpPQlVj6I1k4hnXTzOUoSzLjPPH3YqDhApqxUMzrJEzTx3FYpj2KIYbGsynYNZS9VoP8MNfMoyxMGdLDTHfhUzuwwftvIE6GjFsuxiELfF6hZ0AjW15Yr6EoE1HWkmQZqKmDpaPYcTEwsyb_n3IByQaHZ0XIorQ8mD956ZNtqTLTgm0gPKwF4pQabwpyktcElaOLo0JU5BLwO6I_i5fgO2lvgcYUvu9HhCJNKJoS71mZKHz_hYtkxAEKdrazpy8JVWj3p_bkNdpW_lzjtEk2q6D1G-llUTuXuXLEoHjP9y5hMqtC1ntoEl9fgYObCSqlI8T-OfbP08GDI2rT_f0migIoP6vZE2XC6b30b4vdWRH9mdOEEGUVq1ttcbzVWmYcUNpvch_VzkEtwBTLUulxb7SorMEeE3kvLomPpdfkjcr1jhWWbhJ1EAc0-wcJ-oklW9RpNVjxvFqoh1faUqeqjy8wu-mWzP0BgcmvVjE0Liln01tc9eVyG3QG5gOrrt9caDTzHxkQXwns-vY3y2i5j-vd6onnNFgwF7A_Ak2O5awUzQaTpu3h7BKceduilwoPd_rHbg90jvbregrlaYtsFBS9-c12SfgvmRVDEUhkqSLwxx_F3GHj7y9Cwwfaa7f_VJVRLyZqbn6lkuFNgRCvgdJfI35ET_1Ag1nH8VO_HfRn_WXLqUzuZHN106QJSeH5oCGS2evl9dhSv-KwgEyNDo62kRBgKybZsle--GyNiWZ-WIk0FzsxMzw3h7w5CgMsVDpC2uRlmAPaKhmMQXuu-OGnPelD-4VGsY1MIyUGhJBMXhGQ3ecgToQocfPBJrqRHO39-1gcdijP3kOuRjPklBHUMRX5J7nMCAiaMQcm1kXYNg8KtsDzfq23qVVbuqCUUZXlbegSMfeHllLRc5whOxlTnNQmc-lcexVt2VRrBcgAjbxZ3cXrRwfnP1Az6ZHoHbhtTw3lDhByLJ2fMINHw3fPXkNc-RKX-cKzzplenZuVvaO-5pQq4y-OnoGqgGMEWcoFy08DYs0IIkQkyrIYGblAtOs8FhX6K1cMEhOo41j-SSGhDYZYeLoKiups3bJxrk-Q5tI6WcAB0WKDnUMggOffIRtymy5ECJVCMucBKl5-fXFewMmtT180z4t4boqj0_dpTZ0mVdB8-pXCAtx1duHm6un-nkkT57GYR6yAfWsUJeLWkt3hpKw'></script><style>
+/* 2026 refresh overrides */
+:root {
+  --refresh-bg: #08131f;
+  --refresh-surface: rgba(11, 26, 42, 0.88);
+  --refresh-surface-strong: rgba(15, 34, 54, 0.94);
+  --refresh-line: rgba(133, 201, 255, 0.16);
+  --refresh-text: #f4f8fc;
+  --refresh-muted: #b5c8d8;
+  --refresh-accent: #4ddcc2;
+  --refresh-accent-warm: #ffbd63;
+}
+
+html, body {
+  background:
+    radial-gradient(circle at top left, rgba(77, 220, 194, 0.16), transparent 24%),
+    radial-gradient(circle at 85% 16%, rgba(255, 189, 99, 0.12), transparent 20%),
+    linear-gradient(180deg, #08131f 0%, #06101a 100%) !important;
+  color: var(--refresh-text) !important;
+  font-family: "Aptos", "Segoe UI", system-ui, sans-serif !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.26), transparent 82%);
+}
+
+.slide,
+.slide-container,
+.slide-content,
+.presentation,
+.deck,
+main,
+.container {
+  position: relative;
+}
+
+.slide,
+.slide-content,
+.panel,
+.card,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+ul.references,
+table,
+.grid-item {
+  border-radius: 18px !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24) !important;
+}
+
+.card,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+.grid-item,
+table,
+blockquote {
+  background: var(--refresh-surface) !important;
+  border: 1px solid var(--refresh-line) !important;
+  backdrop-filter: blur(10px);
+}
+
+h1, h2, h3, h4, .slide-title {
+  color: var(--refresh-text) !important;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+p, li, td, th, .subtitle, .muted, small {
+  color: var(--refresh-muted) !important;
+}
+
+strong, b, .accent, .highlight, .key-point, a {
+  color: var(--refresh-accent) !important;
+}
+
+button,
+.nav button,
+.controls button,
+.btn,
+.button {
+  border-radius: 999px !important;
+  border: 1px solid var(--refresh-line) !important;
+  background: var(--refresh-surface-strong) !important;
+  color: var(--refresh-text) !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22) !important;
+}
+
+.progress,
+.progress-bar,
+#progressBar,
+.progress-fill {
+  background: linear-gradient(90deg, #4ddcc2 0%, #79e09b 100%) !important;
+  box-shadow: 0 0 18px rgba(77, 220, 194, 0.38);
+}
+</style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/interstitial-pregnancy/interstitial_pregnancy.html">
+<meta name="description" content="Covers interstitial pregnancy, a rare but life-threatening ectopic implantation in the intramural segment of the fallopian tube. Includes anatomy, ultrasound diagnosis with the interstitial line sign, symptoms, risk factors, and treatment options including methotrexate and cornual resection.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Interstitial Pregnancy, Ectopic Pregnancy, High-Risk Pregnancy, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/interstitial-pregnancy/interstitial_pregnancy.html">
+<meta property="og:title" content="Interstitial Pregnancy - Patient Education | OpenMFM">
+<meta property="og:description" content="Covers interstitial pregnancy, a rare but life-threatening ectopic implantation in the intramural segment of the fallopian tube. Includes anatomy, ultrasound diagnosis with the interstitial line sign, symptoms, risk factors, and treatment options including methotrexate and cornual resection.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Interstitial Pregnancy - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Covers interstitial pregnancy, a rare but life-threatening ectopic implantation in the intramural segment of the fallopian tube. Includes anatomy, ultrasound diagnosis with the interstitial line sign, symptoms, risk factors, and treatment options including methotrexate and cornual resection.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Interstitial Pregnancy - Patient Education",
+  "description": "Covers interstitial pregnancy, a rare but life-threatening ectopic implantation in the intramural segment of the fallopian tube. Includes anatomy, ultrasound diagnosis with the interstitial line sign, symptoms, risk factors, and treatment options including methotrexate and cornual resection.",
+  "url": "https://openmfm.org/decks/interstitial-pregnancy/interstitial_pregnancy.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-26",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Interstitial Pregnancy - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Interstitial Pregnancy, Ectopic Pregnancy, High-Risk Pregnancy, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button class="nav-btn" id="btn-prev" aria-label="Previous slide">&#8592;</button>
+<button class="nav-btn" id="btn-next" aria-label="Next slide">&#8594;</button>
+<div id="slide-counter"></div>
+
+<!-- Mobile bottom navigation bar -->
+<div class="mobile-nav">
+  <button class="mob-btn" id="mob-prev">&#8592; Prev</button>
+  <div class="mob-info" id="mob-info"></div>
+  <button class="mob-btn" id="mob-next">Next &#8594;</button>
+</div>
+
+<div class="deck">
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide active">
+    <div class="label">Maternal-Fetal Medicine · Patient Education</div>
+    <h1 class="slide-title" style="font-size:clamp(2rem,5.5vw,4.2rem);">Interstitial Pregnancy</h1>
+    <p class="slide-subtitle">What It Is · How It Is Diagnosed · What Happens Next</p>
+    <div style="margin-top:2rem; display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center;">
+      <span class="pill pill-teal">ACOG Guideline–Based</span>
+      <span class="pill pill-blue">SMFM Consensus</span>
+      <span class="pill pill-amber">Patient-Facing</span>
+    </div>
+    <div class="slide-footer">Atlanta Perinatal Associates &nbsp;|&nbsp; DoctorsWhoCode.blog</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 2 — WHAT IS AN INTERSTITIAL PREGNANCY?
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Definition</div>
+    <h2 class="slide-title">A Pregnancy Outside the Uterine Cavity</h2>
+    <div style="margin-top:1.5rem;" class="anatomy-wrap">
+      <!-- Inline SVG: simplified uterus + tubes -->
+      <svg width="240" height="220" viewBox="0 0 240 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Uterus anatomy diagram">
+        <!-- Uterine body -->
+        <ellipse cx="120" cy="130" rx="60" ry="70" fill="#1e2d2d" stroke="#2dd4bf" stroke-width="2"/>
+        <!-- Uterine cavity -->
+        <ellipse cx="120" cy="130" rx="28" ry="40" fill="#0d1117" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <!-- Left tube -->
+        <path d="M62 100 Q30 80 10 60" stroke="#8b949e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Right tube -->
+        <path d="M178 100 Q210 80 230 60" stroke="#8b949e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Left interstitial zone (amber highlight) -->
+        <circle cx="62" cy="100" r="11" fill="#451a03" stroke="#fbbf24" stroke-width="2"/>
+        <!-- Right interstitial zone -->
+        <circle cx="178" cy="100" r="11" fill="#1e2d2d" stroke="#30363d" stroke-width="1.5"/>
+        <!-- Ectopic sac in left interstitial zone -->
+        <circle cx="62" cy="100" r="6" fill="#fbbf24" opacity="0.85"/>
+        <!-- Labels -->
+        <text x="120" y="136" text-anchor="middle" fill="#60a5fa" font-size="9" font-family="sans-serif">Uterine</text>
+        <text x="120" y="147" text-anchor="middle" fill="#60a5fa" font-size="9" font-family="sans-serif">Cavity</text>
+        <text x="18" y="55" fill="#fbbf24" font-size="9" font-family="sans-serif">Ectopic</text>
+        <text x="18" y="66" fill="#fbbf24" font-size="9" font-family="sans-serif">Sac Here</text>
+        <line x1="38" y1="65" x2="56" y2="95" stroke="#fbbf24" stroke-width="1" stroke-dasharray="3 2"/>
+      </svg>
+      <div class="anatomy-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#fbbf24;"></div>
+          <span>Interstitial segment — where the tube passes through the uterine muscle</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#60a5fa;"></div>
+          <span>Normal uterine cavity — where a healthy pregnancy implants</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#8b949e;"></div>
+          <span>Fallopian tube — the pathway eggs travel from ovary to uterus</span>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">The embryo implants in the muscular wall of the uterus, not inside the cavity.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 3 — HOW COMMON IS IT?
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Epidemiology</div>
+    <h2 class="slide-title">Rare — But Increasing</h2>
+    <div class="stat-row" style="margin-top:1.8rem;">
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--amber);">2–6%</div>
+        <div class="stat-desc">of all ectopic pregnancies<br>are interstitial</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--red);">2–5%</div>
+        <div class="stat-desc">mortality rate — higher<br>than other ectopic types</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--blue);">↑</div>
+        <div class="stat-desc">Incidence rising with<br>increased use of IVF &amp; ART</div>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1.8rem; font-size:0.95rem; color:var(--muted);">
+      Early recognition dramatically improves outcomes. Your care team is trained to identify this condition.
+    </p>
+    <div class="slide-footer">Source: ACOG, SMFM, peer-reviewed literature</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 4 — WHY IS IT DIFFERENT?
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Why It Matters</div>
+    <h2 class="slide-title">The Uterine Wall Allows Later Growth</h2>
+    <div style="margin-top:1.8rem; max-width:820px; width:100%;">
+      <!-- Timeline: tubal vs interstitial rupture -->
+      <div style="margin-bottom:1.2rem;">
+        <div style="font-size:0.78rem; color:var(--muted); margin-bottom:0.4rem; letter-spacing:0.06em; text-transform:uppercase;">Typical Tubal Ectopic</div>
+        <div style="display:flex; align-items:center; gap:0;">
+          <div style="width:55%; height:14px; background:linear-gradient(90deg,#1e3a5f,#f87171); border-radius:7px 0 0 7px;"></div>
+          <div style="background:var(--red-dim); border:1px solid var(--red); border-radius:0 7px 7px 0; padding:0.15em 0.7em; font-size:0.8rem; color:var(--red); white-space:nowrap;">Rupture 6–10 wks</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.78rem; color:var(--muted); margin-bottom:0.4rem; letter-spacing:0.06em; text-transform:uppercase;">Interstitial Pregnancy</div>
+        <div style="display:flex; align-items:center; gap:0;">
+          <div style="width:85%; height:14px; background:linear-gradient(90deg,#134e4a,#fbbf24); border-radius:7px 0 0 7px;"></div>
+          <div style="background:var(--amber-dim); border:1px solid var(--amber); border-radius:0 7px 7px 0; padding:0.15em 0.7em; font-size:0.8rem; color:var(--amber); white-space:nowrap;">Rupture up to 16 wks</div>
+        </div>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1.6rem; font-size:0.95rem; color:var(--muted);">
+      The thick muscle layer surrounding the tube allows the pregnancy to grow longer — and symptoms may appear later than expected.
+    </p>
+    <div class="slide-footer">Rupture occurs in 20% of cases progressing beyond 12 weeks.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 5 — RISK FACTORS
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Risk Factors</div>
+    <h2 class="slide-title">Certain Histories Increase Risk</h2>
+    <div class="icon-grid" style="margin-top:1.8rem;">
+      <div class="icon-card">
+        <div class="icon">🔬</div>
+        <div class="icon-label">IVF or Assisted Reproduction (ART)</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">✂️</div>
+        <div class="icon-label">Prior Removal of a Fallopian Tube (Salpingectomy)</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">📍</div>
+        <div class="icon-label">Previous Ectopic Pregnancy</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">🦠</div>
+        <div class="icon-label">Pelvic Inflammatory Disease (PID)</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">🔩</div>
+        <div class="icon-label">IUD in Place at Time of Conception</div>
+      </div>
+    </div>
+    <div class="slide-footer">Having a risk factor does not mean this will happen — it guides your care team's monitoring.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 6 — DIAGNOSIS OVERVIEW  (with US illustration)
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Diagnosis</div>
+    <h2 class="slide-title">Ultrasound Is the Key Diagnostic Tool</h2>
+    <div class="diag-layout" style="margin-top:1.6rem;">
+      <!-- Ultrasound illustration panel -->
+      <div class="diag-us-panel">
+        <svg viewBox="0 0 220 290" xmlns="http://www.w3.org/2000/svg">
+          <!-- Dark background -->
+          <rect width="220" height="290" fill="#020202"/>
+          <!-- Scan field (fan) -->
+          <path d="M110 8 L8 278 L212 278 Z" fill="#070707"/>
+          <!-- US machine header -->
+          <text x="5" y="13" fill="#666" font-size="6" font-family="monospace">TVUS  9.0MHz</text>
+          <text x="5" y="21" fill="#444" font-size="5.5" font-family="monospace">OB/GYN · APA</text>
+          <!-- Uterine body (myometrium, medium echogenicity) -->
+          <ellipse cx="110" cy="185" rx="72" ry="58" fill="#181818"/>
+          <ellipse cx="110" cy="185" rx="72" ry="58" fill="none" stroke="#383838" stroke-width="2.5"/>
+          <!-- Inner myometrial layer -->
+          <ellipse cx="110" cy="185" rx="59" ry="46" fill="#101010" stroke="#252525" stroke-width="1.2"/>
+          <!-- Uterine cavity (anechoic) with echogenic endometrium border -->
+          <ellipse cx="110" cy="185" rx="28" ry="21" fill="#040404"/>
+          <ellipse cx="110" cy="185" rx="28" ry="21" fill="none" stroke="#d5d5d5" stroke-width="1.4"/>
+          <!-- INTERSTITIAL ECTOPIC SAC (embedded in upper-left myometrium) -->
+          <circle cx="58" cy="144" r="16" fill="#060606" stroke="#e2e2e2" stroke-width="2.2"/>
+          <!-- Yolk sac within gestational sac -->
+          <circle cx="58" cy="144" r="6" fill="#161616" stroke="#aaaaaa" stroke-width="1"/>
+          <!-- Thin myometrial mantle (dashed ring just outside sac) -->
+          <circle cx="58" cy="144" r="20" fill="none" stroke="#444" stroke-width="0.9" stroke-dasharray="3 2.5"/>
+          <!-- INTERSTITIAL LINE — bright echogenic line connecting sac to cavity -->
+          <line x1="86" y1="166" x2="73" y2="157" stroke="white" stroke-width="2.6" stroke-linecap="round" opacity="0.92"/>
+          <!-- Measurement calipers for gestational sac -->
+          <line x1="41" y1="144" x2="45" y2="144" stroke="#fbbf24" stroke-width="1.3"/>
+          <line x1="71" y1="144" x2="75" y2="144" stroke="#fbbf24" stroke-width="1.3"/>
+          <text x="77" y="141" fill="#fbbf24" font-size="5.5" font-family="monospace">2.3cm</text>
+          <!-- Annotation: Ectopic Sac -->
+          <line x1="32" y1="126" x2="45" y2="133" stroke="#60a5fa" stroke-width="0.9"/>
+          <text x="4" y="124" fill="#60a5fa" font-size="6.5" font-family="sans-serif" font-weight="bold">Ectopic Sac</text>
+          <!-- Annotation: Interstitial Line -->
+          <line x1="104" y1="148" x2="93" y2="158" stroke="#fbbf24" stroke-width="0.8"/>
+          <text x="104" y="146" fill="#fbbf24" font-size="5.5" font-family="sans-serif">IL sign</text>
+          <!-- Annotation: Empty cavity -->
+          <line x1="142" y1="215" x2="142" y2="206" stroke="#2dd4bf" stroke-width="0.9"/>
+          <text x="112" y="222" fill="#2dd4bf" font-size="6" font-family="sans-serif">Empty Cavity</text>
+          <!-- Depth markers (right side) -->
+          <line x1="213" y1="50" x2="217" y2="50" stroke="#3a3a3a" stroke-width="0.8"/>
+          <text x="204" y="53" fill="#3a3a3a" font-size="4.8" font-family="monospace">2</text>
+          <line x1="213" y1="100" x2="217" y2="100" stroke="#3a3a3a" stroke-width="0.8"/>
+          <text x="204" y="103" fill="#3a3a3a" font-size="4.8" font-family="monospace">4</text>
+          <line x1="213" y1="150" x2="217" y2="150" stroke="#3a3a3a" stroke-width="0.8"/>
+          <text x="204" y="153" fill="#3a3a3a" font-size="4.8" font-family="monospace">6</text>
+          <line x1="213" y1="200" x2="217" y2="200" stroke="#3a3a3a" stroke-width="0.8"/>
+          <text x="204" y="203" fill="#3a3a3a" font-size="4.8" font-family="monospace">8</text>
+          <line x1="213" y1="250" x2="217" y2="250" stroke="#3a3a3a" stroke-width="0.8"/>
+          <text x="200" y="253" fill="#3a3a3a" font-size="4.8" font-family="monospace">10</text>
+          <!-- Bottom info bar -->
+          <rect x="0" y="278" width="220" height="12" fill="#111"/>
+          <text x="4" y="286" fill="#555" font-size="5.5" font-family="monospace">TVUS · Interstitial Ectopic</text>
+        </svg>
+      </div>
+      <!-- Info cards -->
+      <div class="diag-cards">
+        <div class="col-card">
+          <h3 style="color:var(--teal);">Transvaginal Ultrasound (TVUS)</h3>
+          <ul>
+            <li>High-resolution imaging of the uterus and tubes</li>
+            <li>Identifies the location of the gestational sac</li>
+            <li>Three specific signs confirm the diagnosis</li>
+            <li>Most sensitive test available</li>
+          </ul>
+        </div>
+        <div class="col-card">
+          <h3 style="color:var(--blue);">Serum β-HCG Monitoring</h3>
+          <ul>
+            <li>Blood test measuring pregnancy hormone levels</li>
+            <li>Levels guide management decisions</li>
+            <li>Serial measurements track response to treatment</li>
+            <li>Monitored until undetectable after treatment</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">Diagnosis is confirmed by combining ultrasound findings with clinical assessment.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 7 — THREE ULTRASOUND SIGNS  (with SVG ultrasound images)
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Ultrasound Criteria</div>
+    <h2 class="slide-title">Three Signs Confirm the Diagnosis</h2>
+    <div class="us-signs-grid" style="margin-top:1.6rem;">
+
+      <!-- Sign 1: Interstitial Line Sign -->
+      <div class="us-sign-card">
+        <div class="us-image">
+          <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="155" fill="#020202"/>
+            <path d="M100 5 L5 148 L195 148 Z" fill="#070707"/>
+            <!-- Uterine body -->
+            <ellipse cx="100" cy="105" rx="58" ry="42" fill="#181818" stroke="#323232" stroke-width="2"/>
+            <ellipse cx="100" cy="105" rx="46" ry="31" fill="#0e0e0e" stroke="#222" stroke-width="1"/>
+            <!-- Uterine cavity (anechoic, bright border) -->
+            <ellipse cx="100" cy="105" rx="22" ry="16" fill="#040404"/>
+            <ellipse cx="100" cy="105" rx="22" ry="16" fill="none" stroke="#d2d2d2" stroke-width="1.3"/>
+            <!-- Interstitial sac (upper left, within myometrium) -->
+            <circle cx="57" cy="76" r="12" fill="#050505" stroke="#e0e0e0" stroke-width="2.2"/>
+            <circle cx="57" cy="76" r="5" fill="#161616" stroke="#999" stroke-width="0.9"/>
+            <!-- THE INTERSTITIAL LINE — bright echogenic white line -->
+            <line x1="78" y1="92" x2="67" y2="84" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.94"/>
+            <!-- Highlight circle around the line -->
+            <ellipse cx="72" cy="88" rx="8" ry="5" fill="none" stroke="#fbbf24" stroke-width="1" stroke-dasharray="2.5 1.5" transform="rotate(-30 72 88)"/>
+            <!-- US header -->
+            <text x="4" y="11" fill="#666" font-size="6" font-family="monospace">TVUS 9MHz</text>
+            <!-- Labels -->
+            <text x="80" y="74" fill="#fbbf24" font-size="6" font-family="sans-serif">IL sign ↗</text>
+            <text x="28" y="65" fill="#60a5fa" font-size="5.5" font-family="sans-serif">GS</text>
+            <line x1="35" y1="66" x2="47" y2="71" stroke="#60a5fa" stroke-width="0.7"/>
+            <!-- Depth markers -->
+            <line x1="2" y1="30" x2="7" y2="30" stroke="#444" stroke-width="0.8"/>
+            <text x="8" y="33" fill="#444" font-size="5" font-family="monospace">2</text>
+            <line x1="2" y1="70" x2="7" y2="70" stroke="#444" stroke-width="0.8"/>
+            <text x="8" y="73" fill="#444" font-size="5" font-family="monospace">4</text>
+            <line x1="2" y1="110" x2="7" y2="110" stroke="#444" stroke-width="0.8"/>
+            <text x="8" y="113" fill="#444" font-size="5" font-family="monospace">6</text>
+          </svg>
+        </div>
+        <div class="us-sign-body">
+          <div class="us-sign-name">Interstitial Line Sign</div>
+          <div class="us-sign-desc">A bright echogenic line connects the pregnancy sac to the uterine cavity, confirming interstitial location.</div>
+          <span class="us-sign-badge">Most specific sign</span>
+        </div>
+      </div>
+
+      <!-- Sign 2: Thin Myometrial Mantle -->
+      <div class="us-sign-card">
+        <div class="us-image">
+          <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="155" fill="#020202"/>
+            <path d="M100 5 L5 148 L195 148 Z" fill="#070707"/>
+            <!-- Uterine body -->
+            <ellipse cx="108" cy="108" rx="60" ry="44" fill="#181818" stroke="#323232" stroke-width="2"/>
+            <ellipse cx="108" cy="108" rx="48" ry="33" fill="#0e0e0e" stroke="#202020" stroke-width="1"/>
+            <!-- Interstitial sac (near outer uterine wall, upper-left) -->
+            <circle cx="55" cy="78" r="13" fill="#050505" stroke="#e0e0e0" stroke-width="2"/>
+            <circle cx="55" cy="78" r="5.5" fill="#141414" stroke="#888" stroke-width="0.9"/>
+            <!-- Outer uterine wall near the sac (bright myometrial rim) -->
+            <path d="M38 68 Q30 78 34 92" stroke="#404040" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M38 68 Q30 78 34 92" stroke="#606060" stroke-width="1" fill="none" stroke-linecap="round"/>
+            <!-- Measurement bracket showing thin mantle -->
+            <line x1="37" y1="75" x2="37" y2="82" stroke="#fbbf24" stroke-width="1.4"/>
+            <line x1="47" y1="75" x2="47" y2="82" stroke="#fbbf24" stroke-width="1.4"/>
+            <line x1="37" y1="78" x2="47" y2="78" stroke="#fbbf24" stroke-width="1.4"/>
+            <!-- Measurement label box -->
+            <rect x="12" y="70" width="24" height="13" rx="2" fill="#1c1200" stroke="#fbbf24" stroke-width="0.5"/>
+            <text x="14" y="80" fill="#fbbf24" font-size="7.5" font-family="monospace" font-weight="bold">4mm</text>
+            <!-- Bracket end ticks -->
+            <line x1="37" y1="75" x2="40" y2="75" stroke="#fbbf24" stroke-width="1"/>
+            <line x1="37" y1="82" x2="40" y2="82" stroke="#fbbf24" stroke-width="1"/>
+            <!-- US header -->
+            <text x="4" y="11" fill="#666" font-size="6" font-family="monospace">TVUS 9MHz</text>
+            <!-- Labels -->
+            <text x="50" y="62" fill="#fbbf24" font-size="5.5" font-family="sans-serif">GS</text>
+            <text x="4" y="148" fill="#f87171" font-size="6" font-family="sans-serif">mantle &lt; 5mm — high risk</text>
+            <!-- Depth markers -->
+            <line x1="193" y1="30" x2="197" y2="30" stroke="#444" stroke-width="0.8"/>
+            <text x="184" y="33" fill="#444" font-size="5" font-family="monospace">2</text>
+            <line x1="193" y1="70" x2="197" y2="70" stroke="#444" stroke-width="0.8"/>
+            <text x="184" y="73" fill="#444" font-size="5" font-family="monospace">4</text>
+            <line x1="193" y1="110" x2="197" y2="110" stroke="#444" stroke-width="0.8"/>
+            <text x="184" y="113" fill="#444" font-size="5" font-family="monospace">6</text>
+          </svg>
+        </div>
+        <div class="us-sign-body">
+          <div class="us-sign-name">Thin Myometrial Mantle</div>
+          <div class="us-sign-desc">Less than 5 mm of uterine muscle surrounds the sac, indicating deep embedding in the wall.</div>
+          <span class="us-sign-badge">Rupture risk marker</span>
+        </div>
+      </div>
+
+      <!-- Sign 3: Empty Uterine Cavity -->
+      <div class="us-sign-card">
+        <div class="us-image">
+          <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="155" fill="#020202"/>
+            <path d="M100 5 L5 148 L195 148 Z" fill="#070707"/>
+            <!-- Uterine body -->
+            <ellipse cx="108" cy="108" rx="60" ry="44" fill="#181818" stroke="#323232" stroke-width="2"/>
+            <ellipse cx="108" cy="108" rx="48" ry="33" fill="#0e0e0e" stroke="#202020" stroke-width="1"/>
+            <!-- EMPTY cavity (anechoic, clearly no sac) -->
+            <ellipse cx="108" cy="108" rx="25" ry="19" fill="#030303"/>
+            <ellipse cx="108" cy="108" rx="25" ry="19" fill="none" stroke="#d8d8d8" stroke-width="1.6"/>
+            <!-- Arrow pointing to empty cavity -->
+            <line x1="108" y1="76" x2="108" y2="91" stroke="#2dd4bf" stroke-width="1.4"/>
+            <polygon points="104,89 108,97 112,89" fill="#2dd4bf"/>
+            <!-- EMPTY label -->
+            <text x="86" y="73" fill="#2dd4bf" font-size="8" font-family="sans-serif" font-weight="bold">EMPTY</text>
+            <!-- Sac shown off to upper left (where it actually is) -->
+            <circle cx="55" cy="76" r="10" fill="#060606" stroke="#fbbf24" stroke-width="1.6" stroke-dasharray="3 2"/>
+            <circle cx="55" cy="76" r="3.8" fill="#141414" stroke="#888" stroke-width="0.8"/>
+            <text x="36" y="62" fill="#fbbf24" font-size="5.5" font-family="sans-serif">Actual sac</text>
+            <line x1="51" y1="63" x2="53" y2="67" stroke="#fbbf24" stroke-width="0.7"/>
+            <!-- US header -->
+            <text x="4" y="11" fill="#666" font-size="6" font-family="monospace">TVUS 9MHz</text>
+            <!-- Footer label -->
+            <text x="4" y="148" fill="#2dd4bf" font-size="6" font-family="sans-serif">No IUP — rules out intrauterine</text>
+            <!-- Depth markers -->
+            <line x1="193" y1="30" x2="197" y2="30" stroke="#444" stroke-width="0.8"/>
+            <text x="184" y="33" fill="#444" font-size="5" font-family="monospace">2</text>
+            <line x1="193" y1="70" x2="197" y2="70" stroke="#444" stroke-width="0.8"/>
+            <text x="184" y="73" fill="#444" font-size="5" font-family="monospace">4</text>
+            <line x1="193" y1="110" x2="197" y2="110" stroke="#444" stroke-width="0.8"/>
+            <text x="184" y="113" fill="#444" font-size="5" font-family="monospace">6</text>
+          </svg>
+        </div>
+        <div class="us-sign-body">
+          <div class="us-sign-name">Empty Uterine Cavity</div>
+          <div class="us-sign-desc">No pregnancy sac is seen inside the uterus — rules out a normal intrauterine pregnancy.</div>
+          <span class="us-sign-badge">Rules out IUP</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="slide-footer">All three signs together provide high diagnostic certainty. (ACOG/SMFM consensus criteria)</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 8 — MANAGEMENT OVERVIEW
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Treatment Overview</div>
+    <h2 class="slide-title">Treatment Is Tailored to Your Situation</h2>
+    <div class="icon-grid" style="margin-top:1.8rem; grid-template-columns: repeat(3, 1fr);">
+      <div class="icon-card" style="border-color:var(--teal);">
+        <div class="icon">💊</div>
+        <div class="icon-label" style="color:var(--teal); font-weight:500;">Medication</div>
+        <div class="icon-label">Non-surgical option for stable patients</div>
+      </div>
+      <div class="icon-card" style="border-color:var(--blue);">
+        <div class="icon">🔭</div>
+        <div class="icon-label" style="color:var(--blue); font-weight:500;">Minimally Invasive Surgery</div>
+        <div class="icon-label">Laparoscopic approach; smaller incisions</div>
+      </div>
+      <div class="icon-card" style="border-color:var(--red);">
+        <div class="icon">🏥</div>
+        <div class="icon-label" style="color:var(--red); font-weight:500;">Emergency Surgery</div>
+        <div class="icon-label">If rupture or instability occurs</div>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1.6rem; font-size:0.95rem; color:var(--muted);">
+      Your team considers your stability, gestational age, β-HCG level, and your fertility goals together.
+    </p>
+    <div class="slide-footer">No single approach is right for everyone — your care plan is individualized.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 9 — MEDICATION OPTION (MTX)
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Medical Management</div>
+    <h2 class="slide-title">Methotrexate: A Non-Surgical Approach</h2>
+    <div class="two-col" style="margin-top:1.8rem;">
+      <div class="col-card">
+        <h3 style="color:var(--teal);">Who Is a Candidate?</h3>
+        <ul>
+          <li>Hemodynamically stable</li>
+          <li>No signs of rupture</li>
+          <li>β-HCG typically below 5,000 mIU/mL</li>
+          <li>Asymptomatic or mildly symptomatic</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h3 style="color:var(--blue);">What to Expect</h3>
+        <ul>
+          <li>Given as an intramuscular injection</li>
+          <li>Stops the pregnancy from growing</li>
+          <li>Weekly β-HCG checks until undetectable</li>
+          <li>May require more than one dose</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">Surgery may still be needed if β-HCG does not fall as expected.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 10 — SURGICAL OPTIONS TABLE
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Surgical Management</div>
+    <h2 class="slide-title">Surgery: When and What Kind</h2>
+    <div class="table-scroll" style="margin-top:1.8rem;">
+      <table>
+        <thead>
+          <tr>
+            <th>Surgical Approach</th>
+            <th>When It Is Used</th>
+            <th>Key Consideration</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:var(--teal);">Laparoscopic Cornuostomy</strong></td>
+            <td>Stable; fertility desired; small sac (&lt;4–5 cm)</td>
+            <td>Minimally invasive; preserves uterus</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--blue);">Cornual Resection</strong></td>
+            <td>Larger pregnancy; failed medication</td>
+            <td>Wedge removal of the affected area</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--amber);">Laparotomy</strong></td>
+            <td>Rupture; heavy bleeding; instability</td>
+            <td>Open surgery for emergency stabilization</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--red);">Hysterectomy</strong></td>
+            <td>Uncontrolled hemorrhage; rare</td>
+            <td>Reserved for life-threatening situations</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-footer">Laparoscopy is the preferred approach in stable patients. (SMFM consensus)</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 11 — IF RUPTURE OCCURS
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Emergency Warning Signs</div>
+    <h2 class="slide-title" style="color:var(--red);">Rupture Is a Medical Emergency</h2>
+    <div class="alert-box" style="margin-top:1.5rem;">
+      <div class="alert-icon">🚨</div>
+      <p>Sudden severe abdominal pain · Dizziness or fainting · Shoulder tip pain · Heavy vaginal bleeding</p>
+    </div>
+    <div style="margin-top:1.5rem; display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;">
+      <div class="icon-card" style="border-color:var(--red); min-width:140px;">
+        <div class="icon">📞</div>
+        <div class="icon-label">Call 911 immediately</div>
+      </div>
+      <div class="icon-card" style="border-color:var(--red); min-width:140px;">
+        <div class="icon">🏃</div>
+        <div class="icon-label">Go to the nearest Emergency Room</div>
+      </div>
+      <div class="icon-card" style="border-color:var(--red); min-width:140px;">
+        <div class="icon">🩸</div>
+        <div class="icon-label">Do not wait — bleeding can be rapid</div>
+      </div>
+    </div>
+    <div class="slide-footer">The uterine and ovarian arteries supply this area — hemorrhage can be life-threatening.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 12 — FUTURE PREGNANCY
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Looking Ahead</div>
+    <h2 class="slide-title">Future Pregnancy Is Possible</h2>
+    <!-- Timeline -->
+    <div class="timeline" style="margin-top:2rem;">
+      <div class="tl-step">
+        <div class="tl-dot" style="background:var(--teal-dim); border:2px solid var(--teal); color:var(--teal);">1</div>
+        <div class="tl-text">Treatment &amp; Recovery</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:var(--blue-dim); border:2px solid var(--blue); color:var(--blue);">2</div>
+        <div class="tl-text">β-HCG Monitoring Until Undetectable</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:var(--amber-dim); border:2px solid var(--amber); color:var(--amber);">3</div>
+        <div class="tl-text">Early Ultrasound at ~6 Weeks in Next Pregnancy</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:var(--green-dim); border:2px solid var(--green); color:var(--green);">4</div>
+        <div class="tl-text">Delivery Planning (C-section at 36–37 wks if uterus repaired)</div>
+      </div>
+    </div>
+    <div class="reassure-box" style="margin-top:1.8rem;">
+      <p>Most patients go on to have successful pregnancies with appropriate monitoring and care.</p>
+    </div>
+    <div class="slide-footer">If the uterine wall was repaired, cesarean delivery is typically recommended. Your MFM team will guide your plan.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 13 — YOUR CARE TEAM
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Partnership in Care</div>
+    <h2 class="slide-title">You Are Not Facing This Alone</h2>
+    <div class="icon-grid" style="margin-top:1.8rem; grid-template-columns: repeat(3, 1fr);">
+      <div class="icon-card" style="border-color:var(--teal);">
+        <div class="icon">👩‍⚕️</div>
+        <div class="icon-label">Your MFM specialist guides every step of your care</div>
+      </div>
+      <div class="icon-card" style="border-color:var(--blue);">
+        <div class="icon">📊</div>
+        <div class="icon-label">Serial β-HCG monitoring confirms complete resolution</div>
+      </div>
+      <div class="icon-card" style="border-color:var(--green);">
+        <div class="icon">💬</div>
+        <div class="icon-label">Ask questions at any time — no concern is too small</div>
+      </div>
+    </div>
+    <div class="reassure-box" style="margin-top:1.8rem;">
+      <p>Your care team is committed to your safety, your recovery, and your future reproductive goals.</p>
+    </div>
+    <div class="slide-footer">Atlanta Perinatal Associates &nbsp;|&nbsp; Maternal-Fetal Medicine</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SLIDE 14 — SUMMARY
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="label">Summary</div>
+    <h2 class="slide-title">Key Takeaways</h2>
+    <div class="table-scroll" style="margin-top:1.8rem;">
+      <table>
+        <thead>
+          <tr>
+            <th>Topic</th>
+            <th>Key Point</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:var(--teal);">What it is</strong></td>
+            <td>A pregnancy implanted in the uterine wall — a type of ectopic pregnancy</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--amber);">Why it matters</strong></td>
+            <td>Can grow longer than other ectopics and rupture with rapid, heavy bleeding</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--blue);">How it is found</strong></td>
+            <td>Transvaginal ultrasound + serial β-HCG blood tests</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--teal);">How it is treated</strong></td>
+            <td>Medication or surgery — chosen based on your individual situation</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--green);">Future pregnancies</strong></td>
+            <td>Possible for most patients with early monitoring and MFM guidance</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-footer">Source: ACOG Practice Bulletins · SMFM Consensus · Peer-Reviewed Literature &nbsp;|&nbsp; Atlanta Perinatal Associates</div>
+  </div>
+
+</div><!-- /.deck -->
+
+<script>
+  (function () {
+    let current = 0;
+    const slides  = document.querySelectorAll('.slide');
+    const bar     = document.getElementById('progress-bar');
+    const counter = document.getElementById('slide-counter');
+    const mobInfo = document.getElementById('mob-info');
+    const total   = slides.length;
+
+    function show(idx) {
+      slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+      // Scroll each slide to top when activated
+      slides[idx].scrollTop = 0;
+      const pct = ((idx + 1) / total) * 100;
+      bar.style.width = pct + '%';
+      counter.textContent = (idx + 1) + ' / ' + total;
+      if (mobInfo) mobInfo.textContent = (idx + 1) + ' of ' + total;
+    }
+
+    function next() { current = (current + 1) % total; show(current); }
+    function prev() { current = (current - 1 + total) % total; show(current); }
+
+    // Desktop nav buttons
+    document.getElementById('btn-next').addEventListener('click', next);
+    document.getElementById('btn-prev').addEventListener('click', prev);
+
+    // Mobile nav buttons
+    document.getElementById('mob-next').addEventListener('click', next);
+    document.getElementById('mob-prev').addEventListener('click', prev);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+    });
+
+    // Touch / swipe support
+    let touchStartX = 0;
+    let touchStartY = 0;
+    document.addEventListener('touchstart', function (e) {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+    document.addEventListener('touchend', function (e) {
+      const dx = e.changedTouches[0].screenX - touchStartX;
+      const dy = e.changedTouches[0].screenY - touchStartY;
+      // Only trigger swipe if horizontal movement dominates
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 45) {
+        dx < 0 ? next() : prev();
+      }
+    }, { passive: true });
+
+    show(0);
+  })();
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

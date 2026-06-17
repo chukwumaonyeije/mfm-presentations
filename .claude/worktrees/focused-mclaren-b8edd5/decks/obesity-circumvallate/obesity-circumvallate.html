@@ -1,0 +1,717 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obesity & Circumvallate Placenta in Pregnancy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0b111c;
+            color: #e8f0ff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .slide-container {
+            width: 100vw;
+            overflow-y: auto;
+            scroll-snap-type: y proximity;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            scroll-snap-align: start;
+            padding: 80px 100px;
+            position: relative;
+            background: linear-gradient(135deg, #0b111c 0%, #1a2332 100%);
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #0d1520 0%, #1c2838 100%);
+        }
+        
+        h2 {
+            font-size: 52px;
+            font-weight: 700;
+            color: #4fd1c5;
+            margin-bottom: 50px;
+            letter-spacing: -1px;
+            text-align: center;
+        }
+        
+        .content {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        ul.tight {
+            list-style: none;
+            padding: 0;
+        }
+        
+        ul.tight li {
+            font-size: 26px;
+            color: #cbd5e0;
+            margin: 24px 0;
+            padding-left: 45px;
+            position: relative;
+            line-height: 1.5;
+        }
+        
+        ul.tight li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #4fd1c5;
+            font-weight: bold;
+            font-size: 30px;
+        }
+        
+        ul.tight.small li {
+            font-size: 20px;
+            margin: 14px 0;
+        }
+        
+        ul.tight.small li::before {
+            font-size: 24px;
+        }
+        
+        .grid {
+            display: grid;
+            gap: 35px;
+            margin: 50px 0;
+        }
+        
+        .grid.cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .grid.cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .panel {
+            background: rgba(22, 50, 74, 0.5);
+            border: 2px solid rgba(79, 209, 197, 0.3);
+            border-radius: 18px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .panel:hover {
+            border-color: rgba(79, 209, 197, 0.6);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(79, 209, 197, 0.15);
+        }
+        
+        .kicker {
+            font-size: 18px;
+            font-weight: 700;
+            color: #4fd1c5;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 18px;
+        }
+        
+        .badge.warn {
+            background: rgba(246, 173, 85, 0.25);
+            color: #f6ad55;
+            border: 2px solid rgba(246, 173, 85, 0.5);
+        }
+        
+        .badge.danger {
+            background: rgba(252, 129, 129, 0.25);
+            color: #fc8181;
+            border: 2px solid rgba(252, 129, 129, 0.5);
+        }
+        
+        .badge.ok {
+            background: rgba(79, 209, 197, 0.25);
+            color: #4fd1c5;
+            border: 2px solid rgba(79, 209, 197, 0.5);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 40px 0;
+            background: rgba(22, 50, 74, 0.4);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid rgba(79, 209, 197, 0.2);
+        }
+        
+        thead {
+            background: rgba(79, 209, 197, 0.2);
+        }
+        
+        th, td {
+            padding: 24px 28px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        th {
+            font-size: 20px;
+            font-weight: 700;
+            color: #4fd1c5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        td {
+            font-size: 19px;
+            color: #cbd5e0;
+            line-height: 1.6;
+        }
+        
+        tbody tr:hover {
+            background: rgba(79, 209, 197, 0.08);
+        }
+        
+        .muted {
+            color: #8a9aaf;
+            font-style: italic;
+        }
+        
+        .small {
+            font-size: 19px;
+        }
+        
+        p {
+            font-size: 22px;
+            color: #cbd5e0;
+            line-height: 1.7;
+        }
+        
+        svg {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+        
+        .svg path, .svg circle, .svg line {
+            stroke: #4fd1c5;
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+        }
+        
+        .hr {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(79, 209, 197, 0.6), transparent);
+            margin: 35px 0;
+        }
+        
+        @media (max-width: 1024px) {
+            .slide {
+                padding: 60px 50px;
+            }
+            
+            h2 {
+                font-size: 40px;
+            }
+            
+            .grid.cols-2, .grid.cols-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            ul.tight li {
+                font-size: 22px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 30px;
+            }
+            
+            h2 {
+                font-size: 32px;
+            }
+            
+            ul.tight li {
+                font-size: 20px;
+            }
+        }
+    </style>
+
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/obesity-circumvallate/obesity-circumvallate.html">
+<meta name="description" content="Covers circumvallate placenta and its association with obesity: placental anatomy, risk of abruption, preterm birth, and fetal growth restriction surveillance.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Obesity, Placental Abnormalities, Risk Assessment">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/obesity-circumvallate/obesity-circumvallate.html">
+<meta property="og:title" content="Obesity &amp; Circumvallate Placenta | OpenMFM">
+<meta property="og:description" content="Covers circumvallate placenta and its association with obesity: placental anatomy, risk of abruption, preterm birth, and fetal growth restriction surveillance.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Obesity &amp; Circumvallate Placenta | OpenMFM">
+<meta name="twitter:description" content="Covers circumvallate placenta and its association with obesity: placental anatomy, risk of abruption, preterm birth, and fetal growth restriction surveillance.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Obesity & Circumvallate Placenta",
+  "description": "Covers circumvallate placenta and its association with obesity: placental anatomy, risk of abruption, preterm birth, and fetal growth restriction surveillance.",
+  "url": "https://openmfm.org/decks/obesity-circumvallate/obesity-circumvallate.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-14",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Obesity & Circumvallate Placenta"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Obesity, Placental Abnormalities, Risk Assessment"
+}
+</script>
+<style>
+/* 2026 refresh overrides */
+:root {
+  --refresh-bg: #08131f;
+  --refresh-surface: rgba(11, 26, 42, 0.88);
+  --refresh-surface-strong: rgba(15, 34, 54, 0.94);
+  --refresh-line: rgba(133, 201, 255, 0.16);
+  --refresh-text: #f4f8fc;
+  --refresh-muted: #b5c8d8;
+  --refresh-accent: #4ddcc2;
+  --refresh-accent-warm: #ffbd63;
+}
+
+html, body {
+  background:
+    radial-gradient(circle at top left, rgba(77, 220, 194, 0.16), transparent 24%),
+    radial-gradient(circle at 85% 16%, rgba(255, 189, 99, 0.12), transparent 20%),
+    linear-gradient(180deg, #08131f 0%, #06101a 100%) !important;
+  color: var(--refresh-text) !important;
+  font-family: "Aptos", "Segoe UI", system-ui, sans-serif !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.26), transparent 82%);
+}
+
+.slide,
+.slide-container,
+.slide-content,
+.presentation,
+.deck,
+main,
+.container {
+  position: relative;
+}
+
+.slide,
+.slide-content,
+.panel,
+.card,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+ul.references,
+table,
+.grid-item {
+  border-radius: 18px !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24) !important;
+}
+
+.card,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+.grid-item,
+table,
+blockquote {
+  background: var(--refresh-surface) !important;
+  border: 1px solid var(--refresh-line) !important;
+  backdrop-filter: blur(10px);
+}
+
+h1, h2, h3, h4, .slide-title {
+  color: var(--refresh-text) !important;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+p, li, td, th, .subtitle, .muted, small {
+  color: var(--refresh-muted) !important;
+}
+
+strong, b, .accent, .highlight, .key-point, a {
+  color: var(--refresh-accent) !important;
+}
+
+button,
+.nav button,
+.controls button,
+.btn,
+.button {
+  border-radius: 999px !important;
+  border: 1px solid var(--refresh-line) !important;
+  background: var(--refresh-surface-strong) !important;
+  color: var(--refresh-text) !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22) !important;
+}
+
+.progress,
+.progress-bar,
+#progressBar,
+.progress-fill {
+  background: linear-gradient(90deg, #4ddcc2 0%, #79e09b 100%) !important;
+  box-shadow: 0 0 18px rgba(77, 220, 194, 0.38);
+}
+</style>
+</head>
+<body>
+    <div class="slide-container">
+<section class="slide" aria-label="Objectives">
+  <h2>Objectives</h2>
+  <ul class="tight">
+    <li>Differentiate placental edge variants and ultrasound limitations.</li>
+    <li>Risk-stratify with class III obesity and suspected circumvallate placenta.</li>
+    <li>Select surveillance and delivery planning without overinterpretation.</li>
+  </ul>
+</section>
+
+<section class="slide" aria-label="De-identified case snapshot">
+  <h2>Case snapshot (de-identified)</h2>
+  <div class="grid cols-2">
+    <div class="panel">
+      <div class="kicker">Maternal</div>
+      <ul class="tight small">
+        <li>33-year-old, G3P2</li>
+        <li>Class III obesity (BMI ~42)</li>
+        <li>Prior cesarean, then successful VBAC</li>
+        <li>Normotensive at visit</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <div class="kicker">Ultrasound (18+ weeks)</div>
+      <ul class="tight small">
+        <li>EFW appropriate; normal FHR</li>
+        <li>Normal fluid by MVP method</li>
+        <li>Cervical length normal</li>
+        <li>Anatomy suboptimal; placental edge â€œcircumvallateâ€ suspected</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Why obesity matters">
+  <h2>Why class III obesity matters</h2>
+  <div class="grid cols-3">
+    <div class="panel">
+      <span class="badge warn">Maternal</span>
+      <ul class="tight small">
+        <li>Gestational diabetes</li>
+        <li>Hypertensive disorders</li>
+        <li>Cesarean & wound morbidity</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <span class="badge warn">Fetal</span>
+      <ul class="tight small">
+        <li>Congenital anomaly detection limits</li>
+        <li>Stillbirth risk rises with BMI</li>
+        <li>Growth abnormalities</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <span class="badge warn">Systems</span>
+      <ul class="tight small">
+        <li>Anesthesia/airway planning</li>
+        <li>Hemorrhage preparedness</li>
+        <li>VTE risk management</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Screening and prevention in obesity">
+  <h2>Screening & prevention (obesity)</h2>
+  <table aria-label="Core elements commonly aligned with ACOG/SMFM practices">
+    <thead>
+      <tr><th>Domain</th><th>Common approach</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Diabetes</td>
+        <td>Assess for early screening if additional risk factors; routine 24â€“28 week screening.</td>
+      </tr>
+      <tr>
+        <td>Preeclampsia prevention</td>
+        <td>Low-dose aspirin if criteria met (obesity is a moderate-risk factor; usually needs â‰¥2 moderate-risk factors).</td>
+      </tr>
+      <tr>
+        <td>Anatomic evaluation</td>
+        <td>Detailed anatomy often indicated; repeat scan if incomplete visualization.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="muted small">Apply individualized risk criteria; avoid â€œone-size-fits-allâ€ prophylaxis.</p>
+</section>
+
+<section class="slide" aria-label="Ultrasound limitations in obesity">
+  <h2>Ultrasound in obesity: practical limits</h2>
+  <ul class="tight">
+    <li>Reduced resolution â†’ false reassurance or false positives.</li>
+    <li>Use optimization: longer exam time, transvaginal as needed, lower frequency, alternative maternal positions.</li>
+    <li>Document â€œsuboptimalâ€ structures explicitly; schedule targeted reattempt.</li>
+  </ul>
+</section>
+
+<section class="slide" aria-label="Placental edge variants">
+  <h2>Placental edge variants</h2>
+  <div class="grid cols-2">
+    <div class="panel">
+      <div class="kicker">Circumvallate</div>
+      <p class="small">Chorionic plate smaller than basal plate; folded/heaped edge creates a raised ring.</p>
+    </div>
+    <div class="panel">
+      <div class="kicker">Circummarginate</div>
+      <p class="small">Similar concept but flatter transition; often less conspicuous on ultrasound.</p>
+    </div>
+  </div>
+  <svg viewBox="0 0 720 160" style="width:100%;height:auto" aria-label="Diagram of placental edge ring concept">
+    <defs>
+      <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="rgba(79,209,197,.35)"/>
+        <stop offset="1" stop-color="rgba(255,255,255,.06)"/>
+      </linearGradient>
+    </defs>
+    <rect x="10" y="18" width="700" height="124" rx="14" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.12)"/>
+    <circle cx="170" cy="80" r="46" fill="url(#g)" stroke="rgba(238,243,255,.85)" stroke-width="2"/>
+    <circle cx="170" cy="80" r="34" fill="rgba(11,19,32,.9)" stroke="rgba(79,209,197,.9)" stroke-width="3"/>
+    <path d="M120 78c12-22 42-34 66-24" fill="none" stroke="rgba(246,173,85,.9)" stroke-width="3"/>
+    <text x="240" y="68" fill="rgba(238,243,255,.92)" font-size="16">Raised/folded edge may appear as a â€œshelfâ€</text>
+    <text x="240" y="96" fill="rgba(183,195,224,.9)" font-size="14">Prenatal imaging diagnosis is imperfect; confirmatory pathology uncommon.</text>
+  </svg>
+</section>
+
+<section class="slide" aria-label="Ultrasound diagnosis cautions">
+  <h2>Diagnosis: avoid overcalling</h2>
+  <ul class="tight">
+    <li>Ultrasound features overlap with normal variants and marginal hematoma.</li>
+    <li>Historical data show limited accuracy; use â€œsuspectedâ€ wording.</li>
+    <li>Focus on clinical sequelae (growth, bleeding, abruption signs), not the label.</li>
+  </ul>
+</section>
+
+<section class="slide" aria-label="Outcome evidence uncertainty">
+  <h2>Outcomes: evidence is mixed</h2>
+  <div class="grid cols-2">
+    <div class="panel">
+      <span class="badge warn">Reported associations</span>
+      <ul class="tight small">
+        <li>Antepartum bleeding</li>
+        <li>Placental abruption</li>
+        <li>Preterm birth</li>
+        <li>SGA / FGR</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <span class="badge ok">Recent cohorts</span>
+      <ul class="tight small">
+        <li>Some series: no clear adverse correlation when diagnosed prenatally</li>
+        <li>Selection and misclassification likely</li>
+        <li>Counsel as â€œpossible increased risk,â€ not deterministic</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Surveillance plan">
+  <h2>Surveillance: a pragmatic approach</h2>
+  <ul class="tight">
+    <li>Repeat targeted anatomy in 3â€“6 weeks if incomplete today.</li>
+    <li>Serial growth in third trimester; frequency individualized (often q4 weeks).</li>
+    <li>Add UA Doppler only if FGR suspected/diagnosed.</li>
+  </ul>
+  <div class="panel">
+    <div class="kicker">Suggested timeline</div>
+    <svg viewBox="0 0 820 120" style="width:100%;height:auto" aria-label="Timeline for follow-up scans">
+      <line x1="60" y1="64" x2="760" y2="64" stroke="rgba(255,255,255,.18)" stroke-width="4" stroke-linecap="round"/>
+      <g fill="none" stroke-width="3">
+        <circle cx="120" cy="64" r="14" stroke="rgba(79,209,197,.95)" fill="rgba(79,209,197,.12)"/>
+        <circle cx="320" cy="64" r="14" stroke="rgba(79,209,197,.95)" fill="rgba(79,209,197,.12)"/>
+        <circle cx="520" cy="64" r="14" stroke="rgba(79,209,197,.95)" fill="rgba(79,209,197,.12)"/>
+        <circle cx="700" cy="64" r="14" stroke="rgba(79,209,197,.95)" fill="rgba(79,209,197,.12)"/>
+      </g>
+      <text x="92" y="30" fill="rgba(238,243,255,.92)" font-size="14">22â€“24w</text>
+      <text x="280" y="30" fill="rgba(238,243,255,.92)" font-size="14">28w</text>
+      <text x="480" y="30" fill="rgba(238,243,255,.92)" font-size="14">32w</text>
+      <text x="668" y="30" fill="rgba(238,243,255,.92)" font-size="14">36w</text>
+      <text x="70" y="100" fill="rgba(183,195,224,.9)" font-size="13">Targeted anatomy</text>
+      <text x="260" y="100" fill="rgba(183,195,224,.9)" font-size="13">Growth Â± AF</text>
+      <text x="460" y="100" fill="rgba(183,195,224,.9)" font-size="13">Growth Â± Doppler</text>
+      <text x="640" y="100" fill="rgba(183,195,224,.9)" font-size="13">Growth / delivery planning</text>
+    </svg>
+  </div>
+</section>
+
+<section class="slide" aria-label="Antenatal testing in obesity">
+  <h2>Antenatal testing (obesity)</h2>
+  <table aria-label="Common consensus guidance for surveillance by BMI class">
+    <thead>
+      <tr><th>Prepregnancy BMI</th><th>When testing may be considered</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>35.0â€“39.9</td><td>Often considered starting ~37 weeks (if no other indications).</td></tr>
+      <tr><td>â‰¥40</td><td>Often considered starting ~34 weeks (if no other indications).</td></tr>
+    </tbody>
+  </table>
+  <p class="muted small">Use shared decision-making; start earlier for superimposed comorbidity or abnormal growth/fluid.</p>
+</section>
+
+<section class="slide" aria-label="When to escalate">
+  <h2>When to escalate care</h2>
+  <div class="grid cols-3">
+    <div class="panel">
+      <span class="badge danger">Bleeding</span>
+      <p class="small">Any persistent or heavy bleeding warrants prompt evaluation; consider abruption differentials.</p>
+    </div>
+    <div class="panel">
+      <span class="badge danger">ROM</span>
+      <p class="small">Leakage concern â†’ triage for ROM assessment; confirm fluid method (MVP vs AFI).</p>
+    </div>
+    <div class="panel">
+      <span class="badge warn">Growth concern</span>
+      <p class="small">If EFW <10% or falling percentiles â†’ interval growth, UA Doppler, testing plan.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Delivery planning with prior cesarean and VBAC">
+  <h2>Delivery planning: prior CS + VBAC</h2>
+  <ul class="tight">
+    <li>Prior successful VBAC raises likelihood of TOLAC success.</li>
+    <li>Obesity may lower success and increases operative risk; counsel neutrally.</li>
+    <li>Placental edge variant alone rarely changes delivery timing.</li>
+  </ul>
+</section>
+
+<section class="slide" aria-label="Intrapartum and anesthesia considerations">
+  <h2>Intrapartum preparedness (obesity)</h2>
+  <div class="grid cols-2">
+    <div class="panel">
+      <ul class="tight small">
+        <li>Early anesthesia assessment; consider early neuraxial placement.</li>
+        <li>Two large-bore IVs when feasible; hemorrhage cart readiness.</li>
+        <li>Continuous fetal monitoring in labor.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <svg class="svg" viewBox="0 0 64 64" aria-hidden="true" style="margin-bottom:.4rem">
+        <path d="M20 50V22c0-6 5-10 12-10s12 4 12 10v28"/>
+        <path d="M16 50h32"/>
+        <path d="M26 26h12"/>
+        <path d="M26 34h12"/>
+        <path d="M26 42h12"/>
+      </svg>
+      <p class="small">Plan for safe access, positioning, and communication; mitigate avoidable delays during urgent scenarios.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Documentation and coding pitfalls">
+  <h2>Documentation pitfalls to avoid</h2>
+  <ul class="tight">
+    <li>State fluid method: â€œMVP 3.2 cmâ€ (avoid labeling as AFI).</li>
+    <li>Use â€œsuspected circumvallate placentaâ€ with imaging limitations.</li>
+    <li>Record prepregnancy/early pregnancy BMI source; align coding with trimester.</li>
+  </ul>
+  <div class="hr" aria-hidden="true"></div>
+  <p class="muted small">Avoid copying ICD codes that conflict with gestational age or clinical history.</p>
+</section>
+
+<section class="slide" aria-label="Take-home pearls">
+  <h2>Take-home pearls</h2>
+  <ul class="tight">
+    <li>Placental edge â€œvariantsâ€ on ultrasound have uncertainty; monitor outcomes, not labels.</li>
+    <li>Class III obesity supports repeat anatomy, growth surveillance, and consideration of testing at ~34 weeks.</li>
+    <li>Counsel with â€œmay increase riskâ€; avoid deterministic language.</li>
+  </ul>
+</section>
+
+    </div>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

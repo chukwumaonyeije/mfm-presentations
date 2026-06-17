@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cfDNA Navigator | NIPT Decision Guide</title>
+    <meta name="description" content="An interactive guide to understanding NIPT (cell-free DNA prenatal screening) — should you get it, and what does a positive result mean? Built by Dr. Chukwuma Onyeije, MFM.">
+    <meta property="og:title" content="cfDNA Navigator | NIPT Decision Guide">
+    <meta property="og:description" content="An interactive guide to understanding NIPT (cell-free DNA prenatal screening) — should you get it, and what does a positive result mean?">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://openmfm.org/understanding-nipt-testing/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="cfDNA Navigator | NIPT Decision Guide">
+    <meta name="twitter:description" content="An interactive guide to NIPT prenatal screening — should you get it, and what does a positive result mean? Built by Dr. Chukwuma Onyeije, MFM.">
+    <style>
+        :root {
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #212529;
+            --heading: #1a5f5f;
+            --primary: #1a5f5f;
+            --primary-hover: #144a4a;
+            --primary-light: #e8f4f4;
+            --border: #dee2e6;
+            --muted: #6c757d;
+            --success: #198754;
+            --success-light: #d1e7dd;
+            --warning: #b45309;
+            --warning-light: #fef3c7;
+            --danger: #dc3545;
+            --danger-light: #f8d7da;
+            --info: #0d6efd;
+            --info-light: #cfe2ff;
+            --tag-bg: #e8f4f4;
+            --tag-text: #1a5f5f;
+        }
+
+        body.dark-mode {
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #e0e0e0;
+            --heading: #20c997;
+            --primary: #20c997;
+            --primary-hover: #17a589;
+            --primary-light: #1a3535;
+            --border: #333;
+            --muted: #9e9e9e;
+            --success: #20c997;
+            --success-light: #1a3535;
+            --warning: #fbbf24;
+            --warning-light: #2a2000;
+            --danger: #f87171;
+            --danger-light: #2a1a1a;
+            --info: #60a5fa;
+            --info-light: #1a2035;
+            --tag-bg: #1a3535;
+            --tag-text: #20c997;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 1.5rem 1rem 3rem;
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 720px; margin: 0 auto; }
+
+        /* ── HEADER ── */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .header-left { display: flex; gap: 0.5rem; align-items: center; }
+
+        .header-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 0.4rem 0.9rem;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        .header-btn:hover { background: var(--primary-light); }
+
+        .dark-mode-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 0.4rem 0.9rem;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 0.85rem;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            text-align: center;
+            margin-bottom: 1.75rem;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: var(--tag-bg);
+            color: var(--tag-text);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            margin-bottom: 0.75rem;
+        }
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--heading);
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+        .hero p {
+            color: var(--muted);
+            font-size: 1rem;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            margin-bottom: 1.25rem;
+        }
+
+        /* ── PROGRESS ── */
+        .progress-wrap {
+            margin-bottom: 1.5rem;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 0.4rem;
+        }
+        .progress-bar-bg {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: width 0.4s ease;
+        }
+
+        /* ── STEP TITLE ── */
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 0.4rem;
+        }
+        .step-instruction {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        /* ── OPTION ITEMS (selectable) ── */
+        .option-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            padding: 0.9rem 1rem;
+            border: 1.5px dashed var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            user-select: none;
+        }
+        .option-item:hover { border-color: var(--primary); background: var(--primary-light); }
+        .option-item.selected {
+            border-style: solid;
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .option-check {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+            font-size: 0.75rem;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .option-item.selected .option-check {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+        .option-text { flex: 1; }
+        .option-text strong { display: block; font-size: 0.95rem; margin-bottom: 0.15rem; }
+        .option-text span { font-size: 0.83rem; color: var(--muted); line-height: 1.4; }
+
+        /* ── RADIO ITEMS (single-select) ── */
+        .radio-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            padding: 0.9rem 1rem;
+            border: 1.5px dashed var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            user-select: none;
+        }
+        .radio-item:hover { border-color: var(--primary); background: var(--primary-light); }
+        .radio-item.selected {
+            border-style: solid;
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .radio-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+            transition: border-color 0.2s;
+        }
+        .radio-item.selected .radio-dot {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+        .radio-dot-inner {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            display: none;
+        }
+        .radio-item.selected .radio-dot-inner { display: block; }
+
+        /* ── NAVIGATION BUTTONS ── */
+        .nav-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            gap: 0.75rem;
+        }
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.6rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn:hover { background: var(--primary-hover); }
+        .btn:active { transform: scale(0.98); }
+        .btn-outline {
+            background: none;
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            padding: 0.7rem 1.4rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-ghost { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.85rem; padding: 0.5rem; }
+
+        /* ── RESULT CARDS ── */
+        .result-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .result-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .result-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 0.3rem;
+        }
+        .result-subtitle { color: var(--muted); font-size: 0.9rem; }
+
+        .result-section {
+            border-radius: 10px;
+            padding: 1.1rem 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .result-section.green { background: var(--success-light); border-left: 4px solid var(--success); }
+        .result-section.yellow { background: var(--warning-light); border-left: 4px solid var(--warning); }
+        .result-section.red { background: var(--danger-light); border-left: 4px solid var(--danger); }
+        .result-section.blue { background: var(--info-light); border-left: 4px solid var(--info); }
+        .result-section.teal { background: var(--primary-light); border-left: 4px solid var(--primary); }
+
+        .result-section h3 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.4rem;
+            color: var(--heading);
+        }
+        .result-section p { font-size: 0.92rem; line-height: 1.55; }
+
+        /* ── PPV EXPLAINER ── */
+        .ppv-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+        .ppv-box {
+            border-radius: 8px;
+            padding: 0.9rem;
+            text-align: center;
+        }
+        .ppv-box .ppv-val {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--heading);
+            display: block;
+        }
+        .ppv-box .ppv-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 0.2rem;
+        }
+
+        /* ── INFO CALLOUT ── */
+        .callout {
+            background: var(--primary-light);
+            border-radius: 8px;
+            padding: 0.9rem 1rem;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            margin: 1rem 0;
+            color: var(--text);
+        }
+        .callout strong { color: var(--heading); }
+
+        /* ── CONDITION TAGS ── */
+        .tag-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 0; }
+        .tag {
+            background: var(--tag-bg);
+            color: var(--tag-text);
+            border-radius: 20px;
+            padding: 0.3rem 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* ── DIVIDER ── */
+        .divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* ── MODAL ── */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            overflow-y: auto;
+            padding: 2rem 1rem;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            margin: 0 auto;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            position: relative;
+        }
+        .modal-content h2 { color: var(--heading); margin-bottom: 1rem; font-size: 1.3rem; }
+        .modal-content h3 { color: var(--heading); margin: 1.1rem 0 0.4rem; font-size: 1rem; }
+        .modal-content p { font-size: 0.9rem; line-height: 1.6; margin-bottom: 0.5rem; }
+        .modal-content ul { padding-left: 1.2rem; font-size: 0.9rem; line-height: 1.7; }
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1.2rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--muted);
+            background: none;
+            border: none;
+            line-height: 1;
+        }
+        .close-btn:hover { color: var(--text); }
+
+        /* ── FADE TRANSITION ── */
+        .card { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.5rem; }
+            .card { padding: 1.4rem; }
+            .ppv-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-left">
+            <button class="header-btn" id="aboutBtn">About This Tool</button>
+        </div>
+        <a href="https://doctorswhocode.blog/" target="_blank" style="color:var(--muted);text-decoration:none;font-size:0.82rem;">DoctorsWhoCode.blog</a>
+        <button class="dark-mode-toggle" id="darkModeToggle">Dark Mode</button>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-badge">cfDNA Navigator</div>
+        <h1>Understanding Your NIPT</h1>
+        <p>A step-by-step guide to the most common questions about cell-free DNA prenatal screening.</p>
+    </div>
+
+    <!-- MAIN CARD (dynamic content injected here) -->
+    <div class="card" id="mainCard"></div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>&#9888;&#65039; <strong>INFORMATIONAL USE ONLY.</strong> This tool is for educational purposes and does not provide medical advice. All clinical decisions must be made with your qualified healthcare provider.</p>
+        <p style="margin-top:0.4rem;">Content aligned with ACOG/SMFM guidelines. &copy; 2026 Atlanta Perinatal Associates &mdash; <a href="https://doctorswhocode.blog/" target="_blank" style="color:var(--muted);">DoctorsWhoCode.blog</a></p>
+    </div>
+</div>
+
+<!-- ABOUT MODAL -->
+<div id="aboutModal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" id="closeModal">&times;</button>
+        <h2>About the cfDNA Navigator</h2>
+        <p>This interactive guide was created by <strong>Dr. Chukwuma Onyeije, MFM</strong> at Atlanta Perinatal Associates to help patients understand cell-free DNA (cfDNA) prenatal screening — also called NIPT (Non-Invasive Prenatal Testing).</p>
+
+        <h3>What This Tool Does</h3>
+        <p>It walks you through two of the most common questions patients ask:</p>
+        <ul>
+            <li><strong>"Should I get the NIPT?"</strong> — Helps you think through your personal situation and values.</li>
+            <li><strong>"My result was positive — what does that mean?"</strong> — Explains what a positive result actually tells you (and what it doesn't).</li>
+        </ul>
+
+        <h3>What This Tool Does NOT Do</h3>
+        <p>This is not a diagnostic tool. It does not replace a conversation with your doctor or genetic counselor. A positive NIPT result is <em>not</em> a diagnosis — it means further evaluation is recommended.</p>
+
+        <h3>Clinical Basis</h3>
+        <p>Content is based on the American College of Obstetricians and Gynecologists (ACOG) and Society for Maternal-Fetal Medicine (SMFM) guidelines on prenatal genetic screening, updated through 2026.</p>
+
+        <h3>About the Author</h3>
+        <p>Dr. Onyeije is a board-certified Maternal-Fetal Medicine specialist and physician-developer. Learn more at <a href="https://doctorswhocode.blog/" target="_blank">DoctorsWhoCode.blog</a>.</p>
+    </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  cfDNA NAVIGATOR — STATE MACHINE
+// ═══════════════════════════════════════════════════════
+
+const STATE = {
+    screen: 'home',        // home | should_q1 | should_q2 | should_q3 | should_result | positive_q1 | positive_q2 | positive_explain
+    shouldData: {
+        age35: null,       // true/false
+        highRisk: [],      // array of selected factor IDs
+        values: null       // 'want_max_info' | 'avoid_invasive' | 'not_sure' | 'decline'
+    },
+    positiveData: {
+        condition: null,   // 't21' | 't18' | 't13' | 'scas' | 'micro' | 'other'
+        age: null          // 'under25' | '25to34' | '35to39' | '40plus'
+    }
+};
+
+const card = document.getElementById('mainCard');
+
+// ── RENDER ROUTER ──────────────────────────────────────
+function render() {
+    card.innerHTML = '';
+    const s = STATE.screen;
+    if      (s === 'home')           renderHome();
+    else if (s === 'should_q1')      renderShouldQ1();
+    else if (s === 'should_q2')      renderShouldQ2();
+    else if (s === 'should_q3')      renderShouldQ3();
+    else if (s === 'should_result')  renderShouldResult();
+    else if (s === 'positive_q1')    renderPositiveQ1();
+    else if (s === 'positive_q2')    renderPositiveQ2();
+    else if (s === 'positive_explain') renderPositiveExplain();
+}
+
+// ── HELPERS ────────────────────────────────────────────
+function progress(step, total, label) {
+    return `<div class="progress-wrap">
+        <div class="progress-label"><span>${label}</span><span>${step} of ${total}</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${Math.round(step/total*100)}%"></div></div>
+    </div>`;
+}
+
+function navRow(backFn, nextFn, nextLabel = 'Next →', nextEnabled = true) {
+    const nextDisabled = nextEnabled ? '' : 'style="opacity:0.45;cursor:not-allowed;"';
+    return `<div class="nav-row">
+        ${backFn ? `<button class="btn-outline" id="backBtn">← Back</button>` : '<div></div>'}
+        <button class="btn" id="nextBtn" ${nextDisabled}>${nextLabel}</button>
+    </div>`;
+}
+
+// ── SCREEN: HOME ───────────────────────────────────────
+function renderHome() {
+    card.innerHTML = `
+        <div style="text-align:center; padding: 0.5rem 0 1rem;">
+            <div style="font-size:2.8rem; margin-bottom:1rem;">🧬</div>
+            <div class="step-title" style="font-size:1.25rem; margin-bottom:0.6rem;">What would you like to explore?</div>
+            <p class="step-instruction" style="margin-bottom:1.75rem;">Choose the question that best matches where you are right now.</p>
+        </div>
+
+        <div class="option-list">
+            <div class="radio-item" id="path-should" data-path="should" style="padding:1.2rem 1.25rem;">
+                <div class="radio-dot"><div class="radio-dot-inner"></div></div>
+                <div class="option-text">
+                    <strong style="font-size:1rem;">My doctor offered me the NIPT — should I do it?</strong>
+                    <span>Understand what the test is, what it can and can't tell you, and how your personal situation affects the decision.</span>
+                </div>
+            </div>
+            <div class="radio-item" id="path-positive" data-path="positive" style="padding:1.2rem 1.25rem;">
+                <div class="radio-dot"><div class="radio-dot-inner"></div></div>
+                <div class="option-text">
+                    <strong style="font-size:1rem;">My NIPT came back positive — what does that mean?</strong>
+                    <span>Learn what a "high-probability" result actually means, why false positives happen, and what your next steps are.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-row" style="justify-content:flex-end; margin-top:1.75rem;">
+            <button class="btn" id="homeNextBtn" style="opacity:0.45;cursor:not-allowed;">Continue →</button>
+        </div>
+    `;
+
+    let selectedPath = null;
+    card.querySelectorAll('.radio-item').forEach(item => {
+        item.addEventListener('click', () => {
+            card.querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            selectedPath = item.dataset.path;
+            const nextBtn = card.querySelector('#homeNextBtn');
+            nextBtn.style.opacity = '1';
+            nextBtn.style.cursor = 'pointer';
+        });
+    });
+
+    card.querySelector('#homeNextBtn').addEventListener('click', () => {
+        if (!selectedPath) return;
+        STATE.screen = selectedPath === 'should' ? 'should_q1' : 'positive_q1';
+        render();
+    });
+}
+
+// ══════════════════════════════════════════════════════
+//  PATH A: "SHOULD I DO IT?"
+// ══════════════════════════════════════════════════════
+
+// ── SHOULD Q1: Age ─────────────────────────────────────
+function renderShouldQ1() {
+    const sel = STATE.shouldData.age35;
+    card.innerHTML = `
+        ${progress(1, 3, 'Should I get the NIPT?')}
+        <div class="step-title">Are you 35 years or older at your due date?</div>
+        <p class="step-instruction">Maternal age is one of the strongest factors affecting how likely a chromosomal condition is — and how meaningful a positive result would be.</p>
+
+        <div class="option-list">
+            <div class="radio-item ${sel === true ? 'selected' : ''}" data-val="true">
+                <div class="radio-dot"><div class="radio-dot-inner"></div></div>
+                <div class="option-text">
+                    <strong>Yes — I am 35 or older</strong>
+                    <span>At 35+, the background risk of chromosomal conditions rises, which increases the positive predictive value of NIPT.</span>
+                </div>
+            </div>
+            <div class="radio-item ${sel === false ? 'selected' : ''}" data-val="false">
+                <div class="radio-dot"><div class="radio-dot-inner"></div></div>
+                <div class="option-text">
+                    <strong>No — I am younger than 35</strong>
+                    <span>NIPT is still highly accurate, but a positive result in a younger patient is more likely to be a false positive.</span>
+                </div>
+            </div>
+        </div>
+
+        ${navRow(() => { STATE.screen = 'home'; render(); }, null, 'Next →', sel !== null)}
+    `;
+
+    card.querySelectorAll('.radio-item').forEach(item => {
+        item.addEventListener('click', () => {
+            card.querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            STATE.shouldData.age35 = item.dataset.val === 'true';
+            render();
+        });
+    });
+
+    const backBtn = card.querySelector('#backBtn');
+    if (backBtn) backBtn.addEventListener('click', () => { STATE.screen = 'home'; render(); });
+
+    const nextBtn = card.querySelector('#nextBtn');
+    if (nextBtn) nextBtn.addEventListener('click', () => {
+        if (STATE.shouldData.age35 === null) return;
+        STATE.screen = 'should_q2';
+        render();
+    });
+}
+
+// ── SHOULD Q2: Risk Factors ────────────────────────────
+function renderShouldQ2() {
+    const sel = STATE.shouldData.highRisk;
+    const factors = [
+        { id: 'prev_aneuploidy', label: 'Previous pregnancy with a chromosomal condition', desc: 'e.g., Down syndrome, Trisomy 18, or another aneuploidy in a prior pregnancy' },
+        { id: 'abnormal_us', label: 'Abnormal ultrasound finding in this pregnancy', desc: 'e.g., increased nuchal translucency, structural anomaly, or soft marker' },
+        { id: 'abnormal_serum', label: 'Abnormal serum screening result', desc: 'e.g., abnormal first-trimester screen or quad screen result' },
+        { id: 'family_hx', label: 'Personal or family history of a chromosomal condition', desc: 'Includes a parent, sibling, or close relative with a known chromosomal abnormality' },
+        { id: 'ivf_donor', label: 'Conceived via IVF or egg donor', desc: 'IVF pregnancies may have a slightly higher baseline risk for certain conditions' },
+        { id: 'none', label: 'None of the above apply to me', desc: 'No additional risk factors identified at this time' },
+    ];
+
+    const factorsHtml = factors.map(f => `
+        <div class="option-item ${sel.includes(f.id) ? 'selected' : ''}" data-id="${f.id}">
+            <div class="option-check">${sel.includes(f.id) ? '✓' : ''}</div>
+            <div class="option-text">
+                <strong>${f.label}</strong>
+                <span>${f.desc}</span>
+            </div>
+        </div>
+    `).join('');
+
+    card.innerHTML = `
+        ${progress(2, 3, 'Should I get the NIPT?')}
+        <div class="step-title">Do any of these apply to you?</div>
+        <p class="step-instruction">Select all that apply. These factors can affect the meaning of your result. If none apply, select the last option.</p>
+        <div class="option-list">${factorsHtml}</div>
+        ${navRow(true, null, 'Next →', sel.length > 0)}
+    `;
+
+    card.querySelectorAll('.option-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const id = item.dataset.id;
+            if (id === 'none') {
+                STATE.shouldData.highRisk = ['none'];
+            } else {
+                const idx = STATE.shouldData.highRisk.indexOf(id);
+                const noneIdx = STATE.shouldData.highRisk.indexOf('none');
+                if (noneIdx > -1) STATE.shouldData.highRisk.splice(noneIdx, 1);
+                if (idx > -1) STATE.shouldData.highRisk.splice(idx, 1);
+                else STATE.shouldData.highRisk.push(id);
+            }
+            render();
+        });
+    });
+
+    const backBtn = card.querySelector('#backBtn');
+    if (backBtn) backBtn.addEventListener('click', () => { STATE.screen = 'should_q1'; render(); });
+
+    const nextBtn = card.querySelector('#nextBtn');
+    if (nextBtn) nextBtn.addEventListener('click', () => {
+        if (sel.length === 0) return;
+        STATE.screen = 'should_q3';
+        render();
+    });
+}
+
+// ── SHOULD Q3: Values / Preference ────────────────────
+function renderShouldQ3() {
+    const sel = STATE.shouldData.values;
+    const options = [
+        { id: 'want_max_info', label: 'I want as much information as possible', desc: 'Knowing early helps me prepare, plan, or make decisions — even if results are uncertain.' },
+        { id: 'avoid_invasive', label: 'I want to avoid invasive testing if possible', desc: 'I would prefer a non-invasive screen first, and only pursue amnio/CVS if the result is concerning.' },
+        { id: 'not_sure', label: 'I\'m not sure yet — I want to understand my options', desc: 'I\'d like more information before deciding whether to screen or not.' },
+        { id: 'decline', label: 'I would prefer not to screen at this time', desc: 'I understand the option is available, but I choose to decline prenatal genetic screening.' },
+    ];
+
+    const optHtml = options.map(o => `
+        <div class="radio-item ${sel === o.id ? 'selected' : ''}" data-val="${o.id}">
+            <div class="radio-dot"><div class="radio-dot-inner"></div></div>
+            <div class="option-text">
+                <strong>${o.label}</strong>
+                <span>${o.desc}</span>
+            </div>
+        </div>
+    `).join('');
+
+    card.innerHTML = `
+        ${progress(3, 3, 'Should I get the NIPT?')}
+        <div class="step-title">What matters most to you right now?</div>
+        <p class="step-instruction">There is no right or wrong answer. Your values and preferences are a key part of this decision.</p>
+        <div class="option-list">${optHtml}</div>
+        ${navRow(true, null, 'See My Guidance →', sel !== null)}
+    `;
+
+    card.querySelectorAll('.radio-item').forEach(item => {
+        item.addEventListener('click', () => {
+            card.querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            STATE.shouldData.values = item.dataset.val;
+            render();
+        });
+    });
+
+    const backBtn = card.querySelector('#backBtn');
+    if (backBtn) backBtn.addEventListener('click', () => { STATE.screen = 'should_q2'; render(); });
+
+    const nextBtn = card.querySelector('#nextBtn');
+    if (nextBtn) nextBtn.addEventListener('click', () => {
+        if (!STATE.shouldData.values) return;
+        STATE.screen = 'should_result';
+        render();
+    });
+}
+
+// ── SHOULD RESULT ──────────────────────────────────────
+function renderShouldResult() {
+    const { age35, highRisk, values } = STATE.shouldData;
+    const isHighRisk = age35 || (highRisk.length > 0 && !highRisk.includes('none'));
+    const declined = values === 'decline';
+
+    let icon, headline, subline;
+    if (declined) {
+        icon = '🤝';
+        headline = 'Your Choice Is Respected';
+        subline = 'Declining screening is a valid, informed decision.';
+    } else if (isHighRisk && values === 'want_max_info') {
+        icon = '✅';
+        headline = 'NIPT Is a Strong Option for You';
+        subline = 'Your risk profile and preferences align well with cfDNA screening.';
+    } else if (!isHighRisk && values === 'want_max_info') {
+        icon = '🔍';
+        headline = 'NIPT Can Still Be Valuable';
+        subline = 'Even at lower baseline risk, NIPT provides the most sensitive screening available.';
+    } else if (values === 'not_sure') {
+        icon = '💬';
+        headline = 'A Conversation With Your MFM Is the Right Next Step';
+        subline = 'You have great questions — your specialist can tailor guidance to your situation.';
+    } else {
+        icon = '📋';
+        headline = 'NIPT Is an Option Worth Considering';
+        subline = 'Here\'s what you should know to make an informed decision.';
+    }
+
+    const riskLevel = isHighRisk ? 'elevated' : 'average';
+
+    card.innerHTML = `
+        <div class="result-header">
+            <div class="result-icon">${icon}</div>
+            <div class="result-title">${headline}</div>
+            <div class="result-subtitle">${subline}</div>
+        </div>
+
+        <hr class="divider">
+
+        ${declined ? `
+        <div class="result-section teal">
+            <h3>Your Right to Decline</h3>
+            <p>ACOG guidelines affirm that every patient has the right to decline prenatal genetic screening after being informed of the option. You may revisit this decision at any point in your pregnancy.</p>
+        </div>
+        <div class="result-section blue">
+            <h3>What Remains Available to You</h3>
+            <p>Even without NIPT, you will still be offered a <strong>second-trimester anatomy ultrasound</strong> at 18–22 weeks to evaluate fetal structure. If any findings emerge, your options can be revisited.</p>
+        </div>
+        ` : `
+        <div class="result-section ${isHighRisk ? 'green' : 'teal'}">
+            <h3>What NIPT Screens For</h3>
+            <p>cfDNA screening evaluates fetal chromosomes from a simple maternal blood draw. It screens for:</p>
+            <div class="tag-row">
+                <span class="tag">Trisomy 21 (Down syndrome)</span>
+                <span class="tag">Trisomy 18 (Edwards syndrome)</span>
+                <span class="tag">Trisomy 13 (Patau syndrome)</span>
+                <span class="tag">Sex chromosome conditions</span>
+                <span class="tag">Optional: Microdeletions</span>
+            </div>
+            <p style="margin-top:0.6rem; font-size:0.88rem; color:var(--muted);">It does <em>not</em> screen for all birth defects, neural tube defects, or single-gene conditions like cystic fibrosis.</p>
+        </div>
+
+        <div class="result-section blue">
+            <h3>How Accurate Is It?</h3>
+            <p>NIPT is the <strong>most sensitive and specific prenatal screening test</strong> available. For Down syndrome (Trisomy 21):</p>
+            <div class="ppv-grid" style="margin:0.75rem 0;">
+                <div class="ppv-box" style="background:var(--success-light);">
+                    <span class="ppv-val">~99%</span>
+                    <div class="ppv-label">Detection Rate<br>(sensitivity)</div>
+                </div>
+                <div class="ppv-box" style="background:var(--info-light);">
+                    <span class="ppv-val">&lt;0.1%</span>
+                    <div class="ppv-label">False Positive Rate<br>(vs. ~5% for quad screen)</div>
+                </div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--muted);">Performance is lower for Trisomy 18, Trisomy 13, sex chromosome conditions, and microdeletions.</p>
+        </div>
+
+        <div class="result-section yellow">
+            <h3>The Critical Limitation: It Is a Screening Test, Not a Diagnosis</h3>
+            <p>A positive NIPT result does <strong>not</strong> mean your baby has a chromosomal condition. It means the risk is elevated and further evaluation is needed. A negative result substantially lowers — but does not eliminate — the risk.</p>
+        </div>
+
+        <div class="result-section ${isHighRisk ? 'green' : 'teal'}">
+            <h3>Your Situation: ${isHighRisk ? 'Elevated Baseline Risk' : 'Average Baseline Risk'}</h3>
+            <p>${isHighRisk
+                ? 'Based on your age or risk factors, your background risk for chromosomal conditions is higher than average. This means a positive NIPT result is more likely to be a true positive, and NIPT is especially informative for you.'
+                : 'Your background risk is in the average range. NIPT is still highly accurate, but in lower-risk patients, a positive result has a higher chance of being a false positive. Diagnostic testing (CVS or amniocentesis) would be needed to confirm any positive result.'
+            }</p>
+        </div>
+
+        <div class="result-section teal">
+            <h3>Timing</h3>
+            <p>NIPT can be performed as early as <strong>10 weeks of gestation</strong>. Results typically return within 7–14 days. It requires only a standard blood draw — there is no risk to the pregnancy from the test itself.</p>
+        </div>
+        `}
+
+        <div class="callout">
+            <strong>Remember:</strong> ACOG recommends that all pregnant patients be <em>offered</em> prenatal genetic screening, regardless of age or risk. The decision to accept or decline belongs entirely to you, after an informed discussion with your provider.
+        </div>
+
+        <div class="nav-row">
+            <button class="btn-outline" id="backBtn">← Back</button>
+            <button class="btn" id="restartBtn">Start Over</button>
+        </div>
+    `;
+
+    card.querySelector('#backBtn').addEventListener('click', () => { STATE.screen = 'should_q3'; render(); });
+    card.querySelector('#restartBtn').addEventListener('click', () => {
+        STATE.screen = 'home';
+        STATE.shouldData = { age35: null, highRisk: [], values: null };
+        STATE.positiveData = { condition: null, age: null };
+        render();
+    });
+}
+
+// ══════════════════════════════════════════════════════
+//  PATH B: "MY NIPT WAS POSITIVE"
+// ══════════════════════════════════════════════════════
+
+// ── POSITIVE Q1: Which condition? ─────────────────────
+function renderPositiveQ1() {
+    const sel = STATE.positiveData.condition;
+    const conditions = [
+        { id: 't21', label: 'Trisomy 21 (Down syndrome)', desc: 'The most common chromosomal condition; highest detection rate and PPV' },
+        { id: 't18', label: 'Trisomy 18 (Edwards syndrome)', desc: 'Less common; associated with serious fetal anomalies' },
+        { id: 't13', label: 'Trisomy 13 (Patau syndrome)', desc: 'Less common; associated with serious fetal anomalies' },
+        { id: 'scas', label: 'Sex chromosome condition', desc: 'e.g., Monosomy X (Turner), XXY (Klinefelter), XXX, or XYY' },
+        { id: 'micro', label: 'Microdeletion syndrome', desc: 'e.g., 22q11.2 deletion (DiGeorge), 1p36 deletion, or others' },
+        { id: 'other', label: 'I\'m not sure / something else', desc: 'Use this if your report didn\'t specify or you\'re unsure of the category' },
+    ];
+
+    const html = conditions.map(c => `
+        <div class="radio-item ${sel === c.id ? 'selected' : ''}" data-val="${c.id}">
+            <div class="radio-dot"><div class="radio-dot-inner"></div></div>
+            <div class="option-text">
+                <strong>${c.label}</strong>
+                <span>${c.desc}</span>
+            </div>
+        </div>
+    `).join('');
+
+    card.innerHTML = `
+        ${progress(1, 2, 'Understanding my positive NIPT')}
+        <div class="step-title">Which condition did your report flag?</div>
+        <p class="step-instruction">Select the finding on your NIPT report. This helps explain what the result means for your specific situation.</p>
+        <div class="option-list">${html}</div>
+        ${navRow(true, null, 'Next →', sel !== null)}
+    `;
+
+    card.querySelectorAll('.radio-item').forEach(item => {
+        item.addEventListener('click', () => {
+            card.querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            STATE.positiveData.condition = item.dataset.val;
+            render();
+        });
+    });
+
+    const backBtn = card.querySelector('#backBtn');
+    if (backBtn) backBtn.addEventListener('click', () => { STATE.screen = 'home'; render(); });
+
+    const nextBtn = card.querySelector('#nextBtn');
+    if (nextBtn) nextBtn.addEventListener('click', () => {
+        if (!STATE.positiveData.condition) return;
+        STATE.screen = 'positive_q2';
+        render();
+    });
+}
+
+// ── POSITIVE Q2: Age ───────────────────────────────────
+function renderPositiveQ2() {
+    const sel = STATE.positiveData.age;
+    const ages = [
+        { id: 'under25', label: 'Under 25 years old', desc: 'Lower baseline chromosomal risk — false positives are more likely in this group' },
+        { id: '25to34', label: '25 to 34 years old', desc: 'Average baseline risk population' },
+        { id: '35to39', label: '35 to 39 years old', desc: 'Elevated baseline risk; positive results more likely to be true positives' },
+        { id: '40plus', label: '40 years or older', desc: 'Highest baseline risk; positive results have the highest positive predictive value' },
+    ];
+
+    const html = ages.map(a => `
+        <div class="radio-item ${sel === a.id ? 'selected' : ''}" data-val="${a.id}">
+            <div class="radio-dot"><div class="radio-dot-inner"></div></div>
+            <div class="option-text">
+                <strong>${a.label}</strong>
+                <span>${a.desc}</span>
+            </div>
+        </div>
+    `).join('');
+
+    card.innerHTML = `
+        ${progress(2, 2, 'Understanding my positive NIPT')}
+        <div class="step-title">How old are you?</div>
+        <p class="step-instruction">Your age affects the probability that a positive NIPT result reflects a true chromosomal condition. This is called the Positive Predictive Value (PPV).</p>
+        <div class="option-list">${html}</div>
+        ${navRow(true, null, 'Explain My Result →', sel !== null)}
+    `;
+
+    card.querySelectorAll('.radio-item').forEach(item => {
+        item.addEventListener('click', () => {
+            card.querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            STATE.positiveData.age = item.dataset.val;
+            render();
+        });
+    });
+
+    const backBtn = card.querySelector('#backBtn');
+    if (backBtn) backBtn.addEventListener('click', () => { STATE.screen = 'positive_q1'; render(); });
+
+    const nextBtn = card.querySelector('#nextBtn');
+    if (nextBtn) nextBtn.addEventListener('click', () => {
+        if (!STATE.positiveData.age) return;
+        STATE.screen = 'positive_explain';
+        render();
+    });
+}
+
+// ── POSITIVE EXPLAIN ───────────────────────────────────
+function renderPositiveExplain() {
+    const { condition, age } = STATE.positiveData;
+
+    // PPV estimates by condition and age (approximate, literature-based)
+    const ppvData = {
+        t21: { under25: '40–60%', '25to34': '60–75%', '35to39': '80–90%', '40plus': '90–99%' },
+        t18: { under25: '20–40%', '25to34': '40–60%', '35to39': '60–80%', '40plus': '75–90%' },
+        t13: { under25: '15–35%', '25to34': '30–50%', '35to39': '50–70%', '40plus': '65–85%' },
+        scas: { under25: '30–55%', '25to34': '40–65%', '35to39': '55–75%', '40plus': '65–80%' },
+        micro: { under25: '10–25%', '25to34': '15–30%', '35to39': '20–40%', '40plus': '25–45%' },
+        other: { under25: '10–40%', '25to34': '20–50%', '35to39': '30–60%', '40plus': '40–70%' },
+    };
+
+    const conditionNames = {
+        t21: 'Trisomy 21 (Down syndrome)',
+        t18: 'Trisomy 18 (Edwards syndrome)',
+        t13: 'Trisomy 13 (Patau syndrome)',
+        scas: 'Sex Chromosome Condition',
+        micro: 'Microdeletion Syndrome',
+        other: 'Chromosomal Condition (unspecified)',
+    };
+
+    const ppv = ppvData[condition][age];
+    const condName = conditionNames[condition];
+
+    const ageLabel = { under25: 'under 25', '25to34': '25–34', '35to39': '35–39', '40plus': '40+' }[age];
+
+    const isMicro = condition === 'micro';
+    const isSCA = condition === 'scas';
+    const isT21 = condition === 't21';
+
+    // Urgency level for next steps
+    const isHighPPV = age === '40plus' || age === '35to39';
+
+    card.innerHTML = `
+        <div class="result-header">
+            <div class="result-icon">📊</div>
+            <div class="result-title">Understanding Your Result</div>
+            <div class="result-subtitle">${condName} &bull; Age ${ageLabel}</div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="result-section yellow">
+            <h3>First: A Positive NIPT Is NOT a Diagnosis</h3>
+            <p>NIPT is a <strong>screening test</strong>, not a diagnostic test. A "high probability" result means the risk of this condition is elevated — it does <em>not</em> confirm that your baby has it. Many positive NIPT results turn out to be false positives.</p>
+        </div>
+
+        <div class="result-section blue">
+            <h3>What Is the Positive Predictive Value (PPV)?</h3>
+            <p>The PPV tells you: <em>"If my NIPT is positive, what is the probability the condition is actually present?"</em></p>
+            <p style="margin-top:0.6rem;">For a patient your age with a positive result for <strong>${condName}</strong>, the estimated PPV is:</p>
+            <div style="text-align:center; margin: 1rem 0;">
+                <span style="font-size:2.2rem; font-weight:800; color:var(--heading);">${ppv}</span>
+                <div style="font-size:0.82rem; color:var(--muted); margin-top:0.2rem;">Estimated probability the result is a true positive</div>
+            </div>
+            <p style="font-size:0.83rem; color:var(--muted);">This is an estimate based on published literature. Your actual PPV depends on your complete clinical picture, including ultrasound findings and laboratory-specific performance data. Your MFM specialist can calculate a more precise estimate.</p>
+        </div>
+
+        ${isMicro ? `
+        <div class="result-section red">
+            <h3>Important Note on Microdeletion Screening</h3>
+            <p>Microdeletion screening by cfDNA has <strong>lower performance</strong> than screening for common trisomies. False positive rates are higher, and the evidence base is less robust. ACOG does not routinely recommend microdeletion screening for all patients. A positive microdeletion result should <strong>always</strong> be confirmed with diagnostic testing before any clinical decisions are made.</p>
+        </div>
+        ` : ''}
+
+        ${isSCA ? `
+        <div class="result-section teal">
+            <h3>About Sex Chromosome Conditions</h3>
+            <p>Sex chromosome conditions (like Turner syndrome, Klinefelter syndrome, Triple X, or XYY) vary widely in their clinical impact — many individuals with these conditions live full, healthy lives. A genetic counselor can help you understand what the specific finding means for your pregnancy and your child's development.</p>
+        </div>
+        ` : ''}
+
+        <div class="result-section ${isHighPPV ? 'red' : 'yellow'}">
+            <h3>Why False Positives Happen</h3>
+            <p>cfDNA in maternal blood comes mostly from the <strong>placenta</strong>, not directly from the fetus. Discrepancies between placental and fetal chromosomes (called <em>confined placental mosaicism</em>), maternal chromosomal variants, vanishing twin, and technical factors can all cause a positive result that does not reflect the fetus's actual chromosomes.</p>
+        </div>
+
+        <div class="result-section green">
+            <h3>Your Next Steps</h3>
+            <p>ACOG recommends the following after a positive NIPT result:</p>
+            <div class="tag-row" style="margin:0.75rem 0;">
+                <span class="tag">1. Genetic counseling</span>
+                <span class="tag">2. Comprehensive ultrasound</span>
+                <span class="tag">3. Offer of diagnostic testing</span>
+            </div>
+            <p><strong>Diagnostic testing</strong> (CVS or amniocentesis) is the only way to <em>confirm or rule out</em> a chromosomal condition with certainty. These tests analyze fetal chromosomes directly and are considered the gold standard. They carry a small procedural risk (&lt;1%) and should be discussed with your MFM specialist.</p>
+        </div>
+
+        <div class="result-section teal">
+            <h3>CVS vs. Amniocentesis — Which One?</h3>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-top:0.5rem;">
+                <div style="background:var(--bg); border-radius:8px; padding:0.8rem;">
+                    <strong style="font-size:0.88rem; color:var(--heading);">CVS</strong>
+                    <p style="font-size:0.82rem; margin-top:0.3rem; color:var(--muted);">Chorionic villus sampling<br>Done at 10–13 weeks<br>Samples placental tissue<br>Earlier results</p>
+                </div>
+                <div style="background:var(--bg); border-radius:8px; padding:0.8rem;">
+                    <strong style="font-size:0.88rem; color:var(--heading);">Amniocentesis</strong>
+                    <p style="font-size:0.82rem; margin-top:0.3rem; color:var(--muted);">Done at 15–20 weeks<br>Samples amniotic fluid<br>Samples fetal cells directly<br>Slightly later results</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="callout">
+            <strong>Bottom line:</strong> A positive NIPT is important information — but it is the <em>beginning</em> of a conversation, not the end of one. Do not make any major decisions based on NIPT alone. Your MFM specialist and genetic counselor are your partners in understanding what this result means for you and your baby.
+        </div>
+
+        <div class="nav-row">
+            <button class="btn-outline" id="backBtn">← Back</button>
+            <button class="btn" id="restartBtn">Start Over</button>
+        </div>
+    `;
+
+    card.querySelector('#backBtn').addEventListener('click', () => { STATE.screen = 'positive_q2'; render(); });
+    card.querySelector('#restartBtn').addEventListener('click', () => {
+        STATE.screen = 'home';
+        STATE.shouldData = { age35: null, highRisk: [], values: null };
+        STATE.positiveData = { condition: null, age: null };
+        render();
+    });
+}
+
+// ══════════════════════════════════════════════════════
+//  GLOBAL CONTROLS
+// ══════════════════════════════════════════════════════
+
+// Dark mode
+const dmToggle = document.getElementById('darkModeToggle');
+dmToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    dmToggle.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+});
+
+// About modal
+const modal = document.getElementById('aboutModal');
+document.getElementById('aboutBtn').onclick = () => modal.style.display = 'block';
+document.getElementById('closeModal').onclick = () => modal.style.display = 'none';
+window.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+
+// Initial render
+render();
+</script>
+</body>
+</html>

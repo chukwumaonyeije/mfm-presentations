@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Early Fetal Heart Rate at 6 Weeks - Patient Education</title>
+  
+  <meta
+    name="keywords"
+    content="Early Fetal Heart Rate, Fetal Bradycardia, First Trimester Ultrasound, Early Pregnancy, Patient Education"
+  />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --blue: #58a6ff;
+      --green: #3fb950;
+      --orange: #f0883e;
+      --red: #f85149;
+      --teal: #39d353;
+      --accent: #1f6feb;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    .deck { width: 100%; height: 100%; position: relative; }
+
+    .slide {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3em 4em;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+
+    .slide.active { opacity: 1; visibility: visible; }
+
+    .slide-label {
+      font-size: 0.75em;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6em;
+    }
+
+    h1 {
+      font-size: 3.4em;
+      font-weight: 300;
+      line-height: 1.15;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 2.4em;
+      font-weight: 300;
+      line-height: 1.2;
+      text-align: center;
+      margin-bottom: 0.5em;
+    }
+
+    h3 {
+      font-size: 1.5em;
+      font-weight: 400;
+      color: var(--blue);
+      margin-bottom: 0.4em;
+    }
+
+    .subtitle {
+      font-size: 1.35em;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.4em;
+      max-width: 820px;
+    }
+
+    p {
+      font-size: 1.2em;
+      line-height: 1.65;
+      max-width: 840px;
+      text-align: center;
+      color: var(--text);
+    }
+
+    .rule {
+      width: 60px;
+      height: 3px;
+      border-radius: 2px;
+      margin: 1em auto;
+    }
+
+    .rule-blue { background: var(--blue); }
+    .rule-green { background: var(--green); }
+    .rule-orange { background: var(--orange); }
+    .rule-teal { background: var(--teal); }
+
+    .cards {
+      display: flex;
+      gap: 1.4em;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1.2em;
+      max-width: 980px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4em 1.8em;
+      min-width: 220px;
+      max-width: 280px;
+      text-align: center;
+    }
+
+    .card .icon { font-size: 2.2em; margin-bottom: 0.4em; }
+    .card .val { font-size: 1.9em; font-weight: 600; }
+    .card .lbl { font-size: 0.9em; color: var(--muted); margin-top: 0.4em; }
+    .card.blue { border-color: var(--blue); }
+    .card.green { border-color: var(--green); }
+    .card.orange { border-color: var(--orange); }
+    .card.red { border-color: var(--red); }
+
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      margin-top: 1.4em;
+      max-width: 920px;
+      width: 100%;
+    }
+
+    .tl-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .tl-step:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .tl-dot {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05em;
+      font-weight: 700;
+      z-index: 1;
+      border: 2px solid;
+    }
+
+    .tl-dot.blue { background: #0d1f3c; border-color: var(--blue); color: var(--blue); }
+    .tl-dot.orange { background: #2a1a08; border-color: var(--orange); color: var(--orange); }
+    .tl-dot.green { background: #0d2a14; border-color: var(--green); color: var(--green); }
+    .tl-dot.teal { background: #0d2a1a; border-color: var(--teal); color: var(--teal); }
+
+    .tl-body { margin-top: 0.7em; text-align: center; padding: 0 0.5em; }
+    .tl-body .tl-wk { font-size: 0.75em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .tl-body .tl-bpm { font-size: 1.2em; font-weight: 600; }
+    .tl-body .tl-note { font-size: 0.8em; color: var(--muted); margin-top: 0.2em; }
+
+    .threshold-table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 860px;
+      margin-top: 1.2em;
+      font-size: 1em;
+    }
+
+    .threshold-table th {
+      background: var(--surface);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.78em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.7em 1em;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .threshold-table td {
+      padding: 0.75em 1em;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .threshold-table tr:last-child td { border-bottom: none; }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2em 0.7em;
+      border-radius: 20px;
+      font-size: 0.82em;
+      font-weight: 600;
+    }
+
+    .badge-green { background: #0d2a14; color: var(--green); border: 1px solid var(--green); }
+    .badge-orange { background: #2a1a08; color: var(--orange); border: 1px solid var(--orange); }
+    .badge-red { background: #2a0d0d; color: var(--red); border: 1px solid var(--red); }
+
+    .highlight-box {
+      background: var(--surface);
+      border-left: 4px solid var(--green);
+      border-radius: 0 10px 10px 0;
+      padding: 1.1em 1.6em;
+      max-width: 860px;
+      width: 100%;
+      margin-top: 1.2em;
+      font-size: 1.12em;
+      line-height: 1.6;
+    }
+
+    .highlight-box.orange { border-left-color: var(--orange); }
+    .highlight-box.blue { border-left-color: var(--blue); }
+
+    .action-list {
+      list-style: none;
+      max-width: 820px;
+      width: 100%;
+      margin-top: 1.2em;
+    }
+
+    .action-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9em;
+      padding: 0.75em 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 1.12em;
+      line-height: 1.5;
+    }
+
+    .action-list li:last-child { border-bottom: none; }
+    .action-list .icon { font-size: 1.4em; flex-shrink: 0; margin-top: 0.05em; }
+
+    .progress-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: var(--accent);
+      transition: width 0.4s ease;
+      z-index: 999;
+    }
+
+    .nav {
+      position: fixed;
+      bottom: 1.4em;
+      display: flex;
+      gap: 0.6em;
+      z-index: 999;
+    }
+
+    .nav.left { left: 1.6em; }
+    .nav.right { right: 1.6em; }
+
+    .nav-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      font-size: 1.1em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .nav-btn:hover { background: var(--border); border-color: var(--blue); }
+
+    .slide-counter {
+      position: fixed;
+      bottom: 1.6em;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.78em;
+      color: var(--muted);
+      z-index: 999;
+    }
+
+    .brand {
+      position: fixed;
+      top: 1.2em;
+      right: 1.6em;
+      font-size: 0.72em;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      z-index: 999;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 2em;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.4em;
+    }
+
+    .stat { text-align: center; }
+    .stat .num { font-size: 3.1em; font-weight: 700; line-height: 1; }
+    .stat .unit { font-size: 1em; color: var(--muted); margin-top: 0.2em; }
+
+    .slide-title { background: radial-gradient(ellipse at 60% 40%, #0d1f3c 0%, var(--bg) 70%); }
+    .slide-overview { background: radial-gradient(ellipse at 40% 60%, #0d1f3c 0%, var(--bg) 70%); }
+    .slide-norms { background: var(--bg); }
+    .slide-thresholds { background: radial-gradient(ellipse at 50% 50%, #0d2a14 0%, var(--bg) 70%); }
+    .slide-context { background: radial-gradient(ellipse at 50% 50%, #2a1a08 0%, var(--bg) 70%); }
+    .slide-next { background: radial-gradient(ellipse at 50% 50%, #0d1f3c 0%, var(--bg) 70%); }
+    .slide-action { background: radial-gradient(ellipse at 50% 50%, #0d2a14 0%, var(--bg) 70%); }
+    .slide-summary { background: radial-gradient(ellipse at 50% 50%, #0d1f3c 0%, var(--bg) 70%); }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/fetal-bradycardia-6-weeks/index.html">
+<meta name="description" content="Patient education on early fetal heart rate at 6 weeks, including expected ranges, how borderline or slow measurements are interpreted, why repeat ultrasound matters, and when to seek care.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Early Fetal Heart Rate, Fetal Bradycardia, First Trimester Ultrasound, Early Pregnancy, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/fetal-bradycardia-6-weeks/index.html">
+<meta property="og:title" content="Early Fetal Heart Rate at 6 Weeks - Patient Education | OpenMFM">
+<meta property="og:description" content="Patient education on early fetal heart rate at 6 weeks, including expected ranges, how borderline or slow measurements are interpreted, why repeat ultrasound matters, and when to seek care.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Early Fetal Heart Rate at 6 Weeks - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Patient education on early fetal heart rate at 6 weeks, including expected ranges, how borderline or slow measurements are interpreted, why repeat ultrasound matters, and when to seek care.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Early Fetal Heart Rate at 6 Weeks - Patient Education",
+  "description": "Patient education on early fetal heart rate at 6 weeks, including expected ranges, how borderline or slow measurements are interpreted, why repeat ultrasound matters, and when to seek care.",
+  "url": "https://openmfm.org/decks/fetal-bradycardia-6-weeks/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-26",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Early Fetal Heart Rate at 6 Weeks - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Early Fetal Heart Rate, Fetal Bradycardia, First Trimester Ultrasound, Early Pregnancy, Patient Education"
+}
+</script>
+</head>
+<body>
+  <div class="brand">OpenMFM · Patient Education</div>
+  <div class="progress-bar" id="progress"></div>
+
+  <div class="deck">
+    <div class="slide slide-title active">
+      <div class="slide-label">Maternal-Fetal Medicine · First Trimester</div>
+      <h1>Early Fetal<br />Heart Rate at 6 Weeks</h1>
+      <div class="rule rule-blue"></div>
+      <p class="subtitle">What an early heartbeat measurement can mean, and why short-interval follow-up is often the most useful next step.</p>
+    </div>
+
+    <div class="slide slide-overview">
+      <div class="slide-label">Overview</div>
+      <h2>What Are We Measuring?</h2>
+      <div class="rule rule-blue"></div>
+      <div class="cards">
+        <div class="card blue">
+          <div class="icon">💓</div>
+          <div class="val" style="color:var(--blue);">Heartbeat</div>
+          <div class="lbl">The fetal heart usually becomes visible on ultrasound around 5.5 to 6 weeks.</div>
+        </div>
+        <div class="card orange">
+          <div class="icon">📈</div>
+          <div class="val" style="color:var(--orange);">Trend</div>
+          <div class="lbl">At this stage, the rate changes quickly over just a few days.</div>
+        </div>
+        <div class="card green">
+          <div class="icon">🗓️</div>
+          <div class="val" style="color:var(--green);">Timing</div>
+          <div class="lbl">Exact gestational dating matters when deciding whether a rate is expected or slow.</div>
+        </div>
+      </div>
+      <div class="highlight-box blue" style="margin-top:1.6em;">
+        A single heart rate measurement early in pregnancy is helpful, but it is usually interpreted together with the crown-rump length, the exact gestational age, and a repeat scan.
+      </div>
+    </div>
+
+    <div class="slide slide-norms">
+      <div class="slide-label">Normal Development</div>
+      <h2>How Early Heart Rate Changes</h2>
+      <div class="rule rule-teal"></div>
+      <div class="timeline">
+        <div class="tl-step">
+          <div class="tl-dot blue">5w</div>
+          <div class="tl-body">
+            <div class="tl-wk">5 Weeks</div>
+            <div class="tl-bpm" style="color:var(--blue);">80-85 bpm</div>
+            <div class="tl-note">Heartbeat may first be seen</div>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot orange">6w</div>
+          <div class="tl-body">
+            <div class="tl-wk">6 Weeks</div>
+            <div class="tl-bpm" style="color:var(--orange);">About 100-120 bpm</div>
+            <div class="tl-note">Normal range is still evolving</div>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot green">7w</div>
+          <div class="tl-body">
+            <div class="tl-wk">7 Weeks</div>
+            <div class="tl-bpm" style="color:var(--green);">Usually above 120 bpm</div>
+            <div class="tl-note">Rise over time is reassuring</div>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot teal">9-10w</div>
+          <div class="tl-body">
+            <div class="tl-wk">9-10 Weeks</div>
+            <div class="tl-bpm" style="color:var(--teal);">170-175 bpm</div>
+            <div class="tl-note">Peak heart rate period</div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:1.4em; font-size:1em; color:var(--muted);">
+        Early embryonic heart rate rises rapidly as the conduction system matures, so small differences in dating can change how a measurement is interpreted.
+      </p>
+    </div>
+
+    <div class="slide slide-thresholds">
+      <div class="slide-label">Interpretation</div>
+      <h2>Common 6-Week Thresholds</h2>
+      <div class="rule rule-green"></div>
+      <table class="threshold-table">
+        <thead>
+          <tr>
+            <th>Heart Rate at 6 Weeks</th>
+            <th>How It Is Often Described</th>
+            <th>What It Usually Means</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:var(--green);">120 bpm or higher</strong></td>
+            <td><span class="badge badge-green">Very Reassuring</span></td>
+            <td>Lower risk of early pregnancy loss</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--orange);">100-119 bpm</strong></td>
+            <td><span class="badge badge-orange">Borderline / Early Normal</span></td>
+            <td>Often followed with repeat ultrasound because many pregnancies continue normally</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--red);">Below 100 bpm</strong></td>
+            <td><span class="badge badge-red">Slow</span></td>
+            <td>Higher concern for nonviability, but follow-up imaging is usually needed before conclusions are made</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="highlight-box" style="margin-top:1.4em;">
+        A measurement around <strong>105 bpm</strong> at 6 weeks is often considered <strong>borderline but potentially normal</strong>. The most important question is whether the heart rate and embryo continue to grow appropriately on the next scan.
+      </div>
+    </div>
+
+    <div class="slide slide-context">
+      <div class="slide-label">Clinical Context</div>
+      <h2>What Else Affects Risk?</h2>
+      <div class="rule rule-orange"></div>
+      <div class="cards">
+        <div class="card green">
+          <div class="icon">📐</div>
+          <div class="val" style="color:var(--green); font-size:1.25em;">Crown-rump length</div>
+          <div class="lbl">This helps confirm true gestational age and makes the heart rate easier to interpret.</div>
+        </div>
+        <div class="card blue">
+          <div class="icon">🩺</div>
+          <div class="val" style="color:var(--blue); font-size:1.25em;">Symptoms</div>
+          <div class="lbl">Bleeding or pain can matter clinically, but they do not replace ultrasound follow-up.</div>
+        </div>
+        <div class="card orange">
+          <div class="icon">📊</div>
+          <div class="val" style="color:var(--orange); font-size:1.25em;">Trajectory</div>
+          <div class="lbl">The change over time matters more than one isolated number.</div>
+        </div>
+      </div>
+      <p style="margin-top:1.4em; font-size:1em; color:var(--muted);">
+        Early pregnancy counseling is strongest when ultrasound findings, dating, and symptoms are reviewed together rather than relying on a single cutoff alone.
+      </p>
+    </div>
+
+    <div class="slide slide-next">
+      <div class="slide-label">Follow-Up</div>
+      <h2>What Usually Happens Next?</h2>
+      <div class="rule rule-blue"></div>
+      <ul class="action-list" style="max-width:720px;">
+        <li>
+          <span class="icon">🗓️</span>
+          <div>
+            <strong>Repeat ultrasound in 7 to 10 days</strong><br />
+            <span style="color:var(--muted); font-size:0.9em;">This checks whether the embryo is growing and whether the heart rate is rising as expected.</span>
+          </div>
+        </li>
+        <li>
+          <span class="icon">📐</span>
+          <div>
+            <strong>Confirm gestational age</strong><br />
+            <span style="color:var(--muted); font-size:0.9em;">Even a few days of dating difference can change whether a heart rate appears normal for that visit.</span>
+          </div>
+        </li>
+        <li>
+          <span class="icon">📋</span>
+          <div>
+            <strong>Review the full clinical picture</strong><br />
+            <span style="color:var(--muted); font-size:0.9em;">Your clinician may also consider symptoms, prior imaging, and laboratory results when counseling you.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="slide slide-action">
+      <div class="slide-label">Self-Care</div>
+      <h2>What Can Patients Do Right Now?</h2>
+      <div class="rule rule-green"></div>
+      <ul class="action-list" style="max-width:720px;">
+        <li>
+          <span class="icon">💊</span>
+          <div>
+            <strong>Continue prenatal vitamins</strong><br />
+            <span style="color:var(--muted); font-size:0.9em;">Routine pregnancy care remains appropriate unless your clinician advises otherwise.</span>
+          </div>
+        </li>
+        <li>
+          <span class="icon">📞</span>
+          <div>
+            <strong>Report heavy bleeding, severe pain, or fainting</strong><br />
+            <span style="color:var(--muted); font-size:0.9em;">These symptoms should prompt urgent clinical review.</span>
+          </div>
+        </li>
+        <li>
+          <span class="icon">🧭</span>
+          <div>
+            <strong>Focus on the next scan rather than one number</strong><br />
+            <span style="color:var(--muted); font-size:0.9em;">Short-interval follow-up is often the best way to clarify prognosis.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="slide slide-summary">
+      <div class="slide-label">Summary</div>
+      <h1 style="font-size:2.8em;">Early Heart Rate Findings<br />Need Context</h1>
+      <div class="rule rule-blue"></div>
+      <p>
+        At 6 weeks, an early fetal heart rate can be reassuring, borderline, or slow depending on the exact number and the gestational dating. Repeat ultrasound is often the key step that clarifies whether the pregnancy is developing normally.
+      </p>
+      <div class="stat-row" style="margin-top:1.8em;">
+        <div class="stat">
+          <div class="num" style="color:var(--orange);">7-10</div>
+          <div class="unit">days is a common interval<br />for repeat ultrasound</div>
+        </div>
+        <div class="stat">
+          <div class="num" style="color:var(--green);">&gt;120</div>
+          <div class="unit">bpm is often a very reassuring<br />6-week measurement</div>
+        </div>
+      </div>
+      <p style="margin-top:1.6em; font-size:1em; color:var(--muted);">
+        OpenMFM · Maternal-Fetal Medicine Patient Education
+      </p>
+    </div>
+  </div>
+
+  <div class="nav left">
+    <button class="nav-btn" onclick="prevSlide()" title="Previous">&#8592;</button>
+  </div>
+  <div class="nav right">
+    <button class="nav-btn" onclick="nextSlide()" title="Next">&#8594;</button>
+  </div>
+  <div class="slide-counter" id="counter">1 / 8</div>
+
+  <script>
+    let current = 0;
+    const slides = document.querySelectorAll(".slide");
+    const total = slides.length;
+    const bar = document.getElementById("progress");
+    const ctr = document.getElementById("counter");
+
+    function showSlide(n) {
+      slides.forEach((slide, index) => slide.classList.toggle("active", index === n));
+      bar.style.width = ((n + 1) / total) * 100 + "%";
+      ctr.textContent = n + 1 + " / " + total;
+    }
+
+    function nextSlide() {
+      current = (current + 1) % total;
+      showSlide(current);
+    }
+
+    function prevSlide() {
+      current = (current - 1 + total) % total;
+      showSlide(current);
+    }
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "ArrowRight" || event.key === " ") nextSlide();
+      else if (event.key === "ArrowLeft") prevSlide();
+    });
+
+    let touchX = null;
+    document.addEventListener("touchstart", event => {
+      touchX = event.touches[0].clientX;
+    }, { passive: true });
+    document.addEventListener("touchend", event => {
+      if (touchX === null) return;
+      const dx = event.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 50) dx < 0 ? nextSlide() : prevSlide();
+      touchX = null;
+    }, { passive: true });
+
+    showSlide(0);
+  </script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

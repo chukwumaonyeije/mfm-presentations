@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Obesity in Pregnancy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slide-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 0.5em;
+            color: #4dd0e1;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.8em;
+            margin-bottom: 0.6em;
+            color: #4dd0e1;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+            color: #81c784;
+            line-height: 1.3;
+        }
+
+        p {
+            font-size: 1.8em;
+            line-height: 1.6;
+            margin-bottom: 0.8em;
+            color: #e8e8e8;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #b0bec5;
+            margin-bottom: 1em;
+        }
+
+        .highlight-box {
+            background: rgba(77, 208, 225, 0.1);
+            border-left: 6px solid #4dd0e1;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .info-box {
+            background: rgba(129, 199, 132, 0.1);
+            border-left: 6px solid #81c784;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .warning-box {
+            background: rgba(255, 183, 77, 0.1);
+            border-left: 6px solid #ffb74d;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            font-size: 1.6em;
+            line-height: 1.8;
+            margin-bottom: 0.8em;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #4dd0e1;
+            font-weight: bold;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid rgba(77, 208, 225, 0.3);
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2em;
+            color: #b0bec5;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 25px;
+            border-radius: 8px;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: #4dd0e1;
+            transition: width 0.3s ease;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1.4em;
+        }
+
+        th {
+            background: rgba(77, 208, 225, 0.2);
+            padding: 16px 20px;
+            text-align: left;
+            color: #4dd0e1;
+            border-bottom: 3px solid #4dd0e1;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Risk gradient rows */
+        .risk-low td { border-left: 5px solid #81c784; }
+        .risk-moderate td { border-left: 5px solid #fff176; }
+        .risk-high td { border-left: 5px solid #ffb74d; }
+        .risk-extreme td { border-left: 5px solid #ef5350; }
+
+        /* Testing rows */
+        .test-none td { border-left: 5px solid #546e7a; }
+        .test-consider td { border-left: 5px solid #ffb74d; }
+        .test-recommended td { border-left: 5px solid #ef5350; }
+
+        .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .small-text {
+            font-size: 1.3em;
+            color: #b0bec5;
+            margin-top: 20px;
+        }
+
+        .emphasis {
+            color: #81c784;
+            font-weight: 600;
+        }
+
+        .emphasis-cyan {
+            color: #4dd0e1;
+            font-weight: 600;
+        }
+
+        .emphasis-amber {
+            color: #ffb74d;
+            font-weight: 600;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+            margin: 30px 0;
+        }
+
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #4dd0e1;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4dd0e1;
+            border: 4px solid #1a1a2e;
+        }
+
+        .timeline-item h3 {
+            margin-bottom: 10px;
+        }
+
+        .timeline-item p {
+            font-size: 1.5em;
+        }
+
+        /* BMI class color badges */
+        .bmi-class1 { color: #81c784; font-weight: 700; }
+        .bmi-class2 { color: #fff176; font-weight: 700; }
+        .bmi-class3 { color: #ffb74d; font-weight: 700; }
+        .bmi-super  { color: #ef5350; font-weight: 700; }
+
+        /* Source citation */
+        .source-note {
+            font-size: 1.1em;
+            color: #78909c;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* New badge */
+        .new-badge {
+            display: inline-block;
+            background: rgba(77, 208, 225, 0.2);
+            border: 1px solid #4dd0e1;
+            color: #4dd0e1;
+            font-size: 0.6em;
+            padding: 3px 10px;
+            border-radius: 20px;
+            vertical-align: middle;
+            margin-left: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/JQplZupHGp_3sPsa1Sio1aOWwj5YyPplmiHGM_RiR6fc2YiGrYyOMooVfYuHqNVFzBaYoIbFK_tDzhuVobUtRhwzzKXwvgKk-L5vv072TRUy9lkyugdyC-yjzJLidT6Sc3wFr-ZieUJvfgqj8jqnXNAnLpvsWWgq1kE0UFZqv4nZThO3f4x-xTrZS39FsBZgJE8WvfG99LuwZghLDeLDo8_x5-q89nhPlwLezTwbTRfltV7uKGI9xmvXsAh4iuGSBoXq2Tt3sGFzWhpBCQi8o4jBNY-xbZTU8gDBiqr2uL2OL4FbiZAfdt8sHQpLoHNueWgM4UkEv5lbMXDdZFSr-p3TUW1cWBaiCPWzqE2Z5cna-Gs90DPbUouB6fSxKmEuq5lswDN32Igm2JIj7zdl9Xe1VH3QAOBcYhxe-O5e_Di9F5IfJNVVpYnqhNoBjHckV--UsyYxcazSJV7x1KuFeDmxjYl_O6GggSl3OFz_Y0yWylFw-8_8m9sKMmuOuCNISdacMUymgbWTP8SwQqQIyMIwpTwP4OVFmG2szl9_rs3fGTwUO_LEDMQJto-e6o0lRqJi4md4QRRSeVAXWcfaZWeukKlYkzFFS4kc4_gZYX5W_VwSXJMtdsjrzyWozIn2RmrQQM1E7VKC3LhAVl8UkS7tgqT9ocs-AUql7CrcS3erxTsPGLZF3fPYSHRRJFtWfYxQYZxky_LTr7hxjVGFxBmCKkFA8R-aTTWVtor2XQMlNesTKYdibV6O6ieZeVv2Gs52OIhLce_2-XsalM_04el3D7lzTLpP0RtJNjazQlsalnBtdSnWQwpB-eHkbF3F61Tu8ErunxB3l3YimO9tVbXEb2P7gTNrqOqi2G-Gv-jnP-fyp8kQGFgX5h5VNAxaIGhQnoW3P69YBPwknwg6UZA2jxFpt5zuCX8IiylwA7bAnDFX3IRLe2HllVqfrBCK1FIOl5w8NkfqlNbWPySM-ILTqQODxQOe6HnnzrWDxIwqF4nGIOqR4DgETI1QKq0ncW5QhXXgJW5LwXmVcIzFsPpVCaWk7AosZeHW6iYD-cyn-ESSegSOykRoWsScurFMJB34Upu54xKD3BWMxPuXDrGc23eiFqg3cjOdZX78SGwpYIYCmoNIw_bIdM5jO--4CIyeqExQg-up5NPyRiEvr8yaAMQ3783mzmRztgKbqO5DGDQBe3wd-JQ0zvtlffYUYv9Sl5IKtEmqQw29KwHoFINjVcIIm5fNAMX1QE5DjgcoNjGOPe8j-X_8kFetGP4lOB9PcaDYdyUBOrGq3WahJmJZGCvw4GGTTAFnmWwOUYyM-_tDNmQUynNy1MKxZ010RhTxBX7-DcanVc_0sqNT9DoLOvc_kOVKtYJGhJT0PUE1rv_CjoRF7jPMaBY1V6Bf8f2xekmYZIiCfa-bd8_F6YWecULvmxpbudtc9bv2k5KQ0yTd1QNTvwGCShjI4Ncp6PPNIgJ0Gq71tz6NZbXxLwI6KWwdEstS2g7ihqsbqMJT4hsG_XUjqlEh3jGgtqWIhTo8gvQybJaOJS9jDmrjzMEBsYBpXegDjFo8z5_aXKyGpwWGKWlg5PLaM9BmoaRP64T4aKsjGDEqu6NQE55-1Ua-aITtTnMFI1YLvKlA_jejhU9hKjGEfs6pIywnMfrEP4U6uTXwJQKZR1bp7QEc9GpmeJy56TtOYNyGgmUqwDvwNrBQbYGPTWs'></script></head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="slide-container">
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 1: Title -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide active">
+            <div class="center">
+                <span class="icon">🤰</span>
+                <h1>Understanding Obesity<br>in Pregnancy</h1>
+                <p class="subtitle">A Guide to Your Personalized Care Plan</p>
+                <p class="small-text">Press the right arrow key (→) to continue</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 2: Obesity Classification (NEW) -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>How Obesity Is Classified in Pregnancy <span class="new-badge">Updated</span></h2>
+            <p class="subtitle">Pre-pregnancy BMI determines your care plan</p>
+
+            <table>
+                <tr>
+                    <th>Class</th>
+                    <th>BMI (kg/m²)</th>
+                    <th>Label</th>
+                    <th>Stillbirth Risk vs. Normal</th>
+                </tr>
+                <tr class="risk-low">
+                    <td><span class="bmi-class1">Class I</span></td>
+                    <td>30.0 – 34.9</td>
+                    <td>Obesity</td>
+                    <td>1.71×</td>
+                </tr>
+                <tr class="risk-moderate">
+                    <td><span class="bmi-class2">Class II</span></td>
+                    <td>35.0 – 39.9</td>
+                    <td>Obesity</td>
+                    <td>2.00×</td>
+                </tr>
+                <tr class="risk-high">
+                    <td><span class="bmi-class3">Class III</span></td>
+                    <td>40.0 – 49.9</td>
+                    <td>Morbid Obesity</td>
+                    <td>2.48×</td>
+                </tr>
+                <tr class="risk-extreme">
+                    <td><span class="bmi-super">Super Morbid</span></td>
+                    <td>≥ 50.0</td>
+                    <td>Extreme Obesity</td>
+                    <td>3.16×</td>
+                </tr>
+            </table>
+
+            <p class="source-note">Source: ACOG Practice Bulletin No. 230 (2021)</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 3: What Does Obesity Mean? -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>What Does "Obesity" Mean in Pregnancy?</h2>
+            <div class="highlight-box">
+                <p><strong>Body Mass Index (BMI)</strong> is calculated from your height and weight <em>before</em> pregnancy.</p>
+            </div>
+            <ul>
+                <li>BMI 30–34.9 = <span class="bmi-class1">Class I Obesity</span></li>
+                <li>BMI 35–39.9 = <span class="bmi-class2">Class II Obesity</span></li>
+                <li>BMI 40–49.9 = <span class="bmi-class3">Class III (Morbid) Obesity</span></li>
+                <li>BMI ≥50 = <span class="bmi-super">Super Morbid Obesity</span></li>
+            </ul>
+            <p class="small-text">Your healthcare team uses this number to plan your pregnancy care — not to judge you.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 4: Why It Matters -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Why Does This Matter?</h2>
+            <p>Higher BMI is <span class="emphasis">associated with</span> some pregnancy complications.</p>
+            <div class="info-box">
+                <p><strong>Important:</strong> This doesn't mean complications will happen — it means your care team will monitor you more closely.</p>
+            </div>
+            <p>Most women with obesity have healthy pregnancies and healthy babies.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 5: Stillbirth Risk (NEW) -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Stillbirth Risk Rises With BMI <span class="new-badge">New</span></h2>
+            <p class="subtitle">This is why we monitor more closely at higher BMI classes</p>
+
+            <div class="grid-2">
+                <div>
+                    <table>
+                        <tr>
+                            <th>BMI Class</th>
+                            <th>Risk vs. Normal Weight</th>
+                        </tr>
+                        <tr class="risk-low">
+                            <td>Class I (30–34.9)</td>
+                            <td><strong>1.71×</strong></td>
+                        </tr>
+                        <tr class="risk-moderate">
+                            <td>Class II (35–39.9)</td>
+                            <td><strong>2.00×</strong></td>
+                        </tr>
+                        <tr class="risk-high">
+                            <td>Class III (≥40)</td>
+                            <td><strong>2.48×</strong></td>
+                        </tr>
+                        <tr class="risk-extreme">
+                            <td>Super Morbid (≥50)</td>
+                            <td><strong>3.16×</strong></td>
+                        </tr>
+                    </table>
+                    <p class="source-note">ACOG Practice Bulletin No. 230</p>
+                </div>
+                <div>
+                    <div class="warning-box">
+                        <h3>At BMI ≥50:</h3>
+                        <p>Risk is <span class="emphasis-amber">5.7× higher</span> at 39 weeks</p>
+                        <p>Risk is <span class="emphasis-amber">13.6× higher</span> at 41 weeks</p>
+                    </div>
+                    <div class="info-box">
+                        <p>Early monitoring <span class="emphasis">finds problems before they happen</span> — that's the goal.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 6: What Could Happen? -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>What Could Happen?</h2>
+            <p class="subtitle">Your team watches for these conditions</p>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3>For You</h3>
+                    <ul>
+                        <li>High blood pressure</li>
+                        <li>Gestational diabetes</li>
+                        <li>Blood clots</li>
+                        <li>Longer labor</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>For Baby</h3>
+                    <ul>
+                        <li>Larger birth weight (macrosomia)</li>
+                        <li>Growth restriction (FGR)</li>
+                        <li>Preterm birth</li>
+                        <li>Birth defects (rare)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p class="small-text">These are possibilities, not certainties. Your care is customized to prevent problems.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 7: Gestational Diabetes Risk (NEW) -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Obesity Significantly Increases Diabetes Risk <span class="new-badge">New</span></h2>
+
+            <div class="warning-box">
+                <p>Class III obesity carries a <span class="emphasis-amber">relative risk of 3.55</span> for gestational diabetes (GDM)</p>
+                <p class="small-text">(95% CI 3.26–3.86)</p>
+            </div>
+
+            <ul>
+                <li>All obese patients are screened for diabetes <strong>early in pregnancy</strong> (first trimester)</li>
+                <li>Routine GDM screen is repeated at <strong>24–28 weeks</strong> even if the early screen is negative</li>
+                <li>Uncontrolled GDM increases the risk of macrosomia, stillbirth, and neonatal complications</li>
+            </ul>
+
+            <div class="info-box">
+                <p><span class="emphasis">Early screening catches diabetes before it affects your baby.</span></p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 8: How We Monitor You -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>How We Monitor You</h2>
+            <p class="subtitle">Your personalized care plan includes</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Blood Pressure Checks</h3>
+                    <p>At every prenatal visit — watching for preeclampsia</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Diabetes Screening</h3>
+                    <p>First trimester + 24–28 weeks (earlier if risk factors present)</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Ultrasound Exams</h3>
+                    <p>Anatomy at 18–22 weeks; serial growth scans from 32 weeks onward</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Fetal Heart Rate Testing (NST)</h3>
+                    <p>Timing depends on your BMI class — see next slides</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 9: Why Fundal Height Is Not Enough (NEW) -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Measuring Your Belly Is Not Enough <span class="new-badge">New</span></h2>
+
+            <div class="grid-2">
+                <div>
+                    <div class="warning-box">
+                        <h3>The Problem</h3>
+                        <p>Fundal height (tape measure) is <span class="emphasis-amber">unreliable in obesity</span></p>
+                        <p>Adipose tissue prevents accurate measurement of baby's size</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="info-box">
+                        <h3>The Solution</h3>
+                        <p>Ultrasound is the <span class="emphasis">only reliable method</span> to assess fetal growth in this population</p>
+                        <p>Serial scans identify both macrosomia and growth restriction</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <p>Your team will use <strong>ultrasound — not just a tape measure</strong> — to track your baby's growth throughout the third trimester.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 10: Sonographic Surveillance Plan (NEW) -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Your Ultrasound Surveillance Plan <span class="new-badge">New</span></h2>
+            <p class="subtitle">ACOG recommends ultrasound for all patients with BMI ≥30</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>18–22 Weeks</h3>
+                    <p>Detailed anatomy survey — may need a longer exam or a repeat visit</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>≥32 Weeks</h3>
+                    <p>Begin serial growth + amniotic fluid volume (AFV) ultrasounds</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Every 4 Weeks (Third Trimester)</h3>
+                    <p>Ongoing growth and fluid monitoring through delivery planning</p>
+                </div>
+            </div>
+
+            <p class="small-text">Serial scans identify both too-large (macrosomia) and too-small (growth restriction) babies.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 11: Ultrasound Accuracy by BMI (NEW) -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Ultrasound Is Less Accurate at Higher BMI <span class="new-badge">New</span></h2>
+            <p class="subtitle">Adipose tissue attenuates sound waves — here's what we do about it</p>
+
+            <table>
+                <tr>
+                    <th>BMI Class</th>
+                    <th>Standard US Detection</th>
+                    <th>Targeted US Detection</th>
+                </tr>
+                <tr class="risk-low">
+                    <td>Normal (&lt;25)</td>
+                    <td>66%</td>
+                    <td><span class="emphasis">97%</span></td>
+                </tr>
+                <tr class="risk-low">
+                    <td>Class I (30–34.9)</td>
+                    <td>48%</td>
+                    <td><span class="emphasis">75%</span></td>
+                </tr>
+                <tr class="risk-moderate">
+                    <td>Class II (35–39.9)</td>
+                    <td>45%</td>
+                    <td><span class="emphasis">88%</span></td>
+                </tr>
+                <tr class="risk-high">
+                    <td>Class III (≥40)</td>
+                    <td>22%</td>
+                    <td><span class="emphasis">75%</span></td>
+                </tr>
+            </table>
+
+            <div class="info-box">
+                <p>We use <strong>targeted/detailed ultrasound</strong> to maximize detection. Longer exams and repeat visits may be needed — this is expected and normal.</p>
+            </div>
+            <p class="source-note">Data: Dashe JS et al. Obstet Gynecol 2009;113:1001–7 | ACOG PB 230</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 12: Additional Tests You May Need -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Additional Tests You May Need</h2>
+
+            <table>
+                <tr>
+                    <th>Test</th>
+                    <th>When</th>
+                    <th>Why</th>
+                </tr>
+                <tr>
+                    <td>Early glucose test</td>
+                    <td>First trimester</td>
+                    <td>Screen for pre-existing diabetes</td>
+                </tr>
+                <tr>
+                    <td>Detailed ultrasound</td>
+                    <td>18–22 weeks</td>
+                    <td>Anatomy survey</td>
+                </tr>
+                <tr>
+                    <td>Growth ultrasounds</td>
+                    <td>≥32 weeks (every 4 wks)</td>
+                    <td>Track size + amniotic fluid</td>
+                </tr>
+                <tr>
+                    <td>Nonstress test (NST)</td>
+                    <td>Based on BMI class</td>
+                    <td>Check baby's heart rate patterns</td>
+                </tr>
+                <tr>
+                    <td>Biophysical profile (BPP)</td>
+                    <td>If NST is nonreactive</td>
+                    <td>Comprehensive fetal assessment</td>
+                </tr>
+            </table>
+
+            <p class="small-text">Not everyone needs all tests — your team decides based on your specific situation.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 13: Antepartum Testing by BMI Class (NEW) -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>When Does Fetal Heart Rate Testing Begin? <span class="new-badge">New</span></h2>
+            <p class="subtitle">Testing schedule is based on your BMI class — ACOG Practice Bulletin 230</p>
+
+            <table>
+                <tr>
+                    <th>BMI Class</th>
+                    <th>BMI Range</th>
+                    <th>US Growth/Fluid</th>
+                    <th>NST/BPP Testing</th>
+                </tr>
+                <tr class="test-none">
+                    <td><span class="bmi-class1">Class I</span></td>
+                    <td>30.0–34.9</td>
+                    <td>Start ≥32 weeks</td>
+                    <td>Only if comorbidities present</td>
+                </tr>
+                <tr class="test-none">
+                    <td><span class="bmi-class2">Class II</span></td>
+                    <td>35.0–39.9</td>
+                    <td>Start ≥32 weeks</td>
+                    <td>Only if comorbidities present</td>
+                </tr>
+                <tr class="test-consider">
+                    <td><span class="bmi-class3">Class III</span></td>
+                    <td>40.0–49.9</td>
+                    <td>Start ≥32 weeks</td>
+                    <td><strong>Consider at 34–37 weeks</strong></td>
+                </tr>
+                <tr class="test-recommended">
+                    <td><span class="bmi-super">Super Morbid</span></td>
+                    <td>≥50.0</td>
+                    <td>Start ≥32 weeks</td>
+                    <td><strong>Suggested at 37 0/7 weeks</strong></td>
+                </tr>
+            </table>
+
+            <p class="small-text">Comorbidities (hypertension, diabetes, prior stillbirth) may trigger earlier testing in any class.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 14: What Is an NST? (NEW) -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>What Happens During a Nonstress Test (NST)? <span class="new-badge">New</span></h2>
+
+            <div class="grid-2">
+                <div>
+                    <ul>
+                        <li>You relax while sensors monitor baby's heart rate for <strong>20–40 minutes</strong></li>
+                        <li>A <span class="emphasis">"reactive" NST</span> means baby's heart rate accelerates normally — reassuring</li>
+                        <li>A <span class="emphasis-amber">"nonreactive" result</span> is <strong>common with obesity</strong> and does not mean something is wrong</li>
+                        <li>If NST is nonreactive → <strong>biophysical profile (BPP)</strong> ultrasound is performed</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="info-box">
+                        <h3>What to Expect</h3>
+                        <p>Women with higher BMI often need <span class="emphasis">longer NSTs (≥30 min)</span> as BMI increases.</p>
+                        <p>This is expected and normal — not a sign of a problem.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p>A BPP adds ultrasound assessment of baby's movements, breathing, tone, and fluid — a comprehensive check.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 15: What You Can Do -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>What You Can Do</h2>
+            <p class="subtitle">Ways to help yourself and your baby</p>
+
+            <div class="info-box">
+                <h3>Weight Gain Goals</h3>
+                <p>For BMI ≥30: Aim for <strong>11–20 pounds</strong> total during pregnancy</p>
+                <p class="small-text">This is a guideline, not a strict rule. Focus on healthy habits, not the scale.</p>
+            </div>
+
+            <ul>
+                <li>Eat balanced meals with vegetables, protein, and whole grains</li>
+                <li>Stay active with walking or swimming (if safe for you)</li>
+                <li>Take prenatal vitamins with folic acid daily</li>
+                <li>Attend all prenatal appointments</li>
+                <li>Ask questions when something is unclear</li>
+            </ul>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 16: Should I Try to Lose Weight? -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Should I Try to Lose Weight?</h2>
+
+            <div class="warning-box">
+                <p><strong>No.</strong> Pregnancy is not the time for weight-loss diets.</p>
+            </div>
+
+            <p>Your baby needs nutrients to grow. Instead, focus on:</p>
+
+            <ul>
+                <li>Healthy food choices</li>
+                <li>Regular physical activity</li>
+                <li>Managing — not minimizing — weight gain</li>
+            </ul>
+
+            <div class="highlight-box">
+                <p>Very low gestational weight gain may reduce macrosomia risk but can increase the risk of a <strong>small-for-gestational-age (SGA)</strong> baby. Your team will guide you.</p>
+            </div>
+
+            <p class="small-text">After delivery, your healthcare team can help you reach a healthy weight safely.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 17: When Will I Deliver? -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>When Will I Deliver?</h2>
+            <p class="subtitle">ACOG recommendations for timing</p>
+
+            <div class="highlight-box">
+                <h3>If pregnancy is uncomplicated (Class I/II):</h3>
+                <p>Delivery between <span class="emphasis">39 weeks 0 days and 40 weeks 6 days</span></p>
+            </div>
+
+            <div class="info-box">
+                <h3>If Class III or complications develop:</h3>
+                <p>Timing depends on the specific condition and how you and baby are doing</p>
+                <p class="small-text">Your team will discuss the safest individualized plan with you</p>
+            </div>
+
+            <p>Most women with obesity deliver at term. Early delivery is only done when medically necessary.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 18: Labor and Delivery -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>What About Labor and Delivery?</h2>
+
+            <ul>
+                <li><strong>IV access:</strong> May be started early (in case of emergency)</li>
+                <li><strong>Anesthesia consult:</strong> May meet with anesthesia team before labor — epidural placement may be more complex</li>
+                <li><strong>Monitoring:</strong> Continuous fetal heart rate monitoring is standard; a fetal scalp electrode may be used if external monitoring is suboptimal</li>
+                <li><strong>Cesarean birth:</strong> Slightly higher chance, but most women deliver vaginally</li>
+            </ul>
+
+            <p class="small-text">Your team prepares for what might happen, not what will happen.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 19: After Your Baby Is Born -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>After Your Baby Is Born</h2>
+
+            <div class="info-box">
+                <p><strong>Special attention to:</strong></p>
+                <ul>
+                    <li>Blood clot prevention (walking, sometimes medication)</li>
+                    <li>Wound healing if you had a cesarean</li>
+                    <li>Blood pressure monitoring</li>
+                    <li>Breastfeeding support (obesity doesn't prevent breastfeeding)</li>
+                </ul>
+            </div>
+
+            <p>Your postpartum care is just as important as your prenatal care.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 20: Planning Future Pregnancies -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Planning Future Pregnancies</h2>
+
+            <p>If you're thinking about another baby someday:</p>
+
+            <ul>
+                <li>Losing weight between pregnancies reduces risks</li>
+                <li>Even 5–10% weight loss can make a meaningful difference</li>
+                <li>Your healthcare team can help with safe weight management</li>
+                <li>Wait at least 18 months between pregnancies when possible</li>
+            </ul>
+
+            <div class="highlight-box">
+                <p>Every pregnancy is different. Past pregnancies don't predict future ones.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 21: Common Questions -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Common Questions</h2>
+
+            <div class="card" style="margin-bottom: 30px;">
+                <h3>Will I need a cesarean birth?</h3>
+                <p>Not automatically. Many women with obesity deliver vaginally. Your delivery method depends on how labor goes and your baby's position.</p>
+            </div>
+
+            <div class="card" style="margin-bottom: 30px;">
+                <h3>Can ultrasounds see my baby clearly?</h3>
+                <p>Usually yes. Sometimes we need a longer exam or a repeat visit — but we can almost always get the images we need.</p>
+            </div>
+
+            <div class="card">
+                <h3>Will my baby be okay?</h3>
+                <p>Most babies born to mothers with obesity are completely healthy. That's why we monitor closely — to catch and treat any problems early.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 22: Who's on Your Team? -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>Who's on Your Team?</h2>
+
+            <p class="subtitle">You're not alone — these specialists may help with your care</p>
+
+            <ul>
+                <li><strong>Obstetrician:</strong> Manages your pregnancy</li>
+                <li><strong>Maternal-Fetal Medicine specialist:</strong> If complications arise</li>
+                <li><strong>Diabetes educator:</strong> If you develop gestational diabetes</li>
+                <li><strong>Nutritionist:</strong> Helps with meal planning</li>
+                <li><strong>Anesthesiologist:</strong> Plans pain relief options</li>
+            </ul>
+
+            <p class="small-text">You're the most important member of the team. Speak up with questions or concerns.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 23: When to Call Your Provider -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>When to Call Your Provider</h2>
+            <p class="subtitle">Don't wait — call right away if you have:</p>
+
+            <div class="warning-box">
+                <ul>
+                    <li>Severe headache that won't go away</li>
+                    <li>Vision changes (blurry vision, seeing spots)</li>
+                    <li>Severe belly pain</li>
+                    <li>Leg swelling with pain, warmth, or redness</li>
+                    <li>Decreased baby movement</li>
+                    <li>Sudden weight gain (more than 2 pounds in a week)</li>
+                    <li>Trouble breathing or chest pain</li>
+                </ul>
+            </div>
+
+            <p>These symptoms need immediate attention. You're not bothering anyone by calling.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 24: The Bottom Line -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <h2>The Bottom Line</h2>
+
+            <div class="highlight-box">
+                <p style="font-size: 2em; line-height: 1.6;">
+                    <span class="emphasis">Obesity is one factor</span> in your pregnancy — not the only factor.
+                    Your health, your actions, and your partnership with your care team matter more.
+                </p>
+            </div>
+
+            <ul>
+                <li>Most women with obesity have healthy pregnancies</li>
+                <li>Close monitoring — including ultrasound and NST — helps prevent complications</li>
+                <li>You have control over many aspects of your health</li>
+                <li>Your care team is here to support you, not judge you</li>
+            </ul>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SLIDE 25: Final Message -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="slide">
+            <div class="center">
+                <span class="icon">❤️</span>
+                <h1>You've Got This</h1>
+                <div class="highlight-box">
+                    <p style="font-size: 2em;">
+                        Pregnancy is a journey. Your care team is walking beside you every step of the way.
+                    </p>
+                </div>
+                <p class="subtitle">Questions? Write them down and bring them to your next appointment.</p>
+                <p class="source-note" style="margin-top: 30px;">Based on ACOG Practice Bulletin No. 230 (2021) · SMFM Guidelines · Atlanta Perinatal Associates</p>
+            </div>
+        </div>
+
+    </div><!-- end slide-container -->
+
+    <div class="navigation">
+        <span id="slideNumber">1</span> / <span id="totalSlides">25</span>
+        <span style="margin-left: 20px;">Use ← → arrow keys</span>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slideNumber = document.getElementById('slideNumber');
+        const totalSlidesSpan = document.getElementById('totalSlides');
+        const progressBar = document.getElementById('progressBar');
+
+        totalSlidesSpan.textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            slideNumber.textContent = currentSlide + 1;
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) prevSlide();
+        }
+
+        // Click navigation (right 30% = next, left 30% = prev)
+        document.addEventListener('click', (e) => {
+            const clickX = e.clientX;
+            const windowWidth = window.innerWidth;
+            if (clickX > windowWidth * 0.7) {
+                nextSlide();
+            } else if (clickX < windowWidth * 0.3) {
+                prevSlide();
+            }
+        });
+
+        // Initialize progress bar
+        updateProgressBar();
+    </script>
+</body>
+</html>

@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Myomectomy &amp; Future Pregnancy | MFM Patient Education</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --blue:      #58a6ff;
+      --blue-dim:  #1f3a5f;
+      --green:     #3fb950;
+      --green-dim: #1a3a24;
+      --orange:    #f0883e;
+      --orange-dim:#3d2208;
+      --red:       #f85149;
+      --red-dim:   #3d0c09;
+      --accent:    #58a6ff;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Deck & Slides ── */
+    .deck { width: 100%; height: 100%; position: relative; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Typography ── */
+    .slide-eyebrow {
+      font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.6rem;
+    }
+    .slide-title {
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      font-weight: 300; line-height: 1.2;
+      color: var(--text); text-align: center;
+      margin-bottom: 1.2rem;
+    }
+    .slide-title span.accent { color: var(--blue); }
+    .slide-title span.green  { color: var(--green); }
+    .slide-title span.orange { color: var(--orange); }
+    .slide-title span.red    { color: var(--red); }
+
+    .slide-body {
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      line-height: 1.7; color: var(--text);
+      max-width: 820px; text-align: center;
+    }
+
+    /* ── Visual Containers ── */
+    .visual-row {
+      display: flex; gap: 1.5rem; justify-content: center;
+      align-items: stretch; flex-wrap: wrap;
+      margin-top: 1.8rem; width: 100%; max-width: 900px;
+    }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.4rem 1.8rem;
+      flex: 1; min-width: 200px; max-width: 340px;
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+    }
+    .card.green  { border-color: var(--green);  background: var(--green-dim); }
+    .card.blue   { border-color: var(--blue);   background: var(--blue-dim); }
+    .card.orange { border-color: var(--orange); background: var(--orange-dim); }
+    .card.red    { border-color: var(--red);    background: var(--red-dim); }
+
+    .card-icon { font-size: 2.4rem; line-height: 1; }
+    .card-label {
+      font-size: 0.95rem; font-weight: 600; text-align: center;
+      letter-spacing: 0.04em;
+    }
+    .card.green  .card-label { color: var(--green); }
+    .card.blue   .card-label { color: var(--blue); }
+    .card.orange .card-label { color: var(--orange); }
+    .card.red    .card-label { color: var(--red); }
+    .card-sub { font-size: 0.85rem; color: var(--muted); text-align: center; line-height: 1.4; }
+
+    /* ── Stat Pill ── */
+    .stat-pill {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--blue-dim); border: 1px solid var(--blue);
+      border-radius: 50px; padding: 0.5rem 1.4rem;
+      font-size: 1.5rem; font-weight: 700; color: var(--blue);
+      margin-top: 1.4rem;
+    }
+    .stat-pill .stat-label { font-size: 0.9rem; font-weight: 400; color: var(--muted); }
+
+    /* ── Risk Bar ── */
+    .risk-bar-wrap { margin-top: 1.6rem; width: 100%; max-width: 600px; }
+    .risk-bar-track {
+      width: 100%; height: 18px; background: var(--border);
+      border-radius: 9px; overflow: hidden;
+    }
+    .risk-bar-fill {
+      height: 100%; border-radius: 9px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      transition: width 1s ease;
+    }
+    .risk-bar-labels {
+      display: flex; justify-content: space-between;
+      font-size: 0.75rem; color: var(--muted); margin-top: 0.4rem;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      display: flex; align-items: flex-start; gap: 0;
+      width: 100%; max-width: 820px; margin-top: 1.8rem;
+    }
+    .tl-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      position: relative;
+    }
+    .tl-item:not(:last-child)::after {
+      content: '';
+      position: absolute; top: 14px; left: 50%; right: -50%;
+      height: 2px; background: var(--border); z-index: 0;
+    }
+    .tl-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--surface); border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; z-index: 1; position: relative;
+    }
+    .tl-dot.green  { border-color: var(--green);  background: var(--green-dim);  color: var(--green); }
+    .tl-dot.blue   { border-color: var(--blue);   background: var(--blue-dim);   color: var(--blue); }
+    .tl-dot.orange { border-color: var(--orange); background: var(--orange-dim); color: var(--orange); }
+    .tl-dot.red    { border-color: var(--red);    background: var(--red-dim);    color: var(--red); }
+    .tl-label {
+      font-size: 0.78rem; color: var(--muted); text-align: center;
+      margin-top: 0.5rem; line-height: 1.3; max-width: 90px;
+    }
+    .tl-label strong { display: block; color: var(--text); font-size: 0.85rem; }
+
+    /* ── Table ── */
+    .data-table {
+      width: 100%; max-width: 820px; border-collapse: collapse;
+      margin-top: 1.6rem; font-size: 0.95rem;
+    }
+    .data-table th {
+      background: var(--surface); color: var(--muted);
+      font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      font-size: 0.75rem; padding: 0.7rem 1rem; border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .data-table td {
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+      vertical-align: middle; line-height: 1.4;
+    }
+    .data-table tr.row-green td:first-child { border-left: 3px solid var(--green); }
+    .data-table tr.row-blue  td:first-child { border-left: 3px solid var(--blue); }
+    .data-table tr.row-orange td:first-child { border-left: 3px solid var(--orange); }
+    .badge {
+      display: inline-block; border-radius: 4px; padding: 0.2rem 0.55rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+    }
+    .badge.green  { background: var(--green-dim);  color: var(--green); }
+    .badge.blue   { background: var(--blue-dim);   color: var(--blue); }
+    .badge.orange { background: var(--orange-dim); color: var(--orange); }
+
+    /* ── Checklist ── */
+    .checklist {
+      list-style: none; margin-top: 1.6rem;
+      display: flex; flex-direction: column; gap: 0.9rem;
+      max-width: 680px; width: 100%;
+    }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 0.9rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.85rem 1.1rem;
+      font-size: 1rem; line-height: 1.5;
+    }
+    .checklist li .ci { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.05rem; }
+
+    /* ── Two-col split ── */
+    .split {
+      display: flex; gap: 2rem; width: 100%; max-width: 860px;
+      margin-top: 1.6rem; align-items: stretch;
+    }
+    .split-col {
+      flex: 1; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.4rem 1.6rem;
+      display: flex; flex-direction: column; gap: 0.6rem;
+    }
+    .split-col.green  { border-color: var(--green); }
+    .split-col.blue   { border-color: var(--blue); }
+    .split-col .col-head {
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 0.4rem;
+    }
+    .split-col.green .col-head { color: var(--green); }
+    .split-col.blue  .col-head { color: var(--blue); }
+    .split-col p { font-size: 0.92rem; color: var(--text); line-height: 1.5; }
+
+    /* ── Nav ── */
+    .nav {
+      position: fixed; bottom: 1.4rem; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1rem;
+      background: rgba(22,27,34,0.92); border: 1px solid var(--border);
+      border-radius: 50px; padding: 0.4rem 1rem;
+      backdrop-filter: blur(8px); z-index: 100;
+    }
+    .nav button {
+      background: none; border: none; color: var(--muted);
+      font-size: 1.2rem; cursor: pointer; padding: 0.3rem 0.5rem;
+      border-radius: 6px; transition: color 0.2s, background 0.2s;
+    }
+    .nav button:hover { color: var(--text); background: var(--border); }
+    .nav-counter { font-size: 0.8rem; color: var(--muted); min-width: 4rem; text-align: center; }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      transition: width 0.4s ease; z-index: 200;
+    }
+
+    /* ── Footer brand ── */
+    .slide-footer {
+      position: absolute; bottom: 3.5rem; left: 0; right: 0;
+      text-align: center; font-size: 0.7rem; color: var(--border);
+      letter-spacing: 0.12em; text-transform: uppercase;
+    }
+
+    /* ── Uterus SVG diagram ── */
+    .uterus-diagram { margin-top: 1.6rem; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .slide { padding: 2rem 1.5rem; }
+      .split { flex-direction: column; }
+      .timeline { flex-wrap: wrap; gap: 1rem; }
+      .tl-item::after { display: none; }
+    }
+  </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/8nk4-XMJK1CmpK4iLVsLe4rD0xysxuc3PacNwMy9VOaYp652MItRqNbUEhEkW-n5lBkD5DJhegoOgTMkUb5i1wXxcWeCSjljtcb4N1Vv3clSODD7Dw4MN9VO6st7HzrL_TWeiNCwLrmjMDUYGMsWiM0oG3q_bWRoj6Tj3ner9ed1WvsOOfa9ZDrx75BNDVZuojUSjnyat9ndOmEbNx4MLYUrUD4XY7KWavTon6iiC7FB2jWiThvRGqT_kXqwbdDOQArc2Wd8LUYGf653VluaTuINf7hQqK7K6cJ7Pz9E17i6UFeDWdtY6sjkkjcZ5G61vCNl201wDU0nGLJKe45_9RbzyeZE9P7StBbGvpBodd3L-AD1i4KKnP7sMbc_KJJo0_su-o5ycGGRcSDBaAFMgzyAxmbVC4Iilpq29WQ9Xp1-cV6O-WpMJGqmX59a8aOv8YyMQ6yO8ME5hAZzotbebw2kAwNM5hQpymTl7zAGJ--fmKRK7jfa_7tPjGcQ7pxzL4CPNHM8a2Xp9_R9pZMFEo61TsYm8-PcFT1t_A_WZdX34spE_llcPuOBsREm9HGcntiOhSPI8Wv5volMiaMxNX1HHQa55hL0wq_zFgC5XH8stotOa4YuaB8ptOw_PXFYYnu9EOqi1XjjZJ3p7a5CansRAwYZwyNxmf6yfVr0wNnQKQOkQ6snwJORNf5FTVj7t9qbraOaXfivOQ6_pqp7K4zSsHhBYTp-2Qtf3GZLMQQukQi9JryjNopEKddsw6AoQwrj-EmwSTovipPe9VOuRo1RGOogimz9PiiUyoAVH-15TXbgpI_tYKaVSxEKLoq4sO7jgY05inJcEVJvE2EfWpK7cN-cZ8HXbo2fm6niUqQsVU2LPl4EUrH_vs6rxHqtnZHARkG8ByBn10EZzE-jy2o1-EkdA9CcSD7mUztKz8HAnjB2nN2NVBwZUpWWyrin0m7ssxAf1_QjFumENRuVHN9STAo_kheeymIErx8mF0I_VaZH2uZMjB8iQZ-5HmCVaBMsP8Rk9GL9Xxlk6rj4Ryao4jgebcTI8MKSiIXPW7kgs5L9132A2Tf2GxhUxSTwbup5N2FSdcZJq180lvfppqLQGZ8zMUEf-y09HAP6nBObb7tQZ82jlvSgOYP_mK0K__5G3eKyiDFukIWinZW4oTwzXyUbS71pCsBN4AnbtT0h19u5w20T7NykGfcKoo6wGGCUcdhh6FXk4RZHxUBreQbio_AViPAGzkPMMXHO03WcG6fQ7ZGV9tSj2CUN0T3Lgcp1PKc6tNpqRBQ0mbQlCaUVOHoZZyneBUihT1xBe7BZ93PeUL35SVhBc-m6W2ihbCO6IYLDRSuiPNqwfONKqQaOxtT6hBtWVLO6MTFLps1QQLAphEE8LU8PLV9bl-HnFfa0g4vhx2QL_3ZJgV7z2omZGC7JzaifNxHEPn02gKftEkYWYap_v9PLx_4aS-VJZMZTQr-9haKQBOMgx6CZpn6nGHVaVHDVTZ9FjJHiAATxw4B04hfPOJZ7I-jnUggf694yEuABFqfsk-g2rn8NINWdTMLgjvpZ9kghojXahEydmfYLyMcsQCUBYNshratCDrzP8c89uyywjDeg_LooKjLhaW6A4QrYCWyC8kXuapFVp9WE89iKlvHkkL3-II7GlDTsUIhTKzp0XgFKHypjXYlSqYEjp7C7-7p3Dx5zNAmf0oZvTKUs2bxLUkdSTmg6YAeO_rymZAF39XD2RnnaI9VB4ikw'></script></head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck" id="deck">
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 1 — Title
+  ══════════════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <p class="slide-eyebrow">Maternal-Fetal Medicine · Patient Education</p>
+    <h1 class="slide-title">Your Myomectomy &amp;<br><span class="accent">Future Pregnancy</span></h1>
+    <p class="slide-body" style="margin-top:1rem;">What your surgical history means — and how we plan together.</p>
+    <div class="visual-row" style="margin-top:2.5rem;">
+      <div class="card blue">
+        <div class="card-icon">🏥</div>
+        <div class="card-label">Evidence-Based</div>
+        <div class="card-sub">ACOG &amp; SMFM guidelines</div>
+      </div>
+      <div class="card green">
+        <div class="card-icon">🤝</div>
+        <div class="card-label">Partnership Care</div>
+        <div class="card-sub">Your team, your plan</div>
+      </div>
+      <div class="card orange">
+        <div class="card-icon">📋</div>
+        <div class="card-label">Personalized</div>
+        <div class="card-sub">Based on your surgery</div>
+      </div>
+    </div>
+    <div class="slide-footer">Use arrow keys or buttons below to navigate</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 2 — What Was a Myomectomy?
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <p class="slide-eyebrow">What Is This?</p>
+    <h2 class="slide-title">Myomectomy: <span class="accent">Fibroid Removal Surgery</span></h2>
+    <p class="slide-body">A myomectomy removed one or more fibroids — non-cancerous growths — from your uterus. Your uterus was repaired and healed, forming a scar.</p>
+
+    <!-- Simple SVG uterus diagram -->
+    <div class="uterus-diagram">
+      <svg viewBox="0 0 420 220" width="420" height="220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">
+        <!-- Step 1: Fibroid present -->
+        <g transform="translate(10,10)">
+          <text x="60" y="14" font-size="11" fill="#8b949e" text-anchor="middle" font-family="sans-serif">Before</text>
+          <!-- uterus body -->
+          <path d="M30,80 Q30,30 60,20 Q90,10 90,50 L90,110 Q90,130 60,135 Q30,130 30,110 Z" fill="#1f3a5f" stroke="#58a6ff" stroke-width="1.5"/>
+          <!-- fibroid -->
+          <circle cx="65" cy="60" r="16" fill="#f0883e" opacity="0.85"/>
+          <text x="65" y="64" font-size="9" fill="#fff" text-anchor="middle" font-family="sans-serif">Fibroid</text>
+          <!-- cervix -->
+          <rect x="50" y="133" width="20" height="18" rx="3" fill="#1f3a5f" stroke="#58a6ff" stroke-width="1.5"/>
+        </g>
+        <!-- Arrow -->
+        <g transform="translate(110,90)">
+          <line x1="0" y1="20" x2="50" y2="20" stroke="#30363d" stroke-width="2"/>
+          <polygon points="50,14 62,20 50,26" fill="#30363d"/>
+          <text x="31" y="12" font-size="10" fill="#8b949e" text-anchor="middle" font-family="sans-serif">Surgery</text>
+        </g>
+        <!-- Step 2: Fibroid removed, scar -->
+        <g transform="translate(180,10)">
+          <text x="60" y="14" font-size="11" fill="#8b949e" text-anchor="middle" font-family="sans-serif">After</text>
+          <path d="M30,80 Q30,30 60,20 Q90,10 90,50 L90,110 Q90,130 60,135 Q30,130 30,110 Z" fill="#1a3a24" stroke="#3fb950" stroke-width="1.5"/>
+          <!-- scar line -->
+          <line x1="48" y1="50" x2="76" y2="70" stroke="#f0883e" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4,3"/>
+          <text x="80" y="55" font-size="9" fill="#f0883e" font-family="sans-serif">Scar</text>
+          <rect x="50" y="133" width="20" height="18" rx="3" fill="#1a3a24" stroke="#3fb950" stroke-width="1.5"/>
+        </g>
+        <!-- Arrow -->
+        <g transform="translate(282,90)">
+          <line x1="0" y1="20" x2="50" y2="20" stroke="#30363d" stroke-width="2"/>
+          <polygon points="50,14 62,20 50,26" fill="#30363d"/>
+          <text x="31" y="12" font-size="10" fill="#8b949e" text-anchor="middle" font-family="sans-serif">Healed</text>
+        </g>
+        <!-- Step 3: Healed uterus -->
+        <g transform="translate(350,10)">
+          <text x="30" y="14" font-size="11" fill="#3fb950" text-anchor="middle" font-family="sans-serif">Healed ✓</text>
+          <path d="M0,80 Q0,30 30,20 Q60,10 60,50 L60,110 Q60,130 30,135 Q0,130 0,110 Z" fill="#1a3a24" stroke="#3fb950" stroke-width="2"/>
+          <rect x="20" y="133" width="20" height="18" rx="3" fill="#1a3a24" stroke="#3fb950" stroke-width="2"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 3 — Why Your History Matters
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <p class="slide-eyebrow">Why Does It Matter?</p>
+    <h2 class="slide-title">Your Uterine Scar <span class="green">Shapes Future Care</span></h2>
+    <p class="slide-body">The healed scar on your uterus is strong — but it requires careful monitoring during a future pregnancy. Your care team will plan around it.</p>
+    <div class="visual-row">
+      <div class="card green">
+        <div class="card-icon">💪</div>
+        <div class="card-label">Strong Scar</div>
+        <div class="card-sub">Healed tissue is durable in most cases</div>
+      </div>
+      <div class="card blue">
+        <div class="card-icon">🔍</div>
+        <div class="card-label">Close Monitoring</div>
+        <div class="card-sub">Surveillance throughout pregnancy</div>
+      </div>
+      <div class="card orange">
+        <div class="card-icon">📐</div>
+        <div class="card-label">Personalized Plan</div>
+        <div class="card-sub">Delivery mode based on your surgery</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 4 — The Key Question
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <p class="slide-eyebrow">The Critical Detail</p>
+    <h2 class="slide-title">One Key Question <span class="accent">Changes Everything</span></h2>
+    <p class="slide-body">Was the inner lining of the uterus — the <strong>uterine cavity</strong> — entered during your surgery?</p>
+
+    <div class="split" style="margin-top:2rem;">
+      <div class="split-col green">
+        <div class="col-head">✅ Cavity NOT Entered</div>
+        <p>Fibroid removed from the wall only. Inner lining untouched.</p>
+        <p style="margin-top:0.5rem; color: var(--green); font-weight:600;">→ Vaginal delivery likely safe</p>
+      </div>
+      <div class="split-col blue">
+        <div class="col-head">⚠️ Cavity WAS Entered</div>
+        <p>Surgery reached or opened the inner lining of the uterus.</p>
+        <p style="margin-top:0.5rem; color: var(--blue); font-weight:600;">→ Cesarean delivery recommended</p>
+      </div>
+    </div>
+    <p style="font-size:0.85rem; color:var(--muted); margin-top:1.2rem;">Your operative report confirms which applies to you.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 5 — Uterine Rupture: Rare but Serious
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <p class="slide-eyebrow">Understanding Risk</p>
+    <h2 class="slide-title">Uterine Rupture: <span class="red">Rare</span> but Serious</h2>
+    <p class="slide-body">Uterine rupture — a tear at the scar — is the primary concern after myomectomy. The overall risk is <strong>low</strong>.</p>
+
+    <div class="stat-pill">
+      <span>~0.6%</span>
+      <span class="stat-label">overall rupture risk &nbsp;|&nbsp; less than 1 in 100</span>
+    </div>
+
+    <div class="risk-bar-wrap">
+      <div class="risk-bar-track">
+        <div class="risk-bar-fill" style="width: 0.6%;"></div>
+      </div>
+      <div class="risk-bar-labels">
+        <span>0%</span>
+        <span style="color:var(--green);">0.6% risk</span>
+        <span>100%</span>
+      </div>
+    </div>
+
+    <div class="visual-row" style="margin-top:1.4rem;">
+      <div class="card green">
+        <div class="card-icon">🟢</div>
+        <div class="card-label">Trial of Labor</div>
+        <div class="card-sub">~0.47% rupture rate during labor</div>
+      </div>
+      <div class="card orange">
+        <div class="card-icon">⏱️</div>
+        <div class="card-label">Before Labor</div>
+        <div class="card-sub">~1.5% spontaneous rupture in some cohorts</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 6 — Timing of Rupture
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <p class="slide-eyebrow">Important Difference from C-Section Scars</p>
+    <h2 class="slide-title">Rupture Can Occur <span class="orange">Before Labor Begins</span></h2>
+    <p class="slide-body">Unlike C-section scars, myomectomy scars may rupture before labor starts. About <strong>71% of ruptures</strong> occur before 36 weeks — making early monitoring essential.</p>
+
+    <div class="timeline" style="margin-top:2rem;">
+      <div class="tl-item">
+        <div class="tl-dot blue">20</div>
+        <div class="tl-label"><strong>20 wks</strong>Anatomy scan</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot orange">28</div>
+        <div class="tl-label"><strong>28 wks</strong>Increased surveillance</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red">36</div>
+        <div class="tl-label"><strong>36 wks</strong>71% of ruptures occur before here</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green">37–39</div>
+        <div class="tl-label"><strong>37–39 wks</strong>Planned delivery window</div>
+      </div>
+    </div>
+
+    <p style="font-size:0.85rem; color:var(--muted); margin-top:1.4rem; text-align:center;">This is why we do not wait until term for high-risk scars.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 7 — Delivery Plan: No Cavity Entry
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <p class="slide-eyebrow">Delivery Planning · Scenario A</p>
+    <h2 class="slide-title"><span class="green">Cavity NOT Entered</span> → Vaginal Delivery Likely Safe</h2>
+    <p class="slide-body">When the inner lining was not breached, vaginal delivery is usually safe. Success rates reach <strong>90%</strong>. This is called a Trial of Labor After Myomectomy (TOLAM).</p>
+
+    <div class="visual-row">
+      <div class="card green">
+        <div class="card-icon">✅</div>
+        <div class="card-label">TOLAM Eligible</div>
+        <div class="card-sub">~90% vaginal delivery success rate</div>
+      </div>
+      <div class="card blue">
+        <div class="card-icon">📅</div>
+        <div class="card-label">Delivery Timing</div>
+        <div class="card-sub">39 weeks or later (standard)</div>
+      </div>
+      <div class="card green">
+        <div class="card-icon">📡</div>
+        <div class="card-label">Continuous Monitoring</div>
+        <div class="card-sub">Electronic fetal monitoring during labor</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 8 — Delivery Plan: Cavity Entered
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <p class="slide-eyebrow">Delivery Planning · Scenario B</p>
+    <h2 class="slide-title"><span class="accent">Cavity Entered</span> → Cesarean Delivery Recommended</h2>
+    <p class="slide-body">When the inner lining was entered, a planned cesarean (C-section) is recommended. This protects against scar separation. Delivery is planned at <strong>37–38 weeks</strong>.</p>
+
+    <div class="visual-row">
+      <div class="card blue">
+        <div class="card-icon">🏥</div>
+        <div class="card-label">Planned C-Section</div>
+        <div class="card-sub">Avoids labor stress on the scar</div>
+      </div>
+      <div class="card blue">
+        <div class="card-icon">📅</div>
+        <div class="card-label">Delivery Timing</div>
+        <div class="card-sub">37 weeks 0 days – 38 weeks 6 days</div>
+      </div>
+      <div class="card orange">
+        <div class="card-icon">📋</div>
+        <div class="card-label">ACOG / SMFM</div>
+        <div class="card-sub">Guideline-recommended approach</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 9 — Delivery Timing Table
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-9">
+    <p class="slide-eyebrow">At a Glance</p>
+    <h2 class="slide-title">Your <span class="accent">Delivery Timing</span> Guide</h2>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Surgical History</th>
+          <th>Delivery Mode</th>
+          <th>Timing</th>
+          <th>Guideline</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-green">
+          <td>Cavity <strong>NOT</strong> entered (subserosal / intramural)</td>
+          <td><span class="badge green">Vaginal (TOLAM)</span></td>
+          <td>39<sup>0/7</sup> weeks or later</td>
+          <td>ACOG / SMFM</td>
+        </tr>
+        <tr class="row-blue">
+          <td>Cavity <strong>WAS</strong> entered</td>
+          <td><span class="badge blue">Cesarean</span></td>
+          <td>37<sup>0/7</sup> – 38<sup>6/7</sup> weeks</td>
+          <td>ACOG / SMFM</td>
+        </tr>
+        <tr class="row-orange">
+          <td>Prior uterine rupture</td>
+          <td><span class="badge orange">Cesarean</span></td>
+          <td>36<sup>0/7</sup> – 37<sup>0/7</sup> weeks</td>
+          <td>ACOG / SMFM</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.8rem; color:var(--muted); margin-top:1rem; text-align:center;">Timing is based on your individual scar risk. Your team will confirm your plan.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 10 — Factors Affecting Risk
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-10">
+    <p class="slide-eyebrow">What Affects Your Risk Level</p>
+    <h2 class="slide-title">Factors That <span class="orange">Influence Scar Strength</span></h2>
+    <p class="slide-body">Certain surgical details may increase risk. Your care team reviews these when planning your care.</p>
+
+    <div class="visual-row">
+      <div class="card orange">
+        <div class="card-icon">🔵</div>
+        <div class="card-label">Large Fibroid Removed</div>
+        <div class="card-sub">Deeper repair needed; may affect healing</div>
+      </div>
+      <div class="card orange">
+        <div class="card-icon">⚡</div>
+        <div class="card-label">Extensive Cautery</div>
+        <div class="card-sub">Electrocautery may impair wound healing</div>
+      </div>
+      <div class="card orange">
+        <div class="card-icon">🦠</div>
+        <div class="card-label">Post-op Infection</div>
+        <div class="card-sub">Infection after surgery may weaken the scar</div>
+      </div>
+    </div>
+    <p style="font-size:0.85rem; color:var(--muted); margin-top:1.2rem; text-align:center;">These are theoretical risk factors. Most patients heal without complications.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 11 — Lap vs. Open
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-11">
+    <p class="slide-eyebrow">Surgical Approach</p>
+    <h2 class="slide-title">Lap vs. Open: <span class="green">Suture Technique Matters Most</span></h2>
+    <p class="slide-body">Whether your surgery was laparoscopic or open (abdominal), rupture risk is <strong>similar</strong> — provided the uterine wall was properly closed in multiple layers.</p>
+
+    <div class="split">
+      <div class="split-col green">
+        <div class="col-head">🔬 Laparoscopic</div>
+        <p>Minimally invasive. Small incisions. Similar scar integrity when properly sutured.</p>
+      </div>
+      <div class="split-col green">
+        <div class="col-head">🏥 Open (Abdominal)</div>
+        <p>Traditional approach. Larger incision. Similar rupture risk with multi-layer closure.</p>
+      </div>
+    </div>
+
+    <div class="stat-pill" style="margin-top:1.4rem; background: var(--green-dim); border-color: var(--green); color: var(--green);">
+      <span>Key Factor:</span>
+      <span class="stat-label" style="color: var(--text);">Multi-layer uterine wall closure &nbsp;=&nbsp; optimal scar integrity</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 12 — Red Flag Symptoms
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-12">
+    <p class="slide-eyebrow">Safety — Know These Signs</p>
+    <h2 class="slide-title">Red Flag Symptoms: <span class="red">Contact Your Team Immediately</span></h2>
+    <p class="slide-body">During pregnancy, these symptoms may signal scar stress. Do not wait — call your care team right away.</p>
+
+    <ul class="checklist" style="margin-top:1.4rem;">
+      <li>
+        <span class="ci" style="color:var(--red);">🔴</span>
+        <span><strong>Sudden or severe abdominal pain</strong> — especially if not related to contractions</span>
+      </li>
+      <li>
+        <span class="ci" style="color:var(--red);">🔴</span>
+        <span><strong>Vaginal bleeding</strong> — any unexplained bleeding during pregnancy</span>
+      </li>
+      <li>
+        <span class="ci" style="color:var(--red);">🔴</span>
+        <span><strong>Decreased fetal movement</strong> — fewer kicks or movements than usual</span>
+      </li>
+    </ul>
+    <p style="font-size:0.85rem; color:var(--muted); margin-top:1rem; text-align:center;">Rupture can occur even without labor contractions. Early recognition saves lives.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 13 — Monitoring During Labor
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-13">
+    <p class="slide-eyebrow">Labor Management</p>
+    <h2 class="slide-title">Close Monitoring <span class="green">Keeps You Both Safe</span></h2>
+    <p class="slide-body">All patients with a prior myomectomy receive <strong>continuous electronic fetal monitoring</strong> during labor. A sudden change in fetal heart rate is the most common early sign of scar stress.</p>
+
+    <div class="visual-row">
+      <div class="card blue">
+        <div class="card-icon">📡</div>
+        <div class="card-label">Continuous EFM</div>
+        <div class="card-sub">Fetal heart rate monitored throughout labor</div>
+      </div>
+      <div class="card orange">
+        <div class="card-icon">⚠️</div>
+        <div class="card-label">Key Warning Sign</div>
+        <div class="card-sub">Sudden bradycardia or deep variable decelerations</div>
+      </div>
+      <div class="card green">
+        <div class="card-icon">👩‍⚕️</div>
+        <div class="card-label">Team Ready</div>
+        <div class="card-sub">Surgical team available for rapid response</div>
+      </div>
+    </div>
+    <p style="font-size:0.85rem; color:var(--muted); margin-top:1rem; text-align:center;">Caution is used with prostaglandins for cervical ripening in patients with a scarred uterus.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 14 — Get Your Operative Report
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-14">
+    <p class="slide-eyebrow">Action Item — Do This Now</p>
+    <h2 class="slide-title">Your Surgical Records Are <span class="orange">Part of Your Care</span></h2>
+    <p class="slide-body">Your original operative report tells your MFM team exactly what was done — and guides your entire pregnancy management plan.</p>
+
+    <ul class="checklist">
+      <li>
+        <span class="ci" style="color:var(--orange);">📁</span>
+        <span>Contact the hospital or surgeon where your myomectomy was performed</span>
+      </li>
+      <li>
+        <span class="ci" style="color:var(--orange);">📄</span>
+        <span>Request a copy of your <strong>operative report</strong> (not just the discharge summary)</span>
+      </li>
+      <li>
+        <span class="ci" style="color:var(--orange);">📤</span>
+        <span>Share the report with your OB and MFM team before your next pregnancy</span>
+      </li>
+    </ul>
+    <p style="font-size:0.85rem; color:var(--muted); margin-top:1rem; text-align:center;">Key detail to confirm: Was the uterine cavity entered? What suture technique was used?</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 15 — Partnership
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-15">
+    <p class="slide-eyebrow">You Are Not Alone</p>
+    <h2 class="slide-title">Your Care Team <span class="green">Partners With You</span></h2>
+    <p class="slide-body">Your MFM specialist, OB, and care team work together to create a personalized plan — so you can focus on your growing family.</p>
+
+    <div class="visual-row">
+      <div class="card green">
+        <div class="card-icon">👩‍⚕️</div>
+        <div class="card-label">MFM Specialist</div>
+        <div class="card-sub">High-risk pregnancy expertise</div>
+      </div>
+      <div class="card green">
+        <div class="card-icon">🩺</div>
+        <div class="card-label">OB/GYN</div>
+        <div class="card-sub">Primary pregnancy care</div>
+      </div>
+      <div class="card green">
+        <div class="card-icon">🏥</div>
+        <div class="card-label">Labor &amp; Delivery Team</div>
+        <div class="card-sub">Ready for your delivery plan</div>
+      </div>
+    </div>
+    <p style="font-size:1rem; color:var(--green); margin-top:1.4rem; text-align:center; font-weight:600;">Most patients with prior myomectomy have healthy pregnancies and deliveries.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 16 — Summary & Next Steps
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-16">
+    <p class="slide-eyebrow">Summary</p>
+    <h2 class="slide-title">What to <span class="orange">Do Next</span></h2>
+
+    <ul class="checklist">
+      <li>
+        <span class="ci" style="color:var(--orange);">1️⃣</span>
+        <span><strong>Locate your operative report</strong> — confirm whether the uterine cavity was entered</span>
+      </li>
+      <li>
+        <span class="ci" style="color:var(--orange);">2️⃣</span>
+        <span><strong>Share your surgical history</strong> with your OB and MFM team before conception or early in pregnancy</span>
+      </li>
+      <li>
+        <span class="ci" style="color:var(--orange);">3️⃣</span>
+        <span><strong>Ask about your delivery plan</strong> — mode of delivery and timing should be established early</span>
+      </li>
+      <li>
+        <span class="ci" style="color:var(--orange);">4️⃣</span>
+        <span><strong>Know your red flag symptoms</strong> — pain, bleeding, decreased fetal movement → call immediately</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 17 — Questions for Your Doctor
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="slide-17">
+    <p class="slide-eyebrow">Shared Decision-Making</p>
+    <h2 class="slide-title">Questions to Ask <span class="accent">Your Care Team</span></h2>
+
+    <ul class="checklist">
+      <li>
+        <span class="ci" style="color:var(--blue);">❓</span>
+        <span>Was my <strong>uterine cavity entered</strong> during my myomectomy?</span>
+      </li>
+      <li>
+        <span class="ci" style="color:var(--blue);">❓</span>
+        <span>What <strong>delivery mode</strong> is recommended for me — vaginal or cesarean?</span>
+      </li>
+      <li>
+        <span class="ci" style="color:var(--blue);">❓</span>
+        <span>At what <strong>gestational age</strong> should I plan to deliver?</span>
+      </li>
+      <li>
+        <span class="ci" style="color:var(--blue);">❓</span>
+        <span>What <strong>symptoms</strong> should prompt me to call or go to the hospital immediately?</span>
+      </li>
+      <li>
+        <span class="ci" style="color:var(--blue);">❓</span>
+        <span>How often will I be seen, and what <strong>monitoring</strong> will I need?</span>
+      </li>
+    </ul>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <button onclick="prevSlide()" title="Previous (←)">&#8592;</button>
+  <span class="nav-counter" id="navCounter">1 / 17</span>
+  <button onclick="nextSlide()" title="Next (→)">&#8594;</button>
+</nav>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const counter = document.getElementById('navCounter');
+  const progressBar = document.getElementById('progressBar');
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    counter.textContent = (index + 1) + ' / ' + total;
+    progressBar.style.width = ((index + 1) / total * 100) + '%';
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % total;
+    showSlide(currentSlide);
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + total) % total;
+    showSlide(currentSlide);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>

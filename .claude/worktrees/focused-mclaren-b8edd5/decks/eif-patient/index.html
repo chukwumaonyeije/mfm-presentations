@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Echogenic Intracardiac Focus (EIF) | MFM Patient Education</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0d1117;
+      --surface:     #161b22;
+      --surface2:    #1c2330;
+      --border:      #30363d;
+      --text:        #e6edf3;
+      --muted:       #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-teal: #39d0b4;
+      --accent-green:#3fb950;
+      --accent-amber:#d29922;
+      --accent-red:  #f85149;
+      --accent-purple:#bc8cff;
+      --brand:       #1f6feb;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ─── Deck & Slide ──────────────────────────────────────────────────── */
+    .deck { width: 100%; height: 100%; position: relative; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3em 4em;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ─── Navigation ────────────────────────────────────────────────────── */
+    .nav {
+      position: fixed; bottom: 1.6em; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1.2em;
+      z-index: 100;
+    }
+    .nav button {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); padding: 0.45em 1.2em;
+      border-radius: 6px; font-size: 1em; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav button:hover { background: var(--brand); border-color: var(--brand); }
+    .nav .counter { color: var(--muted); font-size: 0.9em; min-width: 5em; text-align: center; }
+
+    /* ─── Progress Bar ──────────────────────────────────────────────────── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--brand);
+      transition: width 0.4s ease;
+      z-index: 200;
+    }
+
+    /* ─── Typography ────────────────────────────────────────────────────── */
+    .slide-label {
+      font-size: 0.75em; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.6em;
+    }
+    h1 { font-size: clamp(2em, 4.5vw, 3.6em); font-weight: 300; line-height: 1.15; }
+    h2 { font-size: clamp(1.6em, 3.5vw, 2.6em); font-weight: 300; line-height: 1.2; }
+    h3 { font-size: clamp(1.1em, 2vw, 1.5em); font-weight: 400; }
+    p  { font-size: clamp(0.95em, 1.6vw, 1.25em); line-height: 1.7; max-width: 780px; text-align: center; color: var(--text); }
+
+    .accent-blue   { color: var(--accent-blue); }
+    .accent-teal   { color: var(--accent-teal); }
+    .accent-green  { color: var(--accent-green); }
+    .accent-amber  { color: var(--accent-amber); }
+    .accent-red    { color: var(--accent-red); }
+    .accent-purple { color: var(--accent-purple); }
+
+    /* ─── Cards & Layouts ───────────────────────────────────────────────── */
+    .two-col {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2em; width: 100%; max-width: 1000px; margin-top: 1.5em;
+    }
+    .three-col {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.6em; width: 100%; max-width: 1000px; margin-top: 1.5em;
+    }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.6em 1.8em;
+    }
+    .card h3 { margin-bottom: 0.6em; }
+    .card p  { text-align: left; font-size: 1em; }
+
+    /* ─── Pill / Badge ──────────────────────────────────────────────────── */
+    .pill {
+      display: inline-block; padding: 0.25em 0.85em;
+      border-radius: 20px; font-size: 0.8em; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .pill-blue   { background: rgba(88,166,255,.15); color: var(--accent-blue); border: 1px solid rgba(88,166,255,.3); }
+    .pill-teal   { background: rgba(57,208,180,.15); color: var(--accent-teal); border: 1px solid rgba(57,208,180,.3); }
+    .pill-green  { background: rgba(63,185,80,.15);  color: var(--accent-green); border: 1px solid rgba(63,185,80,.3); }
+    .pill-amber  { background: rgba(210,153,34,.15); color: var(--accent-amber); border: 1px solid rgba(210,153,34,.3); }
+
+    /* ─── Stat Box ──────────────────────────────────────────────────────── */
+    .stat-row { display: flex; gap: 2em; margin-top: 1.6em; flex-wrap: wrap; justify-content: center; }
+    .stat-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.2em 1.8em; text-align: center; min-width: 160px;
+    }
+    .stat-box .stat-num { font-size: 2.4em; font-weight: 700; line-height: 1; }
+    .stat-box .stat-lbl { font-size: 0.8em; color: var(--muted); margin-top: 0.3em; line-height: 1.3; }
+
+    /* ─── Alert Box ─────────────────────────────────────────────────────── */
+    .alert {
+      border-radius: 10px; padding: 1em 1.4em;
+      display: flex; align-items: flex-start; gap: 0.8em;
+      max-width: 820px; margin-top: 1.4em; font-size: 0.95em; line-height: 1.55;
+    }
+    .alert-amber { background: rgba(210,153,34,.12); border: 1px solid rgba(210,153,34,.35); color: var(--text); }
+    .alert-green { background: rgba(63,185,80,.12);  border: 1px solid rgba(63,185,80,.35); color: var(--text); }
+    .alert-blue  { background: rgba(88,166,255,.10); border: 1px solid rgba(88,166,255,.3); color: var(--text); }
+    .alert-icon  { font-size: 1.3em; flex-shrink: 0; margin-top: 0.05em; }
+
+    /* ─── Checklist ─────────────────────────────────────────────────────── */
+    .checklist { list-style: none; margin-top: 1.2em; max-width: 700px; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 0.7em;
+      padding: 0.5em 0; font-size: clamp(0.9em, 1.4vw, 1.1em); line-height: 1.5;
+    }
+    .checklist li::before { content: '✦'; color: var(--accent-teal); flex-shrink: 0; margin-top: 0.05em; }
+
+    /* ─── Two-column checklist ──────────────────────────────────────────── */
+    .checklist-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0.2em 3em; width: 100%; max-width: 900px; margin-top: 1.2em;
+    }
+    .checklist-grid li {
+      display: flex; align-items: flex-start; gap: 0.6em;
+      padding: 0.4em 0; font-size: clamp(0.85em, 1.3vw, 1.05em); line-height: 1.5; list-style: none;
+    }
+    .checklist-grid li::before { content: '✦'; color: var(--accent-teal); flex-shrink: 0; margin-top: 0.05em; }
+
+    /* ─── Comparison Table ──────────────────────────────────────────────── */
+    .comp-table {
+      width: 100%; max-width: 820px; border-collapse: collapse;
+      font-size: clamp(0.85em, 1.3vw, 1em); margin-top: 1.4em;
+    }
+    .comp-table th {
+      background: var(--surface2); color: var(--accent-blue);
+      padding: 0.7em 1em; text-align: left; border-bottom: 2px solid var(--border);
+      font-weight: 600;
+    }
+    .comp-table td {
+      padding: 0.65em 1em; border-bottom: 1px solid var(--border);
+      vertical-align: top; line-height: 1.5;
+    }
+    .comp-table tr:nth-child(even) td { background: rgba(255,255,255,.025); }
+    .comp-table td:first-child { color: var(--muted); font-weight: 500; }
+
+    /* ─── Definition Box ────────────────────────────────────────────────── */
+    .def-box {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.2em 1.6em; max-width: 760px;
+      margin-top: 1.4em; font-size: clamp(0.9em, 1.4vw, 1.1em); line-height: 1.6;
+    }
+    .def-box strong { color: var(--accent-blue); }
+
+    /* ─── Icon Row ──────────────────────────────────────────────────────── */
+    .icon-row {
+      display: flex; gap: 2.5em; margin-top: 1.8em; flex-wrap: wrap;
+      justify-content: center;
+    }
+    .icon-item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.5em; max-width: 140px;
+    }
+    .icon-item svg { width: 52px; height: 52px; }
+    .icon-item span { font-size: 0.85em; text-align: center; color: var(--muted); line-height: 1.35; }
+
+    /* ─── Footer Branding ───────────────────────────────────────────────── */
+    .slide-footer {
+      position: absolute; bottom: 3.5em; left: 4em; right: 4em;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.72em; color: var(--muted); border-top: 1px solid var(--border);
+      padding-top: 0.6em;
+    }
+
+    /* ─── Title Slide Specific ──────────────────────────────────────────── */
+    .title-eyebrow {
+      font-size: 0.8em; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent-teal); margin-bottom: 0.8em;
+    }
+    .title-divider {
+      width: 60px; height: 3px; background: var(--brand);
+      border-radius: 2px; margin: 1em auto;
+    }
+    .title-sub { font-size: clamp(1em, 1.8vw, 1.3em); color: var(--muted); max-width: 600px; text-align: center; line-height: 1.6; }
+
+    /* ─── Diagram ───────────────────────────────────────────────────────── */
+    .diagram { margin-top: 1.4em; }
+
+    /* ─── Mobile ────────────────────────────────────────────────────────── */
+    @media (max-width: 700px) {
+      .slide { padding: 2em 1.6em 5em; }
+      .two-col, .three-col, .checklist-grid { grid-template-columns: 1fr; }
+      .slide-footer { left: 1.6em; right: 1.6em; }
+      .stat-box { min-width: 120px; }
+    }
+    /* 2026 refresh overrides */
+    :root {
+      --bg: #08131f;
+      --surface: rgba(10, 24, 39, 0.9);
+      --surface2: rgba(18, 34, 52, 0.94);
+      --border: rgba(131, 193, 255, 0.16);
+      --text: #f5f9fc;
+      --muted: #b5c7d7;
+      --accent-blue: #69b8ff;
+      --accent-teal: #4ddcc2;
+      --accent-green: #79e09b;
+      --accent-amber: #ffbd63;
+      --accent-red: #ff7171;
+      --accent-purple: #bfbcff;
+      --brand: #69b8ff;
+    }
+
+    html, body {
+      background:
+        radial-gradient(circle at top left, rgba(105, 184, 255, 0.18), transparent 26%),
+        radial-gradient(circle at 88% 16%, rgba(77, 220, 194, 0.13), transparent 20%),
+        linear-gradient(180deg, #08131f 0%, #06101a 100%);
+      font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
+    }
+
+    .deck::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.22), transparent 78%);
+      pointer-events: none;
+    }
+
+    .slide {
+      padding: 4.2em 4.2em 6em;
+      background: linear-gradient(180deg, rgba(8, 19, 31, 0.72), rgba(8, 19, 31, 0.32));
+    }
+
+    h1, h2 {
+      letter-spacing: -0.035em;
+      font-weight: 700;
+      text-wrap: balance;
+    }
+
+    .card,
+    .def-box,
+    .stat-box {
+      background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
+      border: 1px solid rgba(131, 193, 255, 0.16);
+      border-radius: 18px;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+      backdrop-filter: blur(10px);
+    }
+
+    .alert {
+      border-radius: 18px;
+      backdrop-filter: blur(8px);
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: linear-gradient(90deg, #69b8ff 0%, #4ddcc2 100%);
+      box-shadow: 0 0 18px rgba(105, 184, 255, 0.45);
+    }
+
+    .nav {
+      bottom: 1.2em;
+      gap: 0.8em;
+      padding: 0.55em 0.7em;
+      border: 1px solid rgba(131, 193, 255, 0.16);
+      border-radius: 999px;
+      background: rgba(7, 17, 28, 0.72);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+    }
+
+    .nav button {
+      background: rgba(14, 30, 48, 0.92);
+      border: 1px solid rgba(131, 193, 255, 0.18);
+      border-radius: 999px;
+      padding: 0.55em 1.15em;
+    }
+
+    .nav button:hover {
+      background: rgba(31, 74, 116, 0.92);
+    }
+
+    .nav .counter {
+      color: #dce8f7;
+      font-weight: 600;
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/eif-patient/index.html">
+<meta name="description" content="Patient education on echogenic intracardiac focus (EIF): what the bright spot means, why it is now classified as a normal variant, how current ACOG/SMFM guidelines advise against additional testing when EIF is isolated and prior genetic screening is normal, and what to expect during and after pregnancy.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="EIF, Soft Markers, Fetal Ultrasound, Chromosomal Screening, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/eif-patient/index.html">
+<meta property="og:title" content="Echogenic Intracardiac Focus (EIF) - Patient Education | OpenMFM">
+<meta property="og:description" content="Patient education on echogenic intracardiac focus (EIF): what the bright spot means, why it is now classified as a normal variant, how current ACOG/SMFM guidelines advise against additional testing when EIF is isolated and prior genetic screening is normal, and what to expect during and after pregnancy.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Echogenic Intracardiac Focus (EIF) - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Patient education on echogenic intracardiac focus (EIF): what the bright spot means, why it is now classified as a normal variant, how current ACOG/SMFM guidelines advise against additional testing when EIF is isolated and prior genetic screening is normal, and what to expect during and after pregnancy.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Echogenic Intracardiac Focus (EIF) - Patient Education",
+  "description": "Patient education on echogenic intracardiac focus (EIF): what the bright spot means, why it is now classified as a normal variant, how current ACOG/SMFM guidelines advise against additional testing when EIF is isolated and prior genetic screening is normal, and what to expect during and after pregnancy.",
+  "url": "https://openmfm.org/decks/eif-patient/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-26",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Echogenic Intracardiac Focus (EIF) - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "EIF, Soft Markers, Fetal Ultrasound, Chromosomal Screening, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck">
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide active">
+    <div class="title-eyebrow">MFM Patient Education</div>
+    <h1 style="text-align:center;">
+      Understanding Your<br>
+      <span class="accent-blue">Echogenic Intracardiac Focus</span>
+    </h1>
+    <div class="title-divider"></div>
+    <p class="title-sub">
+      A bright spot on your baby's ultrasound — what it means, and what it doesn't
+    </p>
+    <div style="margin-top:2em; display:flex; gap:1em; flex-wrap:wrap; justify-content:center;">
+      <span class="pill pill-green">Common Finding</span>
+      <span class="pill pill-blue">Not a Heart Defect</span>
+      <span class="pill pill-teal">Rarely Requires Action</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Maternal-Fetal Medicine</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 2 — WHAT IS EIF?
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Definition</div>
+    <h2>What Is an <span class="accent-blue">Echogenic Intracardiac Focus</span>?</h2>
+
+    <div class="def-box">
+      <strong>Echogenic</strong> — reflects sound waves and appears bright white on ultrasound &nbsp;|&nbsp;
+      <strong>Intracardiac</strong> — inside the heart &nbsp;|&nbsp;
+      <strong>Focus</strong> — a small, localized spot
+    </div>
+
+    <p style="margin-top:1.4em;">A tiny bright spot inside your baby's heart — most often in the <span class="accent-blue">left ventricle</span> — caused by a small calcium deposit on a heart muscle cord. Your baby's heart is structurally normal and working properly.</p>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num accent-blue">3–5%</div>
+        <div class="stat-lbl">of all pregnancies<br>show EIF</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-green">Not</div>
+        <div class="stat-lbl">a heart defect —<br>function is normal</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-teal">No</div>
+        <div class="stat-lbl">pain or harm<br>to your baby</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 2 of 13</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 3 — HOW IT LOOKS ON ULTRASOUND
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Ultrasound Appearance</div>
+    <h2>What the Sonographer Sees</h2>
+    <p>During a detailed anatomy scan, the sonographer reviews multiple views of your baby's heart. The EIF appears as a small, very bright white dot — about the size of a grain of rice.</p>
+
+    <!-- SVG: Heart cross-section showing EIF -->
+    <div class="diagram">
+      <svg viewBox="0 0 600 200" width="600" height="200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">
+        <!-- Heart outline -->
+        <ellipse cx="300" cy="100" rx="180" ry="80" fill="#1c2330" stroke="#30363d" stroke-width="1.5"/>
+        <!-- Septum dividing left/right -->
+        <line x1="300" y1="30" x2="300" y2="170" stroke="#30363d" stroke-width="2"/>
+        <!-- Left ventricle label -->
+        <text x="200" y="90" text-anchor="middle" fill="#8b949e" font-size="12" font-family="sans-serif">Left Ventricle</text>
+        <text x="200" y="106" text-anchor="middle" fill="#8b949e" font-size="10" font-family="sans-serif">(most common site)</text>
+        <!-- Right ventricle label -->
+        <text x="400" y="90" text-anchor="middle" fill="#8b949e" font-size="12" font-family="sans-serif">Right Ventricle</text>
+        <text x="400" y="106" text-anchor="middle" fill="#8b949e" font-size="10" font-family="sans-serif">(less common)</text>
+        <!-- EIF bright spot in left ventricle -->
+        <circle cx="205" cy="120" r="9" fill="#fff" opacity="0.9"/>
+        <circle cx="205" cy="120" r="5" fill="#fff"/>
+        <!-- Glow effect -->
+        <circle cx="205" cy="120" r="14" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="3"/>
+        <!-- Label -->
+        <line x1="225" y1="118" x2="270" y2="105" stroke="#d29922" stroke-width="1.2" stroke-dasharray="4,2"/>
+        <text x="275" y="103" text-anchor="start" fill="#d29922" font-size="11" font-family="sans-serif">EIF — bright spot</text>
+        <!-- Papillary muscle label -->
+        <text x="205" y="148" text-anchor="middle" fill="#8b949e" font-size="10" font-family="sans-serif">Papillary muscle / chordae</text>
+        <!-- Heart chambers outline detail -->
+        <path d="M140,100 Q145,60 200,55 Q250,50 255,100" stroke="#30363d" stroke-width="1" fill="none"/>
+        <path d="M345,100 Q350,60 400,58 Q450,56 455,100" stroke="#30363d" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:1.2em;">
+      <span class="alert-icon">&#x2705;</span>
+      <span>The bright appearance is caused by calcium reflecting ultrasound waves — the same way bones look bright. It does <strong>not</strong> indicate a structural problem with the heart.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 3 of 13</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 4 — HISTORICAL CONTEXT
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Context</div>
+    <h2>Why You May Have Heard This <span class="accent-amber">Was Concerning</span></h2>
+
+    <div class="two-col" style="max-width:860px; margin-top:1.6em;">
+      <div class="card" style="border-color: rgba(210,153,34,.35);">
+        <h3 class="accent-amber">Then — 1990s Thinking</h3>
+        <p>Early research noticed EIF appeared slightly more often in pregnancies with Down syndrome. It was labeled a <em>"soft marker"</em> — a finding that might suggest further testing was needed.</p>
+      </div>
+      <div class="card" style="border-color: rgba(63,185,80,.35);">
+        <h3 class="accent-green">Now — 2026 Understanding</h3>
+        <p>Large modern studies have shown that an <strong>isolated EIF</strong> has no meaningful clinical significance. ACOG and SMFM both classify it as a <strong>normal variant</strong> in fetal development.</p>
+      </div>
+    </div>
+
+    <div class="alert alert-blue" style="margin-top:1.6em;">
+      <span class="alert-icon">&#x1F4D6;</span>
+      <span>Medical knowledge evolves. Information from before 2015 — including many online forum posts — reflects outdated guidance. Your care team follows current 2026 guidelines.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 4 of 13</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 5 — CURRENT GUIDELINES
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Current Guidelines</div>
+    <h2>What ACOG &amp; SMFM Say in 2026</h2>
+    <p>The leading professional societies agree: isolated EIF should not drive additional testing or change low-risk screening results.</p>
+
+    <table class="comp-table" style="margin-top:1.6em;">
+      <thead>
+        <tr>
+          <th>Clinical Question</th>
+          <th>Guideline Recommendation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Does isolated EIF indicate chromosomal risk?</td>
+          <td>No — it does not meaningfully increase risk</td>
+        </tr>
+        <tr>
+          <td>Should EIF alone prompt amniocentesis?</td>
+          <td>No — risks of procedure outweigh any benefit</td>
+        </tr>
+        <tr>
+          <td>Does EIF change a normal cfDNA result?</td>
+          <td>No — low-risk result remains low-risk</td>
+        </tr>
+        <tr>
+          <td>Does isolated EIF require extra ultrasounds?</td>
+          <td>No — routine prenatal care schedule applies</td>
+        </tr>
+        <tr>
+          <td>Is EIF a heart defect requiring follow-up?</td>
+          <td>No — no postnatal cardiac workup needed</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 5 of 13</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 6 — ISOLATED vs NON-ISOLATED
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">The Key Question</div>
+    <h2>Is the EIF <span class="accent-green">Isolated</span>?</h2>
+    <p>The single most important factor in interpreting EIF is whether it is the <span class="accent-green">only finding</span> on your ultrasound.</p>
+
+    <div class="two-col" style="max-width:860px; margin-top:1.6em;">
+      <div class="card" style="border-color: rgba(63,185,80,.4);">
+        <h3 class="accent-green">&#x2713; Isolated EIF</h3>
+        <p>All other anatomy is normal. Baby is growing well. No other soft markers are seen. This is by far the most common scenario — <strong>over 90% of cases</strong>. Prognosis is excellent; no additional evaluation needed.</p>
+      </div>
+      <div class="card" style="border-color: rgba(210,153,34,.4);">
+        <h3 class="accent-amber">&#x26A0; Non-Isolated EIF</h3>
+        <p>Other soft markers or structural differences are also seen. Your MFM specialist will individualize the evaluation. Genetic counseling and further testing may be recommended.</p>
+      </div>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:1.6em;">
+      <span class="alert-icon">&#x1F4A1;</span>
+      <span>Your care team will confirm whether your EIF is isolated through a comprehensive review of your anatomy scan and all available screening data.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 6 of 13</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 7 — WHAT THIS MEANS FOR YOUR BABY
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Your Baby's Health</div>
+    <h2>What This Means for <span class="accent-teal">Your Baby</span></h2>
+
+    <div class="two-col" style="max-width:900px; margin-top:1.6em;">
+      <div class="card">
+        <h3 class="accent-blue">Heart Health</h3>
+        <p>An EIF is <strong>not</strong> a structural heart defect. Your baby's heart is forming normally and functioning properly. No cardiac symptoms, no valve problems, no impact on blood flow.</p>
+      </div>
+      <div class="card">
+        <h3 class="accent-teal">Genetic Risk</h3>
+        <p>If your genetic screening was normal (cfDNA, first-trimester screen, or quad screen), an isolated EIF does <strong>not</strong> change those results. Your baby's risk profile remains exactly as it was before.</p>
+      </div>
+    </div>
+
+    <div class="stat-row" style="margin-top:1.8em;">
+      <div class="stat-box">
+        <div class="stat-num accent-green">&gt;90%</div>
+        <div class="stat-lbl">of EIF cases<br>are isolated</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-blue">Same</div>
+        <div class="stat-lbl">outcomes as babies<br>without EIF</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-teal">None</div>
+        <div class="stat-lbl">related postnatal<br>complications expected</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 7 of 13</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 8 — TESTING DECISIONS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Testing &amp; Next Steps</div>
+    <h2>Do You Need Additional Testing?</h2>
+    <p>The answer depends on your prior screening results. In most cases with normal prior screening, no new tests are needed.</p>
+
+    <div class="three-col" style="margin-top:1.6em;">
+      <div class="card" style="border-color: rgba(63,185,80,.35);">
+        <h3 class="accent-green">Normal cfDNA</h3>
+        <p style="font-size:0.95em;">Low-risk cell-free DNA result + isolated EIF = no additional testing needed.</p>
+      </div>
+      <div class="card" style="border-color: rgba(63,185,80,.35);">
+        <h3 class="accent-green">Normal 1st-Trimester Screen</h3>
+        <p style="font-size:0.95em;">Normal NT + serum markers + isolated EIF = no additional testing needed.</p>
+      </div>
+      <div class="card" style="border-color: rgba(88,166,255,.35);">
+        <h3 class="accent-blue">No Prior Screening</h3>
+        <p style="font-size:0.95em;">Your doctor may offer routine genetic screening options. EIF alone does not mandate invasive testing.</p>
+      </div>
+    </div>
+
+    <div class="alert alert-amber" style="margin-top:1.6em;">
+      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+      <span><strong>Amniocentesis:</strong> Current ACOG/SMFM guidelines do <strong>not</strong> recommend amniocentesis based solely on an isolated EIF. The small procedural risks outweigh any diagnostic benefit in this context.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 8 of 13</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 9 — MONITORING
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Monitoring</div>
+    <h2>Do You Need Extra Ultrasounds?</h2>
+    <p>For isolated EIF, the short answer is: <span class="accent-green">no additional ultrasounds are required</span>. You will continue with your standard prenatal care schedule.</p>
+
+    <div class="icon-row" style="margin-top:1.8em;">
+      <div class="icon-item">
+        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="26" cy="26" r="24" stroke="#3fb950" stroke-width="2" fill="rgba(63,185,80,0.1)"/>
+          <polyline points="15,27 22,34 37,18" stroke="#3fb950" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Routine prenatal appointments continue as scheduled</span>
+      </div>
+      <div class="icon-item">
+        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="26" cy="26" r="24" stroke="#58a6ff" stroke-width="2" fill="rgba(88,166,255,0.1)"/>
+          <rect x="16" y="14" width="20" height="24" rx="3" stroke="#58a6ff" stroke-width="2"/>
+          <line x1="20" y1="21" x2="32" y2="21" stroke="#58a6ff" stroke-width="1.5"/>
+          <line x1="20" y1="26" x2="32" y2="26" stroke="#58a6ff" stroke-width="1.5"/>
+          <line x1="20" y1="31" x2="28" y2="31" stroke="#58a6ff" stroke-width="1.5"/>
+        </svg>
+        <span>Standard anatomy scan &amp; any routine follow-up scans</span>
+      </div>
+      <div class="icon-item">
+        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="26" cy="26" r="24" stroke="#39d0b4" stroke-width="2" fill="rgba(57,208,180,0.1)"/>
+          <path d="M18,28 Q22,20 26,28 Q30,36 34,28" stroke="#39d0b4" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span>Many EIFs fade or disappear by the third trimester</span>
+      </div>
+    </div>
+
+    <div class="alert alert-blue" style="margin-top:1.6em;">
+      <span class="alert-icon">&#x1F4CB;</span>
+      <span>If your doctor recommends additional ultrasounds, it will be for reasons related to your overall pregnancy — not because of the EIF alone.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 9 of 13</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 10 — AFTER BIRTH
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">After Delivery</div>
+    <h2>What to Expect <span class="accent-teal">After Birth</span></h2>
+    <p>Isolated EIF requires no special postnatal workup. Your baby will receive the same routine newborn care as any healthy newborn.</p>
+
+    <div class="two-col" style="max-width:860px; margin-top:1.6em;">
+      <div class="card" style="border-color: rgba(63,185,80,.4);">
+        <h3 class="accent-green">No Cardiac Testing Needed</h3>
+        <p>Babies with isolated EIF do <strong>not</strong> need echocardiograms or other heart tests after birth. EIF is not associated with postnatal heart problems.</p>
+      </div>
+      <div class="card" style="border-color: rgba(57,208,180,.4);">
+        <h3 class="accent-teal">The Calcium Deposit</h3>
+        <p>The small mineral deposit has no postnatal significance. It does not affect heart function, does not require monitoring, and does not need treatment.</p>
+      </div>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:1.6em;">
+      <span class="alert-icon">&#x1F476;</span>
+      <span>Your baby will receive the standard newborn screening all babies receive, including the routine pulse oximetry heart screen. No extra steps are needed because of the EIF.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 10 of 13</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 11 — WHAT YOU CAN DO & MANAGING FEELINGS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Your Role</div>
+    <h2>What You Can Do</h2>
+    <p>There is nothing you did to cause an EIF, and nothing you can do to change it. Here is what truly helps.</p>
+
+    <ul class="checklist-grid" style="margin-top:1.6em;">
+      <li>Keep all routine prenatal appointments</li>
+      <li>Continue taking your prenatal vitamins</li>
+      <li>Maintain normal dietary calcium intake</li>
+      <li>Stay active as recommended by your doctor</li>
+      <li>Write down questions for your next visit</li>
+      <li>Limit searching outdated online forums</li>
+      <li>Talk with your partner or support person</li>
+      <li>Ask for genetic counseling if you want more reassurance</li>
+    </ul>
+
+    <div class="alert alert-blue" style="margin-top:1.4em;">
+      <span class="alert-icon">&#x1F9E0;</span>
+      <span>It is completely normal to feel anxious when any finding is reported on your ultrasound. With 3–5% of pregnancies showing EIF, thousands of parents navigate these same feelings every year — and the vast majority go on to have healthy babies.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 11 of 13</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 12 — QUESTIONS TO ASK
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Your Voice Matters</div>
+    <h2>Questions to Ask Your Doctor</h2>
+
+    <ul class="checklist" style="margin-top:1.4em; max-width:760px;">
+      <li>Was the EIF the only finding on my ultrasound?</li>
+      <li>Were all other parts of my baby's anatomy normal?</li>
+      <li>What were my genetic screening results, and do they change anything?</li>
+      <li>Based on my overall picture, do you recommend any additional testing?</li>
+      <li>Will the EIF be checked at my next ultrasound, or is no follow-up needed?</li>
+      <li>Are there any symptoms or changes I should report right away?</li>
+      <li>Will my baby need any heart tests after birth?</li>
+    </ul>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 12 of 13</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 13 — KEY TAKEAWAYS & CLOSING
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Summary</div>
+    <h1 style="text-align:center; font-size:clamp(1.8em,3.5vw,2.8em);">
+      The Bottom Line
+    </h1>
+    <div class="title-divider"></div>
+
+    <div class="stat-row" style="margin-top:1.4em; gap:1.2em;">
+      <div class="stat-box">
+        <div class="stat-num accent-blue">Common</div>
+        <div class="stat-lbl">3–5% of all<br>pregnancies</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-green">Benign</div>
+        <div class="stat-lbl">not a heart<br>defect</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-teal">Isolated</div>
+        <div class="stat-lbl">no additional<br>testing needed</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-purple">Healthy</div>
+        <div class="stat-lbl">outcomes same as<br>babies without EIF</div>
+      </div>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:1.6em; max-width:760px;">
+      <span class="alert-icon">&#x1F91D;</span>
+      <span>An isolated EIF is a common, benign ultrasound variant that does not indicate heart disease, does not require treatment, and — in the context of normal genetic screening — does not change your baby's risk. Our team will continue to monitor your pregnancy carefully and walk with you every step of the way.</span>
+    </div>
+
+    <div style="margin-top:1.6em; font-size:0.82em; color:var(--muted); text-align:center; max-width:680px; line-height:1.6;">
+      Information consistent with ACOG, SMFM, and current evidence-based guidelines.<br>
+      This material supports — and does not replace — a conversation with your physician.
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Maternal-Fetal Medicine</span>
+    </div>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- Navigation Controls -->
+<div class="nav">
+  <button onclick="prevSlide()">&#x2190; Prev</button>
+  <span class="counter" id="counter">1 / 13</span>
+  <button onclick="nextSlide()">Next &#x2192;</button>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+
+  function updateUI() {
+    counter.textContent = (currentSlide + 1) + ' / ' + total;
+    progressBar.style.width = ((currentSlide + 1) / total * 100) + '%';
+  }
+
+  function showSlide(index) {
+    slides.forEach((s, i) => s.classList.toggle('active', i === index));
+    updateUI();
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % total;
+    showSlide(currentSlide);
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + total) % total;
+    showSlide(currentSlide);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+    else if (e.key === 'ArrowLeft') prevSlide();
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) > 40) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

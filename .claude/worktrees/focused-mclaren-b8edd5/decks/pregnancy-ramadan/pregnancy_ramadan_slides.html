@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pregnancy and Ramadan</title>
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d1117;
+      --surface:  #161b22;
+      --border:   #30363d;
+      --text:     #e6edf3;
+      --muted:    #8b949e;
+      --accent:   #58a6ff;
+      --green:    #3fb950;
+      --orange:   #f0883e;
+      --red:      #f85149;
+      --teal:     #39d353;
+      --gold:     #d4a017;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Deck ── */
+    .deck { width: 100%; height: 100%; position: relative; }
+
+    .slide {
+      width: 100%; height: 100%;
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 4rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity .45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Progress bar ── */
+    #progress-bar {
+      position: fixed; bottom: 0; left: 0;
+      height: 4px; background: var(--accent);
+      transition: width .4s ease;
+      z-index: 100;
+    }
+
+    /* ── Navigation ── */
+    .nav-btn {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(88,166,255,.12);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+      z-index: 99;
+    }
+    .nav-btn:hover { background: rgba(88,166,255,.28); }
+    #btn-prev { left: 1.2rem; }
+    #btn-next { right: 1.2rem; }
+
+    /* ── Slide counter ── */
+    #slide-counter {
+      position: fixed; bottom: 14px; right: 1.4rem;
+      font-size: .8rem; color: var(--muted);
+      z-index: 100;
+    }
+
+    /* ── Typography ── */
+    .slide-title {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 600;
+      letter-spacing: -.02em;
+      line-height: 1.15;
+      text-align: center;
+      margin-bottom: .6rem;
+    }
+    .slide-subtitle {
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .slide-body {
+      font-size: clamp(.95rem, 1.6vw, 1.2rem);
+      line-height: 1.7;
+      text-align: center;
+      max-width: 820px;
+      color: var(--text);
+    }
+
+    /* ── Accent line ── */
+    .accent-line {
+      width: 64px; height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin: 0 auto 1.6rem;
+    }
+
+    /* ── Author tag ── */
+    .author-tag {
+      margin-top: 2rem;
+      font-size: .9rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+    .author-tag strong { color: var(--accent); }
+
+    /* ── Icon grid ── */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.2rem;
+      width: 100%;
+      max-width: 900px;
+      margin-top: 1.4rem;
+    }
+    .icon-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 1rem;
+      text-align: center;
+    }
+    .icon-card .icon { font-size: 2.4rem; margin-bottom: .6rem; }
+    .icon-card .label {
+      font-size: .9rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* ── Evidence table ── */
+    .ev-table {
+      width: 100%;
+      max-width: 860px;
+      border-collapse: collapse;
+      font-size: clamp(.8rem, 1.3vw, 1rem);
+      margin-top: 1.4rem;
+    }
+    .ev-table th {
+      background: var(--surface);
+      color: var(--accent);
+      padding: .7rem 1rem;
+      text-align: left;
+      border-bottom: 2px solid var(--accent);
+      font-weight: 600;
+    }
+    .ev-table td {
+      padding: .65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      color: var(--text);
+    }
+    .ev-table tr:last-child td { border-bottom: none; }
+    .ev-table tr:hover td { background: rgba(88,166,255,.06); }
+
+    /* ── Pill badges ── */
+    .badge {
+      display: inline-block;
+      padding: .2rem .7rem;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+    }
+    .badge-green  { background: rgba(63,185,80,.18);  color: var(--green); }
+    .badge-orange { background: rgba(240,136,62,.18); color: var(--orange); }
+    .badge-red    { background: rgba(248,81,73,.18);  color: var(--red); }
+    .badge-blue   { background: rgba(88,166,255,.18); color: var(--accent); }
+
+    /* ── Two-column layout ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.4rem;
+      max-width: 900px;
+      width: 100%;
+      margin-top: 1.4rem;
+    }
+    .col-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem;
+    }
+    .col-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: .8rem;
+      color: var(--accent);
+    }
+    .col-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .col-card ul li {
+      font-size: .9rem;
+      color: var(--text);
+      padding: .3rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+    }
+    .col-card ul li:last-child { border-bottom: none; }
+    .col-card ul li::before { content: "›"; color: var(--accent); flex-shrink: 0; }
+
+    /* ── Warning list ── */
+    .warn-list {
+      list-style: none;
+      max-width: 820px;
+      width: 100%;
+      margin-top: 1.2rem;
+    }
+    .warn-list li {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--red);
+      border-radius: 8px;
+      padding: .8rem 1.2rem;
+      margin-bottom: .6rem;
+      font-size: clamp(.85rem, 1.3vw, 1rem);
+    }
+    .warn-list li .wi { font-size: 1.4rem; }
+
+    /* ── Tips list ── */
+    .tips-list {
+      list-style: none;
+      max-width: 820px;
+      width: 100%;
+      margin-top: 1.2rem;
+    }
+    .tips-list li {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--green);
+      border-radius: 8px;
+      padding: .8rem 1.2rem;
+      margin-bottom: .6rem;
+      font-size: clamp(.85rem, 1.3vw, 1rem);
+    }
+    .tips-list li .ti { font-size: 1.4rem; }
+
+    /* ── Crescent decoration ── */
+    .crescent-bg {
+      position: absolute;
+      font-size: 18rem;
+      opacity: .04;
+      right: -2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* ── Class/Level badge ── */
+    .class-badge {
+      margin-top: 1.6rem;
+      background: rgba(88,166,255,.1);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: .6rem 1.4rem;
+      font-size: .85rem;
+      color: var(--accent);
+      text-align: center;
+      max-width: 680px;
+    }
+
+    /* ── Slide-specific accent colors ── */
+    .slide[data-accent="green"]  .accent-line { background: var(--green); }
+    .slide[data-accent="orange"] .accent-line { background: var(--orange); }
+    .slide[data-accent="red"]    .accent-line { background: var(--red); }
+    .slide[data-accent="gold"]   .accent-line { background: var(--gold); }
+    .slide[data-accent="green"]  .slide-title { color: var(--green); }
+    .slide[data-accent="orange"] .slide-title { color: var(--orange); }
+    .slide[data-accent="red"]    .slide-title { color: var(--red); }
+    .slide[data-accent="gold"]   .slide-title { color: var(--gold); }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .two-col { grid-template-columns: 1fr; }
+      .icon-grid { grid-template-columns: repeat(2, 1fr); }
+      .slide { padding: 1.6rem; }
+    }
+  </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/YZtYs-5kggVujoPzasIPEdxv6lJC1ehPCNOHUbzgLIqzpG2-2HT4mNbi9A5Tscwsu1V68YEEFurYISUZzZn15paElgcTCfIqRiqWB2TuSu-YVXXvojbRzlWCMIhb9nkiDho9avmboHuiZCVBMC_XM2kaipuJqKCLel_V_rFkL-PwlIs992XQB8gWDEJiK3ryJy4155UEGbvGyf4Tipgkm5cxVaGjO35F0NX0sbqDF0ikLjpL76DiThMbroAsgwpLb3DZrgqeMpbuX6-4KcktwDpItYXSCFO5rAdIQcM6xRc-KmFavEL0kHUbGdoEu4lP3CE36yP1yh9Z__z_ua1I5_IPM72FbXvxzQoOvk2EaxRJ4UZ4A8nn3D-TE_kKvfQFJp8KatPY7s7IcFb9F4GgDzT4orZkBsSxkHLQfJmzYPeVhAMASeaO1Il0b7P_8FrmiYJa4Q0lg9MFS3jr-jVLIuIDuGsFqIIepX4jPb1zVC4xgLTMFvXPt4RcbKyUVXDTbi0WswsIQ1gtTjry0HK4_EBR_cQPAnqSxDzoLnuvNb-86rJyoRcEwnZc5CwErv4DBUQjo8Lrg0Qbt3mhPEDu3r1I3fK9I3htt4knDOTV0N0nqXSOwAOFF1yWm3AmkJUOGu7HSKNdNv-RnsUfKlssdeJNUzNOiAqyjdgijJShIf6457RfR-gK5A1PJFfuu5dA1Uj-xGfkrcBQ-LSETF6N6g7scpogVz8nGf1gie5VkXAZRnQEIQYq-9TMoo4TA9Qlnc5lFOaBGX93vkJkLOmhVe2pU7SaRA_cNESXpalJhwekMb8JquRAXBetM5ByOOJEee67owKIdQE_8wyPl1CuqLlrzCKXvC57tbEdvKrwNIL9NzMUaqmEdTqMKOW-Eh4r_z4x5jnOQ_xqXWcQA3ApNbkwRhWEGmdJLQahNLqllxVZdrminq_WvJRHWdCpk3npZvEFMCcp1r_T4MJ-XIrfvv3GF7fkyz9Kzk-drOy0OKpg_Dw7-CjN2FKJX_mHeuOEIYMHatTs9zBsqaAroYR5TdLSIoM7zixdwwa5W-V2k0D9jguevmEXmtM44ziO3kvAJ33vMwjXcb4HqiMna3XdjuGukfOEkzML4DWLV33s15Ar36aCSpGhhJxolsslnCmET-IE6BWCKRD0we5Wt06uJG2KJhTDoCf0tZjNvdo5B0vpnXaCOOSywpJU4GvIrSf-6ZBEucwNvLwq9YzZ1HAMhjuTiLlb5YLmBa0OSX2KNd5eoGAtTFJRxRlt2nF9mpoouRrTLPt_YepfulcvV2QDe57YGrrEWWRZo9w6B-Rqlt4CmN4hm9isbLrnCdcxAp-Po-PBpMFg82yC7AkNLmTETIEwUPcz2D9AcvrdJ6AbpvIRsnl7ZR5qqJ_TB4KEZg57F7HpXVo3xYlv7s_yhauaspNDQt3um31Nxj25lgbYUwwdliyOkfdu5xbqr2iwaGIWGHs48TN3S__CrgTI9c8FpEpZMMxZDZrNJeWhQl_P1qneDjnfEzs8linfMct7RJoUdx02OWw9ULemVYOqVnntqvZ9KICzpXfBHKdm5rav5mcYTJnpwEldqCX42uR3ReUbmeIzb4zrZH_MzGAIy_4ACtkYGENbMxfd7NuoVL4JdT-AbJwb90gvM6nDW8yR_VMg'></script>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/pregnancy-ramadan/pregnancy_ramadan_slides.html">
+<meta name="description" content="Culturally sensitive guide to Ramadan fasting in pregnancy: clinical risks of dehydration and hypoglycemia, Islamic exemptions, Suhoor/Iftar nutrition, and monitoring guidance.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Ramadan, Fasting, Cultural Sensitivity, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/pregnancy-ramadan/pregnancy_ramadan_slides.html">
+<meta property="og:title" content="Pregnancy and Ramadan Fasting - Patient Education | OpenMFM">
+<meta property="og:description" content="Culturally sensitive guide to Ramadan fasting in pregnancy: clinical risks of dehydration and hypoglycemia, Islamic exemptions, Suhoor/Iftar nutrition, and monitoring guidance.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pregnancy and Ramadan Fasting - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Culturally sensitive guide to Ramadan fasting in pregnancy: clinical risks of dehydration and hypoglycemia, Islamic exemptions, Suhoor/Iftar nutrition, and monitoring guidance.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Pregnancy and Ramadan Fasting - Patient Education",
+  "description": "Culturally sensitive guide to Ramadan fasting in pregnancy: clinical risks of dehydration and hypoglycemia, Islamic exemptions, Suhoor/Iftar nutrition, and monitoring guidance.",
+  "url": "https://openmfm.org/decks/pregnancy-ramadan/pregnancy_ramadan_slides.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-14",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Pregnancy and Ramadan Fasting - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Ramadan, Fasting, Cultural Sensitivity, Patient Education"
+}
+</script>
+<style>
+/* 2026 refresh overrides */
+:root {
+  --refresh-bg: #08131f;
+  --refresh-surface: rgba(11, 26, 42, 0.88);
+  --refresh-surface-strong: rgba(15, 34, 54, 0.94);
+  --refresh-line: rgba(133, 201, 255, 0.16);
+  --refresh-text: #f4f8fc;
+  --refresh-muted: #b5c8d8;
+  --refresh-accent: #4ddcc2;
+  --refresh-accent-warm: #ffbd63;
+}
+
+html, body {
+  background:
+    radial-gradient(circle at top left, rgba(77, 220, 194, 0.16), transparent 24%),
+    radial-gradient(circle at 85% 16%, rgba(255, 189, 99, 0.12), transparent 20%),
+    linear-gradient(180deg, #08131f 0%, #06101a 100%) !important;
+  color: var(--refresh-text) !important;
+  font-family: "Aptos", "Segoe UI", system-ui, sans-serif !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.26), transparent 82%);
+}
+
+.slide,
+.slide-container,
+.slide-content,
+.presentation,
+.deck,
+main,
+.container {
+  position: relative;
+}
+
+.slide,
+.slide-content,
+.panel,
+.card,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+ul.references,
+table,
+.grid-item {
+  border-radius: 18px !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24) !important;
+}
+
+.card,
+.content-box,
+.info-box,
+.highlight-box,
+.summary-box,
+.comparison-card,
+.warning-box,
+.feature-box,
+.stat-box,
+.takeaway-box,
+.grid-item,
+table,
+blockquote {
+  background: var(--refresh-surface) !important;
+  border: 1px solid var(--refresh-line) !important;
+  backdrop-filter: blur(10px);
+}
+
+h1, h2, h3, h4, .slide-title {
+  color: var(--refresh-text) !important;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+p, li, td, th, .subtitle, .muted, small {
+  color: var(--refresh-muted) !important;
+}
+
+strong, b, .accent, .highlight, .key-point, a {
+  color: var(--refresh-accent) !important;
+}
+
+button,
+.nav button,
+.controls button,
+.btn,
+.button {
+  border-radius: 999px !important;
+  border: 1px solid var(--refresh-line) !important;
+  background: var(--refresh-surface-strong) !important;
+  color: var(--refresh-text) !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22) !important;
+}
+
+.progress,
+.progress-bar,
+#progressBar,
+.progress-fill {
+  background: linear-gradient(90deg, #4ddcc2 0%, #79e09b 100%) !important;
+  box-shadow: 0 0 18px rgba(77, 220, 194, 0.38);
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 1 — Title
+  ═══════════════════════════════════════════════ -->
+  <div class="slide active">
+    <div class="crescent-bg">☪</div>
+    <p style="font-size:3.5rem; margin-bottom:1rem;">🌙</p>
+    <h1 class="slide-title" style="font-size:clamp(2rem,5vw,3.6rem); color:var(--accent);">
+      Pregnancy &amp; Ramadan
+    </h1>
+    <div class="accent-line"></div>
+    <p class="slide-subtitle">
+      Culturally Sensitive Counseling for Prenatal Care Providers
+    </p>
+    <div class="author-tag">
+      <strong>Joann Elie, APRN</strong> · Clinical Supervisor<br>
+      <strong>Chukwuma I. Onyeije, MD, FACOG</strong> · Medical Director<br>
+      Atlanta Perinatal Associates
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 2 — Why This Matters
+  ═══════════════════════════════════════════════ -->
+  <div class="slide" data-accent="gold">
+    <div class="crescent-bg">☪</div>
+    <h2 class="slide-title">Why This Matters</h2>
+    <div class="accent-line"></div>
+    <div class="icon-grid" style="grid-template-columns: repeat(3,1fr); max-width:780px;">
+      <div class="icon-card">
+        <div class="icon">🕌</div>
+        <div class="label">Ramadan is a sacred pillar of Islamic practice</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">🤰</div>
+        <div class="label">Many pregnant women choose to fast</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">🤝</div>
+        <div class="label">Proactive counseling improves outcomes</div>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1.4rem; font-size:.95rem; color:var(--muted);">
+      Early clinician engagement has been shown to reduce the number of fasted days in women who intend to fast.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 3 — Islamic Perspective
+  ═══════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="crescent-bg">☪</div>
+    <h2 class="slide-title">Religious Exemption</h2>
+    <div class="accent-line"></div>
+    <div class="two-col">
+      <div class="col-card">
+        <h3>Islamic Law Provides</h3>
+        <ul>
+          <li>Exemption if fasting poses harm to mother or baby</li>
+          <li>Option to make up fasts later (Qada)</li>
+          <li>Option to provide Fidya (charitable compensation)</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h3>Why Women Still Fast</h3>
+        <ul>
+          <li>Spiritual fulfillment and connection</li>
+          <li>Community and family participation</li>
+          <li>Personal religious conviction</li>
+        </ul>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1.2rem; font-size:.9rem; color:var(--muted);">
+      Offer chaplain services or referral to a trusted religious resource for patients seeking guidance.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 4 — Shared Decision-Making
+  ═══════════════════════════════════════════════ -->
+  <div class="slide" data-accent="green">
+    <h2 class="slide-title">Shared Decision-Making</h2>
+    <div class="accent-line"></div>
+    <p class="slide-body">
+      Use open-ended, respectful questions in a private setting to create a safe space for honest discussion.
+    </p>
+    <div class="icon-grid" style="margin-top:1.6rem; grid-template-columns: repeat(3,1fr); max-width:820px;">
+      <div class="icon-card">
+        <div class="icon">💬</div>
+        <div class="label">"Do you plan on observing Ramadan? If so, how?"</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">🤔</div>
+        <div class="label">"What are your thoughts about fasting? Any concerns?"</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">⚖️</div>
+        <div class="label">"What factors are contributing to your decision?"</div>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1rem; font-size:.9rem; color:var(--muted);">
+      Avoid assumptions. Avoid judgmental attitudes. Respect the patient's autonomy.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 5 — Clinical Evidence Summary
+  ═══════════════════════════════════════════════ -->
+  <div class="slide">
+    <h2 class="slide-title">Clinical Evidence</h2>
+    <div class="accent-line"></div>
+    <table class="ev-table">
+      <thead>
+        <tr>
+          <th>Outcome</th>
+          <th>Evidence</th>
+          <th>Level</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Neonatal Birth Weight</td>
+          <td>No clinically significant effect in healthy pregnancies</td>
+          <td><span class="badge badge-green">Reassuring</span></td>
+        </tr>
+        <tr>
+          <td>Preterm Birth</td>
+          <td>No sufficient evidence of increased risk</td>
+          <td><span class="badge badge-green">Reassuring</span></td>
+        </tr>
+        <tr>
+          <td>Maternal Symptoms</td>
+          <td>Increased fatigue, dehydration, minimal weight gain reduction</td>
+          <td><span class="badge badge-orange">Monitor</span></td>
+        </tr>
+        <tr>
+          <td>Long-term Offspring Health</td>
+          <td>Emerging signals; causality not established</td>
+          <td><span class="badge badge-orange">Evolving</span></td>
+        </tr>
+        <tr>
+          <td>Mode of Delivery</td>
+          <td>Conflicting data exist</td>
+          <td><span class="badge badge-orange">Uncertain</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="slide-body" style="margin-top:1rem; font-size:.85rem; color:var(--muted);">
+      Strong blanket prohibitions are discouraged given the absence of definitive evidence of harm.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 6 — High-Risk Conditions
+  ═══════════════════════════════════════════════ -->
+  <div class="slide" data-accent="red">
+    <h2 class="slide-title">Fasting Not Recommended</h2>
+    <div class="accent-line"></div>
+    <p class="slide-body" style="margin-bottom:.8rem;">
+      Individualize recommendations for patients with the following conditions:
+    </p>
+    <div class="icon-grid" style="grid-template-columns: repeat(3,1fr); max-width:900px;">
+      <div class="icon-card" style="border-color:var(--red);">
+        <div class="icon">🩸</div>
+        <div class="label">Diabetes Mellitus (GDM / T1 / T2)<br><small style="color:var(--muted);">Hypoglycemia, DKA risk</small></div>
+      </div>
+      <div class="icon-card" style="border-color:var(--red);">
+        <div class="icon">🫘</div>
+        <div class="label">Renal Disease<br><small style="color:var(--muted);">Fluid restriction risk</small></div>
+      </div>
+      <div class="icon-card" style="border-color:var(--red);">
+        <div class="icon">🤢</div>
+        <div class="label">Hyperemesis Gravidarum<br><small style="color:var(--muted);">Dehydration risk</small></div>
+      </div>
+      <div class="icon-card" style="border-color:var(--red);">
+        <div class="icon">👯</div>
+        <div class="label">Multiple Gestation<br><small style="color:var(--muted);">Increased caloric needs</small></div>
+      </div>
+      <div class="icon-card" style="border-color:var(--red);">
+        <div class="icon">⚠️</div>
+        <div class="label">Prior Preterm Birth<br><small style="color:var(--muted);">Adverse history</small></div>
+      </div>
+      <div class="icon-card" style="border-color:var(--red);">
+        <div class="icon">💊</div>
+        <div class="label">Daytime Oral Medications<br><small style="color:var(--muted);">Dosing constraints</small></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 7 — Safe Fasting Tips
+  ═══════════════════════════════════════════════ -->
+  <div class="slide" data-accent="green">
+    <h2 class="slide-title">Tips for Safe Fasting</h2>
+    <div class="accent-line"></div>
+    <ul class="tips-list">
+      <li><span class="ti">💧</span> Drink plenty of fluids during non-fasting hours to prevent dehydration</li>
+      <li><span class="ti">🥗</span> Eat nutrient-dense meals at Suhoor and Iftar — fiber, protein, whole grains, fruits</li>
+      <li><span class="ti">🌙</span> Wake for Suhoor (pre-dawn meal) to maintain caloric intake</li>
+      <li><span class="ti">😴</span> Prioritize adequate sleep; adjust activity to non-fasting hours</li>
+      <li><span class="ti">🚶</span> Avoid strenuous activity during fasting hours; stay cool</li>
+      <li><span class="ti">🚫</span> Gradually reduce caffeine and cigarettes before Ramadan begins</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 8 — Nutrition Guidance
+  ═══════════════════════════════════════════════ -->
+  <div class="slide">
+    <h2 class="slide-title">Nutrition During Ramadan</h2>
+    <div class="accent-line"></div>
+    <div class="two-col">
+      <div class="col-card" style="border-color:var(--green);">
+        <h3 style="color:var(--green);">✅ Encourage</h3>
+        <ul>
+          <li>High-fiber foods and whole grains</li>
+          <li>Fruits, vegetables, and nuts</li>
+          <li>Adequate protein at each meal</li>
+          <li>Water and milk during non-fasting hours</li>
+          <li>Dietary log including fluids</li>
+        </ul>
+      </div>
+      <div class="col-card" style="border-color:var(--red);">
+        <h3 style="color:var(--red);">⚠️ Limit</h3>
+        <ul>
+          <li>High-salt foods</li>
+          <li>Excess sugar and processed foods</li>
+          <li>Fried foods at Iftar</li>
+          <li>Caffeine-containing beverages</li>
+          <li>Large caloric bolus without nutrient density</li>
+        </ul>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1rem; font-size:.85rem; color:var(--muted);">
+      Dietician or nutritionist referral may be beneficial.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 9 — When to Break the Fast
+  ═══════════════════════════════════════════════ -->
+  <div class="slide" data-accent="red">
+    <h2 class="slide-title">Break Your Fast Immediately If…</h2>
+    <div class="accent-line"></div>
+    <ul class="warn-list">
+      <li><span class="wi">👶</span> Decreased or absent fetal movement</li>
+      <li><span class="wi">🤰</span> Regular contractions or pelvic pressure (preterm labor signs)</li>
+      <li><span class="wi">🩸</span> Vaginal bleeding or leakage of fluid</li>
+      <li><span class="wi">💧</span> Signs of severe dehydration: syncope, dark urine, extreme thirst</li>
+      <li><span class="wi">🌀</span> Severe dizziness, confusion, or hypoglycemia</li>
+      <li><span class="wi">🤕</span> Severe headache or profound fatigue</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 10 — Fetal Testing Note
+  ═══════════════════════════════════════════════ -->
+  <div class="slide" data-accent="orange">
+    <h2 class="slide-title">Antenatal Fetal Testing</h2>
+    <div class="accent-line"></div>
+    <div class="icon-grid" style="grid-template-columns: repeat(3,1fr); max-width:780px;">
+      <div class="icon-card">
+        <div class="icon">📋</div>
+        <div class="label">BPP and NST may be affected by fasting state</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">⏰</div>
+        <div class="label">Perform testing during non-fasting hours when possible</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">🔍</div>
+        <div class="label">Interpret results with awareness of fasting status</div>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1.4rem; font-size:.95rem; color:var(--muted);">
+      Consider increased frequency of prenatal visits, fetal monitoring, and urinalysis (ketonuria, hydration) during Ramadan.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 11 — For Patients Not Fasting
+  ═══════════════════════════════════════════════ -->
+  <div class="slide">
+    <h2 class="slide-title">Not Fasting? Still Be Mindful</h2>
+    <div class="accent-line"></div>
+    <p class="slide-body">
+      The Ramadan environment can affect health even without fasting.
+    </p>
+    <div class="two-col" style="margin-top:1.4rem;">
+      <div class="col-card" style="border-color:var(--orange);">
+        <h3 style="color:var(--orange);">🍽️ Iftar Meals</h3>
+        <ul>
+          <li>Large caloric bolus at sunset</li>
+          <li>Often high in fat, carbohydrates, and processed sugars</li>
+          <li>Maintain nutrient balance and portion awareness</li>
+        </ul>
+      </div>
+      <div class="col-card" style="border-color:var(--orange);">
+        <h3 style="color:var(--orange);">😴 Sleep Disruption</h3>
+        <ul>
+          <li>Extended post-Iftar socializing and prayer</li>
+          <li>Altered nocturnal sleep patterns</li>
+          <li>Prioritize adequate rest for maternal and fetal health</li>
+        </ul>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top:1rem; font-size:.85rem; color:var(--muted);">
+      Engage in shared decision-making on dietary and lifestyle recommendations throughout Ramadan.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 12 — Clinical Recommendation
+  ═══════════════════════════════════════════════ -->
+  <div class="slide" data-accent="green">
+    <h2 class="slide-title">Clinical Recommendation</h2>
+    <div class="accent-line"></div>
+    <div class="icon-grid" style="grid-template-columns: repeat(2,1fr); max-width:700px;">
+      <div class="icon-card">
+        <div class="icon">📅</div>
+        <div class="label">Initiate counseling <strong>before</strong> Ramadan begins</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">🌍</div>
+        <div class="label">Demonstrate cultural and religious awareness</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">⚖️</div>
+        <div class="label">Engage in nuanced shared decision-making</div>
+      </div>
+      <div class="icon-card">
+        <div class="icon">📞</div>
+        <div class="label">Continue follow-up throughout the month</div>
+      </div>
+    </div>
+    <div class="class-badge">
+      Class I, Level B — Clinicians should engage in proactive, culturally sensitive counseling and shared decision-making with all pregnant Muslim patients prior to Ramadan.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 13 — Closing
+  ═══════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="crescent-bg">☪</div>
+    <p style="font-size:3rem; margin-bottom:1rem;">🌙</p>
+    <h2 class="slide-title" style="color:var(--accent);">We Are Here for You</h2>
+    <div class="accent-line"></div>
+    <p class="slide-body">
+      Our commitment is to support every patient in having a healthy pregnancy and a spiritually fulfilling Ramadan.
+    </p>
+    <div class="author-tag" style="margin-top:2rem;">
+      <strong>Joann Elie, APRN</strong> · Clinical Supervisor<br>
+      <strong>Chukwuma I. Onyeije, MD, FACOG</strong> · Medical Director<br>
+      Atlanta Perinatal Associates
+    </div>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- Navigation buttons -->
+<button class="nav-btn" id="btn-prev" onclick="prevSlide()" aria-label="Previous slide">&#8592;</button>
+<button class="nav-btn" id="btn-next" onclick="nextSlide()" aria-label="Next slide">&#8594;</button>
+
+<!-- Progress bar -->
+<div id="progress-bar"></div>
+
+<!-- Slide counter -->
+<div id="slide-counter"></div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total  = slides.length;
+  const bar    = document.getElementById('progress-bar');
+  const counter= document.getElementById('slide-counter');
+
+  function updateUI() {
+    bar.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+  }
+
+  function showSlide(idx) {
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    current = idx;
+    updateUI();
+  }
+
+  function nextSlide() {
+    showSlide((current + 1) % total);
+  }
+
+  function prevSlide() {
+    showSlide((current - 1 + total) % total);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft')               { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
+  document.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) dx < 0 ? nextSlide() : prevSlide();
+  }, {passive:true});
+
+  showSlide(0);
+</script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

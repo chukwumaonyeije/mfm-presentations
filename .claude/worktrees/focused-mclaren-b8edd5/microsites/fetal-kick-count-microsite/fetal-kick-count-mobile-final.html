@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Baby Kick Counter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FDF6EE;
+    --warm-white: #FFFCF8;
+    --sage: #4A8C7A;
+    --sage-light: #6BAA9A;
+    --sage-dark: #356659;
+    --blush: #E87A70;
+    --blush-light: #F2A09A;
+    --alert-red: #C0392B;
+    --alert-bg: #FEF0EE;
+    --warn-amber: #D4820A;
+    --warn-bg: #FEF9ED;
+    --good-green: #2D7D5A;
+    --good-bg: #EDF7F2;
+    --text-dark: #1E2A28;
+    --text-mid: #4A5850;
+    --text-light: #7A8E8A;
+    --card-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    --card-shadow-hover: 0 4px 24px rgba(0,0,0,0.12);
+    --radius-card: 20px;
+    --radius-btn: 50px;
+    --nav-height: 72px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    height: 100%;
+    background: var(--cream);
+    font-family: 'Nunito', sans-serif;
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ── APP SHELL ── */
+  #app {
+    max-width: 480px;
+    margin: 0 auto;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* ── TOP HEADER ── */
+  header {
+    background: var(--warm-white);
+    padding: 16px 20px 14px;
+    border-bottom: 1px solid rgba(74,140,122,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header-left h1 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--sage-dark);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .header-left p {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+  .header-badge {
+    background: var(--sage);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── SCROLL AREA ── */
+  main {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: calc(var(--nav-height) + 16px);
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* ── TABS / SCREENS ── */
+  .screen { display: none; padding: 20px 16px; }
+  .screen.active { display: block; }
+
+  /* ── BOTTOM NAV ── */
+  nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    height: var(--nav-height);
+    background: var(--warm-white);
+    border-top: 1px solid rgba(74,140,122,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  .nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 0;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--text-light);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-btn svg { transition: transform 0.2s; }
+  .nav-btn.active { color: var(--sage); }
+  .nav-btn.active svg { transform: scale(1.1); }
+  .nav-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--sage);
+    opacity: 0;
+    transition: opacity 0.2s;
+    margin-top: -2px;
+  }
+  .nav-btn.active .nav-dot { opacity: 1; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--warm-white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--card-shadow);
+    padding: 22px 20px;
+    margin-bottom: 14px;
+  }
+  .card-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 12px;
+  }
+
+  /* ── COUNTER SCREEN ── */
+  .session-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .status-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--text-light);
+    flex-shrink: 0;
+    transition: background 0.4s;
+  }
+  .status-dot.counting { background: var(--sage); animation: pulse-dot 1.4s infinite; }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .status-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-mid);
+  }
+
+  /* BIG COUNT DISPLAY */
+  .count-card {
+    background: linear-gradient(145deg, var(--sage-dark) 0%, var(--sage) 100%);
+    border-radius: var(--radius-card);
+    padding: 28px 20px 24px;
+    text-align: center;
+    margin-bottom: 14px;
+    box-shadow: 0 8px 32px rgba(53,102,89,0.28);
+    position: relative;
+    overflow: hidden;
+  }
+  .count-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 140px; height: 140px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .count-card::after {
+    content: '';
+    position: absolute;
+    bottom: -50px; left: -20px;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .count-number {
+    font-size: 5.5rem;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .count-number.bump {
+    transform: scale(1.18);
+  }
+  .count-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+    margin-top: 4px;
+  }
+  .count-goal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    position: relative;
+    z-index: 1;
+  }
+  .count-goal-text {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.8);
+  }
+  .progress-dots {
+    display: flex;
+    gap: 5px;
+  }
+  .progress-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    transition: background 0.3s, transform 0.3s;
+  }
+  .progress-dot.filled {
+    background: white;
+    transform: scale(1.15);
+  }
+
+  /* TIMER */
+  .timer-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  .timer-display {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.9);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+  .timer-icon {
+    font-size: 1.1rem;
+    opacity: 0.7;
+  }
+  .timer-limit {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.55);
+    font-weight: 600;
+  }
+
+  /* BIG KICK BUTTON */
+  .kick-btn-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 6px 0 14px;
+  }
+  .kick-btn {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--blush-light) 0%, var(--blush) 100%);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 8px 32px rgba(232,122,112,0.4), 0 2px 8px rgba(232,122,112,0.2);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    font-family: 'Nunito', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+    touch-action: manipulation;
+  }
+  .kick-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.25), transparent 60%);
+    pointer-events: none;
+  }
+  .kick-btn:active {
+    transform: scale(0.93);
+    box-shadow: 0 4px 16px rgba(232,122,112,0.35);
+  }
+  .kick-btn.tapped {
+    transform: scale(0.93);
+  }
+  .kick-btn-icon { font-size: 3rem; }
+  .kick-btn-text {
+    font-size: 1rem;
+    font-weight: 900;
+    color: white;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .kick-btn-sub {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.06em;
+  }
+
+  /* GOAL REACHED */
+  .goal-card {
+    background: linear-gradient(135deg, var(--good-green) 0%, #3A9B6A 100%);
+    border-radius: var(--radius-card);
+    padding: 24px 20px;
+    text-align: center;
+    margin-bottom: 14px;
+    box-shadow: 0 6px 24px rgba(45,125,90,0.3);
+    display: none;
+  }
+  .goal-card.visible { display: block; }
+  .goal-icon { font-size: 2.8rem; margin-bottom: 8px; }
+  .goal-title {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 4px;
+  }
+  .goal-sub {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+  }
+
+  /* CONTROL BUTTONS */
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .btn-secondary {
+    flex: 1;
+    padding: 14px 16px;
+    border-radius: var(--radius-btn);
+    border: 2px solid rgba(74,140,122,0.2);
+    background: var(--warm-white);
+    color: var(--text-mid);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    touch-action: manipulation;
+  }
+  .btn-secondary:active { background: var(--cream); border-color: var(--sage-light); }
+
+  /* QUICK REFERENCE CARD */
+  .ref-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .ref-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .ref-icon-wrap {
+    width: 42px; height: 42px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+  .ref-icon-wrap.good { background: var(--good-bg); }
+  .ref-icon-wrap.warn { background: var(--warn-bg); }
+  .ref-icon-wrap.alert { background: var(--alert-bg); }
+  .ref-content { flex: 1; }
+  .ref-title {
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 3px;
+  }
+  .ref-title.good { color: var(--good-green); }
+  .ref-title.warn { color: var(--warn-amber); }
+  .ref-title.alert { color: var(--alert-red); }
+  .ref-body {
+    font-size: 0.82rem;
+    color: var(--text-mid);
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  /* EMERGENCY BANNER */
+  .emergency-banner {
+    background: var(--alert-red);
+    border-radius: 16px;
+    padding: 16px 18px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .emergency-icon { font-size: 1.6rem; flex-shrink: 0; }
+  .emergency-text { color: white; }
+  .emergency-title {
+    font-size: 0.95rem;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+  .emergency-body {
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.5;
+    opacity: 0.92;
+  }
+
+  /* ── GUIDE SCREEN ── */
+  .steps-card .step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .steps-card .step:last-child { border-bottom: none; }
+  .step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--sage);
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-text { flex: 1; }
+  .step-head {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 3px;
+  }
+  .step-body {
+    font-size: 0.82rem;
+    color: var(--text-mid);
+    line-height: 1.55;
+    font-weight: 600;
+  }
+
+  .conditions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .condition-chip {
+    background: var(--cream);
+    border: 1.5px solid rgba(74,140,122,0.15);
+    border-radius: 12px;
+    padding: 10px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    transition: all 0.15s;
+    touch-action: manipulation;
+  }
+  .condition-chip.selected {
+    background: rgba(74,140,122,0.08);
+    border-color: var(--sage);
+  }
+  .condition-check {
+    width: 18px; height: 18px;
+    border-radius: 6px;
+    border: 2px solid rgba(74,140,122,0.3);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    font-size: 0.65rem;
+    color: white;
+  }
+  .condition-chip.selected .condition-check {
+    background: var(--sage);
+    border-color: var(--sage);
+  }
+  .condition-chip.selected .condition-check::after { content: '✓'; }
+  .condition-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-mid);
+    line-height: 1.3;
+  }
+  .condition-chip.selected .condition-name { color: var(--sage-dark); }
+
+  .start-week-row {
+    background: var(--good-bg);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-top: 12px;
+    display: none;
+  }
+  .start-week-row.visible { display: block; }
+  .start-week-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--good-green);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .start-week-body {
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    font-weight: 700;
+  }
+
+  /* ── RESOURCES SCREEN ── */
+  .resource-link-card {
+    background: var(--warm-white);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    margin-bottom: 10px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    transition: box-shadow 0.15s;
+  }
+  .resource-link-card:active { box-shadow: var(--card-shadow-hover); }
+  .resource-icon-col {
+    width: 56px;
+    background: var(--cream);
+    align-self: stretch;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .resource-text-col { padding: 14px 14px 14px 4px; flex: 1; }
+  .resource-name {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 2px;
+    line-height: 1.3;
+  }
+  .resource-desc {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .resource-arrow {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    padding-right: 14px;
+    flex-shrink: 0;
+  }
+
+  .disclaimer {
+    background: rgba(74,140,122,0.06);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-top: 6px;
+    margin-bottom: 14px;
+  }
+  .disclaimer-text {
+    font-size: 0.74rem;
+    color: var(--text-mid);
+    line-height: 1.6;
+    font-weight: 600;
+    font-style: italic;
+    text-align: center;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin: 18px 0 8px;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  /* scroll‐to-top on tab switch */
+  .scroll-top { scroll-behavior: auto; }
+
+  @media (min-width: 480px) {
+    .kick-btn { width: 220px; height: 220px; }
+    .count-number { font-size: 6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <header>
+    <div class="header-left">
+      <h1>Baby Kick Counter</h1>
+      <p>OpenMFM.org · High-Risk Pregnancy</p>
+    </div>
+    <div class="header-badge">ACOG</div>
+  </header>
+
+  <main id="main-scroll">
+
+    <!-- ══ COUNTER SCREEN ══ -->
+    <div id="screen-counter" class="screen active">
+
+      <div class="session-status">
+        <div class="status-dot" id="status-dot"></div>
+        <span class="status-label" id="status-label">Ready to start — tap the button to begin</span>
+      </div>
+
+      <!-- Goal reached card (hidden until 10 kicks) -->
+      <div class="goal-card" id="goal-card">
+        <div class="goal-icon">🎉</div>
+        <div class="goal-title">Goal Reached!</div>
+        <div class="goal-sub" id="goal-time-text">10 movements in — min — sec</div>
+      </div>
+
+      <!-- Count display -->
+      <div class="count-card">
+        <div class="count-number" id="count-display">0</div>
+        <div class="count-label">movements</div>
+        <div class="count-goal">
+          <div class="progress-dots" id="progress-dots"></div>
+          <div class="count-goal-text" id="goal-text">Goal: 10</div>
+        </div>
+        <div class="timer-row">
+          <span class="timer-icon">⏱</span>
+          <span class="timer-display" id="timer-display">0:00</span>
+          <span class="timer-limit">/ 2:00 hr max</span>
+        </div>
+      </div>
+
+      <!-- Big kick button -->
+      <div class="kick-btn-wrap">
+        <button class="kick-btn" id="kick-btn" aria-label="Record a movement">
+          <span class="kick-btn-icon">👶</span>
+          <span class="kick-btn-text">I Felt a Kick</span>
+          <span class="kick-btn-sub">Tap each movement</span>
+        </button>
+      </div>
+
+      <!-- Controls -->
+      <div class="btn-row">
+        <button class="btn-secondary" id="undo-btn">↩ Undo Last</button>
+        <button class="btn-secondary" id="reset-btn">↺ New Session</button>
+      </div>
+
+      <!-- Quick Reference -->
+      <div class="card">
+        <div class="card-title">What to watch for</div>
+        <div class="ref-item">
+          <div class="ref-icon-wrap good">✅</div>
+          <div class="ref-content">
+            <div class="ref-title good">All Good</div>
+            <div class="ref-body">You feel 10 movements within 2 hours, and baby's pattern feels similar to other days.</div>
+          </div>
+        </div>
+        <div class="ref-item">
+          <div class="ref-icon-wrap warn">⚠️</div>
+          <div class="ref-content">
+            <div class="ref-title warn">Let Your Doctor Know</div>
+            <div class="ref-body">Movements feel weaker or less frequent than usual over the past few days. Not urgent, but worth a call.</div>
+          </div>
+        </div>
+        <div class="ref-item">
+          <div class="ref-icon-wrap alert">🚨</div>
+          <div class="ref-content">
+            <div class="ref-title alert">Call Right Now</div>
+            <div class="ref-body">Fewer than 10 movements in 2 hours, baby has gone quiet, or something suddenly feels very different. <strong>Do not wait.</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emergency banner -->
+      <div class="emergency-banner">
+        <span class="emergency-icon">📞</span>
+        <div class="emergency-text">
+          <div class="emergency-title">If you're worried — call now</div>
+          <div class="emergency-body">Your instinct matters. Call your provider or go to Labor &amp; Delivery. Even after hours. Even on weekends. Never wait until your next appointment.</div>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <p class="disclaimer-text">This tool is for education only. It does not give medical advice. All decisions should be made with your healthcare provider.</p>
+      </div>
+
+    </div>
+
+    <!-- ══ GUIDE SCREEN ══ -->
+    <div id="screen-guide" class="screen">
+
+      <div class="card steps-card">
+        <div class="card-title">How to count kicks</div>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <div class="step-head">When to start</div>
+            <div class="step-body">Begin at <strong>28 weeks</strong>. If you have diabetes, high blood pressure, twins, or a previous loss — start at <strong>26 weeks</strong>.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <div class="step-head">Pick the same time each day</div>
+            <div class="step-body">Evenings work best — babies are most active after dinner. Choose a time you can stick to every day.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <div class="step-head">Lie on your left side</div>
+            <div class="step-body">This position improves blood flow to your uterus and helps your baby move more.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">
+            <div class="step-head">What counts as a movement</div>
+            <div class="step-body">Any kick, roll, flutter, swish, or poke. <strong>Hiccups do not count</strong> — they feel like a steady rhythm.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-text">
+            <div class="step-head">Your goal: 10 movements in 2 hours</div>
+            <div class="step-body">Most babies reach 10 in under 30 minutes. If you don't feel 10 in 2 hours, contact your provider.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-text">
+            <div class="step-head">Learn YOUR baby's pattern</div>
+            <div class="step-body">Counting daily helps you learn what's normal for your baby. A change in the pattern is often more important than any single number.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-text">
+            <div class="step-head">If baby seems asleep</div>
+            <div class="step-body">Babies sleep for 20–40 minutes at a stretch. Try a cold drink or light snack, then wait a bit before recounting.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Does this apply to me?</div>
+        <p style="font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-bottom:14px; line-height:1.5;">
+          Select any conditions that apply to your pregnancy. We'll tell you when to start counting.
+        </p>
+        <div class="conditions-grid" id="conditions-grid">
+          <div class="condition-chip" data-weeks="26" onclick="toggleCondition(this)">
+            <div class="condition-check"></div>
+            <div class="condition-name">Gestational Diabetes</div>
+          </div>
+          <div class="condition-chip" data-weeks="26" onclick="toggleCondition(this)">
+            <div class="condition-check"></div>
+            <div class="condition-name">Type 1 or 2 Diabetes</div>
+          </div>
+          <div class="condition-chip" data-weeks="26" onclick="toggleCondition(this)">
+            <div class="condition-check"></div>
+            <div class="condition-name">High Blood Pressure or Preeclampsia</div>
+          </div>
+          <div class="condition-chip" data-weeks="26" onclick="toggleCondition(this)">
+            <div class="condition-check"></div>
+            <div class="condition-name">Baby Measuring Small (FGR/SGA)</div>
+          </div>
+          <div class="condition-chip" data-weeks="26" onclick="toggleCondition(this)">
+            <div class="condition-check"></div>
+            <div class="condition-name">Twins or Multiples</div>
+          </div>
+          <div class="condition-chip" data-weeks="26" onclick="toggleCondition(this)">
+            <div class="condition-check"></div>
+            <div class="condition-name">Prior Pregnancy Loss</div>
+          </div>
+          <div class="condition-chip" data-weeks="28" onclick="toggleCondition(this)">
+            <div class="condition-check"></div>
+            <div class="condition-name">Obesity (BMI ≥ 30)</div>
+          </div>
+          <div class="condition-chip" data-weeks="28" onclick="toggleCondition(this)">
+            <div class="condition-check"></div>
+            <div class="condition-name">Age 35 or Older</div>
+          </div>
+          <div class="condition-chip" data-weeks="28" onclick="toggleCondition(this)">
+            <div class="condition-check"></div>
+            <div class="condition-name">Thyroid Disease</div>
+          </div>
+          <div class="condition-chip" data-weeks="28" onclick="toggleCondition(this)">
+            <div class="condition-check"></div>
+            <div class="condition-name">Autoimmune Disease</div>
+          </div>
+          <div class="condition-chip" data-weeks="28" onclick="toggleCondition(this)">
+            <div class="condition-check"></div>
+            <div class="condition-name">Placenta in Front (Anterior Placenta)</div>
+          </div>
+        </div>
+        <div class="start-week-row" id="start-week-row">
+          <div class="start-week-title">📅 Recommended Start</div>
+          <div class="start-week-body" id="start-week-body">Based on your conditions, begin kick counting at 26 weeks.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Why this matters</div>
+        <p style="font-size:0.85rem; color:var(--text-mid); font-weight:600; line-height:1.6; margin-bottom:10px;">
+          Your baby's movements are one of the most direct signs of how they're doing. A slowdown in movement is often one of the <strong>first warning signs</strong> that something needs attention.
+        </p>
+        <p style="font-size:0.85rem; color:var(--text-mid); font-weight:600; line-height:1.6; margin-bottom:10px;">
+          Stillbirth affects about 1 in 175 pregnancies in the U.S. Research shows that regular kick counting — combined with quick action when something feels off — can prevent many of these losses.
+        </p>
+        <p style="font-size:0.85rem; color:var(--text-mid); font-weight:600; line-height:1.6;">
+          <strong>Bonus:</strong> Taking a few quiet minutes each day to focus on your baby's movements is a beautiful bonding experience. 84% of women who track kicks report feeling more connected to their baby.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ══ RESOURCES SCREEN ══ -->
+    <div id="screen-resources" class="screen">
+
+      <div class="emergency-banner">
+        <span class="emergency-icon">📞</span>
+        <div class="emergency-text">
+          <div class="emergency-title">Always trust your gut</div>
+          <div class="emergency-body">If you feel something is wrong with your baby's movement, call your provider or go to Labor &amp; Delivery. Don't wait for your next appointment.</div>
+        </div>
+      </div>
+
+      <div class="section-label">Patient Resources</div>
+
+      <a href="https://countthekicks.org" target="_blank" class="resource-link-card">
+        <div class="resource-icon-col">💜</div>
+        <div class="resource-text-col">
+          <div class="resource-name">Count the Kicks</div>
+          <div class="resource-desc">Free app & education by Healthy Birth Day, Inc. — recommended by ACOG</div>
+        </div>
+        <div class="resource-arrow">›</div>
+      </a>
+
+      <a href="https://countthekicks.org/faq/" target="_blank" class="resource-link-card">
+        <div class="resource-icon-col">❓</div>
+        <div class="resource-text-col">
+          <div class="resource-name">Count the Kicks FAQ</div>
+          <div class="resource-desc">Answers to common questions about fetal movement</div>
+        </div>
+        <div class="resource-arrow">›</div>
+      </a>
+
+      <a href="https://americanpregnancy.org/healthy-pregnancy/while-pregnant/counting-baby-kicks/" target="_blank" class="resource-link-card">
+        <div class="resource-icon-col">🤰</div>
+        <div class="resource-text-col">
+          <div class="resource-name">American Pregnancy Assoc.</div>
+          <div class="resource-desc">Plain-language guide to counting baby kicks</div>
+        </div>
+        <div class="resource-arrow">›</div>
+      </a>
+
+      <div class="section-label">Clinical Guidelines</div>
+
+      <a href="https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2021/06/indications-for-outpatient-antenatal-fetal-surveillance" target="_blank" class="resource-link-card">
+        <div class="resource-icon-col">📋</div>
+        <div class="resource-text-col">
+          <div class="resource-name">ACOG Committee Opinion #828</div>
+          <div class="resource-desc">Official guidelines on antenatal fetal surveillance</div>
+        </div>
+        <div class="resource-arrow">›</div>
+      </a>
+
+      <a href="https://www.smfm.org" target="_blank" class="resource-link-card">
+        <div class="resource-icon-col">🏥</div>
+        <div class="resource-text-col">
+          <div class="resource-name">SMFM</div>
+          <div class="resource-desc">Society for Maternal-Fetal Medicine</div>
+        </div>
+        <div class="resource-arrow">›</div>
+      </a>
+
+      <div class="section-label">Research</div>
+
+      <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11472900/" target="_blank" class="resource-link-card">
+        <div class="resource-icon-col">📖</div>
+        <div class="resource-text-col">
+          <div class="resource-name">Burgess et al. (2024)</div>
+          <div class="resource-desc">Standardizing fetal movement monitoring reduced delays in care and improved patient empowerment</div>
+        </div>
+        <div class="resource-arrow">›</div>
+      </a>
+
+      <div class="section-label">About</div>
+      <div class="card" style="margin-bottom:14px;">
+        <p style="font-size:0.82rem; color:var(--text-mid); font-weight:600; line-height:1.6; margin-bottom:8px;">
+          This tool was created by <strong>Atlanta Perinatal Associates</strong> for use in high-risk pregnancy care. It is based on ACOG, SMFM, and Count the Kicks guidelines.
+        </p>
+        <p style="font-size:0.82rem; color:var(--text-mid); font-weight:600; line-height:1.6;">
+          Developed via <a href="https://openmfm.org" style="color:var(--sage); font-weight:800;">OpenMFM.org</a> and <a href="https://doctorswhocode.blog" style="color:var(--sage); font-weight:800;">DoctorsWhoCode.blog</a>.
+        </p>
+      </div>
+
+      <div class="disclaimer">
+        <p class="disclaimer-text">⚠️ This tool is for educational purposes only and does not provide medical advice. All clinical decisions must be made with a qualified healthcare provider. In an emergency, call your provider or go to the nearest Labor &amp; Delivery unit immediately.</p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ══ BOTTOM NAV ══ -->
+  <nav>
+    <button class="nav-btn active" id="nav-counter" onclick="switchScreen('counter')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M12 7v5l3 3"/>
+      </svg>
+      Counter
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-btn" id="nav-guide" onclick="switchScreen('guide')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+      </svg>
+      Guide
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-btn" id="nav-resources" onclick="switchScreen('resources')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+      </svg>
+      Resources
+      <div class="nav-dot"></div>
+    </button>
+  </nav>
+</div>
+
+<script>
+// ── STATE ──
+let kickCount = 0;
+let timerSeconds = 0;
+let timerInterval = null;
+let sessionActive = false;
+let goalReached = false;
+let goalTime = 0;
+
+// ── NAV ──
+function switchScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+  document.getElementById('main-scroll').scrollTop = 0;
+}
+
+// ── TIMER ──
+function startTimer() {
+  if (timerInterval) return;
+  timerInterval = setInterval(() => {
+    timerSeconds++;
+    updateTimerDisplay();
+    // Warn at 2 hours
+    if (timerSeconds >= 7200) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timerSeconds / 60);
+  const s = timerSeconds % 60;
+  document.getElementById('timer-display').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+// ── PROGRESS DOTS ──
+function renderDots() {
+  const wrap = document.getElementById('progress-dots');
+  wrap.innerHTML = '';
+  for (let i = 0; i < 10; i++) {
+    const d = document.createElement('div');
+    d.className = 'progress-dot' + (i < kickCount ? ' filled' : '');
+    wrap.appendChild(d);
+  }
+}
+
+// ── KICK ──
+document.getElementById('kick-btn').addEventListener('click', () => {
+  if (goalReached) return;
+
+  if (!sessionActive) {
+    sessionActive = true;
+    startTimer();
+    document.getElementById('status-dot').classList.add('counting');
+    document.getElementById('status-label').textContent = 'Session in progress…';
+  }
+
+  kickCount++;
+  updateCountDisplay();
+
+  if (kickCount >= 10 && !goalReached) {
+    goalReached = true;
+    goalTime = timerSeconds;
+    clearInterval(timerInterval);
+    timerInterval = null;
+    showGoalReached();
+  }
+});
+
+function updateCountDisplay() {
+  const el = document.getElementById('count-display');
+  el.textContent = kickCount;
+  el.classList.add('bump');
+  setTimeout(() => el.classList.remove('bump'), 180);
+  renderDots();
+  document.getElementById('goal-text').textContent = kickCount >= 10 ? '🎉 Goal reached!' : `Goal: 10`;
+}
+
+function showGoalReached() {
+  const gc = document.getElementById('goal-card');
+  gc.classList.add('visible');
+  const m = Math.floor(goalTime / 60);
+  const s = goalTime % 60;
+  document.getElementById('goal-time-text').textContent = `10 movements in ${m} min ${s} sec`;
+  document.getElementById('status-dot').classList.remove('counting');
+  document.getElementById('status-label').textContent = '✅ Goal reached — great job!';
+  document.getElementById('kick-btn').style.opacity = '0.5';
+  document.getElementById('kick-btn').style.pointerEvents = 'none';
+}
+
+// ── UNDO ──
+document.getElementById('undo-btn').addEventListener('click', () => {
+  if (kickCount > 0 && !goalReached) {
+    kickCount--;
+    updateCountDisplay();
+    if (kickCount === 0) {
+      resetSession(false);
+    }
+  }
+});
+
+// ── RESET ──
+document.getElementById('reset-btn').addEventListener('click', () => {
+  resetSession(true);
+});
+
+function resetSession(full) {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  timerSeconds = 0;
+  kickCount = 0;
+  sessionActive = false;
+  goalReached = false;
+  goalTime = 0;
+  updateTimerDisplay();
+  updateCountDisplay();
+  document.getElementById('goal-card').classList.remove('visible');
+  document.getElementById('status-dot').classList.remove('counting');
+  document.getElementById('status-label').textContent = 'Ready to start — tap the button to begin';
+  document.getElementById('goal-text').textContent = 'Goal: 10';
+  document.getElementById('kick-btn').style.opacity = '';
+  document.getElementById('kick-btn').style.pointerEvents = '';
+}
+
+// ── CONDITIONS ──
+function toggleCondition(chip) {
+  chip.classList.toggle('selected');
+  updateStartWeek();
+}
+
+function updateStartWeek() {
+  const selected = document.querySelectorAll('.condition-chip.selected');
+  const row = document.getElementById('start-week-row');
+  if (selected.length === 0) {
+    row.classList.remove('visible');
+    return;
+  }
+  let earliest = 28;
+  selected.forEach(c => {
+    const w = parseInt(c.dataset.weeks);
+    if (w < earliest) earliest = w;
+  });
+  row.classList.add('visible');
+  document.getElementById('start-week-body').textContent =
+    `Based on your selected conditions, begin kick counting at ${earliest} weeks of pregnancy. Talk to your provider if you're unsure.`;
+}
+
+// ── INIT ──
+renderDots();
+</script>
+
+</body>
+</html>

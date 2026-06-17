@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Understanding Fetal Growth Restriction | OpenMFM</title>
+  <style>
+    :root {
+      --bg:          #0d1117;
+      --surface:     #161b22;
+      --surface2:    #1c2330;
+      --border:      #30363d;
+      --text:        #e6edf3;
+      --muted:       #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-teal: #39d0b4;
+      --accent-green:#3fb950;
+      --accent-amber:#d29922;
+      --accent-red:  #f85149;
+      --accent-purple:#bc8cff;
+      --brand:       #1f6feb;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; overflow: hidden; }
+
+    /* Progress bar */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--brand); transition: width 0.3s ease; z-index: 1000; width: 0%;
+    }
+
+    /* Slide container */
+    #deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 3.5rem 4rem 4.5rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.35s ease;
+      text-align: center;
+    }
+    .slide.active { opacity: 1; pointer-events: auto; }
+
+    .slide-label {
+      font-size: 0.72em; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent-teal); margin-bottom: 0.6em;
+    }
+    h1 { font-size: clamp(1.8em, 3.5vw, 2.8em); font-weight: 800; line-height: 1.15; margin-bottom: 0.4em; }
+    h2 { font-size: clamp(1.3em, 2.6vw, 2em); font-weight: 700; line-height: 1.2; margin-bottom: 0.6em; }
+    h3 { font-size: clamp(1em, 1.8vw, 1.3em); font-weight: 600; color: var(--accent-blue); margin-bottom: 0.4em; }
+    p  { font-size: clamp(0.9em, 1.5vw, 1.1em); line-height: 1.65; color: var(--text); max-width: 820px; }
+
+    .accent-blue   { color: var(--accent-blue); }
+    .accent-teal   { color: var(--accent-teal); }
+    .accent-green  { color: var(--accent-green); }
+    .accent-amber  { color: var(--accent-amber); }
+    .accent-red    { color: var(--accent-red); }
+    .accent-purple { color: var(--accent-purple); }
+
+    /* Title slide elements */
+    .title-eyebrow {
+      font-size: 0.78em; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent-teal); margin-bottom: 1em;
+    }
+    .title-divider {
+      width: 60px; height: 3px; background: var(--brand);
+      border-radius: 2px; margin: 1em auto;
+    }
+    .title-sub { font-size: 1em; color: var(--muted); max-width: 620px; line-height: 1.6; }
+
+    /* Pills */
+    .pill {
+      display: inline-block; padding: 0.3em 0.85em; border-radius: 999px;
+      font-size: 0.78em; font-weight: 600; letter-spacing: 0.05em;
+    }
+    .pill-blue   { background: rgba(88,166,255,0.15);  color: var(--accent-blue);   border: 1px solid rgba(88,166,255,0.3); }
+    .pill-teal   { background: rgba(57,208,180,0.15);  color: var(--accent-teal);   border: 1px solid rgba(57,208,180,0.3); }
+    .pill-green  { background: rgba(63,185,80,0.15);   color: var(--accent-green);  border: 1px solid rgba(63,185,80,0.3); }
+    .pill-amber  { background: rgba(210,153,34,0.15);  color: var(--accent-amber);  border: 1px solid rgba(210,153,34,0.3); }
+    .pill-red    { background: rgba(248,81,73,0.15);   color: var(--accent-red);    border: 1px solid rgba(248,81,73,0.3); }
+    .pill-purple { background: rgba(188,140,255,0.15); color: var(--accent-purple); border: 1px solid rgba(188,140,255,0.3); }
+
+    /* Cards / grids */
+    .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; width: 100%; max-width: 860px; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1em; width: 100%; max-width: 960px; }
+    .four-col  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1em; width: 100%; max-width: 1000px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.2em 1.4em; text-align: left;
+    }
+    .card h3 { margin-bottom: 0.5em; font-size: 0.98em; }
+    .card p  { font-size: 0.88em; color: var(--muted); line-height: 1.55; }
+
+    /* Alert boxes */
+    .alert {
+      display: flex; align-items: flex-start; gap: 1em;
+      border-radius: 10px; padding: 1em 1.3em;
+      border: 1px solid; text-align: left; max-width: 820px;
+    }
+    .alert-green  { background: rgba(63,185,80,0.1);   border-color: rgba(63,185,80,0.35);  }
+    .alert-amber  { background: rgba(210,153,34,0.1);  border-color: rgba(210,153,34,0.35); }
+    .alert-blue   { background: rgba(88,166,255,0.1);  border-color: rgba(88,166,255,0.35); }
+    .alert-teal   { background: rgba(57,208,180,0.1);  border-color: rgba(57,208,180,0.35); }
+    .alert-purple { background: rgba(188,140,255,0.1); border-color: rgba(188,140,255,0.35);}
+    .alert-icon   { font-size: 1.3em; flex-shrink: 0; margin-top: 0.1em; }
+    .alert p      { margin: 0; font-size: 0.9em; line-height: 1.6; }
+    .alert strong { display: block; margin-bottom: 0.2em; font-size: 1em; color: var(--text); }
+
+    /* Checklist */
+    .checklist { list-style: none; text-align: left; width: 100%; max-width: 820px; }
+    .checklist li {
+      padding: 0.45em 0; border-bottom: 1px solid var(--border);
+      font-size: clamp(0.85em,1.35vw,1em); display: flex; gap: 0.7em; align-items: flex-start;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before { content: "\2736"; color: var(--accent-teal); font-size: 0.9em; flex-shrink: 0; margin-top: 0.05em; }
+
+    /* Stat boxes */
+    .stat-row { display: flex; gap: 1.2em; flex-wrap: wrap; justify-content: center; }
+    .stat-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.2em 1.6em; min-width: 140px; text-align: center;
+    }
+    .stat-num  { font-size: clamp(1.8em,3vw,2.6em); font-weight: 800; line-height: 1; }
+    .stat-label{ font-size: 0.78em; color: var(--muted); margin-top: 0.3em; line-height: 1.3; }
+
+    /* Comparison table */
+    .comp-table { width: 100%; max-width: 860px; border-collapse: collapse; font-size: 0.88em; }
+    .comp-table th {
+      background: var(--surface2); color: var(--accent-teal);
+      padding: 0.7em 1em; text-align: left; font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+    .comp-table td { padding: 0.7em 1em; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    .comp-table tr:last-child td { border-bottom: none; }
+    .comp-table tr:hover td { background: var(--surface); }
+
+    /* Definition box */
+    .def-box {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.1em 1.5em; max-width: 820px; text-align: left;
+    }
+    .def-box p { font-size: 0.9em; color: var(--muted); line-height: 1.65; }
+
+    /* Timeline */
+    .timeline { display: flex; gap: 0; width: 100%; max-width: 860px; }
+    .tl-step {
+      flex: 1; text-align: center; position: relative;
+      padding: 1em 0.5em 0.5em;
+    }
+    .tl-step:not(:last-child)::after {
+      content: ""; position: absolute; top: 2em; right: -1px; width: 100%;
+      height: 2px; background: var(--border);
+    }
+    .tl-dot {
+      width: 2.2em; height: 2.2em; border-radius: 50%;
+      background: var(--brand); color: #fff; font-weight: 700;
+      font-size: 0.88em; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 0.5em; position: relative; z-index: 1;
+    }
+    .tl-step p { font-size: 0.82em; color: var(--muted); margin-top: 0.25em; }
+    .tl-step strong { font-size: 0.88em; color: var(--text); }
+
+    /* Navigation */
+    #nav {
+      position: fixed; bottom: 1.4em; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1em; z-index: 500;
+    }
+    .nav-btn {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); padding: 0.55em 1.3em; border-radius: 8px;
+      cursor: pointer; font-size: 0.88em; font-weight: 600; transition: all 0.2s;
+    }
+    .nav-btn:hover { background: var(--surface2); border-color: var(--accent-blue); }
+    .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    #slide-counter { font-size: 0.82em; color: var(--muted); min-width: 5em; text-align: center; }
+
+    /* Slide footer */
+    .slide-footer {
+      position: absolute; bottom: 0.9em; left: 1.5em; right: 1.5em;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.7em; color: var(--muted); pointer-events: none;
+    }
+
+    /* OpenMFM back link */
+    #back-link {
+      position: fixed; bottom: 1.4em; left: 1.2em; z-index: 600;
+      background: rgba(13,17,23,0.88); backdrop-filter: blur(6px);
+      border: 1px solid rgba(57,208,180,0.35); border-radius: 8px;
+      padding: 5px 14px;
+    }
+    #back-link a { color: var(--accent-teal); text-decoration: none; font-size: 0.72em; font-weight: 500; letter-spacing: 0.02em; white-space: nowrap; }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      .slide { padding: 3rem 1.2rem 4.5rem; }
+      .two-col, .three-col, .four-col { grid-template-columns: 1fr; }
+      .timeline { flex-direction: column; gap: 0.6em; }
+      .tl-step:not(:last-child)::after { display: none; }
+      .stat-row { gap: 0.7em; }
+      .stat-box { min-width: 100px; padding: 0.9em 1em; }
+      h1 { font-size: 1.6em; }
+      h2 { font-size: 1.2em; }
+      .comp-table { font-size: 0.78em; }
+      .comp-table th, .comp-table td { padding: 0.5em 0.6em; }
+      #back-link { display: none; }
+    }
+    /* 2026 refresh overrides */
+    :root {
+      --bg: #08131f;
+      --surface: rgba(10, 24, 39, 0.9);
+      --surface2: rgba(18, 34, 52, 0.94);
+      --border: rgba(131, 193, 255, 0.16);
+      --text: #f5f9fc;
+      --muted: #b5c7d7;
+      --accent-blue: #69b8ff;
+      --accent-teal: #4ddcc2;
+      --accent-green: #79e09b;
+      --accent-amber: #ffbd63;
+      --accent-red: #ff7171;
+      --accent-purple: #bfbcff;
+      --brand: #69b8ff;
+    }
+
+    html, body {
+      background:
+        radial-gradient(circle at top left, rgba(105, 184, 255, 0.18), transparent 26%),
+        radial-gradient(circle at 88% 16%, rgba(77, 220, 194, 0.13), transparent 20%),
+        linear-gradient(180deg, #08131f 0%, #06101a 100%);
+      font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
+    }
+
+    #deck::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.22), transparent 78%);
+      pointer-events: none;
+    }
+
+    .slide {
+      padding: 4.1rem 4rem 5.8rem;
+      background: linear-gradient(180deg, rgba(8, 19, 31, 0.72), rgba(8, 19, 31, 0.32));
+    }
+
+    h1, h2 { letter-spacing: -0.035em; font-weight: 700; text-wrap: balance; }
+
+    .card, .stat-box, .def-box {
+      background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
+      border: 1px solid rgba(131, 193, 255, 0.16);
+      border-radius: 18px;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+      backdrop-filter: blur(10px);
+    }
+
+    .alert { border-radius: 18px; backdrop-filter: blur(8px); }
+
+    #progress-bar {
+      height: 4px;
+      background: linear-gradient(90deg, #69b8ff 0%, #4ddcc2 100%);
+      box-shadow: 0 0 18px rgba(105, 184, 255, 0.45);
+    }
+
+    #nav {
+      bottom: 1.2em;
+      padding: 0.55em 0.7em;
+      border: 1px solid rgba(131, 193, 255, 0.16);
+      border-radius: 999px;
+      background: rgba(7, 17, 28, 0.72);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+    }
+
+    .nav-btn {
+      border-radius: 999px;
+      background: rgba(14, 30, 48, 0.92);
+      border-color: rgba(131, 193, 255, 0.18);
+    }
+
+    .nav-btn:hover { background: rgba(31, 74, 116, 0.92); }
+    #slide-counter { color: #dce8f7; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="deck">
+
+  <!-- Slide 1: Title -->
+  <div class="slide active">
+    <div class="title-eyebrow">MFM Patient Education</div>
+    <h1>Understanding<br><span class="accent-blue">Fetal Growth Restriction</span></h1>
+    <div class="title-divider"></div>
+    <p class="title-sub">A guide to what it means when your baby is measuring small &#x2014; and what we do about it.</p>
+    <div style="margin-top:2em; display:flex; gap:0.8em; flex-wrap:wrap; justify-content:center;">
+      <span class="pill pill-blue">FGR / IUGR</span>
+      <span class="pill pill-teal">Doppler Monitoring</span>
+      <span class="pill pill-green">Delivery Timing</span>
+      <span class="pill pill-purple">Patient Education</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Maternal-Fetal Medicine</span>
+    </div>
+  </div>
+
+  <!-- Slide 2: What is FGR? -->
+  <div class="slide">
+    <div class="slide-label">Definition</div>
+    <h2>What Is Fetal Growth Restriction?</h2>
+    <div class="stat-row" style="margin-bottom:1.2em;">
+      <div class="stat-box">
+        <div class="stat-num accent-blue">&lt;10<span style="font-size:0.55em">th</span></div>
+        <div class="stat-label">Estimated weight<br>percentile for gestational age</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-amber">&lt;3<span style="font-size:0.55em">rd</span></div>
+        <div class="stat-label">Severe FGR &#x2014;<br>highest risk category</div>
+      </div>
+    </div>
+    <p style="max-width:700px;">Your baby&#x2019;s estimated weight on ultrasound is below the 10th percentile for this point in pregnancy. This triggers a thorough evaluation &#x2014; not just more monitoring, but a search for <em>why</em> the baby is small.</p>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 2 of 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 3: Two Different Situations -->
+  <div class="slide">
+    <div class="slide-label">Diagnosis</div>
+    <h2>Small Baby: Two Very Different Situations</h2>
+    <div class="two-col" style="margin-top:0.6em;">
+      <div class="card" style="border-top:3px solid var(--accent-green);">
+        <h3 class="accent-green">Constitutionally Small</h3>
+        <p>Baby is naturally petite &#x2014; often matching family size. Placenta works normally. Doppler blood flow is healthy. No intervention needed beyond routine care.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent-amber);">
+        <h3 class="accent-amber">True Growth Restriction</h3>
+        <p>Baby is not receiving enough oxygen or nutrients. The placenta, an infection, a chromosomal difference, or an autoimmune condition may be the cause. Requires full workup and close monitoring.</p>
+      </div>
+    </div>
+    <div class="alert alert-blue" style="margin-top:1.2em;">
+      <span class="alert-icon">&#x1F4CB;</span>
+      <p><strong>Our first job</strong> is to find out which situation applies to you &#x2014; and if it is true FGR, to understand why.</p>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 3 of 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 4: Initial Evaluation -->
+  <div class="slide">
+    <div class="slide-label">Workup</div>
+    <h2>The Initial Evaluation &#x2014; What We Check First</h2>
+    <p style="margin-bottom:1em;">When a baby is found to be small, ACOG and SMFM recommend a systematic evaluation to identify treatable causes before settling into a monitoring routine.</p>
+    <div class="three-col">
+      <div class="card" style="border-top:3px solid var(--accent-blue);">
+        <h3 class="accent-blue">Detailed Ultrasound</h3>
+        <p>Comprehensive anatomy survey looking for structural differences that may point to a chromosomal or genetic cause.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent-teal);">
+        <h3 class="accent-teal">Doppler Studies</h3>
+        <p>Umbilical artery, middle cerebral artery, and uterine artery blood flow to assess placental function.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent-purple);">
+        <h3 class="accent-purple">Laboratory Testing</h3>
+        <p>Blood tests for infections (TORCH panel) and autoimmune conditions that can impair placental blood supply.</p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 4 of 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 5: Genetic Testing / Amniocentesis -->
+  <div class="slide">
+    <div class="slide-label">Genetic Testing</div>
+    <h2>Chromosomal Testing &amp; Amniocentesis</h2>
+    <p style="margin-bottom:1em;">ACOG and SMFM recommend offering <strong>amniocentesis with chromosomal microarray</strong> for growth-restricted babies &#x2014; particularly when FGR is early-onset (before 32 weeks) or the anatomy scan shows any additional findings.</p>
+    <div class="two-col" style="margin-bottom:1em;">
+      <div class="alert alert-purple">
+        <span class="alert-icon">&#x1F9EC;</span>
+        <p><strong>Chromosomal Microarray</strong><br>
+        More detailed than standard karyotype. Detects tiny genetic differences (copy number variants) that a regular chromosome count would miss. Found in up to 10% of early-onset FGR cases.</p>
+      </div>
+      <div class="alert alert-amber">
+        <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+        <p><strong>Why It Matters</strong><br>
+        If a chromosomal condition is found, it explains the growth restriction, guides counseling about prognosis, and changes how aggressively we intervene. Some conditions carry a higher risk of stillbirth at any gestational age.</p>
+      </div>
+    </div>
+    <div class="def-box">
+      <p>Amniocentesis is an <strong>optional procedure</strong>. Your MFM physician will explain the findings that prompted the recommendation, the risk of the procedure (&lt;1 in 500), and what information it can or cannot provide, so you can make an informed choice.</p>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 5 of 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 6: TORCH Infections -->
+  <div class="slide">
+    <div class="slide-label">Infection Workup</div>
+    <h2>Testing for Congenital Infections &#x2014; the TORCH Panel</h2>
+    <p style="margin-bottom:1em;">Certain infections acquired during pregnancy can cross the placenta, infect the baby, and cause growth restriction. We screen for these with maternal blood tests and sometimes amniotic fluid testing.</p>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Infection</th>
+          <th>How We Test</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong class="accent-teal">CMV</strong> (Cytomegalovirus)</td>
+          <td>Maternal IgM/IgG; amnio PCR if positive</td>
+          <td>Most common congenital infection causing FGR</td>
+        </tr>
+        <tr>
+          <td><strong class="accent-teal">Toxoplasmosis</strong></td>
+          <td>Maternal IgM/IgG serology</td>
+          <td>Linked to raw meat, cat litter exposure</td>
+        </tr>
+        <tr>
+          <td><strong class="accent-teal">Rubella</strong></td>
+          <td>IgG (usually checked at first OB visit)</td>
+          <td>Rare since vaccination; causes severe FGR if contracted</td>
+        </tr>
+        <tr>
+          <td><strong class="accent-teal">Syphilis</strong></td>
+          <td>RPR / VDRL (part of routine prenatal labs)</td>
+          <td>Treatable; important not to miss</td>
+        </tr>
+        <tr>
+          <td><strong class="accent-teal">Parvovirus B19</strong></td>
+          <td>IgM/IgG serology</td>
+          <td>Can cause fetal anemia and hydrops in addition to FGR</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 6 of 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 7: Autoimmune Testing -->
+  <div class="slide">
+    <div class="slide-label">Autoimmune Workup</div>
+    <h2>Autoimmune Testing</h2>
+    <p style="margin-bottom:1em;">Some autoimmune conditions cause tiny blood clots in the placenta, cutting off the baby&#x2019;s nutrient supply. Testing is recommended especially when FGR is early-onset or severe.</p>
+    <div class="two-col" style="margin-bottom:1em;">
+      <div class="card" style="border-top:3px solid var(--accent-red);">
+        <h3 class="accent-red">Antiphospholipid Syndrome (APS)</h3>
+        <p>A key cause of placenta-mediated FGR. We test for:<br>
+        &#x2022; Anticardiolipin antibodies (IgG &amp; IgM)<br>
+        &#x2022; Lupus anticoagulant<br>
+        &#x2022; Anti-&#x03B2;2 glycoprotein I (IgG &amp; IgM)</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent-purple);">
+        <h3 class="accent-purple">Systemic Lupus Erythematosus (SLE)</h3>
+        <p>Active lupus significantly increases FGR risk. Testing includes:<br>
+        &#x2022; ANA (antinuclear antibody)<br>
+        &#x2022; Anti-dsDNA<br>
+        &#x2022; Anti-SSA / Anti-SSB (Ro/La)</p>
+      </div>
+    </div>
+    <div class="alert alert-green">
+      <span class="alert-icon">&#x2714;</span>
+      <p><strong>Positive result = actionable</strong> &#x2014; if APS is confirmed, treatment with low-dose aspirin and heparin may be recommended, and monitoring intensity is increased.</p>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 7 of 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 8: Monitoring Plan -->
+  <div class="slide">
+    <div class="slide-label">Surveillance</div>
+    <h2>Your Ongoing Monitoring Plan</h2>
+    <p style="margin-bottom:1em;">Once the evaluation is complete, we set up a structured schedule to watch your baby closely.</p>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Test</th>
+          <th>Frequency</th>
+          <th>What It Tells Us</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Growth Ultrasound</strong></td>
+          <td>Every 3&#x2013;4 weeks</td>
+          <td>Baby&#x2019;s size and growth velocity</td>
+        </tr>
+        <tr>
+          <td><strong>Umbilical Artery Doppler</strong></td>
+          <td>Every 1&#x2013;2 weeks</td>
+          <td>Resistance in placental blood flow</td>
+        </tr>
+        <tr>
+          <td><strong>Middle Cerebral Artery Doppler</strong></td>
+          <td>Every 1&#x2013;2 weeks</td>
+          <td>Whether baby is redirecting blood to the brain (&#x201C;brain sparing&#x201D;)</td>
+        </tr>
+        <tr>
+          <td><strong>Non-Stress Test (NST)</strong></td>
+          <td>1&#x2013;2 times per week</td>
+          <td>Baby&#x2019;s heart rate pattern and movement</td>
+        </tr>
+        <tr>
+          <td><strong>Biophysical Profile (BPP)</strong></td>
+          <td>As needed</td>
+          <td>Overall fetal well-being score</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 8 of 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 9: Understanding Doppler -->
+  <div class="slide">
+    <div class="slide-label">Doppler Studies</div>
+    <h2>Understanding Doppler Ultrasound</h2>
+    <p style="margin-bottom:1em;">Doppler measures blood flow velocity and direction &#x2014; it&#x2019;s our clearest window into how hard the placenta is working.</p>
+    <div class="three-col">
+      <div class="card" style="border-top:3px solid var(--accent-blue);">
+        <h3 class="accent-blue">Umbilical Artery</h3>
+        <p>Carries blood from baby to placenta. Increased resistance means the placenta is under stress. <strong>Absent or reversed end-diastolic flow</strong> is a critical finding requiring urgent management.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent-teal);">
+        <h3 class="accent-teal">Middle Cerebral Artery (MCA)</h3>
+        <p>Measures blood flow to the baby&#x2019;s brain. When the brain gets extra blood at the expense of other organs (&#x201C;brain sparing&#x201D;), it signals the baby is compensating for low oxygen.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent-amber);">
+        <h3 class="accent-amber">Ductus Venosus</h3>
+        <p>A deep vessel near the baby&#x2019;s heart. Abnormal flow here is a late sign of fetal decompensation and often triggers delivery regardless of gestational age.</p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 9 of 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 10: Delivery Timing -->
+  <div class="slide">
+    <div class="slide-label">Delivery Planning</div>
+    <h2>When Is Delivery Recommended?</h2>
+    <p style="margin-bottom:1em;">Timing is guided by ACOG and SMFM guidelines and depends on how the placenta is functioning.</p>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Clinical Situation</th>
+          <th>Recommended Timing</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>FGR with normal Doppler, no structural or genetic concerns</td>
+          <td><strong class="accent-green">37&#x2013;38 weeks</strong></td>
+        </tr>
+        <tr>
+          <td>FGR &lt; 3rd percentile with normal Doppler</td>
+          <td><strong class="accent-green">37 weeks</strong></td>
+        </tr>
+        <tr>
+          <td>Elevated umbilical artery resistance (abnormal but not absent)</td>
+          <td><strong class="accent-amber">34&#x2013;37 weeks</strong></td>
+        </tr>
+        <tr>
+          <td>Absent end-diastolic flow in umbilical artery</td>
+          <td><strong class="accent-amber">34 weeks</strong></td>
+        </tr>
+        <tr>
+          <td>Reversed end-diastolic flow or abnormal ductus venosus</td>
+          <td><strong class="accent-red">30&#x2013;34 weeks (individualized)</strong></td>
+        </tr>
+        <tr>
+          <td>Non-reassuring fetal testing (abnormal NST / BPP) at any gestational age</td>
+          <td><strong class="accent-red">Immediate evaluation &#x2014; delivery may be indicated</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 10 of 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 11: If Early Delivery Is Needed -->
+  <div class="slide">
+    <div class="slide-label">Preparation</div>
+    <h2>If Early Delivery Is Needed</h2>
+    <p style="margin-bottom:1em;">We prepare in advance so your baby has the best possible start.</p>
+    <div class="three-col">
+      <div class="alert alert-blue" style="flex-direction:column; align-items:flex-start;">
+        <span class="alert-icon">&#x1F489;</span>
+        <p><strong>Steroid Injections</strong><br>
+        Two doses of betamethasone 24 hours apart help the baby&#x2019;s lungs mature and reduce risk of breathing problems, brain bleeding, and intestinal complications if delivered before 37 weeks.</p>
+      </div>
+      <div class="alert alert-teal" style="flex-direction:column; align-items:flex-start;">
+        <span class="alert-icon">&#x1F3E5;</span>
+        <p><strong>NICU Coordination</strong><br>
+        Our team works with neonatology before delivery. If the baby needs intensive care, a NICU team will be present in the delivery room and a bed will be ready.</p>
+      </div>
+      <div class="alert alert-green" style="flex-direction:column; align-items:flex-start;">
+        <span class="alert-icon">&#x1F4CA;</span>
+        <p><strong>Continuous Monitoring</strong><br>
+        Growth-restricted babies require continuous fetal heart rate monitoring during labor. A C-section may be recommended if the baby shows signs of distress.</p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 11 of 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 12: What You Can Do -->
+  <div class="slide">
+    <div class="slide-label">Your Role</div>
+    <h2>What You Can Do</h2>
+    <div class="two-col">
+      <div>
+        <h3 class="accent-green" style="margin-bottom:0.6em;">What Helps</h3>
+        <ul class="checklist">
+          <li>Keep <strong>all monitoring appointments</strong> &#x2014; each one gives us critical data</li>
+          <li>Rest in the <strong>left lateral position</strong> when possible to optimize blood flow</li>
+          <li><strong>Track baby&#x2019;s movements</strong> daily and call immediately if movements decrease</li>
+          <li>Eat <strong>balanced, nutritious meals</strong> &#x2014; you can&#x2019;t out-eat FGR, but good nutrition supports overall health</li>
+          <li>Report any <strong>headache, vision changes, or swelling</strong> &#x2014; these may signal preeclampsia</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="accent-red" style="margin-bottom:0.6em;">What Research Shows Doesn&#x2019;t Help FGR</h3>
+        <ul class="checklist">
+          <li>Extra vitamins or nutritional supplements do <strong>not</strong> reverse FGR</li>
+          <li>Strict bed rest has <strong>not</strong> been shown to improve outcomes</li>
+          <li>Blood thinners do <strong>not</strong> help unless specifically prescribed for a confirmed condition (e.g., APS)</li>
+        </ul>
+        <div class="alert alert-blue" style="margin-top:0.8em;">
+          <p>The most effective intervention is <strong>close surveillance and timely delivery</strong> guided by your monitoring results.</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 12 of 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 13: Questions to Ask -->
+  <div class="slide">
+    <div class="slide-label">Your Visit</div>
+    <h2>Questions to Ask Your MFM Team</h2>
+    <div class="two-col">
+      <ul class="checklist" style="text-align:left;">
+        <li>What percentile is my baby measuring, and has the growth velocity changed?</li>
+        <li>What do the Doppler studies show today?</li>
+        <li>Have we checked for infections (TORCH panel) and autoimmune conditions?</li>
+        <li>Should I consider amniocentesis for chromosomal testing?</li>
+      </ul>
+      <ul class="checklist" style="text-align:left;">
+        <li>How often will I need monitoring visits?</li>
+        <li>At what gestational age are we planning to deliver?</li>
+        <li>What changes in my baby&#x2019;s movement or my symptoms should bring me in immediately?</li>
+        <li>What should I expect in the NICU if my baby arrives early?</li>
+      </ul>
+    </div>
+    <div class="alert alert-teal" style="margin-top:1.2em;">
+      <span class="alert-icon">&#x1F91D;</span>
+      <p>Write your questions down before each visit. Our team wants to hear them &#x2014; you are an essential part of your baby&#x2019;s care team.</p>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 13 of 14</span>
+    </div>
+  </div>
+
+  <!-- Slide 14: Closing -->
+  <div class="slide">
+    <h1 style="text-align:center; font-size:clamp(1.8em,3.5vw,2.6em);">
+      Most Babies With FGR<br>
+      <span class="accent-green">Are Born Healthy</span>
+    </h1>
+    <div class="title-divider"></div>
+    <div class="stat-row" style="margin-bottom:1.4em;">
+      <div class="stat-box">
+        <div class="stat-num accent-teal">Close</div>
+        <div class="stat-label">Surveillance<br>is our best tool</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-blue">Full</div>
+        <div class="stat-label">Workup<br>finds the cause</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-green">Right</div>
+        <div class="stat-label">Timing<br>makes delivery safer</div>
+      </div>
+    </div>
+    <div style="font-size:0.82em; color:var(--muted); text-align:center; max-width:680px; line-height:1.6;">
+      Information is consistent with ACOG Practice Bulletin 227 and SMFM guidelines on fetal growth restriction.<br>
+      This material supports &#x2014; and does not replace &#x2014; a conversation with your physician.
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 14 of 14</span>
+    </div>
+  </div>
+
+</div><!-- /#deck -->
+
+<!-- Navigation -->
+<div id="nav">
+  <button class="nav-btn" id="btn-prev" onclick="changeSlide(-1)" disabled>&#x2190; Prev</button>
+  <span id="slide-counter">1 / 14</span>
+  <button class="nav-btn" id="btn-next" onclick="changeSlide(1)">Next &#x2192;</button>
+</div>
+
+<div id="back-link">
+  <a href="https://openmfm.org/library">&#x2190; OpenMFM Library</a>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('progress-bar').style.width = ((current + 1) / total * 100) + '%';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function changeSlide(dir) {
+    if (dir === 1 && current < total - 1) showSlide(current + 1);
+    if (dir === -1 && current > 0) showSlide(current - 1);
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+  });
+
+  // Touch / swipe
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 40) changeSlide(dx > 0 ? 1 : -1);
+  }, { passive: true });
+
+  // Init
+  showSlide(0);
+</script>
+
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/fetal-growth-restriction-patients/index.html">
+<meta name="description" content="Explains fetal growth restriction (FGR): causes, workup including amniocentesis, TORCH infections, autoimmune testing, Doppler surveillance, and delivery timing per ACOG and SMFM guidelines.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Fetal Growth Restriction, IUGR, Amniocentesis, TORCH Infections, Antiphospholipid Syndrome, Doppler Studies, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/fetal-growth-restriction-patients/index.html">
+<meta property="og:title" content="Understanding Fetal Growth Restriction | OpenMFM">
+<meta property="og:description" content="Explains fetal growth restriction (FGR): causes, workup including amniocentesis, TORCH infections, autoimmune testing, Doppler surveillance, and delivery timing per ACOG and SMFM guidelines.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Understanding Fetal Growth Restriction | OpenMFM">
+<meta name="twitter:description" content="Explains fetal growth restriction (FGR): causes, workup including amniocentesis, TORCH infections, autoimmune testing, Doppler surveillance, and delivery timing per ACOG and SMFM guidelines.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Understanding Fetal Growth Restriction",
+  "description": "Explains fetal growth restriction (FGR): causes, workup including amniocentesis, TORCH infections, autoimmune testing, Doppler surveillance, and delivery timing per ACOG and SMFM guidelines.",
+  "url": "https://openmfm.org/decks/fetal-growth-restriction-patients/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "dateModified": "2026-03-23",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Fetal Growth Restriction"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Fetal Growth Restriction, IUGR, Amniocentesis, TORCH Infections, Antiphospholipid Syndrome, Doppler Studies, Patient Education"
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDM Screener | Gestational Diabetes Risk Assessment</title>
+    <style>
+        :root {
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #1a202c;
+            --subtext: #4a5568;
+            --heading: #1a5f5f;
+            --primary: #1a5f5f;
+            --primary-hover: #144a4a;
+            --primary-light: #e6f4f4;
+            --border: #e2e8f0;
+            --selected-border: #1a5f5f;
+            --selected-bg: #e6f4f4;
+            --warning-bg: #fffbeb;
+            --warning-border: #f6ad55;
+            --success-bg: #f0fff4;
+            --success-border: #48bb78;
+            --caution-bg: #fff5f5;
+            --caution-border: #fc8181;
+            --badge-bg: #1a5f5f;
+            --badge-text: #fff;
+            --footer-text: #718096;
+            --progress-bg: #e2e8f0;
+            --progress-fill: #1a5f5f;
+            --shadow: 0 4px 20px rgba(0,0,0,0.07);
+        }
+
+        body.dark {
+            --bg: #0f1923;
+            --card-bg: #1a2535;
+            --text: #e2e8f0;
+            --subtext: #a0aec0;
+            --heading: #4fd1c5;
+            --primary: #4fd1c5;
+            --primary-hover: #38b2ac;
+            --primary-light: #1a3535;
+            --border: #2d3748;
+            --selected-border: #4fd1c5;
+            --selected-bg: #1a3535;
+            --warning-bg: #2d2a1e;
+            --warning-border: #d69e2e;
+            --success-bg: #1a2e22;
+            --success-border: #38a169;
+            --caution-bg: #2d1f1f;
+            --caution-border: #e53e3e;
+            --badge-bg: #4fd1c5;
+            --badge-text: #0f1923;
+            --footer-text: #718096;
+            --progress-bg: #2d3748;
+            --progress-fill: #4fd1c5;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 1.5rem 1rem 3rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .wrapper {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .header-btn {
+            background: none;
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            padding: 0.4rem 0.9rem;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .header-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+        .brand-link {
+            color: var(--subtext);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+        .brand-link:hover { color: var(--primary); }
+
+        /* ── PROGRESS BAR ── */
+        .progress-wrap {
+            height: 4px;
+            background: var(--progress-bg);
+            border-radius: 2px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--progress-fill);
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem 2rem 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .step-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            color: var(--subtext);
+            font-weight: 500;
+        }
+
+        .card h2 {
+            color: var(--heading);
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .card .instruction {
+            color: var(--subtext);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        /* ── FACTOR ITEMS ── */
+        .factor-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+        .factor-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.85rem 1rem;
+            border: 1.5px dashed var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.15s, background-color 0.15s;
+            user-select: none;
+        }
+
+        .factor-item:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .factor-item.selected {
+            border-style: solid;
+            border-color: var(--selected-border);
+            background: var(--selected-bg);
+        }
+
+        .factor-text {
+            font-size: 0.92rem;
+            line-height: 1.4;
+            padding-right: 0.5rem;
+        }
+
+        .factor-check {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: transparent;
+            transition: border-color 0.15s, background-color 0.15s, color 0.15s;
+        }
+
+        .factor-item.selected .factor-check {
+            border-color: var(--selected-border);
+            background: var(--selected-border);
+            color: #fff;
+        }
+
+        /* ── NAVIGATION ── */
+        .nav-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .selection-count {
+            font-size: 0.82rem;
+            color: var(--subtext);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 0.65rem 1.4rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn:hover { background: var(--primary-hover); }
+        .btn:active { transform: scale(0.98); }
+
+        .btn-ghost {
+            background: none;
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            padding: 0.65rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: border-color 0.2s;
+        }
+        .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ── RESULTS ── */
+        .result-icon {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .result-title {
+            color: var(--heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .result-box {
+            border-radius: 8px;
+            padding: 1rem 1.1rem;
+            margin-bottom: 0.85rem;
+            border-left: 4px solid;
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+
+        .result-box.summary { border-color: var(--primary); background: var(--primary-light); }
+        .result-box.assessment { border-color: var(--warning-border); background: var(--warning-bg); }
+        .result-box.recommendation { border-color: var(--success-border); background: var(--success-bg); }
+        .result-box.note { border-color: var(--border); background: var(--bg); }
+
+        .result-box strong { display: block; margin-bottom: 0.3rem; font-weight: 700; }
+
+        .result-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .result-actions .btn { flex: 1; justify-content: center; }
+        .result-actions .btn-ghost { flex: 1; justify-content: center; }
+
+        /* ── REFERENCE TABLE ── */
+        .ref-table-wrap {
+            margin-top: 1.25rem;
+        }
+
+        .ref-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .ref-table {
+            display: none;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.75rem;
+            font-size: 0.82rem;
+        }
+
+        .ref-table.open { display: table; }
+
+        .ref-table th, .ref-table td {
+            text-align: left;
+            padding: 0.5rem 0.6rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ref-table th {
+            font-weight: 700;
+            color: var(--heading);
+            background: var(--primary-light);
+        }
+
+        /* ── FOOTER DISCLAIMER ── */
+        .disclaimer {
+            margin-top: 1.75rem;
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--footer-text);
+            line-height: 1.5;
+        }
+
+        .disclaimer a { color: var(--primary); text-decoration: none; }
+        .disclaimer a:hover { text-decoration: underline; }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-overlay.open { display: flex; }
+
+        .modal-box {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 580px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: var(--subtext);
+            line-height: 1;
+        }
+        .modal-close:hover { color: var(--text); }
+
+        .modal-box h2 {
+            color: var(--heading);
+            font-size: 1.3rem;
+            margin-bottom: 1.25rem;
+            padding-right: 2rem;
+        }
+
+        .modal-section { margin-bottom: 1.1rem; }
+        .modal-section h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 0.35rem;
+        }
+        .modal-section p, .modal-section li {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: var(--text);
+        }
+        .modal-section ul { padding-left: 1.2rem; }
+        .modal-section li { margin-bottom: 0.2rem; }
+
+        .modal-note {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--warning-bg);
+            border-left: 3px solid var(--warning-border);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 1.5rem 1.25rem 1.25rem; }
+            .card h2 { font-size: 1.4rem; }
+            .result-actions { flex-direction: column; }
+        }
+    </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/cGv24kHqzeb-7LOqPebnMH8IeZzGXULVqxRIQAG2H0EP3ZfFV0f7mpgB3Nnkd5EWI1S49zQ1ZFAt05KJtcCAOHSCX_yrazofrr-VVXM8unoa7Zw2HWWvIHffeYg4AzQR5g1QNYaeHQpOpjpMVGaONr6zR39F8wjR3CE_LdLEKfc7EZe3oWPVXwX6bTuEt_Im5Ff3Px7qdDgsTb_URu_9RJrs02gAqaZ2uowLyodzvzjiMo1o293je8-QdiyFSv758RR8gOdwmyDWTywokSVexrXF2ibkcP7oI34t5YO2MlDXAqevbweu4c2_rIULuyegoJFBh74Mh6encZ1eF2EXMOIW-O8PaKF_V3-brIIpjbnPf-43PQCSG1RPgU924TXHxPIA1Gf3SSvSGuuCUh33-uH9vUvxa0TZQ2H2wWDdK62-Q4TI_SSLtDs0RZDU7lHDR_D3dSxGO_iZB_VOl-LE5wqKA_XyiKxBAeLWvIfEvDmEjM398fJYIXBeho6S-6ek7TVq8x0TgSviIIRxNjwGhTsc3a-rO1vqw5FqEEEO1ztxZOnf3DJPHf4ZOZ0sHbTOb8j7IJ2_Ym6Gt9qJriWhmwA2HwOVYQa_9j1lG47laKBi9AT2xS5n20n1tBUwLyi116n9aerqhZ-jlH-eQHHU_VNG20QPQZ2ZIo-UwYWbigrkYwXfdBod4sbVkzrsiSsn-0xFGQAAwdjHdHSs-_ADyooYzxmkchTlilFgeSI1j-f-5Kz4qidEH5Ye6OhsMKtTG_aPIyW4oBZVp0RCIZODBDzMZAzjovzAQ-rkY9OMDe3e69RxidoxXNe5hsgm30DepfN1VrSvWmZBP_gi-UJecO1FojlM1xH644STpLlp6wXnZR2m1UumDULTmLjlidIbhulIKqrdWDr9GS5VZ-fPTNTFSwqV5J-8gHFSAK6KhKycPT40JGbqVDB6nS2FUGXRMazR5q29IlomA0wrrYYI6yx85peUX46sJFmrOrRsv-ClP7KmY0-IJ-17dshXfBW44yIqjWFBrNVZ8P2r1MB7Kuvrxqaz7cOoUt0dv5-2PdmZSKl2NxwyVt3PhMMjEReeW8kkdlzOUZPmbZuERDu6Q-0VdZWCnGNX0WmZpgdu0dLQzZkPtawbz6WcNdGmWNM-7CpLlqfvuGhuOx8Siz9OhlQdSxZ7Midz-yLJhHZCO4AqRyXGlcQJnilvKtjKVOFyhHImUCD2_EQltEPx0Xm0nZkVCPkYA8ax7M_Dz6a3f2C4Ouxfm5EH6YekvnTMeCxRl6zjua-ox9xmHDuUBVxmoWipejq35LdQf3GE32-HEUwMRw-n9Lu-1yFIb--DBo1G8gJTbFl6x7eWF7MQM5VWr_M-vy3eSUzzea6GD56j2RYfcR3u_VZLO_rvlAGBHQE7B-iVaydvqyoJYue2yK731T_awZLzeHBt2CEIVe2WJ44oaV7HgrVohxTfvxTLFVzUDstm2R9NqVH5eHJFQs-KYXepgiAqh1NOaOsZcnfKIVAMwyMsrCMX0yO9961TVx_tBKjbpIe6HihGUG-AzzXkRtVt6sgC9KBkO762KqIQ-oRGtNVUZtYgGLZZmJd_yM1Y4d-nmFQmZkZKBxPC'></script></head>
+<body>
+
+<div class="wrapper">
+
+    <!-- HEADER -->
+    <div class="header">
+        <button class="header-btn" id="aboutBtn">ℹ About GDM</button>
+        <a class="brand-link" href="https://doctorswhocode.blog/" target="_blank" rel="noopener">Created by DoctorsWhoCode ↗</a>
+        <button class="header-btn" id="darkBtn">◑ Dark Mode</button>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-wrap">
+        <div class="progress-bar" id="progressBar" style="width: 33%"></div>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="card" id="mainCard"></div>
+
+    <!-- DISCLAIMER -->
+    <div class="disclaimer">
+        <p>⚠ <strong>INFORMATIONAL USE ONLY.</strong> This tool is for educational purposes and clinical decision support. It does NOT provide medical advice, diagnosis, or treatment recommendations. All therapeutic decisions must be discussed with and made by a qualified healthcare provider.</p>
+        <p style="margin-top:0.4rem;">Based on <a href="https://www.acog.org/clinical/clinical-guidance/clinical-practice-update/articles/2024/07/screening-for-gestational-and-pregestational-diabetes-in-pregnancy-and-postpartum" target="_blank" rel="noopener">ACOG Clinical Practice Update (2024)</a> &amp; <a href="https://pubmed.ncbi.nlm.nih.gov/29370047/" target="_blank" rel="noopener">ACOG Practice Bulletin No. 190</a> • Consult OB/GYN or MFM specialist for all medical decisions</p>
+    </div>
+
+</div>
+
+<!-- ABOUT MODAL -->
+<div class="modal-overlay" id="aboutModal">
+    <div class="modal-box">
+        <button class="modal-close" id="closeModal">&times;</button>
+        <h2>Gestational Diabetes Mellitus (GDM)</h2>
+
+        <div class="modal-section">
+            <h3>What is GDM?</h3>
+            <p>Gestational diabetes mellitus (GDM) is a type of diabetes that develops during pregnancy in women who did not previously have diabetes. It occurs when the body cannot make enough insulin to meet the extra demands of pregnancy, causing blood sugar levels to rise above normal.</p>
+        </div>
+
+        <div class="modal-section">
+            <h3>Why Does It Matter?</h3>
+            <p>Uncontrolled GDM can increase the risk of complications for both mother and baby, including:</p>
+            <ul>
+                <li>Large baby (macrosomia), which can complicate delivery</li>
+                <li>Preeclampsia (high blood pressure in pregnancy)</li>
+                <li>Cesarean delivery</li>
+                <li>Baby's low blood sugar (hypoglycemia) after birth</li>
+                <li>Increased risk of type 2 diabetes for the mother later in life</li>
+            </ul>
+        </div>
+
+        <div class="modal-section">
+            <h3>When is Screening Done?</h3>
+            <p>Most pregnant women are screened for GDM between <strong>24 and 28 weeks</strong> of pregnancy using a glucose challenge test. Women with certain risk factors may be screened <strong>earlier</strong> in pregnancy.</p>
+        </div>
+
+        <div class="modal-section">
+            <h3>How is it Treated?</h3>
+            <ul>
+                <li><strong>Diet &amp; Exercise:</strong> Most women can control GDM with a healthy diet and regular moderate exercise (e.g., walking 10–15 minutes after meals).</li>
+                <li><strong>Blood Sugar Monitoring:</strong> Checking blood sugar levels at home several times a day.</li>
+                <li><strong>Medication:</strong> If diet and exercise are not enough, insulin injections are the preferred treatment. Metformin (a pill) may be used in some cases.</li>
+            </ul>
+        </div>
+
+        <div class="modal-section">
+            <h3>After Delivery</h3>
+            <p>GDM usually resolves after delivery. However, women who had GDM have a significantly higher lifetime risk of developing type 2 diabetes. ACOG recommends a follow-up blood sugar test (75g OGTT) between <strong>4 and 12 weeks postpartum</strong>.</p>
+        </div>
+
+        <div class="modal-note">
+            <strong>Important:</strong> This information is for educational purposes only. Always consult with your OB/GYN or Maternal-Fetal Medicine specialist for personalized medical advice.
+        </div>
+    </div>
+</div>
+
+<script>
+    // ─────────────────────────────────────────────
+    // CLINICAL CONFIGURATION (ACOG 2024 / PB 190)
+    // ─────────────────────────────────────────────
+    const CONFIG = {
+        title: "GDM Screener",
+        steps: [
+            {
+                id: "bmi",
+                title: "BMI Threshold",
+                instruction: "Early GDM screening is considered for patients who are overweight or obese. Does the patient meet the BMI threshold for early screening consideration?",
+                single: true,
+                factors: [
+                    { id: "bmi_standard", text: "BMI ≥25 kg/m² (general population)" },
+                    { id: "bmi_asian",    text: "BMI ≥23 kg/m² (Asian American patients)" },
+                    { id: "bmi_none",     text: "BMI below threshold — no overweight/obesity" }
+                ]
+            },
+            {
+                id: "high_risk",
+                title: "High-Risk Factors",
+                instruction: "Select all that apply. Even ONE high-risk factor in an overweight patient warrants early GDM screening.",
+                single: false,
+                factors: [
+                    { id: "prior_gdm",       text: "Prior history of gestational diabetes mellitus (GDM)" },
+                    { id: "macrosomia",      text: "Prior macrosomic infant (birthweight ≥4,000 g)" },
+                    { id: "prediabetes",     text: "Hemoglobin A1C ≥5.7%, impaired glucose tolerance, or impaired fasting glucose" },
+                    { id: "insulin_resist",  text: "Conditions strongly associated with insulin resistance (PCOS, acanthosis nigricans, morbid obesity)" }
+                ]
+            },
+            {
+                id: "additional_risk",
+                title: "Additional Risk Factors",
+                instruction: "Select all that apply. These factors, combined with an elevated BMI, further support early screening.",
+                single: false,
+                factors: [
+                    { id: "inactivity",     text: "Physical inactivity" },
+                    { id: "family_hx",      text: "First-degree family history of diabetes (parent or sibling)" },
+                    { id: "race",           text: "High-risk race/ethnicity: Black, Hispanic, Native American, Asian American, or Pacific Islander" },
+                    { id: "htn",            text: "Hypertension (≥140/90 mmHg or on antihypertensive treatment)" },
+                    { id: "hdl",            text: "HDL cholesterol ≤35 mg/dL" },
+                    { id: "trig",           text: "Fasting triglycerides ≥250 mg/dL" },
+                    { id: "cvd",            text: "Cardiovascular disease" },
+                    { id: "hiv",            text: "HIV" },
+                    { id: "age",            text: "Maternal age ≥35 years" }
+                ]
+            }
+        ],
+
+        results: function(sel) {
+            const bmi      = sel[0] || [];
+            const highRisk = sel[1] || [];
+            const addlRisk = sel[2] || [];
+
+            const hasBMI       = bmi.includes("bmi_standard") || bmi.includes("bmi_asian");
+            const noBMI        = bmi.includes("bmi_none");
+            const highRiskCt   = highRisk.length;
+            const addlRiskCt   = addlRisk.length;
+
+            // ── RESULT LOGIC ──
+            if (noBMI) {
+                return {
+                    icon: "✅",
+                    title: "Routine Screening at 24–28 Weeks",
+                    summaryColor: "recommendation",
+                    summary: "Patient does not meet the BMI threshold for early GDM screening consideration.",
+                    assessment: "ACOG does not recommend routine GDM screening before 24 weeks of gestation. This patient should receive standard universal screening at 24–28 weeks of gestation.",
+                    recommendation: "Proceed with standard 1-hour 50g glucose challenge test (GCT) at 24–28 weeks. If positive (≥140 mg/dL), follow with a 3-hour 100g OGTT.",
+                    note: "If the patient develops new risk factors during pregnancy, reassess eligibility for early screening. Clinical judgment should always be applied."
+                };
+            }
+
+            if (!hasBMI) {
+                return {
+                    icon: "❓",
+                    title: "BMI Selection Required",
+                    summaryColor: "assessment",
+                    summary: "Please select a BMI category in Step 1 to receive a screening recommendation.",
+                    assessment: "BMI is required to determine early screening eligibility per ACOG 2024 criteria.",
+                    recommendation: "Return to Step 1 and select the applicable BMI threshold.",
+                    note: "If BMI is unknown, obtain measurement at the first prenatal visit."
+                };
+            }
+
+            // Has qualifying BMI
+            if (highRiskCt >= 1) {
+                return {
+                    icon: "⚠️",
+                    title: "Early GDM Screening Indicated",
+                    summaryColor: "assessment",
+                    summary: `Patient has an elevated BMI and ${highRiskCt} high-risk factor${highRiskCt > 1 ? "s" : ""} (${addlRiskCt} additional risk factor${addlRiskCt !== 1 ? "s" : ""}).`,
+                    assessment: "This patient meets ACOG criteria for early GDM screening. The presence of any high-risk factor in an overweight patient warrants first-trimester or early second-trimester glucose evaluation.",
+                    recommendation: "Screen for pregestational diabetes at the first prenatal visit (fasting glucose, A1C, or 75g OGTT). If negative, repeat standard GDM screening at 24–28 weeks. If A1C >6.5%, a diagnosis of pregestational diabetes is established — GCT/GTT not needed.",
+                    note: "Early screening does not replace standard 24–28 week screening if the initial result is negative. Counsel patient on lifestyle modification regardless of result."
+                };
+            }
+
+            if (hasBMI && addlRiskCt >= 1) {
+                return {
+                    icon: "⚠️",
+                    title: "Consider Early Screening — Clinical Judgment Required",
+                    summaryColor: "assessment",
+                    summary: `Patient has an elevated BMI and ${addlRiskCt} additional risk factor${addlRiskCt !== 1 ? "s" : ""}, but no high-risk factors.`,
+                    assessment: "This patient has a qualifying BMI with additional risk factors. While ACOG's primary early-screening trigger is BMI + a high-risk factor, the accumulation of additional risk factors may support early evaluation at the clinician's discretion.",
+                    recommendation: "Discuss with patient. Consider early screening at first prenatal visit, especially if ≥2 additional risk factors are present. Ensure standard screening at 24–28 weeks regardless of early result.",
+                    note: "Shared decision-making is appropriate. Consider patient preference, access to testing, and clinical context. Consult MFM if uncertain."
+                };
+            }
+
+            // BMI only, no other risk factors
+            return {
+                icon: "📋",
+                title: "Routine Screening at 24–28 Weeks",
+                summaryColor: "recommendation",
+                summary: "Patient has an elevated BMI but no additional risk factors identified.",
+                assessment: "ACOG does not recommend early GDM screening based on elevated BMI alone without additional risk factors. Standard universal screening at 24–28 weeks is appropriate.",
+                recommendation: "Proceed with standard 1-hour 50g glucose challenge test (GCT) at 24–28 weeks. If positive (≥140 mg/dL), follow with a 3-hour 100g OGTT. Counsel on diet, exercise, and weight management.",
+                note: "Encourage healthy lifestyle modifications throughout pregnancy. Reassess for new risk factors at subsequent prenatal visits."
+            };
+        }
+    };
+
+    // ─────────────────────────────────────────────
+    // STATE
+    // ─────────────────────────────────────────────
+    let currentStep = 0;
+    let selections  = {};
+    const card      = document.getElementById("mainCard");
+    const progBar   = document.getElementById("progressBar");
+
+    // ─────────────────────────────────────────────
+    // RENDER STEP
+    // ─────────────────────────────────────────────
+    function renderStep(idx) {
+        const step   = CONFIG.steps[idx];
+        const sel    = selections[idx] || [];
+        const total  = CONFIG.steps.length + 1; // +1 for results
+        const pct    = Math.round(((idx + 1) / total) * 100);
+        progBar.style.width = pct + "%";
+
+        const factorsHtml = step.factors.map(f => {
+            const isSelected = sel.includes(f.id);
+            return `<div class="factor-item${isSelected ? " selected" : ""}" data-step="${idx}" data-id="${f.id}">
+                        <span class="factor-text">${f.text}</span>
+                        <span class="factor-check">${isSelected ? "✓" : ""}</span>
+                    </div>`;
+        }).join("");
+
+        const backBtn = idx > 0
+            ? `<button class="btn-ghost" id="backBtn">← Back</button>`
+            : `<div></div>`;
+
+        const nextLabel = idx === CONFIG.steps.length - 1 ? "See Results →" : "Next →";
+
+        card.innerHTML = `
+            <div class="step-meta">
+                <div class="step-badge">${idx + 1}</div>
+                <span class="step-label">Step ${idx + 1} of ${CONFIG.steps.length}</span>
+            </div>
+            <h2>${step.title}</h2>
+            <p class="instruction">${step.instruction}</p>
+            <div class="factor-list">${factorsHtml}</div>
+            <div class="nav-row">
+                ${backBtn}
+                <span class="selection-count">${sel.length} selected</span>
+                <button class="btn" id="nextBtn">${nextLabel}</button>
+            </div>
+        `;
+    }
+
+    // ─────────────────────────────────────────────
+    // RENDER RESULTS
+    // ─────────────────────────────────────────────
+    function renderResults() {
+        progBar.style.width = "100%";
+        const r = CONFIG.results(selections);
+
+        const highRisk = selections[1] || [];
+        const addlRisk = selections[2] || [];
+
+        card.innerHTML = `
+            <div class="result-icon">${r.icon}</div>
+            <div class="result-title">${r.title}</div>
+
+            <div class="result-box summary">
+                <strong>Risk Summary</strong>
+                ${r.summary}
+            </div>
+
+            <div class="result-box assessment">
+                <strong>Assessment</strong>
+                ${r.assessment}
+            </div>
+
+            <div class="result-box recommendation">
+                <strong>Recommendation</strong>
+                ${r.recommendation}
+            </div>
+
+            <div class="result-box note">
+                <strong>Clinical Note</strong>
+                ${r.note}
+            </div>
+
+            <div class="ref-table-wrap">
+                <button class="ref-toggle" id="refToggle">▶ Show Diagnostic Reference Values</button>
+                <table class="ref-table" id="refTable">
+                    <thead>
+                        <tr><th colspan="2">3-Hour 100g OGTT — Carpenter-Coustan Thresholds</th></tr>
+                        <tr><th>Timepoint</th><th>Normal (&lt; threshold)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Fasting</td><td>&lt; 95 mg/dL</td></tr>
+                        <tr><td>1-hour</td><td>&lt; 180 mg/dL</td></tr>
+                        <tr><td>2-hour</td><td>&lt; 155 mg/dL</td></tr>
+                        <tr><td>3-hour</td><td>&lt; 140 mg/dL</td></tr>
+                    </tbody>
+                    <thead>
+                        <tr><th colspan="2">Glucose Management Targets (ACOG)</th></tr>
+                        <tr><th>Timepoint</th><th>Target</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Fasting / Preprandial</td><td>&lt; 95 mg/dL</td></tr>
+                        <tr><td>1-hour Postprandial</td><td>&lt; 140 mg/dL</td></tr>
+                        <tr><td>2-hour Postprandial</td><td>&lt; 120 mg/dL</td></tr>
+                    </tbody>
+                    <thead>
+                        <tr><th colspan="2">Delivery Timing (ACOG)</th></tr>
+                        <tr><th>Class</th><th>Timing</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>A1GDM (diet-controlled)</td><td>39w0d – 40w6d</td></tr>
+                        <tr><td>A2GDM (well-controlled on meds)</td><td>39w0d – 39w6d</td></tr>
+                        <tr><td>A2GDM (poorly controlled)</td><td>Individualize; may deliver 37w0d – 38w6d</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result-actions">
+                <button class="btn" id="restartBtn">↺ New Assessment</button>
+                <button class="btn-ghost" id="printBtn">⎙ Print / Save PDF</button>
+            </div>
+        `;
+
+        document.getElementById("refToggle").addEventListener("click", function() {
+            const t = document.getElementById("refTable");
+            t.classList.toggle("open");
+            this.textContent = t.classList.contains("open")
+                ? "▼ Hide Diagnostic Reference Values"
+                : "▶ Show Diagnostic Reference Values";
+        });
+
+        document.getElementById("restartBtn").addEventListener("click", () => {
+            currentStep = 0;
+            selections  = {};
+            renderStep(0);
+        });
+
+        document.getElementById("printBtn").addEventListener("click", () => window.print());
+    }
+
+    // ─────────────────────────────────────────────
+    // EVENT DELEGATION
+    // ─────────────────────────────────────────────
+    card.addEventListener("click", e => {
+        const item = e.target.closest(".factor-item");
+        if (item) {
+            const stepIdx = parseInt(item.dataset.step);
+            const factId  = item.dataset.id;
+            const step    = CONFIG.steps[stepIdx];
+
+            if (!selections[stepIdx]) selections[stepIdx] = [];
+
+            if (step.single) {
+                // Single-select: replace selection
+                selections[stepIdx] = [factId];
+            } else {
+                const idx = selections[stepIdx].indexOf(factId);
+                if (idx > -1) selections[stepIdx].splice(idx, 1);
+                else selections[stepIdx].push(factId);
+            }
+            renderStep(currentStep);
+            return;
+        }
+
+        if (e.target.id === "nextBtn") {
+            if (currentStep < CONFIG.steps.length - 1) {
+                currentStep++;
+                renderStep(currentStep);
+            } else {
+                renderResults();
+            }
+        } else if (e.target.id === "backBtn") {
+            currentStep--;
+            renderStep(currentStep);
+        }
+    });
+
+    // ─────────────────────────────────────────────
+    // MODAL
+    // ─────────────────────────────────────────────
+    const modal = document.getElementById("aboutModal");
+    document.getElementById("aboutBtn").addEventListener("click", () => modal.classList.add("open"));
+    document.getElementById("closeModal").addEventListener("click", () => modal.classList.remove("open"));
+    modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("open"); });
+
+    // ─────────────────────────────────────────────
+    // DARK MODE
+    // ─────────────────────────────────────────────
+    const darkBtn = document.getElementById("darkBtn");
+    darkBtn.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        darkBtn.textContent = document.body.classList.contains("dark") ? "☀ Light Mode" : "◑ Dark Mode";
+    });
+
+    // ─────────────────────────────────────────────
+    // INIT
+    // ─────────────────────────────────────────────
+    renderStep(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTN in Pregnancy Screener | Hypertension Risk Assessment</title>
+    <style>
+        :root {
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #1a202c;
+            --subtext: #4a5568;
+            --heading: #6b21a8;
+            --primary: #7c3aed;
+            --primary-hover: #6d28d9;
+            --primary-light: #f3eeff;
+            --border: #e2e8f0;
+            --selected-border: #7c3aed;
+            --selected-bg: #f3eeff;
+            --warning-bg: #fffbeb;
+            --warning-border: #f6ad55;
+            --success-bg: #f0fff4;
+            --success-border: #48bb78;
+            --caution-bg: #fff5f5;
+            --caution-border: #fc8181;
+            --urgent-bg: #fff0f0;
+            --urgent-border: #e53e3e;
+            --badge-bg: #7c3aed;
+            --badge-text: #fff;
+            --footer-text: #718096;
+            --progress-bg: #e2e8f0;
+            --progress-fill: #7c3aed;
+            --shadow: 0 4px 20px rgba(0,0,0,0.07);
+            --tag-high: #e53e3e;
+            --tag-mod: #d69e2e;
+            --tag-bg-high: #fff5f5;
+            --tag-bg-mod: #fffff0;
+        }
+
+        body.dark {
+            --bg: #0f1118;
+            --card-bg: #1a1d2e;
+            --text: #e2e8f0;
+            --subtext: #a0aec0;
+            --heading: #c084fc;
+            --primary: #a855f7;
+            --primary-hover: #9333ea;
+            --primary-light: #1e1535;
+            --border: #2d3748;
+            --selected-border: #a855f7;
+            --selected-bg: #1e1535;
+            --warning-bg: #2d2a1e;
+            --warning-border: #d69e2e;
+            --success-bg: #1a2e22;
+            --success-border: #38a169;
+            --caution-bg: #2d1f1f;
+            --caution-border: #e53e3e;
+            --urgent-bg: #2d1515;
+            --urgent-border: #e53e3e;
+            --badge-bg: #a855f7;
+            --badge-text: #0f1118;
+            --footer-text: #718096;
+            --progress-bg: #2d3748;
+            --progress-fill: #a855f7;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+            --tag-high: #fc8181;
+            --tag-mod: #f6ad55;
+            --tag-bg-high: #2d1515;
+            --tag-bg-mod: #2d2a1e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 1.5rem 1rem 3rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .wrapper { max-width: 700px; margin: 0 auto; }
+
+        /* ── HEADER ── */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .header-btn {
+            background: none;
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            padding: 0.4rem 0.9rem;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .header-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+        .brand-link {
+            color: var(--subtext);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+        .brand-link:hover { color: var(--primary); }
+
+        /* ── PROGRESS BAR ── */
+        .progress-wrap {
+            height: 4px;
+            background: var(--progress-bg);
+            border-radius: 2px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--progress-fill);
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem 2rem 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .step-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-label { font-size: 0.8rem; color: var(--subtext); font-weight: 500; }
+
+        .card h2 {
+            color: var(--heading);
+            font-size: 1.65rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .card .instruction {
+            color: var(--subtext);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        /* ── FACTOR ITEMS ── */
+        .factor-list { display: flex; flex-direction: column; gap: 0.55rem; }
+
+        .factor-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            border: 1.5px dashed var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.15s, background-color 0.15s;
+            user-select: none;
+        }
+
+        .factor-item:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .factor-item.selected {
+            border-style: solid;
+            border-color: var(--selected-border);
+            background: var(--selected-bg);
+        }
+
+        .factor-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            flex: 1;
+            padding-right: 0.5rem;
+        }
+
+        .factor-tag {
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+            letter-spacing: 0.03em;
+        }
+
+        .tag-high {
+            background: var(--tag-bg-high);
+            color: var(--tag-high);
+            border: 1px solid var(--tag-high);
+        }
+
+        .tag-mod {
+            background: var(--tag-bg-mod);
+            color: var(--tag-mod);
+            border: 1px solid var(--tag-mod);
+        }
+
+        .factor-text { font-size: 0.91rem; line-height: 1.4; }
+
+        .factor-check {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: transparent;
+            transition: border-color 0.15s, background-color 0.15s, color 0.15s;
+        }
+
+        .factor-item.selected .factor-check {
+            border-color: var(--selected-border);
+            background: var(--selected-border);
+            color: #fff;
+        }
+
+        /* ── SECTION DIVIDER ── */
+        .section-divider {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--subtext);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.6rem 0 0.3rem;
+            border-top: 1px solid var(--border);
+            margin-top: 0.4rem;
+        }
+
+        /* ── NAVIGATION ── */
+        .nav-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .selection-count { font-size: 0.82rem; color: var(--subtext); }
+
+        .btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 0.65rem 1.4rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn:hover { background: var(--primary-hover); }
+        .btn:active { transform: scale(0.98); }
+
+        .btn-ghost {
+            background: none;
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            padding: 0.65rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: border-color 0.2s;
+        }
+        .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ── RESULTS ── */
+        .result-icon { font-size: 2.5rem; text-align: center; margin-bottom: 0.75rem; }
+
+        .result-title {
+            color: var(--heading);
+            font-size: 1.45rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .result-box {
+            border-radius: 8px;
+            padding: 1rem 1.1rem;
+            margin-bottom: 0.85rem;
+            border-left: 4px solid;
+            font-size: 0.91rem;
+            line-height: 1.55;
+        }
+
+        .result-box.summary   { border-color: var(--primary); background: var(--primary-light); }
+        .result-box.assessment { border-color: var(--warning-border); background: var(--warning-bg); }
+        .result-box.recommendation { border-color: var(--success-border); background: var(--success-bg); }
+        .result-box.urgent    { border-color: var(--urgent-border); background: var(--urgent-bg); }
+        .result-box.note      { border-color: var(--border); background: var(--bg); }
+
+        .result-box strong { display: block; margin-bottom: 0.3rem; font-weight: 700; }
+
+        .result-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .result-actions .btn { flex: 1; justify-content: center; }
+        .result-actions .btn-ghost { flex: 1; justify-content: center; }
+
+        /* ── REFERENCE TABLE ── */
+        .ref-table-wrap { margin-top: 1.25rem; }
+
+        .ref-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .ref-table {
+            display: none;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.75rem;
+            font-size: 0.82rem;
+        }
+        .ref-table.open { display: table; }
+
+        .ref-table th, .ref-table td {
+            text-align: left;
+            padding: 0.5rem 0.6rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .ref-table th {
+            font-weight: 700;
+            color: var(--heading);
+            background: var(--primary-light);
+        }
+
+        /* ── FOOTER ── */
+        .disclaimer {
+            margin-top: 1.75rem;
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--footer-text);
+            line-height: 1.5;
+        }
+        .disclaimer a { color: var(--primary); text-decoration: none; }
+        .disclaimer a:hover { text-decoration: underline; }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-overlay.open { display: flex; }
+
+        .modal-box {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 88vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: var(--subtext);
+            line-height: 1;
+        }
+        .modal-close:hover { color: var(--text); }
+
+        .modal-box h2 {
+            color: var(--heading);
+            font-size: 1.3rem;
+            margin-bottom: 1.25rem;
+            padding-right: 2rem;
+        }
+
+        .modal-section { margin-bottom: 1.1rem; }
+        .modal-section h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 0.35rem;
+        }
+        .modal-section p, .modal-section li {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: var(--text);
+        }
+        .modal-section ul { padding-left: 1.2rem; }
+        .modal-section li { margin-bottom: 0.2rem; }
+
+        .modal-note {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--warning-bg);
+            border-left: 3px solid var(--warning-border);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 1.5rem 1.25rem 1.25rem; }
+            .card h2 { font-size: 1.35rem; }
+            .result-actions { flex-direction: column; }
+        }
+    </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/n-8pvWqIJ2DlUc5RXXIw-Ty0Rzex11gozs20_lycxmB3zw3g7DMjeyXy-AsSilGL957D6ZU6eP66mOhkHW1Q23Km66qBXtd-5_znF273Qp9kkhIfDGuWxXEv7q2YN7gfO978pXRT9IUfKEqA9N99pJtnh-TB4hJhciEG_jtqLx-X0Z-e4eFVhF0vvamR5wV5bsM5W9GLj1c9tXfi2p3m3wZBXy4Gox8__e4t7lFho88U2fSJFpDmbghqgbdP26bwrNmmkAyeBEBEGKSf4BZemLt9Sh46DXVLsr20-PQlpNLWdWBtGA2LFjcTfHs4k24ur4CxuYR8FJvmB-pyoxzg_IrLyharUdGWT8TeC9cPQfNjteaEBjMo8319q7cq4KkDRLCnESeXLquSIIrNznliOR3Cche4B4_MKquYxwcavTKGR2ZcwCsi55KXWZAb5OvcRwlflWaKPHzrB3ZVsBn9OE2Y9N8WmgCgmFjZxUvEiB2j-LXNM4DlZmELrPeaBaEKoZ0pltBcx8qFFa7ti5Kl_lRFo6RBqqIl9mlpGNtDZg3fmBXF_PHbqNiS8iIigSd4IvmX7kpJFVRpxuYP13bouPFKx4KxNwIR8vW6JbiF1MtCL1Vz7E49562yL_6QUO0sSyoFOWiCdVGF28ZFKwAZ3GfFbe4gLqaRf-LB9gX7d3xLzXn_S1xsKw76B7O4XIznzPduLuiQ3OejLHbjrJ9J_-uIjdEuYV8bU70n-670E8QoGDxOYv9OCbnJ4zLN_TARiF7NYSWRyGfFVMox9ZYeDVdLfzRcA0MWk7jigcQc4yj3Wbnejlro0vYUqSaxVV2q0cxtFxctJcPl82XcvkUhMeh0EIM-QwkmiKyCd0W0Ttx8k6IUPB37XrCWMNFOWXTspyWEfp8CuPF3YBL6WYFeqox50MkjDQPH9FRrWL91FmHfw04_pgz9Yg8IPRT3xu5ypRMKWuv9hv0GmVbGqd8c-gn5VaEfLJjzXQsduvvORHBRgjxQGgUdYypbv5u2t_4Id2UkXQAdg7ddYu70PX85YFVN6jMikm3iguUj88OAD7UfkLabd8m5SoUOeuPdMgbDWxgjBImWa_uRfPYUxu-1HgUHuaSuOUy_-nnSu-azv97iLLHG73gCL6kDqcfd1UGoeSWkEOevWlJE1-g9CathHAPqQ7-ocR_3a3CQTE2TRE9gS4f0-ztP3plD2GXkPhV-juCwY0r1DwzqkMhpQrDN5TH6EwBghHIaI5_wM0H_cOVQNR1_vAW1TK2lCR_vvVvam7tdKVv8wnAp_T_8qEQM_uqfDr66nJrXZE_wjeGZzoovdSbHQMaO4sK67oenQq6F492cYe2El2doMQppJNCrt1Eu0xQuBx7Qy0lrZULlc_p5AQYiHFovZag2mOQhLXP7DNxALUG5ToOTAXTxRSh6xvENfYD2vV1Fq036ucWSB-XcTXLhD9B7nwWShiNWncfOkn2FdQIxAIljzK_w5N9-6z7aqujMa-xRDnuqEvoKzFkMVFb7qwHX4aiuNNi8DiewB5FwdGjj3H-UTdjadYiwtSHtW9WAe4YEsTWdYB30gtFWRddQ3zVaru-ERBZtUZsCZC6bEYRtvtQ5Zvd1'></script></head>
+<body>
+
+<div class="wrapper">
+
+    <!-- HEADER -->
+    <div class="header">
+        <button class="header-btn" id="aboutBtn">ℹ About HTN in Pregnancy</button>
+        <a class="brand-link" href="https://doctorswhocode.blog/" target="_blank" rel="noopener">Created by DoctorsWhoCode ↗</a>
+        <button class="header-btn" id="darkBtn">◑ Dark Mode</button>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-wrap">
+        <div class="progress-bar" id="progressBar" style="width: 25%"></div>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="card" id="mainCard"></div>
+
+    <!-- DISCLAIMER -->
+    <div class="disclaimer">
+        <p>⚠ <strong>INFORMATIONAL USE ONLY.</strong> This tool is for educational purposes and clinical decision support. It does NOT provide medical advice, diagnosis, or treatment recommendations. All therapeutic decisions must be discussed with and made by a qualified healthcare provider.</p>
+        <p style="margin-top:0.4rem;">Based on <a href="https://www.acog.org/clinical/clinical-guidance/practice-bulletin/articles/2020/06/gestational-hypertension-and-preeclampsia" target="_blank" rel="noopener">ACOG Practice Bulletin No. 222</a> &amp; <a href="https://www.acog.org/clinical/clinical-guidance/practice-advisory/articles/2022/04/clinical-guidance-for-the-integration-of-the-findings-of-the-chronic-hypertension-and-pregnancy-chap-study" target="_blank" rel="noopener">ACOG CHAP Practice Advisory (2022, Reaffirmed 2025)</a> • Consult OB/GYN or MFM specialist for all medical decisions</p>
+    </div>
+
+</div>
+
+<!-- ABOUT MODAL -->
+<div class="modal-overlay" id="aboutModal">
+    <div class="modal-box">
+        <button class="modal-close" id="closeModal">&times;</button>
+        <h2>Hypertension in Pregnancy</h2>
+
+        <div class="modal-section">
+            <h3>What is Hypertension in Pregnancy?</h3>
+            <p>High blood pressure (hypertension) during pregnancy is one of the most common and serious complications of pregnancy, affecting up to 10% of all pregnancies. It is a leading cause of maternal and infant illness and death worldwide. There are several types, each with different causes, timing, and risks.</p>
+        </div>
+
+        <div class="modal-section">
+            <h3>Types of Hypertension in Pregnancy</h3>
+            <ul>
+                <li><strong>Chronic Hypertension:</strong> High blood pressure that was present before pregnancy or that is diagnosed before 20 weeks of pregnancy.</li>
+                <li><strong>Gestational Hypertension:</strong> New high blood pressure that develops after 20 weeks of pregnancy without other signs of preeclampsia. It usually goes away after delivery.</li>
+                <li><strong>Preeclampsia:</strong> A serious condition with new high blood pressure after 20 weeks, combined with signs of organ damage (such as protein in the urine, low platelets, or kidney/liver problems).</li>
+                <li><strong>Superimposed Preeclampsia:</strong> When a woman with chronic hypertension develops preeclampsia during pregnancy.</li>
+            </ul>
+        </div>
+
+        <div class="modal-section">
+            <h3>Why Does It Matter?</h3>
+            <p>Uncontrolled high blood pressure in pregnancy can lead to serious complications, including:</p>
+            <ul>
+                <li>Stroke or seizures (eclampsia)</li>
+                <li>Premature birth</li>
+                <li>Placental abruption (placenta separating early)</li>
+                <li>Slow fetal growth</li>
+                <li>HELLP syndrome (a severe form of preeclampsia)</li>
+                <li>Long-term increased risk of heart disease for the mother</li>
+            </ul>
+        </div>
+
+        <div class="modal-section">
+            <h3>Can Preeclampsia Be Prevented?</h3>
+            <p>For women at high risk, taking <strong>low-dose aspirin (81 mg daily)</strong> starting between 12 and 28 weeks of pregnancy (ideally by 16 weeks) has been shown to reduce the risk of preeclampsia. Your doctor will determine if aspirin is right for you based on your risk factors.</p>
+        </div>
+
+        <div class="modal-section">
+            <h3>How is it Treated?</h3>
+            <ul>
+                <li><strong>Blood pressure medications:</strong> Safe medications like labetalol, nifedipine, or methyldopa are used to keep blood pressure controlled. Based on the 2022 CHAP study, ACOG now recommends treating blood pressure ≥140/90 mmHg in pregnancy.</li>
+                <li><strong>Close monitoring:</strong> Frequent prenatal visits, blood tests, and fetal monitoring.</li>
+                <li><strong>Delivery:</strong> The only cure for preeclampsia is delivery. Timing depends on how severe the condition is and how far along the pregnancy is.</li>
+            </ul>
+        </div>
+
+        <div class="modal-section">
+            <h3>After Delivery</h3>
+            <p>Blood pressure often remains elevated or can worsen in the first few days after delivery. Women who had hypertension in pregnancy have a <strong>2–4 times higher lifetime risk</strong> of heart disease and stroke. Long-term follow-up with a primary care provider or cardiologist is strongly recommended.</p>
+        </div>
+
+        <div class="modal-note">
+            <strong>Important:</strong> This information is for educational purposes only. Always consult with your OB/GYN or Maternal-Fetal Medicine specialist for personalized medical advice.
+        </div>
+    </div>
+</div>
+
+<script>
+    // ─────────────────────────────────────────────
+    // CLINICAL CONFIGURATION
+    // Sources: ACOG PB 222 (2020), PB 203 (2019), CHAP Advisory (2022, Reaffirmed 2025)
+    // ─────────────────────────────────────────────
+    const CONFIG = {
+        title: "HTN in Pregnancy Screener",
+        steps: [
+            {
+                id: "bp_classification",
+                title: "Blood Pressure Classification",
+                instruction: "Select the patient's current blood pressure status. This determines the hypertensive disorder category and urgency of response.",
+                single: true,
+                factors: [
+                    { id: "bp_normal",   text: "BP consistently <140/90 mmHg — no hypertension identified" },
+                    { id: "bp_mild",     text: "BP 140–159 / 90–109 mmHg (non-severe range)" },
+                    { id: "bp_severe",   text: "BP ≥160 / ≥110 mmHg (severe range)" }
+                ]
+            },
+            {
+                id: "gestational_age",
+                title: "Gestational Age at Onset",
+                instruction: "When was hypertension first identified? Timing determines the classification of the hypertensive disorder.",
+                single: true,
+                factors: [
+                    { id: "ga_before20", text: "Before 20 weeks of gestation (or pre-existing / pre-pregnancy)" },
+                    { id: "ga_after20",  text: "At or after 20 weeks of gestation (new onset)" },
+                    { id: "ga_unknown",  text: "Onset timing unknown or not yet assessed" }
+                ]
+            },
+            {
+                id: "severe_features",
+                title: "Severe Features Assessment",
+                instruction: "Select all that apply. The presence of ANY severe feature elevates the diagnosis to preeclampsia with severe features, regardless of blood pressure level.",
+                single: false,
+                factors: [
+                    { id: "sf_platelets", text: "Thrombocytopenia — platelet count <100,000/µL" },
+                    { id: "sf_renal",     text: "Renal insufficiency — serum creatinine >1.1 mg/dL, or doubling of baseline creatinine" },
+                    { id: "sf_liver",     text: "Impaired liver function — transaminases ≥2× normal, AND/OR severe RUQ or epigastric pain unresponsive to medication" },
+                    { id: "sf_pulm",      text: "Pulmonary edema" },
+                    { id: "sf_ha",        text: "New-onset headache unresponsive to medication and not attributed to another etiology" },
+                    { id: "sf_vision",    text: "Visual disturbances (blurred vision, scotomata, photopsia)" },
+                    { id: "sf_none",      text: "None of the above — no severe features identified" }
+                ]
+            },
+            {
+                id: "preeclampsia_risk",
+                title: "Preeclampsia Risk Factors",
+                instruction: "Select all that apply. These factors determine aspirin prophylaxis eligibility. HIGH-RISK factors carry greater individual weight than MODERATE-RISK factors.",
+                single: false,
+                factors: [
+                    { id: "rf_prior_pe",    text: "Prior history of preeclampsia (especially with adverse outcome)", tag: "HIGH" },
+                    { id: "rf_multifetal",  text: "Multifetal gestation (twins, triplets, or more)", tag: "HIGH" },
+                    { id: "rf_chronic_htn", text: "Chronic hypertension", tag: "HIGH" },
+                    { id: "rf_dm",          text: "Pre-existing Type 1 or Type 2 diabetes mellitus", tag: "HIGH" },
+                    { id: "rf_renal",       text: "Renal disease", tag: "HIGH" },
+                    { id: "rf_autoimmune",  text: "Autoimmune condition (SLE, antiphospholipid syndrome)", tag: "HIGH" },
+                    { id: "rf_nullip",      text: "Nulliparity (first pregnancy)", tag: "MOD" },
+                    { id: "rf_obesity",     text: "Obesity (pre-pregnancy BMI >30 kg/m²)", tag: "MOD" },
+                    { id: "rf_fam_hx",      text: "Family history of preeclampsia (mother or sister)", tag: "MOD" },
+                    { id: "rf_race",        text: "Black race or low socioeconomic status", tag: "MOD" },
+                    { id: "rf_age35",       text: "Maternal age ≥35 years", tag: "MOD" },
+                    { id: "rf_prior_adv",   text: "Prior adverse pregnancy outcome or interpregnancy interval >10 years", tag: "MOD" }
+                ]
+            }
+        ],
+
+        results: function(sel) {
+            const bp       = (sel[0] || [])[0];
+            const ga       = (sel[1] || [])[0];
+            const sf       = sel[2] || [];
+            const rf       = sel[3] || [];
+
+            const sfNone   = sf.includes("sf_none");
+            const hasSF    = sf.length > 0 && !sfNone;
+            const sfCount  = hasSF ? sf.length : 0;
+
+            const highRF   = rf.filter(r => ["rf_prior_pe","rf_multifetal","rf_chronic_htn","rf_dm","rf_renal","rf_autoimmune"].includes(r));
+            const modRF    = rf.filter(r => ["rf_nullip","rf_obesity","rf_fam_hx","rf_race","rf_age35","rf_prior_adv"].includes(r));
+            const aspirinIndicated = highRF.length >= 1 || modRF.length >= 2;
+
+            // ── URGENT: Severe BP ──
+            if (bp === "bp_severe") {
+                return {
+                    icon: "🚨",
+                    title: "Severe Hypertension — Urgent Evaluation Required",
+                    urgentAlert: "Blood pressure in the severe range (≥160/110 mmHg) requires urgent evaluation and treatment within 30–60 minutes to prevent maternal stroke, myocardial ischemia, and renal failure.",
+                    assessment: `BP ≥160/110 mmHg constitutes a hypertensive urgency in pregnancy. ${hasSF ? `${sfCount} severe feature(s) identified — this is consistent with preeclampsia with severe features.` : "Evaluate for severe features of preeclampsia (labs, symptoms)."}`,
+                    recommendation: "Initiate acute antihypertensive therapy immediately (IV labetalol, IV hydralazine, or oral immediate-release nifedipine). Obtain CBC, CMP, LFTs, uric acid, and urine protein. Administer magnesium sulfate for seizure prophylaxis if preeclampsia with severe features is confirmed. Consult MFM.",
+                    note: `Delivery timing: If ≥34 weeks with severe features, proceed to delivery after stabilization. If <34 weeks, expectant management may be considered in a tertiary center with shared decision-making. ${aspirinIndicated ? "Aspirin prophylaxis is indicated for future pregnancies." : ""}`,
+                    aspirinMsg: aspirinIndicated ? `Aspirin prophylaxis (81 mg daily, start 12–28 weeks, ideally by 16 weeks) is indicated based on ${highRF.length} high-risk and ${modRF.length} moderate-risk factor(s).` : null
+                };
+            }
+
+            // ── NO HTN ──
+            if (bp === "bp_normal") {
+                return {
+                    icon: aspirinIndicated ? "⚠️" : "✅",
+                    title: aspirinIndicated ? "Normotensive — Preeclampsia Risk Factors Present" : "Normotensive — Routine Prenatal Monitoring",
+                    assessment: aspirinIndicated
+                        ? `Blood pressure is currently in the normal range. However, ${highRF.length} high-risk and ${modRF.length} moderate-risk factor(s) for preeclampsia were identified.`
+                        : "Blood pressure is currently in the normal range with no significant risk factors for preeclampsia identified.",
+                    recommendation: aspirinIndicated
+                        ? `Initiate low-dose aspirin (81 mg daily) between 12 and 28 weeks of gestation, preferably by 16 weeks. Continue until delivery. Monitor blood pressure at every prenatal visit. Educate patient on warning signs of preeclampsia.`
+                        : "Continue routine prenatal blood pressure monitoring at every visit. Educate patient on warning signs: severe headache, visual changes, right upper quadrant pain, sudden swelling. No aspirin prophylaxis indicated at this time.",
+                    note: "Reassess risk factors at each prenatal visit. New risk factors may change management. Blood pressure can change throughout pregnancy — any new elevation ≥140/90 mmHg warrants further evaluation.",
+                    aspirinMsg: aspirinIndicated ? `Aspirin prophylaxis (81 mg daily) is indicated: ${highRF.length} high-risk factor(s) and ${modRF.length} moderate-risk factor(s) identified.` : null
+                };
+            }
+
+            // ── MILD HTN (140–159 / 90–109) ──
+            if (bp === "bp_mild") {
+                // Determine classification
+                let classification = "";
+                let classDetail = "";
+
+                if (ga === "ga_before20") {
+                    classification = "Chronic Hypertension";
+                    classDetail = "Hypertension identified before 20 weeks is consistent with chronic hypertension (pre-existing or newly diagnosed). Evaluate for secondary causes if not previously worked up.";
+                } else if (ga === "ga_after20") {
+                    if (hasSF) {
+                        classification = "Preeclampsia (without severe-range BP, but with severe features)";
+                        classDetail = `New-onset hypertension at ≥20 weeks with ${sfCount} severe feature(s). This meets criteria for preeclampsia with severe features despite non-severe blood pressure levels.`;
+                    } else {
+                        classification = "Gestational Hypertension vs. Preeclampsia (without severe features)";
+                        classDetail = "New-onset hypertension at ≥20 weeks. Obtain urine protein, CBC, CMP, and LFTs to differentiate gestational hypertension from preeclampsia. Up to 50% of gestational hypertension cases progress to preeclampsia.";
+                    }
+                } else {
+                    classification = "Hypertension — Onset Timing Needed";
+                    classDetail = "Gestational age at onset is required to classify the hypertensive disorder. Determine whether hypertension was present before 20 weeks.";
+                }
+
+                return {
+                    icon: "⚠️",
+                    title: `${classification}`,
+                    assessment: `${classDetail} Per the 2022 ACOG CHAP Practice Advisory (reaffirmed 2025), a treatment threshold of 140/90 mmHg is now recommended for all hypertensive disorders in pregnancy.`,
+                    recommendation: `Initiate or titrate antihypertensive therapy to maintain BP <140/90 mmHg. First-line oral agents: labetalol, extended-release nifedipine, or methyldopa. ${hasSF ? "Severe features present — administer magnesium sulfate for seizure prophylaxis. Consult MFM urgently." : "Obtain diagnostic workup: 24-hour urine protein or protein:creatinine ratio, CBC, CMP, LFTs, uric acid."} Perform third-trimester fetal growth ultrasound.`,
+                    note: `Delivery timing: ${ga === "ga_after20" && hasSF ? "Preeclampsia with severe features at ≥34 weeks — proceed to delivery. <34 weeks — consider expectant management at tertiary center." : ga === "ga_after20" ? "Gestational HTN or preeclampsia without severe features at ≥37 weeks — proceed to delivery." : "Chronic HTN (well-controlled, no superimposed PE) — deliver at 38w0d–39w6d."} ${aspirinIndicated ? "Aspirin prophylaxis is indicated for this and future pregnancies." : ""}`,
+                    aspirinMsg: aspirinIndicated ? `Aspirin prophylaxis (81 mg daily, start 12–28 weeks, ideally by 16 weeks) is indicated based on ${highRF.length} high-risk and ${modRF.length} moderate-risk factor(s).` : null
+                };
+            }
+
+            // ── FALLBACK ──
+            return {
+                icon: "❓",
+                title: "Incomplete Assessment",
+                assessment: "Please complete all steps to receive a clinical recommendation.",
+                recommendation: "Return to Step 1 and ensure all required fields are selected.",
+                note: "All four steps are required to generate an accurate clinical assessment.",
+                aspirinMsg: null
+            };
+        }
+    };
+
+    // ─────────────────────────────────────────────
+    // STATE
+    // ─────────────────────────────────────────────
+    let currentStep = 0;
+    let selections  = {};
+    const card      = document.getElementById("mainCard");
+    const progBar   = document.getElementById("progressBar");
+
+    // ─────────────────────────────────────────────
+    // RENDER STEP
+    // ─────────────────────────────────────────────
+    function renderStep(idx) {
+        const step   = CONFIG.steps[idx];
+        const sel    = selections[idx] || [];
+        const total  = CONFIG.steps.length + 1;
+        const pct    = Math.round(((idx + 1) / total) * 100);
+        progBar.style.width = pct + "%";
+
+        const factorsHtml = step.factors.map(f => {
+            const isSelected = sel.includes(f.id);
+            const tagHtml = f.tag
+                ? `<span class="factor-tag ${f.tag === "HIGH" ? "tag-high" : "tag-mod"}">${f.tag}</span>`
+                : "";
+            return `<div class="factor-item${isSelected ? " selected" : ""}" data-step="${idx}" data-id="${f.id}">
+                        <div class="factor-left">
+                            ${tagHtml}
+                            <span class="factor-text">${f.text}</span>
+                        </div>
+                        <span class="factor-check">${isSelected ? "✓" : ""}</span>
+                    </div>`;
+        }).join("");
+
+        const backBtn = idx > 0
+            ? `<button class="btn-ghost" id="backBtn">← Back</button>`
+            : `<div></div>`;
+
+        const nextLabel = idx === CONFIG.steps.length - 1 ? "See Results →" : "Next →";
+
+        card.innerHTML = `
+            <div class="step-meta">
+                <div class="step-badge">${idx + 1}</div>
+                <span class="step-label">Step ${idx + 1} of ${CONFIG.steps.length}</span>
+            </div>
+            <h2>${step.title}</h2>
+            <p class="instruction">${step.instruction}</p>
+            <div class="factor-list">${factorsHtml}</div>
+            <div class="nav-row">
+                ${backBtn}
+                <span class="selection-count">${sel.length} selected</span>
+                <button class="btn" id="nextBtn">${nextLabel}</button>
+            </div>
+        `;
+    }
+
+    // ─────────────────────────────────────────────
+    // RENDER RESULTS
+    // ─────────────────────────────────────────────
+    function renderResults() {
+        progBar.style.width = "100%";
+        const r = CONFIG.results(selections);
+
+        const urgentHtml = r.urgentAlert
+            ? `<div class="result-box urgent"><strong>🚨 Urgent Action Required</strong>${r.urgentAlert}</div>`
+            : "";
+
+        const aspirinHtml = r.aspirinMsg
+            ? `<div class="result-box recommendation"><strong>💊 Aspirin Prophylaxis</strong>${r.aspirinMsg}</div>`
+            : "";
+
+        card.innerHTML = `
+            <div class="result-icon">${r.icon}</div>
+            <div class="result-title">${r.title}</div>
+
+            ${urgentHtml}
+
+            <div class="result-box assessment">
+                <strong>Assessment</strong>
+                ${r.assessment}
+            </div>
+
+            <div class="result-box recommendation">
+                <strong>Recommendation</strong>
+                ${r.recommendation}
+            </div>
+
+            ${aspirinHtml}
+
+            <div class="result-box note">
+                <strong>Clinical Note</strong>
+                ${r.note}
+            </div>
+
+            <div class="ref-table-wrap">
+                <button class="ref-toggle" id="refToggle">▶ Show Clinical Reference Values</button>
+                <table class="ref-table" id="refTable">
+                    <thead>
+                        <tr><th colspan="2">BP Classification in Pregnancy</th></tr>
+                        <tr><th>Category</th><th>Definition</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Non-severe HTN</td><td>SBP 140–159 or DBP 90–109 mmHg</td></tr>
+                        <tr><td>Severe HTN</td><td>SBP ≥160 or DBP ≥110 mmHg</td></tr>
+                        <tr><td>Treatment target (CHAP 2022)</td><td>&lt;140/90 mmHg</td></tr>
+                    </tbody>
+                    <thead>
+                        <tr><th colspan="2">Delivery Timing (ACOG PB 222)</th></tr>
+                        <tr><th>Condition</th><th>Timing</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Gestational HTN or PE (any severity) ≥37 wks</td><td>Deliver</td></tr>
+                        <tr><td>PE with severe features ≥34 wks</td><td>Deliver after stabilization</td></tr>
+                        <tr><td>PE with severe features &lt;34 wks</td><td>Expectant management (tertiary center)</td></tr>
+                        <tr><td>Chronic HTN (well-controlled, no superimposed PE)</td><td>38w0d – 39w6d</td></tr>
+                    </tbody>
+                    <thead>
+                        <tr><th colspan="2">Aspirin Prophylaxis (ACOG PB 222)</th></tr>
+                        <tr><th>Indication</th><th>Regimen</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>≥1 high-risk factor OR ≥2 moderate-risk factors</td><td>81 mg daily, start 12–28 wks (ideally by 16 wks), until delivery</td></tr>
+                    </tbody>
+                    <thead>
+                        <tr><th colspan="2">Acute Severe HTN Treatment (within 30–60 min)</th></tr>
+                        <tr><th>Agent</th><th>Route / Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Labetalol</td><td>IV: 20 mg bolus, repeat q10 min (max 300 mg)</td></tr>
+                        <tr><td>Hydralazine</td><td>IV: 5–10 mg q20 min</td></tr>
+                        <tr><td>Nifedipine (IR)</td><td>Oral: 10–20 mg q20 min (max 50 mg)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result-actions">
+                <button class="btn" id="restartBtn">↺ New Assessment</button>
+                <button class="btn-ghost" id="printBtn">⎙ Print / Save PDF</button>
+            </div>
+        `;
+
+        document.getElementById("refToggle").addEventListener("click", function() {
+            const t = document.getElementById("refTable");
+            t.classList.toggle("open");
+            this.textContent = t.classList.contains("open")
+                ? "▼ Hide Clinical Reference Values"
+                : "▶ Show Clinical Reference Values";
+        });
+
+        document.getElementById("restartBtn").addEventListener("click", () => {
+            currentStep = 0;
+            selections  = {};
+            renderStep(0);
+        });
+
+        document.getElementById("printBtn").addEventListener("click", () => window.print());
+    }
+
+    // ─────────────────────────────────────────────
+    // EVENT DELEGATION
+    // ─────────────────────────────────────────────
+    card.addEventListener("click", e => {
+        const item = e.target.closest(".factor-item");
+        if (item) {
+            const stepIdx = parseInt(item.dataset.step);
+            const factId  = item.dataset.id;
+            const step    = CONFIG.steps[stepIdx];
+
+            if (!selections[stepIdx]) selections[stepIdx] = [];
+
+            if (step.single) {
+                selections[stepIdx] = [factId];
+            } else {
+                // For severe features: if "none" is selected, clear others; if other selected, clear "none"
+                if (factId === "sf_none") {
+                    selections[stepIdx] = ["sf_none"];
+                } else {
+                    const noneIdx = selections[stepIdx].indexOf("sf_none");
+                    if (noneIdx > -1) selections[stepIdx].splice(noneIdx, 1);
+                    const idx = selections[stepIdx].indexOf(factId);
+                    if (idx > -1) selections[stepIdx].splice(idx, 1);
+                    else selections[stepIdx].push(factId);
+                }
+            }
+            renderStep(currentStep);
+            return;
+        }
+
+        if (e.target.id === "nextBtn") {
+            if (currentStep < CONFIG.steps.length - 1) {
+                currentStep++;
+                renderStep(currentStep);
+            } else {
+                renderResults();
+            }
+        } else if (e.target.id === "backBtn") {
+            currentStep--;
+            renderStep(currentStep);
+        }
+    });
+
+    // ─────────────────────────────────────────────
+    // MODAL
+    // ─────────────────────────────────────────────
+    const modal = document.getElementById("aboutModal");
+    document.getElementById("aboutBtn").addEventListener("click", () => modal.classList.add("open"));
+    document.getElementById("closeModal").addEventListener("click", () => modal.classList.remove("open"));
+    modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("open"); });
+
+    // ─────────────────────────────────────────────
+    // DARK MODE
+    // ─────────────────────────────────────────────
+    const darkBtn = document.getElementById("darkBtn");
+    darkBtn.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        darkBtn.textContent = document.body.classList.contains("dark") ? "☀ Light Mode" : "◑ Dark Mode";
+    });
+
+    // ─────────────────────────────────────────────
+    // INIT
+    // ─────────────────────────────────────────────
+    renderStep(0);
+</script>
+</body>
+</html>

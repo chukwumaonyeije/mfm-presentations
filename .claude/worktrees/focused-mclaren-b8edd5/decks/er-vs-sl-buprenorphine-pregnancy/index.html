@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extended-Release vs Sublingual Buprenorphine in Pregnancy | MFM Clinical Presentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-dark:    #0d1117;
+      --bg-card:    #161b22;
+      --bg-card2:   #1c2330;
+      --accent:     #58a6ff;
+      --accent2:    #3fb950;
+      --accent3:    #f78166;
+      --accent4:    #d2a8ff;
+      --text-main:  #e6edf3;
+      --text-muted: #8b949e;
+      --border:     #30363d;
+      --er-color:   #58a6ff;
+      --sl-color:   #f0883e;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── DECK WRAPPER ─────────────────────────────────────────── */
+    .deck {
+      width: 100vw; height: 100vh;
+      position: relative;
+    }
+
+    /* ── SLIDE BASE ───────────────────────────────────────────── */
+    .slide {
+      width: 100%; height: 100%;
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── SLIDE COUNTER ────────────────────────────────────────── */
+    .slide-counter {
+      position: fixed; bottom: 1.4rem; right: 2rem;
+      font-size: 0.85rem; color: var(--text-muted);
+      letter-spacing: 0.05em; z-index: 100;
+    }
+
+    /* ── NAV ARROWS ───────────────────────────────────────────── */
+    .nav-btn {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--text-muted); font-size: 1.4rem;
+      padding: 0.6rem 0.9rem; border-radius: 6px;
+      cursor: pointer; z-index: 100;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-btn:hover { background: rgba(88,166,255,0.15); color: var(--accent); }
+    .nav-prev { left: 1rem; }
+    .nav-next { right: 1rem; }
+
+    /* ── PROGRESS BAR ─────────────────────────────────────────── */
+    .progress-bar {
+      position: fixed; bottom: 0; left: 0;
+      height: 3px; background: var(--accent);
+      transition: width 0.4s ease; z-index: 100;
+    }
+
+    /* ── TYPOGRAPHY ───────────────────────────────────────────── */
+    .kicker {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    h1 { font-size: clamp(2rem, 4.5vw, 3.4rem); font-weight: 300; line-height: 1.15; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 300; line-height: 1.2; }
+    h3 { font-size: clamp(1rem, 2vw, 1.5rem); font-weight: 400; }
+    .sub { font-size: clamp(0.9rem, 1.5vw, 1.15rem); color: var(--text-muted); line-height: 1.6; max-width: 780px; text-align: center; }
+    .citation { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.4rem; }
+
+    /* ── DIVIDER ──────────────────────────────────────────────── */
+    .divider { width: 60px; height: 2px; background: var(--accent); margin: 1rem auto; }
+
+    /* ── CARD GRID ────────────────────────────────────────────── */
+    .card-grid {
+      display: grid; gap: 1.2rem;
+      width: 100%; max-width: 960px;
+      margin-top: 1.4rem;
+    }
+    .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+    }
+    .card .card-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;
+    }
+    .card .card-value {
+      font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 300;
+    }
+    .card .card-note { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+    /* ── STAT COMPARISON ──────────────────────────────────────── */
+    .stat-compare {
+      display: flex; gap: 1.6rem; align-items: stretch;
+      max-width: 900px; width: 100%; margin-top: 1.4rem;
+    }
+    .stat-box {
+      flex: 1; border-radius: 10px; padding: 1.6rem 2rem;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center;
+    }
+    .stat-box.er { background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.35); }
+    .stat-box.sl { background: rgba(240,136,62,0.08); border: 1px solid rgba(240,136,62,0.35); }
+    .stat-box .stat-drug {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .stat-box.er .stat-drug { color: var(--er-color); }
+    .stat-box.sl .stat-drug { color: var(--sl-color); }
+    .stat-box .stat-num {
+      font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 200; line-height: 1;
+    }
+    .stat-box.er .stat-num { color: var(--er-color); }
+    .stat-box.sl .stat-num { color: var(--sl-color); }
+    .stat-box .stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem; }
+    .stat-vs {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: var(--text-muted); font-weight: 300;
+      min-width: 40px;
+    }
+    .p-badge {
+      display: inline-block; margin-top: 1rem;
+      background: rgba(63,185,80,0.12); border: 1px solid rgba(63,185,80,0.4);
+      color: var(--accent2); font-size: 0.8rem; font-weight: 600;
+      padding: 0.25rem 0.8rem; border-radius: 20px; letter-spacing: 0.05em;
+    }
+    .p-badge.ns {
+      background: rgba(139,148,158,0.1); border-color: rgba(139,148,158,0.3);
+      color: var(--text-muted);
+    }
+
+    /* ── HORIZONTAL BAR CHART ─────────────────────────────────── */
+    .bar-chart { width: 100%; max-width: 820px; margin-top: 1.4rem; }
+    .bar-row { display: flex; align-items: center; margin-bottom: 1rem; }
+    .bar-label { width: 220px; font-size: 0.82rem; color: var(--text-muted); flex-shrink: 0; text-align: right; padding-right: 1rem; }
+    .bar-track { flex: 1; background: var(--bg-card2); border-radius: 4px; height: 28px; position: relative; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 0.6rem; font-size: 0.82rem; font-weight: 600; transition: width 0.8s ease; }
+    .bar-fill.er { background: linear-gradient(90deg, rgba(88,166,255,0.7), rgba(88,166,255,0.4)); color: #fff; }
+    .bar-fill.sl { background: linear-gradient(90deg, rgba(240,136,62,0.7), rgba(240,136,62,0.4)); color: #fff; }
+
+    /* ── TIMELINE ─────────────────────────────────────────────── */
+    .timeline {
+      display: flex; align-items: flex-start; gap: 0;
+      max-width: 900px; width: 100%; margin-top: 1.6rem;
+    }
+    .tl-step {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      text-align: center; position: relative;
+    }
+    .tl-step:not(:last-child)::after {
+      content: ''; position: absolute;
+      top: 20px; left: 50%; width: 100%; height: 2px;
+      background: var(--border);
+    }
+    .tl-dot {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--bg-card); border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; color: var(--accent);
+      z-index: 1; position: relative;
+    }
+    .tl-title { font-size: 0.78rem; font-weight: 600; margin-top: 0.6rem; color: var(--text-main); }
+    .tl-sub { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.2rem; max-width: 120px; }
+
+    /* ── COMPARISON TABLE ─────────────────────────────────────── */
+    .comp-table { width: 100%; max-width: 900px; border-collapse: collapse; margin-top: 1.4rem; font-size: 0.9rem; }
+    .comp-table th {
+      padding: 0.7rem 1rem; text-align: center;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; border-bottom: 1px solid var(--border);
+    }
+    .comp-table th.er-head { color: var(--er-color); }
+    .comp-table th.sl-head { color: var(--sl-color); }
+    .comp-table th.outcome-head { color: var(--text-muted); text-align: left; }
+    .comp-table td {
+      padding: 0.65rem 1rem; border-bottom: 1px solid rgba(48,54,61,0.5);
+      text-align: center; color: var(--text-main);
+    }
+    .comp-table td.outcome-cell { text-align: left; color: var(--text-muted); font-size: 0.82rem; }
+    .comp-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .sig { color: var(--accent2); font-weight: 600; }
+    .ns-val { color: var(--text-muted); }
+
+    /* ── ICON ROW ─────────────────────────────────────────────── */
+    .icon-row { display: flex; gap: 2rem; margin-top: 1.4rem; }
+    .icon-card {
+      flex: 1; background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.4rem 1rem; text-align: center;
+    }
+    .icon-card .icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .icon-card .icon-title { font-size: 0.8rem; font-weight: 600; color: var(--text-main); }
+    .icon-card .icon-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+    /* ── TITLE SLIDE SPECIFIC ─────────────────────────────────── */
+    #slide-1 { background: radial-gradient(ellipse at 30% 50%, rgba(88,166,255,0.06) 0%, transparent 60%), var(--bg-dark); }
+    #slide-1 h1 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 300; max-width: 800px; text-align: center; line-height: 1.2; }
+    .title-badge {
+      display: inline-block; background: rgba(88,166,255,0.1);
+      border: 1px solid rgba(88,166,255,0.3); color: var(--accent);
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; padding: 0.3rem 0.9rem; border-radius: 20px;
+      margin-bottom: 1.2rem;
+    }
+    .title-meta { display: flex; gap: 2rem; margin-top: 1.6rem; }
+    .title-meta-item { text-align: center; }
+    .title-meta-item .meta-val { font-size: 1.1rem; font-weight: 600; color: var(--accent); }
+    .title-meta-item .meta-key { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.2rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* ── KEY POINTS SLIDE ─────────────────────────────────────── */
+    .kp-list { list-style: none; max-width: 820px; width: 100%; margin-top: 1.2rem; }
+    .kp-list li {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 0.9rem 1.2rem; margin-bottom: 0.7rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 8px; font-size: 0.95rem; line-height: 1.5;
+    }
+    .kp-list li .kp-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.05rem; }
+
+    /* ── SAFETY SLIDE ─────────────────────────────────────────── */
+    .safety-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem; max-width: 900px; width: 100%; margin-top: 1.2rem;
+    }
+    .safety-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.2rem 1.4rem;
+    }
+    .safety-card .sc-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .safety-card .sc-row { display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0; border-bottom: 1px solid rgba(48,54,61,0.4); font-size: 0.85rem; }
+    .safety-card .sc-row:last-child { border-bottom: none; }
+    .safety-card .sc-er { color: var(--er-color); font-weight: 600; }
+    .safety-card .sc-sl { color: var(--sl-color); font-weight: 600; }
+
+    /* ── CONCLUSION SLIDE ─────────────────────────────────────── */
+    #slide-10 { background: radial-gradient(ellipse at 70% 50%, rgba(63,185,80,0.05) 0%, transparent 60%), var(--bg-dark); }
+    .conclusion-box {
+      max-width: 820px; width: 100%;
+      background: rgba(63,185,80,0.06); border: 1px solid rgba(63,185,80,0.25);
+      border-radius: 12px; padding: 1.8rem 2.2rem; margin-top: 1.4rem;
+      text-align: center;
+    }
+    .conclusion-box p { font-size: 1.05rem; line-height: 1.7; color: var(--text-main); }
+    .conclusion-box .c-highlight { color: var(--accent2); font-weight: 600; }
+
+    /* ── FOOTNOTE ─────────────────────────────────────────────── */
+    .footnote {
+      position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
+      font-size: 0.68rem; color: var(--text-muted); white-space: nowrap;
+    }
+    /* 2026 refresh overrides */
+    :root {
+      --bg-dark: #08131f;
+      --bg-card: rgba(10, 24, 39, 0.9);
+      --bg-card2: rgba(18, 34, 52, 0.94);
+      --accent: #69b8ff;
+      --accent2: #79e09b;
+      --accent3: #ff8a6a;
+      --accent4: #c0b7ff;
+      --text-main: #f5f9fc;
+      --text-muted: #b5c7d7;
+      --border: rgba(131, 193, 255, 0.16);
+      --er-color: #69b8ff;
+      --sl-color: #ffb165;
+    }
+
+    html, body {
+      background:
+        radial-gradient(circle at top left, rgba(105, 184, 255, 0.18), transparent 26%),
+        radial-gradient(circle at 88% 16%, rgba(121, 224, 155, 0.12), transparent 18%),
+        linear-gradient(180deg, #08131f 0%, #06101a 100%);
+      font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
+    }
+
+    .deck::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.22), transparent 80%);
+      pointer-events: none;
+    }
+
+    .slide {
+      padding: 4rem 5rem 6rem;
+      background: linear-gradient(180deg, rgba(8, 19, 31, 0.72), rgba(8, 19, 31, 0.3));
+    }
+
+    h1, h2 { letter-spacing: -0.035em; font-weight: 700; text-wrap: balance; }
+
+    .card, .stat-box.er, .stat-box.sl {
+      background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
+      border-radius: 18px;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+      backdrop-filter: blur(10px);
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: linear-gradient(90deg, #69b8ff 0%, #79e09b 100%);
+      box-shadow: 0 0 18px rgba(105, 184, 255, 0.45);
+    }
+
+    .slide-counter {
+      right: 1.4rem;
+      bottom: 1.2rem;
+      padding: 0.45rem 0.8rem;
+      border: 1px solid rgba(131, 193, 255, 0.16);
+      border-radius: 999px;
+      background: rgba(7, 17, 28, 0.72);
+      backdrop-filter: blur(12px);
+      color: #dce8f7;
+    }
+
+    .nav-btn {
+      background: rgba(9, 22, 35, 0.78);
+      border: 1px solid rgba(131, 193, 255, 0.18);
+      border-radius: 999px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+    }
+
+    .nav-btn:hover { background: rgba(31, 74, 116, 0.9); color: #f5f9fc; }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/er-vs-sl-buprenorphine-pregnancy/index.html">
+<meta name="description" content="Journal club presentation of the first RCT comparing weekly extended-release buprenorphine (ER-BUP) to daily sublingual buprenorphine (SL-BUP) in pregnancy through 12 months post partum: primary opioid abstinence outcomes, NOWS severity, maternal safety, and postpartum adherence. Based on Winhusen TJ et al., JAMA Intern Med 2026.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Opioid Use Disorder, Buprenorphine, Substance Use in Pregnancy, Neonatal Opioid Withdrawal, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/er-vs-sl-buprenorphine-pregnancy/index.html">
+<meta property="og:title" content="Extended-Release vs Sublingual Buprenorphine in Pregnancy - Provider Education | OpenMFM">
+<meta property="og:description" content="Journal club presentation of the first RCT comparing weekly extended-release buprenorphine (ER-BUP) to daily sublingual buprenorphine (SL-BUP) in pregnancy through 12 months post partum: primary opioid abstinence outcomes, NOWS severity, maternal safety, and postpartum adherence. Based on Winhusen TJ et al., JAMA Intern Med 2026.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Extended-Release vs Sublingual Buprenorphine in Pregnancy - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Journal club presentation of the first RCT comparing weekly extended-release buprenorphine (ER-BUP) to daily sublingual buprenorphine (SL-BUP) in pregnancy through 12 months post partum: primary opioid abstinence outcomes, NOWS severity, maternal safety, and postpartum adherence. Based on Winhusen TJ et al., JAMA Intern Med 2026.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Extended-Release vs Sublingual Buprenorphine in Pregnancy - Provider Education",
+  "description": "Journal club presentation of the first RCT comparing weekly extended-release buprenorphine (ER-BUP) to daily sublingual buprenorphine (SL-BUP) in pregnancy through 12 months post partum: primary opioid abstinence outcomes, NOWS severity, maternal safety, and postpartum adherence. Based on Winhusen TJ et al., JAMA Intern Med 2026.",
+  "url": "https://openmfm.org/decks/er-vs-sl-buprenorphine-pregnancy/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-03-23",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Extended-Release vs Sublingual Buprenorphine in Pregnancy - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Opioid Use Disorder, Buprenorphine, Substance Use in Pregnancy, Neonatal Opioid Withdrawal, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ── SLIDE 1: TITLE ─────────────────────────────────────── -->
+  <div class="slide active" id="slide-1">
+    <div class="title-badge">JAMA Internal Medicine · March 2026</div>
+    <h1>Extended-Release vs Sublingual Buprenorphine in Pregnancy</h1>
+    <div class="divider"></div>
+    <p class="sub">A Randomized Clinical Trial Through 12 Months Post Partum</p>
+    <div class="title-meta">
+      <div class="title-meta-item">
+        <div class="meta-val">N = 140</div>
+        <div class="meta-key">Participants</div>
+      </div>
+      <div class="title-meta-item">
+        <div class="meta-val">13 Sites</div>
+        <div class="meta-key">US Centers</div>
+      </div>
+      <div class="title-meta-item">
+        <div class="meta-val">2020–2024</div>
+        <div class="meta-key">Enrollment Period</div>
+      </div>
+      <div class="title-meta-item">
+        <div class="meta-val">NCT03918850</div>
+        <div class="meta-key">ClinicalTrials.gov</div>
+      </div>
+    </div>
+    <p class="citation" style="margin-top:1.6rem;">Winhusen TJ et al. JAMA Intern Med. doi:10.1001/jamainternmed.2026.0057</p>
+  </div>
+
+  <!-- ── SLIDE 2: CLINICAL CONTEXT ──────────────────────────── -->
+  <div class="slide" id="slide-2">
+    <div class="kicker">Background</div>
+    <h2>Why Consider Extended-Release Buprenorphine?</h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-3" style="margin-top:1.6rem;">
+      <div class="card">
+        <div class="card-label">Challenge 1</div>
+        <div style="font-size:1.8rem; margin-bottom:0.4rem;">💊</div>
+        <h3 style="font-size:1rem; color:var(--accent3);">Diversion &amp; Misuse</h3>
+        <p class="card-note" style="margin-top:0.4rem;">Daily sublingual tablets carry risk of diversion and non-prescribed use.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Challenge 2</div>
+        <div style="font-size:1.8rem; margin-bottom:0.4rem;">📉</div>
+        <h3 style="font-size:1rem; color:var(--accent3);">Adherence Barriers</h3>
+        <p class="card-note" style="margin-top:0.4rem;">Daily dosing during pregnancy is associated with poor adherence rates.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Challenge 3</div>
+        <div style="font-size:1.8rem; margin-bottom:0.4rem;">🔄</div>
+        <h3 style="font-size:1rem; color:var(--accent3);">Peak-Trough Effects</h3>
+        <p class="card-note" style="margin-top:0.4rem;">Plasma levels fall during pregnancy, inadequately suppressing cravings.</p>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:1.4rem; font-size:0.9rem;">Extended-release buprenorphine (Brixadi/CAM2038) provides stable plasma levels via weekly subcutaneous injection — potentially addressing all three challenges.</p>
+  </div>
+
+  <!-- ── SLIDE 3: STUDY DESIGN ───────────────────────────────── -->
+  <div class="slide" id="slide-3">
+    <div class="kicker">Methods</div>
+    <h2>Trial Design</h2>
+    <div class="divider"></div>
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-dot">1</div>
+        <div class="tl-title">Enrollment</div>
+        <div class="tl-sub">Adults with OUD, singleton pregnancy 6–30 wks GA</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot">2</div>
+        <div class="tl-title">Randomization</div>
+        <div class="tl-sub">1:1 allocation · Balanced on site &amp; GA</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot">3</div>
+        <div class="tl-title">Pregnancy Phase</div>
+        <div class="tl-sub">Weekly ER-BUP injection vs daily SL-BUP</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot">4</div>
+        <div class="tl-title">Delivery</div>
+        <div class="tl-sub">Infant NOWS monitoring &amp; outcomes</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot">5</div>
+        <div class="tl-title">Post Partum</div>
+        <div class="tl-sub">12-month follow-up · Monthly visits</div>
+      </div>
+    </div>
+    <div class="card-grid cols-2" style="max-width:700px; margin-top:1.6rem;">
+      <div class="card" style="border-left: 3px solid var(--er-color);">
+        <div class="card-label" style="color:var(--er-color);">Extended-Release (n=69)</div>
+        <p class="card-note">Brixadi 24 mg/wk SC injection during pregnancy; monthly option post partum if not breastfeeding</p>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--sl-color);">
+        <div class="card-label" style="color:var(--sl-color);">Sublingual (n=71)</div>
+        <p class="card-note">Generic buprenorphine tablets or buprenorphine/naloxone film; target 16 mg/day</p>
+      </div>
+    </div>
+    <p class="citation">Open-label, noninferiority RCT · 13 US outpatient peripartum OUD treatment sites · July 2020 – October 2024</p>
+  </div>
+
+  <!-- ── SLIDE 4: POPULATION ─────────────────────────────────── -->
+  <div class="slide" id="slide-4">
+    <div class="kicker">Study Population</div>
+    <h2>Participant Characteristics</h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-3" style="max-width:900px; margin-top:1.4rem;">
+      <div class="card">
+        <div class="card-label">Mean Age</div>
+        <div class="card-value">31.2 <span style="font-size:1rem;">yrs</span></div>
+        <div class="card-note">SD 4.6 · Range 18–41</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Mean GA at Enrollment</div>
+        <div class="card-value">21.1 <span style="font-size:1rem;">wks</span></div>
+        <div class="card-note">SD 6.5</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Already on Buprenorphine</div>
+        <div class="card-value">98.6<span style="font-size:1rem;">%</span></div>
+        <div class="card-note">Clinically stable population</div>
+      </div>
+      <div class="card">
+        <div class="card-label">OUD (DSM-5, past 12 mo)</div>
+        <div class="card-value">75.7<span style="font-size:1rem;">%</span></div>
+        <div class="card-note">Moderate or severe</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Polysubstance Use</div>
+        <div class="card-value">85<span style="font-size:1rem;">%</span></div>
+        <div class="card-note">Cotinine positive; 14% amphetamine</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Study Completion</div>
+        <div class="card-value">81<span style="font-size:1rem;">%</span></div>
+        <div class="card-note">Through 12 months post partum</div>
+      </div>
+    </div>
+    <p class="sub" style="font-size:0.82rem; margin-top:1rem;">82.9% White · 7.1% Black · 7.1% Hispanic · 10% Additional groups</p>
+  </div>
+
+  <!-- ── SLIDE 5: PRIMARY OUTCOME ────────────────────────────── -->
+  <div class="slide" id="slide-5">
+    <div class="kicker">Primary Outcome · Pregnancy</div>
+    <h2>Illicit Opioid Abstinence During Pregnancy</h2>
+    <div class="divider"></div>
+    <div class="stat-compare">
+      <div class="stat-box er">
+        <div class="stat-drug">Extended-Release</div>
+        <div class="stat-num">82.5%</div>
+        <div class="stat-label">Negative urine samples</div>
+        <div class="p-badge">Superior · <em>P</em> = .009</div>
+      </div>
+      <div class="stat-vs">vs</div>
+      <div class="stat-box sl">
+        <div class="stat-drug">Sublingual</div>
+        <div class="stat-num">72.6%</div>
+        <div class="stat-label">Negative urine samples</div>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:1.2rem; font-size:0.88rem;">
+      Noninferiority was demonstrated; superiority testing confirmed ER-BUP advantage.<br/>
+      Buprenorphine adherence was high and similar in both groups (~85%).
+    </p>
+    <p class="citation">Primary outcome: proportion of weekly UDS negative for fentanyl, morphine, heroin, oxycodone, and other illicit opioids. Missing samples imputed as positive.</p>
+  </div>
+
+  <!-- ── SLIDE 6: POSTPARTUM OUTCOMES ───────────────────────── -->
+  <div class="slide" id="slide-6">
+    <div class="kicker">Key Secondary Outcome · Post Partum</div>
+    <h2>Illicit Opioid Abstinence Post Partum</h2>
+    <div class="divider"></div>
+    <div class="stat-compare">
+      <div class="stat-box er">
+        <div class="stat-drug">Extended-Release</div>
+        <div class="stat-num">60.2%</div>
+        <div class="stat-label">Negative urine samples</div>
+        <div class="p-badge ns">No Difference · <em>P</em> = .45</div>
+      </div>
+      <div class="stat-vs">vs</div>
+      <div class="stat-box sl">
+        <div class="stat-drug">Sublingual</div>
+        <div class="stat-num">59.5%</div>
+        <div class="stat-label">Negative urine samples</div>
+      </div>
+    </div>
+    <div class="card-grid cols-2" style="max-width:700px; margin-top:1.2rem;">
+      <div class="card">
+        <div class="card-label">Postpartum Adherence</div>
+        <div class="card-note" style="font-size:0.9rem;">ER-BUP: 69.3% · SL-BUP: 75.5%<br/><span style="color:var(--text-muted); font-size:0.78rem;">Difference not significant (<em>P</em> = .30)</span></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Medication Discontinuation</div>
+        <div class="card-note" style="font-size:0.9rem;">35% postpartum vs 10% during pregnancy<br/><span style="color:var(--text-muted); font-size:0.78rem;">Custody demands &amp; CPS involvement cited</span></div>
+      </div>
+    </div>
+    <p class="sub" style="font-size:0.82rem; margin-top:0.8rem;">90% of participants retained maternal custody · 36% had open CPS cases</p>
+  </div>
+
+  <!-- ── SLIDE 7: INFANT OUTCOMES ────────────────────────────── -->
+  <div class="slide" id="slide-7">
+    <div class="kicker">Infant Outcomes</div>
+    <h2>Neonatal Opioid Withdrawal Syndrome (NOWS)</h2>
+    <div class="divider"></div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="outcome-head">Outcome</th>
+          <th class="er-head">ER-BUP (n=66)</th>
+          <th class="sl-head">SL-BUP (n=69)</th>
+          <th style="color:var(--text-muted); font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase;">P Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="outcome-cell">Treated for NOWS</td>
+          <td class="ns-val">30.2%</td>
+          <td class="ns-val">26.5%</td>
+          <td class="ns-val">.64</td>
+        </tr>
+        <tr>
+          <td class="outcome-cell">Opioid treatment duration</td>
+          <td class="ns-val">10.9 days</td>
+          <td class="ns-val">14.8 days</td>
+          <td class="ns-val">.28</td>
+        </tr>
+        <tr>
+          <td class="outcome-cell">Hospital length of stay</td>
+          <td class="ns-val">8.5 days</td>
+          <td class="ns-val">9.5 days</td>
+          <td class="ns-val">.54</td>
+        </tr>
+        <tr>
+          <td class="outcome-cell">Peak Finnegan score</td>
+          <td class="ns-val">10.4</td>
+          <td class="ns-val">10.0</td>
+          <td class="ns-val">.45</td>
+        </tr>
+        <tr>
+          <td class="outcome-cell">Head circumference at birth</td>
+          <td class="sig">34.0 cm</td>
+          <td class="sig">33.4 cm</td>
+          <td class="sig">.049 ✓</td>
+        </tr>
+        <tr>
+          <td class="outcome-cell">12-month developmental issues</td>
+          <td class="ns-val">17.3%</td>
+          <td class="ns-val">15.4%</td>
+          <td class="ns-val">.79</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="sub" style="font-size:0.8rem; margin-top:0.9rem;">Only 28% of infants required opioid treatment for NOWS — lower than historical rates of 39–48%. All infants had live birth and were discharged alive.</p>
+  </div>
+
+  <!-- ── SLIDE 8: MATERNAL SAFETY ────────────────────────────── -->
+  <div class="slide" id="slide-8">
+    <div class="kicker">Maternal Safety</div>
+    <h2>Adverse Events &amp; Safety Outcomes</h2>
+    <div class="divider"></div>
+    <div class="safety-grid">
+      <div class="safety-card" style="border-top: 2px solid var(--accent2);">
+        <div class="sc-label" style="color:var(--accent2);">Serious Adverse Events</div>
+        <div class="sc-row">
+          <span>During Pregnancy</span>
+          <span><span class="sc-er">8.7%</span> vs <span class="sc-sl">26.8%</span> &nbsp;<span style="color:var(--accent2); font-size:0.75rem;"><em>P</em>=.007</span></span>
+        </div>
+        <div class="sc-row">
+          <span>Post Partum</span>
+          <span><span class="sc-er">6.0%</span> vs <span class="sc-sl">18.6%</span> &nbsp;<span style="color:var(--accent2); font-size:0.75rem;"><em>P</em>=.04</span></span>
+        </div>
+        <div class="sc-row">
+          <span>Hospitalizations (pregnancy)</span>
+          <span><span class="sc-er">8.7%</span> vs <span class="sc-sl">26.8%</span></span>
+        </div>
+      </div>
+      <div class="safety-card" style="border-top: 2px solid var(--accent);">
+        <div class="sc-label" style="color:var(--accent);">Postpartum Pain Management</div>
+        <div class="sc-row">
+          <span>Any pain medication</span>
+          <span><span class="sc-er">85.7%</span> vs <span class="sc-sl">98.5%</span> &nbsp;<span style="color:var(--accent2); font-size:0.75rem;"><em>P</em>=.03</span></span>
+        </div>
+        <div class="sc-row">
+          <span>Opioid pain medication</span>
+          <span><span class="sc-er">30.2%</span> vs <span class="sc-sl">50.0%</span> &nbsp;<span style="color:var(--accent2); font-size:0.75rem;"><em>P</em>=.02</span></span>
+        </div>
+        <div class="sc-row">
+          <span>HADS Anxiety score (PP)</span>
+          <span><span class="sc-er">5.8</span> vs <span class="sc-sl">6.8</span> &nbsp;<span style="color:var(--accent2); font-size:0.75rem;"><em>P</em>=.04</span></span>
+        </div>
+      </div>
+      <div class="safety-card" style="border-top: 2px solid var(--accent3);">
+        <div class="sc-label" style="color:var(--accent3);">Non-Serious AEs (Pregnancy)</div>
+        <div class="sc-row">
+          <span>Any non-serious TEAE</span>
+          <span><span class="sc-er">63.8%</span> vs <span class="sc-sl">66.2%</span></span>
+        </div>
+        <div class="sc-row">
+          <span>Medication-related</span>
+          <span><span class="sc-er">26.1%</span> vs <span class="sc-sl">7.0%</span> &nbsp;<span style="color:var(--accent3); font-size:0.75rem;"><em>P</em>=.003</span></span>
+        </div>
+        <div class="sc-row">
+          <span>GI-related (mild/moderate)</span>
+          <span><span class="sc-er">Higher</span> in ER group</span>
+        </div>
+      </div>
+      <div class="safety-card" style="border-top: 2px solid var(--accent4);">
+        <div class="sc-label" style="color:var(--accent4);">Injection Site Reactions (ER only)</div>
+        <div class="sc-row">
+          <span>Severity</span>
+          <span style="color:var(--accent2);">Primarily mild–moderate</span>
+        </div>
+        <div class="sc-row">
+          <span>Overdose events</span>
+          <span style="color:var(--text-muted);">Rare; associated with medication discontinuation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 9: STUDY STRENGTHS & LIMITATIONS ─────────────── -->
+  <div class="slide" id="slide-9">
+    <div class="kicker">Critical Appraisal</div>
+    <h2>Strengths &amp; Limitations</h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2" style="max-width:880px; margin-top:1.4rem;">
+      <div class="card" style="border-top: 2px solid var(--accent2);">
+        <div class="card-label" style="color:var(--accent2);">Strengths</div>
+        <ul style="list-style:none; font-size:0.85rem; line-height:1.8; color:var(--text-muted);">
+          <li>✅ First RCT of ER-buprenorphine in pregnancy</li>
+          <li>✅ 13 geographically diverse US sites</li>
+          <li>✅ High study completion (98% through pregnancy)</li>
+          <li>✅ Comprehensive effectiveness &amp; safety data</li>
+          <li>✅ Pragmatic, real-world clinical settings</li>
+          <li>✅ Polysubstance use population</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top: 2px solid var(--accent3);">
+        <div class="card-label" style="color:var(--accent3);">Limitations</div>
+        <ul style="list-style:none; font-size:0.85rem; line-height:1.8; color:var(--text-muted);">
+          <li>⚠️ Open-label design (no blinding)</li>
+          <li>⚠️ Clinically stable population (most already on BUP)</li>
+          <li>⚠️ Supply disruption affected 16 postpartum participants</li>
+          <li>⚠️ Sample predominantly White, non-Hispanic</li>
+          <li>⚠️ Some secondary outcomes underpowered</li>
+          <li>⚠️ Variation in Finnegan scoring across hospitals</li>
+        </ul>
+      </div>
+    </div>
+    <p class="sub" style="font-size:0.82rem; margin-top:1rem;">Funded by NIH HEAL Initiative · Extended-release buprenorphine donated by Braeburn (CAM2038/Brixadi)</p>
+  </div>
+
+  <!-- ── SLIDE 10: CONCLUSIONS ───────────────────────────────── -->
+  <div class="slide" id="slide-10">
+    <div class="kicker">Conclusions &amp; Clinical Implications</div>
+    <h2>What This Trial Tells Us</h2>
+    <div class="divider"></div>
+    <div class="conclusion-box">
+      <p>
+        Weekly <span class="c-highlight">extended-release buprenorphine</span> produced
+        <span class="c-highlight">significantly higher illicit opioid abstinence</span> during pregnancy
+        compared to sublingual buprenorphine (82.5% vs 72.6%; <em>P</em> = .009),
+        with <span class="c-highlight">fewer serious adverse events</span> and
+        <span class="c-highlight">less postpartum opioid pain medication use</span>.
+        NOWS outcomes were <span class="c-highlight">comparable</span> between groups.
+      </p>
+    </div>
+    <ul class="kp-list" style="margin-top:1rem;">
+      <li>
+        <span class="kp-icon">🟢</span>
+        <span>ER-buprenorphine is an effective, guideline-supportable option for OUD treatment during pregnancy.</span>
+      </li>
+      <li>
+        <span class="kp-icon">🟡</span>
+        <span>Postpartum advantage is not sustained — both groups show similar abstinence rates after delivery.</span>
+      </li>
+      <li>
+        <span class="kp-icon">🔵</span>
+        <span>Infant safety profile is reassuring; no increase in NOWS severity or developmental delay at 12 months.</span>
+      </li>
+    </ul>
+    <p class="citation" style="margin-top:1rem;">Winhusen TJ et al. JAMA Intern Med. Published online March 16, 2026. doi:10.1001/jamainternmed.2026.0057</p>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- ── NAVIGATION ──────────────────────────────────────────── -->
+<button class="nav-btn nav-prev" onclick="prevSlide()" aria-label="Previous slide">&#8592;</button>
+<button class="nav-btn nav-next" onclick="nextSlide()" aria-label="Next slide">&#8594;</button>
+<div class="progress-bar" id="progress"></div>
+<div class="slide-counter" id="counter"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + slides.length;
+    document.getElementById('progress').style.width = ((current + 1) / slides.length * 100) + '%';
+  }
+
+  function nextSlide() { showSlide(current + 1); }
+  function prevSlide() { showSlide(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  // Init
+  showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

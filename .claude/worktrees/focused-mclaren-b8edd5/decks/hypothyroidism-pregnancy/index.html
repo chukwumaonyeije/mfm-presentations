@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Managing Hypothyroidism During Pregnancy</title>
+    <style>
+        /* ─── Reset & Base ─── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── Deck & Slides ─── */
+        .deck {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3em 5%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ─── Typography ─── */
+        .slide-label {
+            font-size: 0.75em;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #8b949e;
+            margin-bottom: 0.6em;
+        }
+
+        h1 {
+            font-size: clamp(2.2em, 5vw, 4em);
+            font-weight: 200;
+            line-height: 1.15;
+            text-align: center;
+            letter-spacing: -0.01em;
+        }
+
+        h2 {
+            font-size: clamp(1.6em, 3.5vw, 2.8em);
+            font-weight: 300;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: clamp(1.1em, 2.2vw, 1.6em);
+            font-weight: 400;
+            text-align: center;
+        }
+
+        p.body-text {
+            font-size: clamp(1em, 1.8vw, 1.35em);
+            line-height: 1.7;
+            text-align: center;
+            max-width: 760px;
+            color: #c9d1d9;
+        }
+
+        /* ─── Color Tokens ─── */
+        .blue   { color: #58a6ff; }
+        .green  { color: #56d364; }
+        .orange { color: #f0883e; }
+        .teal   { color: #39d0d8; }
+        .red    { color: #f85149; }
+        .gold   { color: #e3b341; }
+
+        /* ─── Slide Backgrounds ─── */
+        .bg-title    { background: linear-gradient(135deg, #0d1117 0%, #161b22 60%, #0e1e35 100%); }
+        .bg-dark     { background: #0d1117; }
+        .bg-section  { background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); }
+
+        /* ─── Accent Bar ─── */
+        .accent-bar {
+            width: 60px;
+            height: 4px;
+            border-radius: 2px;
+            margin: 0.8em auto 1.2em;
+        }
+        .accent-blue   { background: #58a6ff; }
+        .accent-green  { background: #56d364; }
+        .accent-orange { background: #f0883e; }
+        .accent-teal   { background: #39d0d8; }
+
+        /* ─── Icon Block ─── */
+        .icon-block {
+            font-size: clamp(3em, 7vw, 5.5em);
+            line-height: 1;
+            margin: 0.25em 0;
+        }
+
+        /* ─── Pill Tags ─── */
+        .pill {
+            display: inline-block;
+            padding: 0.3em 1em;
+            border-radius: 50px;
+            font-size: 0.85em;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin: 0.25em 0.3em;
+        }
+        .pill-blue   { background: rgba(88,166,255,0.15); color: #58a6ff; border: 1px solid rgba(88,166,255,0.35); }
+        .pill-green  { background: rgba(86,211,100,0.12); color: #56d364; border: 1px solid rgba(86,211,100,0.3); }
+        .pill-orange { background: rgba(240,136,62,0.12); color: #f0883e; border: 1px solid rgba(240,136,62,0.3); }
+        .pill-teal   { background: rgba(57,208,216,0.12); color: #39d0d8; border: 1px solid rgba(57,208,216,0.3); }
+
+        /* ─── Cards ─── */
+        .card-row {
+            display: flex;
+            gap: 1.2em;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.4em 1.6em;
+            flex: 1;
+            min-width: 200px;
+            max-width: 280px;
+            text-align: center;
+        }
+
+        .card .card-icon { font-size: 2.2em; margin-bottom: 0.4em; }
+        .card .card-title { font-size: 1em; font-weight: 600; margin-bottom: 0.4em; }
+        .card .card-body  { font-size: 0.85em; color: #8b949e; line-height: 1.5; }
+
+        /* ─── Timeline ─── */
+        .timeline {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 0;
+            width: 100%;
+            max-width: 860px;
+            margin-top: 1em;
+        }
+
+        .tl-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .tl-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 22px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #30363d;
+            z-index: 0;
+        }
+
+        .tl-dot {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1em;
+            font-weight: 700;
+            z-index: 1;
+            position: relative;
+        }
+
+        .tl-label {
+            font-size: 0.8em;
+            text-align: center;
+            margin-top: 0.6em;
+            color: #c9d1d9;
+            max-width: 110px;
+            line-height: 1.4;
+        }
+
+        .tl-sub {
+            font-size: 0.72em;
+            color: #8b949e;
+            text-align: center;
+            max-width: 110px;
+            margin-top: 0.2em;
+        }
+
+        /* ─── Table ─── */
+        .data-table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 820px;
+            font-size: clamp(0.75em, 1.4vw, 0.95em);
+        }
+
+        .data-table th {
+            background: #161b22;
+            color: #8b949e;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.7em 1em;
+            border-bottom: 2px solid #30363d;
+            text-align: left;
+        }
+
+        .data-table td {
+            padding: 0.65em 1em;
+            border-bottom: 1px solid #21262d;
+            color: #c9d1d9;
+            vertical-align: middle;
+        }
+
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+        /* ─── Checklist ─── */
+        .checklist {
+            list-style: none;
+            max-width: 680px;
+            width: 100%;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8em;
+            padding: 0.55em 0;
+            font-size: clamp(0.9em, 1.6vw, 1.15em);
+            color: #c9d1d9;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .checklist li:last-child { border-bottom: none; }
+
+        .check-icon {
+            font-size: 1.1em;
+            margin-top: 0.05em;
+            flex-shrink: 0;
+        }
+
+        /* ─── Two-column layout ─── */
+        .two-col {
+            display: flex;
+            gap: 2em;
+            width: 100%;
+            max-width: 900px;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .col-title {
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.8em;
+            padding-bottom: 0.4em;
+            border-bottom: 2px solid;
+        }
+
+        .col-item {
+            font-size: clamp(0.85em, 1.5vw, 1.05em);
+            color: #c9d1d9;
+            padding: 0.4em 0;
+            border-bottom: 1px solid #21262d;
+            line-height: 1.5;
+        }
+
+        /* ─── Stat Block ─── */
+        .stat-row {
+            display: flex;
+            gap: 1.5em;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 860px;
+            width: 100%;
+        }
+
+        .stat-block {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.2em 1.8em;
+            text-align: center;
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .stat-number {
+            font-size: clamp(2em, 4vw, 3em);
+            font-weight: 200;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #8b949e;
+            margin-top: 0.4em;
+            line-height: 1.4;
+        }
+
+        /* ─── Question Box ─── */
+        .q-box {
+            background: #161b22;
+            border-left: 4px solid #58a6ff;
+            border-radius: 0 10px 10px 0;
+            padding: 0.9em 1.4em;
+            max-width: 720px;
+            width: 100%;
+            margin: 0.4em 0;
+            text-align: left;
+            font-size: clamp(0.9em, 1.6vw, 1.1em);
+            color: #c9d1d9;
+        }
+
+        /* ─── Footer / Nav ─── */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6em 2em;
+            background: #161b22;
+            border-top: 1px solid #21262d;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            background: #21262d;
+            color: #e6edf3;
+            border: 1px solid #30363d;
+            padding: 0.45em 1.3em;
+            font-size: 0.9em;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.2s;
+            user-select: none;
+        }
+
+        .nav-btn:hover { background: #30363d; }
+        .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+        .slide-counter {
+            font-size: 0.85em;
+            color: #8b949e;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-bar-wrap {
+            width: 160px;
+            height: 3px;
+            background: #30363d;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: #58a6ff;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* ─── Branding ─── */
+        .brand {
+            font-size: 0.7em;
+            color: #30363d;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        /* ─── Responsive tweaks ─── */
+        @media (max-width: 600px) {
+            .card-row { flex-direction: column; align-items: center; }
+            .two-col  { flex-direction: column; }
+            .timeline { flex-direction: column; align-items: flex-start; gap: 1em; }
+            .tl-item::after { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="deck">
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 1 — Title
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-title active">
+        <div class="slide-label">Maternal-Fetal Medicine · Patient Education</div>
+        <h1>Managing <span class="blue">Hypothyroidism</span><br>During Pregnancy</h1>
+        <div class="accent-bar accent-blue"></div>
+        <p class="body-text">A guide to keeping your thyroid — and your baby — healthy throughout your pregnancy.</p>
+        <div style="margin-top:2em; display:flex; gap:0.6em; flex-wrap:wrap; justify-content:center;">
+            <span class="pill pill-blue">ACOG Guideline-Based</span>
+            <span class="pill pill-teal">SMFM Endorsed</span>
+            <span class="pill pill-green">Patient-Safe</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 2 — What Is Hypothyroidism?
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-dark">
+        <div class="slide-label">Understanding Your Condition</div>
+        <h2>What Is <span class="blue">Hypothyroidism</span>?</h2>
+        <div class="accent-bar accent-blue"></div>
+        <div class="icon-block">🦋</div>
+        <p class="body-text">Your thyroid gland — a butterfly-shaped gland in your neck — makes hormones that control energy, metabolism, and growth.</p>
+        <p class="body-text" style="margin-top:0.8em;"><strong class="orange">Hypothyroidism</strong> means your thyroid is underactive and does not produce enough hormone.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 3 — Why It Matters in Pregnancy
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-section">
+        <div class="slide-label">Why Thyroid Health Matters</div>
+        <h2>Your Baby Depends on <span class="teal">Your Thyroid</span></h2>
+        <div class="accent-bar accent-teal"></div>
+        <p class="body-text">During the first trimester, your baby cannot yet make its own thyroid hormone. Your supply is the only source for early brain and nervous system development.</p>
+        <div class="stat-row" style="margin-top:1.4em;">
+            <div class="stat-block">
+                <div class="stat-number teal">Weeks 1–12</div>
+                <div class="stat-label">Baby relies entirely on maternal thyroid hormone</div>
+            </div>
+            <div class="stat-block">
+                <div class="stat-number teal">Week 5+</div>
+                <div class="stat-label">Critical window for fetal brain cell formation</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 4 — Reassurance
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-dark">
+        <div class="slide-label">Good News</div>
+        <h2 class="green">Hypothyroidism Is Treatable</h2>
+        <div class="accent-bar accent-green"></div>
+        <div class="icon-block">🌟</div>
+        <p class="body-text">With the right medication, monitoring, and teamwork, women with hypothyroidism have healthy pregnancies and healthy babies every day.</p>
+        <p class="body-text" style="margin-top:0.8em; color:#56d364; font-weight:600;">Proper treatment essentially eliminates the added risk.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 5 — Types of Hypothyroidism in Pregnancy
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-section">
+        <div class="slide-label">Clinical Classification</div>
+        <h2>Types of <span class="blue">Thyroid Dysfunction</span></h2>
+        <div class="accent-bar accent-blue"></div>
+        <table class="data-table" style="margin-top:0.8em;">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>TSH Level</th>
+                    <th>Free T4</th>
+                    <th>Significance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong class="orange">Overt Hypothyroidism</strong></td>
+                    <td>↑ Elevated</td>
+                    <td>↓ Low</td>
+                    <td>Requires immediate treatment</td>
+                </tr>
+                <tr>
+                    <td><strong class="gold">Subclinical Hypothyroidism</strong></td>
+                    <td>↑ Elevated</td>
+                    <td>Normal</td>
+                    <td>Treatment based on antibody status</td>
+                </tr>
+                <tr>
+                    <td><strong class="teal">Isolated Hypothyroxinemia</strong></td>
+                    <td>Normal</td>
+                    <td>↓ Low</td>
+                    <td>Often iodine-related; monitored closely</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 6 — The TSH Target
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-dark">
+        <div class="slide-label">Your Treatment Goal</div>
+        <h2>The <span class="blue">TSH Target</span> During Pregnancy</h2>
+        <div class="accent-bar accent-blue"></div>
+        <div class="stat-row" style="margin-top:1em;">
+            <div class="stat-block" style="border-color:#58a6ff;">
+                <div class="stat-number blue">&lt; 2.5</div>
+                <div class="stat-label">mIU/L — Target TSH throughout pregnancy</div>
+            </div>
+            <div class="stat-block">
+                <div class="stat-number" style="color:#8b949e;">Every 4 wks</div>
+                <div class="stat-label">Blood tests during first half of pregnancy</div>
+            </div>
+            <div class="stat-block">
+                <div class="stat-number" style="color:#8b949e;">~28 wks</div>
+                <div class="stat-label">Additional check in the third trimester</div>
+            </div>
+        </div>
+        <p class="body-text" style="margin-top:1.2em; font-size:0.95em; color:#8b949e;">TSH = Thyroid-Stimulating Hormone. A simple blood test that tells us how well your thyroid is working.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 7 — Medication: Levothyroxine
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-section">
+        <div class="slide-label">Your Medication</div>
+        <h2><span class="orange">Levothyroxine</span> — Your Thyroid Hormone</h2>
+        <div class="accent-bar accent-orange"></div>
+        <div class="two-col" style="margin-top:1em;">
+            <div class="col">
+                <div class="col-title" style="color:#f0883e; border-color:#f0883e;">What It Is</div>
+                <div class="col-item">A synthetic form of thyroxine (T4)</div>
+                <div class="col-item">Identical to what your thyroid naturally makes</div>
+                <div class="col-item">Safe to take throughout pregnancy</div>
+                <div class="col-item">Safe for breastfeeding</div>
+            </div>
+            <div class="col">
+                <div class="col-title" style="color:#58a6ff; border-color:#58a6ff;">Why Doses Change</div>
+                <div class="col-item">Pregnancy raises estrogen levels</div>
+                <div class="col-item">Estrogen increases thyroid-binding proteins</div>
+                <div class="col-item">More hormone is needed to meet demand</div>
+                <div class="col-item">Dose typically rises ~30% in early pregnancy</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 8 — Immediate Action: Dose Increase
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-dark">
+        <div class="slide-label">Action Required</div>
+        <h2>As Soon as You Know You Are <span class="green">Pregnant</span></h2>
+        <div class="accent-bar accent-green"></div>
+        <div class="icon-block">📞</div>
+        <p class="body-text"><strong>Contact us immediately.</strong> Do not wait for your first prenatal appointment.</p>
+        <div style="margin-top:1.2em; background:#161b22; border:1px solid #30363d; border-radius:12px; padding:1.2em 2em; max-width:620px; text-align:center;">
+            <div style="font-size:1.8em; font-weight:200; color:#56d364;">9 pills per week</div>
+            <div style="font-size:0.9em; color:#8b949e; margin-top:0.4em;">instead of your usual 7 — take 2 extra doses on any 2 days each week</div>
+        </div>
+        <p class="body-text" style="margin-top:1em; font-size:0.95em; color:#8b949e;">We will confirm the exact dose adjustment at your first visit.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 9 — Monitoring Timeline
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-section">
+        <div class="slide-label">Monitoring Schedule</div>
+        <h2>Your <span class="teal">Monitoring Timeline</span></h2>
+        <div class="accent-bar accent-teal"></div>
+        <div class="timeline" style="margin-top:1.4em;">
+            <div class="tl-item">
+                <div class="tl-dot" style="background:rgba(88,166,255,0.2); color:#58a6ff; border:2px solid #58a6ff;">✚</div>
+                <div class="tl-label blue">Positive Test</div>
+                <div class="tl-sub">Increase dose immediately</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot" style="background:rgba(57,208,216,0.2); color:#39d0d8; border:2px solid #39d0d8;">4w</div>
+                <div class="tl-label teal">Every 4 Weeks</div>
+                <div class="tl-sub">TSH + Free T4 checks through 20 weeks</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot" style="background:rgba(86,211,100,0.2); color:#56d364; border:2px solid #56d364;">28</div>
+                <div class="tl-label green">Week 28</div>
+                <div class="tl-sub">Third-trimester thyroid check</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot" style="background:rgba(240,136,62,0.2); color:#f0883e; border:2px solid #f0883e;">🍼</div>
+                <div class="tl-label orange">Delivery</div>
+                <div class="tl-sub">Return to pre-pregnancy dose</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot" style="background:rgba(227,179,65,0.2); color:#e3b341; border:2px solid #e3b341;">6w</div>
+                <div class="tl-label gold">6 Weeks Postpartum</div>
+                <div class="tl-sub">TSH recheck to confirm euthyroidism</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 10 — Taking Medication Correctly
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-dark">
+        <div class="slide-label">Medication Tips</div>
+        <h2>Taking Your Medication <span class="orange">Correctly</span></h2>
+        <div class="accent-bar accent-orange"></div>
+        <ul class="checklist" style="margin-top:0.8em;">
+            <li>
+                <span class="check-icon green">✔</span>
+                <span>Take on an <strong>empty stomach</strong>, 30–60 minutes before breakfast, with a full glass of water.</span>
+            </li>
+            <li>
+                <span class="check-icon orange">⚠</span>
+                <span>Wait at least <strong>4 hours</strong> before taking iron, calcium, or prenatal vitamins.</span>
+            </li>
+            <li>
+                <span class="check-icon green">✔</span>
+                <span>Bedtime dosing is an option — at least 2 hours after your last meal.</span>
+            </li>
+            <li>
+                <span class="check-icon orange">⚠</span>
+                <span>Do <strong>not switch brands</strong> of levothyroxine without talking to your doctor first.</span>
+            </li>
+            <li>
+                <span class="check-icon red">✘</span>
+                <span>Never stop taking your medication without medical guidance.</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 11 — Risks of Untreated Hypothyroidism
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-section">
+        <div class="slide-label">Why Treatment Matters</div>
+        <h2>Risks When Hypothyroidism Is <span class="orange">Untreated</span></h2>
+        <div class="accent-bar accent-orange"></div>
+        <div class="card-row" style="margin-top:1em;">
+            <div class="card">
+                <div class="card-icon">🤰</div>
+                <div class="card-title orange">For You</div>
+                <div class="card-body">Preeclampsia · Placental abruption · Preterm labor · Postpartum hemorrhage</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">👶</div>
+                <div class="card-title orange">For Your Baby</div>
+                <div class="card-body">Miscarriage · Low birth weight · Preterm birth · Perinatal complications</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🧠</div>
+                <div class="card-title orange">Brain Development</div>
+                <div class="card-body">Untreated overt hypothyroidism is linked to lower IQ scores and learning differences in offspring</div>
+            </div>
+        </div>
+        <p class="body-text" style="margin-top:1.2em; color:#56d364; font-size:0.95em;">Treatment dramatically reduces all of these risks.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 12 — Subclinical Hypothyroidism
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-dark">
+        <div class="slide-label">A Common Finding</div>
+        <h2><span class="gold">Subclinical</span> Hypothyroidism</h2>
+        <div class="accent-bar" style="background:#e3b341;"></div>
+        <p class="body-text">TSH is mildly elevated, but free T4 is still normal. This is common — affecting up to 1 in 4 pregnant women.</p>
+        <div class="two-col" style="margin-top:1.2em;">
+            <div class="col">
+                <div class="col-title" style="color:#e3b341; border-color:#e3b341;">TPO Antibodies Positive</div>
+                <div class="col-item">Treatment with levothyroxine is recommended</div>
+                <div class="col-item">Reduces risk of miscarriage and preterm birth</div>
+            </div>
+            <div class="col">
+                <div class="col-title" style="color:#8b949e; border-color:#8b949e;">TPO Antibodies Negative</div>
+                <div class="col-item">Treatment considered if TSH &gt; 2.5 mIU/L</div>
+                <div class="col-item">Decision made together with your care team</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 13 — After Delivery
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-section">
+        <div class="slide-label">Postpartum Care</div>
+        <h2>After Your Baby Is <span class="green">Born</span></h2>
+        <div class="accent-bar accent-green"></div>
+        <div class="card-row" style="margin-top:1em;">
+            <div class="card">
+                <div class="card-icon">💊</div>
+                <div class="card-title green">Dose Reduction</div>
+                <div class="card-body">Return to your pre-pregnancy levothyroxine dose immediately after delivery.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🩸</div>
+                <div class="card-title green">TSH Recheck</div>
+                <div class="card-body">Blood test at 6 weeks postpartum to confirm your levels are back to normal.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">⚠️</div>
+                <div class="card-title orange">Watch For</div>
+                <div class="card-body">Postpartum thyroiditis — mood changes, fatigue, or palpitations. Tell us right away.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 14 — Questions to Ask
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-dark">
+        <div class="slide-label">Your Voice Matters</div>
+        <h2>Questions to Ask <span class="blue">Your Doctor</span></h2>
+        <div class="accent-bar accent-blue"></div>
+        <div style="width:100%; max-width:700px; margin-top:0.8em;">
+            <div class="q-box">What is my current TSH level, and what is the goal during my pregnancy?</div>
+            <div class="q-box">When exactly should I increase my dose after a positive pregnancy test?</div>
+            <div class="q-box">Can I take my prenatal vitamin and thyroid medication at the same time?</div>
+            <div class="q-box">When will my next thyroid blood test be scheduled?</div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 15 — Key Reminders
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-section">
+        <div class="slide-label">Summary</div>
+        <h2>Key <span class="teal">Reminders</span></h2>
+        <div class="accent-bar accent-teal"></div>
+        <ul class="checklist" style="margin-top:0.8em;">
+            <li><span class="check-icon green">✔</span><span>Tell us as soon as you know you are pregnant — or if you are planning to conceive.</span></li>
+            <li><span class="check-icon green">✔</span><span>Increase your levothyroxine dose immediately upon a positive pregnancy test.</span></li>
+            <li><span class="check-icon green">✔</span><span>Attend all prenatal appointments and blood tests as scheduled.</span></li>
+            <li><span class="check-icon orange">⚠</span><span>Take your medication correctly — timing and spacing from supplements matter.</span></li>
+            <li><span class="check-icon red">✘</span><span>Never stop your thyroid medication without speaking to your doctor first.</span></li>
+        </ul>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 16 — Partnership Closing
+    ══════════════════════════════════════════ -->
+    <div class="slide bg-title">
+        <div class="slide-label">We Are Here for You</div>
+        <h2 class="green">You Can Have a Healthy Pregnancy</h2>
+        <div class="accent-bar accent-green"></div>
+        <div class="icon-block">🤝</div>
+        <p class="body-text">With proper management, hypothyroidism should not prevent you from having a healthy pregnancy and a healthy baby.</p>
+        <p class="body-text" style="margin-top:0.8em; color:#56d364; font-weight:600;">We are your partners in this journey.</p>
+        <div style="margin-top:2em;">
+            <span class="pill pill-green">Atlanta Perinatal Associates</span>
+            <span class="pill pill-teal">DoctorsWhoCode.blog</span>
+        </div>
+        <div class="brand" style="margin-top:2em;">OpenMFM.org · Dr. Chukwuma Onyeije, MFM</div>
+    </div>
+
+</div><!-- /.deck -->
+
+<!-- ─── Navigation Bar ─── -->
+<div class="nav-bar">
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()">&#8592; Previous</button>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:0.4em;">
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="progressFill" style="width:6.25%;"></div>
+        </div>
+        <span class="slide-counter" id="slideCounter">1 / 16</span>
+    </div>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next &#8594;</button>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    const counter = document.getElementById('slideCounter');
+    const fill = document.getElementById('progressFill');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function showSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === index);
+        });
+        counter.textContent = (index + 1) + ' / ' + total;
+        fill.style.width = ((index + 1) / total * 100) + '%';
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === total - 1;
+    }
+
+    function nextSlide() {
+        if (currentSlide < total - 1) {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    showSlide(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrops Fetalis: Understanding Your Baby's Evaluation</title>
+    <style>
+        :root {
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --heading: #0f4c75;
+            --primary: #0f4c75;
+            --primary-hover: #0a3557;
+            --accent: #1b9aaa;
+            --accent-light: #e8f7f9;
+            --border: #cbd5e1;
+            --muted: #64748b;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --tag-bg: #e0f2fe;
+            --tag-text: #0369a1;
+        }
+
+        body.dark {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #e2e8f0;
+            --heading: #38bdf8;
+            --primary: #38bdf8;
+            --primary-hover: #0ea5e9;
+            --accent: #22d3ee;
+            --accent-light: #0f2a30;
+            --border: #334155;
+            --muted: #94a3b8;
+            --tag-bg: #1e3a5f;
+            --tag-text: #7dd3fc;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            transition: background 0.3s, color 0.3s;
+            min-height: 100vh;
+        }
+
+        /* ─── TOPBAR ─── */
+        .topbar {
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+        }
+        .topbar a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 600; }
+        .topbar a:hover { color: white; }
+        .topbar-right { display: flex; gap: 1rem; align-items: center; }
+        .dark-toggle {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.78rem;
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            background: linear-gradient(135deg, #0f4c75 0%, #1b9aaa 100%);
+            color: white;
+            padding: 3rem 1.5rem 2.5rem;
+            text-align: center;
+        }
+        body.dark .hero {
+            background: linear-gradient(135deg, #0a2a45 0%, #0f4c75 100%);
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 20px;
+            padding: 0.3rem 1rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: white;
+        }
+        .hero p {
+            font-size: 1.05rem;
+            max-width: 640px;
+            margin: 0 auto 1.5rem;
+            opacity: 0.92;
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        .hero-stat {
+            text-align: center;
+        }
+        .hero-stat .num {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: block;
+        }
+        .hero-stat .lbl {
+            font-size: 0.78rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* ─── MAIN LAYOUT ─── */
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 1rem 4rem;
+        }
+
+        /* ─── SECTION TITLES ─── */
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* ─── CARDS ─── */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 1.75rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            margin-bottom: 1.5rem;
+        }
+
+        /* ─── DEFINITION BOX ─── */
+        .definition-box {
+            background: var(--accent-light);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .definition-box h3 {
+            color: var(--heading);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .definition-box p {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        /* ─── CAUSE GRID ─── */
+        .cause-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .cause-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.1rem 1.25rem;
+            border-top: 3px solid var(--accent);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .cause-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        }
+        .cause-card .cause-icon {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+        .cause-card h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 0.3rem;
+        }
+        .cause-card .freq-tag {
+            display: inline-block;
+            background: var(--tag-bg);
+            color: var(--tag-text);
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.15rem 0.6rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+        .cause-card p {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        /* ─── SCREENER ─── */
+        .screener-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .progress-bar-wrap {
+            background: var(--border);
+            border-radius: 10px;
+            height: 6px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+        .step-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+        .screener-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 0.5rem;
+        }
+        .screener-instruction {
+            font-size: 0.95rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .factor-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 1.1rem;
+            border: 1.5px dashed var(--border);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .factor-item:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+        .factor-item.selected {
+            border-style: solid;
+            border-color: var(--primary);
+            background: var(--accent-light);
+        }
+        .factor-check {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .factor-item.selected .factor-check {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        .factor-text {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+        .factor-text strong {
+            display: block;
+            font-size: 0.95rem;
+            margin-bottom: 0.15rem;
+        }
+        .factor-text span {
+            font-size: 0.82rem;
+            color: var(--muted);
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.75rem;
+            gap: 1rem;
+        }
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 1.5px solid var(--primary);
+        }
+        .btn-outline:hover { background: var(--accent-light); }
+
+        /* ─── RESULTS ─── */
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .result-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--heading);
+        }
+        .result-section {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+        }
+        .result-section h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .result-section p, .result-section ul {
+            font-size: 0.93rem;
+            color: var(--text);
+        }
+        .result-section ul {
+            padding-left: 1.2rem;
+        }
+        .result-section ul li {
+            margin-bottom: 0.4rem;
+        }
+        .result-note {
+            font-size: 0.82rem;
+            color: var(--muted);
+            background: var(--bg);
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+        }
+
+        /* ─── WORKUP TIMELINE ─── */
+        .timeline {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-top: 1rem;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 14px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -2.5rem;
+            top: 4px;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 3px solid var(--bg);
+        }
+        .timeline-item h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 0.3rem;
+        }
+        .timeline-item p {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        /* ─── PROGNOSIS TABLE ─── */
+        .prognosis-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        .prognosis-table th {
+            background: var(--primary);
+            color: white;
+            padding: 0.65rem 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        .prognosis-table th:first-child { border-radius: 8px 0 0 0; }
+        .prognosis-table th:last-child { border-radius: 0 8px 0 0; }
+        .prognosis-table td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+        .prognosis-table tr:last-child td { border-bottom: none; }
+        .prognosis-table tr:nth-child(even) td { background: var(--bg); }
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-green { background: #dcfce7; color: #15803d; }
+        .badge-yellow { background: #fef9c3; color: #a16207; }
+        .badge-red { background: #fee2e2; color: #b91c1c; }
+        body.dark .badge-green { background: #14532d; color: #86efac; }
+        body.dark .badge-yellow { background: #422006; color: #fde047; }
+        body.dark .badge-red { background: #450a0a; color: #fca5a5; }
+
+        /* ─── ACCORDION ─── */
+        .accordion-item {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
+        .accordion-header {
+            background: var(--card-bg);
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--heading);
+            font-size: 0.95rem;
+            user-select: none;
+        }
+        .accordion-header:hover { background: var(--accent-light); }
+        .accordion-arrow { transition: transform 0.25s; font-size: 0.75rem; color: var(--muted); }
+        .accordion-item.open .accordion-arrow { transform: rotate(180deg); }
+        .accordion-body {
+            display: none;
+            padding: 1rem 1.25rem;
+            font-size: 0.9rem;
+            color: var(--text);
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+        }
+        .accordion-item.open .accordion-body { display: block; }
+
+        /* ─── MODAL ─── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: var(--card-bg);
+            border-radius: 14px;
+            max-width: 640px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+        }
+        .modal-box h2 { color: var(--heading); margin-bottom: 1rem; font-size: 1.3rem; }
+        .modal-box h4 { color: var(--heading); margin: 1rem 0 0.4rem; font-size: 1rem; }
+        .modal-box p, .modal-box li { font-size: 0.92rem; color: var(--text); margin-bottom: 0.5rem; }
+        .modal-box ul, .modal-box ol { padding-left: 1.3rem; }
+
+        /* ─── FOOTER ─── */
+        .footer {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            font-size: 0.78rem;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+        .disclaimer-banner {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.82rem;
+            color: #92400e;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+        body.dark .disclaimer-banner {
+            background: #1c1200;
+            border-color: #78350f;
+            color: #fde68a;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 600px) {
+            .hero-stats { gap: 1rem; }
+            .cause-grid { grid-template-columns: 1fr 1fr; }
+            .btn-row { flex-direction: column-reverse; }
+            .btn, .btn-outline { width: 100%; text-align: center; }
+        }
+    </style>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/Bkah5abxWFo8qIXAvOIshK9x7w6lk4d0xMZXZC7Nln7tq_99XCaUzFkUGP43lZSTgVrfE1OTtSufCMSZ8LWF9uwvrKzrRyxkJ9ZlhodLezd1WQcfTWdLyhtne1QMBeIdLZzQXhI3iQcHf39F_W4P2K5ftiY5HOz9IQkfJ2BM73wq1vd6Q5TWq-BfOweyYEiMuZNVjSOZO5hIKosOVT8dAb2zslbsnjrnBZaQKVUkLOsR7DySdzlIp6P8TfGDpO4PmYOmY-IgKfDqwduMDKAthZFgIuSijU2m6ujUp996Pt7y2POKXlvuBxmGrPBIsZoyuIYFkk40vH4P46ydtSWyp-qr1avGekR6_l13RRAqY9grNn7_KuiRZMGjD8xOpsQqPkMAwY6QZ1v9iq1y5fZG4h9uUkImnZDXhIVTOjwQVgI585EqpC9eWnwzcSiTwRPR1yVB1L5wZXD8jHAiWJLoDAr_CfKjfLzjnkFOYf_lM2mcPQGwqTcUpCu4iNw7zMhqEsJCfLZ5qerhBgDQmKfkaWH3hwdRInN6dsUy22uStXU9Ur6fHUKxK80S4z8zJjuRHRcp27_lbVXj_ZPOfKZ9iIuZ4xKOi7pG0eLQl5rJeg33jXvUwaDa2OCsxBpXxmv1p3BvthB4tJzR8E7A3dM1SiFj8UnKOIgaUR5_pIP_E5r-eTzSX5qGOvvhgq_qYYPLlbFYGsvBqP81e16nFJY451-vFBTiEYy4hoAUvQaexBfhS0EeB5C32HkrUkQPgcXEF-5fGq2Ls-gEHtsKGsptL3pRa5P-vbnlwUESXMpmHShDDTFofdPSDfFO_eljmLYd8-zsSuUN434X8JgDKTZyhDGOywXKXLunyF-R8NZD_h40R3ccZu7FTt9IgKxMbJqyKaiPYGGMnsnVGo5Lfciq8PCWfJqgIK8ilQ9CnrB2Tc8eUJ0j5YbPhBLrCJ9Z47IMcE3oh6hJgejpNZD2x2nAuBfQxhqKnD-VBENy8d4-3WOLHr16xBCdp_GBpYg_CijEALj2eyCYjNUjXERp2phKRm-z7usS1t4-J5vs-B6R_QR1dKpL4lbKOhBX-_tT8nh3WFJoiqhFNxNzYLR5CswcYIsrHizwpK8X6934Wkj2thSGV8vUWkNmNw2SWftF_BTvhBbXn5tnMqcN0C6rKupkP8kl15XE0FlsHdmmKdBF5SYckQEhzwdE-jYZav2WHIQM2UalgA14fSULW_tKInzYoL2d1iKepltAyFjVskpJKychvNsEFr-65-pqyr8jtfRSBvkLdkFjArMWdXJ3_DtQLejzlcVq3Fu1khZGd2D6bWNSPGriNSmnWQgwAXT5Ja2Ap7XVtgWPnRqplzGtdid4rLyMf-sdeg_REiQV3ThIQ3DOWQauWcCT-2vbUVi_IWBAczjyTgTGuvUiLgqVRfSiw9EDvCP8rm-aFGj0_rGFKGvczfjkLMbXcxdtnf8NkgUOBdHDEoSM9NMszPra8g_9icZ_FFQHFxzynCS9Gko2Ek2e0TPq9JZ8dk2M7sBn3ZgsMw2BrrMVUg8MEwENGlWepET-QWjcIqzOsJwe2iZRVmxeRxMY4HOEj-ul4fvFpbE1ggNqmqNXkfo1Ckj28GHsUvBgsYU4rJQRPYE'></script></head>
+<body>
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <a href="https://atlantaperinatal.com" target="_blank">Atlanta Perinatal Associates</a>
+        <div class="topbar-right">
+            <a href="https://doctorswhocode.blog" target="_blank">DoctorsWhoCode.blog</a>
+            <button class="dark-toggle" id="darkToggle">Dark Mode</button>
+            <button class="dark-toggle" id="aboutBtn" style="cursor:pointer;">About This Tool</button>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-badge">Patient Education | SMFM Consult Series #75</div>
+        <h1>Understanding Hydrops Fetalis</h1>
+        <p>When your baby has fluid buildup, our team works through a careful, step-by-step evaluation to find the cause and guide your care.</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="num">~90%</span>
+                <span class="lbl">of cases are non-immune</span>
+            </div>
+            <div class="hero-stat">
+                <span class="num">1 in 2,500</span>
+                <span class="lbl">pregnancies affected</span>
+            </div>
+            <div class="hero-stat">
+                <span class="num">10+</span>
+                <span class="lbl">possible underlying causes</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+
+        <div class="disclaimer-banner">
+            ⚠️ <span><strong>For educational purposes only.</strong> This tool does not provide medical advice. All clinical decisions must be made with your healthcare provider. Based on SMFM Consult Series #75 (2026).</span>
+        </div>
+
+        <!-- WHAT IS HYDROPS -->
+        <div class="section-title">
+            <span class="section-icon">1</span>
+            What Is Hydrops Fetalis?
+        </div>
+        <div class="card">
+            <div class="definition-box">
+                <h3>Medical Definition</h3>
+                <p>Hydrops fetalis is the presence of abnormal fluid collections in <strong>two or more fetal body compartments</strong>, detected by ultrasound. The word "hydrops" comes from the Greek word for water.</p>
+            </div>
+            <p style="margin-bottom:1rem; font-size:0.95rem;">The fluid can appear in any combination of these four areas:</p>
+            <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:0.75rem; margin-bottom:1rem;">
+                <div style="background:var(--accent-light); border-radius:8px; padding:0.85rem; text-align:center;">
+                    <div style="font-size:1.5rem; margin-bottom:0.3rem;">🫁</div>
+                    <strong style="font-size:0.88rem; color:var(--heading);">Pleural Effusion</strong>
+                    <p style="font-size:0.78rem; color:var(--muted); margin-top:0.2rem;">Fluid around the lungs</p>
+                </div>
+                <div style="background:var(--accent-light); border-radius:8px; padding:0.85rem; text-align:center;">
+                    <div style="font-size:1.5rem; margin-bottom:0.3rem;">❤️</div>
+                    <strong style="font-size:0.88rem; color:var(--heading);">Pericardial Effusion</strong>
+                    <p style="font-size:0.78rem; color:var(--muted); margin-top:0.2rem;">Fluid around the heart</p>
+                </div>
+                <div style="background:var(--accent-light); border-radius:8px; padding:0.85rem; text-align:center;">
+                    <div style="font-size:1.5rem; margin-bottom:0.3rem;">🫃</div>
+                    <strong style="font-size:0.88rem; color:var(--heading);">Ascites</strong>
+                    <p style="font-size:0.78rem; color:var(--muted); margin-top:0.2rem;">Fluid in the abdomen</p>
+                </div>
+                <div style="background:var(--accent-light); border-radius:8px; padding:0.85rem; text-align:center;">
+                    <div style="font-size:1.5rem; margin-bottom:0.3rem;">🧒</div>
+                    <strong style="font-size:0.88rem; color:var(--heading);">Skin Edema</strong>
+                    <p style="font-size:0.78rem; color:var(--muted); margin-top:0.2rem;">Fluid under the skin (&gt;5mm)</p>
+                </div>
+            </div>
+            <p style="font-size:0.9rem; color:var(--muted);">Additional ultrasound findings may include a large placenta (placentomegaly) and excess amniotic fluid (polyhydramnios). <strong>Non-immune hydrops fetalis (NIHF)</strong> means the fluid buildup is <em>not</em> caused by blood type incompatibility between mother and baby — this is the most common type, accounting for about 90% of all hydrops cases.</p>
+        </div>
+
+        <!-- CAUSES -->
+        <div class="section-title">
+            <span class="section-icon">2</span>
+            What Causes Hydrops Fetalis?
+        </div>
+        <p style="font-size:0.93rem; color:var(--muted); margin-bottom:1rem;">Hydrops is not a disease itself — it is a <strong>sign of an underlying problem</strong>. Finding that cause is the most important goal of the evaluation. There are many possible causes, grouped into the categories below.</p>
+        <div class="cause-grid">
+            <div class="cause-card">
+                <div class="cause-icon">🧬</div>
+                <h4>Genetic &amp; Chromosomal</h4>
+                <span class="freq-tag">Most common: 19%–53%</span>
+                <p>Conditions like Down syndrome (trisomy 21), Turner syndrome (monosomy X), Noonan syndrome, and other single-gene disorders (RASopathies).</p>
+            </div>
+            <div class="cause-card">
+                <div class="cause-icon">❤️</div>
+                <h4>Cardiovascular</h4>
+                <span class="freq-tag">8%–20% of cases</span>
+                <p>Structural heart defects, fast heart rates (SVT, atrial flutter), or slow heart rates (heart block) that impair the heart's ability to pump blood effectively.</p>
+            </div>
+            <div class="cause-card">
+                <div class="cause-icon">🩸</div>
+                <h4>Fetal Anemia</h4>
+                <span class="freq-tag">0%–10% of cases</span>
+                <p>Severe anemia from inherited conditions (like alpha-thalassemia), parvovirus infection, or fetal-maternal bleeding leads to heart failure and fluid accumulation.</p>
+            </div>
+            <div class="cause-card">
+                <div class="cause-icon">🦠</div>
+                <h4>Infections</h4>
+                <span class="freq-tag">7%–8% of cases</span>
+                <p>Parvovirus B19 is the most common infectious cause. Others include cytomegalovirus (CMV), toxoplasmosis, syphilis, and varicella.</p>
+            </div>
+            <div class="cause-card">
+                <div class="cause-icon">🫁</div>
+                <h4>Pulmonary / Thoracic</h4>
+                <span class="freq-tag">5%–6% of cases</span>
+                <p>Large lung masses like a congenital pulmonary airway malformation (CPAM) or bronchopulmonary sequestration can compress the heart and block venous return.</p>
+            </div>
+            <div class="cause-card">
+                <div class="cause-icon">👶👶</div>
+                <h4>Twin Complications</h4>
+                <span class="freq-tag">4%–5% of cases</span>
+                <p>In identical twin pregnancies, twin-to-twin transfusion syndrome (TTTS) can cause one twin to become severely fluid-overloaded.</p>
+            </div>
+            <div class="cause-card">
+                <div class="cause-icon">🔗</div>
+                <h4>Placental / Cord</h4>
+                <span class="freq-tag">~2% of cases</span>
+                <p>Placental tumors (chorioangiomas) can act as high-flow shunts, causing the baby's heart to work too hard and leading to high-output cardiac failure.</p>
+            </div>
+            <div class="cause-card">
+                <div class="cause-icon">🔬</div>
+                <h4>Lymphatic Dysplasia</h4>
+                <span class="freq-tag">6%–10% of cases</span>
+                <p>Abnormal development of the lymphatic system prevents proper fluid drainage. Often associated with genetic syndromes like Noonan or Milroy disease.</p>
+            </div>
+        </div>
+
+        <!-- EVALUATION SCREENER -->
+        <div class="section-title" style="margin-top:2rem;">
+            <span class="section-icon">3</span>
+            Interactive Evaluation Guide
+        </div>
+        <p style="font-size:0.93rem; color:var(--muted); margin-bottom:1rem;">Use this tool to understand what evaluation steps are typically recommended based on your baby's findings. Select all that apply to your situation.</p>
+
+        <div class="screener-card" id="screenerCard">
+            <!-- Injected by JS -->
+        </div>
+
+        <!-- WORKUP TIMELINE -->
+        <div class="section-title" style="margin-top:2rem;">
+            <span class="section-icon">4</span>
+            The Diagnostic Workup: Step by Step
+        </div>
+        <div class="card">
+            <p style="font-size:0.93rem; color:var(--muted); margin-bottom:1.25rem;">The evaluation for hydrops fetalis follows a structured algorithm recommended by the Society for Maternal-Fetal Medicine (SMFM). Think of it as a systematic search to identify the underlying cause.</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">1</div>
+                    <h4>History &amp; Lab Review</h4>
+                    <p>Your doctor reviews your family history (for genetic conditions), medical history, and all prior lab results. Blood type and antibody screening (Indirect Coombs test) are repeated. A complete blood count and hemoglobin electrophoresis help screen for inherited anemias like thalassemia.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">2</div>
+                    <h4>Comprehensive Ultrasound &amp; Fetal Echo</h4>
+                    <p>A detailed anatomic survey examines every organ system. A fetal echocardiogram (specialized heart ultrasound) is performed to evaluate the heart's structure and rhythm. The placenta, umbilical cord, amniotic fluid, and fetal growth are also assessed.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">3</div>
+                    <h4>MCA Doppler (Anemia Screen)</h4>
+                    <p>The Middle Cerebral Artery (MCA) Doppler measures blood flow velocity in a key brain artery. When a baby is anemic, the heart pumps faster to compensate, and this shows up as an elevated MCA Doppler value (≥1.5 MoM). This is a non-invasive way to screen for fetal anemia before considering more invasive testing.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">4</div>
+                    <h4>Amniocentesis (Genetic &amp; Infection Testing)</h4>
+                    <p>A small sample of amniotic fluid is collected by a thin needle under ultrasound guidance. This fluid is used for: <strong>Chromosomal Microarray Analysis (CMA)</strong> to detect genetic abnormalities, and <strong>PCR testing</strong> for infections like parvovirus, CMV, and toxoplasmosis. SMFM recommends this testing for all pregnancies with one or more fetal effusions.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">5</div>
+                    <h4>Fetal Blood Sampling (PUBS) — If Anemia Suspected</h4>
+                    <p>If the MCA Doppler is elevated (≥1.5 MoM), a procedure called Percutaneous Umbilical Blood Sampling (PUBS) may be recommended. This directly measures the baby's blood count and can confirm the cause and severity of anemia. If severe anemia is found, an intrauterine transfusion can be performed at the same time.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">6</div>
+                    <h4>Exome or Genome Sequencing — If Initial Tests Are Negative</h4>
+                    <p>If the chromosomal microarray and other tests do not find a cause, SMFM recommends offering exome or genome sequencing. This advanced genetic test looks at the protein-coding regions (exome) or the entire genetic code (genome) to identify single-gene disorders — such as RASopathies, inborn errors of metabolism, or other rare conditions — that are not detectable by standard chromosomal testing.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGNOSIS -->
+        <div class="section-title">
+            <span class="section-icon">5</span>
+            Prognosis: What to Expect
+        </div>
+        <div class="card">
+            <p style="font-size:0.93rem; color:var(--muted); margin-bottom:1rem;">Outcomes in hydrops fetalis vary widely and depend heavily on the <strong>underlying cause</strong>, gestational age, and response to treatment. The following table summarizes how the prognosis differs by cause.</p>
+            <table class="prognosis-table">
+                <thead>
+                    <tr>
+                        <th>Underlying Cause</th>
+                        <th>Prognosis</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Tachyarrhythmia (SVT)</td>
+                        <td><span class="badge badge-green">More Favorable</span></td>
+                        <td>Often treatable with medications given to the mother</td>
+                    </tr>
+                    <tr>
+                        <td>Parvovirus Infection</td>
+                        <td><span class="badge badge-green">More Favorable</span></td>
+                        <td>Anemia often transient; intrauterine transfusion highly effective (~85% survival)</td>
+                    </tr>
+                    <tr>
+                        <td>Lymphatic Dysplasia</td>
+                        <td><span class="badge badge-green">More Favorable</span></td>
+                        <td>Better long-term neurodevelopmental outcomes reported</td>
+                    </tr>
+                    <tr>
+                        <td>Lung Masses (CPAM)</td>
+                        <td><span class="badge badge-yellow">Variable</span></td>
+                        <td>Prognosis worsens with larger lesion size (CPAM volume ratio ≥1.6)</td>
+                    </tr>
+                    <tr>
+                        <td>Chromosomal Aneuploidy</td>
+                        <td><span class="badge badge-yellow">Variable</span></td>
+                        <td>Depends on specific diagnosis (e.g., trisomy 21 vs. trisomy 13/18)</td>
+                    </tr>
+                    <tr>
+                        <td>Trisomy 13 or 18</td>
+                        <td><span class="badge badge-red">Guarded</span></td>
+                        <td>Associated with high risk of morbidity and mortality</td>
+                    </tr>
+                    <tr>
+                        <td>Inborn Errors of Metabolism</td>
+                        <td><span class="badge badge-red">Guarded</span></td>
+                        <td>Cardiac anomalies and metabolic disorders carry higher risk</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.82rem; color:var(--muted); margin-top:1rem;">Overall, among live-born neonates with NIHF, survival ranges from 36% to 68% in published series. Your MFM specialist will provide individualized counseling based on your specific situation.</p>
+        </div>
+
+        <!-- FAQ -->
+        <div class="section-title">
+            <span class="section-icon">6</span>
+            Frequently Asked Questions
+        </div>
+        <div id="faqContainer">
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    What is mirror syndrome? <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-body">
+                    Mirror syndrome is a serious complication in which the pregnant person develops a form of preeclampsia that "mirrors" the baby's hydropic condition. It occurs in approximately 8%–38% of pregnancies with NIHF. Signs include swelling (edema), high blood pressure, and protein in the urine. It requires close monitoring and, in many cases, delivery. Your doctor will monitor your blood pressure and lab values throughout the pregnancy.
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    Will my baby need surgery before birth? <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-body">
+                    Some causes of hydrops can be treated before birth (in utero). For example, fetal anemia from parvovirus can be treated with an intrauterine blood transfusion. Certain arrhythmias can be treated with medications given to the mother. Large chest masses may be amenable to fetal intervention at specialized centers. However, many causes do not have a fetal treatment, and management focuses on careful monitoring and planning for delivery.
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    How soon will we know the cause? <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-body">
+                    Some results, like the MCA Doppler and ultrasound findings, are available immediately. Infection PCR results from amniocentesis typically return within 1–2 weeks. Chromosomal microarray results usually take 2–3 weeks. Exome or genome sequencing, if needed, can take 4–8 weeks or longer. Your care team will keep you updated as results become available and will not wait for all results before counseling you on management options.
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    What does "NIHF spectrum" mean? <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-body">
+                    "NIHF spectrum" refers to pregnancies where only a single fetal fluid collection is present (e.g., an isolated pleural effusion or ascites alone), rather than the full definition of hydrops which requires two or more fluid compartments. The underlying causes and evaluation approach are largely the same, but outcomes can differ. A single effusion may progress to full hydrops, so careful monitoring is important.
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    Will this happen again in a future pregnancy? <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-body">
+                    Recurrence risk depends entirely on the underlying cause. If a genetic condition with autosomal recessive inheritance (such as an inborn error of metabolism) is identified, the recurrence risk in future pregnancies is 25%. If the cause is an infection like parvovirus, recurrence is unlikely. If no cause is found, recurrence risk is harder to estimate. Genetic counseling is a critical part of the evaluation for this reason.
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end .container -->
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>Based on: <strong>SMFM Consult Series #75</strong> — Evaluation and management of non-immune hydrops fetalis (2026). <a href="https://doi.org/10.1002/pmf2.70208" target="_blank">DOI: 10.1002/pmf2.70208</a></p>
+        <p style="margin-top:0.4rem;">Created by <a href="https://doctorswhocode.blog" target="_blank">DoctorsWhoCode.blog</a> | Atlanta Perinatal Associates | Dr. C. Onyeije, MFM</p>
+        <p style="margin-top:0.4rem;">⚠️ For educational purposes only. Not a substitute for professional medical advice.</p>
+    </div>
+
+    <!-- ABOUT MODAL -->
+    <div class="modal-overlay" id="aboutModal">
+        <div class="modal-box">
+            <button class="modal-close" id="closeModal">✕</button>
+            <h2>About This Tool</h2>
+            <p>This patient education microsite was created by <strong>Atlanta Perinatal Associates</strong> and <a href="https://doctorswhocode.blog" target="_blank">DoctorsWhoCode.blog</a> to help patients and families understand the evaluation process for non-immune hydrops fetalis (NIHF).</p>
+            <h4>What Is This Tool For?</h4>
+            <p>This interactive guide translates the clinical recommendations from the <strong>Society for Maternal-Fetal Medicine (SMFM) Consult Series #75</strong> into patient-friendly language. It is designed to help you:</p>
+            <ul>
+                <li>Understand what hydrops fetalis is and how it is detected</li>
+                <li>Learn about the many possible underlying causes</li>
+                <li>Follow the step-by-step diagnostic workup your care team will use</li>
+                <li>Understand what the test results mean for your baby's prognosis</li>
+            </ul>
+            <h4>Clinical Basis</h4>
+            <p>All content is based on SMFM Consult Series #75: <em>Evaluation and management of non-immune hydrops fetalis</em>, published in <em>Pregnancy</em> (2026). DOI: 10.1002/pmf2.70208.</p>
+            <h4>Important Disclaimer</h4>
+            <p>This tool is for <strong>educational purposes only</strong> and does not provide medical advice, diagnosis, or treatment recommendations. Every pregnancy is unique. Please discuss your specific situation with your Maternal-Fetal Medicine specialist.</p>
+        </div>
+    </div>
+
+    <script>
+        // ─── SCREENER CONFIG ───
+        const STEPS = [
+            {
+                title: "Step 1: Ultrasound Findings",
+                instruction: "Select all findings that were identified on your ultrasound. This helps illustrate which evaluation pathways are typically recommended.",
+                factors: [
+                    {
+                        id: "full_hydrops",
+                        label: "Full Hydrops Fetalis",
+                        desc: "Fluid in 2 or more body compartments (e.g., ascites + pleural effusion, or skin edema + pericardial effusion)"
+                    },
+                    {
+                        id: "single_effusion",
+                        label: "Single Fetal Effusion (NIHF Spectrum)",
+                        desc: "Fluid in only one compartment — e.g., isolated pleural effusion, pericardial effusion, or ascites alone"
+                    },
+                    {
+                        id: "structural_anomaly",
+                        label: "Structural Anomaly Identified",
+                        desc: "A heart defect, lung mass, skeletal abnormality, or other structural finding was seen on ultrasound"
+                    },
+                    {
+                        id: "placentomegaly",
+                        label: "Large Placenta or Placental Mass",
+                        desc: "Placentomegaly (placenta ≥4 cm in 2nd trimester, ≥6 cm in 3rd trimester) or a placental tumor (chorioangioma)"
+                    },
+                    {
+                        id: "polyhydramnios",
+                        label: "Excess Amniotic Fluid (Polyhydramnios)",
+                        desc: "Deepest vertical pocket ≥8 cm or amniotic fluid index ≥24 cm"
+                    }
+                ]
+            },
+            {
+                title: "Step 2: Laboratory & Maternal Findings",
+                instruction: "Select any lab results or maternal history findings that apply.",
+                factors: [
+                    {
+                        id: "positive_coombs",
+                        label: "Positive Indirect Coombs Test",
+                        desc: "Suggests immune-related hydrops from red blood cell antibodies — a different evaluation pathway"
+                    },
+                    {
+                        id: "mca_elevated",
+                        label: "Elevated MCA Doppler (≥1.5 MoM)",
+                        desc: "Middle Cerebral Artery Doppler is elevated, suggesting possible fetal anemia"
+                    },
+                    {
+                        id: "low_mcv",
+                        label: "Low MCV or Abnormal Hemoglobin Electrophoresis",
+                        desc: "Maternal blood tests suggest possible alpha-thalassemia carrier status"
+                    },
+                    {
+                        id: "infection_exposure",
+                        label: "Known or Suspected Infection Exposure",
+                        desc: "Exposure to parvovirus (Fifth disease), CMV, toxoplasmosis, or syphilis during pregnancy"
+                    },
+                    {
+                        id: "family_history",
+                        label: "Family History of Genetic Condition",
+                        desc: "A known genetic disorder in the family that could be associated with fetal effusions"
+                    },
+                    {
+                        id: "twin_pregnancy",
+                        label: "Monochorionic (Identical) Twin Pregnancy",
+                        desc: "Sharing a placenta puts twins at risk for twin-to-twin transfusion syndrome (TTTS)"
+                    }
+                ]
+            }
+        ];
+
+        let currentStep = 0;
+        let selections = {};
+
+        const screenerCard = document.getElementById('screenerCard');
+
+        function renderStep(idx) {
+            const step = STEPS[idx];
+            const totalSteps = STEPS.length;
+            const progress = ((idx) / totalSteps) * 100;
+            const sel = selections[idx] || [];
+
+            const factorsHtml = step.factors.map(f => {
+                const isSelected = sel.includes(f.id);
+                return `
+                    <div class="factor-item ${isSelected ? 'selected' : ''}" data-step="${idx}" data-factor="${f.id}">
+                        <div class="factor-check">${isSelected ? '✓' : ''}</div>
+                        <div class="factor-text">
+                            <strong>${f.label}</strong>
+                            <span>${f.desc}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            screenerCard.innerHTML = `
+                <div class="progress-bar-wrap">
+                    <div class="progress-bar-fill" style="width:${progress}%"></div>
+                </div>
+                <div class="step-label">Step ${idx + 1} of ${totalSteps}</div>
+                <div class="screener-title">${step.title}</div>
+                <p class="screener-instruction">${step.instruction}</p>
+                ${factorsHtml}
+                <div class="btn-row">
+                    ${idx > 0 ? '<button class="btn btn-outline" id="backBtn">← Back</button>' : '<div></div>'}
+                    <button class="btn" id="nextBtn">${idx === totalSteps - 1 ? 'See My Evaluation Summary →' : 'Next →'}</button>
+                </div>
+            `;
+        }
+
+        function renderResults() {
+            const step0 = selections[0] || [];
+            const step1 = selections[1] || [];
+
+            let sections = [];
+
+            // Immune hydrops check
+            if (step1.includes('positive_coombs')) {
+                screenerCard.innerHTML = `
+                    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+                    <div class="result-header">
+                        <div class="result-icon">⚠️</div>
+                        <div class="result-title">Possible Immune Hydrops — Different Pathway</div>
+                    </div>
+                    <div class="result-section">
+                        <h4>Important Finding</h4>
+                        <p>A positive Indirect Coombs test suggests that the hydrops may be <strong>immune-related</strong>, caused by maternal antibodies attacking the baby's red blood cells. This is a different condition from non-immune hydrops fetalis (NIHF) and follows a separate evaluation and management pathway focused on assessing fetal anemia severity and the need for intrauterine transfusions.</p>
+                    </div>
+                    <div class="result-section">
+                        <h4>Next Step</h4>
+                        <p>Your MFM specialist will perform serial MCA Doppler measurements and may recommend fetal blood sampling (PUBS) to directly assess the severity of fetal anemia. Intrauterine transfusion is highly effective for immune-mediated anemia.</p>
+                    </div>
+                    <div class="result-note">⚠️ This tool focuses on non-immune hydrops. Please discuss your specific results with your MFM specialist.</div>
+                    <div class="btn-row"><div></div><button class="btn" id="restartBtn">Start Over</button></div>
+                `;
+                return;
+            }
+
+            // Build result sections
+            const hasHydrops = step0.includes('full_hydrops') || step0.includes('single_effusion');
+            const hasAnomaly = step0.includes('structural_anomaly');
+            const hasMCAHigh = step1.includes('mca_elevated');
+            const hasInfection = step1.includes('infection_exposure');
+            const hasLowMCV = step1.includes('low_mcv');
+            const hasFamilyHx = step1.includes('family_history');
+            const hasTwin = step1.includes('twin_pregnancy');
+
+            let recs = [];
+
+            recs.push(`<li><strong>Detailed Anatomic Ultrasound:</strong> A comprehensive survey of all fetal organ systems, including a <strong>fetal echocardiogram</strong> (heart ultrasound), is the essential first step for all pregnancies with fetal effusions.</li>`);
+
+            recs.push(`<li><strong>MCA Doppler:</strong> Measurement of blood flow in the baby's middle cerebral artery to screen for fetal anemia — this is recommended for all cases regardless of anatomy.</li>`);
+
+            if (hasHydrops) {
+                recs.push(`<li><strong>Amniocentesis with Chromosomal Microarray (CMA):</strong> SMFM <em>recommends</em> fetal genetic testing for all pregnancies with one or more fetal effusions. CMA detects chromosomal abnormalities not visible on standard karyotype.</li>`);
+            }
+
+            if (hasInfection || hasHydrops) {
+                recs.push(`<li><strong>Infection PCR Testing:</strong> Amniotic fluid (from amniocentesis) or maternal serum can be tested for parvovirus B19, CMV, and toxoplasmosis by PCR. This is especially important when infection is in the differential diagnosis.</li>`);
+            }
+
+            if (hasMCAHigh) {
+                recs.push(`<li><strong>Fetal Blood Sampling (PUBS):</strong> Because the MCA Doppler is elevated (≥1.5 MoM), a percutaneous umbilical blood sampling procedure may be recommended to directly measure the baby's blood count and confirm or rule out severe fetal anemia. An intrauterine transfusion can be performed at the same time if needed.</li>`);
+            }
+
+            if (hasLowMCV) {
+                recs.push(`<li><strong>Alpha-Thalassemia Testing:</strong> Because the MCV is low or hemoglobin electrophoresis is abnormal, targeted genetic sequencing for alpha-thalassemia (HBA1/HBA2 gene deletions) should be performed.</li>`);
+            }
+
+            if (hasFamilyHx) {
+                recs.push(`<li><strong>Targeted Genetic Testing:</strong> Given the family history, a gene panel specific to the suspected condition may be recommended alongside or instead of a broad chromosomal microarray.</li>`);
+            }
+
+            if (hasTwin) {
+                recs.push(`<li><strong>Twin-Specific Evaluation:</strong> In a monochorionic twin pregnancy, evaluation for twin-to-twin transfusion syndrome (TTTS) is essential. Referral to a specialized fetal therapy center should be considered.</li>`);
+            }
+
+            recs.push(`<li><strong>Exome or Genome Sequencing (if initial tests are negative):</strong> SMFM recommends offering exome or genome sequencing when chromosomal microarray and other testing does not yield a diagnosis. This can identify single-gene disorders responsible for approximately one-third of otherwise unexplained NIHF cases.</li>`);
+
+            const noSelections = step0.length === 0 && step1.length === 0;
+
+            screenerCard.innerHTML = `
+                <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+                <div class="result-header">
+                    <div class="result-icon">📋</div>
+                    <div class="result-title">Your Evaluation Summary</div>
+                </div>
+                ${noSelections ? `
+                    <div class="result-section">
+                        <h4>No Findings Selected</h4>
+                        <p>No specific findings were selected. The evaluation of hydrops fetalis is complex and individualized. A consultation with a Maternal-Fetal Medicine (MFM) specialist is the most important first step.</p>
+                    </div>
+                ` : `
+                    <div class="result-section">
+                        <h4>Recommended Evaluation Steps</h4>
+                        <p>Based on the findings you selected, the following evaluation steps are typically recommended by SMFM guidelines:</p>
+                        <ul style="margin-top:0.75rem;">${recs.join('')}</ul>
+                    </div>
+                    <div class="result-section">
+                        <h4>Genetic Counseling</h4>
+                        <p>Genetic counseling is an <strong>integral part of the management plan</strong> for any patient with fetal effusions, regardless of the suspected cause. A genetic counselor will help interpret test results, explain recurrence risks, and guide decisions about further testing.</p>
+                    </div>
+                    <div class="result-section">
+                        <h4>Maternal Monitoring</h4>
+                        <p>Given the risk of <strong>mirror syndrome</strong> (a form of preeclampsia that can develop in pregnancies with NIHF), your care team will monitor your blood pressure, labs, and symptoms throughout the pregnancy.</p>
+                    </div>
+                `}
+                <div class="result-note">⚠️ This summary is based on SMFM Consult Series #75 and is for educational purposes only. Your individualized care plan will be determined by your healthcare team based on the full clinical picture.</div>
+                <div class="btn-row"><div></div><button class="btn" id="restartBtn">Start New Assessment</button></div>
+            `;
+        }
+
+        // Event delegation
+        screenerCard.addEventListener('click', e => {
+            const factorEl = e.target.closest('.factor-item');
+            if (factorEl) {
+                const step = parseInt(factorEl.dataset.step);
+                const factor = factorEl.dataset.factor;
+                if (!selections[step]) selections[step] = [];
+                const idx = selections[step].indexOf(factor);
+                if (idx > -1) selections[step].splice(idx, 1);
+                else selections[step].push(factor);
+                renderStep(currentStep);
+                return;
+            }
+            if (e.target.id === 'nextBtn') {
+                if (currentStep < STEPS.length - 1) {
+                    currentStep++;
+                    renderStep(currentStep);
+                } else {
+                    renderResults();
+                }
+            } else if (e.target.id === 'backBtn') {
+                currentStep--;
+                renderStep(currentStep);
+            } else if (e.target.id === 'restartBtn') {
+                currentStep = 0;
+                selections = {};
+                renderStep(0);
+            }
+        });
+
+        // ─── ACCORDION ───
+        document.getElementById('faqContainer').addEventListener('click', e => {
+            const header = e.target.closest('.accordion-header');
+            if (header) {
+                const item = header.closest('.accordion-item');
+                item.classList.toggle('open');
+            }
+        });
+
+        // ─── MODAL ───
+        document.getElementById('aboutBtn').addEventListener('click', () => {
+            document.getElementById('aboutModal').classList.add('active');
+        });
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('aboutModal').classList.remove('active');
+        });
+        document.getElementById('aboutModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('aboutModal')) {
+                document.getElementById('aboutModal').classList.remove('active');
+            }
+        });
+
+        // ─── DARK MODE ───
+        document.getElementById('darkToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            document.getElementById('darkToggle').textContent =
+                document.body.classList.contains('dark') ? 'Light Mode' : 'Dark Mode';
+        });
+
+        // ─── INIT ───
+        renderStep(0);
+    </script>
+</body>
+</html>

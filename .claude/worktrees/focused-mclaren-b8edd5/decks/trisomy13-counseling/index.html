@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trisomy 13 (Patau Syndrome) – Patient Counseling</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0d1117;
+      --surface:     #161b22;
+      --border:      #30363d;
+      --text:        #e6edf3;
+      --muted:       #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-teal: #39d353;
+      --accent-gold: #e3b341;
+      --accent-red:  #f85149;
+      --accent-purple: #bc8cff;
+      --slide-w: 1280px;
+      --slide-h: 720px;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Deck & Slides ── */
+    .deck {
+      width: var(--slide-w);
+      height: var(--slide-h);
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .slide {
+      width: 100%; height: 100%;
+      position: absolute; top: 0; left: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 56px 72px;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+      background: var(--bg);
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Navigation ── */
+    .nav {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 16px;
+      z-index: 100;
+    }
+    .nav button {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); padding: 8px 20px; border-radius: 6px;
+      font-size: 0.9rem; cursor: pointer; transition: background 0.2s;
+    }
+    .nav button:hover { background: var(--border); }
+    .nav .counter { color: var(--muted); font-size: 0.85rem; min-width: 60px; text-align: center; }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0;
+      height: 3px; background: var(--accent-blue);
+      transition: width 0.4s ease;
+      z-index: 200;
+    }
+
+    /* ── Slide-specific layouts ── */
+
+    /* Title slide */
+    .slide-title {
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 60%, #0d2137 100%);
+      text-align: center;
+    }
+    .slide-title .eyebrow {
+      font-size: 0.95rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent-blue); margin-bottom: 18px;
+    }
+    .slide-title h1 {
+      font-size: 3.6rem; font-weight: 700; line-height: 1.1;
+      color: var(--text); margin-bottom: 12px;
+    }
+    .slide-title .subtitle {
+      font-size: 1.5rem; color: var(--muted); font-weight: 300; margin-bottom: 40px;
+    }
+    .slide-title .badge {
+      display: inline-block; background: rgba(88,166,255,0.12);
+      border: 1px solid rgba(88,166,255,0.35); border-radius: 20px;
+      padding: 6px 20px; font-size: 0.85rem; color: var(--accent-blue);
+    }
+    .chromosome-icon {
+      font-size: 5rem; margin-bottom: 24px; opacity: 0.85;
+    }
+
+    /* Standard content slide */
+    .slide-content { align-items: flex-start; }
+    .slide-content .slide-header {
+      width: 100%; margin-bottom: 36px;
+    }
+    .slide-content .slide-header .tag {
+      font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent-blue); margin-bottom: 8px;
+    }
+    .slide-content .slide-header h2 {
+      font-size: 2.4rem; font-weight: 600; color: var(--text);
+      border-left: 4px solid var(--accent-blue); padding-left: 16px;
+    }
+
+    /* Two-column layout */
+    .two-col {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+      width: 100%;
+    }
+
+    /* Stat cards */
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%;
+    }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 24px 28px;
+    }
+    .stat-card .label {
+      font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .stat-card .value {
+      font-size: 2.2rem; font-weight: 700; color: var(--accent-blue);
+    }
+    .stat-card .note {
+      font-size: 0.8rem; color: var(--muted); margin-top: 6px;
+    }
+    .stat-card.gold .value { color: var(--accent-gold); }
+    .stat-card.teal .value { color: var(--accent-teal); }
+    .stat-card.red  .value { color: var(--accent-red); }
+
+    /* Info blocks */
+    .info-block {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 22px 28px; width: 100%;
+    }
+    .info-block + .info-block { margin-top: 16px; }
+    .info-block .ib-title {
+      font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent-blue); margin-bottom: 8px;
+    }
+    .info-block p {
+      font-size: 1.15rem; line-height: 1.55; color: var(--text);
+    }
+
+    /* Highlight callout */
+    .callout {
+      border-radius: 10px; padding: 20px 28px; width: 100%;
+      margin-top: 16px;
+    }
+    .callout.blue  { background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.3); }
+    .callout.gold  { background: rgba(227,179,65,0.08); border: 1px solid rgba(227,179,65,0.3); }
+    .callout.teal  { background: rgba(57,211,83,0.08);  border: 1px solid rgba(57,211,83,0.3); }
+    .callout.red   { background: rgba(248,81,73,0.08);  border: 1px solid rgba(248,81,73,0.3); }
+    .callout p { font-size: 1.1rem; line-height: 1.5; }
+    .callout .callout-label {
+      font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .callout.blue  .callout-label { color: var(--accent-blue); }
+    .callout.gold  .callout-label { color: var(--accent-gold); }
+    .callout.teal  .callout-label { color: var(--accent-teal); }
+    .callout.red   .callout-label { color: var(--accent-red); }
+
+    /* Icon list */
+    .icon-list { list-style: none; width: 100%; }
+    .icon-list li {
+      display: flex; align-items: flex-start; gap: 14px;
+      font-size: 1.1rem; line-height: 1.5; padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .icon-list li:last-child { border-bottom: none; }
+    .icon-list li .ico { font-size: 1.4rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* Step timeline */
+    .timeline { width: 100%; display: flex; flex-direction: column; gap: 0; }
+    .timeline-item {
+      display: flex; gap: 20px; align-items: flex-start; position: relative;
+    }
+    .timeline-item:not(:last-child)::after {
+      content: ''; position: absolute;
+      left: 19px; top: 44px; width: 2px;
+      height: calc(100% - 8px);
+      background: var(--border);
+    }
+    .tl-dot {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700;
+      background: var(--surface); border: 2px solid var(--accent-blue);
+      color: var(--accent-blue); z-index: 1;
+    }
+    .tl-body { padding: 8px 0 24px; }
+    .tl-body .tl-title { font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .tl-body .tl-desc  { font-size: 0.95rem; color: var(--muted); line-height: 1.5; }
+
+    /* Table */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+    .data-table th {
+      background: var(--surface); color: var(--accent-blue);
+      font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 12px 16px; text-align: left; border-bottom: 2px solid var(--border);
+    }
+    .data-table td {
+      padding: 12px 16px; border-bottom: 1px solid var(--border);
+      color: var(--text); font-size: 1rem;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table .highlight { color: var(--accent-gold); font-weight: 600; }
+    .data-table .good { color: var(--accent-teal); font-weight: 600; }
+    .data-table .warn { color: var(--accent-red); font-weight: 600; }
+
+    /* Chromosome diagram */
+    .chr-diagram {
+      display: flex; align-items: flex-end; gap: 8px; justify-content: center;
+    }
+    .chr-pair { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .chr-bar {
+      width: 28px; border-radius: 14px;
+      background: linear-gradient(180deg, var(--accent-blue) 0%, #1f6feb 100%);
+    }
+    .chr-bar.extra { background: linear-gradient(180deg, var(--accent-red) 0%, #b91c1c 100%); }
+    .chr-label { font-size: 0.75rem; color: var(--muted); }
+
+    /* PPV visual */
+    .ppv-ring-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .ppv-ring-wrap .ring-label { font-size: 0.85rem; color: var(--muted); text-align: center; }
+
+    /* Reassurance panel */
+    .reassure-panel {
+      background: linear-gradient(135deg, rgba(57,211,83,0.06), rgba(57,211,83,0.02));
+      border: 1px solid rgba(57,211,83,0.3); border-radius: 12px;
+      padding: 28px 36px; width: 100%; text-align: center;
+    }
+    .reassure-panel .big-icon { font-size: 3rem; margin-bottom: 12px; }
+    .reassure-panel h3 { font-size: 1.6rem; font-weight: 600; color: var(--accent-teal); margin-bottom: 10px; }
+    .reassure-panel p { font-size: 1.1rem; color: var(--text); line-height: 1.6; max-width: 680px; margin: 0 auto; }
+
+    /* Closing slide */
+    .slide-closing { text-align: center; }
+    .slide-closing h2 { font-size: 2.8rem; font-weight: 600; margin-bottom: 16px; }
+    .slide-closing p  { font-size: 1.3rem; color: var(--muted); max-width: 620px; line-height: 1.6; margin-bottom: 32px; }
+    .contact-row { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+    .contact-chip {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 24px;
+      font-size: 1rem; color: var(--text);
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    /* Slide number watermark */
+    .slide-num {
+      position: absolute; bottom: 18px; right: 28px;
+      font-size: 0.75rem; color: var(--border);
+    }
+
+    /* Branding footer */
+    .brand-footer {
+      position: absolute; bottom: 18px; left: 28px;
+      font-size: 0.7rem; color: var(--border); letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Responsive scale */
+    @media (max-width: 1300px) {
+      .deck { transform: translate(-50%, -50%) scale(0.85); transform-origin: center center; }
+    }
+    @media (max-width: 900px) {
+      .deck { transform: translate(-50%, -50%) scale(0.6); }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/trisomy13-counseling/index.html">
+<meta name="description" content="Patient counseling on Trisomy 13 (Patau syndrome): what the diagnosis means, how NIPT works and its PPV limitations, why false positives occur (confined placental mosaicism, vanishing twin), characteristic sonographic findings, diagnostic confirmation via amniocentesis or CVS, prognosis, and a shared decision-making pathway. Based on ACOG/SMFM guidance.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Trisomy 13, Patau Syndrome, Chromosomal Anomalies, NIPT, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/trisomy13-counseling/index.html">
+<meta property="og:title" content="Trisomy 13 (Patau Syndrome) - Patient Counseling | OpenMFM">
+<meta property="og:description" content="Patient counseling on Trisomy 13 (Patau syndrome): what the diagnosis means, how NIPT works and its PPV limitations, why false positives occur (confined placental mosaicism, vanishing twin), characteristic sonographic findings, diagnostic confirmation via amniocentesis or CVS, prognosis, and a shared decision-making pathway. Based on ACOG/SMFM guidance.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Trisomy 13 (Patau Syndrome) - Patient Counseling | OpenMFM">
+<meta name="twitter:description" content="Patient counseling on Trisomy 13 (Patau syndrome): what the diagnosis means, how NIPT works and its PPV limitations, why false positives occur (confined placental mosaicism, vanishing twin), characteristic sonographic findings, diagnostic confirmation via amniocentesis or CVS, prognosis, and a shared decision-making pathway. Based on ACOG/SMFM guidance.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Trisomy 13 (Patau Syndrome) - Patient Counseling",
+  "description": "Patient counseling on Trisomy 13 (Patau syndrome): what the diagnosis means, how NIPT works and its PPV limitations, why false positives occur (confined placental mosaicism, vanishing twin), characteristic sonographic findings, diagnostic confirmation via amniocentesis or CVS, prognosis, and a shared decision-making pathway. Based on ACOG/SMFM guidance.",
+  "url": "https://openmfm.org/decks/trisomy13-counseling/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-04-21",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Trisomy 13 (Patau Syndrome) - Patient Counseling"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Trisomy 13, Patau Syndrome, Chromosomal Anomalies, NIPT, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck">
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 1 · Title
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-title active">
+    <div class="chromosome-icon">🧬</div>
+    <div class="eyebrow">Maternal-Fetal Medicine · Patient Counseling</div>
+    <h1>Trisomy 13</h1>
+    <div class="subtitle">Patau Syndrome — Understanding Your Screening Results</div>
+    <div class="badge">Prepared by Your MFM Care Team</div>
+    <div class="brand-footer">Atlanta Perinatal Associates · DoctorsWhoCode.blog</div>
+    <div class="slide-num">1 / 10</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 2 · What is Trisomy 13?
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-content">
+    <div class="slide-header">
+      <div class="tag">Genetics</div>
+      <h2>What is Trisomy 13?</h2>
+    </div>
+    <div class="two-col" style="align-items:center;">
+      <div>
+        <div class="info-block">
+          <div class="ib-title">Definition</div>
+          <p>Trisomy 13, or <strong>Patau syndrome</strong>, occurs when a baby has <strong>three copies</strong> of chromosome 13 instead of the usual two.</p>
+        </div>
+        <div class="info-block" style="margin-top:16px;">
+          <div class="ib-title">Cause</div>
+          <p>This extra chromosome arises from an error in cell division — typically a random event, not inherited.</p>
+        </div>
+        <div class="callout gold" style="margin-top:16px;">
+          <div class="callout-label">Prevalence</div>
+          <p>Trisomy 13 affects approximately <strong>1 in 5,000–12,000</strong> live births.</p>
+        </div>
+      </div>
+      <!-- Chromosome diagram -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+        <div style="font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Chromosome 13 Pair</div>
+        <div style="display:flex;gap:32px;align-items:flex-end;">
+          <!-- Normal pair -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <div style="display:flex;gap:8px;align-items:flex-end;">
+              <div style="width:28px;height:90px;border-radius:14px;background:linear-gradient(180deg,var(--accent-blue),#1f6feb);"></div>
+              <div style="width:28px;height:90px;border-radius:14px;background:linear-gradient(180deg,var(--accent-blue),#1f6feb);"></div>
+            </div>
+            <div style="font-size:0.8rem;color:var(--accent-teal);">Normal (2)</div>
+          </div>
+          <div style="font-size:1.8rem;color:var(--muted);padding-bottom:40px;">→</div>
+          <!-- Trisomy pair -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <div style="display:flex;gap:8px;align-items:flex-end;">
+              <div style="width:28px;height:90px;border-radius:14px;background:linear-gradient(180deg,var(--accent-blue),#1f6feb);"></div>
+              <div style="width:28px;height:90px;border-radius:14px;background:linear-gradient(180deg,var(--accent-blue),#1f6feb);"></div>
+              <div style="width:28px;height:90px;border-radius:14px;background:linear-gradient(180deg,var(--accent-red),#b91c1c);"></div>
+            </div>
+            <div style="font-size:0.8rem;color:var(--accent-red);">Trisomy 13 (3)</div>
+          </div>
+        </div>
+        <div style="font-size:0.85rem;color:var(--muted);text-align:center;max-width:220px;line-height:1.5;">The extra chromosome (red) disrupts normal fetal development.</div>
+      </div>
+    </div>
+    <div class="brand-footer">Atlanta Perinatal Associates</div>
+    <div class="slide-num">2 / 10</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 3 · How NIPT Works
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-content">
+    <div class="slide-header">
+      <div class="tag">Screening</div>
+      <h2>How NIPT Works</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="info-block">
+          <div class="ib-title">Cell-Free DNA</div>
+          <p>NIPT analyzes fragments of <strong>cell-free DNA (cfDNA)</strong> from the placenta that circulate in maternal blood.</p>
+        </div>
+        <div class="callout blue" style="margin-top:16px;">
+          <div class="callout-label">Key Point</div>
+          <p>NIPT is a <strong>screening test</strong>, not a diagnostic test. A positive result requires confirmation.</p>
+        </div>
+      </div>
+      <div>
+        <!-- Simple flow diagram -->
+        <div style="display:flex;flex-direction:column;gap:0;width:100%;">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;text-align:center;font-size:0.95rem;">
+            🩸 Maternal Blood Draw
+          </div>
+          <div style="text-align:center;font-size:1.4rem;color:var(--muted);padding:4px 0;">↓</div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;text-align:center;font-size:0.95rem;">
+            🧬 cfDNA Extraction &amp; Sequencing
+          </div>
+          <div style="text-align:center;font-size:1.4rem;color:var(--muted);padding:4px 0;">↓</div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;text-align:center;font-size:0.95rem;">
+            💻 Bioinformatic Algorithm
+          </div>
+          <div style="text-align:center;font-size:1.4rem;color:var(--muted);padding:4px 0;">↓</div>
+          <div style="background:rgba(88,166,255,0.1);border:1px solid rgba(88,166,255,0.35);border-radius:8px;padding:14px 18px;text-align:center;font-size:0.95rem;color:var(--accent-blue);">
+            📋 Risk Result (High / Low)
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-footer">Atlanta Perinatal Associates</div>
+    <div class="slide-num">3 / 10</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 4 · NIPT Performance for Trisomy 13
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-content">
+    <div class="slide-header">
+      <div class="tag">Test Performance</div>
+      <h2>NIPT Performance for Trisomy 13</h2>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="label">Sensitivity</div>
+        <div class="value">91–100%</div>
+        <div class="note">Good at detecting true cases</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Specificity</div>
+        <div class="value">99.97%</div>
+        <div class="note">Very low false alarm rate</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="label">Positive Predictive Value (PPV)</div>
+        <div class="value">18–33%</div>
+        <div class="note">In general (low-risk) populations</div>
+      </div>
+      <div class="stat-card teal">
+        <div class="label">PPV with Abnormal Ultrasound</div>
+        <div class="value">~100%</div>
+        <div class="note">When major anomalies are present</div>
+      </div>
+    </div>
+    <div class="callout gold" style="margin-top:20px;">
+      <div class="callout-label">What PPV Means for You</div>
+      <p>A PPV of 18–33% means that in a general population, <strong>up to 2 out of 3 positive NIPT results for Trisomy 13 may be false positives.</strong></p>
+    </div>
+    <div class="brand-footer">Atlanta Perinatal Associates</div>
+    <div class="slide-num">4 / 10</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 5 · Why False Positives Happen
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-content">
+    <div class="slide-header">
+      <div class="tag">Biology of Discordance</div>
+      <h2>Why False Positives Happen</h2>
+    </div>
+    <ul class="icon-list">
+      <li>
+        <span class="ico">🧫</span>
+        <div>
+          <strong>Confined Placental Mosaicism (CPM)</strong><br/>
+          <span style="color:var(--muted);font-size:0.95rem;">The extra chromosome 13 is only in the placenta, not the baby. NIPT reads placental DNA, so it may flag a healthy fetus.</span>
+        </div>
+      </li>
+      <li>
+        <span class="ico">👥</span>
+        <div>
+          <strong>Vanishing Twin</strong><br/>
+          <span style="color:var(--muted);font-size:0.95rem;">DNA from an early twin that did not develop can persist in maternal blood, triggering a positive result for the surviving healthy baby.</span>
+        </div>
+      </li>
+      <li>
+        <span class="ico">🔬</span>
+        <div>
+          <strong>Low-Level Fetal Mosaicism</strong><br/>
+          <span style="color:var(--muted);font-size:0.95rem;">A small proportion of cells carry the extra chromosome, creating discordant results between different tests.</span>
+        </div>
+      </li>
+      <li>
+        <span class="ico">👩</span>
+        <div>
+          <strong>Maternal Factors</strong><br/>
+          <span style="color:var(--muted);font-size:0.95rem;">Advanced maternal age and diminished ovarian reserve are associated with a higher frequency of aneuploidy detection.</span>
+        </div>
+      </li>
+    </ul>
+    <div class="brand-footer">Atlanta Perinatal Associates</div>
+    <div class="slide-num">5 / 10</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 6 · The Role of Ultrasound
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-content">
+    <div class="slide-header">
+      <div class="tag">Ultrasound Integration</div>
+      <h2>The Role of Ultrasound</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="info-block">
+          <div class="ib-title">Critical Next Step</div>
+          <p>A <strong>detailed anatomy ultrasound</strong> is performed after a positive NIPT to look for structural differences associated with Trisomy 13.</p>
+        </div>
+        <div class="callout teal" style="margin-top:16px;">
+          <div class="callout-label">Normal Ultrasound</div>
+          <p>If the detailed ultrasound is <strong>entirely normal</strong>, the likelihood of a true positive decreases significantly — suggesting a possible false positive or CPM.</p>
+        </div>
+      </div>
+      <div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 24px;">
+          <div style="font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">PPV by Ultrasound Findings</div>
+          <!-- Bar chart -->
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:0.9rem;">NIPT alone</span>
+                <span style="font-size:0.9rem;color:var(--accent-gold);">~30%</span>
+              </div>
+              <div style="background:var(--border);border-radius:4px;height:12px;overflow:hidden;">
+                <div style="width:30%;height:100%;background:var(--accent-gold);border-radius:4px;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:0.9rem;">NIPT + Abnormal Ultrasound</span>
+                <span style="font-size:0.9rem;color:var(--accent-teal);">~100%</span>
+              </div>
+              <div style="background:var(--border);border-radius:4px;height:12px;overflow:hidden;">
+                <div style="width:100%;height:100%;background:var(--accent-teal);border-radius:4px;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:0.9rem;">NIPT + Normal Ultrasound</span>
+                <span style="font-size:0.9rem;color:var(--accent-blue);">Low</span>
+              </div>
+              <div style="background:var(--border);border-radius:4px;height:12px;overflow:hidden;">
+                <div style="width:12%;height:100%;background:var(--accent-blue);border-radius:4px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-footer">Atlanta Perinatal Associates</div>
+    <div class="slide-num">6 / 10</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 7 · Sonographic Findings of Trisomy 13
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-content">
+    <div class="slide-header">
+      <div class="tag">Ultrasound Findings</div>
+      <h2>Sonographic Findings of Trisomy 13</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+          <table class="data-table">
+            <thead>
+              <tr><th>System</th><th>Finding</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Brain</td><td>Holoprosencephaly</td></tr>
+              <tr><td>Face</td><td>Median cleft lip/palate, cyclopia</td></tr>
+              <tr><td>Heart</td><td>Cardiac defects (VSD, ASD)</td></tr>
+              <tr><td>Kidneys</td><td>Renal cysts, dysplasia</td></tr>
+              <tr><td>Abdomen</td><td>Omphalocele</td></tr>
+              <tr><td>Limbs</td><td>Postaxial polydactyly</td></tr>
+              <tr><td>Growth</td><td>Intrauterine growth restriction</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="callout blue">
+          <div class="callout-label">Key Marker</div>
+          <p><strong>Holoprosencephaly</strong> (failure of the brain to divide) is one of the most characteristic findings of Trisomy 13.</p>
+        </div>
+        <div class="callout gold">
+          <div class="callout-label">Multiple Anomalies</div>
+          <p>When <strong>two or more</strong> major anomalies are identified together, the probability of a true trisomy increases substantially.</p>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;font-size:0.9rem;color:var(--muted);line-height:1.5;">
+          Not all findings are present in every case. Your physician will review your specific ultrasound results with you.
+        </div>
+      </div>
+    </div>
+    <div class="brand-footer">Atlanta Perinatal Associates</div>
+    <div class="slide-num">7 / 10</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 8 · Diagnostic Confirmation
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-content">
+    <div class="slide-header">
+      <div class="tag">Diagnosis</div>
+      <h2>Confirming the Diagnosis</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="info-block">
+          <div class="ib-title">Why Confirmation is Required</div>
+          <p>NIPT is a screening test. A <strong>diagnostic procedure</strong> tests the baby's actual chromosomes and provides a definitive answer.</p>
+        </div>
+        <div class="callout blue" style="margin-top:16px;">
+          <div class="callout-label">Clinical Guidance (ACOG/SMFM)</div>
+          <p>Invasive diagnostic testing is recommended before any irreversible clinical decision is made.</p>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 24px;">
+          <div style="font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-blue);margin-bottom:12px;">Option 1 · CVS</div>
+          <div style="font-size:1rem;font-weight:600;margin-bottom:6px;">Chorionic Villus Sampling</div>
+          <div style="font-size:0.9rem;color:var(--muted);line-height:1.5;">Performed at <strong style="color:var(--text);">10–13 weeks</strong>. Samples placental tissue. Earlier result, but may reflect CPM rather than fetal status.</div>
+        </div>
+        <div style="background:rgba(57,211,83,0.06);border:1px solid rgba(57,211,83,0.3);border-radius:10px;padding:20px 24px;">
+          <div style="font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-teal);margin-bottom:12px;">Option 2 · Amniocentesis (Preferred)</div>
+          <div style="font-size:1rem;font-weight:600;margin-bottom:6px;">Amniocentesis</div>
+          <div style="font-size:0.9rem;color:var(--muted);line-height:1.5;">Performed after <strong style="color:var(--text);">15 weeks</strong>. Samples fetal cells (amniocytes) directly — the <strong style="color:var(--text);">gold standard</strong> for fetal diagnosis.</div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-footer">Atlanta Perinatal Associates</div>
+    <div class="slide-num">8 / 10</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 9 · Survival & Prognosis
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-content">
+    <div class="slide-header">
+      <div class="tag">Prognosis</div>
+      <h2>Survival in Trisomy 13</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="stat-grid" style="grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="stat-card red">
+            <div class="label">Stillbirth Rate</div>
+            <div class="value">~30%</div>
+            <div class="note">Of diagnosed pregnancies</div>
+          </div>
+          <div class="stat-card red">
+            <div class="label">Survival to 1 Year</div>
+            <div class="value">~10%</div>
+            <div class="note">Of liveborn infants</div>
+          </div>
+        </div>
+        <div class="callout gold" style="margin-top:16px;">
+          <div class="callout-label">Variability</div>
+          <p>Outcomes vary by the specific anomalies present and the extent of chromosomal involvement (full trisomy vs. mosaicism).</p>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="info-block">
+          <div class="ib-title">Mosaic Trisomy 13</div>
+          <p>A small subset of patients have <strong>mosaic Trisomy 13</strong>, where only some cells carry the extra chromosome. These individuals may have milder features and longer survival.</p>
+        </div>
+        <div class="callout blue">
+          <div class="callout-label">Important Note</div>
+          <p>Prognosis discussions are individualized. Your physician will review your specific findings and what they mean for your pregnancy.</p>
+        </div>
+      </div>
+    </div>
+    <div class="brand-footer">Atlanta Perinatal Associates</div>
+    <div class="slide-num">9 / 10</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 10 · Your Next Steps & Partnership
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-closing">
+    <h2>Your Next Steps</h2>
+    <p>We will guide you through each step with clear information and compassionate care.</p>
+    <div style="width:100%;max-width:900px;margin:0 auto 32px;">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="tl-dot">1</div>
+          <div class="tl-body">
+            <div class="tl-title">Detailed Anatomy Ultrasound</div>
+            <div class="tl-desc">A comprehensive scan to evaluate fetal anatomy and look for structural differences associated with Trisomy 13.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot">2</div>
+          <div class="tl-body">
+            <div class="tl-title">Genetic Counseling</div>
+            <div class="tl-desc">A dedicated session to review your specific PPV, risk factors, and all available options — without pressure.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot">3</div>
+          <div class="tl-body">
+            <div class="tl-title">Diagnostic Testing (if desired)</div>
+            <div class="tl-desc">Amniocentesis or CVS to obtain a definitive chromosomal diagnosis from fetal cells.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot">4</div>
+          <div class="tl-body">
+            <div class="tl-title">Shared Decision-Making</div>
+            <div class="tl-desc">We review all results together. Your values and choices guide every decision we make as a team.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-row">
+      <div class="contact-chip">🏥 Atlanta Perinatal Associates</div>
+      <div class="contact-chip">📞 Ask your care team any time</div>
+      <div class="contact-chip">🤝 You are not alone</div>
+    </div>
+    <div class="brand-footer">Atlanta Perinatal Associates · DoctorsWhoCode.blog</div>
+    <div class="slide-num">10 / 10</div>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prevSlide()">← Prev</button>
+  <span class="counter" id="counter">1 / 10</span>
+  <button onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total  = slides.length;
+  const bar    = document.getElementById('progressBar');
+  const ctr    = document.getElementById('counter');
+
+  function showSlide(n) {
+    slides.forEach((s, i) => s.classList.toggle('active', i === n));
+    bar.style.width = ((n + 1) / total * 100) + '%';
+    ctr.textContent = (n + 1) + ' / ' + total;
+  }
+
+  function nextSlide() {
+    current = (current + 1) % total;
+    showSlide(current);
+  }
+
+  function prevSlide() {
+    current = (current - 1 + total) % total;
+    showSlide(current);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft')               { e.preventDefault(); prevSlide(); }
+  });
+
+  showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

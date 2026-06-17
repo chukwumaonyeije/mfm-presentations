@@ -1,0 +1,46 @@
+﻿name: Notify Vercel Publish
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'decks/preconception-repeat-cesarean/**'
+
+jobs:
+  wait-for-vercel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Poll site until live (timeout ~20 minutes)
+        run: |
+          URL="https://openmfm.org/decks/preconception-repeat-cesarean/"
+          MAX=40
+          COUNT=0
+          echo "Checking $URL up to $MAX times (30s interval)..."
+          while [ $COUNT -lt $MAX ]; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL" || echo "000")
+            echo "Attempt $((COUNT+1)): HTTP $STATUS"
+            if [ "$STATUS" = "200" ]; then
+              echo "LIVE=true" >> $GITHUB_ENV
+              echo "Site is live"
+              break
+            fi
+            COUNT=$((COUNT+1))
+            sleep 30
+          done
+
+      - name: Create GitHub issue to notify
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const live = process.env.LIVE === 'true';
+            const url = 'https://openmfm.org/decks/preconception-repeat-cesarean/';
+            const title = live ? `Vercel deployed: Preconception Repeat Cesarean deck is live` : `Vercel deploy timeout: Preconception deck still not live`;
+            const body = live
+              ? `The deck is live at ${url}`
+              : `I checked ${40} times at 30s intervals and the page did not return HTTP 200. URL: ${url}`;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body
+            });
