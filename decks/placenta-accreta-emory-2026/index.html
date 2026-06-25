@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Placenta Accreta Spectrum — Emory Healthcare Protocol</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent:    #58a6ff;
+      --accent2:   #3fb950;
+      --warn:      #d29922;
+      --danger:    #f85149;
+      --purple:    #bc8cff;
+      --teal:      #39d353;
+      --gold:      #e3b341;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── Progress Bar ──────────────────────────────────────────────────── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: var(--accent);
+      transition: width 0.4s ease;
+      z-index: 100;
+    }
+
+    /* ─── Deck & Slides ─────────────────────────────────────────────────── */
+    #deck {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .slide.exit-left {
+      opacity: 0;
+      transform: translateX(-60px);
+      visibility: hidden;
+    }
+
+    /* ─── Typography ────────────────────────────────────────────────────── */
+    .slide-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    h1 { font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 300; line-height: 1.15; }
+    h2 { font-size: clamp(1.5rem, 3.5vw, 2.6rem); font-weight: 300; line-height: 1.2; }
+    h3 { font-size: clamp(1.1rem, 2.5vw, 1.8rem); font-weight: 400; color: var(--accent); }
+
+    p.body-text {
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      line-height: 1.7;
+      color: var(--text);
+      max-width: 820px;
+      text-align: center;
+    }
+
+    .highlight { color: var(--accent); }
+    .green     { color: var(--accent2); }
+    .warn      { color: var(--warn); }
+    .danger    { color: var(--danger); }
+    .purple    { color: var(--purple); }
+    .gold      { color: var(--gold); }
+
+    /* ─── Divider ───────────────────────────────────────────────────────── */
+    .divider {
+      width: 60px; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin: 1rem auto;
+    }
+
+    /* ─── Cards / Grid ──────────────────────────────────────────────────── */
+    .card-grid {
+      display: grid;
+      gap: 1rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+    }
+    .card .card-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .card .card-body {
+      font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    /* ─── Spectrum Visual ───────────────────────────────────────────────── */
+    .spectrum-bar {
+      display: flex;
+      width: 100%;
+      max-width: 900px;
+      border-radius: 12px;
+      overflow: hidden;
+      height: 90px;
+      margin: 1.5rem 0;
+    }
+    .spectrum-bar .seg {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      gap: 4px;
+    }
+    .seg-accreta  { background: #1c3a5e; color: #58a6ff; }
+    .seg-increta  { background: #3a2a5e; color: #bc8cff; }
+    .seg-percreta { background: #5e1c2a; color: #f85149; }
+    .seg .seg-label { font-size: 0.7rem; font-weight: 400; opacity: 0.8; }
+
+    /* ─── Risk Table ────────────────────────────────────────────────────── */
+    table.risk-table {
+      width: 100%;
+      max-width: 820px;
+      border-collapse: collapse;
+      font-size: clamp(0.8rem, 1.4vw, 1rem);
+    }
+    table.risk-table th {
+      background: var(--surface);
+      color: var(--accent);
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid var(--accent);
+    }
+    table.risk-table td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    table.risk-table tr:last-child td { border-bottom: none; }
+    table.risk-table .risk-val { font-weight: 700; }
+
+    /* ─── Icon Bullets ──────────────────────────────────────────────────── */
+    .icon-list {
+      list-style: none;
+      max-width: 820px;
+      width: 100%;
+    }
+    .icon-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      font-size: clamp(0.9rem, 1.6vw, 1.15rem);
+      line-height: 1.6;
+      padding: 0.4rem 0;
+    }
+    .icon-list li .ico {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ─── Timeline ──────────────────────────────────────────────────────── */
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      max-width: 950px;
+      width: 100%;
+      margin: 1.5rem 0;
+    }
+    .tl-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .tl-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+    }
+    .tl-dot {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #000;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+    .tl-content {
+      margin-top: 0.6rem;
+      text-align: center;
+      font-size: clamp(0.75rem, 1.3vw, 0.95rem);
+      line-height: 1.5;
+      color: var(--text);
+      padding: 0 0.4rem;
+    }
+    .tl-content strong { display: block; color: var(--accent); margin-bottom: 2px; }
+
+    /* ─── Big Stat ──────────────────────────────────────────────────────── */
+    .stat-row {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 900px;
+      width: 100%;
+    }
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 1.8rem;
+      text-align: center;
+      min-width: 160px;
+    }
+    .stat-box .stat-num {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 300;
+      line-height: 1;
+    }
+    .stat-box .stat-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+      line-height: 1.4;
+    }
+
+    /* ─── Checklist ─────────────────────────────────────────────────────── */
+    .checklist {
+      list-style: none;
+      max-width: 820px;
+      width: 100%;
+    }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+      line-height: 1.6;
+      padding: 0.35rem 0;
+    }
+    .checklist li::before {
+      content: '☐';
+      color: var(--accent);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* ─── Badge ─────────────────────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 0.2em 0.7em;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .badge-acog  { background: #1c3a5e; color: #58a6ff; border: 1px solid #58a6ff; }
+    .badge-smfm  { background: #1a3a2a; color: #3fb950; border: 1px solid #3fb950; }
+    .badge-emory { background: #3a2a1c; color: #e3b341; border: 1px solid #e3b341; }
+    .badge-warn  { background: #3a2a1c; color: #d29922; border: 1px solid #d29922; }
+
+    /* ─── Goal-Directed Therapy Box ─────────────────────────────────────── */
+    .gdt-row {
+      display: flex;
+      gap: 1rem;
+      max-width: 900px;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .gdt-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      text-align: center;
+      flex: 1;
+      min-width: 150px;
+    }
+    .gdt-item .gdt-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .gdt-item .gdt-val   { font-size: clamp(1.2rem, 2.5vw, 1.8rem); font-weight: 300; margin: 0.3rem 0; }
+    .gdt-item .gdt-unit  { font-size: 0.75rem; color: var(--muted); }
+
+    /* ─── Navigation ────────────────────────────────────────────────────── */
+    #nav {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(22, 27, 34, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      padding: 0.5rem 1.2rem;
+      backdrop-filter: blur(8px);
+      z-index: 50;
+    }
+    #nav button {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    #nav button:hover { background: var(--border); }
+    #slide-counter {
+      font-size: 0.8rem;
+      color: var(--muted);
+      min-width: 60px;
+      text-align: center;
+    }
+
+    /* ─── Section Divider Slide ─────────────────────────────────────────── */
+    .section-slide {
+      background: linear-gradient(135deg, #0d1117 0%, #1c2a3a 100%);
+    }
+    .section-slide h2 { font-size: clamp(2rem, 4vw, 3rem); }
+
+    /* ─── Source Note ───────────────────────────────────────────────────── */
+    .source-note {
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-top: 1.5rem;
+      text-align: center;
+      max-width: 820px;
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/placenta-accreta-emory-2026/index.html">
+<meta name="description" content="35-slide provider education deck based on the Emory Healthcare 2026 Invasive Placental Disease Protocol. Covers PAS classification (accreta/increta/percreta), risk stratification, antenatal diagnosis, multidisciplinary team assembly, planned cesarean hysterectomy at 34–35+6 weeks, goal-directed hemorrhage management with TXA and transfusion targets, and postoperative ICU care. Aligned with ACOG/SMFM Consensus No. 7 and FIGO 2018 guidelines.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Placenta Accreta Spectrum, Obstetric Hemorrhage, Multidisciplinary Care, Cesarean Hysterectomy, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/placenta-accreta-emory-2026/index.html">
+<meta property="og:title" content="Placenta Accreta Spectrum — Emory Healthcare Protocol 2026 | OpenMFM">
+<meta property="og:description" content="35-slide provider education deck based on the Emory Healthcare 2026 Invasive Placental Disease Protocol. Covers PAS classification (accreta/increta/percreta), risk stratification, antenatal diagnosis, multidisciplinary team assembly, planned cesarean hysterectomy at 34–35+6 weeks, goal-directed hemorrhage management with TXA and transfusion targets, and postoperative ICU care. Aligned with ACOG/SMFM Consensus No. 7 and FIGO 2018 guidelines.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Placenta Accreta Spectrum — Emory Healthcare Protocol 2026 | OpenMFM">
+<meta name="twitter:description" content="35-slide provider education deck based on the Emory Healthcare 2026 Invasive Placental Disease Protocol. Covers PAS classification (accreta/increta/percreta), risk stratification, antenatal diagnosis, multidisciplinary team assembly, planned cesarean hysterectomy at 34–35+6 weeks, goal-directed hemorrhage management with TXA and transfusion targets, and postoperative ICU care. Aligned with ACOG/SMFM Consensus No. 7 and FIGO 2018 guidelines.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Placenta Accreta Spectrum — Emory Healthcare Protocol 2026",
+  "description": "35-slide provider education deck based on the Emory Healthcare 2026 Invasive Placental Disease Protocol. Covers PAS classification (accreta/increta/percreta), risk stratification, antenatal diagnosis, multidisciplinary team assembly, planned cesarean hysterectomy at 34–35+6 weeks, goal-directed hemorrhage management with TXA and transfusion targets, and postoperative ICU care. Aligned with ACOG/SMFM Consensus No. 7 and FIGO 2018 guidelines.",
+  "url": "https://openmfm.org/decks/placenta-accreta-emory-2026/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-06-25",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Placenta Accreta Spectrum — Emory Healthcare Protocol 2026"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Placenta Accreta Spectrum, Obstetric Hemorrhage, Multidisciplinary Care, Cesarean Hysterectomy, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<div id="deck">
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide active" id="s1">
+    <div class="slide-label">Emory Healthcare · Clinical Protocol</div>
+    <h1 style="text-align:center; max-width:900px;">
+      Placenta Accreta<br>
+      <span class="highlight">Spectrum</span>
+    </h1>
+    <div class="divider"></div>
+    <p class="body-text">Invasive Placental Disease Management</p>
+    <div style="margin-top:1.5rem; display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center;">
+      <span class="badge badge-acog">ACOG Consensus No. 7</span>
+      <span class="badge badge-smfm">SMFM 2023</span>
+      <span class="badge badge-emory">Emory Healthcare 2026</span>
+    </div>
+    <p class="source-note">Effective Date: 02/12/2026 · Applicable Facilities: EDH, EJCH, EUHM</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 2 — SCOPE & PURPOSE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s2">
+    <div class="slide-label">Section 1 · Overview</div>
+    <h2>Scope &amp; <span class="highlight">Purpose</span></h2>
+    <div class="divider"></div>
+    <ul class="icon-list" style="max-width:780px;">
+      <li><span class="ico">🎯</span>Applies to all inpatient and outpatient obstetric and perioperative teams</li>
+      <li><span class="ico">🔬</span>Covers suspected or confirmed PAS — accreta, increta, and percreta</li>
+      <li><span class="ico">📅</span>From prenatal identification through postpartum care</li>
+      <li><span class="ico">🏥</span>Optimize outcomes via multidisciplinary team approach</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 3 — WHAT IS PAS?
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s3">
+    <div class="slide-label">Section 1 · Definition</div>
+    <h2>What is <span class="highlight">PAS</span>?</h2>
+    <div class="divider"></div>
+    <p class="body-text" style="margin-bottom:1.2rem;">
+      A <strong>spectrum of abnormal placental adherence and invasion</strong> into the uterine wall.
+      Formerly known as <em>morbidly adherent placenta</em>.
+    </p>
+    <div class="spectrum-bar">
+      <div class="seg seg-accreta">
+        <span style="font-size:1.4rem;">🔵</span>
+        <strong>Accreta</strong>
+        <span class="seg-label">Villi attach to<br>myometrium</span>
+      </div>
+      <div class="seg seg-increta">
+        <span style="font-size:1.4rem;">🟣</span>
+        <strong>Increta</strong>
+        <span class="seg-label">Villi invade<br>myometrium</span>
+      </div>
+      <div class="seg seg-percreta">
+        <span style="font-size:1.4rem;">🔴</span>
+        <strong>Percreta</strong>
+        <span class="seg-label">Villi penetrate<br>through serosa</span>
+      </div>
+    </div>
+    <p class="source-note">ACOG/SMFM Obstetric Care Consensus No. 7 (2018) · Emory Healthcare Policy (2026)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 4 — ACCRETA (DEPTH)
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s4">
+    <div class="slide-label">Section 1 · Depth of Invasion</div>
+    <h2><span class="highlight">Placenta Accreta</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2" style="max-width:700px;">
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">Definition</div>
+        <div class="card-body">Chorionic villi attach directly to the myometrium <strong>without invasion</strong>. No intervening decidua basalis.</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">Clinical Significance</div>
+        <div class="card-body">Most common form (~75–78%). Placenta does not separate normally at delivery.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 5 — INCRETA
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s5">
+    <div class="slide-label">Section 1 · Depth of Invasion</div>
+    <h2><span class="purple">Placenta Increta</span></h2>
+    <div class="divider" style="background:var(--purple);"></div>
+    <div class="card-grid cols-2" style="max-width:700px;">
+      <div class="card">
+        <div class="card-title" style="color:var(--purple);">Definition</div>
+        <div class="card-body">Chorionic villi <strong>invade the myometrium</strong> but do not penetrate the uterine serosa.</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--purple);">Clinical Significance</div>
+        <div class="card-body">~17% of PAS cases. Greater risk of hemorrhage than accreta alone.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 6 — PERCRETA
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s6">
+    <div class="slide-label">Section 1 · Depth of Invasion</div>
+    <h2><span class="danger">Placenta Percreta</span></h2>
+    <div class="divider" style="background:var(--danger);"></div>
+    <div class="card-grid cols-2" style="max-width:700px;">
+      <div class="card">
+        <div class="card-title" style="color:var(--danger);">Definition</div>
+        <div class="card-body">Villi <strong>penetrate through the uterine serosa</strong> and may invade adjacent organs (bladder, bowel).</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--danger);">Clinical Significance</div>
+        <div class="card-body">~5% of PAS. Highest morbidity. Requires urology/colorectal surgical involvement.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 7 — ETIOLOGY
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s7">
+    <div class="slide-label">Section 1 · Pathophysiology</div>
+    <h2>Etiology &amp; <span class="highlight">Pathophysiology</span></h2>
+    <div class="divider"></div>
+    <ul class="icon-list" style="max-width:800px;">
+      <li><span class="ico">🔬</span>Defect of the <strong>endometrial–myometrial interface</strong></li>
+      <li><span class="ico">⚠️</span>Failure of normal decidualization in the area of a <strong>uterine scar</strong></li>
+      <li><span class="ico">🔗</span>Allows abnormally deep placental anchoring villi and trophoblast infiltration</li>
+      <li><span class="ico">📈</span>Rising incidence driven by increasing rates of <strong>cesarean delivery</strong></li>
+    </ul>
+    <p class="source-note">ACOG/SMFM Obstetric Care Consensus No. 7 (2018)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 8 — INCIDENCE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s8">
+    <div class="slide-label">Section 1 · Epidemiology</div>
+    <h2>Rising <span class="warn">Incidence</span></h2>
+    <div class="divider" style="background:var(--warn);"></div>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num highlight">1 in 272</div>
+        <div class="stat-desc">Current US rate<br>(National Inpatient Sample, 2016)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num warn">1 in 533</div>
+        <div class="stat-desc">Rate from<br>1982–2002</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--muted);">1 in 2,510</div>
+        <div class="stat-desc">Rate in<br>1970s–1980s</div>
+      </div>
+    </div>
+    <p class="source-note">ACOG/SMFM Obstetric Care Consensus No. 7 (2018)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 9 — SECTION DIVIDER: RISK FACTORS & DIAGNOSIS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide section-slide" id="s9">
+    <div class="slide-label">Section 2</div>
+    <h2>Risk Factors &amp;<br><span class="highlight">Diagnosis</span></h2>
+    <div class="divider"></div>
+    <p class="body-text muted">Identifying patients at risk and confirming the diagnosis antenatally</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 10 — PRIMARY RISK FACTOR: PRIOR CS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s10">
+    <div class="slide-label">Section 2 · Risk Factors</div>
+    <h2>Primary Risk Factor:<br><span class="highlight">Prior Cesarean Delivery</span></h2>
+    <div class="divider"></div>
+    <table class="risk-table">
+      <thead>
+        <tr>
+          <th>Prior Cesarean Deliveries</th>
+          <th>PAS Risk (with Placenta Previa)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>0</td><td class="risk-val green">3%</td></tr>
+        <tr><td>1</td><td class="risk-val" style="color:var(--warn);">11%</td></tr>
+        <tr><td>2</td><td class="risk-val" style="color:var(--warn);">40%</td></tr>
+        <tr><td>3</td><td class="risk-val danger">61%</td></tr>
+        <tr><td>≥4</td><td class="risk-val danger">67%</td></tr>
+      </tbody>
+    </table>
+    <p class="source-note">ACOG/SMFM Obstetric Care Consensus No. 7 (2018)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 11 — ADDITIONAL RISK FACTORS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s11">
+    <div class="slide-label">Section 2 · Risk Factors</div>
+    <h2>Additional <span class="highlight">Risk Factors</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-3" style="max-width:900px;">
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">Uterine History</div>
+        <div class="card-body">Prior uterine surgeries, curettage, or Asherman syndrome</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">Maternal Factors</div>
+        <div class="card-body">Advanced maternal age, multiparity</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">Placental Location</div>
+        <div class="card-body">Placenta previa is a major independent risk factor</div>
+      </div>
+    </div>
+    <p class="source-note">ACOG/SMFM Obstetric Care Consensus No. 7 (2018)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 12 — ANTENATAL DIAGNOSIS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s12">
+    <div class="slide-label">Section 2 · Diagnosis</div>
+    <h2>Antenatal <span class="highlight">Diagnosis</span></h2>
+    <div class="divider"></div>
+    <ul class="icon-list" style="max-width:800px;">
+      <li><span class="ico">✅</span><strong>Highly desirable</strong> — outcomes are optimized when delivery is planned before labor or bleeding</li>
+      <li><span class="ico">🔊</span>Primary modality: <strong>obstetric ultrasonography</strong></li>
+      <li><span class="ico">👩‍⚕️</span>Evaluate by providers with <strong>experience and expertise</strong> in PAS diagnosis</li>
+      <li><span class="ico">⚠️</span>Absence of ultrasound findings does <strong>not</strong> preclude PAS — clinical risk factors remain crucial</li>
+    </ul>
+    <p class="source-note">ACOG/SMFM Obstetric Care Consensus No. 7 (2018)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 13 — ULTRASOUND FEATURES
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s13">
+    <div class="slide-label">Section 2 · Ultrasound</div>
+    <h2>Ultrasound <span class="highlight">Features</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2" style="max-width:900px;">
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">Gray-Scale Findings</div>
+        <div class="card-body">
+          Multiple vascular <strong>lacunae</strong> within placenta<br>
+          Loss of normal <strong>hypoechoic zone</strong><br>
+          Retroplacental myometrial thickness <strong>&lt;1 mm</strong><br>
+          Abnormal uterine serosa–bladder interface
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--purple);">Doppler Findings</div>
+        <div class="card-body">
+          <strong>Turbulent lacunar blood flow</strong> (most common)<br>
+          Increased subplacental vascularity<br>
+          Gaps in myometrial blood flow<br>
+          Vessels bridging placenta to uterine margin
+        </div>
+      </div>
+    </div>
+    <p class="source-note">SMFM PAS Ultrasound Marker Task Force (2021) · ACOG/SMFM Consensus No. 7 (2018)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 14 — MRI UTILITY
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s14">
+    <div class="slide-label">Section 2 · Imaging</div>
+    <h2>MRI: <span class="highlight">Adjunct Imaging</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2" style="max-width:800px;">
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">When to Consider MRI</div>
+        <div class="card-body">Posterior placenta previa · Indeterminate ultrasound · Suspected percreta with organ invasion</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--warn);">Limitations</div>
+        <div class="card-body">More expensive · Less available · Expertise limited · Does not clearly improve on ultrasound in most cases</div>
+      </div>
+    </div>
+    <p class="source-note">ACOG/SMFM Obstetric Care Consensus No. 7 (2018)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 15 — SECTION DIVIDER: CARE COORDINATION
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide section-slide" id="s15">
+    <div class="slide-label">Section 3</div>
+    <h2>Care Coordination &amp;<br><span class="highlight">Planning</span></h2>
+    <div class="divider"></div>
+    <p class="body-text muted">Multidisciplinary team assembly and pre-operative preparation</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 16 — CORE CARE TEAM
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s16">
+    <div class="slide-label">Section 3 · Care Coordination</div>
+    <h2>Core Care <span class="highlight">Team</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-3" style="max-width:900px;">
+      <div class="card" style="border-color:var(--accent);">
+        <div class="card-title" style="color:var(--accent);">🤱 Nursing</div>
+        <div class="card-body">Clinical coordination lead</div>
+      </div>
+      <div class="card" style="border-color:var(--accent);">
+        <div class="card-title" style="color:var(--accent);">👩‍⚕️ MFM</div>
+        <div class="card-body">Maternal-Fetal Medicine specialist</div>
+      </div>
+      <div class="card" style="border-color:var(--accent);">
+        <div class="card-title" style="color:var(--accent);">💉 Anesthesia</div>
+        <div class="card-body">Neuraxial or general anesthesia planning</div>
+      </div>
+      <div class="card" style="border-color:var(--accent);">
+        <div class="card-title" style="color:var(--accent);">👶 NICU</div>
+        <div class="card-body">Neonatal intensive care unit</div>
+      </div>
+      <div class="card" style="border-color:var(--accent);">
+        <div class="card-title" style="color:var(--accent);">🩸 Blood Bank</div>
+        <div class="card-body">Massive transfusion protocol readiness</div>
+      </div>
+    </div>
+    <p class="source-note">Consultation by second trimester or as soon as diagnosis is made · Emory Healthcare Protocol (2026)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 17 — AUGMENTED CARE TEAM
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s17">
+    <div class="slide-label">Section 3 · Care Coordination</div>
+    <h2>Augmented <span class="purple">Care Team</span></h2>
+    <div class="divider" style="background:var(--purple);"></div>
+    <div class="card-grid cols-2" style="max-width:820px;">
+      <div class="card">
+        <div class="card-title" style="color:var(--purple);">🔬 Gyn-Oncology</div>
+        <div class="card-body">Retroperitoneal dissection support</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--purple);">🏥 ICU</div>
+        <div class="card-body">Postoperative critical care planning</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--purple);">🩻 Interventional Radiology</div>
+        <div class="card-body">Rare adjunct procedures (selective use)</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--purple);">🫀 Urology</div>
+        <div class="card-body">Suspected bladder/ureteral involvement</div>
+      </div>
+      <div class="card" style="grid-column:1/-1;">
+        <div class="card-title" style="color:var(--purple);">🔪 Trauma / General / Colorectal Surgery</div>
+        <div class="card-body">Suspected bowel involvement</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 18 — LEVEL OF CARE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s18">
+    <div class="slide-label">Section 3 · Facility Requirements</div>
+    <h2>Level of <span class="highlight">Care</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2" style="max-width:820px;">
+      <div class="card" style="border-color:var(--accent2);">
+        <div class="card-title" style="color:var(--accent2);">ACOG/SMFM Recommendation</div>
+        <div class="card-body">Delivery at a <strong>Level III or IV</strong> maternal care facility. Continuously available staff with PAS expertise.</div>
+      </div>
+      <div class="card" style="border-color:var(--accent2);">
+        <div class="card-title" style="color:var(--accent2);">Required Infrastructure</div>
+        <div class="card-body">Interdisciplinary critical care team · Blood bank with massive transfusion protocol · Strong nursing leadership</div>
+      </div>
+    </div>
+    <p class="source-note"><span class="badge badge-acog">ACOG</span> <span class="badge badge-smfm">SMFM</span> Obstetric Care Consensus No. 7 (2018)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 19 — TIMING OF DELIVERY
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s19">
+    <div class="slide-label">Section 3 · Delivery Planning</div>
+    <h2>Timing of <span class="highlight">Delivery</span></h2>
+    <div class="divider"></div>
+    <div class="stat-row">
+      <div class="stat-box" style="border-color:var(--accent);">
+        <div class="stat-num highlight">34–35<sup style="font-size:0.5em;">+6</sup></div>
+        <div class="stat-desc">Weeks of gestation<br>Recommended delivery window</div>
+      </div>
+    </div>
+    <ul class="icon-list" style="max-width:780px; margin-top:1.2rem;">
+      <li><span class="ico">📋</span>Scheduled delivery <strong>before onset of labor or bleeding</strong></li>
+      <li><span class="ico">🚫</span>Avoid placental disruption at time of delivery</li>
+      <li><span class="ico">💊</span>Antenatal corticosteroids per RCOG Green-top Guideline 27a at 34–35+6 weeks</li>
+    </ul>
+    <p class="source-note"><span class="badge badge-acog">ACOG/SMFM</span> Consensus No. 7 (2018) · RCOG Green-top Guideline 27a (2018)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 20 — TIMELINE OF CARE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s20">
+    <div class="slide-label">Section 3 · Care Timeline</div>
+    <h2>Antenatal <span class="highlight">Care Timeline</span></h2>
+    <div class="divider"></div>
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-dot">1</div>
+        <div class="tl-content"><strong>1st Trimester</strong>Identify risk factors; early ultrasound evaluation</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot">2</div>
+        <div class="tl-content"><strong>2nd Trimester</strong>Multidisciplinary team consultation; confirm diagnosis</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot">3</div>
+        <div class="tl-content"><strong>3rd Trimester</strong>Schedule OR; obtain consent; pre-op assessment</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot">4</div>
+        <div class="tl-content"><strong>34–35+6 wks</strong>Planned cesarean hysterectomy</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot">5</div>
+        <div class="tl-content"><strong>Postpartum</strong>ICU / recovery; surveillance if conservative management</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 21 — INFORMED CONSENT
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s21">
+    <div class="slide-label">Section 3 · Consent</div>
+    <h2>Informed <span class="highlight">Consent</span></h2>
+    <div class="divider"></div>
+    <ul class="checklist" style="max-width:780px;">
+      <li>Cesarean hysterectomy</li>
+      <li>Possible cystotomy and/or ureteral injury</li>
+      <li>Possible bowel injury</li>
+      <li>Blood transfusion (including cell salvage)</li>
+      <li>Interventional radiology procedures</li>
+      <li>ICU admission</li>
+      <li>Conservative options (retained placenta in situ, uterine-sparing) — only when appropriate expertise available</li>
+    </ul>
+    <p class="source-note">Emory Healthcare Protocol (2026)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 22 — SECTION DIVIDER: INTRAOPERATIVE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide section-slide" id="s22">
+    <div class="slide-label">Section 4</div>
+    <h2>Intraoperative<br><span class="highlight">Management</span></h2>
+    <div class="divider"></div>
+    <p class="body-text muted">Surgical approach, hemorrhage preparedness, and goal-directed therapy</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 23 — GENERAL SURGICAL APPROACH
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s23">
+    <div class="slide-label">Section 4 · Surgical Approach</div>
+    <h2>General <span class="highlight">Surgical Approach</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2" style="max-width:820px;">
+      <div class="card" style="border-color:var(--accent2);">
+        <div class="card-title" style="color:var(--accent2);">Standard Approach</div>
+        <div class="card-body"><strong>Planned cesarean hysterectomy</strong> with placenta left in situ after fetal delivery. Avoid attempted placental removal.</div>
+      </div>
+      <div class="card" style="border-color:var(--warn);">
+        <div class="card-title" style="color:var(--warn);">Conservative Management</div>
+        <div class="card-body">Uterus-sparing strategies only in <strong>highly selected cases</strong> at centers with specific expertise and with informed consent.</div>
+      </div>
+    </div>
+    <p class="source-note"><span class="badge badge-acog">ACOG/SMFM</span> Consensus No. 7 (2018) · FIGO Consensus Guidelines (2018)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 24 — PRE-INCISION HUDDLE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s24">
+    <div class="slide-label">Section 4 · Pre-Incision</div>
+    <h2>Pre-Incision <span class="highlight">Team Huddle</span></h2>
+    <div class="divider"></div>
+    <ul class="checklist" style="max-width:780px;">
+      <li>Confirm team roles and assignments</li>
+      <li>Review anticipated estimated blood loss (EBL)</li>
+      <li>Walk through key surgical steps</li>
+      <li>Define intraoperative consult criteria</li>
+      <li>Verify all equipment is open and counted prior to induction</li>
+      <li>Confirm cell saver is connected and ready</li>
+      <li>Alert OB Rapid Response Team</li>
+    </ul>
+    <p class="source-note">Emory Healthcare Protocol (2026)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 25 — LABS & ACCESS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s25">
+    <div class="slide-label">Section 4 · Pre-operative Labs</div>
+    <h2>Labs &amp; <span class="highlight">Vascular Access</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2" style="max-width:820px;">
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">Laboratory Studies</div>
+        <div class="card-body">CBC · CMP · Type and cross for <strong>4 units PRBC</strong><br>Maintain active T&amp;S / T&amp;C every 72 hours (admitted patients)</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">Vascular Access</div>
+        <div class="card-body"><strong>2 large bore IVs</strong> · Consider arterial line · Central venous access only as clinically indicated</div>
+      </div>
+    </div>
+    <p class="source-note">Emory Healthcare Protocol (2026)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 26 — HEMORRHAGE PREPAREDNESS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s26">
+    <div class="slide-label">Section 4 · Hemorrhage Preparedness</div>
+    <h2>Hemorrhage <span class="danger">Preparedness</span></h2>
+    <div class="divider" style="background:var(--danger);"></div>
+    <div class="card-grid cols-3" style="max-width:900px;">
+      <div class="card">
+        <div class="card-title" style="color:var(--danger);">🩸 Cell Saver</div>
+        <div class="card-body">Connected and used throughout procedure</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--danger);">🌡️ Fluid Warmer</div>
+        <div class="card-body">In-line fluid warmer required</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--danger);">⚡ Rapid Infuser</div>
+        <div class="card-body">Available in OR; prime if needed</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--danger);">📊 QBL Monitoring</div>
+        <div class="card-body">Quantitative blood loss assessment every 30 minutes</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--danger);">🧪 TEG/ROTEM</div>
+        <div class="card-body">Goal-directed therapy guided by labs/TEG/ROTEM when available</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--danger);">💊 Uterotonics</div>
+        <div class="card-body">Oxytocin, methylergonovine, carboprost, misoprostol, calcium</div>
+      </div>
+    </div>
+    <p class="source-note">Emory Healthcare Protocol (2026)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 27 — GOAL-DIRECTED TRANSFUSION TARGETS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s27">
+    <div class="slide-label">Section 4 · Transfusion Management</div>
+    <h2>Goal-Directed <span class="highlight">Transfusion Targets</span></h2>
+    <div class="divider"></div>
+    <div class="gdt-row">
+      <div class="gdt-item">
+        <div class="gdt-label">Fibrinogen</div>
+        <div class="gdt-val highlight">≥ 200</div>
+        <div class="gdt-unit">mg/dL</div>
+      </div>
+      <div class="gdt-item">
+        <div class="gdt-label">Hemoglobin</div>
+        <div class="gdt-val highlight">&gt; 7</div>
+        <div class="gdt-unit">g/dL</div>
+      </div>
+      <div class="gdt-item">
+        <div class="gdt-label">Platelets</div>
+        <div class="gdt-val highlight">&gt; 50,000</div>
+        <div class="gdt-unit">per µL</div>
+      </div>
+    </div>
+    <p class="body-text" style="margin-top:1.2rem; font-size:1rem;">Active transfusion management early for <strong>uncontrolled bleeding</strong></p>
+    <p class="source-note">Emory Healthcare Protocol (2026)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 28 — TRANEXAMIC ACID
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s28">
+    <div class="slide-label">Section 4 · Pharmacologic Adjuncts</div>
+    <h2>Tranexamic Acid <span class="highlight">(TXA)</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2" style="max-width:820px;">
+      <div class="card" style="border-color:var(--accent2);">
+        <div class="card-title" style="color:var(--accent2);">Dosing Protocol</div>
+        <div class="card-body"><strong>1 g TXA</strong> at 1 L blood loss<br>Repeat dose at 30 minutes if hemorrhage continues</div>
+      </div>
+      <div class="card" style="border-color:var(--accent2);">
+        <div class="card-title" style="color:var(--accent2);">Availability</div>
+        <div class="card-body">Ensure TXA is available and accessible in the OR prior to incision</div>
+      </div>
+    </div>
+    <p class="source-note">Emory Healthcare Protocol (2026)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 29 — SECTION DIVIDER: ADJUNCT PROCEDURES
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide section-slide" id="s29">
+    <div class="slide-label">Section 5</div>
+    <h2>Adjunct Procedures &amp;<br><span class="highlight">Post-Operative Care</span></h2>
+    <div class="divider"></div>
+    <p class="body-text muted">Interventional radiology, ureteral stents, and postoperative planning</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 30 — INTERVENTIONAL RADIOLOGY
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s30">
+    <div class="slide-label">Section 5 · Adjunct Procedures</div>
+    <h2>Interventional <span class="highlight">Radiology (IR)</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2" style="max-width:820px;">
+      <div class="card" style="border-color:var(--danger);">
+        <div class="card-title" style="color:var(--danger);">Not Recommended</div>
+        <div class="card-body"><strong>Routine pre-op prophylactic balloon occlusion is NOT recommended</strong> — evidence does not support routine use</div>
+      </div>
+      <div class="card" style="border-color:var(--warn);">
+        <div class="card-title" style="color:var(--warn);">Selective Use</div>
+        <div class="card-body">May be considered in <strong>suspected percreta with extra-uterine organ invasion</strong> at experienced centers after multidisciplinary discussion</div>
+      </div>
+    </div>
+    <p class="source-note">Emory Healthcare Protocol (2026) · ACOG/SMFM Consensus No. 7 (2018)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 31 — URETERAL STENTS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s31">
+    <div class="slide-label">Section 5 · Adjunct Procedures</div>
+    <h2>Ureteral <span class="highlight">Stents</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2" style="max-width:820px;">
+      <div class="card" style="border-color:var(--danger);">
+        <div class="card-title" style="color:var(--danger);">Not Routinely Recommended</div>
+        <div class="card-body">Evidence does <strong>not demonstrate</strong> reduced ureteral injury with routine use</div>
+      </div>
+      <div class="card" style="border-color:var(--warn);">
+        <div class="card-title" style="color:var(--warn);">Consider When</div>
+        <div class="card-body">Strong suspicion of <strong>bladder or parametrial invasion</strong> to facilitate identification, based on surgeon preference and anatomy</div>
+      </div>
+    </div>
+    <p class="source-note">Emory Healthcare Protocol (2026)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 32 — CONSERVATIVE MANAGEMENT CONSIDERATIONS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s32">
+    <div class="slide-label">Section 5 · Conservative Management</div>
+    <h2>Conservative <span class="warn">Management</span></h2>
+    <div class="divider" style="background:var(--warn);"></div>
+    <ul class="icon-list" style="max-width:800px;">
+      <li><span class="ico">🏥</span>Only at centers with <strong>specific expertise</strong></li>
+      <li><span class="ico">📋</span>Requires explicit <strong>informed consent</strong> regarding risks, surveillance, and potential need for delayed hysterectomy</li>
+      <li><span class="ico">👩‍⚕️</span>After consultation with <strong>Maternal-Fetal Medicine</strong></li>
+      <li><span class="ico">📅</span>Assured <strong>follow-up</strong> plan must be in place</li>
+      <li><span class="ico">⚠️</span>Retained placenta in situ carries risk of delayed hemorrhage and infection</li>
+    </ul>
+    <p class="source-note">Emory Healthcare Protocol (2026) · FIGO Consensus Guidelines (2018)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 33 — POSTOPERATIVE CARE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s33">
+    <div class="slide-label">Section 5 · Post-Operative</div>
+    <h2>Post-Operative <span class="highlight">Care</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2" style="max-width:820px;">
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">ICU Planning</div>
+        <div class="card-body">Pre-planned ICU admission as part of augmented care coordination. Intensivist involvement as indicated.</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--accent);">Monitoring</div>
+        <div class="card-body">Continued hemorrhage surveillance · Coagulation monitoring · Wound and organ injury assessment</div>
+      </div>
+    </div>
+    <p class="source-note">Emory Healthcare Protocol (2026)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 34 — KEY TAKEAWAYS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s34">
+    <div class="slide-label">Summary</div>
+    <h2>Key <span class="highlight">Takeaways</span></h2>
+    <div class="divider"></div>
+    <ul class="icon-list" style="max-width:820px;">
+      <li><span class="ico">🔍</span><strong>Identify early</strong> — antenatal diagnosis optimizes outcomes</li>
+      <li><span class="ico">👥</span><strong>Multidisciplinary team</strong> assembled by second trimester</li>
+      <li><span class="ico">🏥</span><strong>Level III/IV facility</strong> with massive transfusion capability</li>
+      <li><span class="ico">📅</span><strong>Planned delivery</strong> at 34–35+6 weeks before labor or bleeding</li>
+      <li><span class="ico">✂️</span><strong>Cesarean hysterectomy</strong> with placenta in situ is the standard approach</li>
+      <li><span class="ico">🩸</span><strong>Protocol-driven hemorrhage management</strong> — TXA, goal-directed transfusion</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SLIDE 35 — REFERENCES
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s35">
+    <div class="slide-label">References</div>
+    <h3 style="font-size:1.4rem; color:var(--accent); margin-bottom:0.8rem;">Evidence Base</h3>
+    <div class="divider"></div>
+    <div style="max-width:860px; width:100%;">
+      <table class="risk-table" style="font-size:0.8rem;">
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Year</th>
+            <th>Key Contribution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-acog">ACOG/SMFM</span> Obstetric Care Consensus No. 7</td>
+            <td>2018</td>
+            <td>Diagnosis, delivery timing (34–35+6 wks), cesarean hysterectomy standard</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-smfm">SMFM</span> PAS Ultrasound Marker Task Force</td>
+            <td>2021</td>
+            <td>Standardized sonographic markers and ultrasound examination approach</td>
+          </tr>
+          <tr>
+            <td>FIGO Consensus Guidelines on PAS</td>
+            <td>2018</td>
+            <td>Conservative and non-conservative surgical management, terminology</td>
+          </tr>
+          <tr>
+            <td>RCOG Green-top Guideline 27a</td>
+            <td>2018</td>
+            <td>Steroid timing at 34–35+6 wks, follow-up imaging</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-emory">Emory Healthcare</span> Invasive Placental Disease Policy</td>
+            <td>2026</td>
+            <td>Institutional protocol for EDH, EJCH, EUHM</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- ─── Navigation ──────────────────────────────────────────────────────── -->
+<div id="nav">
+  <button onclick="prevSlide()" title="Previous (←)">&#8592;</button>
+  <span id="slide-counter">1 / 35</span>
+  <button onclick="nextSlide()" title="Next (→)">&#8594;</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total  = slides.length;
+  const counter = document.getElementById('slide-counter');
+  const bar     = document.getElementById('progress-bar');
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit-left');
+      if (i < index) s.classList.add('exit-left');
+    });
+    slides[index].classList.add('active');
+    counter.textContent = `${index + 1} / ${total}`;
+    bar.style.width = `${((index + 1) / total) * 100}%`;
+  }
+
+  function nextSlide() {
+    if (current < total - 1) { current++; showSlide(current); }
+  }
+
+  function prevSlide() {
+    if (current > 0) { current--; showSlide(current); }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft')                   { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (dx < -50) nextSlide();
+    if (dx >  50) prevSlide();
+  });
+
+  showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
