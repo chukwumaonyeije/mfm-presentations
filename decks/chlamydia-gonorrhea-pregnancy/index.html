@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chlamydia &amp; Gonorrhea in Pregnancy | MFM Patient Education</title>
+    <style>
+        /* ── Base Reset ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0d1117;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Progress Bar ───────────────────────────────────────── */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4db8ff, #00e5ff);
+            transition: width 0.4s ease;
+            z-index: 100;
+        }
+
+        /* ── Slide Counter ──────────────────────────────────────── */
+        #slide-counter {
+            position: fixed;
+            bottom: 1.2em; right: 1.8em;
+            font-size: 0.85em;
+            color: #555;
+            z-index: 100;
+            letter-spacing: 0.05em;
+        }
+
+        /* ── Navigation Arrows ──────────────────────────────────── */
+        .nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #aaa;
+            font-size: 1.6em;
+            width: 2.4em;
+            height: 2.4em;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: background 0.2s, color 0.2s;
+        }
+        .nav-btn:hover { background: rgba(77,184,255,0.18); color: #4db8ff; }
+        #btn-prev { left: 1em; }
+        #btn-next { right: 1em; }
+
+        /* ── Deck & Slides ──────────────────────────────────────── */
+        .deck {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3em 5em;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease;
+        }
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ── Typography ─────────────────────────────────────────── */
+        .slide-title {
+            font-size: 2.6em;
+            font-weight: 300;
+            color: #4db8ff;
+            text-align: center;
+            margin-bottom: 0.6em;
+            letter-spacing: 0.02em;
+        }
+        .slide-subtitle {
+            font-size: 1.35em;
+            font-weight: 300;
+            color: #90caf9;
+            text-align: center;
+            margin-bottom: 0.4em;
+        }
+        .slide-body {
+            font-size: 1.25em;
+            line-height: 1.7;
+            text-align: center;
+            max-width: 820px;
+            color: #ccc;
+        }
+        .highlight { color: #4db8ff; font-weight: 600; }
+        .reassurance { color: #66bb6a; font-weight: 600; }
+        .action { color: #ffa726; font-weight: 600; }
+        .caution { color: #ef5350; font-weight: 600; }
+
+        /* ── Title Slide ────────────────────────────────────────── */
+        .slide-title-main {
+            font-size: 3.4em;
+            font-weight: 200;
+            color: #4db8ff;
+            text-align: center;
+            letter-spacing: 0.03em;
+            line-height: 1.2;
+        }
+        .slide-title-sub {
+            font-size: 1.4em;
+            font-weight: 300;
+            color: #90caf9;
+            text-align: center;
+            margin-top: 0.5em;
+        }
+        .slide-tagline {
+            font-size: 1.1em;
+            color: #66bb6a;
+            margin-top: 1.2em;
+            text-align: center;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .divider {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, #4db8ff, #00e5ff);
+            margin: 1em auto;
+            border-radius: 2px;
+        }
+
+        /* ── Icon Grid ──────────────────────────────────────────── */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.2em;
+            max-width: 700px;
+            width: 100%;
+            margin-top: 0.5em;
+        }
+        .icon-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.2em 1.5em;
+            text-align: left;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8em;
+        }
+        .icon-card .icon {
+            font-size: 1.8em;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        .icon-card .card-text {
+            font-size: 1em;
+            line-height: 1.5;
+            color: #ccc;
+        }
+        .icon-card .card-label {
+            font-size: 0.85em;
+            color: #4db8ff;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.2em;
+        }
+
+        /* ── Two-Column Layout ──────────────────────────────────── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5em;
+            max-width: 860px;
+            width: 100%;
+            margin-top: 0.5em;
+        }
+        .col-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.4em 1.6em;
+        }
+        .col-card h3 {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #4db8ff;
+            margin-bottom: 0.6em;
+            letter-spacing: 0.04em;
+        }
+        .col-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .col-card ul li {
+            font-size: 0.95em;
+            color: #ccc;
+            line-height: 1.6;
+            padding: 0.2em 0;
+        }
+        .col-card ul li::before {
+            content: "▸ ";
+            color: #4db8ff;
+        }
+
+        /* ── Clinical Table ─────────────────────────────────────── */
+        .clinical-table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 820px;
+            font-size: 1em;
+            margin-top: 0.6em;
+        }
+        .clinical-table th {
+            background: rgba(77,184,255,0.15);
+            color: #4db8ff;
+            padding: 0.7em 1em;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border-bottom: 1px solid rgba(77,184,255,0.3);
+        }
+        .clinical-table td {
+            padding: 0.65em 1em;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            color: #ccc;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        .clinical-table tr:last-child td { border-bottom: none; }
+        .clinical-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+        /* ── Timeline ───────────────────────────────────────────── */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6em;
+            max-width: 700px;
+            width: 100%;
+            margin-top: 0.4em;
+        }
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1em;
+        }
+        .timeline-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #4db8ff;
+            flex-shrink: 0;
+            margin-top: 0.3em;
+        }
+        .timeline-dot.green { background: #66bb6a; }
+        .timeline-dot.orange { background: #ffa726; }
+        .timeline-content {
+            font-size: 1em;
+            color: #ccc;
+            line-height: 1.5;
+        }
+        .timeline-content strong {
+            color: #e0e0e0;
+            display: block;
+            font-size: 0.95em;
+        }
+
+        /* ── Pill Badges ────────────────────────────────────────── */
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7em;
+            justify-content: center;
+            margin-top: 0.8em;
+        }
+        .badge {
+            background: rgba(77,184,255,0.12);
+            border: 1px solid rgba(77,184,255,0.3);
+            color: #4db8ff;
+            border-radius: 20px;
+            padding: 0.35em 1em;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .badge.green {
+            background: rgba(102,187,106,0.12);
+            border-color: rgba(102,187,106,0.3);
+            color: #66bb6a;
+        }
+        .badge.orange {
+            background: rgba(255,167,38,0.12);
+            border-color: rgba(255,167,38,0.3);
+            color: #ffa726;
+        }
+        .badge.red {
+            background: rgba(239,83,80,0.12);
+            border-color: rgba(239,83,80,0.3);
+            color: #ef5350;
+        }
+
+        /* ── Warning Box ────────────────────────────────────────── */
+        .warning-box {
+            background: rgba(239,83,80,0.08);
+            border: 1px solid rgba(239,83,80,0.3);
+            border-radius: 10px;
+            padding: 0.9em 1.4em;
+            max-width: 720px;
+            width: 100%;
+            margin-top: 0.8em;
+            font-size: 1em;
+            color: #ef9a9a;
+            text-align: center;
+        }
+
+        /* ── Reassurance Box ────────────────────────────────────── */
+        .reassurance-box {
+            background: rgba(102,187,106,0.08);
+            border: 1px solid rgba(102,187,106,0.3);
+            border-radius: 10px;
+            padding: 0.9em 1.4em;
+            max-width: 720px;
+            width: 100%;
+            margin-top: 0.8em;
+            font-size: 1em;
+            color: #a5d6a7;
+            text-align: center;
+        }
+
+        /* ── Closing Slide ──────────────────────────────────────── */
+        .closing-icon {
+            font-size: 4em;
+            margin-bottom: 0.3em;
+        }
+
+        /* ── Slide Background Accents ───────────────────────────── */
+        .slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 20% 80%, rgba(77,184,255,0.04) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 20%, rgba(0,229,255,0.03) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* ── Source Note ────────────────────────────────────────── */
+        .source-note {
+            position: absolute;
+            bottom: 2em;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7em;
+            color: #444;
+            letter-spacing: 0.04em;
+        }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/chlamydia-gonorrhea-pregnancy/index.html">
+<meta name="description" content="A patient-oriented educational guide on chlamydia and gonorrhea during pregnancy, covering risks, screening, treatment, and protection of maternal and neonatal health.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Chlamydia, Gonorrhea, Sexually Transmitted Infections, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/chlamydia-gonorrhea-pregnancy/index.html">
+<meta property="og:title" content="Chlamydia &amp; Gonorrhea in Pregnancy - Patient Education | OpenMFM">
+<meta property="og:description" content="A patient-oriented educational guide on chlamydia and gonorrhea during pregnancy, covering risks, screening, treatment, and protection of maternal and neonatal health.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Chlamydia &amp; Gonorrhea in Pregnancy - Patient Education | OpenMFM">
+<meta name="twitter:description" content="A patient-oriented educational guide on chlamydia and gonorrhea during pregnancy, covering risks, screening, treatment, and protection of maternal and neonatal health.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Chlamydia & Gonorrhea in Pregnancy - Patient Education",
+  "description": "A patient-oriented educational guide on chlamydia and gonorrhea during pregnancy, covering risks, screening, treatment, and protection of maternal and neonatal health.",
+  "url": "https://openmfm.org/decks/chlamydia-gonorrhea-pregnancy/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-06-26",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Chlamydia & Gonorrhea in Pregnancy - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Chlamydia, Gonorrhea, Sexually Transmitted Infections, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Navigation Buttons -->
+<button class="nav-btn" id="btn-prev" onclick="prevSlide()" aria-label="Previous slide">&#8592;</button>
+<button class="nav-btn" id="btn-next" onclick="nextSlide()" aria-label="Next slide">&#8594;</button>
+
+<!-- Slide Counter -->
+<div id="slide-counter"></div>
+
+<div class="deck">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 1 — Title
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide active">
+        <div class="closing-icon">🧬</div>
+        <div class="slide-title-main">Chlamydia &amp; Gonorrhea<br>in Pregnancy</div>
+        <div class="divider"></div>
+        <div class="slide-title-sub">Diagnosis · Treatment · Pregnancy Implications</div>
+        <div class="slide-tagline">A Patient-Centered Discussion</div>
+        <div class="source-note">Based on CDC STI Guidelines 2021 &amp; ACOG Recommendations</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 2 — What Are These Infections?
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">What Are These Infections?</div>
+        <div class="two-col">
+            <div class="col-card">
+                <h3>🦠 Chlamydia</h3>
+                <ul>
+                    <li>Caused by <em>Chlamydia trachomatis</em></li>
+                    <li>Most common bacterial STI</li>
+                    <li>Often completely silent</li>
+                    <li>Easily treated with antibiotics</li>
+                </ul>
+            </div>
+            <div class="col-card">
+                <h3>🦠 Gonorrhea</h3>
+                <ul>
+                    <li>Caused by <em>Neisseria gonorrhoeae</em></li>
+                    <li>Second most common bacterial STI</li>
+                    <li>Often completely silent</li>
+                    <li>Treatable with a single injection</li>
+                </ul>
+            </div>
+        </div>
+        <div class="reassurance-box">
+            Most pregnant patients with these infections have <strong>no symptoms at all</strong> — which is why routine screening is essential.
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 3 — Who Should Be Screened?
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Who Should Be Screened?</div>
+        <div class="slide-subtitle">Screening is a standard part of prenatal care</div>
+        <div class="icon-grid">
+            <div class="icon-card">
+                <div class="icon">👶</div>
+                <div class="card-text">
+                    <div class="card-label">All Patients &lt; 25 yrs</div>
+                    Screen at first prenatal visit
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">📋</div>
+                <div class="card-text">
+                    <div class="card-label">Patients ≥ 25 yrs</div>
+                    Screen if risk factors are present
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">🔄</div>
+                <div class="card-text">
+                    <div class="card-label">Repeat Screening</div>
+                    Third trimester for high-risk patients
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">🔗</div>
+                <div class="card-text">
+                    <div class="card-label">Co-Screening</div>
+                    HIV, syphilis &amp; hepatitis B if positive
+                </div>
+            </div>
+        </div>
+        <div class="source-note">ACOG / CDC Screening Recommendations</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 4 — How Do We Test?
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">How Do We Test?</div>
+        <div class="slide-body">
+            We use a highly accurate test called <span class="highlight">NAAT</span><br>
+            (Nucleic Acid Amplification Test)
+        </div>
+        <div class="icon-grid" style="margin-top:1.2em;">
+            <div class="icon-card">
+                <div class="icon">🔬</div>
+                <div class="card-text">
+                    <div class="card-label">Specimen Type</div>
+                    Vaginal swab (preferred) or first-catch urine
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">✅</div>
+                <div class="card-text">
+                    <div class="card-label">Accuracy</div>
+                    Highest sensitivity &amp; specificity available
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">🙋</div>
+                <div class="card-text">
+                    <div class="card-label">Self-Collection</div>
+                    Patient-collected swabs are acceptable
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">⚡</div>
+                <div class="card-text">
+                    <div class="card-label">Results</div>
+                    Typically available within 24–48 hours
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 5 — Maternal Risks (Pregnancy Complications)
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Risks to the Pregnancy</div>
+        <div class="slide-subtitle">Untreated infections can cause ascending inflammation</div>
+        <div class="two-col">
+            <div class="col-card">
+                <h3>🔵 Chlamydia Risks</h3>
+                <ul>
+                    <li>Preterm labor</li>
+                    <li>Early water breaking (PPROM)</li>
+                    <li>Chorioamnionitis (womb infection)</li>
+                    <li>Postpartum uterine infection</li>
+                </ul>
+            </div>
+            <div class="col-card">
+                <h3>🔴 Gonorrhea Risks</h3>
+                <ul>
+                    <li>Preterm labor</li>
+                    <li>Early water breaking (PPROM)</li>
+                    <li>Chorioamnionitis</li>
+                    <li>Spontaneous pregnancy loss</li>
+                </ul>
+            </div>
+        </div>
+        <div class="reassurance-box">
+            <strong>Treatment eliminates these risks.</strong> Early detection and therapy protect both mother and baby.
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 6 — Neonatal Risks
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Risks to the Baby</div>
+        <div class="slide-subtitle">Transmission occurs during vaginal delivery</div>
+        <table class="clinical-table">
+            <thead>
+                <tr>
+                    <th>Condition</th>
+                    <th>Cause</th>
+                    <th>Onset After Birth</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Gonococcal Eye Infection (Ophthalmia Neonatorum)</td>
+                    <td>Gonorrhea</td>
+                    <td>2–5 days</td>
+                </tr>
+                <tr>
+                    <td>Chlamydial Eye Infection</td>
+                    <td>Chlamydia</td>
+                    <td>5–14 days</td>
+                </tr>
+                <tr>
+                    <td>Neonatal Pneumonia</td>
+                    <td>Chlamydia</td>
+                    <td>1–3 months</td>
+                </tr>
+                <tr>
+                    <td>Disseminated Gonococcal Infection (Sepsis)</td>
+                    <td>Gonorrhea</td>
+                    <td>First weeks of life</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="reassurance-box">
+            Treating the infection before delivery <strong>prevents vertical transmission</strong> to the newborn.
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 7 — Treatment: Safe Antibiotics
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Safe Treatment in Pregnancy</div>
+        <div class="slide-subtitle">Pregnancy-specific regimens — effective and well-tolerated</div>
+        <table class="clinical-table">
+            <thead>
+                <tr>
+                    <th>Infection</th>
+                    <th>First-Line Treatment</th>
+                    <th>Alternative</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="highlight">Chlamydia</span></td>
+                    <td>Azithromycin 1 g — single oral dose</td>
+                    <td>Amoxicillin 500 mg three times daily × 7 days</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">Gonorrhea</span></td>
+                    <td>Ceftriaxone 500 mg — single IM injection</td>
+                    <td>Cefixime 400 mg oral (if injection unavailable)</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="warning-box">
+            ⚠️ <strong>Doxycycline, tetracyclines, and fluoroquinolones are strictly contraindicated</strong> in all trimesters of pregnancy.
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 8 — Partner Treatment
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Partner Treatment Matters</div>
+        <div class="slide-body" style="margin-bottom:0.8em;">
+            Treating your partner prevents <span class="action">reinfection</span> — the most common cause of treatment failure.
+        </div>
+        <div class="icon-grid">
+            <div class="icon-card">
+                <div class="icon">💊</div>
+                <div class="card-text">
+                    <div class="card-label">Partner Therapy</div>
+                    Partner should be treated at the same time
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">🚫</div>
+                <div class="card-text">
+                    <div class="card-label">Abstain</div>
+                    Avoid intercourse for 7 days after treatment
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">📬</div>
+                <div class="card-text">
+                    <div class="card-label">Expedited Partner Therapy</div>
+                    We can provide a prescription for your partner
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">🔒</div>
+                <div class="card-text">
+                    <div class="card-label">Confidentiality</div>
+                    Your privacy is fully protected
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 9 — Test-of-Cure
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Confirming the Infection Is Gone</div>
+        <div class="slide-subtitle">Test-of-Cure (TOC) — Required in Pregnancy</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <strong>Day 0 — Treatment Completed</strong>
+                    Take all prescribed medication as directed
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot orange"></div>
+                <div class="timeline-content">
+                    <strong>3–4 Weeks Later — Test-of-Cure (NAAT)</strong>
+                    Confirms the bacteria are fully eliminated. Do not test earlier — false positives can occur.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot green"></div>
+                <div class="timeline-content">
+                    <strong>3 Months Later — Reinfection Screen</strong>
+                    Checks for any new exposure
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot green"></div>
+                <div class="timeline-content">
+                    <strong>Third Trimester — Routine Rescreen</strong>
+                    Captures late-pregnancy reinfections before delivery
+                </div>
+            </div>
+        </div>
+        <div class="source-note">CDC STI Treatment Guidelines 2021</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 10 — What Can You Do?
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">What Can You Do?</div>
+        <div class="badge-row">
+            <span class="badge orange">Complete all medication</span>
+            <span class="badge orange">Ensure partner is treated</span>
+            <span class="badge orange">Abstain for 7 days after treatment</span>
+            <span class="badge">Return for Test-of-Cure at 3–4 weeks</span>
+            <span class="badge">Attend all scheduled prenatal visits</span>
+            <span class="badge green">Ask your care team any questions</span>
+        </div>
+        <div class="reassurance-box" style="margin-top:1.4em;">
+            These infections are <strong>common, treatable, and curable.</strong><br>
+            With proper care, your pregnancy can be completely healthy.
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 11 — Summary
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Summary</div>
+        <table class="clinical-table">
+            <thead>
+                <tr>
+                    <th>Topic</th>
+                    <th>Key Point</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Presentation</td>
+                    <td>Usually asymptomatic — universal screening is essential</td>
+                </tr>
+                <tr>
+                    <td>Diagnosis</td>
+                    <td>NAAT (vaginal swab or urine) — highly accurate</td>
+                </tr>
+                <tr>
+                    <td>Treatment</td>
+                    <td>Azithromycin (CT) · Ceftriaxone (GC) — safe in pregnancy</td>
+                </tr>
+                <tr>
+                    <td>Maternal Risks</td>
+                    <td>Preterm labor, PPROM, chorioamnionitis if untreated</td>
+                </tr>
+                <tr>
+                    <td>Neonatal Risks</td>
+                    <td>Eye infections, pneumonia, sepsis — prevented by treatment</td>
+                </tr>
+                <tr>
+                    <td>Follow-Up</td>
+                    <td>Test-of-Cure at 3–4 weeks · Rescreen at 3 months</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 12 — Closing / Partnership
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="closing-icon">🤝</div>
+        <div class="slide-title-main" style="font-size:2.8em;">You Are Not Alone</div>
+        <div class="divider"></div>
+        <div class="slide-title-sub">
+            Your care team is here to guide you<br>every step of the way.
+        </div>
+        <div class="badge-row" style="margin-top:1.5em;">
+            <span class="badge green">Treatable</span>
+            <span class="badge green">Curable</span>
+            <span class="badge green">Preventable Neonatal Harm</span>
+        </div>
+        <div class="slide-tagline" style="margin-top:1.4em;">
+            Maternal-Fetal Medicine · Patient Education
+        </div>
+        <div class="source-note">CDC STI Treatment Guidelines 2021 · ACOG Practice Bulletin · DoctorsWhoCode.blog</div>
+    </div>
+
+</div><!-- end .deck -->
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    const progressBar = document.getElementById('progress-bar');
+    const counter = document.getElementById('slide-counter');
+
+    function updateUI() {
+        progressBar.style.width = ((currentSlide + 1) / total * 100) + '%';
+        counter.textContent = (currentSlide + 1) + ' / ' + total;
+    }
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+        updateUI();
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % total;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + total) % total;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+    });
+
+    showSlide(currentSlide);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

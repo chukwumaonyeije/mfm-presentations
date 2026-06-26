@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iron Deficiency Anemia in Pregnancy</title>
+    <style>
+        /* ─── Base ─────────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            background: #0d0d0d;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden;
+        }
+
+        /* ─── Deck & Slides ─────────────────────────────────────── */
+        .deck { width: 100%; height: 100%; position: relative; }
+        .slide {
+            width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 3em 5em;
+            opacity: 0; transition: opacity 0.5s ease-in-out; visibility: hidden;
+            text-align: center;
+        }
+        .slide.active { opacity: 1; visibility: visible; }
+
+        /* ─── Typography ────────────────────────────────────────── */
+        h1 { font-size: 3.2em; font-weight: 200; color: #fff; margin: 0.2em 0; letter-spacing: -1px; }
+        h2 { font-size: 2.4em; font-weight: 300; color: #4da6ff; margin: 0 0 0.4em 0; }
+        h3 { font-size: 1.6em; font-weight: 400; color: #a0c4ff; margin: 0.3em 0; }
+        p  { font-size: 1.35em; line-height: 1.7; max-width: 860px; margin: 0.5em auto; }
+        .subtitle { font-size: 1.5em; color: #aaa; font-weight: 300; margin-top: 0.3em; }
+        .label    { font-size: 0.9em; text-transform: uppercase; letter-spacing: 3px; color: #666; margin-bottom: 0.5em; }
+
+        /* ─── Color Tokens ──────────────────────────────────────── */
+        .blue    { color: #4da6ff; }
+        .green   { color: #66cc66; }
+        .orange  { color: #ff9933; }
+        .red     { color: #ff5555; }
+        .white   { color: #ffffff; }
+        .muted   { color: #888; }
+
+        /* ─── Accent bar ────────────────────────────────────────── */
+        .accent-bar {
+            width: 60px; height: 4px; border-radius: 2px;
+            background: #4da6ff; margin: 0.6em auto 1.2em;
+        }
+
+        /* ─── Stat Boxes ────────────────────────────────────────── */
+        .stat-row {
+            display: flex; gap: 2em; justify-content: center;
+            flex-wrap: wrap; margin-top: 1em;
+        }
+        .stat-box {
+            background: #1a1a2e; border: 1px solid #2a2a4a;
+            border-radius: 12px; padding: 1.2em 2em;
+            min-width: 200px; flex: 1; max-width: 280px;
+        }
+        .stat-box .big-num {
+            font-size: 2.6em; font-weight: 700; color: #4da6ff;
+            line-height: 1;
+        }
+        .stat-box .stat-label { font-size: 0.95em; color: #aaa; margin-top: 0.3em; }
+
+        /* ─── Bullet Cards ──────────────────────────────────────── */
+        .card-list {
+            display: flex; flex-direction: column; gap: 0.8em;
+            max-width: 860px; width: 100%; margin-top: 0.5em;
+        }
+        .card-item {
+            background: #161625; border-left: 4px solid #4da6ff;
+            border-radius: 8px; padding: 0.8em 1.4em;
+            text-align: left; font-size: 1.25em; line-height: 1.5;
+        }
+        .card-item.orange { border-left-color: #ff9933; }
+        .card-item.green  { border-left-color: #66cc66; }
+        .card-item.red    { border-left-color: #ff5555; }
+
+        /* ─── Two-Column Layout ─────────────────────────────────── */
+        .two-col {
+            display: flex; gap: 2.5em; align-items: flex-start;
+            justify-content: center; width: 100%; max-width: 1100px;
+            margin-top: 0.5em;
+        }
+        .col { flex: 1; text-align: left; }
+        .col-title {
+            font-size: 1.1em; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 0.6em;
+        }
+
+        /* ─── Table ─────────────────────────────────────────────── */
+        table {
+            border-collapse: collapse; width: 100%;
+            max-width: 1050px; font-size: 1.1em; margin-top: 0.8em;
+        }
+        th {
+            background: #1a1a2e; color: #4da6ff;
+            padding: 0.7em 1em; border-bottom: 2px solid #2a2a4a;
+            text-align: left; font-weight: 400; letter-spacing: 1px;
+        }
+        td {
+            padding: 0.65em 1em; border-bottom: 1px solid #222;
+            text-align: left; vertical-align: top;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #1a1a2e; }
+
+        /* ─── Icon Circles ──────────────────────────────────────── */
+        .icon-row {
+            display: flex; gap: 2.5em; justify-content: center;
+            flex-wrap: wrap; margin-top: 1em;
+        }
+        .icon-card {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 0.6em; max-width: 200px;
+        }
+        .icon-circle {
+            width: 70px; height: 70px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8em; background: #1a1a2e;
+            border: 2px solid #2a2a4a;
+        }
+        .icon-card p { font-size: 1em; color: #ccc; margin: 0; text-align: center; }
+
+        /* ─── Pill Badge ────────────────────────────────────────── */
+        .pill {
+            display: inline-block; padding: 0.3em 1em;
+            border-radius: 20px; font-size: 0.9em;
+            font-weight: 600; letter-spacing: 1px;
+            margin: 0.2em;
+        }
+        .pill-blue   { background: #1a3a5c; color: #4da6ff; border: 1px solid #4da6ff; }
+        .pill-orange { background: #3a2a10; color: #ff9933; border: 1px solid #ff9933; }
+        .pill-red    { background: #3a1010; color: #ff5555; border: 1px solid #ff5555; }
+        .pill-green  { background: #102a10; color: #66cc66; border: 1px solid #66cc66; }
+
+        /* ─── Navigation ────────────────────────────────────────── */
+        #nav {
+            position: fixed; bottom: 1.5em; left: 50%;
+            transform: translateX(-50%);
+            display: flex; align-items: center; gap: 1em;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px; padding: 0.5em 1.2em;
+            backdrop-filter: blur(6px);
+            z-index: 100;
+        }
+        #nav button {
+            background: none; border: none; color: #aaa;
+            font-size: 1.3em; cursor: pointer; padding: 0.2em 0.5em;
+            border-radius: 6px; transition: color 0.2s;
+        }
+        #nav button:hover { color: #fff; }
+        #slide-counter { font-size: 0.9em; color: #666; min-width: 60px; text-align: center; }
+
+        /* ─── Slide-specific backgrounds ───────────────────────── */
+        .slide-title-bg {
+            background: radial-gradient(ellipse at 60% 40%, #0d1b2e 0%, #0d0d0d 70%);
+        }
+        .slide-diag-bg {
+            background: radial-gradient(ellipse at 30% 60%, #0d1a0d 0%, #0d0d0d 70%);
+        }
+        .slide-maternal-bg {
+            background: radial-gradient(ellipse at 70% 30%, #1a0d0d 0%, #0d0d0d 70%);
+        }
+        .slide-fetal-bg {
+            background: radial-gradient(ellipse at 30% 70%, #1a0d1a 0%, #0d0d0d 70%);
+        }
+        .slide-tx-bg {
+            background: radial-gradient(ellipse at 50% 50%, #0d1a1a 0%, #0d0d0d 70%);
+        }
+
+        /* ─── Trimester Timeline ────────────────────────────────── */
+        .timeline {
+            display: flex; align-items: center; justify-content: center;
+            gap: 0; max-width: 900px; width: 100%; margin-top: 1.2em;
+        }
+        .tl-node {
+            display: flex; flex-direction: column; align-items: center;
+            flex: 1;
+        }
+        .tl-circle {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: #1a1a2e; border: 2px solid #4da6ff;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-size: 0.85em; line-height: 1.2;
+        }
+        .tl-circle .hb { font-size: 1.3em; font-weight: 700; color: #4da6ff; }
+        .tl-label { font-size: 0.9em; color: #aaa; margin-top: 0.5em; }
+        .tl-line { flex: 1; height: 2px; background: #2a2a4a; max-width: 80px; }
+
+        /* ─── Ferritin Gauge ────────────────────────────────────── */
+        .ferritin-scale {
+            display: flex; align-items: stretch;
+            max-width: 700px; width: 100%; height: 50px;
+            border-radius: 8px; overflow: hidden; margin: 1.2em auto 0.5em;
+            border: 1px solid #333;
+        }
+        .fs-zone {
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85em; font-weight: 600;
+        }
+        .fs-red    { background: #3a1010; color: #ff5555; flex: 30; }
+        .fs-orange { background: #3a2a10; color: #ff9933; flex: 20; }
+        .fs-green  { background: #102a10; color: #66cc66; flex: 50; }
+        .fs-labels {
+            display: flex; max-width: 700px; width: 100%;
+            justify-content: space-between; font-size: 0.85em; color: #888;
+            margin: 0 auto;
+        }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/iron-deficiency-anemia/index.html">
+<meta name="description" content="Clinician-focused guide on iron deficiency anemia in pregnancy. Covers trimester-specific diagnostic thresholds, iron studies workup, maternal-fetal implications, and evidence-based treatment guidelines for oral, intravenous iron, and blood transfusion.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Iron Deficiency, Anemia, Iron Studies, Intravenous Iron, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/iron-deficiency-anemia/index.html">
+<meta property="og:title" content="Iron Deficiency Anemia in Pregnancy - Provider Education | OpenMFM">
+<meta property="og:description" content="Clinician-focused guide on iron deficiency anemia in pregnancy. Covers trimester-specific diagnostic thresholds, iron studies workup, maternal-fetal implications, and evidence-based treatment guidelines for oral, intravenous iron, and blood transfusion.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Iron Deficiency Anemia in Pregnancy - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Clinician-focused guide on iron deficiency anemia in pregnancy. Covers trimester-specific diagnostic thresholds, iron studies workup, maternal-fetal implications, and evidence-based treatment guidelines for oral, intravenous iron, and blood transfusion.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Iron Deficiency Anemia in Pregnancy - Provider Education",
+  "description": "Clinician-focused guide on iron deficiency anemia in pregnancy. Covers trimester-specific diagnostic thresholds, iron studies workup, maternal-fetal implications, and evidence-based treatment guidelines for oral, intravenous iron, and blood transfusion.",
+  "url": "https://openmfm.org/decks/iron-deficiency-anemia/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-06-26",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Iron Deficiency Anemia in Pregnancy - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Iron Deficiency, Anemia, Iron Studies, Intravenous Iron, Provider Education"
+}
+</script>
+</head>
+<body>
+<div class="deck">
+
+    <!-- ── SLIDE 1: Title ─────────────────────────────────────────── -->
+    <div class="slide slide-title-bg">
+        <div class="label">Maternal-Fetal Medicine | Clinical Education</div>
+        <h1>Iron Deficiency Anemia<br>in Pregnancy</h1>
+        <div class="accent-bar"></div>
+        <p class="subtitle">Diagnosis &bull; Implications &bull; Evidence-Based Treatment</p>
+        <div class="stat-row" style="margin-top:2em;">
+            <div class="stat-box">
+                <div class="big-num">~40%</div>
+                <div class="stat-label">of pregnant women worldwide are anemic (WHO)</div>
+            </div>
+            <div class="stat-box">
+                <div class="big-num">#1</div>
+                <div class="stat-label">most common nutritional deficiency in pregnancy</div>
+            </div>
+            <div class="stat-box">
+                <div class="big-num">2–3×</div>
+                <div class="stat-label">increase in daily iron requirement during pregnancy</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 2: Diagnostic Thresholds ────────────────────────── -->
+    <div class="slide">
+        <h2>Diagnostic Thresholds</h2>
+        <div class="accent-bar"></div>
+        <p>Hemoglobin cutoffs are trimester-specific to account for physiological hemodilution.</p>
+        <div class="timeline">
+            <div class="tl-node">
+                <div class="tl-circle">
+                    <span class="hb">&lt;11.0</span>
+                    <span>g/dL</span>
+                </div>
+                <div class="tl-label">1st Trimester</div>
+            </div>
+            <div class="tl-line"></div>
+            <div class="tl-node">
+                <div class="tl-circle" style="border-color:#ff9933;">
+                    <span class="hb" style="color:#ff9933;">&lt;10.5</span>
+                    <span>g/dL</span>
+                </div>
+                <div class="tl-label">2nd Trimester</div>
+            </div>
+            <div class="tl-line"></div>
+            <div class="tl-node">
+                <div class="tl-circle">
+                    <span class="hb">&lt;11.0</span>
+                    <span>g/dL</span>
+                </div>
+                <div class="tl-label">3rd Trimester</div>
+            </div>
+        </div>
+        <p style="margin-top:1.2em;" class="muted">2nd trimester threshold is lower due to maximum plasma volume expansion.</p>
+    </div>
+
+    <!-- ── SLIDE 3: Iron Studies ──────────────────────────────────── -->
+    <div class="slide slide-diag-bg">
+        <h2>Iron Studies Workup</h2>
+        <div class="accent-bar"></div>
+        <p>Ferritin is the most sensitive and specific marker for absolute iron deficiency.</p>
+        <div class="ferritin-scale">
+            <div class="fs-zone fs-red">IDA<br>&lt;30 µg/L</div>
+            <div class="fs-zone fs-orange">Borderline<br>30–50 µg/L</div>
+            <div class="fs-zone fs-green">Adequate<br>&gt;50 µg/L</div>
+        </div>
+        <div class="fs-labels"><span>0</span><span>30</span><span>50</span><span>100+ µg/L</span></div>
+        <div class="card-list" style="margin-top:1.2em; max-width:860px;">
+            <div class="card-item orange"><strong>TSAT &lt;20%</strong> — indicates iron-restricted erythropoiesis; useful when ferritin is falsely elevated by inflammation.</div>
+            <div class="card-item"><strong>MCV &lt;80 fL</strong> — microcytosis is a <em>late</em> finding; if low with normal iron stores, screen for hemoglobinopathy.</div>
+            <div class="card-item"><strong>RDW &gt;15%</strong> — elevated red cell distribution width; reactive thrombocytosis may also be present on CBC.</div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 4: Maternal Implications ────────────────────────── -->
+    <div class="slide slide-maternal-bg">
+        <h2>Maternal Implications</h2>
+        <div class="accent-bar" style="background:#ff5555;"></div>
+        <div class="two-col" style="max-width:1000px;">
+            <div class="col">
+                <div class="col-title red">Cardiovascular</div>
+                <div class="card-list">
+                    <div class="card-item red">Exacerbates physiological tachycardia</div>
+                    <div class="card-item red">Risk of high-output heart failure (severe IDA)</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="col-title orange">Peripartum</div>
+                <div class="card-list">
+                    <div class="card-item orange">Increased risk of postpartum hemorrhage (PPH)</div>
+                    <div class="card-item orange">Higher susceptibility to peripartum infections</div>
+                    <div class="card-item orange">Increased likelihood of requiring blood transfusion</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="col-title" style="color:#a0c4ff;">Psychosocial</div>
+                <div class="card-list">
+                    <div class="card-item">Profound fatigue and impaired cognition</div>
+                    <div class="card-item">Increased rates of postpartum depression</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 5: Fetal Implications ───────────────────────────── -->
+    <div class="slide slide-fetal-bg">
+        <h2>Fetal &amp; Neonatal Implications</h2>
+        <div class="accent-bar" style="background:#b366ff;"></div>
+        <div class="icon-row">
+            <div class="icon-card">
+                <div class="icon-circle" style="border-color:#ff5555;">🫀</div>
+                <p>Preterm delivery &amp; premature rupture of membranes</p>
+            </div>
+            <div class="icon-card">
+                <div class="icon-circle" style="border-color:#ff9933;">⚖️</div>
+                <p>Low birth weight &amp; fetal growth restriction (FGR)</p>
+            </div>
+            <div class="icon-card">
+                <div class="icon-circle" style="border-color:#b366ff;">🧠</div>
+                <p>Impaired neurodevelopment &amp; long-term cognitive effects</p>
+            </div>
+            <div class="icon-card">
+                <div class="icon-circle" style="border-color:#4da6ff;">🩸</div>
+                <p>Depleted fetal iron stores at birth → neonatal IDA</p>
+            </div>
+        </div>
+        <p style="margin-top:1.5em;" class="muted">Cerebral iron deficit in early life has lasting behavioral and cognitive consequences.</p>
+    </div>
+
+    <!-- ── SLIDE 6: Treatment — Nutrition ────────────────────────── -->
+    <div class="slide slide-tx-bg">
+        <h2>Treatment: Nutritional Optimization</h2>
+        <div class="accent-bar" style="background:#66cc66;"></div>
+        <p><span class="green">Prevention and maintenance</span> — <span class="orange">inadequate as monotherapy</span> for established IDA.</p>
+        <div class="two-col" style="max-width:900px; margin-top:1em;">
+            <div class="col">
+                <div class="col-title green">Enhance Absorption</div>
+                <div class="card-list">
+                    <div class="card-item green">Heme iron (red meat, poultry, fish) — superior bioavailability</div>
+                    <div class="card-item green">Vitamin C (ascorbic acid) with every iron-containing meal</div>
+                    <div class="card-item green">Non-heme sources: leafy greens, legumes, fortified cereals</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="col-title orange">Avoid Inhibitors</div>
+                <div class="card-list">
+                    <div class="card-item orange">Calcium / dairy products — consume 1–2 hrs apart</div>
+                    <div class="card-item orange">Tannins in tea and coffee — consume 1–2 hrs apart</div>
+                    <div class="card-item orange">Phytates in whole grains — separate from iron meals</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 7: Treatment — Oral Iron ────────────────────────── -->
+    <div class="slide">
+        <h2>Treatment: Oral Iron Therapy</h2>
+        <div class="accent-bar"></div>
+        <p>First-line therapy for <span class="blue">mild-to-moderate IDA</span> (Hb 9.0–10.9 g/dL) diagnosed in the 1st or early 2nd trimester.</p>
+        <div class="card-list" style="margin-top:0.8em;">
+            <div class="card-item"><strong>Dose:</strong> 40–80 mg elemental iron per dose</div>
+            <div class="card-item green"><strong>Alternate-day dosing</strong> — avoids 24–48 hr hepcidin surge; optimizes fractional absorption and reduces GI side effects</div>
+            <div class="card-item green">Take on an empty stomach with Vitamin C (e.g., orange juice) to maximize absorption</div>
+            <div class="card-item orange"><strong>Limitations:</strong> GI adverse effects (constipation, nausea, epigastric pain) are common; requires 3–4 weeks for 1 g/dL Hb rise</div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 8: Treatment — IV Iron ──────────────────────────── -->
+    <div class="slide slide-tx-bg">
+        <h2>Treatment: Intravenous Iron</h2>
+        <div class="accent-bar" style="background:#ff9933;"></div>
+        <div class="two-col" style="max-width:1000px; margin-top:0.5em;">
+            <div class="col">
+                <div class="col-title blue">Indications</div>
+                <div class="card-list">
+                    <div class="card-item">Severe IDA (Hb &lt;9.0 g/dL)</div>
+                    <div class="card-item">Diagnosis &gt;30 weeks gestation</div>
+                    <div class="card-item">Oral iron intolerance or non-adherence</div>
+                    <div class="card-item">Malabsorption syndromes</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="col-title green">Advantages</div>
+                <div class="card-list">
+                    <div class="card-item green">Rapid Hb normalization &amp; full marrow iron repletion</div>
+                    <div class="card-item green">Single-session dosing: up to 1000 mg in 15–30 min</div>
+                    <div class="card-item green">Modern agents: ferric carboxymaltose, iron isomaltoside</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="col-title orange">Risks &amp; Contraindications</div>
+                <div class="card-list">
+                    <div class="card-item red">Contraindicated in 1st trimester</div>
+                    <div class="card-item orange">Rare hypersensitivity / anaphylaxis</div>
+                    <div class="card-item orange">Hypophosphatemia (ferric carboxymaltose)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SLIDE 9: Treatment — Blood Transfusion ────────────────── -->
+    <div class="slide slide-maternal-bg">
+        <h2>Treatment: Blood Transfusion</h2>
+        <div class="accent-bar" style="background:#ff5555;"></div>
+        <p>Reserved <span class="red">exclusively</span> for severe, life-threatening scenarios.</p>
+        <div class="card-list" style="margin-top:0.8em;">
+            <div class="card-item red"><strong>Indications:</strong> Hb &lt;7.0 g/dL with symptoms, hemodynamic instability, or active hemorrhage (abruption, previa)</div>
+            <div class="card-item green"><strong>Benefit:</strong> Immediate restoration of oxygen-carrying capacity</div>
+            <div class="card-item orange"><strong>Critical limitation:</strong> Does <em>not</em> replete tissue iron stores — IV iron must follow once hemodynamically stable</div>
+            <div class="card-item red"><strong>Risks:</strong> Maternal alloimmunization (complicates future pregnancies), TACO, TRALI</div>
+        </div>
+        <p style="margin-top:1em;" class="muted">Alloimmunization from transfusion can have permanent implications for subsequent pregnancies.</p>
+    </div>
+
+    <!-- ── SLIDE 10: Comparison Table ────────────────────────────── -->
+    <div class="slide">
+        <h2>Treatment Modalities: At a Glance</h2>
+        <div class="accent-bar"></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Modality</th>
+                    <th>Primary Indication</th>
+                    <th>Key Advantage</th>
+                    <th>Key Risk / Limitation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="green">Nutrition</span></td>
+                    <td>Prevention &amp; maintenance</td>
+                    <td>Safe; promotes holistic health</td>
+                    <td>Inadequate for established IDA</td>
+                </tr>
+                <tr>
+                    <td><span class="blue">Oral Iron</span></td>
+                    <td>Mild–moderate IDA (1st/2nd tri)</td>
+                    <td>Accessible, inexpensive, non-invasive</td>
+                    <td>GI side effects; slow Hb response</td>
+                </tr>
+                <tr>
+                    <td><span class="orange">IV Iron</span></td>
+                    <td>Severe IDA or 3rd trimester</td>
+                    <td>Rapid Hb normalization; repletes stores</td>
+                    <td>Contraindicated 1st tri; facility needed</td>
+                </tr>
+                <tr>
+                    <td><span class="red">Transfusion</span></td>
+                    <td>Hb &lt;7.0 g/dL or hemodynamic instability</td>
+                    <td>Immediate correction of tissue hypoxia</td>
+                    <td>Alloimmunization; TACO/TRALI; no iron repletion</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ── SLIDE 11: Clinical Summary ────────────────────────────── -->
+    <div class="slide slide-title-bg">
+        <h2>Clinical Summary</h2>
+        <div class="accent-bar"></div>
+        <div class="card-list" style="max-width:860px; text-align:left;">
+            <div class="card-item green">Screen all pregnant patients with CBC and ferritin; act on ferritin &lt;30 µg/L — do not wait for Hb to fall.</div>
+            <div class="card-item">Oral iron (alternate-day) is first-line for mild–moderate IDA in early pregnancy.</div>
+            <div class="card-item orange">IV iron is standard of care after 14 weeks for severe IDA or late-pregnancy diagnosis.</div>
+            <div class="card-item red">Transfusion is a rescue therapy; always follow with IV iron to restore stores.</div>
+        </div>
+        <div style="margin-top:1.5em;">
+            <span class="pill pill-blue">ACOG</span>
+            <span class="pill pill-blue">SMFM</span>
+            <span class="pill pill-blue">NICE</span>
+            <span class="pill pill-green">Evidence-Based</span>
+            <span class="pill pill-orange">MFM Clinical Guidance</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- ── Navigation Bar ─────────────────────────────────────────────── -->
+<div id="nav">
+    <button onclick="prevSlide()" title="Previous (←)">&#8592;</button>
+    <span id="slide-counter">1 / 11</span>
+    <button onclick="nextSlide()" title="Next (→)">&#8594;</button>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slide-counter');
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+        counter.textContent = (index + 1) + ' / ' + slides.length;
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowRight' || event.key === ' ') {
+            nextSlide();
+        } else if (event.key === 'ArrowLeft') {
+            prevSlide();
+        }
+    });
+
+    // Touch / swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+    document.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].screenX - touchStartX;
+        if (dx < -50) nextSlide();
+        else if (dx > 50) prevSlide();
+    });
+
+    showSlide(currentSlide);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
