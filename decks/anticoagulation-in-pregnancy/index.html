@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preconception Anticoagulation Counseling — MFM</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── Deck & Slide ──────────────────────────────────────────── */
+    .deck {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ─── Typography ────────────────────────────────────────────── */
+    .slide-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #58a6ff;
+      margin-bottom: 0.6rem;
+    }
+    h1 {
+      font-size: clamp(2rem, 4.5vw, 3.8rem);
+      font-weight: 300;
+      line-height: 1.15;
+      text-align: center;
+      color: #ffffff;
+    }
+    h2 {
+      font-size: clamp(1.4rem, 3vw, 2.4rem);
+      font-weight: 400;
+      color: #58a6ff;
+      text-align: center;
+      margin-bottom: 1.4rem;
+    }
+    h3 {
+      font-size: clamp(1rem, 1.8vw, 1.5rem);
+      font-weight: 300;
+      color: #8b949e;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    .body-text {
+      font-size: clamp(0.95rem, 1.6vw, 1.25rem);
+      line-height: 1.7;
+      text-align: center;
+      max-width: 820px;
+      color: #c9d1d9;
+    }
+
+    /* ─── Cards / Stat Boxes ────────────────────────────────────── */
+    .card-row {
+      display: flex;
+      gap: 1.4rem;
+      margin-top: 1.4rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.4rem 1.8rem;
+      min-width: 200px;
+      max-width: 260px;
+      text-align: center;
+      flex: 1;
+    }
+    .card .stat {
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .card .stat-label {
+      font-size: 0.85rem;
+      color: #8b949e;
+      line-height: 1.4;
+    }
+    .accent-blue  { color: #58a6ff; }
+    .accent-green { color: #3fb950; }
+    .accent-amber { color: #d29922; }
+    .accent-red   { color: #f85149; }
+    .accent-teal  { color: #39d353; }
+
+    /* ─── Tables ────────────────────────────────────────────────── */
+    .tbl-wrap {
+      width: 100%;
+      max-width: 1000px;
+      overflow-x: auto;
+      margin-top: 1.2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: clamp(0.75rem, 1.2vw, 0.95rem);
+    }
+    thead tr {
+      background: #1f2937;
+    }
+    thead th {
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #58a6ff;
+      border-bottom: 2px solid #30363d;
+      white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid #21262d; }
+    tbody tr:hover { background: #161b22; }
+    tbody td {
+      padding: 0.65rem 1rem;
+      color: #c9d1d9;
+      vertical-align: top;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.2em 0.6em;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge-green  { background: #1a3a2a; color: #3fb950; }
+    .badge-red    { background: #3a1a1a; color: #f85149; }
+    .badge-amber  { background: #3a2e1a; color: #d29922; }
+    .badge-blue   { background: #1a2a3a; color: #58a6ff; }
+
+    /* ─── Timeline ──────────────────────────────────────────────── */
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-top: 1.4rem;
+      width: 100%;
+      max-width: 900px;
+    }
+    .tl-step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+    .tl-step::before {
+      content: '';
+      display: block;
+      height: 3px;
+      background: #30363d;
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      width: 100%;
+      z-index: 0;
+    }
+    .tl-step:last-child::before { display: none; }
+    .tl-dot {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      margin: 0 auto 0.6rem;
+      position: relative;
+      z-index: 1;
+    }
+    .tl-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 0.3rem;
+    }
+    .tl-desc {
+      font-size: 0.72rem;
+      color: #8b949e;
+      line-height: 1.4;
+      padding: 0 0.3rem;
+    }
+
+    /* ─── Two-column layout ─────────────────────────────────────── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.4rem;
+      width: 100%;
+      max-width: 900px;
+      margin-top: 1.2rem;
+    }
+    .col-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem;
+    }
+    .col-box .col-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+    .col-box ul {
+      list-style: none;
+      padding: 0;
+    }
+    .col-box ul li {
+      font-size: 0.9rem;
+      color: #c9d1d9;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid #21262d;
+      line-height: 1.4;
+    }
+    .col-box ul li:last-child { border-bottom: none; }
+    .col-box ul li::before { content: '› '; color: #58a6ff; }
+
+    /* ─── Icon list ─────────────────────────────────────────────── */
+    .icon-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 1.2rem;
+      width: 100%;
+      max-width: 820px;
+    }
+    .icon-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid #21262d;
+      font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+      color: #c9d1d9;
+      line-height: 1.5;
+    }
+    .icon-list li:last-child { border-bottom: none; }
+    .icon-list .icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    /* ─── Highlight box ─────────────────────────────────────────── */
+    .highlight-box {
+      background: #1a2a3a;
+      border-left: 4px solid #58a6ff;
+      border-radius: 0 8px 8px 0;
+      padding: 0.9rem 1.2rem;
+      font-size: 0.95rem;
+      color: #c9d1d9;
+      max-width: 820px;
+      width: 100%;
+      margin-top: 1rem;
+      line-height: 1.6;
+    }
+    .highlight-box.amber { border-color: #d29922; background: #2a2010; }
+    .highlight-box.green { border-color: #3fb950; background: #102010; }
+    .highlight-box.red   { border-color: #f85149; background: #2a1010; }
+
+    /* ─── Nav bar ───────────────────────────────────────────────── */
+    .nav-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 0.6rem 1rem;
+      background: #161b22;
+      border-top: 1px solid #21262d;
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #e6edf3;
+      padding: 0.4rem 1.1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+    .nav-btn:hover { background: #30363d; }
+    .slide-counter {
+      font-size: 0.8rem;
+      color: #8b949e;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    /* ─── Slide-specific backgrounds ───────────────────────────── */
+    .slide-title-bg {
+      background: radial-gradient(ellipse at 60% 40%, #0d2137 0%, #0d1117 70%);
+    }
+    .slide-risk-bg {
+      background: radial-gradient(ellipse at 40% 60%, #1a0d0d 0%, #0d1117 70%);
+    }
+    .slide-green-bg {
+      background: radial-gradient(ellipse at 50% 50%, #0d1a0d 0%, #0d1117 70%);
+    }
+
+    @media (max-width: 768px) {
+      body { height: 100dvh; }
+      .deck { min-height: 0; }
+      .slide {
+        justify-content: flex-start;
+        padding: 2rem 1rem 5rem;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .two-col { grid-template-columns: 1fr; }
+      .card-row { flex-direction: column; width: 100%; }
+      .card { min-width: 0; max-width: none; width: 100%; }
+      .timeline { flex-direction: column; gap: 1rem; }
+      .tl-step::before { display: none; }
+      .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      table { min-width: 680px; }
+      .nav-bar { position: relative; z-index: 10000; }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/anticoagulation-in-pregnancy/index.html">
+<meta name="description" content="Clinician-focused guide to anticoagulation before, during, and after pregnancy, including risk stratification, medication safety, LMWH dosing, mechanical heart valves, delivery bridging, neuraxial timing, and postpartum resumption.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Anticoagulation, Preconception Counseling, Venous Thromboembolism, Mechanical Heart Valve, LMWH, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/anticoagulation-in-pregnancy/index.html">
+<meta property="og:title" content="Anticoagulation Before and During Pregnancy - Provider Education | OpenMFM">
+<meta property="og:description" content="Clinician-focused guide to anticoagulation before, during, and after pregnancy, including risk stratification, medication safety, LMWH dosing, mechanical heart valves, delivery bridging, neuraxial timing, and postpartum resumption.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anticoagulation Before and During Pregnancy - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Clinician-focused guide to anticoagulation before, during, and after pregnancy, including risk stratification, medication safety, LMWH dosing, mechanical heart valves, delivery bridging, neuraxial timing, and postpartum resumption.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Anticoagulation Before and During Pregnancy - Provider Education",
+  "description": "Clinician-focused guide to anticoagulation before, during, and after pregnancy, including risk stratification, medication safety, LMWH dosing, mechanical heart valves, delivery bridging, neuraxial timing, and postpartum resumption.",
+  "url": "https://openmfm.org/decks/anticoagulation-in-pregnancy/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-06-30",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Anticoagulation Before and During Pregnancy - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Anticoagulation, Preconception Counseling, Venous Thromboembolism, Mechanical Heart Valve, LMWH, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 1 — Title
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-title-bg active" id="slide-1">
+    <div class="slide-label">Maternal-Fetal Medicine · Preconception Counseling</div>
+    <h1>Anticoagulation<br>Prior to &amp; During Pregnancy</h1>
+    <h3>Preconception Discussion Series</h3>
+    <div class="highlight-box" style="margin-top:2rem; text-align:center;">
+      Balancing maternal thrombotic risk · fetal teratogenicity · peripartum hemorrhage
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 2 — Hypercoagulable State
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-risk-bg" id="slide-2">
+    <div class="slide-label">Pathophysiology</div>
+    <h2>Pregnancy: A Hypercoagulable State</h2>
+    <div class="card-row">
+      <div class="card">
+        <div class="stat accent-amber">5–10×</div>
+        <div class="stat-label">VTE risk increase<br><em>during pregnancy</em></div>
+      </div>
+      <div class="card">
+        <div class="stat accent-red">15–20×</div>
+        <div class="stat-label">VTE risk increase<br><em>postpartum</em></div>
+      </div>
+      <div class="card">
+        <div class="stat accent-blue">3</div>
+        <div class="stat-label">Mechanisms:<br>↑ coagulation factors<br>↓ fibrinolysis · venous stasis</div>
+      </div>
+    </div>
+    <div class="highlight-box amber" style="margin-top:1.4rem; text-align:center;">
+      Postpartum carries the <strong>highest daily VTE risk</strong> of any period in a woman's life.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 3 — Multidisciplinary Planning
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="slide-label">Preconception Framework</div>
+    <h2>Multidisciplinary Planning Is Mandatory</h2>
+    <div class="card-row">
+      <div class="card">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🫀</div>
+        <div class="stat-label" style="font-size:0.95rem; color:#e6edf3;">Cardiology</div>
+      </div>
+      <div class="card">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🩸</div>
+        <div class="stat-label" style="font-size:0.95rem; color:#e6edf3;">Hematology</div>
+      </div>
+      <div class="card">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🤰</div>
+        <div class="stat-label" style="font-size:0.95rem; color:#e6edf3;">Maternal-Fetal Medicine</div>
+      </div>
+      <div class="card">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">💉</div>
+        <div class="stat-label" style="font-size:0.95rem; color:#e6edf3;">Anesthesia</div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:1.4rem; text-align:center;">
+      Planning must occur <strong>prior to conception</strong> — not after a positive pregnancy test.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 4 — Risk Stratification: Prior VTE
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="slide-label">Risk Stratification · Prior VTE</div>
+    <h2>Antepartum Prophylaxis: Who Needs It?</h2>
+    <div class="two-col">
+      <div class="col-box">
+        <div class="col-title accent-red">Antepartum Prophylaxis Required</div>
+        <ul>
+          <li>Single unprovoked prior VTE</li>
+          <li>Hormone-associated VTE</li>
+          <li>Homozygous Factor V Leiden</li>
+          <li>Prothrombin gene mutation</li>
+          <li>Antithrombin deficiency</li>
+        </ul>
+      </div>
+      <div class="col-box">
+        <div class="col-title accent-green">Postpartum Prophylaxis Only</div>
+        <ul>
+          <li>VTE provoked by transient risk factor</li>
+          <li>Non-hormonal trigger</li>
+          <li>Risk factor fully resolved</li>
+          <li>No severe thrombophilia</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:1rem; font-size:0.85rem; text-align:center;">
+      Risk stratification determines antepartum management. Individualize every case.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 5 — Mechanical Heart Valves
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-risk-bg" id="slide-5">
+    <div class="slide-label">High-Risk Indication</div>
+    <h2>Mechanical Heart Valves</h2>
+    <ul class="icon-list">
+      <li>
+        <span class="icon">⚠️</span>
+        <span><strong>Exceptionally high thrombotic risk.</strong> Valve thrombosis peaks in the <em>first trimester</em>.</span>
+      </li>
+      <li>
+        <span class="icon">🔄</span>
+        <span>Peak risk driven by <strong>subtherapeutic transition</strong> from VKA to LMWH and fluctuating LMWH pharmacokinetics.</span>
+      </li>
+      <li>
+        <span class="icon">📋</span>
+        <span>Protocolized monitoring during medication transition is <strong>non-negotiable</strong>.</span>
+      </li>
+      <li>
+        <span class="icon">💊</span>
+        <span>Low-dose warfarin (≤5 mg/day) may continue <em>only</em> in select patients who understand teratogenic risk.</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 6 — Atrial Fibrillation
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="slide-label">High-Risk Indication</div>
+    <h2>Atrial Fibrillation &amp; Cardiomyopathy</h2>
+    <ul class="icon-list">
+      <li>
+        <span class="icon">📊</span>
+        <span>Risk assessment via <strong>CHA₂DS₂-VASc</strong> score guides anticoagulation decisions.</span>
+      </li>
+      <li>
+        <span class="icon">🧠</span>
+        <span>Concurrent cardiomyopathy or heart failure: prioritize <strong>maternal stroke prevention</strong>.</span>
+      </li>
+      <li>
+        <span class="icon">🔀</span>
+        <span>VKAs and DOACs are typically substituted with <strong>LMWH</strong> during pregnancy.</span>
+      </li>
+    </ul>
+    <div class="highlight-box" style="margin-top:1rem; text-align:center;">
+      Decisions are individualized — no single protocol applies to all AF patients.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 7 — Agent Safety Table
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="slide-label">Pharmacology · Agent Selection</div>
+    <h2>Anticoagulant Safety in Pregnancy</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>Placental Transfer</th>
+            <th>Fetal Safety</th>
+            <th>Recommendation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>LMWH</strong><br><small style="color:#8b949e;">Enoxaparin / Dalteparin</small></td>
+            <td><span class="badge badge-green">None</span></td>
+            <td>Safe; monitor maternal pharmacokinetics</td>
+            <td><span class="badge badge-green">Agent of Choice</span></td>
+          </tr>
+          <tr>
+            <td><strong>UFH</strong><br><small style="color:#8b949e;">Unfractionated Heparin</small></td>
+            <td><span class="badge badge-green">None</span></td>
+            <td>Safe; risk of maternal HIT &amp; osteoporosis</td>
+            <td><span class="badge badge-blue">Secondary — Near Delivery</span></td>
+          </tr>
+          <tr>
+            <td><strong>VKA</strong><br><small style="color:#8b949e;">Warfarin</small></td>
+            <td><span class="badge badge-red">High</span></td>
+            <td>Embryopathy, fetal bleeding, pregnancy loss</td>
+            <td><span class="badge badge-red">Contraindicated (&gt;6 wks)</span></td>
+          </tr>
+          <tr>
+            <td><strong>DOACs</strong><br><small style="color:#8b949e;">Apixaban / Rivaroxaban</small></td>
+            <td><span class="badge badge-red">High</span></td>
+            <td>Fetal toxicity &amp; embryopathy</td>
+            <td><span class="badge badge-red">Absolute Contraindication</span></td>
+          </tr>
+          <tr>
+            <td><strong>Fondaparinux</strong></td>
+            <td><span class="badge badge-amber">Minimal / Unknown</span></td>
+            <td>Insufficient human safety data</td>
+            <td><span class="badge badge-amber">HIT / Heparin Allergy Only</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 8 — Transition Strategy: Teratogens
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="slide-label">Guideline-Directed Transitions</div>
+    <h2>Discontinuing Teratogens</h2>
+    <div class="two-col">
+      <div class="col-box">
+        <div class="col-title accent-red">DOACs</div>
+        <ul>
+          <li>Switch to LMWH <em>before conception</em></li>
+          <li>Or immediately upon positive pregnancy test</li>
+          <li>Early fetal ultrasound to confirm viability</li>
+          <li>Document absence of embryopathy</li>
+        </ul>
+      </div>
+      <div class="col-box">
+        <div class="col-title accent-amber">VKAs (Warfarin)</div>
+        <ul>
+          <li>Substitute UFH or LMWH before 6 weeks</li>
+          <li>Eliminates risk of warfarin embryopathy</li>
+          <li>OR 2.26 for preterm birth with 1st-trimester exposure</li>
+          <li>OR 3.78 for very preterm birth</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight-box red" style="margin-top:1rem; text-align:center;">
+      The 6-week threshold for VKA cessation is <strong>critical</strong>. Transition must be planned preconceptionally.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 9 — LMWH Dosing Strategy
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-9">
+    <div class="slide-label">Pharmacologic Management</div>
+    <h2>LMWH Dosing Strategies</h2>
+    <ul class="icon-list">
+      <li>
+        <span class="icon">💉</span>
+        <span><strong>ASH Guidelines:</strong> Standard prophylactic <em>or</em> intermediate (half-therapeutic) dosing for prior VTE patients.</span>
+      </li>
+      <li>
+        <span class="icon">📉</span>
+        <span>Pre- and postpartum LMWH meta-analyses confirm <strong>significant reduction in VTE recurrence</strong> vs. no prophylaxis.</span>
+      </li>
+      <li>
+        <span class="icon">🔬</span>
+        <span>Mechanical valve patients: dose-adjust via <strong>anti-Xa levels</strong> — plasma volume expansion and enhanced renal clearance alter pharmacokinetics.</span>
+      </li>
+      <li>
+        <span class="icon">📋</span>
+        <span>No large RCTs exist for mechanical valve management — consensus guidelines apply.</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 10 — Peripartum Timeline
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-10">
+    <div class="slide-label">Peripartum Management</div>
+    <h2>Bridging Strategy at Delivery</h2>
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-dot" style="background:#1a2a3a; border:2px solid #58a6ff;">💉</div>
+        <div class="tl-title">36–37 Weeks</div>
+        <div class="tl-desc">Convert therapeutic LMWH → IV UFH infusion</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:#2a2010; border:2px solid #d29922;">⏸️</div>
+        <div class="tl-title">≥24 hrs Before</div>
+        <div class="tl-desc">Hold LMWH prior to scheduled induction or cesarean</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:#2a1010; border:2px solid #f85149;">🛑</div>
+        <div class="tl-title">4–6 hrs Before</div>
+        <div class="tl-desc">Halt UFH infusion before delivery or neuraxial anesthesia</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:#102010; border:2px solid #3fb950;">✅</div>
+        <div class="tl-title">Delivery</div>
+        <div class="tl-desc">Anesthesia consultation mandatory for all anticoagulated patients</div>
+      </div>
+    </div>
+    <div class="highlight-box amber" style="margin-top:1.4rem; text-align:center;">
+      LMWH's long half-life precludes neuraxial anesthesia if administered too close to labor — <strong>epidural hematoma risk</strong>.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 11 — Postpartum Strategy
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-risk-bg" id="slide-11">
+    <div class="slide-label">Postpartum Management</div>
+    <h2>Resumption of Anticoagulation</h2>
+    <div class="card-row">
+      <div class="card">
+        <div class="stat accent-green">12–24 h</div>
+        <div class="stat-label">After vaginal delivery<br>(assuming hemostasis)</div>
+      </div>
+      <div class="card">
+        <div class="stat accent-amber">24 h</div>
+        <div class="stat-label">After cesarean delivery<br>(assuming hemostasis)</div>
+      </div>
+      <div class="card">
+        <div class="stat accent-blue">4–6 wks</div>
+        <div class="stat-label">Postpartum prophylaxis<br>for prior VTE</div>
+      </div>
+    </div>
+    <div class="highlight-box green" style="margin-top:1.4rem;">
+      <strong>Lactation safety:</strong> Warfarin and LMWH are safe during breastfeeding. DOACs currently lack definitive safety profiles for lactation.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 12 — Summary
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide slide-title-bg" id="slide-12">
+    <div class="slide-label">Clinical Summary</div>
+    <h2>Key Preconception Principles</h2>
+    <ul class="icon-list" style="max-width:860px;">
+      <li>
+        <span class="icon">🔴</span>
+        <span><strong>DOACs:</strong> Absolute contraindication. Transition to LMWH before conception or at positive test.</span>
+      </li>
+      <li>
+        <span class="icon">🟡</span>
+        <span><strong>VKAs:</strong> Discontinue before 6 weeks gestation. Exception: select mechanical valve patients (≤5 mg/day).</span>
+      </li>
+      <li>
+        <span class="icon">🟢</span>
+        <span><strong>LMWH:</strong> Agent of choice throughout pregnancy. Monitor anti-Xa levels in high-risk patients.</span>
+      </li>
+      <li>
+        <span class="icon">🏥</span>
+        <span><strong>Multidisciplinary planning</strong> (MFM, cardiology, hematology, anesthesia) must occur <em>prior to conception</em>.</span>
+      </li>
+      <li>
+        <span class="icon">📅</span>
+        <span><strong>Postpartum:</strong> Resume anticoagulation within 12–24 hours. Continue prophylaxis 4–6 weeks for prior VTE.</span>
+      </li>
+    </ul>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- ─── Navigation Bar ─────────────────────────────────────────── -->
+<div class="nav-bar">
+  <button class="nav-btn" onclick="prevSlide()">◀ Prev</button>
+  <span class="slide-counter" id="counter">1 / 12</span>
+  <button class="nav-btn" onclick="nextSlide()">Next ▶</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const total = slides.length;
+
+  function showSlide(idx) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === idx);
+    });
+    counter.textContent = (idx + 1) + ' / ' + total;
+  }
+
+  function nextSlide() {
+    current = (current + 1) % total;
+    showSlide(current);
+  }
+
+  function prevSlide() {
+    current = (current - 1 + total) % total;
+    showSlide(current);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+    else if (e.key === 'ArrowLeft') prevSlide();
+  });
+
+  showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

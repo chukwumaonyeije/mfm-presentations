@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fetal Ventricular Septal Defect | MFM Patient Education</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent:    #58a6ff;
+      --green:     #3fb950;
+      --orange:    #d29922;
+      --red:       #f85149;
+      --purple:    #bc8cff;
+      --teal:      #39d353;
+      --font:      'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      overflow: hidden;
+    }
+
+    /* ── Deck & Slides ── */
+    .deck {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ── Nav Controls ── */
+    .nav {
+      position: fixed; bottom: 1.8rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 1rem; align-items: center; z-index: 100;
+    }
+    .nav button {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); padding: 0.5rem 1.2rem;
+      border-radius: 6px; cursor: pointer; font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .nav button:hover { background: var(--border); }
+    .nav .counter { color: var(--muted); font-size: 0.9rem; min-width: 60px; text-align: center; }
+
+    /* ── Progress Bar ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--accent); transition: width 0.4s ease; z-index: 200;
+    }
+
+    /* ── Slide Label ── */
+    .slide-label {
+      position: fixed; top: 1rem; right: 1.5rem;
+      font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em;
+      text-transform: uppercase; z-index: 100;
+    }
+
+    /* ── Typography ── */
+    h1 { font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 300; letter-spacing: -0.02em; line-height: 1.1; }
+    h2 { font-size: clamp(1.6rem, 3.5vw, 2.6rem); font-weight: 300; letter-spacing: -0.01em; }
+    h3 { font-size: clamp(1rem, 2vw, 1.4rem); font-weight: 400; color: var(--muted); }
+    p  { font-size: clamp(0.95rem, 1.8vw, 1.25rem); line-height: 1.7; max-width: 820px; text-align: center; }
+
+    .accent  { color: var(--accent); }
+    .green   { color: var(--green); }
+    .orange  { color: var(--orange); }
+    .red     { color: var(--red); }
+    .purple  { color: var(--purple); }
+    .muted   { color: var(--muted); }
+
+    /* ── Divider ── */
+    .divider {
+      width: 60px; height: 2px;
+      background: var(--accent); border-radius: 2px;
+      margin: 1.2rem auto;
+    }
+
+    /* ── Card Grid ── */
+    .card-grid {
+      display: grid; gap: 1.2rem;
+      width: 100%; max-width: 900px;
+    }
+    .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+      text-align: left;
+    }
+    .card .card-icon { font-size: 2rem; margin-bottom: 0.6rem; }
+    .card .card-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .card .card-body  { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+    .card.accent-border { border-left: 3px solid var(--accent); }
+    .card.green-border  { border-left: 3px solid var(--green); }
+    .card.orange-border { border-left: 3px solid var(--orange); }
+    .card.purple-border { border-left: 3px solid var(--purple); }
+    .card.red-border    { border-left: 3px solid var(--red); }
+
+    /* ── Stat Block ── */
+    .stat-row {
+      display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .stat {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.2rem 2rem;
+      text-align: center; min-width: 160px;
+    }
+    .stat .stat-num { font-size: 2.8rem; font-weight: 700; line-height: 1; }
+    .stat .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; line-height: 1.4; }
+
+    /* ── Table ── */
+    .data-table {
+      width: 100%; max-width: 900px;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .data-table th {
+      background: var(--surface); color: var(--accent);
+      padding: 0.75rem 1rem; text-align: left;
+      border-bottom: 2px solid var(--border);
+      font-weight: 600; font-size: 0.8rem;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .data-table td {
+      padding: 0.7rem 1rem; border-bottom: 1px solid var(--border);
+      vertical-align: top; color: var(--text);
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: rgba(88,166,255,0.04); }
+
+    /* ── Timeline ── */
+    .timeline {
+      display: flex; flex-direction: column; gap: 0;
+      max-width: 680px; width: 100%;
+    }
+    .tl-item {
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      position: relative;
+    }
+    .tl-item:not(:last-child)::before {
+      content: '';
+      position: absolute; left: 19px; top: 38px;
+      width: 2px; height: calc(100% - 10px);
+      background: var(--border);
+    }
+    .tl-dot {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0; margin-top: 0.2rem;
+      border: 2px solid var(--border);
+    }
+    .tl-content { padding-bottom: 1.6rem; }
+    .tl-content .tl-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .tl-content .tl-desc  { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── Heart Anatomy SVG ── */
+    .heart-svg-wrap { margin: 1rem 0; }
+
+    /* ── Alert Banner ── */
+    .alert {
+      border-radius: 8px; padding: 0.9rem 1.4rem;
+      font-size: 0.9rem; line-height: 1.5;
+      max-width: 820px; text-align: left;
+      display: flex; gap: 0.8rem; align-items: flex-start;
+    }
+    .alert-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .alert.info    { background: rgba(88,166,255,0.1);  border: 1px solid rgba(88,166,255,0.3); }
+    .alert.success { background: rgba(63,185,80,0.1);   border: 1px solid rgba(63,185,80,0.3); }
+    .alert.warning { background: rgba(210,153,34,0.1);  border: 1px solid rgba(210,153,34,0.3); }
+    .alert.danger  { background: rgba(248,81,73,0.1);   border: 1px solid rgba(248,81,73,0.3); }
+
+    /* ── Pill Badge ── */
+    .badge {
+      display: inline-block; padding: 0.2rem 0.7rem;
+      border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .badge-blue   { background: rgba(88,166,255,0.15); color: var(--accent); }
+    .badge-green  { background: rgba(63,185,80,0.15);  color: var(--green); }
+    .badge-orange { background: rgba(210,153,34,0.15); color: var(--orange); }
+    .badge-purple { background: rgba(188,140,255,0.15); color: var(--purple); }
+
+    /* ── Slide-specific layouts ── */
+    .slide-center { text-align: center; gap: 0.8rem; }
+    .slide-left   { align-items: flex-start; text-align: left; }
+    .full-width   { width: 100%; max-width: 960px; }
+    .mt-1 { margin-top: 0.5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mt-3 { margin-top: 1.5rem; }
+
+    /* ── Anatomy Diagram ── */
+    .anatomy-wrap {
+      display: flex; gap: 3rem; align-items: center;
+      max-width: 900px; width: 100%;
+    }
+    .anatomy-wrap svg { flex-shrink: 0; }
+    .anatomy-labels { flex: 1; }
+    .anatomy-labels li {
+      list-style: none; padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem; display: flex; gap: 0.6rem; align-items: center;
+    }
+    .anatomy-labels li:last-child { border-bottom: none; }
+
+    /* ── Closing slide ── */
+    .closing-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem; max-width: 860px; width: 100%;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      html, body { height: 100dvh; }
+      .card-grid.cols-2, .card-grid.cols-3,
+      .closing-grid { grid-template-columns: 1fr; }
+      .anatomy-wrap { flex-direction: column; }
+      .slide {
+        justify-content: flex-start;
+        padding: 3rem 1.5rem 6rem;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .data-table { min-width: 680px; }
+      .full-width:has(.data-table) { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .nav { bottom: 1rem; }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/fetal-ventricular-septal-defect/index.html">
+<meta name="description" content="Patient-centered discussion of fetal ventricular septal defects, including VSD types and size, spontaneous closure, genetic considerations, prenatal monitoring, newborn evaluation, treatment options, and practical next steps.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Ventricular Septal Defect, Congenital Heart Disease, Fetal Echocardiography, Prenatal Genetics, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/fetal-ventricular-septal-defect/index.html">
+<meta property="og:title" content="Fetal Ventricular Septal Defect - Patient Education | OpenMFM">
+<meta property="og:description" content="Patient-centered discussion of fetal ventricular septal defects, including VSD types and size, spontaneous closure, genetic considerations, prenatal monitoring, newborn evaluation, treatment options, and practical next steps.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fetal Ventricular Septal Defect - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Patient-centered discussion of fetal ventricular septal defects, including VSD types and size, spontaneous closure, genetic considerations, prenatal monitoring, newborn evaluation, treatment options, and practical next steps.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Fetal Ventricular Septal Defect - Patient Education",
+  "description": "Patient-centered discussion of fetal ventricular septal defects, including VSD types and size, spontaneous closure, genetic considerations, prenatal monitoring, newborn evaluation, treatment options, and practical next steps.",
+  "url": "https://openmfm.org/decks/fetal-ventricular-septal-defect/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-06-30",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Fetal Ventricular Septal Defect - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Ventricular Septal Defect, Congenital Heart Disease, Fetal Echocardiography, Prenatal Genetics, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div class="slide-label" id="slide-label">1 / 14</div>
+
+<div class="deck" id="deck">
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 1 — Title
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide active slide-center">
+    <div style="margin-bottom:1.2rem;">
+      <!-- Simple heart icon in SVG -->
+      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M36 62s-28-18-28-36a18 18 0 0 1 28-14.9A18 18 0 0 1 64 26c0 18-28 36-28 36z" fill="none" stroke="#58a6ff" stroke-width="2.5"/>
+        <!-- VSD gap line -->
+        <line x1="36" y1="28" x2="36" y2="50" stroke="#f85149" stroke-width="2" stroke-dasharray="4 3"/>
+        <circle cx="36" cy="38" r="4" fill="#f85149" opacity="0.8"/>
+      </svg>
+    </div>
+    <h1>Fetal Ventricular<br/><span class="accent">Septal Defect</span></h1>
+    <div class="divider"></div>
+    <h3>Understanding Your Prenatal Diagnosis</h3>
+    <p class="muted mt-2" style="font-size:0.9rem;">Chukwuma I. Onyeije, MD &nbsp;·&nbsp; Maternal-Fetal Medicine</p>
+    <p class="muted" style="font-size:0.8rem; margin-top:0.4rem;">Atlanta Perinatal Associates</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 2 — What is a VSD?
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>What Is a <span class="accent">VSD</span>?</h2>
+    <div class="divider"></div>
+    <div class="anatomy-wrap mt-2">
+      <!-- Simplified heart cross-section SVG -->
+      <svg width="200" height="220" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer heart shape -->
+        <ellipse cx="100" cy="120" rx="80" ry="90" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+        <!-- Septum (wall) -->
+        <line x1="100" y1="40" x2="100" y2="190" stroke="#8b949e" stroke-width="3"/>
+        <!-- VSD gap -->
+        <line x1="100" y1="105" x2="100" y2="130" stroke="#f85149" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="100" cy="117" r="6" fill="#f85149" opacity="0.85"/>
+        <!-- Chamber labels -->
+        <text x="60" y="80" fill="#58a6ff" font-size="11" font-family="sans-serif">RV</text>
+        <text x="125" y="80" fill="#58a6ff" font-size="11" font-family="sans-serif">LV</text>
+        <text x="60" y="170" fill="#8b949e" font-size="9" font-family="sans-serif">Right</text>
+        <text x="120" y="170" fill="#8b949e" font-size="9" font-family="sans-serif">Left</text>
+        <!-- Arrow showing shunt -->
+        <path d="M94 117 L80 117" stroke="#f85149" stroke-width="1.5" marker-end="url(#arr)" opacity="0.7"/>
+        <defs>
+          <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#f85149"/>
+          </marker>
+        </defs>
+      </svg>
+      <div class="anatomy-labels">
+        <ul>
+          <li><span class="badge badge-blue">Location</span> Wall between the two lower heart chambers</li>
+          <li><span class="badge badge-blue">Term</span> Ventricular septum = the dividing wall</li>
+          <li><span class="badge badge-orange">Defect</span> A small opening (hole) in that wall</li>
+          <li><span class="badge badge-green">Common</span> Most frequent congenital heart finding</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 3 — How Common?
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>How <span class="accent">Common</span> Is This?</h2>
+    <div class="divider"></div>
+    <div class="stat-row mt-2">
+      <div class="stat">
+        <div class="stat-num accent">40%</div>
+        <div class="stat-label">of all neonatal<br/>congenital heart defects</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num green">4 / 1000</div>
+        <div class="stat-label">live births<br/>prevalence</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num orange">10%</div>
+        <div class="stat-label">of fetal heart<br/>malformations</div>
+      </div>
+    </div>
+    <div class="alert success mt-3">
+      <span class="alert-icon">✓</span>
+      <span>VSDs are the <strong>most studied</strong> congenital heart defect. We know a great deal about outcomes and management.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 4 — Types of VSD
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>Types of <span class="accent">VSD</span></h2>
+    <div class="divider"></div>
+    <table class="data-table mt-2">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Location</th>
+          <th>Frequency</th>
+          <th>Outlook</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong class="accent">Muscular</strong></td>
+          <td>Muscle wall of the septum</td>
+          <td><span class="badge badge-blue">Most common</span></td>
+          <td><span class="green">Excellent — usually closes on its own</span></td>
+        </tr>
+        <tr>
+          <td><strong class="purple">Perimembranous</strong></td>
+          <td>Near the heart valves</td>
+          <td><span class="badge badge-purple">2nd most common</span></td>
+          <td><span class="green">Often closes; some need follow-up</span></td>
+        </tr>
+        <tr>
+          <td><strong class="muted">Outlet / Inlet</strong></td>
+          <td>Near outflow / inflow tracts</td>
+          <td><span class="badge badge-orange">Less common</span></td>
+          <td><span class="orange">May require evaluation</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="muted mt-2" style="font-size:0.85rem;">Mid-muscular VSDs are ~5× more common than apical defects.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 5 — Size Classification
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>Size <span class="accent">Classification</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-3 mt-2">
+      <div class="card green-border">
+        <div class="card-icon">🟢</div>
+        <div class="card-title">Small</div>
+        <div class="card-body">
+          <strong>&lt; 4 mm</strong><br/>
+          Highest rate of spontaneous closure.<br/>
+          Usually no symptoms.
+        </div>
+      </div>
+      <div class="card orange-border">
+        <div class="card-icon">🟡</div>
+        <div class="card-title">Moderate</div>
+        <div class="card-body">
+          <strong>4 – 6 mm</strong><br/>
+          Detectable by fetal echo as early as 16–18 weeks.<br/>
+          Close monitoring recommended.
+        </div>
+      </div>
+      <div class="card red-border">
+        <div class="card-icon">🔴</div>
+        <div class="card-title">Large</div>
+        <div class="card-body">
+          <strong>&gt; 6 mm</strong><br/>
+          May need pediatric cardiology follow-up.<br/>
+          Intervention occasionally required.
+        </div>
+      </div>
+    </div>
+    <div class="alert info mt-3">
+      <span class="alert-icon">ℹ</span>
+      <span>Small defects may not be visible on early ultrasound. Repeat imaging improves detection accuracy.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 6 — Reassuring Spontaneous Closure Rates
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>Spontaneous <span class="green">Closure</span> Rates</h2>
+    <div class="divider"></div>
+    <div class="stat-row mt-2">
+      <div class="stat">
+        <div class="stat-num green">45%</div>
+        <div class="stat-label">Perimembranous VSDs<br/>close <em>before</em> birth</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num green">31%</div>
+        <div class="stat-label">Close within the<br/><em>first year</em> of life</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num accent">~76%</div>
+        <div class="stat-label">Combined closure<br/>rate by age 1</div>
+      </div>
+    </div>
+    <div class="alert success mt-3">
+      <span class="alert-icon">✓</span>
+      <span>Isolated <strong>muscular VSDs</strong> have an even higher spontaneous closure rate — most close during pregnancy or within the first 2 years of life.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 7 — Genetic Risk (Isolated VSD)
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>Genetic Risk: <span class="accent">Isolated</span> VSD</h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2 mt-2">
+      <div class="card green-border">
+        <div class="card-icon">🧬</div>
+        <div class="card-title">Trisomy 21 Risk</div>
+        <div class="card-body">
+          Upper limit <strong class="green">≤ 3%</strong> in strictly isolated VSDs.<br/>
+          Amniocentesis is <em>individualized</em> — not automatic.
+        </div>
+      </div>
+      <div class="card accent-border">
+        <div class="card-icon">🔬</div>
+        <div class="card-title">Chromosomal Microarray (CMA)</div>
+        <div class="card-body">
+          Genetic diagnosis established in <strong class="accent">14.5%</strong> of fetal VSDs when tested.<br/>
+          Recommended when other findings are present.
+        </div>
+      </div>
+      <div class="card orange-border">
+        <div class="card-icon">⚠️</div>
+        <div class="card-title">Non-Isolated VSD</div>
+        <div class="card-body">
+          Chromosomal abnormalities in <strong class="orange">26–45%</strong> of cases.<br/>
+          CMA and karyotyping are first-line tests.
+        </div>
+      </div>
+      <div class="card purple-border">
+        <div class="card-icon">📋</div>
+        <div class="card-title">Variants of Uncertain Significance</div>
+        <div class="card-body">
+          VUS results are possible with advanced testing.<br/>
+          Genetic counseling is an essential part of care.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 8 — Isolated vs. Non-Isolated
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>Isolated vs. <span class="orange">Non-Isolated</span> VSD</h2>
+    <div class="divider"></div>
+    <table class="data-table mt-2">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Isolated VSD</th>
+          <th>Non-Isolated VSD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Other anomalies present?</td>
+          <td><span class="green">No</span></td>
+          <td><span class="orange">Yes (cardiac or extracardiac)</span></td>
+        </tr>
+        <tr>
+          <td>Chromosomal risk</td>
+          <td><span class="green">Low (≤3% trisomy 21)</span></td>
+          <td><span class="orange">High (26–45%)</span></td>
+        </tr>
+        <tr>
+          <td>Genetic testing recommendation</td>
+          <td>Individualized discussion</td>
+          <td><span class="accent">CMA + karyotype recommended</span></td>
+        </tr>
+        <tr>
+          <td>Prognosis</td>
+          <td><span class="green">Generally excellent</span></td>
+          <td>Depends on associated findings</td>
+        </tr>
+        <tr>
+          <td>Spontaneous closure</td>
+          <td><span class="green">Very likely</span></td>
+          <td>Variable</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 9 — The "Sentinel" Warning (Latent Disorders)
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>Beyond the <span class="orange">Defect Itself</span></h2>
+    <div class="divider"></div>
+    <div class="alert warning mt-1" style="max-width:820px; text-align:left;">
+      <span class="alert-icon">⚠️</span>
+      <span>An isolated VSD can be a <strong>sentinel marker</strong> for latent genetic cardiac disorders — even after the defect closes.</span>
+    </div>
+    <div class="card-grid cols-3 mt-2">
+      <div class="card red-border">
+        <div class="card-icon">⚡</div>
+        <div class="card-title">Long QT Syndrome</div>
+        <div class="card-body">KCNQ1 mutations<br/>Severe QTc prolongation<br/>Risk of arrhythmia</div>
+      </div>
+      <div class="card red-border">
+        <div class="card-icon">💓</div>
+        <div class="card-title">Brugada / Arrhythmia</div>
+        <div class="card-body">SCN5A mutations<br/>Ventricular tachycardia<br/>Heart block</div>
+      </div>
+      <div class="card red-border">
+        <div class="card-icon">🫀</div>
+        <div class="card-title">Dilated Cardiomyopathy</div>
+        <div class="card-body">TTN / MYH7 mutations<br/>LV dilation & dysfunction<br/>May manifest in adulthood</div>
+      </div>
+    </div>
+    <p class="muted mt-2" style="font-size:0.85rem;">Longitudinal cardiac follow-up is medically necessary even after VSD closure.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 10 — Symptoms to Watch For (Postnatal)
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>Signs to Watch For <span class="muted">After Birth</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-2 mt-2">
+      <div class="card orange-border">
+        <div class="card-icon">😮‍💨</div>
+        <div class="card-title">Breathing</div>
+        <div class="card-body">Rapid breathing, difficulty breathing, or bluish color around lips and fingernails</div>
+      </div>
+      <div class="card orange-border">
+        <div class="card-icon">🍼</div>
+        <div class="card-title">Feeding</div>
+        <div class="card-body">Poor feeding, tiring easily during feeds, or slow weight gain</div>
+      </div>
+      <div class="card orange-border">
+        <div class="card-icon">🌡️</div>
+        <div class="card-title">Infections</div>
+        <div class="card-body">Frequent respiratory infections may indicate a significant shunt</div>
+      </div>
+      <div class="card orange-border">
+        <div class="card-icon">🎨</div>
+        <div class="card-title">Skin Color</div>
+        <div class="card-body">Pale or bluish skin coloration (cyanosis) warrants immediate evaluation</div>
+      </div>
+    </div>
+    <div class="alert info mt-2">
+      <span class="alert-icon">ℹ</span>
+      <span><strong>Most babies with small isolated VSDs have no symptoms at all.</strong> These signs are more relevant for larger defects.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 11 — Treatment Options
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>Treatment <span class="accent">Options</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid cols-3 mt-2">
+      <div class="card green-border">
+        <div class="card-icon">👁️</div>
+        <div class="card-title">Watchful Waiting</div>
+        <div class="card-body">
+          First-line approach for small isolated VSDs.<br/>
+          Serial echocardiograms to confirm closure.
+        </div>
+      </div>
+      <div class="card accent-border">
+        <div class="card-icon">💊</div>
+        <div class="card-title">Medications</div>
+        <div class="card-body">
+          <strong>Beta-blockers</strong> (e.g., Propranolol)<br/>
+          <strong>Diuretics</strong> (e.g., Furosemide)<br/>
+          <strong>ACE inhibitors</strong> (e.g., Ramipril)
+        </div>
+      </div>
+      <div class="card orange-border">
+        <div class="card-icon">🏥</div>
+        <div class="card-title">Intervention</div>
+        <div class="card-body">
+          Catheter-based closure<br/>
+          Open-heart surgery<br/>
+          Hybrid muscular VSD closure
+        </div>
+      </div>
+    </div>
+    <div class="alert success mt-2">
+      <span class="alert-icon">✓</span>
+      <span>The majority of isolated VSDs <strong>do not require any intervention.</strong> Treatment is reserved for defects that persist or cause symptoms.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 12 — Monitoring Timeline
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>Your <span class="accent">Monitoring</span> Plan</h2>
+    <div class="divider"></div>
+    <div class="timeline mt-2">
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(88,166,255,0.15); border-color:#58a6ff;">🤰</div>
+        <div class="tl-content">
+          <div class="tl-title">Prenatal — Now</div>
+          <div class="tl-desc">Detailed fetal echocardiogram · Genetic counseling discussion · Amniocentesis if indicated</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(63,185,80,0.15); border-color:#3fb950;">👶</div>
+        <div class="tl-content">
+          <div class="tl-title">Birth — Newborn Period</div>
+          <div class="tl-desc">Pediatric cardiology consultation · Neonatal echocardiogram · Clinical observation</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(210,153,34,0.15); border-color:#d29922;">📅</div>
+        <div class="tl-content">
+          <div class="tl-title">First Year of Life</div>
+          <div class="tl-desc">Serial echocardiograms · Monitor for spontaneous closure · Assess feeding and growth</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(188,140,255,0.15); border-color:#bc8cff;">🔭</div>
+        <div class="tl-content">
+          <div class="tl-title">Long-Term Follow-Up</div>
+          <div class="tl-desc">Continued cardiac surveillance even after closure · Watch for arrhythmia or cardiomyopathy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 13 — Muscular vs. Perimembranous Summary
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>Muscular vs. <span class="purple">Perimembranous</span></h2>
+    <div class="divider"></div>
+    <table class="data-table mt-2">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Muscular VSD</th>
+          <th>Perimembranous VSD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Location</td>
+          <td>Muscular septum (mid-muscular most common)</td>
+          <td>Near membranous septum / valves</td>
+        </tr>
+        <tr>
+          <td>Frequency</td>
+          <td><span class="green">Most prevalent overall</span></td>
+          <td>Up to 40% of neonatal cardiac malformations</td>
+        </tr>
+        <tr>
+          <td>Spontaneous Closure</td>
+          <td><span class="green">Highest probability; in utero or ≤2 yrs</span></td>
+          <td>45% in utero · 31% in first year</td>
+        </tr>
+        <tr>
+          <td>Chromosomal Risk</td>
+          <td><span class="green">Not a significant risk factor (isolated)</span></td>
+          <td><span class="orange">Warrants detailed assessment</span></td>
+        </tr>
+        <tr>
+          <td>Need for Intervention</td>
+          <td><span class="green">Rarely required</span></td>
+          <td>Possible for large non-closing defects</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       SLIDE 14 — Next Steps & Partnership
+  ══════════════════════════════════════════════════════ -->
+  <div class="slide slide-center">
+    <h2>Your <span class="green">Next Steps</span></h2>
+    <div class="divider"></div>
+    <div class="closing-grid mt-2">
+      <div class="card green-border" style="text-align:center;">
+        <div class="card-icon">🫀</div>
+        <div class="card-title">Fetal Echo</div>
+        <div class="card-body">Detailed fetal echocardiogram to characterize the defect fully</div>
+      </div>
+      <div class="card accent-border" style="text-align:center;">
+        <div class="card-icon">🧬</div>
+        <div class="card-title">Genetic Counseling</div>
+        <div class="card-body">Individualized discussion about testing options and your specific findings</div>
+      </div>
+      <div class="card purple-border" style="text-align:center;">
+        <div class="card-icon">👩‍⚕️</div>
+        <div class="card-title">Pediatric Cardiology</div>
+        <div class="card-body">Consultation scheduled to plan postnatal care and monitoring</div>
+      </div>
+    </div>
+    <div class="alert success mt-3">
+      <span class="alert-icon">🤝</span>
+      <span>You are not alone. Our team — MFM, pediatric cardiology, and genetics — will partner with you every step of the way.</span>
+    </div>
+    <p class="muted mt-2" style="font-size:0.8rem;">
+      Atlanta Perinatal Associates &nbsp;·&nbsp; Chukwuma I. Onyeije, MD &nbsp;·&nbsp; DoctorsWhoCode.blog
+    </p>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- ── Navigation ── -->
+<div class="nav">
+  <button onclick="prevSlide()">&#8592; Prev</button>
+  <span class="counter" id="nav-counter">1 / 14</span>
+  <button onclick="nextSlide()">Next &#8594;</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function updateUI() {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === current);
+    });
+    const label = `${current + 1} / ${total}`;
+    document.getElementById('slide-label').textContent = label;
+    document.getElementById('nav-counter').textContent = label;
+    document.getElementById('progress-bar').style.width =
+      ((current + 1) / total * 100) + '%';
+  }
+
+  function nextSlide() {
+    current = (current + 1) % total;
+    updateUI();
+  }
+
+  function prevSlide() {
+    current = (current - 1 + total) % total;
+    updateUI();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  updateUI();
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
