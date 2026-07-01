@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECV Success Calculator | OpenMFM</title>
+<meta name="description" content="Interactive External Cephalic Version (ECV) success probability calculator using the validated Dahl et al. (2021) four-variable model, with a built-in contraindication screen. Companion tool to the OpenMFM Breech Presentation & External Cephalic Version patient guide.">
+<meta property="og:title" content="ECV Success Calculator — OpenMFM">
+<meta property="og:description" content="Estimate External Cephalic Version success probability with a validated logistic model and contraindication screen. A bedside counseling aid for breech presentation.">
+<meta property="og:url" content="https://openmfm.org/microsites/ecv-success-calculator/index.html">
+<link rel="canonical" href="https://openmfm.org/microsites/ecv-success-calculator/index.html">
+<style>
+  :root {
+    --ink: #14213d;
+    --ink-soft: #3d4a68;
+    --paper: #f7f8fa;
+    --card: #ffffff;
+    --line: #dfe3ea;
+    --teal: #0f6d66;
+    --teal-deep: #0a4f4a;
+    --amber: #b5720a;
+    --rose: #a2333e;
+    --focus: #1c5cff;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Georgia", "Charter", serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+  }
+
+  .top-nav {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .top-nav a {
+    color: var(--teal-deep);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .top-nav a:hover { text-decoration: underline; }
+
+  header.tool-head {
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .eyebrow {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--teal-deep);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-size: 28px;
+    margin: 0 0 6px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 60ch;
+  }
+
+  .guide-link {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 10px;
+  }
+
+  .guide-link a {
+    color: var(--teal-deep);
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal);
+  }
+
+  .guide-link a:hover { color: var(--teal); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .card h2 {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 18px;
+    font-weight: 700;
+  }
+
+  .field {
+    margin-bottom: 20px;
+  }
+  .field:last-child { margin-bottom: 0; }
+
+  label.field-label {
+    display: block;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  .bmi-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  input[type="range"] {
+    flex: 1;
+    accent-color: var(--teal);
+    height: 4px;
+  }
+
+  input[type="number"] {
+    width: 76px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    padding: 6px 8px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    text-align: center;
+  }
+
+  input[type="number"]:focus,
+  button:focus-visible,
+  .seg-btn:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .seg {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .seg-btn {
+    flex: 1;
+    min-width: 140px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink-soft);
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .seg-btn.active {
+    background: var(--teal-deep);
+    border-color: var(--teal-deep);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .seg-btn:hover:not(.active) {
+    border-color: var(--teal);
+    color: var(--teal-deep);
+  }
+
+  /* Result */
+  .result-card {
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    padding: 28px 24px;
+  }
+
+  .result-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .result-label {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #b9c2d6;
+  }
+
+  .result-number {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .result-band {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 3px;
+  }
+
+  .band-lower { background: #4a2226; color: #f5c6cb; }
+  .band-mid { background: #4a3a12; color: #f5dd9a; }
+  .band-higher { background: #123a30; color: #a6e6cf; }
+
+  .meter {
+    margin-top: 18px;
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.12);
+    overflow: hidden;
+    position: relative;
+  }
+  .meter-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #a2333e, #b5720a, #0f6d66);
+    width: 100%;
+    position: absolute;
+  }
+  .meter-marker {
+    position: absolute;
+    top: -3px;
+    width: 3px;
+    height: 14px;
+    background: #fff;
+    transform: translateX(-1.5px);
+    transition: left 0.2s ease;
+  }
+
+  .benchmark-line {
+    margin-top: 8px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    color: #b9c2d6;
+  }
+
+  /* Notes / interpretation */
+  .interp {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 16px;
+  }
+
+  .factors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .factor {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 3px;
+    padding: 8px 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .factor .dir-up { color: #a6e6cf; }
+  .factor .dir-down { color: #f5c6cb; }
+
+  footer.disclaimer {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+    margin-top: 8px;
+  }
+
+  footer.disclaimer p { margin: 0 0 8px; }
+  footer.disclaimer p:last-child { margin-bottom: 0; }
+
+  footer.disclaimer a {
+    color: var(--teal-deep);
+    font-weight: 600;
+  }
+
+  .ref {
+    font-size: 11px;
+    color: #8b94a8;
+  }
+
+  /* Screening card */
+  .screen-card h2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .screen-sub {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: -10px 0 18px;
+  }
+
+  .check-group {
+    margin-bottom: 18px;
+  }
+  .check-group:last-child { margin-bottom: 0; }
+
+  .check-group-label {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .check-group-label.absolute { color: var(--rose); }
+  .check-group-label.relative { color: var(--amber); }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 10px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    margin-bottom: 8px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .check-item:last-child { margin-bottom: 0; }
+
+  .check-item:hover { background: var(--paper); }
+
+  .check-item input[type="checkbox"] {
+    margin-top: 3px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    accent-color: var(--rose);
+  }
+
+  .check-group.relative-group .check-item input[type="checkbox"] {
+    accent-color: var(--amber);
+  }
+
+  .check-item.checked {
+    background: #fbeceb;
+    border-color: var(--rose);
+  }
+  .relative-group .check-item.checked {
+    background: #fdf3e2;
+    border-color: var(--amber);
+  }
+
+  /* Gate states */
+  #blockedNotice {
+    display: none;
+    background: #fbeceb;
+    border: 1px solid var(--rose);
+    border-left: 5px solid var(--rose);
+    border-radius: 4px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+  }
+
+  #blockedNotice h2 {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: var(--rose);
+    font-size: 16px;
+    text-transform: none;
+    letter-spacing: 0;
+    margin: 0 0 8px;
+  }
+
+  #blockedNotice p {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    margin: 0 0 10px;
+  }
+
+  #blockedList {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    margin: 0;
+    padding-left: 20px;
+    color: var(--ink-soft);
+  }
+
+  #cautionNotice {
+    display: none;
+    background: #fdf3e2;
+    border: 1px solid var(--amber);
+    border-left: 5px solid var(--amber);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  #cautionNotice strong { color: var(--amber); }
+
+  .calc-section {
+    transition: opacity 0.2s ease;
+  }
+
+  .calc-section.disabled {
+    opacity: 0.35;
+    pointer-events: none;
+    filter: grayscale(0.4);
+  }
+
+  @media (max-width: 480px) {
+    .result-number { font-size: 44px; }
+    .factors { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="top-nav"><a href="https://openmfm.org/interactive">&larr; Back to Interactive Tools</a></div>
+
+  <header class="tool-head">
+    <div class="eyebrow">OpenMFM &middot; Bedside Counseling Tool</div>
+    <h1>External Cephalic Version Success Calculator</h1>
+    <p class="subtitle">Estimates the probability of successful ECV using the validated four-variable Dahl et al. (2021) logistic model. Intended as a counseling aid for shared decision-making, not a threshold for offering or withholding the procedure.</p>
+    <p class="guide-link">Companion tool to the <a href="https://openmfm.org/decks/external-cephalic-version-breech/Breech%20Presentation%20&amp;%20External%20Cephalic%20Version.html">Breech Presentation &amp; External Cephalic Version patient guide</a>.</p>
+  </header>
+
+  <div class="card screen-card">
+    <h2>Step 1 &middot; Contraindication Screen</h2>
+    <p class="screen-sub">Check any that apply. This list reflects ACOG Practice Bulletin No. 221 and current literature on ECV risk. It is a screening aid, not a complete substitute for clinical judgment &mdash; individualize as needed.</p>
+
+    <div class="check-group absolute-group">
+      <div class="check-group-label absolute">Absolute contraindications &mdash; ECV should not proceed</div>
+
+      <label class="check-item"><input type="checkbox" data-tier="absolute" value="Any condition that would independently contraindicate labor or vaginal delivery"> Any condition that would independently contraindicate labor or vaginal delivery</label>
+      <label class="check-item"><input type="checkbox" data-tier="absolute" value="Placenta previa or vasa previa"> Placenta previa or vasa previa</label>
+      <label class="check-item"><input type="checkbox" data-tier="absolute" value="Antepartum hemorrhage / suspected placental abruption"> Antepartum hemorrhage or suspected placental abruption</label>
+      <label class="check-item"><input type="checkbox" data-tier="absolute" value="Ruptured membranes"> Ruptured membranes</label>
+      <label class="check-item"><input type="checkbox" data-tier="absolute" value="Nonreassuring fetal status / abnormal fetal heart rate tracing"> Nonreassuring fetal status or abnormal fetal heart rate tracing</label>
+      <label class="check-item"><input type="checkbox" data-tier="absolute" value="Multiple gestation (other than version of a second twin)"> Multiple gestation (other than version of a second twin)</label>
+      <label class="check-item"><input type="checkbox" data-tier="absolute" value="Severe preeclampsia / eclampsia"> Severe preeclampsia or eclampsia</label>
+      <label class="check-item"><input type="checkbox" data-tier="absolute" value="Major uterine anomaly precluding version"> Major uterine anomaly precluding version</label>
+      <label class="check-item"><input type="checkbox" data-tier="absolute" value="Major fetal anomaly incompatible with the procedure"> Major fetal anomaly incompatible with the procedure</label>
+      <label class="check-item"><input type="checkbox" data-tier="absolute" value="Active genital herpes or other condition precluding vaginal birth"> Active genital herpes lesions or other condition precluding vaginal birth</label>
+    </div>
+
+    <div class="check-group relative-group">
+      <div class="check-group-label relative">Relative contraindications &mdash; individualize, counsel carefully</div>
+
+      <label class="check-item"><input type="checkbox" data-tier="relative" value="Oligohydramnios"> Oligohydramnios</label>
+      <label class="check-item"><input type="checkbox" data-tier="relative" value="Fetal growth restriction, particularly with abnormal Doppler studies"> Fetal growth restriction, particularly with abnormal Doppler studies</label>
+      <label class="check-item"><input type="checkbox" data-tier="relative" value="Morbid obesity"> Morbid obesity</label>
+      <label class="check-item"><input type="checkbox" data-tier="relative" value="Prior cesarean delivery"> Prior cesarean delivery</label>
+      <label class="check-item"><input type="checkbox" data-tier="relative" value="Hypertensive disorder without severe features"> Hypertensive disorder without severe features</label>
+      <label class="check-item"><input type="checkbox" data-tier="relative" value="Minor uterine anomaly"> Minor uterine anomaly</label>
+      <label class="check-item"><input type="checkbox" data-tier="relative" value="Rh alloimmunization"> Rh alloimmunization</label>
+      <label class="check-item"><input type="checkbox" data-tier="relative" value="Nuchal cord identified on ultrasound"> Nuchal cord identified on ultrasound</label>
+    </div>
+  </div>
+
+  <div id="blockedNotice">
+    <h2>ECV not recommended based on this screen</h2>
+    <p>The following absolute contraindication(s) were selected. The success calculator below has been disabled because a probability estimate is not clinically meaningful when the procedure itself should not be attempted.</p>
+    <ul id="blockedList"></ul>
+  </div>
+
+  <div id="cautionNotice">
+    <strong>Relative contraindication(s) noted.</strong> <span id="cautionList"></span> The calculator below remains available, but individualize the decision to attempt ECV and counsel the patient accordingly.
+  </div>
+
+  <div class="card calc-section" id="calcSection">
+    <h2>Step 2 &middot; Patient &amp; Pregnancy Factors</h2>
+
+    <div class="field">
+      <label class="field-label" for="bmi">Maternal BMI (kg/m&sup2;)</label>
+      <div class="bmi-row">
+        <input type="range" id="bmiRange" min="16" max="50" step="0.1" value="27">
+        <input type="number" id="bmi" min="16" max="50" step="0.1" value="27">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Parity</label>
+      <div class="seg" id="parityGroup">
+        <button type="button" class="seg-btn active" data-value="0">Nulliparous</button>
+        <button type="button" class="seg-btn" data-value="1">Multiparous</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Presentation at ECV</label>
+      <div class="seg" id="presentationGroup">
+        <button type="button" class="seg-btn active" data-value="0">Breech</button>
+        <button type="button" class="seg-btn" data-value="1">Transverse / Oblique</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Placental Location</label>
+      <div class="seg" id="placentaGroup">
+        <button type="button" class="seg-btn active" data-value="0">Not Anterior</button>
+        <button type="button" class="seg-btn" data-value="1">Anterior</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card result-card calc-section" id="resultSection">
+    <div class="result-top">
+      <div>
+        <div class="result-label">Estimated ECV Success Probability</div>
+        <div class="result-number" id="probOut">&mdash;</div>
+      </div>
+      <div class="result-band" id="bandOut">&nbsp;</div>
+    </div>
+
+    <div class="meter">
+      <div class="meter-fill"></div>
+      <div class="meter-marker" id="meterMarker" style="left:50%"></div>
+    </div>
+    <div class="benchmark-line">Lower &nbsp;&middot;&nbsp; Intermediate &nbsp;&middot;&nbsp; Higher &nbsp;&mdash;&nbsp; original derivation cohort success rate 40.6%</div>
+
+    <div class="factors">
+      <div class="factor"><span>BMI</span><span id="fBmi" class="dir-down">&mdash;</span></div>
+      <div class="factor"><span>Parity</span><span id="fParity" class="dir-down">&mdash;</span></div>
+      <div class="factor"><span>Presentation</span><span id="fPresentation" class="dir-down">&mdash;</span></div>
+      <div class="factor"><span>Placenta</span><span id="fPlacenta" class="dir-down">&mdash;</span></div>
+    </div>
+
+    <p class="interp" id="interpText"></p>
+  </div>
+
+  <footer class="disclaimer">
+    <p><strong>Counseling aid only.</strong> This tool does not determine candidacy for ECV and does not replace assessment of contraindications, fetal well-being, amniotic fluid volume, or shared decision-making with the patient.</p>
+    <p>Model: p = 1 / (1 + e<sup>&minus;x</sup>), where x = 1.1726 &minus; 0.0314(BMI) &minus; 0.9299(nulliparity) + 1.0218(transverse/oblique presentation) &minus; 0.5113(anterior placenta).</p>
+    <p class="ref">Reference: Dahl RM et al., 2021 (derivation cohort success 40.6%; external validation AUROC 0.70 by Kishkovich et al., 2023). Builds on the earlier Newman-Peacock scoring system (Newman RB et al., Am J Obstet Gynecol 1993).</p>
+    <p>For full patient counseling background, see the <a href="https://openmfm.org/decks/external-cephalic-version-breech/Breech%20Presentation%20&amp;%20External%20Cephalic%20Version.html">Breech Presentation &amp; External Cephalic Version patient guide</a>. Built by <a href="https://openmfm.org" target="_blank" rel="noopener">OpenMFM.org</a>.</p>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  // --- Contraindication screen gating ---
+  const checkboxes = Array.from(document.querySelectorAll('.check-item input[type="checkbox"]'));
+  const blockedNotice = document.getElementById('blockedNotice');
+  const blockedList = document.getElementById('blockedList');
+  const cautionNotice = document.getElementById('cautionNotice');
+  const cautionList = document.getElementById('cautionList');
+  const calcSection = document.getElementById('calcSection');
+  const resultSection = document.getElementById('resultSection');
+
+  function evaluateScreen() {
+    const absoluteChecked = [];
+    const relativeChecked = [];
+
+    checkboxes.forEach(cb => {
+      const item = cb.closest('.check-item');
+      item.classList.toggle('checked', cb.checked);
+      if (cb.checked) {
+        if (cb.dataset.tier === 'absolute') absoluteChecked.push(cb.value);
+        else relativeChecked.push(cb.value);
+      }
+    });
+
+    if (absoluteChecked.length > 0) {
+      blockedNotice.style.display = 'block';
+      blockedList.innerHTML = absoluteChecked.map(v => '<li>' + v + '</li>').join('');
+      cautionNotice.style.display = 'none';
+      calcSection.classList.add('disabled');
+      resultSection.classList.add('disabled');
+    } else {
+      blockedNotice.style.display = 'none';
+      calcSection.classList.remove('disabled');
+      resultSection.classList.remove('disabled');
+
+      if (relativeChecked.length > 0) {
+        cautionNotice.style.display = 'block';
+        cautionList.textContent = relativeChecked.join('; ') + '.';
+      } else {
+        cautionNotice.style.display = 'none';
+      }
+    }
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', evaluateScreen));
+  evaluateScreen();
+
+  // --- Calculator ---
+  const state = { bmi: 27, parity: 0, presentation: 0, placenta: 0 };
+
+  const bmiRange = document.getElementById('bmiRange');
+  const bmiInput = document.getElementById('bmi');
+  const probOut = document.getElementById('probOut');
+  const bandOut = document.getElementById('bandOut');
+  const meterMarker = document.getElementById('meterMarker');
+  const interpText = document.getElementById('interpText');
+
+  const fBmi = document.getElementById('fBmi');
+  const fParity = document.getElementById('fParity');
+  const fPresentation = document.getElementById('fPresentation');
+  const fPlacenta = document.getElementById('fPlacenta');
+
+  function wireSeg(groupId, key) {
+    const group = document.getElementById(groupId);
+    const buttons = group.querySelectorAll('.seg-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state[key] = Number(btn.dataset.value);
+        compute();
+      });
+    });
+  }
+
+  wireSeg('parityGroup', 'parity');
+  wireSeg('presentationGroup', 'presentation');
+  wireSeg('placentaGroup', 'placenta');
+
+  function syncBmi(value) {
+    let v = Math.min(50, Math.max(16, Number(value)));
+    state.bmi = v;
+    bmiRange.value = v;
+    bmiInput.value = v;
+    compute();
+  }
+
+  bmiRange.addEventListener('input', e => syncBmi(e.target.value));
+  bmiInput.addEventListener('input', e => {
+    if (e.target.value !== '') syncBmi(e.target.value);
+  });
+
+  function compute() {
+    const x = 1.1726
+      - 0.0314 * state.bmi
+      - 0.9299 * (state.parity === 0 ? 1 : 0)   // nulliparity = 1 if nulliparous
+      + 1.0218 * state.presentation
+      - 0.5113 * state.placenta;
+
+    const p = 1 / (1 + Math.exp(-x));
+    const pct = p * 100;
+
+    probOut.textContent = pct.toFixed(1) + '%';
+    meterMarker.style.left = Math.min(98, Math.max(2, pct)) + '%';
+
+    let bandClass, bandLabel, interp;
+    if (pct < 30) {
+      bandClass = 'band-lower'; bandLabel = 'Lower';
+      interp = 'Estimated probability is below the derivation cohort average. This does not preclude offering ECV, but counseling should reflect the lower expected yield.';
+    } else if (pct < 55) {
+      bandClass = 'band-mid'; bandLabel = 'Intermediate';
+      interp = 'Estimated probability is near the derivation cohort average (40.6%). Reasonable to offer with standard counseling.';
+    } else {
+      bandClass = 'band-higher'; bandLabel = 'Higher';
+      interp = 'Estimated probability is above the derivation cohort average, consistent with favorable predictors for successful version.';
+    }
+
+    bandOut.className = 'result-band ' + bandClass;
+    bandOut.textContent = bandLabel;
+    interpText.textContent = interp;
+
+    fBmi.textContent = state.bmi.toFixed(1) + ' kg/m²';
+    fBmi.className = state.bmi <= 27 ? 'dir-up' : 'dir-down';
+
+    fParity.textContent = state.parity === 1 ? 'Multiparous' : 'Nulliparous';
+    fParity.className = state.parity === 1 ? 'dir-up' : 'dir-down';
+
+    fPresentation.textContent = state.presentation === 1 ? 'Transverse / oblique' : 'Breech';
+    fPresentation.className = state.presentation === 1 ? 'dir-up' : 'dir-down';
+
+    fPlacenta.textContent = state.placenta === 1 ? 'Anterior' : 'Not anterior';
+    fPlacenta.className = state.placenta === 1 ? 'dir-down' : 'dir-up';
+  }
+
+  compute();
+})();
+</script>
+
+</body>
+</html>
