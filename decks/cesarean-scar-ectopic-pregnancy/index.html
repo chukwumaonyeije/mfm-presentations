@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cesarean Scar Ectopic Pregnancy | MFM Presentation</title>
+    <style>
+        /* ─── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── Deck Container ────────────────────────────────────────── */
+        .deck {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ─── Individual Slides ─────────────────────────────────────── */
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease-in-out;
+        }
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ─── Slide Backgrounds ─────────────────────────────────────── */
+        .slide-title-bg    { background: linear-gradient(135deg, #0d1117 0%, #161b22 60%, #1a2332 100%); }
+        .slide-path-bg     { background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); }
+        .slide-risk-bg     { background: linear-gradient(135deg, #1a0a0a 0%, #1f1010 100%); }
+        .slide-pas-bg      { background: linear-gradient(135deg, #0d1117 0%, #1a1a2e 100%); }
+        .slide-dx1-bg      { background: linear-gradient(135deg, #0a1628 0%, #0d2040 100%); }
+        .slide-dx2-bg      { background: linear-gradient(135deg, #0d1117 0%, #1a2332 100%); }
+        .slide-class-bg    { background: linear-gradient(135deg, #0d1117 0%, #1a1a2e 100%); }
+        .slide-hemo-bg     { background: linear-gradient(135deg, #1a0a0a 0%, #1a1010 100%); }
+        .slide-mgmt1-bg    { background: linear-gradient(135deg, #0d1117 0%, #0f1f0f 100%); }
+        .slide-mgmt2-bg    { background: linear-gradient(135deg, #0d1117 0%, #1a1a2e 100%); }
+
+        /* ─── Typography ────────────────────────────────────────────── */
+        .slide-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #58a6ff;
+            margin-bottom: 0.6rem;
+        }
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.8rem);
+            font-weight: 300;
+            line-height: 1.1;
+            text-align: center;
+            color: #e6edf3;
+        }
+        h1 span.accent { color: #58a6ff; }
+        h2 {
+            font-size: clamp(1.4rem, 3vw, 2.4rem);
+            font-weight: 300;
+            text-align: center;
+            color: #e6edf3;
+            margin-bottom: 1.2rem;
+        }
+        h2 span.accent { color: #58a6ff; }
+        h2 span.danger { color: #ff7b72; }
+        h2 span.success { color: #3fb950; }
+        h2 span.warning { color: #d29922; }
+
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            color: #8b949e;
+            text-align: center;
+            margin-top: 0.6rem;
+            font-weight: 300;
+        }
+
+        /* ─── Content Blocks ────────────────────────────────────────── */
+        .content-row {
+            display: flex;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 1.2rem;
+            justify-content: center;
+            align-items: stretch;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.4rem 1.8rem;
+            flex: 1;
+        }
+        .card-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .card-label.blue  { color: #58a6ff; }
+        .card-label.red   { color: #ff7b72; }
+        .card-label.green { color: #3fb950; }
+        .card-label.amber { color: #d29922; }
+        .card-label.purple { color: #bc8cff; }
+
+        .card p, .card li {
+            font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+            line-height: 1.65;
+            color: #c9d1d9;
+        }
+        .card ul { list-style: none; padding: 0; }
+        .card ul li { padding: 0.2rem 0; }
+        .card ul li::before { content: "▸ "; color: #58a6ff; font-size: 0.75rem; }
+
+        /* ─── Stat Callout ──────────────────────────────────────────── */
+        .stat-callout {
+            text-align: center;
+            margin-top: 1.4rem;
+        }
+        .stat-number {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            color: #58a6ff;
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: #8b949e;
+            margin-top: 0.3rem;
+        }
+
+        /* ─── Tables ────────────────────────────────────────────────── */
+        .clinical-table {
+            width: 100%;
+            max-width: 960px;
+            border-collapse: collapse;
+            margin-top: 1.2rem;
+            font-size: clamp(0.8rem, 1.4vw, 1rem);
+        }
+        .clinical-table thead tr {
+            background: rgba(88, 166, 255, 0.12);
+            border-bottom: 2px solid #58a6ff;
+        }
+        .clinical-table th {
+            padding: 0.75rem 1.2rem;
+            text-align: left;
+            font-weight: 600;
+            color: #58a6ff;
+            letter-spacing: 0.06em;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        .clinical-table td {
+            padding: 0.7rem 1.2rem;
+            color: #c9d1d9;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            vertical-align: top;
+            line-height: 1.5;
+        }
+        .clinical-table tbody tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+        }
+        .badge-blue   { background: rgba(88,166,255,0.15); color: #58a6ff; border: 1px solid rgba(88,166,255,0.3); }
+        .badge-red    { background: rgba(255,123,114,0.15); color: #ff7b72; border: 1px solid rgba(255,123,114,0.3); }
+        .badge-amber  { background: rgba(210,153,34,0.15); color: #d29922; border: 1px solid rgba(210,153,34,0.3); }
+        .badge-green  { background: rgba(63,185,80,0.15); color: #3fb950; border: 1px solid rgba(63,185,80,0.3); }
+        .badge-purple { background: rgba(188,140,255,0.15); color: #bc8cff; border: 1px solid rgba(188,140,255,0.3); }
+
+        /* ─── Icon Blocks ───────────────────────────────────────────── */
+        .icon-row {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 1.4rem;
+            flex-wrap: wrap;
+        }
+        .icon-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            width: 140px;
+        }
+        .icon-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+        }
+        .icon-circle.red    { background: rgba(255,123,114,0.15); border: 2px solid rgba(255,123,114,0.4); }
+        .icon-circle.blue   { background: rgba(88,166,255,0.15);  border: 2px solid rgba(88,166,255,0.4); }
+        .icon-circle.amber  { background: rgba(210,153,34,0.15);  border: 2px solid rgba(210,153,34,0.4); }
+        .icon-circle.green  { background: rgba(63,185,80,0.15);   border: 2px solid rgba(63,185,80,0.4); }
+        .icon-circle.purple { background: rgba(188,140,255,0.15); border: 2px solid rgba(188,140,255,0.4); }
+        .icon-block span {
+            font-size: 0.75rem;
+            color: #8b949e;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* ─── Divider ───────────────────────────────────────────────── */
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #58a6ff, transparent);
+            border-radius: 2px;
+            margin: 0.8rem auto;
+        }
+
+        /* ─── Alert Banner ──────────────────────────────────────────── */
+        .alert-banner {
+            background: rgba(255,123,114,0.08);
+            border: 1px solid rgba(255,123,114,0.3);
+            border-left: 4px solid #ff7b72;
+            border-radius: 8px;
+            padding: 0.9rem 1.4rem;
+            max-width: 900px;
+            width: 100%;
+            margin-top: 1.2rem;
+        }
+        .alert-banner p {
+            font-size: clamp(0.8rem, 1.4vw, 1rem);
+            color: #ff7b72;
+            line-height: 1.5;
+        }
+
+        /* ─── Navigation ────────────────────────────────────────────── */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 2rem;
+            background: rgba(255,255,255,0.03);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            flex-shrink: 0;
+        }
+        .nav-btn {
+            background: rgba(88,166,255,0.1);
+            border: 1px solid rgba(88,166,255,0.25);
+            color: #58a6ff;
+            padding: 0.45rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+        .nav-btn:hover { background: rgba(88,166,255,0.2); }
+        .nav-btn:disabled { opacity: 0.3; cursor: default; }
+        .slide-counter {
+            font-size: 0.8rem;
+            color: #8b949e;
+            letter-spacing: 0.1em;
+        }
+        .progress-bar {
+            height: 2px;
+            background: rgba(255,255,255,0.06);
+            flex-shrink: 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #58a6ff, #bc8cff);
+            transition: width 0.4s ease;
+        }
+
+        /* ─── Branding ──────────────────────────────────────────────── */
+        .brand {
+            font-size: 0.65rem;
+            color: #484f58;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        /* ─── Utility ───────────────────────────────────────────────── */
+        .text-center { text-align: center; }
+        .mt-sm { margin-top: 0.6rem; }
+        .full-width { width: 100%; max-width: 1000px; }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/cesarean-scar-ectopic-pregnancy/index.html">
+<meta name="description" content="Clinical guidelines for diagnosing and managing cesarean scar ectopic pregnancy (CSP), covering ultrasound diagnostic criteria, classification (Type I-III), risks of uterine rupture, and treatment algorithms.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Cesarean Scar Ectopic, Ectopic Pregnancy, Ultrasound Diagnosis, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/cesarean-scar-ectopic-pregnancy/index.html">
+<meta property="og:title" content="Cesarean Scar Ectopic Pregnancy - Provider Education | OpenMFM">
+<meta property="og:description" content="Clinical guidelines for diagnosing and managing cesarean scar ectopic pregnancy (CSP), covering ultrasound diagnostic criteria, classification (Type I-III), risks of uterine rupture, and treatment algorithms.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cesarean Scar Ectopic Pregnancy - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Clinical guidelines for diagnosing and managing cesarean scar ectopic pregnancy (CSP), covering ultrasound diagnostic criteria, classification (Type I-III), risks of uterine rupture, and treatment algorithms.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Cesarean Scar Ectopic Pregnancy - Provider Education",
+  "description": "Clinical guidelines for diagnosing and managing cesarean scar ectopic pregnancy (CSP), covering ultrasound diagnostic criteria, classification (Type I-III), risks of uterine rupture, and treatment algorithms.",
+  "url": "https://openmfm.org/decks/cesarean-scar-ectopic-pregnancy/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-07-02",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Cesarean Scar Ectopic Pregnancy - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Cesarean Scar Ectopic, Ectopic Pregnancy, Ultrasound Diagnosis, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:10%"></div></div>
+
+<!-- Deck -->
+<div class="deck">
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SLIDE 1 — TITLE
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-title-bg active">
+        <div class="slide-label">Maternal-Fetal Medicine | First-Trimester Emergency</div>
+        <h1>Cesarean Scar<br><span class="accent">Ectopic Pregnancy</span></h1>
+        <div class="divider"></div>
+        <p class="subtitle">Diagnosis · Implications · Management</p>
+        <div class="icon-row" style="margin-top:2.2rem;">
+            <div class="icon-block">
+                <div class="icon-circle blue">🔬</div>
+                <span>Diagnosis</span>
+            </div>
+            <div class="icon-block">
+                <div class="icon-circle red">⚠️</div>
+                <span>Implications</span>
+            </div>
+            <div class="icon-block">
+                <div class="icon-circle green">⚕️</div>
+                <span>Management</span>
+            </div>
+        </div>
+        <p class="subtitle" style="margin-top:2rem; font-size:0.8rem;">
+            ACOG · SMFM · Evidence-Based
+        </p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SLIDE 2 — PATHOPHYSIOLOGY & INCIDENCE
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-path-bg">
+        <div class="slide-label">Pathophysiology</div>
+        <h2>Mechanism &amp; <span class="accent">Incidence</span></h2>
+        <div class="content-row">
+            <div class="card">
+                <div class="card-label blue">Mechanism</div>
+                <ul>
+                    <li>Blastocyst implants within the fibrous <strong>myometrial niche</strong> (isthmocele) of a prior cesarean scar</li>
+                    <li>Trophoblast invades deficient scar tissue rather than normal endometrium</li>
+                    <li>Incidence rises synchronously with global cesarean delivery rates</li>
+                </ul>
+            </div>
+            <div class="card" style="flex:0 0 220px; text-align:center;">
+                <div class="card-label blue">Estimated Incidence</div>
+                <div class="stat-number">1:2,000</div>
+                <div class="stat-label">pregnancies</div>
+                <div style="margin-top:1rem; font-size:0.8rem; color:#8b949e;">Range: 1 in 1,800 – 1 in 2,226</div>
+            </div>
+        </div>
+        <div class="alert-banner" style="border-color:rgba(88,166,255,0.3); border-left-color:#58a6ff; margin-top:1rem;">
+            <p style="color:#8b949e;">
+                ▸ Rising cesarean rates worldwide are driving a parallel increase in CSP incidence.
+            </p>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SLIDE 3 — MATERNAL RISKS
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-risk-bg">
+        <div class="slide-label">Clinical Implications</div>
+        <h2><span class="danger">Severe Maternal Risks</span></h2>
+        <div class="icon-row" style="margin-top:1.2rem;">
+            <div class="icon-block">
+                <div class="icon-circle red">🩸</div>
+                <span>Massive Hemorrhage</span>
+            </div>
+            <div class="icon-block">
+                <div class="icon-circle red">💥</div>
+                <span>Uterine Rupture</span>
+            </div>
+            <div class="icon-block">
+                <div class="icon-circle amber">🏥</div>
+                <span>Emergency Hysterectomy</span>
+            </div>
+            <div class="icon-block">
+                <div class="icon-circle red">☠️</div>
+                <span>Maternal Mortality</span>
+            </div>
+        </div>
+        <div class="alert-banner" style="margin-top:1.6rem;">
+            <p>
+                <strong>Without timely intervention</strong>, CSP frequently leads to catastrophic complications including spontaneous uterine rupture and maternal death.
+            </p>
+        </div>
+        <div class="card" style="max-width:700px; margin-top:1rem; text-align:center;">
+            <div class="card-label red">Clinical Imperative</div>
+            <p style="font-size:1rem; color:#c9d1d9;">Urgent evaluation is <strong>mandatory</strong> upon diagnosis. Expectant management is generally contraindicated.</p>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SLIDE 4 — PLACENTA ACCRETA SPECTRUM
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-pas-bg">
+        <div class="slide-label">Long-Term Implications</div>
+        <h2>Link to <span class="accent">Placenta Accreta Spectrum</span></h2>
+        <div class="content-row">
+            <div class="card">
+                <div class="card-label purple">PAS Continuum</div>
+                <ul>
+                    <li>First-trimester CSP is a <strong>direct precursor</strong> to second- and third-trimester PAS disorders</li>
+                    <li>Trophoblastic invasion of scar tissue mirrors PAS pathophysiology</li>
+                    <li>Allowing progression poses an unacceptable risk of accreta, increta, or percreta</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-label purple">PAS Spectrum</div>
+                <table class="clinical-table" style="margin-top:0.3rem;">
+                    <thead>
+                        <tr><th>Type</th><th>Invasion Depth</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><span class="badge badge-amber">Accreta</span></td><td>Superficial myometrium</td></tr>
+                        <tr><td><span class="badge badge-red">Increta</span></td><td>Deep myometrium</td></tr>
+                        <tr><td><span class="badge badge-red">Percreta</span></td><td>Through serosa / bladder</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SLIDE 5 — DIAGNOSTIC APPROACH: FIRST-LINE
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-dx1-bg">
+        <div class="slide-label">Diagnosis</div>
+        <h2>First-Line Imaging: <span class="accent">Transvaginal Ultrasound</span></h2>
+        <div class="content-row">
+            <div class="card">
+                <div class="card-label blue">TVUS — Key Diagnostic Criteria</div>
+                <ul>
+                    <li>Empty uterine cavity and empty endocervical canal</li>
+                    <li>Gestational sac embedded in the <strong>anterior lower uterine segment</strong></li>
+                    <li>Thin or absent myometrium between sac and bladder</li>
+                    <li>Trophoblastic blood flow on <strong>color Doppler</strong> at the scar site</li>
+                </ul>
+            </div>
+            <div class="card" style="flex:0 0 260px; text-align:center;">
+                <div class="card-label blue">Modality of Choice</div>
+                <div style="font-size:3rem; margin: 0.8rem 0;">🔊</div>
+                <p style="font-size:0.9rem; color:#c9d1d9;">Early first-trimester TVUS is the <strong>primary and most sensitive</strong> modality for CSP diagnosis</p>
+                <div class="badge badge-blue" style="margin-top:0.8rem;">SMFM Endorsed</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SLIDE 6 — DIAGNOSTIC APPROACH: ADJUNCTIVE
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-dx2-bg">
+        <div class="slide-label">Diagnosis</div>
+        <h2>Adjunctive Imaging: <span class="accent">MRI</span></h2>
+        <div class="content-row">
+            <div class="card">
+                <div class="card-label blue">MRI with Contrast — Indications</div>
+                <ul>
+                    <li>Evaluate <strong>extent of chorionic villus invasion</strong> into myometrium</li>
+                    <li>Assess uterine wall insufficiency and residual myometrial thickness</li>
+                    <li>Precisely map pelvic anatomy prior to complex surgical intervention</li>
+                    <li>Clarify equivocal TVUS findings</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-label amber">When to Escalate to MRI</div>
+                <ul>
+                    <li>Suspected deep myometrial invasion</li>
+                    <li>Planned complex surgical resection</li>
+                    <li>Suspected bladder involvement (Type 2 CSP)</li>
+                    <li>Inconclusive ultrasound findings</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SLIDE 7 — CLASSIFICATION
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-class-bg">
+        <div class="slide-label">Classification</div>
+        <h2>CSP <span class="accent">Classification</span> &amp; Prognosis</h2>
+        <table class="clinical-table full-width" style="margin-top:1rem;">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Growth Trajectory</th>
+                    <th>Prognosis &amp; Risk</th>
+                    <th>Risk Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Type 1</strong><br><span style="font-size:0.8rem; color:#8b949e;">Endogenic</span></td>
+                    <td>Grows endogenously toward the uterine cavity</td>
+                    <td>May rarely progress toward viability; exceptionally high risk of <strong>Placenta Accreta Spectrum</strong></td>
+                    <td><span class="badge badge-amber">HIGH</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Type 2</strong><br><span style="font-size:0.8rem; color:#8b949e;">Exogenic</span></td>
+                    <td>Grows exophytically toward bladder and uterine serosa</td>
+                    <td>Ominous prognosis; imminent risk of <strong>spontaneous uterine rupture</strong> and life-threatening hemorrhage</td>
+                    <td><span class="badge badge-red">CRITICAL</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="card" style="max-width:900px; margin-top:1rem; text-align:center;">
+            <p style="font-size:0.9rem; color:#c9d1d9;">Accurate classification is <strong>mandatory</strong> — it directly informs prognosis and surgical strategy.</p>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SLIDE 8 — HEMORRHAGE RISK FACTORS
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-hemo-bg">
+        <div class="slide-label">Risk Stratification</div>
+        <h2>Predictors of <span class="danger">Intraoperative Hemorrhage</span></h2>
+        <div class="content-row">
+            <div class="card">
+                <div class="card-label red">Independent Predictors</div>
+                <ul>
+                    <li><strong>Reduced anterior myometrial thickness</strong> — thinner residual myometrium correlates with higher hemorrhage risk</li>
+                    <li><strong>Larger gestational sac diameter</strong> — greater trophoblastic burden increases vascular involvement</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-label amber">Clinical Application</div>
+                <ul>
+                    <li>Measure anterior myometrial thickness on TVUS prior to intervention</li>
+                    <li>Document gestational sac diameter at time of diagnosis</li>
+                    <li>Use findings to stratify hemorrhage risk and plan adjunctive measures (e.g., UAE)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="alert-banner" style="margin-top:1rem;">
+            <p>These factors are <strong>independent predictors</strong> of severe intraoperative hemorrhage during surgical management.</p>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SLIDE 9 — MANAGEMENT: EXPECTANT & MEDICAL
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-mgmt1-bg">
+        <div class="slide-label">Management</div>
+        <h2>Expectant &amp; <span class="accent">Medical Management</span></h2>
+        <div class="content-row">
+            <div class="card">
+                <div class="card-label red">Expectant Management</div>
+                <ul>
+                    <li><span class="badge badge-red">Contraindicated</span> in most cases</li>
+                    <li>20.1% spontaneous miscarriage rate</li>
+                    <li>Unacceptable risk of rupture, hemorrhage, and PAS progression</li>
+                    <li>Reserved only for exceptional, highly selected cases</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-label green">Medical Management — Methotrexate</div>
+                <ul>
+                    <li><strong>Indication:</strong> Early, unruptured CSP in hemodynamically stable patients</li>
+                    <li><strong>Routes:</strong> Systemic intramuscular (IM) or local ultrasound-guided injection</li>
+                    <li><strong>Role:</strong> Halts trophoblastic activity; frequently used prior to definitive surgical evacuation</li>
+                    <li><span class="badge badge-green">First-line medical option</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SLIDE 10 — MANAGEMENT: SURGICAL & ADJUNCTIVE
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="slide slide-mgmt2-bg">
+        <div class="slide-label">Management</div>
+        <h2>Surgical &amp; <span class="accent">Adjunctive Interventions</span></h2>
+        <table class="clinical-table full-width" style="margin-top:0.8rem;">
+            <thead>
+                <tr>
+                    <th>Approach</th>
+                    <th>Procedure</th>
+                    <th>Indication</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge badge-blue">Minimally Invasive</span></td>
+                    <td>Hysteroscopic evacuation; ultrasound-guided sac aspiration</td>
+                    <td>Stable, early CSP; fertility preservation desired</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-blue">Surgical</span></td>
+                    <td>Laparoscopic scar resection; uterine curettage; primary hysterotomy</td>
+                    <td>Larger sacs; Type 2 CSP; failed medical management</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-red">Emergency</span></td>
+                    <td>Emergency hysterectomy</td>
+                    <td>Uterine rupture; uncontrollable hemorrhage</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-purple">Adjunctive</span></td>
+                    <td>Uterine Artery Embolization (UAE)</td>
+                    <td>Pre-surgical hemorrhage prophylaxis; emergent hemorrhage control; fertility preservation</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="card" style="max-width:900px; margin-top:0.8rem; text-align:center;">
+            <p style="font-size:0.85rem; color:#c9d1d9;">Management must be <strong>individualized</strong> based on gestational age, structural type, hemodynamic stability, and fertility goals.</p>
+        </div>
+    </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation Bar -->
+<div class="nav-bar">
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>← Previous</button>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:0.2rem;">
+        <span class="slide-counter" id="slideCounter">1 / 10</span>
+        <span class="brand">DoctorsWhoCode.blog · OpenMFM.org</span>
+    </div>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+
+    function showSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === index);
+        });
+        document.getElementById('slideCounter').textContent = (index + 1) + ' / ' + total;
+        document.getElementById('progressFill').style.width = ((index + 1) / total * 100) + '%';
+        document.getElementById('prevBtn').disabled = index === 0;
+        document.getElementById('nextBtn').disabled = index === total - 1;
+    }
+
+    function nextSlide() {
+        if (currentSlide < total - 1) { currentSlide++; showSlide(currentSlide); }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 0) { currentSlide--; showSlide(currentSlide); }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

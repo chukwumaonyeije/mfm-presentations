@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sFlt-1/PlGF Ratio Evaluation Protocol | MFM Clinical Presentation</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent:    #58a6ff;
+      --green:     #3fb950;
+      --yellow:    #d29922;
+      --red:       #f85149;
+      --teal:      #39d353;
+      --purple:    #bc8cff;
+      --font:      'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      overflow: hidden;
+    }
+
+    /* ─── Deck & Slide ─────────────────────────────────────────────────── */
+    .deck {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ─── Navigation ───────────────────────────────────────────────────── */
+    .nav {
+      position: fixed; bottom: 1.6rem; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1.2rem;
+      z-index: 100;
+    }
+    .nav button {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); font-size: 1.1rem;
+      padding: 0.5rem 1.2rem; border-radius: 6px; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav button:hover { background: var(--border); }
+    #slide-counter { color: var(--muted); font-size: 0.9rem; min-width: 60px; text-align: center; }
+
+    /* ─── Progress bar ─────────────────────────────────────────────────── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--accent); transition: width 0.4s ease;
+      z-index: 200;
+    }
+
+    /* ─── Branding ─────────────────────────────────────────────────────── */
+    .brand {
+      position: fixed; bottom: 1.4rem; right: 2rem;
+      font-size: 0.72rem; color: var(--muted); letter-spacing: 0.04em;
+    }
+
+    /* ─── Typography ───────────────────────────────────────────────────── */
+    .slide-label {
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.6rem;
+    }
+    h1 { font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 300; line-height: 1.1; }
+    h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 300; line-height: 1.2; }
+    h3 { font-size: clamp(1.2rem, 2.5vw, 1.8rem); font-weight: 400; }
+    .subtitle { font-size: clamp(1rem, 2vw, 1.4rem); color: var(--muted); margin-top: 0.8rem; }
+    .body-text { font-size: clamp(0.95rem, 1.6vw, 1.2rem); line-height: 1.7; color: var(--text); max-width: 780px; text-align: center; }
+    .note { font-size: 0.82rem; color: var(--muted); margin-top: 1rem; }
+
+    /* ─── Accent line ──────────────────────────────────────────────────── */
+    .accent-line {
+      width: 60px; height: 3px; background: var(--accent);
+      border-radius: 2px; margin: 1rem auto;
+    }
+
+    /* ─── Pathway diagram (SVG-based) ──────────────────────────────────── */
+    .pathway { width: 100%; max-width: 820px; }
+
+    /* ─── Gestational timeline ─────────────────────────────────────────── */
+    .timeline-wrap { width: 100%; max-width: 760px; }
+    .timeline-track {
+      position: relative; height: 6px;
+      background: var(--border); border-radius: 3px; margin: 1.8rem 0 0.6rem;
+    }
+    .timeline-fill {
+      position: absolute; top: 0; left: 0; height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--purple));
+      border-radius: 3px;
+    }
+    .timeline-labels {
+      display: flex; justify-content: space-between;
+      font-size: 0.78rem; color: var(--muted);
+    }
+    .timeline-markers {
+      display: flex; justify-content: space-between;
+      position: relative; margin-top: 0.3rem;
+    }
+    .t-marker {
+      display: flex; flex-direction: column; align-items: center;
+      font-size: 0.75rem; color: var(--accent); gap: 0.2rem;
+    }
+    .t-marker .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent);
+    }
+    .t-marker.key .dot { background: var(--purple); }
+    .t-marker.key { color: var(--purple); }
+
+    /* ─── Decision table ───────────────────────────────────────────────── */
+    .decision-table {
+      width: 100%; max-width: 860px;
+      border-collapse: collapse; font-size: clamp(0.78rem, 1.3vw, 0.98rem);
+    }
+    .decision-table th {
+      background: var(--surface); color: var(--accent);
+      padding: 0.7rem 1rem; text-align: left;
+      border-bottom: 2px solid var(--accent);
+      font-weight: 600; letter-spacing: 0.04em;
+      font-size: 0.78rem; text-transform: uppercase;
+    }
+    .decision-table td {
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+      vertical-align: top; line-height: 1.5;
+    }
+    .decision-table tr:last-child td { border-bottom: none; }
+    .decision-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+    .zone-green { color: var(--green); font-weight: 700; }
+    .zone-yellow { color: var(--yellow); font-weight: 700; }
+    .zone-red { color: var(--red); font-weight: 700; }
+
+    /* ─── Zone cards ───────────────────────────────────────────────────── */
+    .zone-cards { display: flex; gap: 1.4rem; width: 100%; max-width: 900px; }
+    .zone-card {
+      flex: 1; border-radius: 10px; padding: 1.6rem 1.4rem;
+      border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 0.6rem;
+    }
+    .zone-card.green { border-color: var(--green); background: rgba(63,185,80,0.07); }
+    .zone-card.yellow { border-color: var(--yellow); background: rgba(210,153,34,0.07); }
+    .zone-card.red { border-color: var(--red); background: rgba(248,81,73,0.07); }
+
+    .zone-card .ratio {
+      font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700; line-height: 1;
+    }
+    .zone-card.green .ratio { color: var(--green); }
+    .zone-card.yellow .ratio { color: var(--yellow); }
+    .zone-card.red .ratio { color: var(--red); }
+
+    .zone-card .zone-label {
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--muted); margin-bottom: 0.3rem;
+    }
+    .zone-card .zone-title { font-size: 1rem; font-weight: 600; }
+    .zone-card .zone-body { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+    .zone-card .zone-action {
+      font-size: 0.8rem; margin-top: 0.4rem;
+      padding: 0.4rem 0.7rem; border-radius: 5px;
+      border: 1px solid var(--border);
+    }
+    .zone-card.green .zone-action { border-color: var(--green); color: var(--green); }
+    .zone-card.yellow .zone-action { border-color: var(--yellow); color: var(--yellow); }
+    .zone-card.red .zone-action { border-color: var(--red); color: var(--red); }
+
+    /* ─── Integration grid ─────────────────────────────────────────────── */
+    .integration-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem; max-width: 820px; width: 100%;
+    }
+    .int-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.2rem 1rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+      text-align: center;
+    }
+    .int-card .icon { font-size: 2rem; }
+    .int-card .int-title { font-size: 0.85rem; font-weight: 600; color: var(--accent); }
+    .int-card .int-body { font-size: 0.75rem; color: var(--muted); line-height: 1.4; }
+
+    /* ─── Repeat testing flowchart ─────────────────────────────────────── */
+    .flow-wrap { display: flex; flex-direction: column; align-items: center; gap: 0; max-width: 640px; width: 100%; }
+    .flow-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.8rem 1.6rem;
+      font-size: 0.88rem; text-align: center; width: 100%;
+    }
+    .flow-box.trigger { border-color: var(--accent); color: var(--accent); }
+    .flow-arrow { color: var(--muted); font-size: 1.4rem; line-height: 1; padding: 0.2rem 0; }
+    .flow-branches { display: flex; gap: 1.4rem; width: 100%; }
+    .flow-branch { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0; }
+    .flow-branch .flow-box.green { border-color: var(--green); color: var(--green); }
+    .flow-branch .flow-box.yellow { border-color: var(--yellow); color: var(--yellow); }
+    .flow-branch .flow-box.red { border-color: var(--red); color: var(--red); }
+    .flow-branch .outcome {
+      font-size: 0.72rem; color: var(--muted); text-align: center; margin-top: 0.5rem; padding: 0 0.3rem;
+    }
+
+    /* ─── Caveats list ─────────────────────────────────────────────────── */
+    .caveat-list { list-style: none; max-width: 760px; width: 100%; display: flex; flex-direction: column; gap: 0.9rem; }
+    .caveat-list li {
+      display: flex; align-items: flex-start; gap: 0.8rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.9rem 1.1rem;
+      font-size: 0.88rem; line-height: 1.5; color: var(--text);
+    }
+    .caveat-list li .ci { color: var(--yellow); font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+    /* ─── Slide 1 special ──────────────────────────────────────────────── */
+    #slide-1 { background: radial-gradient(ellipse at 60% 40%, rgba(88,166,255,0.07) 0%, transparent 60%), var(--bg); }
+    #slide-1 h1 { text-align: center; }
+    #slide-1 .tag-row { display: flex; gap: 0.8rem; margin-top: 1.4rem; flex-wrap: wrap; justify-content: center; }
+    #slide-1 .tag {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 0.3rem 0.8rem; border-radius: 20px;
+      border: 1px solid var(--border); color: var(--muted);
+    }
+    #slide-1 .tag.accent { border-color: var(--accent); color: var(--accent); }
+
+    /* ─── Slide 3 pathway ──────────────────────────────────────────────── */
+    .pathway-row {
+      display: flex; align-items: center; gap: 0; width: 100%; max-width: 860px;
+    }
+    .pw-box {
+      flex: 1; border-radius: 10px; padding: 1.1rem 0.9rem;
+      text-align: center; border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .pw-box .pw-icon { font-size: 1.8rem; }
+    .pw-box .pw-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-top: 0.3rem; }
+    .pw-box .pw-name { font-size: 0.95rem; font-weight: 600; margin-top: 0.2rem; }
+    .pw-box.highlight { border-color: var(--accent); background: rgba(88,166,255,0.07); }
+    .pw-box.danger { border-color: var(--red); background: rgba(248,81,73,0.07); }
+    .pw-arrow { font-size: 1.6rem; color: var(--muted); padding: 0 0.5rem; flex-shrink: 0; }
+    .pw-arrow.red { color: var(--red); }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/sflt1-plgf/index.html">
+<meta name="description" content="Clinical protocol for sFlt-1/PlGF ratio testing in suspected preeclampsia, including validation windows (24+0 to 36+6 weeks), cutoff values (ratio &lt;38 to rule out, &gt;85/110 to rule in), and management pathways.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="sFlt-1/PlGF, Preeclampsia, Angiogenic Markers, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/sflt1-plgf/index.html">
+<meta property="og:title" content="sFlt-1/PlGF Ratio Evaluation Protocol - Provider Education | OpenMFM">
+<meta property="og:description" content="Clinical protocol for sFlt-1/PlGF ratio testing in suspected preeclampsia, including validation windows (24+0 to 36+6 weeks), cutoff values (ratio &lt;38 to rule out, &gt;85/110 to rule in), and management pathways.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="sFlt-1/PlGF Ratio Evaluation Protocol - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Clinical protocol for sFlt-1/PlGF ratio testing in suspected preeclampsia, including validation windows (24+0 to 36+6 weeks), cutoff values (ratio &lt;38 to rule out, &gt;85/110 to rule in), and management pathways.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "sFlt-1/PlGF Ratio Evaluation Protocol - Provider Education",
+  "description": "Clinical protocol for sFlt-1/PlGF ratio testing in suspected preeclampsia, including validation windows (24+0 to 36+6 weeks), cutoff values (ratio <38 to rule out, >85/110 to rule in), and management pathways.",
+  "url": "https://openmfm.org/decks/sflt1-plgf/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-07-02",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "sFlt-1/PlGF Ratio Evaluation Protocol - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "sFlt-1/PlGF, Preeclampsia, Angiogenic Markers, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div class="progress-bar" id="progress-bar"></div>
+
+<div class="deck">
+
+  <!-- ─── SLIDE 1: Title ─────────────────────────────────────────────── -->
+  <div class="slide active" id="slide-1">
+    <div class="slide-label">MFM Clinical Protocol</div>
+    <h1>sFlt-1 / PlGF<br>Ratio Evaluation</h1>
+    <div class="accent-line"></div>
+    <p class="subtitle">Suspected Preeclampsia with Mild Hypertension</p>
+    <div class="tag-row">
+      <span class="tag accent">PROGNOSIS Validated</span>
+      <span class="tag">ISSHP 2021</span>
+      <span class="tag">NICE Guidance</span>
+      <span class="tag">Roche Elecsys Platform</span>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 2: Indication & Gestational Window ─────────────────── -->
+  <div class="slide" id="slide-2">
+    <div class="slide-label">Indication</div>
+    <h2>When to Order</h2>
+    <div class="accent-line"></div>
+    <p class="body-text">
+      Indicated when preeclampsia is suspected — new or worsening hypertension,
+      proteinuria, or other signs — at ≥20 weeks. Optimally validated from
+      <strong>24<sup>+0</sup> to 36<sup>+6</sup> weeks</strong>.
+    </p>
+
+    <div class="timeline-wrap" style="margin-top:2.2rem;">
+      <div class="timeline-labels">
+        <span>20 wks</span>
+        <span>24 wks</span>
+        <span>28 wks</span>
+        <span>32 wks</span>
+        <span>36 wks</span>
+        <span>40 wks</span>
+      </div>
+      <div class="timeline-track">
+        <!-- Fill from 24 to 36 weeks: (24-20)/(40-20)=20% start, (36-20)/(40-20)=80% end → width 60%, left 20% -->
+        <div class="timeline-fill" style="left:20%; width:60%;"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-top:0.5rem;">
+        <span style="font-size:0.7rem; color:var(--muted); width:16.6%; text-align:center;"></span>
+        <span style="font-size:0.72rem; color:var(--accent); width:16.6%; text-align:center;">▲ Validated<br>Window Begins</span>
+        <span style="font-size:0.7rem; color:var(--muted); width:16.6%; text-align:center;"></span>
+        <span style="font-size:0.7rem; color:var(--muted); width:16.6%; text-align:center;"></span>
+        <span style="font-size:0.72rem; color:var(--purple); width:16.6%; text-align:center;">▲ Validated<br>Window Ends</span>
+        <span style="font-size:0.7rem; color:var(--muted); width:16.6%; text-align:center;"></span>
+      </div>
+    </div>
+    <p class="note">Normal reference range (23–34<sup>+6</sup> wks, healthy US cohort): 0.9–13.5</p>
+  </div>
+
+  <!-- ─── SLIDE 3: Pathophysiology ─────────────────────────────────── -->
+  <div class="slide" id="slide-3">
+    <div class="slide-label">Pathophysiology</div>
+    <h2>Angiogenic Imbalance</h2>
+    <div class="accent-line"></div>
+
+    <div class="pathway-row" style="margin-top:2rem;">
+      <div class="pw-box">
+        <div class="pw-icon">🫀</div>
+        <div class="pw-label">Trigger</div>
+        <div class="pw-name">Placental Ischemia</div>
+      </div>
+      <div class="pw-arrow">→</div>
+      <div class="pw-box highlight">
+        <div class="pw-icon">⬆</div>
+        <div class="pw-label">Anti-Angiogenic</div>
+        <div class="pw-name">sFlt-1 ↑</div>
+      </div>
+      <div class="pw-arrow red">⊣</div>
+      <div class="pw-box">
+        <div class="pw-icon">⬇</div>
+        <div class="pw-label">Pro-Angiogenic</div>
+        <div class="pw-name">PlGF ↓</div>
+      </div>
+      <div class="pw-arrow">→</div>
+      <div class="pw-box danger">
+        <div class="pw-icon">🩸</div>
+        <div class="pw-label">Outcome</div>
+        <div class="pw-name">Vasoconstriction &amp; Hypertension</div>
+      </div>
+    </div>
+
+    <p class="note" style="margin-top:1.8rem;">
+      Elevated sFlt-1/PlGF ratio is detectable in maternal serum <em>before</em> clinical onset of preeclampsia.
+    </p>
+  </div>
+
+  <!-- ─── SLIDE 4: Three Decision Zones ────────────────────────────── -->
+  <div class="slide" id="slide-4">
+    <div class="slide-label">Clinical Decision Thresholds</div>
+    <h2>Three Ratio Zones</h2>
+    <div class="accent-line"></div>
+
+    <div class="zone-cards" style="margin-top:1.8rem;">
+      <div class="zone-card green">
+        <div class="zone-label">Rule-Out Zone</div>
+        <div class="ratio">≤ 38</div>
+        <div class="zone-title">Low Risk</div>
+        <div class="zone-body">NPV 99.3% — reliably excludes preeclampsia within 1 week; NPV 94.3% at 4 weeks.</div>
+        <div class="zone-action">Outpatient management</div>
+      </div>
+      <div class="zone-card yellow">
+        <div class="zone-label">Intermediate Zone</div>
+        <div class="ratio">39–85</div>
+        <div class="zone-title">Equivocal</div>
+        <div class="zone-body">Cannot rule in or rule out. Increased risk of progression. Serial monitoring required.</div>
+        <div class="zone-action">Enhanced surveillance</div>
+      </div>
+      <div class="zone-card red">
+        <div class="zone-label">Rule-In Zone</div>
+        <div class="ratio">&gt; 85</div>
+        <div class="zone-title">High Risk (&lt;34 wks)</div>
+        <div class="zone-body">High probability of preeclampsia. Severe angiogenic imbalance. Adverse outcomes likely.</div>
+        <div class="zone-action">Consider admission</div>
+      </div>
+    </div>
+    <p class="note">Late-onset (&ge;34 wks) rule-in threshold: &gt;110 | PROGNOSIS single cutoff: 38</p>
+  </div>
+
+  <!-- ─── SLIDE 5: Full Decision Table ─────────────────────────────── -->
+  <div class="slide" id="slide-5">
+    <div class="slide-label">Management Protocol</div>
+    <h2>Clinical Action by Zone</h2>
+    <div class="accent-line"></div>
+
+    <table class="decision-table" style="margin-top:1.6rem;">
+      <thead>
+        <tr>
+          <th>sFlt-1/PlGF Ratio</th>
+          <th>Interpretation</th>
+          <th>Recommended Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="zone-green">≤ 38</span></td>
+          <td>Rule-out — low short-term risk of preeclampsia (NPV 99.3%)</td>
+          <td>Outpatient management; repeat assessment in 1–4 weeks if symptoms persist</td>
+        </tr>
+        <tr>
+          <td><span class="zone-yellow">39 – 85</span></td>
+          <td>Intermediate — cannot exclude or confirm preeclampsia</td>
+          <td>Close surveillance; serial BP, labs, fetal assessment; consider repeat testing in 1–2 weeks</td>
+        </tr>
+        <tr>
+          <td><span class="zone-red">&gt; 85</span> <span style="font-size:0.75rem;color:var(--muted);">(&lt;34 wks)</span></td>
+          <td>Rule-in — high probability of preeclampsia with severe features</td>
+          <td>Strongly consider admission; intensive maternal/fetal surveillance; corticosteroids if preterm; plan delivery</td>
+        </tr>
+        <tr>
+          <td><span class="zone-red">&gt; 110</span> <span style="font-size:0.75rem;color:var(--muted);">(≥34 wks)</span></td>
+          <td>Rule-in — late-onset threshold</td>
+          <td>Same as above; expedited delivery planning per clinical context</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ─── SLIDE 6: Rule-Out Zone Detail ────────────────────────────── -->
+  <div class="slide" id="slide-6">
+    <div class="slide-label">Zone Detail — Rule-Out</div>
+    <h2 style="color:var(--green);">Ratio ≤ 38</h2>
+    <div class="accent-line" style="background:var(--green);"></div>
+
+    <div style="display:flex; gap:2rem; max-width:860px; width:100%; margin-top:1.8rem; align-items:stretch;">
+      <div style="flex:1; background:rgba(63,185,80,0.07); border:1px solid var(--green); border-radius:10px; padding:1.4rem;">
+        <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--green); margin-bottom:0.6rem;">Clinical Benefit</div>
+        <p style="font-size:0.9rem; line-height:1.6; color:var(--text);">
+          Safely excludes imminent preeclampsia, eclampsia, and HELLP syndrome within <strong>1 week</strong>.
+          Prevents unnecessary hospital admissions and premature iatrogenic delivery.
+        </p>
+      </div>
+      <div style="flex:1; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.4rem;">
+        <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:0.6rem;">Performance</div>
+        <p style="font-size:0.9rem; line-height:1.6; color:var(--text);">
+          NPV <strong>99.3%</strong> at 1 week &nbsp;|&nbsp; NPV <strong>94.3%</strong> at 4 weeks<br>
+          Negative likelihood ratio ≤ 0.16 for progression to severe features
+        </p>
+      </div>
+      <div style="flex:1; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.4rem;">
+        <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:0.6rem;">Outpatient Plan</div>
+        <p style="font-size:0.9rem; line-height:1.6; color:var(--text);">
+          Reduced surveillance intensity appropriate. Repeat clinical assessment or biomarker testing
+          in <strong>1–4 weeks</strong> if symptoms persist.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 7: Rule-In Zone Detail ─────────────────────────────── -->
+  <div class="slide" id="slide-7">
+    <div class="slide-label">Zone Detail — Rule-In</div>
+    <h2 style="color:var(--red);">Ratio &gt; 85 (&lt;34 weeks)</h2>
+    <div class="accent-line" style="background:var(--red);"></div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; max-width:860px; width:100%; margin-top:1.8rem;">
+      <div style="background:rgba(248,81,73,0.07); border:1px solid var(--red); border-radius:10px; padding:1.2rem;">
+        <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--red); margin-bottom:0.5rem;">Associated Risks</div>
+        <p style="font-size:0.85rem; line-height:1.6; color:var(--text);">
+          Placental abruption · IUGR · Pulmonary edema · Renal failure · DIC
+        </p>
+      </div>
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.2rem;">
+        <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:0.5rem;">Inpatient Monitoring</div>
+        <p style="font-size:0.85rem; line-height:1.6; color:var(--text);">
+          Serial labs · BP management · Uterine, umbilical &amp; cerebral Doppler ultrasound
+        </p>
+      </div>
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.2rem;">
+        <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:0.5rem;">Fetal Considerations</div>
+        <p style="font-size:0.85rem; line-height:1.6; color:var(--text);">
+          Antenatal corticosteroids if delivery anticipated &lt;34 weeks. Prepare for potential preterm delivery.
+        </p>
+      </div>
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.2rem;">
+        <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:0.5rem;">Predictive Performance</div>
+        <p style="font-size:0.85rem; line-height:1.6; color:var(--text);">
+          Positive LR 6.0–8.2 for severe features. AUC 0.92 vs. &lt;0.70 for conventional labs (PRECISE study).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 8: Clinical Integration ────────────────────────────── -->
+  <div class="slide" id="slide-8">
+    <div class="slide-label">Clinical Integration</div>
+    <h2>Ratio + Clinical Context</h2>
+    <div class="accent-line"></div>
+
+    <div class="integration-grid" style="margin-top:1.8rem;">
+      <div class="int-card">
+        <div class="icon">📊</div>
+        <div class="int-title">Blood Pressure Trends</div>
+        <div class="int-body">Serial BP measurements over time, not single readings</div>
+      </div>
+      <div class="int-card">
+        <div class="icon">🔬</div>
+        <div class="int-title">Laboratory Panel</div>
+        <div class="int-body">CBC, LFTs, creatinine, urine protein/creatinine ratio</div>
+      </div>
+      <div class="int-card">
+        <div class="icon">👶</div>
+        <div class="int-title">Fetal Status</div>
+        <div class="int-body">Biophysical profile, growth, Doppler indices</div>
+      </div>
+      <div class="int-card">
+        <div class="icon">📋</div>
+        <div class="int-title">Symptoms</div>
+        <div class="int-body">Headache, visual changes, RUQ pain, edema</div>
+      </div>
+      <div class="int-card">
+        <div class="icon">📅</div>
+        <div class="int-title">Gestational Age</div>
+        <div class="int-body">Guides delivery timing and corticosteroid decisions</div>
+      </div>
+      <div class="int-card" style="border-color:var(--yellow);">
+        <div class="icon">⚠️</div>
+        <div class="int-title" style="color:var(--yellow);">Key Caveat</div>
+        <div class="int-body">Abnormal ratio alone is <strong>not</strong> an indication for delivery</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 9: Repeat Testing ───────────────────────────────────── -->
+  <div class="slide" id="slide-9">
+    <div class="slide-label">Repeat Testing Strategy</div>
+    <h2>When to Retest</h2>
+    <div class="accent-line"></div>
+
+    <div class="flow-wrap" style="margin-top:1.6rem;">
+      <div class="flow-box trigger">Initial sFlt-1/PlGF Result</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-branches">
+        <div class="flow-branch">
+          <div class="flow-box green">≤ 38 (Normal)</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-box" style="font-size:0.8rem;">Retest in ≥2 weeks if symptoms return or worsen</div>
+          <div class="outcome">PARROT-2: Routine repeat testing confers no additional benefit beyond initial test</div>
+        </div>
+        <div class="flow-branch">
+          <div class="flow-box yellow">39–85 (Intermediate)</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-box" style="font-size:0.8rem;">Repeat in 1–2 weeks; monitor ratio trajectory</div>
+          <div class="outcome">Rising ratio (Δ &gt;30 at 2 wks) predicts progression to preeclampsia</div>
+        </div>
+        <div class="flow-branch">
+          <div class="flow-box red">&gt; 85 (Elevated)</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-box" style="font-size:0.8rem;">Repeat testing adds limited value; manage clinically</div>
+          <div class="outcome">Immediate clinical action is the priority</div>
+        </div>
+      </div>
+    </div>
+    <p class="note" style="margin-top:1rem;">Retest immediately if clinical situation changes, regardless of initial result.</p>
+  </div>
+
+  <!-- ─── SLIDE 10: Important Caveats ──────────────────────────────── -->
+  <div class="slide" id="slide-10">
+    <div class="slide-label">Clinical Caveats</div>
+    <h2>Important Considerations</h2>
+    <div class="accent-line"></div>
+
+    <ul class="caveat-list" style="margin-top:1.6rem;">
+      <li>
+        <span class="ci">⚠</span>
+        <span>An abnormal ratio alone is <strong>not</strong> an indication for delivery — integrate with BP trends, labs, and fetal status.</span>
+      </li>
+      <li>
+        <span class="ci">🧪</span>
+        <span><strong>Platform matters:</strong> Cutoffs above apply to the <strong>Roche Elecsys</strong> platform. QuidelOrtho PlGF-alone uses different thresholds (rule-out: PlGF &gt;100 pg/mL; rule-in: PlGF &lt;12 pg/mL).</span>
+      </li>
+      <li>
+        <span class="ci">📅</span>
+        <span>Best validated for <strong>preterm suspected preeclampsia</strong> (24–36<sup>+6</sup> wks). Evidence beyond 37 weeks is more limited.</span>
+      </li>
+      <li>
+        <span class="ci">📈</span>
+        <span>Even in <strong>confirmed preeclampsia</strong>, the ratio adds independent prognostic value for progression to severe features.</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ─── SLIDE 11: Summary ─────────────────────────────────────────── -->
+  <div class="slide" id="slide-11">
+    <div class="slide-label">Summary</div>
+    <h2>Protocol at a Glance</h2>
+    <div class="accent-line"></div>
+
+    <table class="decision-table" style="margin-top:1.6rem; max-width:780px;">
+      <thead>
+        <tr>
+          <th>Step</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Identify</strong></td>
+          <td>Suspected preeclampsia ≥20 wks; optimally 24<sup>+0</sup>–36<sup>+6</sup> wks</td>
+        </tr>
+        <tr>
+          <td><strong>2. Measure</strong></td>
+          <td>sFlt-1/PlGF ratio via Roche Elecsys immunoassay</td>
+        </tr>
+        <tr>
+          <td><strong>3. Interpret</strong></td>
+          <td>≤38 rule-out · 39–85 intermediate · &gt;85 rule-in (&lt;34 wks)</td>
+        </tr>
+        <tr>
+          <td><strong>4. Integrate</strong></td>
+          <td>Combine with BP, labs, symptoms, fetal status, gestational age</td>
+        </tr>
+        <tr>
+          <td><strong>5. Retest</strong></td>
+          <td>In 1–2 weeks if intermediate; immediately if clinical change</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="note" style="margin-top:1.2rem;">Sources: PROGNOSIS (NEJM 2016) · PARROT-2 (Lancet 2024) · PRECISE (AJOG 2026) · ISSHP 2021 · NICE Guidance</p>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- ─── Navigation ──────────────────────────────────────────────────── -->
+<div class="nav">
+  <button onclick="prevSlide()">&#8592;</button>
+  <span id="slide-counter">1 / 11</span>
+  <button onclick="nextSlide()">&#8594;</button>
+</div>
+
+<div class="brand">DoctorsWhoCode.blog &nbsp;|&nbsp; MFM Clinical Education</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('slide-counter');
+  const bar = document.getElementById('progress-bar');
+
+  function showSlide(n) {
+    slides.forEach((s, i) => s.classList.toggle('active', i === n));
+    counter.textContent = (n + 1) + ' / ' + slides.length;
+    bar.style.width = ((n + 1) / slides.length * 100) + '%';
+  }
+
+  function nextSlide() {
+    current = (current + 1) % slides.length;
+    showSlide(current);
+  }
+
+  function prevSlide() {
+    current = (current - 1 + slides.length) % slides.length;
+    showSlide(current);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  showSlide(current);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
