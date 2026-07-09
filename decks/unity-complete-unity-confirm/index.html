@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unity Complete & Unity Confirm — Clinical Overview</title>
+  <style>
+    /* ─── Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0d1117;
+      --surface:    #161b22;
+      --surface2:   #1f2937;
+      --border:     #30363d;
+      --accent:     #58a6ff;
+      --accent2:    #3fb950;
+      --warn:       #f78166;
+      --gold:       #e3b341;
+      --text:       #e6edf3;
+      --muted:      #8b949e;
+      --white:      #ffffff;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ─── Deck & Slides ─────────────────────────────────────── */
+    .deck {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.45s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ─── Navigation ────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      bottom: 1.6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav button {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.45rem 1.2rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .nav button:hover { background: var(--accent); color: var(--bg); }
+
+    .slide-counter {
+      font-size: 0.8rem;
+      color: var(--muted);
+      min-width: 60px;
+      text-align: center;
+    }
+
+    /* ─── Slide accent bar ──────────────────────────────────── */
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    /* ─── Typography ────────────────────────────────────────── */
+    h1 { font-size: 3.2rem; font-weight: 300; letter-spacing: -0.02em; color: var(--white); }
+    h2 { font-size: 2.2rem; font-weight: 400; color: var(--accent); margin-bottom: 1.2rem; }
+    h3 { font-size: 1.3rem; font-weight: 600; color: var(--accent2); margin-bottom: 0.5rem; }
+    p  { font-size: 1.1rem; line-height: 1.7; color: var(--text); max-width: 860px; }
+
+    .subtitle {
+      font-size: 1.4rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      font-weight: 300;
+    }
+
+    .eyebrow {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+    }
+
+    /* ─── Evidence badge ────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.2rem 0.7rem;
+      border-radius: 4px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+    .badge-acog  { background: #1a3a5c; color: var(--accent); border: 1px solid var(--accent); }
+    .badge-smfm  { background: #1a3a2c; color: var(--accent2); border: 1px solid var(--accent2); }
+    .badge-ltd   { background: #3a2a1a; color: var(--gold); border: 1px solid var(--gold); }
+    .badge-ldt   { background: #2a1a1a; color: var(--warn); border: 1px solid var(--warn); }
+
+    /* ─── Two-column layout ─────────────────────────────────── */
+    .cols {
+      display: grid;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1100px;
+    }
+    .cols-2 { grid-template-columns: 1fr 1fr; }
+    .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    /* ─── Cards ─────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+    }
+
+    .card-pro  { border-left: 4px solid var(--accent2); }
+    .card-con  { border-left: 4px solid var(--warn); }
+    .card-alt  { border-left: 4px solid var(--gold); }
+    .card-info { border-left: 4px solid var(--accent); }
+
+    .card p { font-size: 0.95rem; margin-top: 0.4rem; color: var(--muted); }
+
+    /* ─── Icon circles ──────────────────────────────────────── */
+    .icon-row {
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      max-width: 160px;
+      text-align: center;
+    }
+
+    .icon-circle {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+    }
+
+    .icon-item span { font-size: 0.85rem; color: var(--muted); line-height: 1.4; }
+
+    /* ─── Timeline ──────────────────────────────────────────── */
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      width: 100%;
+      max-width: 1000px;
+      margin-top: 1rem;
+    }
+
+    .tl-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .tl-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+    }
+
+    .tl-dot {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      z-index: 1;
+      position: relative;
+    }
+
+    .tl-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.5rem;
+      padding: 0 0.3rem;
+      line-height: 1.4;
+    }
+
+    .tl-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+      margin-top: 0.2rem;
+    }
+
+    /* ─── Table ─────────────────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      max-width: 1000px;
+    }
+
+    thead th {
+      background: var(--surface2);
+      color: var(--accent);
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 2px solid var(--border);
+    }
+
+    tbody td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--surface); }
+
+    .check  { color: var(--accent2); font-weight: 700; }
+    .cross  { color: var(--warn);    font-weight: 700; }
+    .caution{ color: var(--gold);    font-weight: 700; }
+
+    /* ─── Stat callout ──────────────────────────────────────── */
+    .stat-row {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.8rem;
+      text-align: center;
+      min-width: 160px;
+    }
+
+    .stat-num {
+      font-size: 2.6rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+      line-height: 1.4;
+    }
+
+    /* ─── Disclaimer bar ────────────────────────────────────── */
+    .disclaimer {
+      position: fixed;
+      bottom: 4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.68rem;
+      color: var(--muted);
+      max-width: 900px;
+      text-align: center;
+      line-height: 1.5;
+      padding: 0 2rem;
+    }
+
+    /* ─── Slide-specific overrides ──────────────────────────── */
+    #slide-1 { background: radial-gradient(ellipse at 60% 40%, #0f2a4a 0%, var(--bg) 70%); }
+    #slide-1 h1 { font-size: 3.4rem; }
+
+    /* ─── Responsive ────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .cols-2, .cols-3 { grid-template-columns: 1fr; }
+      .slide { padding: 2rem; }
+      h1 { font-size: 2.2rem; }
+      h2 { font-size: 1.6rem; }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/unity-complete-unity-confirm/index.html">
+<meta name="description" content="Clinical overview of Unity Complete (aneuploidy NIPT plus single-gene NIPT for up to 14 recessive/X-linked conditions) and Unity Confirm (a non-invasive circulating fetal cell assay confirming high-risk cfDNA results), covering QCT technology, indications and exclusions, preliminary concordance data, and comparison to CVS and amniocentesis.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="NIPT, Circulating Fetal Cells, Aneuploidy Screening, Carrier Screening, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/unity-complete-unity-confirm/index.html">
+<meta property="og:title" content="Unity Complete &amp; Unity Confirm - Provider Education | OpenMFM">
+<meta property="og:description" content="Clinical overview of Unity Complete (aneuploidy NIPT plus single-gene NIPT for up to 14 recessive/X-linked conditions) and Unity Confirm (a non-invasive circulating fetal cell assay confirming high-risk cfDNA results), covering QCT technology, indications and exclusions, preliminary concordance data, and comparison to CVS and amniocentesis.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Unity Complete &amp; Unity Confirm - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Clinical overview of Unity Complete (aneuploidy NIPT plus single-gene NIPT for up to 14 recessive/X-linked conditions) and Unity Confirm (a non-invasive circulating fetal cell assay confirming high-risk cfDNA results), covering QCT technology, indications and exclusions, preliminary concordance data, and comparison to CVS and amniocentesis.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Unity Complete & Unity Confirm - Provider Education",
+  "description": "Clinical overview of Unity Complete (aneuploidy NIPT plus single-gene NIPT for up to 14 recessive/X-linked conditions) and Unity Confirm (a non-invasive circulating fetal cell assay confirming high-risk cfDNA results), covering QCT technology, indications and exclusions, preliminary concordance data, and comparison to CVS and amniocentesis.",
+  "url": "https://openmfm.org/decks/unity-complete-unity-confirm/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-07-09",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Unity Complete & Unity Confirm - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "NIPT, Circulating Fetal Cells, Aneuploidy Screening, Carrier Screening, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 1 — Title
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="eyebrow">BillionToOne · Clinical Overview · 2026</div>
+    <h1>Unity Complete™ &amp; Unity Confirm™</h1>
+    <div class="subtitle">Non-Invasive Prenatal Screening &amp; Confirmatory Fetal Cell Testing</div>
+    <div style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;">
+      <span class="badge badge-acog">ACOG Aligned</span>
+      <span class="badge badge-smfm">SMFM Relevant</span>
+      <span class="badge badge-ldt">LDT — Not FDA Cleared</span>
+    </div>
+    <p style="margin-top:2.5rem; font-size:0.95rem; color:var(--muted); max-width:600px; text-align:center;">
+      A physician-facing clinical review of indications, technology, advantages, limitations, and alternatives.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 2 — The Clinical Problem
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="eyebrow">Clinical Context</div>
+    <h2>The Post-NIPT Diagnostic Gap</h2>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">~75%</div>
+        <div class="stat-label">Patients with high-risk cfDNA<br>do not pursue invasive testing</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">10–14w</div>
+        <div class="stat-label">CVS window — limited<br>provider availability</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">&gt;16w</div>
+        <div class="stat-label">Amniocentesis — delays<br>diagnosis by weeks</div>
+      </div>
+    </div>
+    <p style="margin-top:1.8rem; text-align:center; max-width:780px;">
+      Geographic disparities, procedural risk aversion, and access barriers leave many patients without diagnostic confirmation following a high-risk NIPT result.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 3 — Unity Complete Overview
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="eyebrow">Test Overview</div>
+    <h2>Unity Complete™ — What It Screens</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-info">
+        <h3>Unity Aneuploidy™ Screen</h3>
+        <p>T21 · T18 · T13 · Monosomy X · XXX · XXY · XYY<br>Optional: 22q11.2 microdeletion · Fetal sex</p>
+        <p style="margin-top:0.6rem;">Zygosity for twin pregnancies included.</p>
+      </div>
+      <div class="card card-info">
+        <h3>Unity Fetal Risk™ Screen (sgNIPT)</h3>
+        <p>Up to 14 recessive &amp; X-linked conditions including CF, SMA, sickle cell, α/β-thalassemia, Tay-Sachs, PKU, DMD, Fragile X (optional).</p>
+        <p style="margin-top:0.6rem;">Reflex fetal risk assessment if maternal carrier is positive — <strong>no paternal sample required.</strong></p>
+      </div>
+    </div>
+    <p style="margin-top:1.4rem; text-align:center; font-size:0.95rem; color:var(--muted);">
+      Single maternal blood draw · Available from 9–10 weeks gestation · Results: aneuploidies ~1 week · recessive conditions ~2 weeks
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 4 — QCT Technology
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="eyebrow">Proprietary Technology</div>
+    <h2>QCT™ — Quantitative Counting Templates</h2>
+    <div class="cols cols-3" style="max-width:960px;">
+      <div class="card card-info">
+        <div class="icon-circle" style="background:#1a2a3a; margin-bottom:0.6rem;">🧬</div>
+        <h3>Single-Base Precision</h3>
+        <p>Counts fetal DNA molecules down to a single base pair from cfDNA.</p>
+      </div>
+      <div class="card card-info">
+        <div class="icon-circle" style="background:#1a2a3a; margin-bottom:0.6rem;">📊</div>
+        <h3>Fetal Genotype</h3>
+        <p>Determines fetal genotype in maternal blood — not just parental carrier risk.</p>
+      </div>
+      <div class="card card-info">
+        <div class="icon-circle" style="background:#1a2a3a; margin-bottom:0.6rem;">🎯</div>
+        <h3>~3× Detection</h3>
+        <p>~3× increase in detection of affected pregnancies vs. traditional carrier screening.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.4rem; text-align:center; font-size:0.92rem; color:var(--muted);">
+      Proprietary to BillionToOne · Enables single-gene NIPT (sgNIPT) — previously not technically feasible from cfDNA alone.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 5 — Unity Confirm Technology
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="eyebrow">Unity Confirm™ · Fetal Cell Capture Technology</div>
+    <h2>Circulating Fetal Cell (CFC) Assay</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">🩸</div>
+        <div class="tl-title">Maternal Blood</div>
+        <div class="tl-label">Collected 10–15w6d gestation<br>Streck cfDNA tube</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🔬</div>
+        <div class="tl-title">EVT Isolation</div>
+        <div class="tl-label">Extravillous trophoblasts captured via immunofluorescence microscopy</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🧬</div>
+        <div class="tl-title">SNV Verification</div>
+        <div class="tl-label">Fetal origin confirmed by paternal SNP enrichment analysis</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🖥️</div>
+        <div class="tl-title">Single-Cell WGS</div>
+        <div class="tl-label">Whole-genome sequencing per cell (≥5M reads/cell)</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">📋</div>
+        <div class="tl-title">CNV Report</div>
+        <div class="tl-label">Genome-wide copy-number result — concordant or discordant</div>
+      </div>
+    </div>
+    <p style="margin-top:1.6rem; text-align:center; font-size:0.9rem; color:var(--muted);">
+      Effectively 100% fetal fraction for captured cells · Avg. 2.9 fetal cells captured per case · Mean GA at collection: 15w
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 6 — Unity Confirm Clinical Data
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="eyebrow">Clinical Evidence <span class="badge badge-ltd">Preliminary Data · n=16</span></div>
+    <h2>Unity Confirm™ — Initial Clinical Performance</h2>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">16/16</div>
+        <div class="stat-label">CFC results concordant<br>with cytogenetic or clinical diagnosis</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Concordance rate<br>(preliminary, n=16)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">2.9</div>
+        <div class="stat-label">Mean fetal cells<br>captured per case</div>
+      </div>
+    </div>
+    <p style="margin-top:1.6rem; text-align:center; max-width:780px; font-size:0.92rem;">
+      9 of 16 cases concordant with CVS/amniocentesis. Remaining cases confirmed via postnatal examination or ultrasound findings.
+      <strong style="color:var(--warn);">Evidence is preliminary; large prospective validation studies are pending.</strong>
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 7 — Pros (Advantages)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="eyebrow">Clinical Assessment</div>
+    <h2>Advantages of Unity Complete / Confirm</h2>
+    <div class="cols cols-2" style="max-width:1060px;">
+      <div class="card card-pro">
+        <h3>✓ Non-Invasive — Zero Procedural Risk</h3>
+        <p>No risk of procedure-related pregnancy loss (CVS: ~0.5–1%; amniocentesis: ~0.1–0.3%).</p>
+      </div>
+      <div class="card card-pro">
+        <h3>✓ Comprehensive Single-Draw Panel</h3>
+        <p>Aneuploidies + up to 14 recessive conditions from one maternal blood draw. No paternal sample required.</p>
+      </div>
+      <div class="card card-pro">
+        <h3>✓ Bridges the Access Gap</h3>
+        <p>Addresses geographic and logistical barriers to CVS; provides early confirmatory data for patients who decline invasive testing.</p>
+      </div>
+      <div class="card card-pro">
+        <h3>✓ Direct Fetal Risk Assessment</h3>
+        <p>sgNIPT provides individualized fetal risk — not just parental carrier probability. Risk can be stratified to 1:5,000 or 9:10.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 8 — Cons (Limitations)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="eyebrow">Clinical Assessment</div>
+    <h2>Limitations &amp; Cautions</h2>
+    <div class="cols cols-2" style="max-width:1060px;">
+      <div class="card card-con">
+        <h3>✗ Not a Diagnostic Test</h3>
+        <p>Unity Confirm is a screening/confirmatory adjunct — not a replacement for CVS or amniocentesis. Irreversible decisions must not be based on this result alone.</p>
+      </div>
+      <div class="card card-con">
+        <h3>✗ Cannot Exclude Mosaicism</h3>
+        <p>Single-cell analysis may miss mosaic aneuploidy. This limitation is shared with rapid CVS (FISH), but not with cultured karyotype.</p>
+      </div>
+      <div class="card card-con">
+        <h3>✗ Narrow Gestational Window</h3>
+        <p>Unity Confirm available only through 15w6d. Fetal cell yield decreases with advancing gestational age.</p>
+      </div>
+      <div class="card card-con">
+        <h3>✗ Exclusions &amp; No-Result Risk</h3>
+        <p>Not available for: monosomy X, twins, vanishing twin, egg donor, gestational surrogacy. Insufficient fetal cell recovery possible.</p>
+      </div>
+      <div class="card card-con">
+        <h3>✗ LDT — Not FDA Cleared</h3>
+        <p>Laboratory-developed test (CLIA-certified, CAP-accredited). Regulatory status differs from FDA-approved diagnostics.</p>
+      </div>
+      <div class="card card-con">
+        <h3>✗ Limited Prospective Data</h3>
+        <p>Preliminary concordance data (n=16). Large, independent validation studies are not yet published.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 9 — Alternatives Comparison
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-9">
+    <div class="eyebrow">Clinical Alternatives</div>
+    <h2>Comparative Landscape</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Test / Procedure</th>
+          <th>Type</th>
+          <th>GA Window</th>
+          <th>Diagnostic?</th>
+          <th>Mosaicism</th>
+          <th>Procedural Risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Unity Aneuploidy NIPT</strong></td>
+          <td>Screening (cfDNA)</td>
+          <td>≥9w</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">Limited</span></td>
+          <td><span class="check">None</span></td>
+        </tr>
+        <tr>
+          <td><strong>Unity Confirm™ (CFC)</strong></td>
+          <td>Confirmatory (fetal cell)</td>
+          <td>10–15w6d</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="caution">Cannot exclude</span></td>
+          <td><span class="check">None</span></td>
+        </tr>
+        <tr>
+          <td><strong>Chorionic Villus Sampling</strong></td>
+          <td>Diagnostic</td>
+          <td>10–14w</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="caution">Rapid CVS limited</span></td>
+          <td><span class="warn">~0.5–1%</span></td>
+        </tr>
+        <tr>
+          <td><strong>Amniocentesis</strong></td>
+          <td>Diagnostic (gold standard)</td>
+          <td>≥15–16w</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">Cultured cells</span></td>
+          <td><span class="caution">~0.1–0.3%</span></td>
+        </tr>
+        <tr>
+          <td><strong>Expectant Management</strong></td>
+          <td>Observation / Ultrasound</td>
+          <td>Any</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">None</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:1rem; font-size:0.82rem; color:var(--muted); text-align:center;">
+      Amniocentesis remains the gold standard for diagnostic confirmation of aneuploidy.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 10 — Clinical Indications & Exclusions
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-10">
+    <div class="eyebrow">Clinical Decision Support</div>
+    <h2>Unity Confirm™ — Indications &amp; Exclusions</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-pro">
+        <h3>Appropriate Candidates</h3>
+        <p>High-risk Unity Aneuploidy Screen result (T21, T18, T13, SCAs, 22q11.2)</p>
+        <p>Singleton gestation ≤15w6d</p>
+        <p>Patient declines or lacks access to CVS</p>
+        <p>Seeking additional data prior to amniocentesis decision</p>
+      </div>
+      <div class="card card-con">
+        <h3>Exclusions / Not Available</h3>
+        <p>High-risk monosomy X result</p>
+        <p>Twin or higher-order multiple gestations</p>
+        <p>Vanishing twin pregnancies</p>
+        <p>Gestational carriers or egg donor pregnancies</p>
+        <p>Gestational age &gt;15w6d</p>
+      </div>
+    </div>
+    <p style="margin-top:1.2rem; text-align:center; font-size:0.88rem; color:var(--muted);">
+      Unity Confirm is available <strong>exclusively</strong> following a high-risk Unity Aneuploidy Screen result. Not available as a standalone test.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 11 — Counseling Framework
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-11">
+    <div class="eyebrow">Patient Counseling</div>
+    <h2>Counseling Framework After High-Risk NIPT</h2>
+    <div class="cols cols-3" style="max-width:1000px;">
+      <div class="card card-alt">
+        <h3>🔬 Pursue Diagnostic Testing</h3>
+        <p>CVS (10–14w) or amniocentesis (≥15w). Definitive cytogenetic diagnosis. Discuss procedural risk and access.</p>
+      </div>
+      <div class="card card-alt">
+        <h3>🧬 Unity Confirm (CFC)</h3>
+        <p>Non-invasive adjunct. Provides additional genomic data. Does not replace diagnostic testing. Appropriate for informed patients who decline invasive procedures.</p>
+      </div>
+      <div class="card card-alt">
+        <h3>📡 Expectant Management</h3>
+        <p>Detailed anatomy ultrasound (18–20w). Serial growth surveillance. Neonatal evaluation. Appropriate when patient declines all testing.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.2rem; text-align:center; font-size:0.88rem; color:var(--muted);">
+      Genetic counseling is recommended for all patients with high-risk results. BillionToOne offers complimentary telephone genetic consultation.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 12 — Key Takeaways
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-12">
+    <div class="eyebrow">Summary</div>
+    <h2>Key Clinical Takeaways</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-info">
+        <h3>Unity Complete™</h3>
+        <p>First-of-kind test combining aneuploidy NIPT + sgNIPT for recessive conditions from a single draw. Direct fetal risk — no paternal sample needed. ACOG-aligned conditions.</p>
+      </div>
+      <div class="card card-info">
+        <h3>Unity Confirm™</h3>
+        <p>Novel CFC assay providing CVS-like genomic insights non-invasively. Bridges the diagnostic gap for patients declining invasive testing. Preliminary data promising; larger studies needed.</p>
+      </div>
+      <div class="card card-con">
+        <h3>Critical Caveat</h3>
+        <p>Neither test is diagnostic. Amniocentesis remains the gold standard. Mosaicism cannot be excluded. LDT status — not FDA cleared. Clinical correlation is mandatory.</p>
+      </div>
+      <div class="card card-pro">
+        <h3>Clinical Opportunity</h3>
+        <p>Addresses a real unmet need in prenatal care. Expands access for underserved populations. Empowers shared decision-making between patients and providers.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 13 — References
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-13">
+    <div class="eyebrow">References &amp; Disclosures</div>
+    <h2>Sources</h2>
+    <div class="card card-info" style="max-width:900px; width:100%;">
+      <table style="font-size:0.82rem;">
+        <tbody>
+          <tr>
+            <td style="width:30px; color:var(--muted);">1.</td>
+            <td>Son H, et al. <em>Initial clinical outcomes of a circulating fetal cell assay to confirm high-risk aneuploidy cfDNA screening results.</em> BillionToOne White Paper, 2026.</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);">2.</td>
+            <td>Wynn J, et al. Performance of single-gene NIPT for autosomal recessive conditions. <em>Prenat Diagn.</em> 2023;43(10):1344–1354.</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);">3.</td>
+            <td>ACOG Committee Opinion No. 691. Carrier screening for genetic conditions. <em>Obstet Gynecol.</em> 2017;129:e41–55.</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);">4.</td>
+            <td>ACOG Practice Bulletin No. 163. Screening for fetal aneuploidy. <em>Obstet Gynecol.</em> 2016;127(5):e123–e137.</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);">5.</td>
+            <td>BillionToOne Unity Confirm™ Brochure &amp; Sample Report. <em>unityscreen.com</em>, 2026.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:1rem; font-size:0.78rem; color:var(--warn); text-align:center; max-width:860px;">
+      Unity Confirm is a laboratory-developed test (LDT) performed in a CLIA-certified, CAP-accredited laboratory. It has not been cleared or approved by the FDA. Results should not be used as the sole basis for irreversible clinical decisions. Clinical correlation is mandatory.
+    </p>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- ─── Navigation ──────────────────────────────────────── -->
+<div class="nav">
+  <button onclick="prevSlide()">← Prev</button>
+  <span class="slide-counter" id="counter">1 / 13</span>
+  <button onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const total = slides.length;
+
+  function showSlide(n) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === n);
+    });
+    counter.textContent = (n + 1) + ' / ' + total;
+  }
+
+  function nextSlide() {
+    current = (current + 1) % total;
+    showSlide(current);
+  }
+
+  function prevSlide() {
+    current = (current - 1 + total) % total;
+    showSlide(current);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
