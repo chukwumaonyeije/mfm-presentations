@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prenatal Atypical Genitalia — Ultrasound Recognition &amp; Diagnostic Work-Up</title>
+  <style>
+    /* ─── Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0d1117;
+      --surface:    #161b22;
+      --surface2:   #1f2937;
+      --border:     #30363d;
+      --accent:     #58a6ff;
+      --accent2:    #3fb950;
+      --warn:       #f78166;
+      --gold:       #e3b341;
+      --text:       #e6edf3;
+      --muted:      #8b949e;
+      --white:      #ffffff;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ─── Deck & Slides ─────────────────────────────────────── */
+    .deck {
+      width: 100%; height: 100%;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.45s ease;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ─── Navigation ────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      bottom: 1.6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav button {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.45rem 1.2rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .nav button:hover { background: var(--accent); color: var(--bg); }
+
+    .slide-counter {
+      font-size: 0.8rem;
+      color: var(--muted);
+      min-width: 60px;
+      text-align: center;
+    }
+
+    /* ─── Slide accent bar ──────────────────────────────────── */
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    /* ─── Typography ────────────────────────────────────────── */
+    h1 { font-size: 3.2rem; font-weight: 300; letter-spacing: -0.02em; color: var(--white); text-align: center; }
+    h2 { font-size: 2.2rem; font-weight: 400; color: var(--accent); margin-bottom: 1.2rem; text-align: center; }
+    h3 { font-size: 1.3rem; font-weight: 600; color: var(--accent2); margin-bottom: 0.5rem; }
+    p  { font-size: 1.1rem; line-height: 1.7; color: var(--text); max-width: 860px; }
+
+    .subtitle {
+      font-size: 1.4rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      font-weight: 300;
+      text-align: center;
+    }
+
+    .eyebrow {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+      text-align: center;
+    }
+
+    /* ─── Evidence badge ────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.2rem 0.7rem;
+      border-radius: 4px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+    .badge-acog  { background: #1a3a5c; color: var(--accent); border: 1px solid var(--accent); }
+    .badge-smfm  { background: #1a3a2c; color: var(--accent2); border: 1px solid var(--accent2); }
+    .badge-ltd   { background: #3a2a1a; color: var(--gold); border: 1px solid var(--gold); }
+    .badge-ldt   { background: #2a1a1a; color: var(--warn); border: 1px solid var(--warn); }
+
+    /* ─── Two-column layout ─────────────────────────────────── */
+    .cols {
+      display: grid;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1100px;
+    }
+    .cols-2 { grid-template-columns: 1fr 1fr; }
+    .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    /* ─── Cards ─────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+    }
+
+    .card-pro  { border-left: 4px solid var(--accent2); }
+    .card-con  { border-left: 4px solid var(--warn); }
+    .card-alt  { border-left: 4px solid var(--gold); }
+    .card-info { border-left: 4px solid var(--accent); }
+
+    .card p { font-size: 0.95rem; margin-top: 0.4rem; color: var(--muted); max-width: none; }
+
+    /* ─── Icon circles ──────────────────────────────────────── */
+    .icon-row {
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      max-width: 180px;
+      text-align: center;
+    }
+
+    .icon-circle {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      background: #1a2a3a;
+    }
+
+    .icon-item span { font-size: 0.85rem; color: var(--muted); line-height: 1.4; }
+    .icon-item h3 { font-size: 1rem; }
+
+    /* ─── Timeline ──────────────────────────────────────────── */
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      width: 100%;
+      max-width: 1050px;
+      margin-top: 1rem;
+    }
+
+    .tl-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .tl-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+    }
+
+    .tl-dot {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      z-index: 1;
+      position: relative;
+    }
+
+    .tl-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.5rem;
+      padding: 0 0.3rem;
+      line-height: 1.4;
+    }
+
+    .tl-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+      margin-top: 0.2rem;
+    }
+
+    /* ─── Table ─────────────────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      max-width: 1000px;
+    }
+
+    thead th {
+      background: var(--surface2);
+      color: var(--accent);
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 2px solid var(--border);
+    }
+
+    tbody td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--surface); }
+
+    .check  { color: var(--accent2); font-weight: 700; }
+    .cross  { color: var(--warn);    font-weight: 700; }
+    .caution{ color: var(--gold);    font-weight: 700; }
+
+    /* ─── Stat callout ──────────────────────────────────────── */
+    .stat-row {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.8rem;
+      text-align: center;
+      min-width: 180px;
+    }
+
+    .stat-num {
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+      line-height: 1.4;
+    }
+
+    /* ─── Slide-specific overrides ──────────────────────────── */
+    #slide-1 { background: radial-gradient(ellipse at 60% 40%, #0f2a4a 0%, var(--bg) 70%); }
+    #slide-1 h1 { font-size: 3.2rem; }
+
+    /* ─── Responsive ────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .cols-2, .cols-3 { grid-template-columns: 1fr; }
+      .slide { padding: 2rem; }
+      h1 { font-size: 2.2rem; }
+      h2 { font-size: 1.6rem; }
+      .timeline { flex-direction: column; gap: 1.4rem; }
+      .tl-item:not(:last-child)::after { display: none; }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/prenatal-atypical-genitalia/index.html">
+<meta name="description" content="Structured approach to prenatal atypical genitalia and disorders of sex development, covering sonographic recognition, distinguishing screening from diagnostic testing, resolving cfDNA-ultrasound discordance, the cytogenetic/molecular testing ladder, multidisciplinary planning, and delivery and postnatal confirmation.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Disorders of Sex Development, Fetal Genitourinary Anomalies, cfDNA Screening, Prenatal Ultrasound, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/prenatal-atypical-genitalia/index.html">
+<meta property="og:title" content="Prenatal Atypical Genitalia - Provider Education | OpenMFM">
+<meta property="og:description" content="Structured approach to prenatal atypical genitalia and disorders of sex development, covering sonographic recognition, distinguishing screening from diagnostic testing, resolving cfDNA-ultrasound discordance, the cytogenetic/molecular testing ladder, multidisciplinary planning, and delivery and postnatal confirmation.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prenatal Atypical Genitalia - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Structured approach to prenatal atypical genitalia and disorders of sex development, covering sonographic recognition, distinguishing screening from diagnostic testing, resolving cfDNA-ultrasound discordance, the cytogenetic/molecular testing ladder, multidisciplinary planning, and delivery and postnatal confirmation.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Prenatal Atypical Genitalia - Provider Education",
+  "description": "Structured approach to prenatal atypical genitalia and disorders of sex development, covering sonographic recognition, distinguishing screening from diagnostic testing, resolving cfDNA-ultrasound discordance, the cytogenetic/molecular testing ladder, multidisciplinary planning, and delivery and postnatal confirmation.",
+  "url": "https://openmfm.org/decks/prenatal-atypical-genitalia/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-07-10",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Prenatal Atypical Genitalia - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Disorders of Sex Development, Fetal Genitourinary Anomalies, cfDNA Screening, Prenatal Ultrasound, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 1 — Title
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="eyebrow">Maternal-Fetal Medicine · Provider Education</div>
+    <h1>Prenatal Atypical Genitalia</h1>
+    <div class="subtitle">Ultrasound Recognition, Diagnostic Work-Up &amp; Perinatal Planning</div>
+    <div style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;">
+      <span class="badge badge-acog">ACOG Aligned</span>
+      <span class="badge badge-smfm">DSD Consensus Aligned</span>
+    </div>
+    <p style="margin-top:2.5rem; font-size:0.95rem; color:var(--muted); max-width:640px; text-align:center;">
+      Chukwuma Onyeije, MD · Maternal-Fetal Medicine — a structured approach to recognizing, confirming, and counseling atypical fetal genital findings.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 2 — Terminology
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="eyebrow">Terminology</div>
+    <h2>Name the Finding, Not the Child</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-info">
+        <h3>Atypical Genitalia</h3>
+        <p>Describes <strong>phenotype</strong> — what is directly observed on ultrasound or physical exam.</p>
+      </div>
+      <div class="card card-info">
+        <h3>Disorder of Sex Development (DSD)</h3>
+        <p>Describes atypical <strong>chromosomal, gonadal, or anatomical</strong> sex development — a broader diagnostic category that may or may not be present.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.6rem; text-align:center; font-size:0.95rem; color:var(--muted); max-width:760px;">
+      Precise, descriptive language keeps the differential open and protects the family from premature labeling.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 3 — Epidemiology
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="eyebrow">Clinical Significance</div>
+    <h2>Rare Finding, High Diagnostic Consequence</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-info">
+        <h3>Uncommon in Routine Screening</h3>
+        <p>Prenatal suspicion of atypical genitalia is uncommon in the general obstetric population.</p>
+      </div>
+      <div class="card card-con">
+        <h3>Frequent in Referral Cohorts</h3>
+        <p>Associated structural and genetic anomalies are frequent once a case reaches an MFM referral center.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.6rem; text-align:center; font-size:0.95rem; color:var(--muted); max-width:760px;">
+      Treat a suspected genital anomaly as a sentinel finding warranting full anatomic survey — not an isolated curiosity.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 4 — What ultrasound can and cannot tell you
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="eyebrow">Sonographic Principles</div>
+    <h2>Ultrasound Sees Anatomy — Not Chromosomal Sex</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-info">
+        <h3>Anatomy, Not Karyotype</h3>
+        <p>Ultrasound evaluates external phenotype and selected internal anatomy. It cannot, by itself, determine chromosomal or gonadal sex.</p>
+      </div>
+      <div class="card card-info">
+        <h3>Timing Shapes Confidence</h3>
+        <p>External genital differentiation begins near 8–9 weeks and is largely complete by 16 weeks. Diagnostic confidence rises with advancing gestational age.</p>
+      </div>
+    </div>
+    <div class="timeline" style="max-width:700px;">
+      <div class="tl-item">
+        <div class="tl-dot">🌱</div>
+        <div class="tl-title">8–9 weeks</div>
+        <div class="tl-label">External differentiation begins</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">📐</div>
+        <div class="tl-title">16 weeks</div>
+        <div class="tl-label">External phenotype largely complete</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🔍</div>
+        <div class="tl-title">18–22 weeks</div>
+        <div class="tl-label">Detailed anatomic survey — highest confidence</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 5 — Clinical triggers
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="eyebrow">Clinical Triggers</div>
+    <h2>What Prompts a Genital-Anomaly Work-Up</h2>
+    <div class="cols cols-2" style="max-width:900px;">
+      <div class="card card-alt">
+        <h3>👁️ Atypical External Morphology</h3>
+        <p>An operator directly observes external genital anatomy that does not fit a clear male or female pattern.</p>
+      </div>
+      <div class="card card-alt">
+        <h3>🧬 cfDNA–Ultrasound Discordance</h3>
+        <p>The sex predicted by cell-free DNA screening does not match the sex suggested by ultrasound.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.6rem; text-align:center; font-size:0.95rem; color:var(--muted); max-width:760px;">
+      Either pathway alone is sufficient to trigger confirmatory imaging and a structured evaluation.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 6 — Confirm before labeling
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="eyebrow">First Step</div>
+    <h2>Confirm Before Labeling</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-pro">
+        <h3>Repeat Targeted Imaging</h3>
+        <p>Re-image with an expert operator before communicating any impression to the family.</p>
+      </div>
+      <div class="card card-pro">
+        <h3>Optimize Image Quality</h3>
+        <p>Adjust fetal position, magnification, orthogonal imaging planes, and obtain cine clips before drawing conclusions.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 7 — Describe morphology systematically
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="eyebrow">Descriptive Framework</div>
+    <h2>Describe Morphology Systematically</h2>
+    <div class="cols cols-2" style="max-width:900px;">
+      <div class="card card-info">
+        <h3>Phallic Structure</h3>
+        <p>Size · contour · curvature</p>
+      </div>
+      <div class="card card-info">
+        <h3>Labioscrotal Region</h3>
+        <p>Labioscrotal fold fusion · urethral position</p>
+      </div>
+    </div>
+    <p style="margin-top:1.6rem; text-align:center; font-size:0.95rem; color:var(--muted); max-width:760px;">
+      A systematic, structured description travels better between sonographer, MFM, and the postnatal team than an impression of "male" or "female."
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 8 — Signs are clues, not diagnoses
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="eyebrow">Interpreting Findings</div>
+    <h2>Sonographic Signs Are Clues — Not Diagnoses</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-alt">
+        <h3>Blunt, Incurved Phallus</h3>
+        <p>A clue suggestive of hypospadias — not a definitive diagnosis on its own.</p>
+      </div>
+      <div class="card card-alt">
+        <h3>Bifid Labioscrotal Folds</h3>
+        <p>A clue suggestive of severe undervirilization — warrants further evaluation, not a label.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 9 — Search beyond the perineum
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-9">
+    <div class="eyebrow">Anatomic Survey</div>
+    <h2>Search Beyond the Perineum</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-con">
+        <h3>Genitourinary &amp; Abdominal</h3>
+        <p>Renal/urinary tract anomalies · OEIS complex · cloacal malformations</p>
+      </div>
+      <div class="card card-con">
+        <h3>Other Systems</h3>
+        <p>Cardiac · CNS · abdominal wall · spine</p>
+      </div>
+    </div>
+    <p style="margin-top:1.6rem; text-align:center; font-size:0.95rem; color:var(--muted); max-width:760px;">
+      Atypical genitalia is often one finding within a broader multisystem phenotype — a complete anatomic survey is essential.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 10 — Classify the diagnostic problem
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-10">
+    <div class="eyebrow">Framing the Case</div>
+    <h2>Classify the Diagnostic Problem</h2>
+    <div class="cols cols-3" style="max-width:1050px;">
+      <div class="card card-info">
+        <h3>Isolated Morphology</h3>
+        <p>Genital finding alone, no other structural anomaly identified.</p>
+      </div>
+      <div class="card card-info">
+        <h3>Multisystem Phenotype</h3>
+        <p>Genital finding accompanied by anomalies in other organ systems.</p>
+      </div>
+      <div class="card card-info">
+        <h3>Genotype–Phenotype Discordance</h3>
+        <p>Sex predicted by genetic screening conflicts with sonographic phenotype.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 11 — Differential begins with chromosomes
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-11">
+    <div class="eyebrow">Differential Diagnosis</div>
+    <h2>The Differential Begins With Chromosomes</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-info">
+        <h3>46,XX</h3>
+        <p>Androgen excess (e.g., congenital adrenal hyperplasia) · SRY-related testicular development</p>
+      </div>
+      <div class="card card-info">
+        <h3>46,XY</h3>
+        <p>Disorders of gonadal development, androgen synthesis, androgen action, or anatomic malformation</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 12 — Interrogate the history
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-12">
+    <div class="eyebrow">History Taking</div>
+    <h2>Interrogate the History</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-alt">
+        <h3>Pregnancy-Specific</h3>
+        <p>Prior sex-screening results · vanishing (co-)twin</p>
+      </div>
+      <div class="card card-alt">
+        <h3>Maternal-Specific</h3>
+        <p>History of transplant or transfusion · maternal disease</p>
+      </div>
+    </div>
+    <p style="margin-top:1.6rem; text-align:center; font-size:0.95rem; color:var(--muted); max-width:760px;">
+      Each of these can independently explain a discordant or unexpected sex result.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 13 — Discordance has multiple sources
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-13">
+    <div class="eyebrow">Discordant Results</div>
+    <h2>Discordance Has Multiple Sources</h2>
+    <div class="icon-row">
+      <div class="icon-item">
+        <div class="icon-circle">👶</div>
+        <h3>Fetal DSD</h3>
+        <span>True fetal disorder of sex development</span>
+      </div>
+      <div class="icon-item">
+        <div class="icon-circle">🧫</div>
+        <h3>Confined Placental Mosaicism</h3>
+        <span>Placental cell line differs from the fetus</span>
+      </div>
+      <div class="icon-item">
+        <div class="icon-circle">👥</div>
+        <h3>Vanishing Male Twin</h3>
+        <span>Residual DNA from a demised co-twin</span>
+      </div>
+      <div class="icon-item">
+        <div class="icon-circle">🩸</div>
+        <h3>Maternal Variation / Transplant</h3>
+        <span>Maternal sex-chromosome variation or transplant-derived cell lines</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 14 — Do not adjudicate screening with screening
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-14">
+    <div class="eyebrow">Testing Logic</div>
+    <h2>Do Not Adjudicate Screening With Screening</h2>
+    <div class="card card-con" style="max-width:820px; width:100%;">
+      <h3>cfDNA Is Screening, Not Diagnostic</h3>
+      <p>A second cfDNA (or similar screening) platform cannot exclude small rearrangements, mosaicism, or a single-gene DSD. A discordant result should escalate to diagnostic testing — not a repeat screen.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 15 — Assay method changes the blind spots
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-15">
+    <div class="eyebrow">Screening Technology</div>
+    <h2>Assay Method Changes the Blind Spots</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-con">
+        <h3>SNP-Based Platforms</h3>
+        <p>Target specific regions efficiently, but may misinterpret mosaicism or microchimerism.</p>
+      </div>
+      <div class="card card-con">
+        <h3>Whole-Genome (MPS) Platforms</h3>
+        <p>Count reads across the genome, but remain blind to microtranslocations below their resolution limit.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.6rem; text-align:center; font-size:0.95rem; color:var(--warn); max-width:760px;">
+      Neither technology is diagnostic for structural or single-gene DSDs.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 16 — Specimen strategy localizes discordance
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-16">
+    <div class="eyebrow">Resolving Discordance</div>
+    <h2>A Specimen Strategy Localizes the Discordance</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-con">
+        <h3>cfDNA</h3>
+        <p>Predominantly reflects placental and maternal DNA — introducing biological false positives unrelated to true fetal sex.</p>
+      </div>
+      <div class="card card-pro">
+        <h3>Amniotic Fluid</h3>
+        <p>Evaluates fetal DNA directly, bypassing confined placental mosaicism and maternal microchimerism.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.6rem; text-align:center; font-size:0.95rem; color:var(--muted); max-width:760px;">
+      When non-invasive screening contradicts expert ultrasound, change the specimen source to resolve the discrepancy.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 17 — Diagnostic testing is offered, not mandated
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-17">
+    <div class="eyebrow">Patient-Centered Testing</div>
+    <h2>Diagnostic Testing Is Offered — Not Mandated</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-pro">
+        <h3>Genetic Counseling First</h3>
+        <p>Frame the discordance, the differential, and the testing options before any procedure is discussed.</p>
+      </div>
+      <div class="card card-pro">
+        <h3>Offer Amniocentesis</h3>
+        <p>Amniocentesis for fetal DNA analysis is offered to patients who wish diagnostic clarification — the decision remains theirs.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 18 — The cytogenetic and molecular ladder
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-18">
+    <div class="eyebrow">Diagnostic Ladder</div>
+    <h2>Escalate Testing by Phenotype — Not by Default</h2>
+    <div class="timeline" style="max-width:1050px;">
+      <div class="tl-item">
+        <div class="tl-dot">⚡</div>
+        <div class="tl-title">Rapid SCA Screen</div>
+        <div class="tl-label">Rapid sex-chromosome assessment</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🧬</div>
+        <div class="tl-title">Karyotype</div>
+        <div class="tl-label">When structure or mosaicism matters</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🎯</div>
+        <div class="tl-title">SRY FISH / PCR</div>
+        <div class="tl-label">Targeted only for suspected SRY deletion, duplication, or translocation</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🧪</div>
+        <div class="tl-title">Phenotype-Directed Panel</div>
+        <div class="tl-label">Suspected CAH → CYP21A2 sequencing + del/dup; unexplained DSD → multigene panel</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 19 — Use fetal MRI selectively
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-19">
+    <div class="eyebrow">Adjunct Imaging</div>
+    <h2>Use Fetal MRI Selectively</h2>
+    <div class="card card-info" style="max-width:780px; width:100%;">
+      <h3>A Complement, Not a Replacement</h3>
+      <p>Fetal MRI complements expert ultrasound in select cases — it does not replace a well-performed, targeted sonographic evaluation.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 20 — Counsel uncertainty without abandoning precision
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-20">
+    <div class="eyebrow">Patient Counseling</div>
+    <h2>Counsel Uncertainty Without Abandoning Precision</h2>
+    <div class="cols cols-3" style="max-width:1050px;">
+      <div class="card card-alt">
+        <h3>State What Is Known</h3>
+        <p>Communicate confirmed findings plainly and specifically.</p>
+      </div>
+      <div class="card card-alt">
+        <h3>Separate Possibilities From Probabilities</h3>
+        <p>Distinguish what could occur from what is statistically likely.</p>
+      </div>
+      <div class="card card-alt">
+        <h3>Acknowledge False Positives</h3>
+        <p>Be explicit that screening findings can be wrong, and explain why.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 21 — Assemble the team
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-21">
+    <div class="eyebrow">Multidisciplinary Care</div>
+    <h2>Assemble the Team Before Delivery</h2>
+    <div class="icon-row">
+      <div class="icon-item">
+        <div class="icon-circle">🩺</div>
+        <h3>MFM</h3>
+      </div>
+      <div class="icon-item">
+        <div class="icon-circle">🧬</div>
+        <h3>Genetics / Genetic Counseling</h3>
+      </div>
+      <div class="icon-item">
+        <div class="icon-circle">⚕️</div>
+        <h3>Pediatric Endocrinology</h3>
+      </div>
+      <div class="icon-item">
+        <div class="icon-circle">🔬</div>
+        <h3>Urology / Surgery</h3>
+      </div>
+    </div>
+    <p style="margin-top:1.8rem; text-align:center; font-size:0.95rem; color:var(--muted); max-width:760px;">
+      Coordinating this team prenatally allows a unified, prepared postnatal evaluation instead of a fragmented one.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 22 — Delivery follows obstetric indications
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-22">
+    <div class="eyebrow">Delivery Planning</div>
+    <h2>Delivery Follows Obstetric Indications</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-pro">
+        <h3>No Automatic Cesarean</h3>
+        <p>Atypical genitalia alone does not mandate cesarean delivery.</p>
+      </div>
+      <div class="card card-con">
+        <h3>Plan for Salt-Wasting Risk</h3>
+        <p>When congenital adrenal hyperplasia is a consideration, select a delivery center prepared to anticipate and manage a neonatal salt-wasting crisis.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 23 — Postnatal confirmation
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-23">
+    <div class="eyebrow">After Delivery</div>
+    <h2>Postnatal Confirmation Completes the Diagnosis</h2>
+    <div class="cols cols-3" style="max-width:1050px;">
+      <div class="card card-info">
+        <h3>Expert Examination</h3>
+        <p>Physical exam plus electrolytes and glucose.</p>
+      </div>
+      <div class="card card-info">
+        <h3>Targeted Hormones</h3>
+        <p>17-OHP and other targeted hormone assays as indicated.</p>
+      </div>
+      <div class="card card-info">
+        <h3>Imaging</h3>
+        <p>Pelvic and abdominal ultrasound.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 24 — A practical prenatal pathway
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-24">
+    <div class="eyebrow">Practical Summary</div>
+    <h2>A Practical Prenatal Pathway</h2>
+    <div class="timeline" style="max-width:1050px;">
+      <div class="tl-item">
+        <div class="tl-dot">1</div>
+        <div class="tl-title">Confirm Anatomy</div>
+        <div class="tl-label">Expert targeted ultrasound</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">2</div>
+        <div class="tl-title">Survey the Fetus</div>
+        <div class="tl-label">Full anatomic survey for associated anomalies</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">3</div>
+        <div class="tl-title">Reconcile</div>
+        <div class="tl-label">cfDNA and history against sonographic findings</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">4</div>
+        <div class="tl-title">Counsel</div>
+        <div class="tl-label">Genetic counseling before any procedure</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">5</div>
+        <div class="tl-title">Offer Diagnosis</div>
+        <div class="tl-label">Amniocentesis: karyotype + CMA → SRY FISH → gene panel, as indicated</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 25 — Apply it to discordant sex results
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-25">
+    <div class="eyebrow">Applied Example</div>
+    <h2>Applying the Framework to Discordant Sex Results</h2>
+    <div class="card card-con" style="max-width:840px; width:100%;">
+      <h3>Y Chromosome Detected by cfDNA + Apparently Female Ultrasound</h3>
+      <p><span class="cross">✗</span> Is <strong>not</strong> automatically a "false-positive male" result.</p>
+      <p><span class="cross">✗</span> Is <strong>not</strong> an indication for repeat cfDNA testing.</p>
+      <p style="color:var(--text); margin-top:0.8rem;"><span class="check">✓</span> Is an indication to confirm anatomy, survey the fetus, reconcile the history, counsel, and offer diagnostic testing.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 26 — Five take-home principles
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-26">
+    <div class="eyebrow">Summary</div>
+    <h2>Five Take-Home Principles</h2>
+    <div class="cols cols-2" style="max-width:1000px;">
+      <div class="card card-pro">
+        <h3>1. Describe Phenotype</h3>
+        <p>Use structured, descriptive language — not a premature sex label.</p>
+      </div>
+      <div class="card card-pro">
+        <h3>2. Confirm With Expert Imaging</h3>
+        <p>Re-image before communicating any impression to the family.</p>
+      </div>
+      <div class="card card-pro">
+        <h3>3. Search for Associated Anomalies</h3>
+        <p>Complete a full anatomic survey — genital findings are often part of a broader phenotype.</p>
+      </div>
+      <div class="card card-pro">
+        <h3>4. Offer Diagnostic — Not Repeat Screening — Testing</h3>
+        <p>Escalate discordant or concerning findings to diagnostic testing, not another screen.</p>
+      </div>
+    </div>
+    <div class="card card-info" style="max-width:1000px; width:100%; margin-top:1.4rem;">
+      <h3>5. Build the Team Early</h3>
+      <p>Coordinate MFM, genetics, pediatric endocrinology, and urology/surgery before delivery.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SLIDE 27 — References
+  ══════════════════════════════════════════════════════════ -->
+  <div class="slide" id="slide-27">
+    <div class="eyebrow">References &amp; Disclosures</div>
+    <h2>Selected References</h2>
+    <div class="card card-info" style="max-width:900px; width:100%;">
+      <table style="font-size:0.82rem;">
+        <tbody>
+          <tr>
+            <td style="width:30px; color:var(--muted);">1.</td>
+            <td>Hughes IA, Houk C, Ahmed SF, Lee PA; LWPES/ESPE Consensus Group. Consensus statement on management of intersex disorders. <em>Arch Dis Child.</em> 2006;91(7):554–563.</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);">2.</td>
+            <td>Lee PA, Nordenström A, Houk CP, et al. Global Disorders of Sex Development Update since 2006: Perceptions, Approach and Care. <em>Horm Res Paediatr.</em> 2016;85(3):158–180.</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);">3.</td>
+            <td>Speiser PW, Arlt W, Auchus RJ, et al. Congenital Adrenal Hyperplasia Due to Steroid 21-Hydroxylase Deficiency: An Endocrine Society Clinical Practice Guideline. <em>J Clin Endocrinol Metab.</em> 2018;103(11):4043–4088.</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);">4.</td>
+            <td>American College of Obstetricians and Gynecologists. Screening for Fetal Chromosomal Abnormalities: ACOG Practice Bulletin No. 226. <em>Obstet Gynecol.</em> 2020;136(4):e48–e69.</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);">5.</td>
+            <td>Society for Maternal-Fetal Medicine. Clinical guidance on the interpretation and limitations of cell-free DNA screening in discordant or ambiguous fetal sex results.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:1rem; font-size:0.78rem; color:var(--muted); text-align:center; max-width:860px;">
+      Educational content for healthcare providers. Not a substitute for individualized clinical judgment, genetic counseling, or institutional protocols.
+    </p>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- ─── Navigation ──────────────────────────────────────── -->
+<div class="nav">
+  <button onclick="prevSlide()">← Prev</button>
+  <span class="slide-counter" id="counter">1 / 27</span>
+  <button onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const total = slides.length;
+
+  function showSlide(n) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === n);
+    });
+    counter.textContent = (n + 1) + ' / ' + total;
+  }
+
+  function nextSlide() {
+    current = (current + 1) % total;
+    showSlide(current);
+  }
+
+  function prevSlide() {
+    current = (current - 1 + total) % total;
+    showSlide(current);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  showSlide(0);
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
