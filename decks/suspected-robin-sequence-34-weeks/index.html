@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="author" content="Dr. Chukwuma Onyeije">
+  
+  <title>Suspected Robin Sequence at 34 Weeks</title>
+  <style>
+    :root {
+      --bg: #07131f;
+      --panel: #0d2032;
+      --panel-2: #112a40;
+      --text: #f4f8fb;
+      --muted: #a9bdcd;
+      --blue: #56c5ff;
+      --blue-deep: #168dc4;
+      --green: #69dfad;
+      --orange: #ffb454;
+      --red: #ff6b78;
+      --line: rgba(178, 216, 239, 0.22);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(86, 197, 255, 0.12), transparent 32%),
+        radial-gradient(circle at 84% 84%, rgba(105, 223, 173, 0.09), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, a { font: inherit; }
+    button { color: inherit; }
+
+    .deck {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .deck::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 92%);
+    }
+
+    .slides {
+      height: 100%;
+      display: flex;
+      transition: transform 520ms cubic-bezier(.2,.8,.2,1);
+      will-change: transform;
+    }
+
+    .slide {
+      flex: 0 0 100%;
+      height: 100%;
+      position: relative;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: clamp(1rem, 2vw, 2rem);
+      padding: clamp(2.4rem, 5vw, 5rem) clamp(2rem, 7vw, 7.5rem) clamp(4rem, 7vw, 5.5rem);
+      overflow: hidden;
+    }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      width: 24rem;
+      height: 24rem;
+      right: -10rem;
+      top: -12rem;
+      border: 1px solid rgba(86,197,255,0.12);
+      border-radius: 50%;
+      box-shadow: 0 0 0 4rem rgba(86,197,255,0.025), 0 0 0 8rem rgba(86,197,255,0.018);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: clamp(0.72rem, 1.1vw, 0.95rem);
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      max-width: 1100px;
+      font-size: clamp(2.7rem, 6vw, 6.7rem);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+      font-weight: 780;
+    }
+    h2 {
+      max-width: 1100px;
+      font-size: clamp(2.25rem, 4.9vw, 5.3rem);
+      line-height: 1.02;
+      letter-spacing: -0.045em;
+      font-weight: 760;
+    }
+    h3 {
+      font-size: clamp(1.2rem, 2vw, 2rem);
+      line-height: 1.1;
+    }
+    .subtitle {
+      max-width: 900px;
+      margin-top: 1.4rem;
+      color: var(--muted);
+      font-size: clamp(1.15rem, 2.2vw, 2rem);
+      line-height: 1.4;
+    }
+
+    .content {
+      align-self: center;
+      width: min(1180px, 100%);
+      margin-inline: auto;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: clamp(0.72rem, 1vw, 0.92rem);
+      letter-spacing: 0.02em;
+    }
+
+    .source-chip, .evidence-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.42rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.38rem 0.68rem;
+      background: rgba(10, 30, 46, 0.76);
+      color: var(--muted);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .source-chip:hover, .source-chip:focus-visible { border-color: var(--blue); color: var(--text); }
+    .evidence-chip::before {
+      content: "";
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 14px rgba(105,223,173,0.7);
+    }
+
+    .grid-2, .grid-3, .grid-4 {
+      display: grid;
+      gap: clamp(1rem, 2.4vw, 2rem);
+    }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      min-height: 13rem;
+      border: 1px solid var(--line);
+      border-radius: 1.25rem;
+      padding: clamp(1.25rem, 2.5vw, 2.25rem);
+      background: linear-gradient(145deg, rgba(17,42,64,0.96), rgba(9,26,42,0.88));
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.2rem;
+    }
+    .card p, .statement, .step p {
+      color: var(--muted);
+      font-size: clamp(1rem, 1.65vw, 1.48rem);
+      line-height: 1.45;
+    }
+    .card.airway { border-top: 4px solid var(--orange); }
+    .card.fetal { border-top: 4px solid var(--red); }
+    .card.action { border-top: 4px solid var(--green); }
+    .card.assess { border-top: 4px solid var(--blue); }
+
+    .icon {
+      width: clamp(2.4rem, 4.2vw, 4rem);
+      height: clamp(2.4rem, 4.2vw, 4rem);
+      display: grid;
+      place-items: center;
+      border-radius: 1rem;
+      background: rgba(86,197,255,0.1);
+      color: var(--blue);
+    }
+    .icon svg { width: 62%; height: 62%; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+    .sequence {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, auto));
+      align-items: center;
+      gap: clamp(0.4rem, 1.2vw, 1rem);
+    }
+    .node {
+      min-height: 8.6rem;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 1.2rem;
+      border: 1px solid var(--line);
+      background: rgba(17,42,64,0.82);
+      font-size: clamp(1rem, 1.7vw, 1.5rem);
+      font-weight: 760;
+      line-height: 1.2;
+    }
+    .arrow { color: var(--blue); font-size: clamp(1.4rem, 3vw, 2.6rem); text-align: center; }
+
+    .centerline {
+      width: min(1050px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.7rem;
+      position: relative;
+    }
+    .centerline::before {
+      content: "";
+      position: absolute;
+      left: 7%; right: 7%; top: 2.2rem;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      z-index: -1;
+    }
+    .step {
+      text-align: center;
+      display: grid;
+      justify-items: center;
+      gap: 0.8rem;
+    }
+    .step .dot {
+      width: 4.4rem;
+      height: 4.4rem;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--panel-2);
+      border: 2px solid var(--blue);
+      color: var(--text);
+      font-size: 1.35rem;
+      font-weight: 850;
+      box-shadow: 0 0 0 8px rgba(86,197,255,0.08);
+    }
+    .step p { font-size: clamp(0.78rem, 1.15vw, 1rem); color: var(--text); font-weight: 700; }
+
+    .big-stat {
+      display: grid;
+      grid-template-columns: minmax(13rem, 0.7fr) 1.4fr;
+      align-items: center;
+      gap: clamp(2rem, 6vw, 6rem);
+    }
+    .stat {
+      font-size: clamp(4.8rem, 12vw, 11rem);
+      line-height: 0.8;
+      letter-spacing: -0.08em;
+      font-weight: 850;
+      color: var(--blue);
+      text-shadow: 0 0 60px rgba(86,197,255,0.22);
+    }
+    .stat small {
+      display: block;
+      font-size: clamp(1rem, 1.8vw, 1.5rem);
+      letter-spacing: 0;
+      line-height: 1.1;
+      color: var(--muted);
+      margin-top: 1.4rem;
+    }
+    .statement {
+      font-size: clamp(1.35rem, 2.55vw, 2.35rem);
+      line-height: 1.38;
+      color: var(--text);
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .check {
+      min-height: 7rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.2rem;
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      background: rgba(17,42,64,0.75);
+      font-size: clamp(1rem, 1.55vw, 1.35rem);
+      font-weight: 720;
+    }
+    .check::before {
+      content: "✓";
+      flex: 0 0 auto;
+      width: 2.1rem;
+      height: 2.1rem;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #042119;
+      background: var(--green);
+      font-weight: 950;
+    }
+
+    .ladder {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, auto));
+      align-items: center;
+      gap: clamp(0.35rem, 0.8vw, 0.75rem);
+    }
+    .rung {
+      min-height: 8.2rem;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 0.9rem;
+      border-radius: 1rem;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      font-size: clamp(0.9rem, 1.4vw, 1.2rem);
+      font-weight: 760;
+    }
+    .rung:nth-of-type(1) { border-top: 4px solid var(--green); }
+    .rung:nth-of-type(3) { border-top: 4px solid var(--blue); }
+    .rung:nth-of-type(5) { border-top: 4px solid var(--orange); }
+    .rung:nth-of-type(7) { border-top: 4px solid var(--orange); }
+    .rung:nth-of-type(9) { border-top: 4px solid var(--red); }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: stretch;
+      gap: 1.1rem;
+    }
+    .compare .divider {
+      width: 1px;
+      background: var(--line);
+    }
+
+    .callout {
+      max-width: 1000px;
+      padding: clamp(1.5rem, 3.2vw, 3rem);
+      border-left: 6px solid var(--orange);
+      border-radius: 0 1.25rem 1.25rem 0;
+      background: rgba(255,180,84,0.08);
+      font-size: clamp(1.4rem, 3vw, 2.7rem);
+      line-height: 1.35;
+      font-weight: 690;
+    }
+
+    .accent-blue { color: var(--blue); }
+    .accent-green { color: var(--green); }
+    .accent-orange { color: var(--orange); }
+    .accent-red { color: var(--red); }
+    .muted { color: var(--muted); }
+
+    .cover {
+      background:
+        linear-gradient(120deg, rgba(7,19,31,0.86), rgba(7,19,31,0.95)),
+        radial-gradient(circle at 76% 30%, rgba(86,197,255,0.25), transparent 35%);
+    }
+    .cover .content { align-self: end; margin-bottom: 4vh; }
+    .cover .kicker {
+      display: inline-flex;
+      padding: 0.5rem 0.8rem;
+      border: 1px solid rgba(86,197,255,0.45);
+      border-radius: 999px;
+      color: var(--blue);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: clamp(0.72rem, 1vw, 0.9rem);
+      margin-bottom: 1.4rem;
+    }
+    .cover-art {
+      position: absolute;
+      top: 8%; right: 7%;
+      width: min(34vw, 430px);
+      opacity: 0.72;
+      filter: drop-shadow(0 28px 60px rgba(0,0,0,0.28));
+    }
+
+    .citation-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.9rem;
+    }
+    .citation-list a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      padding: 1rem 1.15rem;
+      background: rgba(17,42,64,0.72);
+      font-size: clamp(0.9rem, 1.3vw, 1.15rem);
+      line-height: 1.3;
+    }
+    .citation-list a:hover, .citation-list a:focus-visible { border-color: var(--blue); transform: translateY(-2px); }
+
+    .controls {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem clamp(1rem, 3vw, 2.2rem) max(0.75rem, env(safe-area-inset-bottom));
+      background: linear-gradient(to top, rgba(3,11,18,0.96), rgba(3,11,18,0.72), transparent);
+    }
+    .control-group { display: flex; gap: 0.55rem; }
+    .control-btn {
+      width: 2.65rem;
+      height: 2.65rem;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(13,32,50,0.86);
+      cursor: pointer;
+    }
+    .control-btn:hover, .control-btn:focus-visible { border-color: var(--blue); background: rgba(22,141,196,0.24); outline: none; }
+    .progress-track {
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      overflow: hidden;
+    }
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      transition: width 450ms ease;
+    }
+    .counter { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.88rem; min-width: 4.8rem; text-align: right; }
+
+    .help {
+      position: fixed;
+      top: 1rem; right: 1rem;
+      z-index: 25;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .help button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.45rem 0.7rem;
+      background: rgba(13,32,50,0.82);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.78rem;
+    }
+    .help button:hover, .help button:focus-visible { color: var(--text); border-color: var(--blue); outline: none; }
+
+    .drawer, .overview {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(2,8,13,0.88);
+      backdrop-filter: blur(18px);
+      opacity: 0;
+      visibility: hidden;
+      transition: 240ms ease;
+    }
+    .drawer.open, .overview.open { opacity: 1; visibility: visible; }
+    .drawer-panel {
+      position: absolute;
+      top: 0; right: 0;
+      width: min(680px, 94vw);
+      height: 100%;
+      padding: clamp(1.5rem, 4vw, 3rem);
+      overflow: auto;
+      background: #091a29;
+      border-left: 1px solid var(--line);
+      transform: translateX(100%);
+      transition: transform 280ms ease;
+    }
+    .drawer.open .drawer-panel { transform: translateX(0); }
+    .drawer h3 { font-size: 2rem; margin-bottom: 1rem; }
+    .drawer ol { padding-left: 1.4rem; }
+    .drawer li { color: var(--muted); margin: 1rem 0; line-height: 1.5; }
+    .drawer a { color: var(--blue); }
+    .close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 50%;
+      width: 2.6rem; height: 2.6rem;
+      cursor: pointer;
+    }
+
+    .overview-grid {
+      height: 100%;
+      overflow: auto;
+      padding: 4rem clamp(1rem, 4vw, 4rem);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      align-content: start;
+    }
+    .thumb {
+      aspect-ratio: 16 / 9;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 0.9rem;
+      background: linear-gradient(145deg, var(--panel-2), var(--panel));
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .thumb:hover, .thumb:focus-visible { border-color: var(--blue); outline: none; transform: translateY(-2px); }
+    .thumb strong { font-size: 1.05rem; }
+    .thumb span { color: var(--muted); font-size: 0.75rem; }
+
+    @media (max-width: 880px) {
+      .slide { padding-inline: 1.35rem; padding-top: 4.4rem; }
+      .grid-2, .grid-3, .grid-4, .citation-list { grid-template-columns: 1fr; }
+      .grid-3 .card, .grid-4 .card { min-height: 8rem; }
+      .sequence { grid-template-columns: 1fr; }
+      .sequence .arrow { transform: rotate(90deg); }
+      .centerline { grid-template-columns: repeat(3, 1fr); row-gap: 1.4rem; }
+      .centerline::before { display: none; }
+      .checklist { grid-template-columns: repeat(2, 1fr); }
+      .ladder { grid-template-columns: 1fr; }
+      .ladder .arrow { transform: rotate(90deg); }
+      .compare { grid-template-columns: 1fr; }
+      .compare .divider { width: 100%; height: 1px; }
+      .big-stat { grid-template-columns: 1fr; gap: 1rem; }
+      .stat { font-size: clamp(4rem, 22vw, 8rem); }
+      .cover-art { opacity: 0.25; width: 60vw; top: 12%; right: -8%; }
+      .footer { flex-wrap: wrap; }
+    }
+
+    @media (max-height: 700px) and (min-width: 881px) {
+      .slide { padding-top: 2.5rem; padding-bottom: 4rem; }
+      h2 { font-size: clamp(2rem, 4vw, 3.8rem); }
+      .card { min-height: 10rem; }
+      .node, .rung { min-height: 6.7rem; }
+    }
+
+    @media print {
+      body { overflow: visible; background: #07131f; }
+      .slides { display: block; transform: none !important; }
+      .slide { width: 13.333in; height: 7.5in; page-break-after: always; }
+      .controls, .help, .drawer, .overview { display: none !important; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slides, .progress-bar, .drawer, .drawer-panel, .overview { transition: none; }
+    }
+  </style>
+
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/suspected-robin-sequence-34-weeks/index.html">
+<meta name="description" content="Evidence-based third-trimester management of suspected Robin sequence with polyhydramnios and pericardial effusion, covering prenatal evaluation, airway planning, and neonatal care.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Robin Sequence, Micrognathia, Polyhydramnios, Airway Obstruction, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/suspected-robin-sequence-34-weeks/index.html">
+<meta property="og:title" content="Suspected Robin Sequence at 34 Weeks - Provider Education | OpenMFM">
+<meta property="og:description" content="Evidence-based third-trimester management of suspected Robin sequence with polyhydramnios and pericardial effusion, covering prenatal evaluation, airway planning, and neonatal care.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Suspected Robin Sequence at 34 Weeks - Provider Education | OpenMFM">
+<meta name="twitter:description" content="Evidence-based third-trimester management of suspected Robin sequence with polyhydramnios and pericardial effusion, covering prenatal evaluation, airway planning, and neonatal care.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Suspected Robin Sequence at 34 Weeks - Provider Education",
+  "description": "Evidence-based third-trimester management of suspected Robin sequence with polyhydramnios and pericardial effusion, covering prenatal evaluation, airway planning, and neonatal care.",
+  "url": "https://openmfm.org/decks/suspected-robin-sequence-34-weeks/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-07-14",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Suspected Robin Sequence at 34 Weeks - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Robin Sequence, Micrognathia, Polyhydramnios, Airway Obstruction, Provider Education"
+}
+</script>
+</head>
+<body>
+  <main class="deck" aria-label="Suspected Robin sequence presentation">
+    <div class="slides" id="slides">
+
+      <section class="slide cover" data-title="Suspected Robin Sequence at 34 Weeks">
+        <svg class="cover-art" viewBox="0 0 420 420" role="img" aria-label="Abstract fetal profile and airway illustration">
+          <circle cx="210" cy="210" r="172" fill="rgba(86,197,255,.05)" stroke="rgba(86,197,255,.35)" stroke-width="2"/>
+          <path d="M112 102c55-46 143-32 180 21 21 30 26 71 14 105-9 26-27 42-51 56-16 10-24 29-27 53" fill="none" stroke="#56c5ff" stroke-width="7" stroke-linecap="round"/>
+          <path d="M258 127c-8 17-9 35-2 52 6 14 20 24 22 39 2 14-8 27-20 33-18 9-38 7-56 15-15 7-26 22-30 38" fill="none" stroke="#f4f8fb" stroke-width="8" stroke-linecap="round"/>
+          <path d="M222 245c-12 3-25 5-37 4-14-1-26-8-33-20" fill="none" stroke="#ffb454" stroke-width="8" stroke-linecap="round"/>
+          <path d="M204 253c4 27 1 55-10 80" fill="none" stroke="#69dfad" stroke-width="6" stroke-linecap="round" stroke-dasharray="10 10"/>
+          <circle cx="190" cy="335" r="9" fill="#69dfad"/>
+        </svg>
+        <div></div>
+        <div class="content">
+          <div class="kicker">Maternal–Fetal Medicine</div>
+          <h1>Suspected Robin Sequence at 34 Weeks</h1>
+          <p class="subtitle">Third-trimester management of polyhydramnios, pericardial effusion, and anticipated airway risk</p>
+        </div>
+        <div class="footer"><span>Dr. Chukwuma Onyeije</span><span>Clinical education deck</span></div>
+      </section>
+
+      <section class="slide" data-title="Two risks. One coordinated plan.">
+        <header><div class="eyebrow">Clinical frame</div><h2>Two risks. One coordinated plan.</h2></header>
+        <div class="content grid-2">
+          <article class="card airway">
+            <div class="icon"><svg viewBox="0 0 24 24"><path d="M7 4c7 0 10 4 10 9 0 4-2 6-5 7M7 4c-1 4-1 7 1 10m0 0c2 1 4 1 6 0"/></svg></div>
+            <div><h3>Airway</h3><p>Micrognathia may predict obstruction at birth.</p></div>
+          </article>
+          <article class="card fetal">
+            <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 5.6-7 10-7 10Z"/><path d="M3 12h5l2-4 3 8 2-4h6"/></svg></div>
+            <div><h3>Fetal status</h3><p>Pericardial effusion requires urgent etiologic assessment.</p></div>
+          </article>
+        </div>
+        <footer class="footer"><span class="evidence-chip">Guideline + cohort evidence</span><button class="source-chip" data-open-sources>Sources 1–2</button></footer>
+      </section>
+
+      <section class="slide" data-title="A sequence—not a syndrome">
+        <header><div class="eyebrow">Definition</div><h2>A sequence—not a syndrome</h2></header>
+        <div class="content">
+          <div class="sequence">
+            <div class="node">Micrognathia</div><div class="arrow">→</div>
+            <div class="node">Glossoptosis</div><div class="arrow">→</div>
+            <div class="node">Upper-airway obstruction</div><div class="arrow">+</div>
+            <div class="node">Cleft palate often present</div>
+          </div>
+        </div>
+        <footer class="footer"><span>Clinical triad; cleft palate is not required</span><button class="source-chip" data-open-sources>Sources 3, 6</button></footer>
+      </section>
+
+      <section class="slide" data-title="Prenatal diagnosis remains probabilistic">
+        <header><div class="eyebrow">Calibrated certainty</div><h2>Prenatal diagnosis remains probabilistic</h2></header>
+        <div class="content compare">
+          <article class="card assess"><h3>Before birth</h3><p>Ultrasound identifies micrognathia and secondary clues.</p></article>
+          <div class="divider"></div>
+          <article class="card action"><h3>After birth</h3><p>Airway obstruction completes the clinical diagnosis. One measurement cannot reliably predict severity.</p></article>
+        </div>
+        <footer class="footer"><span>Describe the phenotype as suspected Robin sequence</span><button class="source-chip" data-open-sources>Sources 2, 4</button></footer>
+      </section>
+
+      <section class="slide" data-title="Polyhydramnios signals impaired function">
+        <header><div class="eyebrow">Functional clue</div><h2>Polyhydramnios signals impaired function</h2></header>
+        <div class="content big-stat">
+          <div class="stat">↑AFV<small>Reduced fetal swallowing</small></div>
+          <p class="statement">Glossoptosis or cleft palate may impair swallowing—and increase preterm labor, membrane rupture, and maternal respiratory risk.</p>
+        </div>
+        <footer class="footer"><span>Trend AFI/DVP and maternal symptoms</span><button class="source-chip" data-open-sources>Sources 2, 6</button></footer>
+      </section>
+
+      <section class="slide" data-title="The effusion changes the pathway">
+        <header><div class="eyebrow">Diagnostic pivot</div><h2>The effusion changes the pathway</h2></header>
+        <div class="content">
+          <div class="callout">Isolated Robin sequence does not explain pericardial fluid.</div>
+          <div class="checklist" style="margin-top:1.4rem">
+            <div class="check">Cardiac disease</div><div class="check">Arrhythmia</div><div class="check">Anemia</div>
+            <div class="check">Infection</div><div class="check">Genetic disease</div><div class="check">Evolving hydrops</div>
+          </div>
+        </div>
+        <footer class="footer"><span>Run airway and effusion evaluations in parallel</span><button class="source-chip" data-open-sources>Source 1</button></footer>
+      </section>
+
+      <section class="slide" data-title="First 24 hours: four parallel tracks">
+        <header><div class="eyebrow">Immediate evaluation</div><h2>First 24 hours: four parallel tracks</h2></header>
+        <div class="content grid-4">
+          <article class="card assess"><h3>01</h3><p>Targeted ultrasound</p></article>
+          <article class="card assess"><h3>02</h3><p>Fetal echocardiography</p></article>
+          <article class="card assess"><h3>03</h3><p>MCA Doppler</p></article>
+          <article class="card action"><h3>04</h3><p>Genetics + targeted infection testing</p></article>
+        </div>
+        <footer class="footer"><span>Begin airway planning simultaneously</span><button class="source-chip" data-open-sources>Source 1</button></footer>
+      </section>
+
+      <section class="slide" data-title="Echocardiography answers urgent questions">
+        <header><div class="eyebrow">Cardiac assessment</div><h2>Echocardiography answers urgent questions</h2></header>
+        <div class="content grid-3">
+          <article class="card fetal"><h3>Effusion</h3><p>Size, distribution, progression</p></article>
+          <article class="card assess"><h3>Heart</h3><p>Anatomy, rhythm, ventricular function</p></article>
+          <article class="card action"><h3>Hemodynamics</h3><p>Venous Dopplers, inflow/outflow compromise, tamponade physiology</p></article>
+        </div>
+        <footer class="footer"><span>Reassess with interval surveillance if pregnancy continues</span><button class="source-chip" data-open-sources>Source 1</button></footer>
+      </section>
+
+      <section class="slide" data-title="Define the hydrops spectrum">
+        <header><div class="eyebrow">Diagnostic threshold</div><h2>Define the hydrops spectrum</h2></header>
+        <div class="content grid-2">
+          <article class="card assess"><h3 class="accent-blue">One effusion</h3><p>Evaluate as NIHF spectrum.</p></article>
+          <article class="card fetal"><h3 class="accent-red">Two compartments</h3><p>Diagnostic hydrops. Survey pleura, abdomen, skin, placenta, and amniotic fluid.</p></article>
+        </div>
+        <footer class="footer"><span>One effusion still warrants diagnostic testing</span><button class="source-chip" data-open-sources>Source 1</button></footer>
+      </section>
+
+      <section class="slide" data-title="Screen for fetal anemia">
+        <header><div class="eyebrow">Doppler</div><h2>Screen for fetal anemia</h2></header>
+        <div class="content big-stat">
+          <div class="stat">&gt;1.5<small>MCA-PSV MoM</small></div>
+          <p class="statement">Raises concern for moderate–severe anemia and prompts etiologic evaluation.</p>
+        </div>
+        <footer class="footer"><span>Review antibodies; evaluate parvovirus when indicated</span><button class="source-chip" data-open-sources>Source 1</button></footer>
+      </section>
+
+      <section class="slide" data-title="Target infection testing">
+        <header><div class="eyebrow">Precision workup</div><h2>Target infection testing</h2></header>
+        <div class="content compare">
+          <article class="card fetal"><h3>Avoid</h3><p>Nonspecific “TORCH panel”</p></article>
+          <div class="divider"></div>
+          <article class="card action"><h3>Use</h3><p>History- and phenotype-directed serology/PCR: parvovirus B19, CMV, toxoplasma, and others when indicated.</p></article>
+        </div>
+        <footer class="footer"><span>Test the differential—not an acronym</span><button class="source-chip" data-open-sources>Source 1</button></footer>
+      </section>
+
+      <section class="slide" data-title="Offer diagnostic genetics now">
+        <header><div class="eyebrow">SMFM recommendation</div><h2>Offer diagnostic genetics now</h2></header>
+        <div class="content sequence" style="grid-template-columns:1fr auto 1fr auto 1fr">
+          <div class="node">Any fetal effusion</div><div class="arrow">→</div>
+          <div class="node">CMA ± karyotype</div><div class="arrow">→</div>
+          <div class="node">Exome/genome if nondiagnostic</div>
+        </div>
+        <footer class="footer"><span>Consider concurrent sequencing when monogenic disease is likely</span><button class="source-chip" data-open-sources>Source 1</button></footer>
+      </section>
+
+      <section class="slide" data-title="MRI refines airway planning">
+        <header><div class="eyebrow">Advanced imaging</div><h2>MRI refines airway planning</h2></header>
+        <div class="content grid-2">
+          <article class="card assess"><h3>Clarify</h3><p>Tongue position, palate, jaw severity, airway relationships, thoracic lesions</p></article>
+          <article class="card airway"><h3>Remember</h3><p>Imaging predicts risk—not certainty.</p></article>
+        </div>
+        <footer class="footer"><span>Use when anatomy is uncertain or obstruction appears severe</span><button class="source-chip" data-open-sources>Sources 2, 4</button></footer>
+      </section>
+
+      <section class="slide" data-title="Centralize care before labor">
+        <header><div class="eyebrow">Multidisciplinary planning</div><h2>Centralize care before labor</h2></header>
+        <div class="content centerline">
+          <div class="step"><div class="dot">MFM</div><p>MFM</p></div>
+          <div class="step"><div class="dot">Neo</div><p>Neonatology</p></div>
+          <div class="step"><div class="dot">Anes</div><p>Pediatric anesthesia</p></div>
+          <div class="step"><div class="dot">ENT</div><p>Otolaryngology</p></div>
+          <div class="step"><div class="dot">Rad</div><p>Radiology</p></div>
+          <div class="step"><div class="dot">Gen</div><p>Genetics</p></div>
+        </div>
+        <footer class="footer"><span>Plan maternal safety, airway sequence, equipment, and family goals</span><button class="source-chip" data-open-sources>Sources 3–5</button></footer>
+      </section>
+
+      <section class="slide" data-title="EXIT is selective—not automatic">
+        <header><div class="eyebrow">Delivery strategy</div><h2>EXIT is selective—not automatic</h2></header>
+        <div class="content compare">
+          <article class="card fetal"><h3>Do not default</h3><p>Micrognathia + polyhydramnios alone</p></article>
+          <div class="divider"></div>
+          <article class="card action"><h3>Consider</h3><p>Placental-support airway when imaging and team review predict critical obstruction.</p></article>
+        </div>
+        <footer class="footer"><span>Routine EXIT may overtreat and adds maternal risk</span><button class="source-chip" data-open-sources>Source 2</button></footer>
+      </section>
+
+      <section class="slide" data-title="Timing follows maternal–fetal status">
+        <header><div class="eyebrow">Individualized delivery</div><h2>Timing follows maternal–fetal status</h2></header>
+        <div class="content">
+          <div class="callout">Robin sequence alone does not mandate preterm birth.</div>
+          <div class="checklist" style="margin-top:1.4rem">
+            <div class="check">Worsening hydrops</div><div class="check">Preterm labor / ROM</div><div class="check">Maternal compromise</div>
+          </div>
+        </div>
+        <footer class="footer"><span>Balance continuation risk against prematurity</span><button class="source-chip" data-open-sources>Source 1</button></footer>
+      </section>
+
+      <section class="slide" data-title="Mode follows obstetric indication">
+        <header><div class="eyebrow">Route of birth</div><h2>Mode follows obstetric indication</h2></header>
+        <div class="content grid-2">
+          <article class="card action"><h3>Vaginal birth</h3><p>Acceptable when airway resources are immediately available.</p></article>
+          <article class="card assess"><h3>Cesarean</h3><p>Standard obstetric indications—or required logistics when EXIT is selected.</p></article>
+        </div>
+        <footer class="footer"><span>Deliver in a tertiary perinatal center</span><button class="source-chip" data-open-sources>Source 1</button></footer>
+      </section>
+
+      <section class="slide" data-title="Build the delivery-room airway ladder">
+        <header><div class="eyebrow">Rehearsed escalation</div><h2>Build the delivery-room airway ladder</h2></header>
+        <div class="content ladder">
+          <div class="rung">Position</div><div class="arrow">→</div>
+          <div class="rung">Oxygenation / ventilation</div><div class="arrow">→</div>
+          <div class="rung">NPA / noninvasive support</div><div class="arrow">→</div>
+          <div class="rung">Advanced intubation</div><div class="arrow">→</div>
+          <div class="rung">Surgical airway rescue</div>
+        </div>
+        <footer class="footer"><span>Assign leaders, equipment, thresholds, and backups</span><button class="source-chip" data-open-sources>Sources 3, 5</button></footer>
+      </section>
+
+      <section class="slide" data-title="Positioning can temporize obstruction">
+        <header><div class="eyebrow">First-line bridge</div><h2>Positioning can temporize obstruction</h2></header>
+        <div class="content grid-2">
+          <article class="card action"><h3>Stable</h3><p>Prone or lateral positioning may move the tongue anteriorly.</p></article>
+          <article class="card fetal"><h3>Unstable</h3><p>Escalate immediately for persistent obstruction, hypoxemia, or inadequate ventilation.</p></article>
+        </div>
+        <footer class="footer"><span>Continuous monitoring is essential</span><button class="source-chip" data-open-sources>Sources 3, 6</button></footer>
+      </section>
+
+      <section class="slide" data-title="Stabilization is only the beginning">
+        <header><div class="eyebrow">Postnatal pathway</div><h2>Stabilization is only the beginning</h2></header>
+        <div class="content checklist">
+          <div class="check">Airway level</div><div class="check">Sleep breathing</div><div class="check">Feeding safety</div>
+          <div class="check">Growth</div><div class="check">Palate / hearing</div><div class="check">Syndromic features</div>
+        </div>
+        <footer class="footer"><span>Coordinate ENT, craniofacial, pulmonary, feeding, and genetics</span><button class="source-chip" data-open-sources>Sources 3, 5</button></footer>
+      </section>
+
+      <section class="slide" data-title="Counsel with calibrated certainty">
+        <header><div class="eyebrow">Shared decision-making</div><h2>Counsel with calibrated certainty</h2></header>
+        <div class="content callout">Explain what is suspected, what remains uncertain, and how preparation reduces risk. Delivery planning should proceed while testing continues.</div>
+        <footer class="footer"><span>Preparedness without deterministic prediction</span><button class="source-chip" data-open-sources>Sources 3, 4</button></footer>
+      </section>
+
+      <section class="slide" data-title="The 34-week action plan">
+        <header><div class="eyebrow">Operational summary</div><h2>The 34-week action plan</h2></header>
+        <div class="content grid-3">
+          <article class="card fetal"><h3>Today</h3><p>Echo, hydrops survey, MCA, genetics, infection evaluation</p></article>
+          <article class="card assess"><h3>Next</h3><p>MRI + multidisciplinary airway conference</p></article>
+          <article class="card action"><h3>Delivery</h3><p>Tertiary center + rehearsed escalation pathway</p></article>
+        </div>
+        <footer class="footer"><span>Two clinical pathways; one coordinated team</span><button class="source-chip" data-open-sources>Sources 1–5</button></footer>
+      </section>
+
+      <section class="slide" data-title="Evidence anchors">
+        <header><div class="eyebrow">References</div><h2>Evidence anchors</h2></header>
+        <div class="content citation-list">
+          <a href="https://publications.smfm.org/publications/626-society-for-maternal-fetal-medicine-consult-series-75/" target="_blank" rel="noopener">1 · SMFM #75</a>
+          <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11628208/" target="_blank" rel="noopener">2 · Goergen 2024</a>
+          <a href="https://www.mdpi.com/2227-9067/11/9/1094" target="_blank" rel="noopener">3 · Rickart 2024</a>
+          <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10130438/" target="_blank" rel="noopener">4 · Cang 2023</a>
+          <a href="https://www.chop.edu/clinical-pathway/neonate-infant-micrognathia-retrognathia-and-concern-airway-obstruction-clinical-pathway" target="_blank" rel="noopener">5 · CHOP pathway</a>
+          <a href="https://www.ncbi.nlm.nih.gov/books/NBK562213/" target="_blank" rel="noopener">6 · NCBI review</a>
+        </div>
+        <footer class="footer"><span>Press R for complete citations</span><span>Clinical decisions require local protocol alignment</span></footer>
+      </section>
+    </div>
+
+    <div class="help" aria-label="Presentation utilities">
+      <button type="button" id="overviewBtn" title="Slide overview (O)">Overview</button>
+      <button type="button" id="sourcesBtn" title="References (R)">References</button>
+    </div>
+
+    <nav class="controls" aria-label="Slide navigation">
+      <div class="control-group">
+        <button class="control-btn" id="prevBtn" type="button" aria-label="Previous slide">←</button>
+        <button class="control-btn" id="nextBtn" type="button" aria-label="Next slide">→</button>
+      </div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+      <div class="counter" id="counter" aria-live="polite">1 / 23</div>
+    </nav>
+  </main>
+
+  <aside class="drawer" id="sourceDrawer" aria-hidden="true" aria-label="Complete references">
+    <div class="drawer-panel">
+      <button class="close" type="button" data-close-overlay aria-label="Close references">×</button>
+      <h3>Complete references</h3>
+      <ol>
+        <li><strong>Society for Maternal-Fetal Medicine.</strong> Consult Series #75: Evaluation and management of non-immune hydrops fetalis. 2026. <a href="https://publications.smfm.org/publications/626-society-for-maternal-fetal-medicine-consult-series-75/" target="_blank" rel="noopener">Open source</a></li>
+        <li><strong>Goergen S, et al.</strong> Predicting the Difficult Neonatal Airway in Fetuses With Micrognathia, Oropharyngeal or Neck Mass Lesions: Two-Center Experience With Fetal MRI. <em>Prenatal Diagnosis.</em> 2024;44:1593–1602. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11628208/" target="_blank" rel="noopener">Open source</a></li>
+        <li><strong>Rickart AJ, et al.</strong> Diagnosis and Early Management of Robin Sequence. <em>Children.</em> 2024;11:1094. <a href="https://www.mdpi.com/2227-9067/11/9/1094" target="_blank" rel="noopener">Open source</a></li>
+        <li><strong>Cang Z, et al.</strong> Prenatal diagnosis of micrognathia: a systematic review. <em>Frontiers in Pediatrics.</em> 2023;11:1161421. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10130438/" target="_blank" rel="noopener">Open source</a></li>
+        <li><strong>Children’s Hospital of Philadelphia.</strong> Micrognathia-Retrognathia Clinical Pathway. <a href="https://www.chop.edu/clinical-pathway/neonate-infant-micrognathia-retrognathia-and-concern-airway-obstruction-clinical-pathway" target="_blank" rel="noopener">Open source</a></li>
+        <li><strong>Baxter D, et al.</strong> Pierre Robin Sequence. StatPearls, NCBI Bookshelf. <a href="https://www.ncbi.nlm.nih.gov/books/NBK562213/" target="_blank" rel="noopener">Open source</a></li>
+      </ol>
+      <p class="muted">This deck distinguishes formal guidance from observational evidence and consensus-based multidisciplinary practice. Adapt implementation to local fetal therapy, anesthesia, ENT, and neonatal protocols.</p>
+    </div>
+  </aside>
+
+  <section class="overview" id="overview" aria-hidden="true" aria-label="Slide overview">
+    <button class="close" type="button" data-close-overlay aria-label="Close overview">×</button>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </section>
+
+  <script>
+    (() => {
+      const slidesEl = document.getElementById('slides');
+      const slides = [...document.querySelectorAll('.slide')];
+      const progressBar = document.getElementById('progressBar');
+      const counter = document.getElementById('counter');
+      const sourceDrawer = document.getElementById('sourceDrawer');
+      const overview = document.getElementById('overview');
+      const overviewGrid = document.getElementById('overviewGrid');
+      let index = 0;
+      let touchStartX = null;
+
+      function render() {
+        slidesEl.style.transform = `translateX(-${index * 100}%)`;
+        progressBar.style.width = `${((index + 1) / slides.length) * 100}%`;
+        counter.textContent = `${index + 1} / ${slides.length}`;
+        slides.forEach((slide, i) => slide.setAttribute('aria-hidden', i === index ? 'false' : 'true'));
+        document.title = `${slides[index].dataset.title} · ${index + 1}/${slides.length}`;
+        history.replaceState(null, '', `#${index + 1}`);
+      }
+
+      function goTo(nextIndex) {
+        index = Math.max(0, Math.min(slides.length - 1, nextIndex));
+        render();
+      }
+      function next() { goTo(index + 1); }
+      function prev() { goTo(index - 1); }
+      function closeOverlays() {
+        sourceDrawer.classList.remove('open');
+        overview.classList.remove('open');
+        sourceDrawer.setAttribute('aria-hidden', 'true');
+        overview.setAttribute('aria-hidden', 'true');
+      }
+      function openSources() {
+        closeOverlays();
+        sourceDrawer.classList.add('open');
+        sourceDrawer.setAttribute('aria-hidden', 'false');
+      }
+      function openOverview() {
+        closeOverlays();
+        overview.classList.add('open');
+        overview.setAttribute('aria-hidden', 'false');
+      }
+
+      document.getElementById('nextBtn').addEventListener('click', next);
+      document.getElementById('prevBtn').addEventListener('click', prev);
+      document.getElementById('sourcesBtn').addEventListener('click', openSources);
+      document.getElementById('overviewBtn').addEventListener('click', openOverview);
+      document.querySelectorAll('[data-open-sources]').forEach(btn => btn.addEventListener('click', openSources));
+      document.querySelectorAll('[data-close-overlay]').forEach(btn => btn.addEventListener('click', closeOverlays));
+      [sourceDrawer, overview].forEach(el => el.addEventListener('click', e => { if (e.target === el) closeOverlays(); }));
+
+      slides.forEach((slide, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'thumb';
+        btn.innerHTML = `<strong>${slide.dataset.title}</strong><span>${i + 1} / ${slides.length}</span>`;
+        btn.addEventListener('click', () => { goTo(i); closeOverlays(); });
+        overviewGrid.appendChild(btn);
+      });
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') return closeOverlays();
+        if (sourceDrawer.classList.contains('open') || overview.classList.contains('open')) return;
+        if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); next(); }
+        if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); prev(); }
+        if (e.key === 'Home') goTo(0);
+        if (e.key === 'End') goTo(slides.length - 1);
+        if (e.key.toLowerCase() === 'r') openSources();
+        if (e.key.toLowerCase() === 'o') openOverview();
+        if (e.key.toLowerCase() === 'f') document.documentElement.requestFullscreen?.();
+      });
+
+      document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
+      document.addEventListener('touchend', e => {
+        if (touchStartX === null) return;
+        const delta = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(delta) > 55) delta < 0 ? next() : prev();
+        touchStartX = null;
+      }, {passive:true});
+
+      const hashIndex = Number(location.hash.replace('#','')) - 1;
+      if (Number.isInteger(hashIndex) && hashIndex >= 0 && hashIndex < slides.length) index = hashIndex;
+      render();
+    })();
+  </script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
