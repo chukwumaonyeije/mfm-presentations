@@ -1,442 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timing of Delivery for Gestational Diabetes</title>
-    <style>
-        /* ─── Reset & Base ─────────────────────────────────────────────── */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            background: #0d1117;
-            color: #e6edf3;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* ─── Deck & Slides ─────────────────────────────────────────────── */
-        .deck {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .slide {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 3em 5em;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.45s ease-in-out;
-        }
-
-        .slide.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* ─── Typography ────────────────────────────────────────────────── */
-        h1 { font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 300; letter-spacing: 0; line-height: 1.15; }
-        h2 { font-size: clamp(1.6rem, 3.5vw, 2.8rem); font-weight: 300; letter-spacing: 0; }
-        h3 { font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 400; }
-        p  { font-size: clamp(1rem, 1.8vw, 1.35rem); line-height: 1.7; max-width: 820px; text-align: center; }
-
-        .kicker {
-            font-size: clamp(0.7rem, 1.2vw, 0.9rem);
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: #58a6ff;
-            margin-bottom: 0.6em;
-        }
-
-        /* ─── Color Accents ─────────────────────────────────────────────── */
-        .accent-blue   { color: #58a6ff; }
-        .accent-green  { color: #3fb950; }
-        .accent-orange { color: #f0883e; }
-        .accent-red    { color: #f85149; }
-        .accent-teal   { color: #39d353; }
-        .accent-yellow { color: #e3b341; }
-
-        /* ─── Slide Backgrounds ─────────────────────────────────────────── */
-        .slide-title    { background: linear-gradient(135deg, #0d1117 0%, #161b22 60%, #1a2332 100%); }
-        .slide-a1       { background: linear-gradient(135deg, #0d1117 0%, #0d2137 100%); }
-        .slide-a2       { background: linear-gradient(135deg, #0d1117 0%, #0d2a1a 100%); }
-        .slide-poor     { background: linear-gradient(135deg, #0d1117 0%, #2a1a0d 100%); }
-        .slide-refractory { background: linear-gradient(135deg, #0d1117 0%, #2a0d0d 100%); }
-        .slide-macro    { background: linear-gradient(135deg, #0d1117 0%, #1a0d2a 100%); }
-        .slide-risk     { background: linear-gradient(135deg, #0d1117 0%, #1a1a0d 100%); }
-        .slide-summary  { background: linear-gradient(135deg, #0d1117 0%, #0d1a2a 100%); }
-
-        /* ─── Cards & Boxes ─────────────────────────────────────────────── */
-        .card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 1.4em 2em;
-            margin: 0.5em;
-        }
-
-        .card-row {
-            display: flex;
-            gap: 1em;
-            justify-content: center;
-            flex-wrap: wrap;
-            width: 100%;
-            max-width: 1100px;
-        }
-
-        .card-item {
-            flex: 1;
-            min-width: 220px;
-            max-width: 320px;
-        }
-
-        /* ─── Timeline ──────────────────────────────────────────────────── */
-        .timeline {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0;
-            margin: 1.5em 0;
-            width: 100%;
-            max-width: 900px;
-        }
-
-        .tl-node {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-        }
-
-        .tl-dot {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            border: 3px solid;
-            background: #0d1117;
-            position: relative;
-            z-index: 2;
-        }
-
-        .tl-line {
-            height: 3px;
-            flex: 1;
-            background: rgba(255,255,255,0.15);
-        }
-
-        .tl-label {
-            font-size: 0.75rem;
-            margin-top: 0.5em;
-            text-align: center;
-            max-width: 80px;
-            line-height: 1.3;
-        }
-
-        .tl-week {
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.4em;
-        }
-
-        /* ─── Table ─────────────────────────────────────────────────────── */
-        .summary-table {
-            width: 100%;
-            max-width: 1050px;
-            border-collapse: collapse;
-            font-size: clamp(0.75rem, 1.3vw, 1rem);
-        }
-
-        .summary-table th {
-            background: rgba(88, 166, 255, 0.15);
-            color: #58a6ff;
-            padding: 0.75em 1em;
-            text-align: left;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            border-bottom: 2px solid rgba(88,166,255,0.3);
-        }
-
-        .summary-table td {
-            padding: 0.65em 1em;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-            vertical-align: top;
-            line-height: 1.4;
-        }
-
-        .summary-table tr:last-child td { border-bottom: none; }
-
-        .badge {
-            display: inline-block;
-            padding: 0.2em 0.7em;
-            border-radius: 20px;
-            font-size: 0.78em;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-        }
-
-        .badge-green  { background: rgba(63,185,80,0.2);  color: #3fb950; border: 1px solid rgba(63,185,80,0.4); }
-        .badge-blue   { background: rgba(88,166,255,0.2); color: #58a6ff; border: 1px solid rgba(88,166,255,0.4); }
-        .badge-orange { background: rgba(240,136,62,0.2); color: #f0883e; border: 1px solid rgba(240,136,62,0.4); }
-        .badge-red    { background: rgba(248,81,73,0.2);  color: #f85149; border: 1px solid rgba(248,81,73,0.4); }
-        .badge-purple { background: rgba(188,140,255,0.2);color: #bc8cff; border: 1px solid rgba(188,140,255,0.4); }
-
-        /* ─── Icon SVGs ─────────────────────────────────────────────────── */
-        .icon-wrap {
-            margin-bottom: 0.8em;
-        }
-
-        .icon-wrap svg {
-            width: 64px;
-            height: 64px;
-        }
-
-        /* ─── Risk Chart ─────────────────────────────────────────────────── */
-        .risk-chart {
-            display: flex;
-            flex-direction: column;
-            gap: 0.7em;
-            width: 100%;
-            max-width: 750px;
-            margin-top: 1em;
-        }
-
-        .risk-row {
-            display: flex;
-            align-items: center;
-            gap: 1em;
-        }
-
-        .risk-label {
-            font-size: 0.9rem;
-            width: 220px;
-            text-align: right;
-            flex-shrink: 0;
-        }
-
-        .risk-bar-bg {
-            flex: 1;
-            height: 28px;
-            background: rgba(255,255,255,0.07);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .risk-bar {
-            height: 100%;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            padding-left: 0.6em;
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: #fff;
-            transition: width 0.8s ease;
-        }
-
-        /* ─── Navigation ─────────────────────────────────────────────────── */
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.6em 2em;
-            background: rgba(255,255,255,0.03);
-            border-top: 1px solid rgba(255,255,255,0.07);
-        }
-
-        .nav-btn {
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: #e6edf3;
-            padding: 0.45em 1.4em;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-        }
-
-        .nav-btn:hover { background: rgba(255,255,255,0.14); }
-        .nav-btn:disabled { opacity: 0.3; cursor: default; }
-
-        .nav-counter {
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.4);
-            letter-spacing: 0.08em;
-        }
-
-        .progress-bar {
-            height: 3px;
-            background: rgba(255,255,255,0.08);
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #58a6ff, #3fb950);
-            transition: width 0.4s ease;
-        }
-
-        /* ─── Source note ────────────────────────────────────────────────── */
-        .source-note {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.3);
-            margin-top: 1.5em;
-            letter-spacing: 0.04em;
-        }
-
-        /* ─── Divider ────────────────────────────────────────────────────── */
-        .divider {
-            width: 60px;
-            height: 3px;
-            border-radius: 2px;
-            margin: 0.8em auto;
-        }
-
-        /* ─── Responsive ───────────────────────────────────────────────── */
-        @media (max-width: 768px) {
-            body {
-                min-height: 100dvh;
-                height: 100dvh;
-                width: 100%;
-            }
-
-            .deck {
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .slide {
-                min-height: calc(100dvh - 70px);
-                height: auto;
-                padding: 1.5rem 1rem 6rem;
-                justify-content: flex-start;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            h1 { font-size: clamp(2rem, 11vw, 2.7rem); }
-            h2 { font-size: clamp(1.45rem, 8vw, 2.05rem); text-align: center; }
-            h3 { font-size: 1.08rem; }
-            p { font-size: 0.98rem; line-height: 1.55; }
-
-            .kicker {
-                font-size: 0.68rem;
-                text-align: center;
-            }
-
-            .card {
-                width: 100%;
-                padding: 1rem;
-                margin: 0.35rem 0;
-            }
-
-            .card-row {
-                flex-direction: column;
-                gap: 0.75rem;
-                align-items: stretch;
-            }
-
-            .card-item {
-                max-width: none;
-                min-width: 0;
-            }
-
-            .timeline {
-                align-items: stretch;
-                overflow-x: auto;
-                padding-bottom: 0.35rem;
-            }
-
-            .tl-label {
-                max-width: 72px;
-                font-size: 0.68rem;
-            }
-
-            .risk-row {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0.35rem;
-            }
-
-            .risk-label {
-                width: auto;
-                text-align: left;
-            }
-
-            .summary-table {
-                display: block;
-                max-width: 100%;
-                overflow-x: auto;
-                white-space: normal;
-                font-size: 0.8rem;
-            }
-
-            .summary-table th,
-            .summary-table td {
-                min-width: 150px;
-                padding: 0.65rem;
-            }
-
-            .source-note {
-                font-size: 0.62rem;
-                text-align: center;
-            }
-
-            .nav {
-                position: fixed;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                padding: 0.6rem 0.75rem calc(0.6rem + env(safe-area-inset-bottom));
-                background: rgba(13,17,23,0.96);
-                backdrop-filter: blur(8px);
-                -webkit-backdrop-filter: blur(8px);
-                z-index: 30;
-            }
-
-            .nav-btn {
-                min-width: 78px;
-                padding: 0.5rem 0.65rem;
-                font-size: 0.82rem;
-            }
-
-            .nav-counter {
-                font-size: 0.75rem;
-            }
-        }
-    </style>
-
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1117">
+  <title>Timing of Delivery in Gestational Diabetes | OpenMFM</title>
+  
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2330;--border:#30363d;--text:#e6edf3;--muted:#9ba5b1;--blue:#58a6ff;--cyan:#22d3ee;--teal:#39d0b4;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#bc8cff;--brand:#1f6feb;--shadow:0 24px 70px rgba(0,0,0,.35)}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
+    body{background:radial-gradient(circle at 85% 10%,rgba(34,211,238,.08),transparent 28%),radial-gradient(circle at 15% 85%,rgba(31,111,235,.1),transparent 32%),var(--bg)}
+    button,a{font:inherit} a{color:var(--blue)}
+    .skip-link{position:fixed;left:1rem;top:-4rem;z-index:100;background:#fff;color:#000;padding:.7rem 1rem;border-radius:.5rem}.skip-link:focus{top:1rem}
+    .progress-track{position:fixed;inset:0 0 auto;height:4px;background:rgba(255,255,255,.05);z-index:50}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--cyan));box-shadow:0 0 16px rgba(34,211,238,.45);transition:width .3s ease}
+    main{height:100%}.slide{position:absolute;inset:0;display:grid;align-content:center;gap:clamp(.75rem,1.6vh,1.2rem);padding:clamp(3.8rem,7vh,6rem) clamp(1.2rem,7vw,7rem) clamp(5rem,10vh,7rem);opacity:0;visibility:hidden;transform:translateX(28px);transition:opacity .35s ease,transform .35s ease;overflow:auto}.slide.active{opacity:1;visibility:visible;transform:none;z-index:2}
+    .slide-inner{width:min(1160px,100%);margin:auto}.kicker,.slide-label{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:800;margin-bottom:.55rem}.eyebrow{text-align:center;color:var(--cyan);font-weight:800;letter-spacing:.17em;text-transform:uppercase;font-size:.78rem}
+    h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:"Space Grotesk",Inter,ui-sans-serif,sans-serif;line-height:1.08}h1{font-size:clamp(2.35rem,6vw,5.7rem);letter-spacing:-.045em;margin-bottom:1rem}h2{font-size:clamp(1.85rem,4.2vw,3.8rem);letter-spacing:-.035em;margin-bottom:clamp(1rem,2.2vh,1.65rem);max-width:1000px}h3{font-size:clamp(1rem,1.55vw,1.35rem);margin-bottom:.55rem}p{font-size:clamp(.98rem,1.35vw,1.16rem);line-height:1.55;color:#c7d0da}.lead{font-size:clamp(1.12rem,1.7vw,1.4rem);max-width:840px;color:#d8e0e8}.accent{color:var(--cyan)}.muted{color:var(--muted)}
+    .title-center{text-align:center}.title-center .lead{margin-left:auto;margin-right:auto}.divider{width:78px;height:4px;border-radius:8px;background:linear-gradient(90deg,var(--blue),var(--cyan));margin:1.4rem auto 1.6rem}.pills{display:flex;justify-content:center;gap:.65rem;flex-wrap:wrap}.pill{padding:.48rem .8rem;border:1px solid var(--border);border-radius:999px;background:rgba(22,27,34,.72);font-size:.76rem;font-weight:750;color:#dbe6f0}.pill.cyan{border-color:rgba(34,211,238,.4);color:#9cecf7}.pill.green{border-color:rgba(63,185,80,.45);color:#8ce99a}.pill.purple{border-color:rgba(188,140,255,.45);color:#d8b9ff}
+    .grid-2,.grid-3,.grid-4{display:grid;gap:clamp(.7rem,1.35vw,1.1rem)}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .card{background:linear-gradient(145deg,rgba(28,35,48,.94),rgba(22,27,34,.88));border:1px solid var(--border);border-radius:16px;padding:clamp(1rem,2vw,1.45rem);box-shadow:0 14px 38px rgba(0,0,0,.16)}.card.blue{border-top:3px solid var(--blue)}.card.green{border-top:3px solid var(--green)}.card.amber{border-top:3px solid var(--amber)}.card.red{border-top:3px solid var(--red)}.card p:last-child{margin-bottom:0}.card .big{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.8rem,3vw,3rem);font-weight:800;line-height:1;color:var(--text);margin-bottom:.55rem}.card .small{font-size:.86rem;color:var(--muted)}
+    .callout{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:start;padding:1rem 1.15rem;border-radius:14px;border:1px solid rgba(88,166,255,.35);background:rgba(31,111,235,.09)}.callout.amber{border-color:rgba(210,153,34,.42);background:rgba(210,153,34,.09)}.callout.red{border-color:rgba(248,81,73,.4);background:rgba(248,81,73,.08)}.callout.green{border-color:rgba(63,185,80,.4);background:rgba(63,185,80,.08)}.callout-icon{width:2rem;height:2rem;border-radius:50%;display:grid;place-items:center;background:rgba(88,166,255,.16);color:var(--blue);font-weight:900}.callout p{margin:0}
+    .decision-map{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:.6rem;align-items:center}.decision-node{min-height:132px;display:grid;place-items:center;text-align:center;padding:1rem;border-radius:16px;border:1px solid var(--border);background:var(--surface)}.decision-node strong{display:block;font-size:1.04rem;margin-bottom:.4rem}.arrow{color:var(--cyan);font-size:1.5rem;font-weight:900}
+    .balance{display:grid;grid-template-columns:1fr 110px 1fr;align-items:center;gap:1rem}.risk-panel{padding:1.25rem;border-radius:18px;border:1px solid var(--border);background:var(--surface);min-height:230px}.risk-panel h3{font-size:1.35rem}.risk-panel ul,.pearls{margin:.8rem 0 0;padding:0;list-style:none}.risk-panel li,.pearls li{position:relative;padding:.38rem 0 .38rem 1.35rem;color:#c9d2dc;line-height:1.42}.risk-panel li::before,.pearls li::before{content:"";position:absolute;left:0;top:.85rem;width:.45rem;height:.45rem;border-radius:50%;background:var(--cyan)}.fulcrum{height:170px;display:grid;place-items:center}.fulcrum svg{width:100%;height:100%}
+    .timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.35rem;align-items:end;margin:1.2rem 0}.week{position:relative;text-align:center;padding-top:1.15rem}.week::before{content:"";position:absolute;left:0;right:0;top:.35rem;height:3px;background:var(--border)}.week:first-child::before{left:50%}.week:last-child::before{right:50%}.dot{position:absolute;top:0;left:50%;width:.75rem;height:.75rem;margin-left:-.375rem;border-radius:50%;background:#59616d;border:2px solid var(--bg)}.week.active .dot{background:var(--cyan);box-shadow:0 0 16px rgba(34,211,238,.6)}.week.window{background:rgba(34,211,238,.08);border-radius:12px;padding-bottom:.75rem}.week strong{display:block;font-size:clamp(.85rem,1.25vw,1rem)}.week span{font-size:.72rem;color:var(--muted)}
+    .window-banner{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:.8rem}.window-banner .range{font-family:"Space Grotesk",sans-serif;font-size:clamp(2rem,4.8vw,4.4rem);font-weight:800;letter-spacing:-.04em}.window-banner .context{font-size:1rem;color:var(--muted)}
+    .split-rule{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.rule{border-radius:18px;padding:1.2rem;border:1px solid var(--border);background:var(--surface)}.rule .label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--muted);margin-bottom:.55rem}.rule strong{font-size:clamp(1.2rem,2vw,1.65rem);display:block;margin-bottom:.6rem}
+    .evidence-ladder{display:grid;gap:.75rem}.evidence-row{display:grid;grid-template-columns:180px 1fr;gap:1rem;align-items:center;padding:.8rem 1rem;border-radius:12px;background:var(--surface);border:1px solid var(--border)}.evidence-row strong{color:var(--cyan)}.evidence-row p{font-size:.92rem;margin:0}
+    .reference-list{columns:2;column-gap:2rem;margin:0;padding-left:1.2rem}.reference-list li{break-inside:avoid;margin:0 0 .75rem;font-size:clamp(.68rem,.88vw,.8rem);line-height:1.4;color:#bdc7d2}.source{font-size:.72rem;color:var(--muted);line-height:1.35;margin-top:.55rem}.source a{color:#9cc7ff}.tag{display:inline-block;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800;padding:.3rem .5rem;border-radius:6px;background:rgba(34,211,238,.1);color:#8cecf8;margin-bottom:.55rem}
+    .footer{position:absolute;left:clamp(1.2rem,4vw,3rem);right:clamp(1.2rem,4vw,3rem);bottom:1rem;display:flex;justify-content:space-between;gap:1rem;color:#6f7a86;font-size:.68rem;letter-spacing:.03em}.nav{position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:.55rem;padding:.38rem;border:1px solid var(--border);border-radius:999px;background:rgba(13,17,23,.88);backdrop-filter:blur(12px);box-shadow:var(--shadow)}.nav button{border:0;background:transparent;color:var(--text);width:2.4rem;height:2.4rem;border-radius:50%;cursor:pointer}.nav button:hover,.nav button:focus-visible{background:var(--surface2);outline:2px solid var(--blue);outline-offset:2px}.counter{font-variant-numeric:tabular-nums;color:var(--muted);min-width:4.3rem;text-align:center;font-size:.78rem}.help{position:fixed;right:1rem;top:1rem;z-index:31;border:1px solid var(--border);border-radius:999px;background:rgba(13,17,23,.78);color:var(--muted);padding:.45rem .65rem;cursor:pointer}.help:focus-visible{outline:2px solid var(--blue)}
+    dialog{width:min(560px,calc(100% - 2rem));border:1px solid var(--border);border-radius:18px;background:var(--surface);color:var(--text);padding:1.4rem;box-shadow:var(--shadow)}dialog::backdrop{background:rgba(0,0,0,.72)}dialog button{float:right;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);padding:.5rem .75rem}.keys{display:grid;grid-template-columns:auto 1fr;gap:.6rem 1rem}.keys kbd{border:1px solid var(--border);border-bottom-width:3px;border-radius:6px;padding:.2rem .45rem;background:var(--bg)}
+    @media(max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr)}.decision-map{grid-template-columns:1fr}.arrow{transform:rotate(90deg);text-align:center}.decision-node{min-height:86px}.balance{grid-template-columns:1fr}.fulcrum{display:none}.reference-list{columns:1}.evidence-row{grid-template-columns:1fr;gap:.3rem}}
+    @media(max-width:700px){.slide{padding:3.6rem 1rem 5.4rem;align-content:start}.slide-inner{margin-top:auto;margin-bottom:auto}.grid-2,.grid-3,.grid-4,.split-rule{grid-template-columns:1fr}.card{padding:.9rem}.timeline{grid-template-columns:repeat(5,minmax(58px,1fr));overflow-x:auto;padding-bottom:.4rem}.week{min-width:58px}.nav{bottom:.6rem}.footer{bottom:.55rem}.footer span:first-child{display:none}.help{font-size:0;width:2.2rem;height:2.2rem;padding:0}.help::after{content:"?";font-size:.9rem}.risk-panel{min-height:0}h1{font-size:clamp(2.2rem,13vw,4rem)}h2{font-size:clamp(1.7rem,9vw,2.7rem)}}
+    @media(max-height:720px){.slide{padding-top:3rem;padding-bottom:4.6rem;gap:.55rem}.card{padding:.8rem 1rem}h2{margin-bottom:.75rem}.risk-panel{min-height:180px}.source{margin-top:.3rem}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+    @media print{html,body{height:auto;overflow:visible;background:#fff;color:#111}.progress-track,.nav,.help,.skip-link{display:none!important}.slide{position:relative;display:grid!important;opacity:1!important;visibility:visible!important;transform:none!important;page-break-after:always;break-after:page;height:7.5in;padding:.45in;background:#fff;color:#111;overflow:hidden}.slide:last-child{page-break-after:auto}.card,.risk-panel,.rule,.decision-node,.evidence-row{background:#fff;color:#111;box-shadow:none;border-color:#bbb}.slide p,.card p,.risk-panel li,.pearls li,.reference-list li,.muted,.source{color:#333}.footer{color:#666}.nav{display:none}}
+  </style>
 <!-- openmfm-seo-injected -->
 <link rel="canonical" href="https://openmfm.org/decks/gdm-timing-of-delivery/index.html">
-<meta name="description" content="Evidence-based clinical education deck on delivery timing for gestational diabetes, including A1GDM, A2GDM, poor glycemic control, refractory disease, suspected macrosomia, neonatal risk tradeoffs, and ACOG/SMFM/NICE-aligned timing windows.">
+<meta name="description" content="A decision-focused guide to delivery timing in gestational diabetes, separating ACOG recommendations, NICE guidance, and observational evidence across diet-controlled, medication-managed, and poorly controlled disease.">
 <meta name="author" content="Dr. Chukwuma Onyeije, MD">
-<meta name="keywords" content="Gestational Diabetes, Delivery Timing, A1GDM, A2GDM, Glycemic Control, Provider Education">
+<meta name="keywords" content="Gestational Diabetes, Delivery Timing, ACOG, NICE, Provider Education">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://openmfm.org/decks/gdm-timing-of-delivery/index.html">
 <meta property="og:title" content="Timing of Delivery in Gestational Diabetes - Provider Education | OpenMFM">
-<meta property="og:description" content="Evidence-based clinical education deck on delivery timing for gestational diabetes, including A1GDM, A2GDM, poor glycemic control, refractory disease, suspected macrosomia, neonatal risk tradeoffs, and ACOG/SMFM/NICE-aligned timing windows.">
+<meta property="og:description" content="A decision-focused guide to delivery timing in gestational diabetes, separating ACOG recommendations, NICE guidance, and observational evidence across diet-controlled, medication-managed, and poorly controlled disease.">
 <meta property="og:image" content="https://openmfm.org/og-image.png">
 <meta property="og:site_name" content="OpenMFM">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Timing of Delivery in Gestational Diabetes - Provider Education | OpenMFM">
-<meta name="twitter:description" content="Evidence-based clinical education deck on delivery timing for gestational diabetes, including A1GDM, A2GDM, poor glycemic control, refractory disease, suspected macrosomia, neonatal risk tradeoffs, and ACOG/SMFM/NICE-aligned timing windows.">
+<meta name="twitter:description" content="A decision-focused guide to delivery timing in gestational diabetes, separating ACOG recommendations, NICE guidance, and observational evidence across diet-controlled, medication-managed, and poorly controlled disease.">
 <meta name="twitter:image" content="https://openmfm.org/og-image.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "MedicalWebPage",
   "name": "Timing of Delivery in Gestational Diabetes - Provider Education",
-  "description": "Evidence-based clinical education deck on delivery timing for gestational diabetes, including A1GDM, A2GDM, poor glycemic control, refractory disease, suspected macrosomia, neonatal risk tradeoffs, and ACOG/SMFM/NICE-aligned timing windows.",
+  "description": "A decision-focused guide to delivery timing in gestational diabetes, separating ACOG recommendations, NICE guidance, and observational evidence across diet-controlled, medication-managed, and poorly controlled disease.",
   "url": "https://openmfm.org/decks/gdm-timing-of-delivery/index.html",
   "author": {
     "@type": "Person",
@@ -456,7 +76,7 @@
       "url": "https://openmfm.org/og-image.png"
     }
   },
-  "dateModified": "2026-07-14",
+  "dateModified": "2026-07-16",
   "inLanguage": "en",
   "audience": {
     "@type": "MedicalAudience",
@@ -471,519 +91,235 @@
     "name": "OpenMFM",
     "url": "https://openmfm.org"
   },
-  "keywords": "Gestational Diabetes, Delivery Timing, A1GDM, A2GDM, Glycemic Control, Provider Education"
+  "keywords": "Gestational Diabetes, Delivery Timing, ACOG, NICE, Provider Education"
 }
 </script>
 </head>
 <body>
+  <a class="skip-link" href="#slide-1">Skip to presentation</a>
+  <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+  <button class="help" id="helpButton" aria-label="Open navigation help">Navigation help</button>
+  <main id="deck" aria-live="polite">
+    <section class="slide active" id="slide-1" aria-labelledby="title-1">
+      <div class="slide-inner title-center">
+        <div class="eyebrow">OpenMFM Clinician Education</div>
+        <h1 id="title-1">Timing of Delivery<br><span class="accent">in Gestational Diabetes</span></h1>
+        <div class="divider"></div>
+        <p class="lead">The diagnosis does not determine one delivery date. Glycemic control, treatment, fetal status, and comorbidity determine the safest window.</p>
+        <div class="pills"><span class="pill cyan">ACOG-aligned</span><span class="pill green">Decision framework</span><span class="pill purple">Provider education</span></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>Maternal-Fetal Medicine</span></div>
+    </section>
 
-<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-
-<div class="deck">
-
-    <!-- ══════════════════════════════════════════════════════════════════
-         SLIDE 1 — TITLE
-    ══════════════════════════════════════════════════════════════════ -->
-    <div class="slide slide-title active" id="slide-1">
-        <div class="kicker">Maternal-Fetal Medicine · Clinical Education</div>
-        <h1 style="text-align:center; max-width:900px;">
-            Timing of Delivery<br>
-            <span class="accent-blue">in Gestational Diabetes</span>
-        </h1>
-        <div class="divider" style="background:#58a6ff;"></div>
-        <p style="color:rgba(255,255,255,0.55); font-size:1.1rem; margin-top:0.5em;">
-            Evidence-Based Recommendations &nbsp;·&nbsp; ACOG &nbsp;·&nbsp; SMFM &nbsp;·&nbsp; NICE
-        </p>
-        <p class="source-note">ACOG Practice Bulletin · SMFM Consult Series · NICE NG3</p>
-    </div>
-
-    <!-- ══════════════════════════════════════════════════════════════════
-         SLIDE 2 — GDM CLASSIFICATION OVERVIEW
-    ══════════════════════════════════════════════════════════════════ -->
-    <div class="slide slide-a1" id="slide-2">
-        <div class="kicker">Classification</div>
-        <h2 style="text-align:center; margin-bottom:0.3em;">GDM: A Tiered Approach</h2>
-        <div class="divider" style="background:#58a6ff;"></div>
-        <div class="card-row" style="margin-top:1em;">
-            <div class="card card-item" style="border-color:rgba(63,185,80,0.4);">
-                <div class="badge badge-green" style="margin-bottom:0.6em;">A1GDM</div>
-                <h3 class="accent-green">Diet-Controlled</h3>
-                <p style="font-size:0.95rem; text-align:left; margin-top:0.4em; color:rgba(255,255,255,0.75);">
-                    Glycemic targets met with nutrition alone
-                </p>
-            </div>
-            <div class="card card-item" style="border-color:rgba(88,166,255,0.4);">
-                <div class="badge badge-blue" style="margin-bottom:0.6em;">A2GDM</div>
-                <h3 class="accent-blue">Medication-Managed</h3>
-                <p style="font-size:0.95rem; text-align:left; margin-top:0.4em; color:rgba(255,255,255,0.75);">
-                    Requires insulin or oral hypoglycemic agents
-                </p>
-            </div>
-            <div class="card card-item" style="border-color:rgba(240,136,62,0.4);">
-                <div class="badge badge-orange" style="margin-bottom:0.6em;">POORLY CONTROLLED</div>
-                <h3 class="accent-orange">Suboptimal Control</h3>
-                <p style="font-size:0.95rem; text-align:left; margin-top:0.4em; color:rgba(255,255,255,0.75);">
-                    Persistent hyperglycemia despite therapy
-                </p>
-            </div>
+    <section class="slide" id="slide-2" aria-labelledby="title-2">
+      <div class="slide-inner">
+        <div class="slide-label">The first decision</div>
+        <h2 id="title-2">Classify the clinical scenario before choosing a date</h2>
+        <div class="grid-3">
+          <article class="card green"><span class="tag">A1GDM</span><h3>Diet controlled</h3><p>Glucose targets are met with nutrition and activity alone.</p><p class="small">The least intervention is usually needed when fetal growth and maternal status remain reassuring.</p></article>
+          <article class="card blue"><span class="tag">A2GDM</span><h3>Medication managed</h3><p>Insulin or an oral glucose-lowering agent is required.</p><p class="small">Medication use matters, but control and comorbidity still shape the plan.</p></article>
+          <article class="card red"><span class="tag">Suboptimal control</span><h3>Persistent hyperglycemia</h3><p>Values remain above target despite treatment or adherence is difficult to establish.</p><p class="small">ACOG does not define one glucose or HbA1c threshold for this category.</p></article>
         </div>
-        <p class="source-note">ACOG Practice Bulletin No. 190</p>
-    </div>
+        <p class="source">Guideline basis: ACOG Practice Bulletin No. 190. Categories describe treatment and control; they do not replace clinical judgment.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>2 / 13</span></div>
+    </section>
 
-    <!-- ══════════════════════════════════════════════════════════════════
-         SLIDE 3 — A1GDM TIMING
-    ══════════════════════════════════════════════════════════════════ -->
-    <div class="slide slide-a1" id="slide-3">
-        <div class="kicker">Diet-Controlled GDM · A1GDM</div>
-        <h2 style="text-align:center;">
-            <span class="accent-green">Well-Controlled</span> &nbsp;|&nbsp; Normal Fetal Growth
-        </h2>
-        <div class="divider" style="background:#3fb950;"></div>
-
-        <!-- Gestational age timeline -->
-        <div class="timeline" style="margin-top:1.5em;">
-            <div class="tl-node">
-                <div class="tl-week" style="color:rgba(255,255,255,0.3);">34</div>
-                <div class="tl-dot" style="border-color:rgba(255,255,255,0.2);"></div>
-                <div class="tl-label" style="color:rgba(255,255,255,0.3);">Late preterm</div>
-            </div>
-            <div class="tl-line"></div>
-            <div class="tl-node">
-                <div class="tl-week" style="color:rgba(255,255,255,0.3);">37</div>
-                <div class="tl-dot" style="border-color:rgba(255,255,255,0.2);"></div>
-                <div class="tl-label" style="color:rgba(255,255,255,0.3);">Early term</div>
-            </div>
-            <div class="tl-line"></div>
-            <div class="tl-node">
-                <div class="tl-week accent-green" style="font-size:1.1rem;">39</div>
-                <div class="tl-dot" style="border-color:#3fb950; background:#3fb950;"></div>
-                <div class="tl-label accent-green" style="font-weight:600;">Earliest<br>delivery</div>
-            </div>
-            <div class="tl-line" style="background:rgba(63,185,80,0.4);"></div>
-            <div class="tl-node">
-                <div class="tl-week accent-green">40<sup style="font-size:0.6em;">6/7</sup></div>
-                <div class="tl-dot" style="border-color:#3fb950; background:#3fb950;"></div>
-                <div class="tl-label accent-green" style="font-weight:600;">Expectant<br>limit</div>
-            </div>
-            <div class="tl-line"></div>
-            <div class="tl-node">
-                <div class="tl-week" style="color:rgba(255,255,255,0.3);">41+</div>
-                <div class="tl-dot" style="border-color:rgba(248,81,73,0.5);"></div>
-                <div class="tl-label" style="color:rgba(248,81,73,0.7);">Increased risk</div>
-            </div>
+    <section class="slide" id="slide-3" aria-labelledby="title-3">
+      <div class="slide-inner">
+        <div class="slide-label">Decision architecture</div>
+        <h2 id="title-3">Four variables determine the delivery window</h2>
+        <div class="decision-map" role="img" aria-label="Decision pathway from glycemic control through treatment, fetal status, and comorbidities to delivery timing">
+          <div class="decision-node"><div><strong>1. Control</strong><span class="muted">At target or persistently elevated?</span></div></div><div class="arrow" aria-hidden="true">&#x2192;</div>
+          <div class="decision-node"><div><strong>2. Treatment</strong><span class="muted">Diet alone or medication?</span></div></div><div class="arrow" aria-hidden="true">&#x2192;</div>
+          <div class="decision-node"><div><strong>3. Fetal status</strong><span class="muted">Growth, fluid, surveillance</span></div></div><div class="arrow" aria-hidden="true">&#x2192;</div>
+          <div class="decision-node"><div><strong>4. Comorbidity</strong><span class="muted">Hypertension, prior history, other indication</span></div></div>
         </div>
+        <div class="callout green"><div class="callout-icon" aria-hidden="true">&#x2713;</div><p><strong>Clinical rule:</strong> choose the earliest gestational age justified by the full maternal-fetal picture, not by the GDM label in isolation.</p></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>3 / 13</span></div>
+    </section>
 
-        <div class="card" style="max-width:680px; margin-top:1em; border-color:rgba(63,185,80,0.3);">
-            <p style="font-size:1.05rem; text-align:center; color:rgba(255,255,255,0.85);">
-                Antepartum fetal testing indicated.<br>
-                <span class="accent-green">No benefit</span> to delivery before 39 weeks.
-            </p>
+    <section class="slide" id="slide-4" aria-labelledby="title-4">
+      <div class="slide-inner">
+        <div class="slide-label">Why timing matters</div>
+        <h2 id="title-4">Delivery timing balances neonatal maturity against ongoing pregnancy risk</h2>
+        <div class="balance">
+          <article class="risk-panel"><h3 style="color:var(--amber)">Earlier birth</h3><ul><li>Respiratory morbidity</li><li>Neonatal hypoglycemia</li><li>Hyperbilirubinemia</li><li>NICU admission</li></ul></article>
+          <div class="fulcrum" aria-hidden="true"><svg viewBox="0 0 120 180"><line x1="12" y1="74" x2="108" y2="74" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/><circle cx="60" cy="74" r="9" fill="#58a6ff"/><path d="M60 83 L32 150 H88 Z" fill="#1c2330" stroke="#30363d" stroke-width="3"/></svg></div>
+          <article class="risk-panel"><h3 style="color:var(--cyan)">Ongoing pregnancy</h3><ul><li>Increasing fetal size</li><li>Shoulder dystocia and birth trauma</li><li>Stillbirth risk in higher-risk disease</li><li>Evolution of maternal or fetal complications</li></ul></article>
         </div>
-        <p class="source-note">ACOG PB No. 190 [1]</p>
-    </div>
+        <p class="source">Evidence context: ACOG Committee Opinion No. 765; Metcalfe et al., 2020; Nashif et al., 2023.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>4 / 13</span></div>
+    </section>
 
-    <!-- ══════════════════════════════════════════════════════════════════
-         SLIDE 4 — A2GDM TIMING
-    ══════════════════════════════════════════════════════════════════ -->
-    <div class="slide slide-a2" id="slide-4">
-        <div class="kicker">Medication-Managed GDM · A2GDM</div>
-        <h2 style="text-align:center;">
-            <span class="accent-blue">Well-Controlled</span> &nbsp;|&nbsp; Normal Fetal Growth
-        </h2>
-        <div class="divider" style="background:#58a6ff;"></div>
-
-        <div class="timeline" style="margin-top:1.5em;">
-            <div class="tl-node">
-                <div class="tl-week" style="color:rgba(255,255,255,0.3);">37</div>
-                <div class="tl-dot" style="border-color:rgba(255,255,255,0.2);"></div>
-                <div class="tl-label" style="color:rgba(255,255,255,0.3);">Early term</div>
-            </div>
-            <div class="tl-line"></div>
-            <div class="tl-node">
-                <div class="tl-week accent-blue" style="font-size:1.1rem;">39<sup style="font-size:0.6em;">0/7</sup></div>
-                <div class="tl-dot" style="border-color:#58a6ff; background:#58a6ff;"></div>
-                <div class="tl-label accent-blue" style="font-weight:600;">Delivery<br>window opens</div>
-            </div>
-            <div class="tl-line" style="background:rgba(88,166,255,0.4);"></div>
-            <div class="tl-node">
-                <div class="tl-week accent-blue">39<sup style="font-size:0.6em;">6/7</sup></div>
-                <div class="tl-dot" style="border-color:#58a6ff; background:#58a6ff;"></div>
-                <div class="tl-label accent-blue" style="font-weight:600;">Delivery<br>window closes</div>
-            </div>
-            <div class="tl-line"></div>
-            <div class="tl-node">
-                <div class="tl-week" style="color:rgba(248,81,73,0.7);">40+</div>
-                <div class="tl-dot" style="border-color:rgba(248,81,73,0.5);"></div>
-                <div class="tl-label" style="color:rgba(248,81,73,0.7);">Not recommended</div>
-            </div>
+    <section class="slide" id="slide-5" aria-labelledby="title-5">
+      <div class="slide-inner">
+        <div class="slide-label">A1GDM</div>
+        <h2 id="title-5">Well-controlled A1GDM can usually continue to full term</h2>
+        <div class="window-banner"><span class="range accent">39 0/7&#x2013;40 6/7</span><span class="context">reasonable delivery window when no other indication is present</span></div>
+        <div class="timeline" aria-label="Timeline showing the A1GDM delivery window from 39 weeks through 40 weeks and 6 days">
+          <div class="week"><i class="dot"></i><strong>37</strong><span>early term</span></div><div class="week"><i class="dot"></i><strong>38</strong><span>avoid routine delivery</span></div><div class="week window active"><i class="dot"></i><strong>39</strong><span>window opens</span></div><div class="week window active"><i class="dot"></i><strong>40</strong><span>expectant management</span></div><div class="week active"><i class="dot"></i><strong>40+6</strong><span>upper boundary</span></div>
         </div>
+        <div class="callout"><div class="callout-icon" aria-hidden="true">i</div><p><strong>ACOG:</strong> delivery before 39 weeks is not recommended solely for diet-controlled GDM when glycemic control and fetal status are reassuring.</p></div>
+        <p class="source">ACOG Practice Bulletin No. 190.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>5 / 13</span></div>
+    </section>
 
-        <div class="card-row" style="margin-top:1em;">
-            <div class="card" style="border-color:rgba(88,166,255,0.3); max-width:400px;">
-                <p style="font-size:0.95rem; text-align:center; color:rgba(255,255,255,0.8);">
-                    Induction at 38–39 wks reduces <span class="accent-blue">LGA rates</span> without increasing cesarean delivery
-                </p>
-            </div>
-            <div class="card" style="border-color:rgba(88,166,255,0.3); max-width:400px;">
-                <p style="font-size:0.95rem; text-align:center; color:rgba(255,255,255,0.8);">
-                    Shoulder dystocia: <span class="accent-blue">1.4%</span> with induction at 38–39 wks vs. <span class="accent-red">10%</span> with expectant management beyond 40 wks
-                </p>
-            </div>
+    <section class="slide" id="slide-6" aria-labelledby="title-6">
+      <div class="slide-inner">
+        <div class="slide-label">Surveillance nuance</div>
+        <h2 id="title-6">A1GDM does not automatically mandate antepartum testing</h2>
+        <div class="split-rule">
+          <article class="rule"><div class="label">What ACOG says</div><strong>No consensus before 40 weeks</strong><p>For diet-controlled GDM without other comorbidities, evidence is insufficient to require routine surveillance before 40 0/7 weeks.</p></article>
+          <article class="rule"><div class="label">What clinicians should do</div><strong>Individualize the plan</strong><p>Use glycemic trends, fetal growth, fluid, comorbidities, and local practice to decide whether and when testing adds value.</p></article>
         </div>
-        <p class="source-note">ACOG PB No. 190 [1]</p>
-    </div>
+        <div class="callout amber"><div class="callout-icon" aria-hidden="true">!</div><p>Do not convert “no consensus” into “never test.” A separate maternal or fetal indication may independently justify surveillance.</p></div>
+        <p class="source">ACOG Committee Opinion No. 828, Indications for Outpatient Antenatal Fetal Surveillance.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>6 / 13</span></div>
+    </section>
 
-    <!-- ══════════════════════════════════════════════════════════════════
-         SLIDE 5 — POORLY CONTROLLED GDM
-    ══════════════════════════════════════════════════════════════════ -->
-    <div class="slide slide-poor" id="slide-5">
-        <div class="kicker">Suboptimal Glycemic Control</div>
-        <h2 style="text-align:center;">
-            <span class="accent-orange">Poorly Controlled</span> GDM
-        </h2>
-        <div class="divider" style="background:#f0883e;"></div>
-
-        <div class="timeline" style="margin-top:1.5em;">
-            <div class="tl-node">
-                <div class="tl-week" style="color:rgba(255,255,255,0.3);">34</div>
-                <div class="tl-dot" style="border-color:rgba(255,255,255,0.2);"></div>
-                <div class="tl-label" style="color:rgba(255,255,255,0.3);">Late preterm</div>
-            </div>
-            <div class="tl-line"></div>
-            <div class="tl-node">
-                <div class="tl-week accent-orange" style="font-size:1.1rem;">37<sup style="font-size:0.6em;">0/7</sup></div>
-                <div class="tl-dot" style="border-color:#f0883e; background:#f0883e;"></div>
-                <div class="tl-label accent-orange" style="font-weight:600;">Earliest<br>delivery</div>
-            </div>
-            <div class="tl-line" style="background:rgba(240,136,62,0.4);"></div>
-            <div class="tl-node">
-                <div class="tl-week accent-orange">38<sup style="font-size:0.6em;">6/7</sup></div>
-                <div class="tl-dot" style="border-color:#f0883e; background:#f0883e;"></div>
-                <div class="tl-label accent-orange" style="font-weight:600;">Upper<br>limit</div>
-            </div>
-            <div class="tl-line"></div>
-            <div class="tl-node">
-                <div class="tl-week" style="color:rgba(255,255,255,0.3);">39</div>
-                <div class="tl-dot" style="border-color:rgba(255,255,255,0.2);"></div>
-                <div class="tl-label" style="color:rgba(255,255,255,0.3);">Full term</div>
-            </div>
+    <section class="slide" id="slide-7" aria-labelledby="title-7">
+      <div class="slide-inner">
+        <div class="slide-label">A2GDM</div>
+        <h2 id="title-7">Well-controlled A2GDM points to the 39th week</h2>
+        <div class="window-banner"><span class="range accent">39 0/7&#x2013;39 6/7</span><span class="context">recommended delivery window</span></div>
+        <div class="grid-3">
+          <article class="card blue"><div class="big">39</div><h3>Full-term target</h3><p>Medication use alone does not justify routine delivery before 39 weeks when control is good.</p></article>
+          <article class="card green"><div class="big">&#x2713;</div><h3>Confirm stability</h3><p>Review glucose patterns, medication needs, growth, fluid, surveillance, and other diagnoses.</p></article>
+          <article class="card amber"><div class="big">&#x2260;</div><h3>Not one-size-fits-all</h3><p>A separate obstetric indication can appropriately move delivery earlier.</p></article>
         </div>
+        <p class="source">ACOG Practice Bulletin No. 190. ACOG guidance is presented separately from observational evidence and international recommendations.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>7 / 13</span></div>
+    </section>
 
-        <div class="card" style="max-width:720px; margin-top:1em; border-color:rgba(240,136,62,0.3);">
-            <p style="font-size:1rem; text-align:center; color:rgba(255,255,255,0.8);">
-                Balance <span class="accent-orange">prematurity risk</span> against <span class="accent-red">stillbirth risk</span>.<br>
-                No clear glycemic threshold defined by ACOG for "poorly controlled."
-            </p>
+    <section class="slide" id="slide-8" aria-labelledby="title-8">
+      <div class="slide-inner">
+        <div class="slide-label">Suboptimal control</div>
+        <h2 id="title-8">Poor control can justify earlier delivery, but the threshold remains undefined</h2>
+        <div class="window-banner"><span class="range" style="color:var(--amber)">37 0/7&#x2013;38 6/7</span><span class="context">often used after individualized risk assessment</span></div>
+        <div class="grid-2">
+          <article class="card amber"><h3>Document objective evidence</h3><p>Describe fasting and postprandial patterns, medication escalation, adherence barriers, fetal growth, fluid, and surveillance results.</p></article>
+          <article class="card red"><h3>Name the uncertainty</h3><p>ACOG does not specify one glucose value, percentage of abnormal readings, or HbA1c cutoff that defines “poorly controlled.”</p></article>
         </div>
-        <p class="source-note">ACOG PB No. 190 [1]</p>
-    </div>
+        <div class="callout amber"><div class="callout-icon" aria-hidden="true">!</div><p>Earlier delivery is a risk tradeoff, not a penalty for abnormal numbers. The indication should be explicit and reproducible.</p></div>
+        <p class="source">ACOG Practice Bulletin No. 190; Braverman-Poyastro et al., 2024; Nashif et al., 2023.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>8 / 13</span></div>
+    </section>
 
-    <!-- ══════════════════════════════════════════════════════════════════
-         SLIDE 6 — REFRACTORY / LATE PRETERM
-    ══════════════════════════════════════════════════════════════════ -->
-    <div class="slide slide-refractory" id="slide-6">
-        <div class="kicker">Refractory Poor Control</div>
-        <h2 style="text-align:center;">
-            Late Preterm Delivery &nbsp;
-            <span class="accent-red">34–36<sup style="font-size:0.6em;">6/7</sup> Weeks</span>
-        </h2>
-        <div class="divider" style="background:#f85149;"></div>
-
-        <div class="card-row" style="margin-top:1.2em;">
-            <div class="card card-item" style="border-color:rgba(248,81,73,0.4); max-width:340px;">
-                <!-- Hospital icon -->
-                <div style="text-align:center; margin-bottom:0.5em;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#f85149" stroke-width="1.5" width="48" height="48">
-                        <rect x="3" y="3" width="18" height="18" rx="2"/>
-                        <path d="M9 12h6M12 9v6"/>
-                        <path d="M3 9h18"/>
-                    </svg>
-                </div>
-                <h3 class="accent-red" style="text-align:center;">Indication 1</h3>
-                <p style="font-size:0.9rem; text-align:center; margin-top:0.4em; color:rgba(255,255,255,0.75);">
-                    Failure of in-hospital attempts to improve glycemic control
-                </p>
-            </div>
-            <div class="card card-item" style="border-color:rgba(248,81,73,0.4); max-width:340px;">
-                <div style="text-align:center; margin-bottom:0.5em;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#f85149" stroke-width="1.5" width="48" height="48">
-                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                    </svg>
-                </div>
-                <h3 class="accent-red" style="text-align:center;">Indication 2</h3>
-                <p style="font-size:0.9rem; text-align:center; margin-top:0.4em; color:rgba(255,255,255,0.75);">
-                    Abnormal antepartum fetal surveillance
-                </p>
-            </div>
+    <section class="slide" id="slide-9" aria-labelledby="title-9">
+      <div class="slide-inner">
+        <div class="slide-label">Exceptional circumstances</div>
+        <h2 id="title-9">Late-preterm delivery is reserved for refractory disease or concerning fetal status</h2>
+        <div class="window-banner"><span class="range" style="color:var(--red)">34 0/7&#x2013;36 6/7</span><span class="context">consider only when the risk of remaining pregnant is greater</span></div>
+        <div class="grid-2">
+          <article class="card red"><span class="tag">Indication 1</span><h3>Failed inpatient efforts</h3><p>Persistent severe hyperglycemia despite supervised attempts to improve control.</p></article>
+          <article class="card red"><span class="tag">Indication 2</span><h3>Abnormal fetal surveillance</h3><p>A nonreassuring assessment that independently supports delivery.</p></article>
         </div>
+        <div class="callout red"><div class="callout-icon" aria-hidden="true">!</div><p>Late-preterm birth carries meaningful respiratory, feeding, thermoregulation, and glycemic morbidity. Document why continued pregnancy is less safe.</p></div>
+        <p class="source">ACOG Practice Bulletin No. 190; ACOG Committee Opinion No. 765.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>9 / 13</span></div>
+    </section>
 
-        <div class="card" style="max-width:680px; margin-top:1em; border-color:rgba(248,81,73,0.2); background:rgba(248,81,73,0.07);">
-            <p style="font-size:1rem; text-align:center; color:rgba(255,255,255,0.85);">
-                <span class="accent-red">Reserve for refractory cases only.</span><br>
-                Late preterm delivery carries significant neonatal morbidity risk.
-            </p>
+    <section class="slide" id="slide-10" aria-labelledby="title-10">
+      <div class="slide-inner">
+        <div class="slide-label">Fetal size and route of birth</div>
+        <h2 id="title-10">Suspected macrosomia changes counseling more than timing</h2>
+        <div class="grid-3">
+          <article class="card purple" style="border-top:3px solid var(--purple)"><div class="big">&#x2265;4,500 g</div><h3>Discuss scheduled cesarean</h3><p>In pregnancies complicated by diabetes, ACOG advises considering scheduled cesarean birth at this estimated fetal-weight threshold.</p></article>
+          <article class="card blue"><div class="big">0.6&#x2013;1.4%</div><h3>2,500&#x2013;4,000 g</h3><p>Reported shoulder-dystocia frequency across all pregnancies in this birthweight range.</p></article>
+          <article class="card amber"><div class="big">5&#x2013;9%</div><h3>&gt;4,000 g</h3><p>Reported frequency at higher birthweights. This is not an induction-versus-expectant-management comparison.</p></article>
         </div>
-        <p class="source-note">ACOG PB No. 190 [1]</p>
-    </div>
+        <div class="callout"><div class="callout-icon" aria-hidden="true">i</div><p>Ultrasound estimated fetal weight is imprecise. Use the estimate to structure shared decision-making, not to promise or predict a delivery outcome.</p></div>
+        <p class="source">ACOG Practice Bulletin No. 216, Macrosomia. Weight-stratified shoulder-dystocia estimates: Cleveland Clinic, medically reviewed 2022.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>10 / 13</span></div>
+    </section>
 
-    <!-- ══════════════════════════════════════════════════════════════════
-         SLIDE 7 — MACROSOMIA
-    ══════════════════════════════════════════════════════════════════ -->
-    <div class="slide slide-macro" id="slide-7">
-        <div class="kicker">Fetal Growth · Macrosomia</div>
-        <h2 style="text-align:center;">
-            Suspected Macrosomia &nbsp;
-            <span style="color:#bc8cff;">EFW ≥ 4,500 g</span>
-        </h2>
-        <div class="divider" style="background:#bc8cff;"></div>
-
-        <div class="card-row" style="margin-top:1.2em;">
-            <div class="card" style="border-color:rgba(188,140,255,0.4); max-width:320px;">
-                <div style="text-align:center; margin-bottom:0.4em;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#bc8cff" stroke-width="1.5" width="44" height="44">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M12 8v4l3 3"/>
-                    </svg>
-                </div>
-                <h3 style="color:#bc8cff; text-align:center;">Timing</h3>
-                <p style="font-size:0.9rem; text-align:center; margin-top:0.4em; color:rgba(255,255,255,0.75);">
-                    Individualized; no universal gestational age threshold
-                </p>
-            </div>
-            <div class="card" style="border-color:rgba(248,81,73,0.4); max-width:320px;">
-                <div style="text-align:center; margin-bottom:0.4em;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#f85149" stroke-width="1.5" width="44" height="44">
-                        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-                        <line x1="12" y1="9" x2="12" y2="13"/>
-                        <line x1="12" y1="17" x2="12.01" y2="17"/>
-                    </svg>
-                </div>
-                <h3 class="accent-red" style="text-align:center;">Shoulder Dystocia</h3>
-                <p style="font-size:0.9rem; text-align:center; margin-top:0.4em; color:rgba(255,255,255,0.75);">
-                    Risk is higher at any fetal weight in diabetic vs. non-diabetic pregnancies
-                </p>
-            </div>
-            <div class="card" style="border-color:rgba(240,136,62,0.4); max-width:320px;">
-                <div style="text-align:center; margin-bottom:0.4em;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#f0883e" stroke-width="1.5" width="44" height="44">
-                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
-                    </svg>
-                </div>
-                <h3 class="accent-orange" style="text-align:center;">Counseling</h3>
-                <p style="font-size:0.9rem; text-align:center; margin-top:0.4em; color:rgba(255,255,255,0.75);">
-                    Discuss risks/benefits of scheduled cesarean delivery
-                </p>
-            </div>
+    <section class="slide" id="slide-11" aria-labelledby="title-11">
+      <div class="slide-inner">
+        <div class="slide-label">Guidelines and evidence</div>
+        <h2 id="title-11">ACOG and NICE agree on the principle, not every delivery window</h2>
+        <div class="grid-2">
+          <article class="card blue"><span class="tag">United States guideline</span><h3>ACOG</h3><p>Uses a tiered framework based on diet control, medication use, glycemic control, and complications.</p><ul class="pearls"><li>A1GDM: 39 0/7&#x2013;40 6/7</li><li>A2GDM: 39 0/7&#x2013;39 6/7</li><li>Poor control: earlier, individualized</li></ul></article>
+          <article class="card green"><span class="tag">United Kingdom guideline</span><h3>NICE NG3</h3><p>Advises people with uncomplicated GDM to give birth no later than 40+6.</p><ul class="pearls"><li>Offer induction or cesarean if birth has not occurred by then</li><li>Consider earlier elective birth for maternal or fetal complications</li></ul></article>
         </div>
+        <div class="callout green"><div class="callout-icon" aria-hidden="true">&#x2713;</div><p><strong>Shared principle:</strong> uncomplicated, well-controlled GDM does not justify routine early-term delivery before 39 weeks.</p></div>
+        <p class="source">ACOG Practice Bulletin No. 190; NICE Guideline NG3, recommendations 1.4.4&#x2013;1.4.5.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>11 / 13</span></div>
+    </section>
 
-        <div class="card" style="max-width:700px; margin-top:1em; border-color:rgba(188,140,255,0.2);">
-            <p style="font-size:0.95rem; text-align:center; color:rgba(255,255,255,0.8);">
-                Third-trimester ultrasound or clinical exam is reasonable to identify macrosomia.
-            </p>
+    <section class="slide" id="slide-12" aria-labelledby="title-12">
+      <div class="slide-inner">
+        <div class="slide-label">Clinical pearls</div>
+        <h2 id="title-12">Use a hierarchy, not a memorized date</h2>
+        <div class="grid-2">
+          <ol class="pearls" style="counter-reset:pearl;list-style:none">
+            <li><strong>Classify treatment:</strong> diet alone or medication.</li><li><strong>Assess actual control:</strong> review patterns, not a label.</li><li><strong>Check fetal status:</strong> growth, fluid, and testing when indicated.</li><li><strong>Identify competing indications:</strong> hypertension and other disease may lead.</li>
+          </ol>
+          <ol class="pearls" style="list-style:none">
+            <li><strong>Avoid routine birth before 39 weeks</strong> when GDM is uncomplicated and well controlled.</li><li><strong>Document why earlier is safer</strong> when control is poor.</li><li><strong>Separate timing from route:</strong> macrosomia mainly changes counseling about mode of birth.</li><li><strong>Name the evidence level:</strong> guideline, cohort evidence, or clinical inference.</li>
+          </ol>
         </div>
-        <p class="source-note">ACOG PB No. 190 [1] · ACOG PB No. 227 [2]</p>
-    </div>
+        <div class="callout green"><div class="callout-icon" aria-hidden="true">&#x2713;</div><p>The best delivery plan is specific enough to defend, flexible enough to respond, and clear enough for the patient and care team to understand.</p></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>12 / 13</span></div>
+    </section>
 
-    <!-- ══════════════════════════════════════════════════════════════════
-         SLIDE 8 — RISKS OF EARLY INDUCTION
-    ══════════════════════════════════════════════════════════════════ -->
-    <div class="slide slide-risk" id="slide-8">
-        <div class="kicker">Neonatal Outcomes · Caution</div>
-        <h2 style="text-align:center;">
-            Early Induction in <span class="accent-green">Well-Controlled</span> GDM
-        </h2>
-        <div class="divider" style="background:#e3b341;"></div>
-
-        <p style="margin-top:0.5em; color:rgba(255,255,255,0.65); font-size:1rem;">
-            Induction &lt;39 weeks in well-controlled GDM is associated with increased neonatal morbidity
-        </p>
-
-        <div class="risk-chart">
-            <div class="risk-row">
-                <div class="risk-label" style="color:rgba(255,255,255,0.7);">Neonatal Hypoglycemia</div>
-                <div class="risk-bar-bg">
-                    <div class="risk-bar" style="width:70%; background:linear-gradient(90deg,#e3b341,#f0883e);">↑ Risk</div>
-                </div>
+    <section class="slide" id="slide-13" aria-labelledby="title-13">
+      <div class="slide-inner">
+        <div class="slide-label">Evidence and controversies</div>
+        <h2 id="title-13">Guidelines are clear; the evidence gaps are not</h2>
+        <div class="grid-2">
+          <div>
+            <div class="evidence-ladder">
+              <div class="evidence-row"><strong>Known</strong><p>Early-term birth has more neonatal morbidity than birth at 39 weeks when no competing indication exists.</p></div>
+              <div class="evidence-row"><strong>Uncertain</strong><p>No standardized definition identifies the degree of poor glycemic control that should trigger birth before 39 weeks.</p></div>
+              <div class="evidence-row"><strong>Contested</strong><p>The optimal surveillance strategy for uncomplicated A1GDM remains unsettled.</p></div>
+              <div class="evidence-row"><strong>Research need</strong><p>Better prospective studies must compare timing strategies while measuring glycemic severity and maternal-fetal outcomes.</p></div>
             </div>
-            <div class="risk-row">
-                <div class="risk-label" style="color:rgba(255,255,255,0.7);">Hyperbilirubinemia</div>
-                <div class="risk-bar-bg">
-                    <div class="risk-bar" style="width:55%; background:linear-gradient(90deg,#e3b341,#f0883e);">↑ Risk</div>
-                </div>
-            </div>
-            <div class="risk-row">
-                <div class="risk-label" style="color:rgba(255,255,255,0.7);">NICU Admission</div>
-                <div class="risk-bar-bg">
-                    <div class="risk-bar" style="width:45%; background:linear-gradient(90deg,#e3b341,#f0883e);">↑ Risk</div>
-                </div>
-            </div>
-            <div class="risk-row">
-                <div class="risk-label" style="color:rgba(255,255,255,0.7);">Respiratory Morbidity</div>
-                <div class="risk-bar-bg">
-                    <div class="risk-bar" style="width:35%; background:linear-gradient(90deg,#e3b341,#f0883e);">↑ Risk</div>
-                </div>
-            </div>
+          </div>
+          <div>
+            <h3>Selected references</h3>
+            <ol class="reference-list">
+              <li>ACOG. Gestational Diabetes Mellitus. Practice Bulletin No. 190. <em>Obstet Gynecol.</em> 2018;131:e49&#x2013;e64.</li>
+              <li>ACOG. Indications for Outpatient Antenatal Fetal Surveillance. Committee Opinion No. 828. <em>Obstet Gynecol.</em> 2021;137:e177&#x2013;e197.</li>
+              <li>ACOG. Macrosomia. Practice Bulletin No. 216. <em>Obstet Gynecol.</em> 2020;135:e18&#x2013;e35.</li>
+              <li>ACOG. Avoidance of Nonmedically Indicated Early-Term Deliveries. Committee Opinion No. 765. <em>Obstet Gynecol.</em> 2019;133:e156&#x2013;e163.</li>
+              <li>NICE. Diabetes in pregnancy: management from preconception to the postnatal period. NG3. Updated 2020.</li>
+              <li>Braverman-Poyastro A, et al. Antepartum Fetal Surveillance and Optimal Timing of Delivery in Diabetic Women. <em>J Clin Med.</em> 2024;13:313.</li>
+              <li>Nashif SK, et al. Neonatal outcomes and rationale for timing of birth in perinatal diabetes. <em>AJOG MFM.</em> 2023;5:101129.</li>
+              <li>Metcalfe A, et al. Timing of delivery in women with diabetes. <em>Acta Obstet Gynecol Scand.</em> 2020;99:341&#x2013;349.</li>
+              <li>Feghali MN, et al. Timing of delivery and pregnancy outcomes in women with GDM. <em>Am J Obstet Gynecol.</em> 2016;215:243.e1&#x2013;7.</li>
+              <li>Cleveland Clinic. Shoulder Dystocia. Medically reviewed January 23, 2022.</li>
+            </ol>
+          </div>
         </div>
+        <p class="source">Educational material for clinicians. Apply current institutional protocols and individualized maternal-fetal assessment.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>13 / 13</span></div>
+    </section>
+  </main>
 
-        <div class="card" style="max-width:680px; margin-top:1.2em; border-color:rgba(227,179,65,0.3); background:rgba(227,179,65,0.06);">
-            <p style="font-size:0.95rem; text-align:center; color:rgba(255,255,255,0.85);">
-                Reserve early-term delivery for <span class="accent-yellow">poor glycemic control</span> or <span class="accent-yellow">concerning fetal status</span>.
-            </p>
-        </div>
-        <p class="source-note">ACOG PB No. 190 [1] · Supported by RCT data [5]</p>
-    </div>
-
-    <!-- ══════════════════════════════════════════════════════════════════
-         SLIDE 9 — NICE GUIDELINES
-    ══════════════════════════════════════════════════════════════════ -->
-    <div class="slide slide-a1" id="slide-9">
-        <div class="kicker">International Perspective · NICE NG3</div>
-        <h2 style="text-align:center;">
-            NICE Guideline <span class="accent-blue">Comparison</span>
-        </h2>
-        <div class="divider" style="background:#58a6ff;"></div>
-
-        <div class="card-row" style="margin-top:1.2em;">
-            <div class="card" style="border-color:rgba(88,166,255,0.3); max-width:420px;">
-                <div class="badge badge-blue" style="margin-bottom:0.6em;">ACOG / SMFM</div>
-                <p style="font-size:0.95rem; text-align:left; color:rgba(255,255,255,0.8); line-height:1.6;">
-                    Tiered approach by glycemic control class (A1 vs. A2 vs. poor control). Delivery window: <strong>39–40<sup>6/7</sup> weeks</strong> for well-controlled GDM.
-                </p>
-            </div>
-            <div class="card" style="border-color:rgba(88,166,255,0.3); max-width:420px;">
-                <div class="badge badge-blue" style="margin-bottom:0.6em;">NICE NG3</div>
-                <p style="font-size:0.95rem; text-align:left; color:rgba(255,255,255,0.8); line-height:1.6;">
-                    Delivery no later than <strong>40+6 weeks</strong> for all women with GDM. Earlier elective birth if maternal or fetal complications arise.
-                </p>
-            </div>
-        </div>
-
-        <div class="card" style="max-width:700px; margin-top:1em; border-color:rgba(88,166,255,0.15);">
-            <p style="font-size:0.9rem; text-align:center; color:rgba(255,255,255,0.65);">
-                Both guidelines converge on avoiding delivery before 39 weeks in uncomplicated, well-controlled GDM.
-            </p>
-        </div>
-        <p class="source-note">NICE NG3 [4] · ACOG PB No. 190 [1]</p>
-    </div>
-
-    <!-- ══════════════════════════════════════════════════════════════════
-         SLIDE 10 — SUMMARY TABLE
-    ══════════════════════════════════════════════════════════════════ -->
-    <div class="slide slide-summary" id="slide-10">
-        <div class="kicker">Clinical Reference</div>
-        <h2 style="text-align:center; margin-bottom:0.5em;">
-            Delivery Timing <span class="accent-blue">Summary</span>
-        </h2>
-        <div class="divider" style="background:#58a6ff; margin-bottom:1em;"></div>
-
-        <table class="summary-table">
-            <thead>
-                <tr>
-                    <th>Clinical Scenario</th>
-                    <th>Recommended Delivery</th>
-                    <th>Key Consideration</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <span class="badge badge-green">A1GDM</span><br>
-                        <span style="font-size:0.85rem; color:rgba(255,255,255,0.6);">Diet-controlled, well-controlled, normal fetus</span>
-                    </td>
-                    <td><strong class="accent-green">39<sup>0/7</sup> – 40<sup>6/7</sup> wks</strong></td>
-                    <td style="font-size:0.85rem; color:rgba(255,255,255,0.7);">Expectant management with antepartum testing; no benefit to delivery &lt;39 wks</td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="badge badge-blue">A2GDM</span><br>
-                        <span style="font-size:0.85rem; color:rgba(255,255,255,0.6);">Medication-managed, well-controlled, normal fetus</span>
-                    </td>
-                    <td><strong class="accent-blue">39<sup>0/7</sup> – 39<sup>6/7</sup> wks</strong></td>
-                    <td style="font-size:0.85rem; color:rgba(255,255,255,0.7);">Induction at 38–39 wks may reduce LGA; shoulder dystocia 1.4% vs. 10%</td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="badge badge-orange">POOR CONTROL</span><br>
-                        <span style="font-size:0.85rem; color:rgba(255,255,255,0.6);">Diet or medication, suboptimal glycemia</span>
-                    </td>
-                    <td><strong class="accent-orange">37<sup>0/7</sup> – 38<sup>6/7</sup> wks</strong></td>
-                    <td style="font-size:0.85rem; color:rgba(255,255,255,0.7);">Balance prematurity vs. stillbirth risk; no clear glycemic threshold defined</td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="badge badge-red">REFRACTORY</span><br>
-                        <span style="font-size:0.85rem; color:rgba(255,255,255,0.6);">Failing inpatient management or abnormal testing</span>
-                    </td>
-                    <td><strong class="accent-red">34<sup>0/7</sup> – 36<sup>6/7</sup> wks</strong></td>
-                    <td style="font-size:0.85rem; color:rgba(255,255,255,0.7);">Reserve for refractory cases only; significant neonatal morbidity risk</td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="badge badge-purple">MACROSOMIA</span><br>
-                        <span style="font-size:0.85rem; color:rgba(255,255,255,0.6);">EFW ≥ 4,500 g</span>
-                    </td>
-                    <td><strong style="color:#bc8cff;">Individualized</strong></td>
-                    <td style="font-size:0.85rem; color:rgba(255,255,255,0.7);">Counsel re: cesarean delivery; shoulder dystocia risk elevated at any weight</td>
-                </tr>
-            </tbody>
-        </table>
-        <p class="source-note" style="margin-top:0.8em;">ACOG PB No. 190 [1] · ACOG PB No. 227 [2] · NICE NG3 [4]</p>
-    </div>
-
-</div><!-- /deck -->
-
-<!-- ─── Navigation Bar ─────────────────────────────────────────────────── -->
-<div class="nav">
-    <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>← Prev</button>
-    <span class="nav-counter" id="navCounter">1 / 10</span>
-    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next →</button>
-</div>
-
-<script>
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
-    const total = slides.length;
-    const progressFill = document.getElementById('progressFill');
-    const navCounter = document.getElementById('navCounter');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-
-    function showSlide(index) {
-        slides.forEach((s, i) => {
-            s.classList.toggle('active', i === index);
-        });
-        progressFill.style.width = ((index + 1) / total * 100) + '%';
-        navCounter.textContent = (index + 1) + ' / ' + total;
-        prevBtn.disabled = index === 0;
-        nextBtn.disabled = index === total - 1;
-    }
-
-    function nextSlide() {
-        if (currentSlide < total - 1) {
-            currentSlide++;
-            showSlide(currentSlide);
-        }
-    }
-
-    function prevSlide() {
-        if (currentSlide > 0) {
-            currentSlide--;
-            showSlide(currentSlide);
-        }
-    }
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
-        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
-    });
-
-    showSlide(0);
-</script>
-
-
+  <nav class="nav" aria-label="Slide navigation"><button id="prev" aria-label="Previous slide">&#x2190;</button><span class="counter" id="counter" aria-live="polite">1 / 13</span><button id="next" aria-label="Next slide">&#x2192;</button></nav>
+  <dialog id="helpDialog" aria-labelledby="helpTitle"><button id="closeHelp" aria-label="Close help">Close</button><h2 id="helpTitle" style="font-size:1.5rem">Navigation</h2><div class="keys"><kbd>&#x2192;</kbd><span>Next slide</span><kbd>&#x2190;</kbd><span>Previous slide</span><kbd>Space</kbd><span>Next slide</span><kbd>Home</kbd><span>First slide</span><kbd>End</kbd><span>Last slide</span><kbd>Esc</kbd><span>Close help</span></div></dialog>
+  <script>
+    (()=>{const slides=[...document.querySelectorAll('.slide')],counter=document.getElementById('counter'),bar=document.getElementById('progressBar'),prev=document.getElementById('prev'),next=document.getElementById('next');let current=0,touchX=0;
+      const fromHash=()=>{const m=location.hash.match(/slide-(\d+)/);return m?Math.min(slides.length-1,Math.max(0,Number(m[1])-1)):0};
+      const show=(n,push=true)=>{current=Math.min(slides.length-1,Math.max(0,n));slides.forEach((s,i)=>{s.classList.toggle('active',i===current);s.setAttribute('aria-hidden',i===current?'false':'true')});counter.textContent=`${current+1} / ${slides.length}`;bar.style.width=`${((current+1)/slides.length)*100}%`;prev.disabled=current===0;next.disabled=current===slides.length-1;if(push&&location.hash!==`#slide-${current+1}`)history.replaceState(null,'',`#slide-${current+1}`);slides[current].focus({preventScroll:true})};
+      prev.addEventListener('click',()=>show(current-1));next.addEventListener('click',()=>show(current+1));
+      addEventListener('keydown',e=>{if(document.getElementById('helpDialog').open)return;if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(current+1)}else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1)});
+      addEventListener('hashchange',()=>show(fromHash(),false));document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX},{passive:true});document.addEventListener('touchend',e=>{const d=e.changedTouches[0].screenX-touchX;if(Math.abs(d)>40)show(current+(d<0?1:-1))},{passive:true});
+      const dialog=document.getElementById('helpDialog');document.getElementById('helpButton').addEventListener('click',()=>dialog.showModal());document.getElementById('closeHelp').addEventListener('click',()=>dialog.close());show(fromHash(),false);
+    })();
+  </script>
 <!-- openmfm-footer-injected -->
 <div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
   <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
