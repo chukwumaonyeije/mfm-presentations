@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Prenatal Ventriculomegaly &amp; Hydrocephalus — Patient Education</title>
+<style>
+/* ─── Google Fonts Import ─── */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* ─── Custom Premium Theme (Navy Blue, Emerald, & Coral) ─── */
+:root {
+  --bg: #070b13;
+  --panel: #0d1321;
+  --panel2: #161e31;
+  --text: #f5f7fa;
+  --muted: #a0aec0;
+  --blue: #38bdf8;
+  --cyan: #06b6d4;
+  --green: #10b981;
+  --orange: #f59e0b;
+  --red: #f43f5e;
+  --purple: #a855f7;
+  --line: #2d3748;
+  --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  --font-title: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  width: 100%; height: 100%;
+  margin: 0; overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+/* Dynamic radial gradients for fluid-theme */
+body {
+  background: 
+    radial-gradient(circle at 12% 18%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 82%, rgba(168, 85, 247, 0.06) 0%, transparent 45%),
+    var(--bg);
+}
+
+a { color: inherit; }
+
+.deck {
+  width: 100%; height: 100%;
+  position: relative;
+  isolation: isolate;
+}
+
+.slide {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(12px, 2.2vh, 26px);
+  padding: clamp(24px, 5vw, 64px) clamp(24px, 7vw, 96px) clamp(32px, 6vh, 64px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(40px) scale(0.995);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.slide::before {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.015), transparent 45%);
+}
+
+.eyebrow {
+  font-family: var(--font-title);
+  font-size: clamp(0.75rem, 1.2vw, 0.95rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.slide h1, .slide h2 {
+  font-family: var(--font-title);
+  margin: 0;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.slide h1 {
+  font-size: clamp(2.4rem, 6vw, 5.2rem);
+  max-width: 16ch;
+  font-weight: 700;
+}
+
+.slide h2 {
+  font-size: clamp(1.8rem, 4vw, 3.6rem);
+  max-width: 22ch;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: clamp(1rem, 1.8vw, 1.35rem);
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 54ch;
+  margin-top: 10px;
+}
+
+.stage {
+  min-height: 0;
+  display: grid;
+  align-items: center;
+}
+
+.clinical-copy {
+  font-size: clamp(1.05rem, 2.1vw, 1.8rem);
+  line-height: 1.48;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.clinical-copy strong {
+  color: var(--cyan);
+  font-weight: 700;
+}
+
+.slide-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--muted);
+  font-size: clamp(0.68rem, 1vw, 0.82rem);
+  min-height: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 12px;
+}
+
+.source-pill {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 12px;
+  text-decoration: none;
+  background: rgba(13, 19, 33, 0.6);
+  color: #e2e8f0;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.source-pill:hover, .source-pill:focus {
+  border-color: var(--cyan);
+  color: white;
+  background: rgba(6, 182, 212, 0.1);
+  outline: none;
+}
+
+.brand {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--cyan);
+}
+
+.controls {
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  background: rgba(7, 11, 19, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+}
+
+.controls button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.2s;
+}
+
+.controls button:hover, .controls button:focus {
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+
+.counter {
+  min-width: 68px;
+  text-align: center;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.progress {
+  position: fixed;
+  z-index: 30;
+  left: 0; top: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.help {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  display: none;
+  place-items: center;
+  background: rgba(7, 10, 17, 0.82);
+  backdrop-filter: blur(8px);
+}
+
+.help.open {
+  display: grid;
+}
+
+.help-card {
+  width: min(520px, 90vw);
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.help-card h3 {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  margin: 0 0 16px;
+  color: var(--cyan);
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px 16px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+kbd {
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-bottom-width: 3px;
+  border-radius: 6px;
+  padding: 2px 8px;
+  color: white;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─── Card Styling ─── */
+.card {
+  background: linear-gradient(145deg, rgba(22, 30, 49, 0.7), rgba(13, 19, 33, 0.8));
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(6, 182, 212, 0.4);
+}
+
+.card.cyan-border { border-left: 4px solid var(--cyan); }
+.card.green-border { border-left: 4px solid var(--green); }
+.card.orange-border { border-left: 4px solid var(--orange); }
+.card.red-border { border-left: 4px solid var(--red); }
+.card.purple-border { border-left: 4px solid var(--purple); }
+
+.card-icon {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+}
+
+.card-title {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.card-body {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ─── Grid layouts ─── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  width: 100%;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+/* ─── SVGs & Graphics ─── */
+.diagram-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.diagram-card {
+  padding: 16px;
+  background: rgba(13, 19, 33, 0.4);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.diagram-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-top: 10px;
+}
+
+/* Slide Layouts */
+.cover-layout {
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.compass-layout {
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.compass {
+  width: min(34vh, 300px);
+  aspect-ratio: 1;
+  margin: auto;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: rgba(13, 19, 33, 0.4);
+}
+
+.compass::before, .compass::after {
+  content: "";
+  position: absolute;
+  background: var(--line);
+}
+
+.compass::before { width: 1px; height: 110%; }
+.compass::after { height: 1px; width: 110%; }
+
+.needle {
+  width: 16%;
+  height: 38%;
+  background: linear-gradient(var(--cyan) 50%, var(--panel) 50%);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  transform: rotate(60deg);
+  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.4));
+  animation: jitter 4s infinite ease-in-out;
+}
+
+@keyframes jitter {
+  0%, 100% { transform: rotate(60deg); }
+  50% { transform: rotate(64deg); }
+}
+
+/* Stats Blocks */
+.stat-row {
+  display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+}
+.stat-card {
+  flex: 1;
+  min-width: 180px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.stat-number {
+  font-family: var(--font-title);
+  font-size: 3.2rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* Measurement Ruler */
+.ruler-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: 90px;
+  margin: 20px auto;
+  border-radius: 8px;
+  background: #1e293b;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.ruler-bar {
+  display: flex;
+  height: 40px;
+}
+
+.ruler-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: white;
+}
+
+.ruler-segment.normal { width: 50%; background: var(--green); }
+.ruler-segment.borderline { width: 25%; background: var(--orange); }
+.ruler-segment.significant { width: 25%; background: var(--red); }
+
+.ruler-ticks {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 10px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.ruler-marker {
+  position: absolute;
+  top: 36px;
+  width: 4px;
+  height: 20px;
+  background: white;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  box-shadow: 0 0 8px white;
+}
+
+/* Venn Diagram */
+.venn-container {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  height: 280px;
+  margin: auto;
+}
+
+.venn-circle {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 20px;
+}
+
+.venn-circle.c1 {
+  left: 20px; top: 10px;
+  background: rgba(6, 182, 212, 0.2);
+  border: 2.5px solid var(--cyan);
+}
+
+.venn-circle.c2 {
+  right: 20px; top: 10px;
+  background: rgba(16, 185, 129, 0.2);
+  border: 2.5px solid var(--green);
+}
+
+.venn-circle.c3 {
+  left: calc(50% - 90px); bottom: 10px;
+  background: rgba(168, 85, 247, 0.2);
+  border: 2.5px solid var(--purple);
+}
+
+.venn-center {
+  position: absolute;
+  left: calc(50% - 40px);
+  top: calc(50% - 40px);
+  width: 80px;
+  height: 80px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 1.15rem;
+  color: var(--orange);
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+}
+
+/* Timelines */
+.timeline-layout {
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.timeline {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.timeline-item {
+  flex: 1;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+}
+
+.timeline-item::after {
+  content: "→";
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--line);
+  font-size: 1.5rem;
+  z-index: 10;
+}
+
+.timeline-item:last-child::after { display: none; }
+
+.timeline-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1.5px solid var(--cyan);
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.timeline-title {
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.timeline-desc {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* Care plan sheet */
+.care-plan-sheet {
+  background: rgba(13, 19, 33, 0.6);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.sheet-header {
+  background: rgba(6, 182, 212, 0.1);
+  border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+  padding: 14px 20px;
+  font-family: var(--font-title);
+  font-weight: 700;
+  color: var(--cyan);
+  display: flex;
+  justify-content: space-between;
+}
+
+.sheet-body {
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 24px;
+}
+
+.sheet-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.sheet-val {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+/* References styling */
+.refs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+.ref-card {
+  padding: 20px;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.ref-card:hover {
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+}
+
+.ref-num {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--cyan);
+}
+
+.ref-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 8px 0;
+  color: var(--text);
+}
+
+.ref-meta {
+  font-size: 0.75rem;
+  color: var(--green);
+  font-weight: 700;
+}
+
+/* Closing visual */
+.closing-layout {
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.closing-symbol {
+  width: min(34vh, 300px);
+  aspect-ratio: 1;
+  margin: auto;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0% 35%, transparent 36%),
+              conic-gradient(from 220deg, var(--cyan), var(--purple), var(--cyan));
+  mask: radial-gradient(circle, transparent 0% 55%, black 57%);
+  -webkit-mask: radial-gradient(circle, transparent 0% 55%, black 57%);
+  animation: spin 20s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive media queries */
+@media (max-width: 960px) {
+  .slide {
+    padding: 24px 24px 64px;
+    grid-template-rows: auto 1fr auto;
+    gap: 16px;
+  }
+  .cover-layout, .compass-layout, .closing-layout, .grid-2 {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .cover-art, .compass, .closing-symbol {
+    max-height: 28vh;
+  }
+  .grid-3 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .timeline {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .timeline-item::after { display: none; }
+  .sheet-body {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .refs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .slide-footer .brand { display: none; }
+  .controls { bottom: 12px; }
+  .grid-4 { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide, .progress, .needle, .closing-symbol {
+    transition: none;
+    animation: none;
+  }
+}
+
+@media print {
+  html, body { height: auto; overflow: visible; background: white; color: black; }
+  .deck { height: auto; }
+  .slide {
+    position: relative; opacity: 1; visibility: visible; transform: none;
+    page-break-after: always; height: 100vh;
+  }
+  .controls, .progress, .help { display: none !important; }
+}
+</style>
+
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/ventriculomegaly-hydrocephalus-patient/index.html">
+<meta name="description" content="A supportive, evidence-based guide for families navigating a prenatal diagnosis of fluid buildup in the baby's brain, covering normal ventricle anatomy, the diagnostic measurement ruler, genetic and infectious testing options, fetal MRI, serial ultrasound monitoring, delivery planning, and postnatal shunting.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Ventriculomegaly, Hydrocephalus, Prenatal Ultrasound, Fetal MRI, Pediatric Neurosurgery, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/ventriculomegaly-hydrocephalus-patient/index.html">
+<meta property="og:title" content="Prenatal Ventriculomegaly &amp; Hydrocephalus - Patient Education | OpenMFM">
+<meta property="og:description" content="A supportive, evidence-based guide for families navigating a prenatal diagnosis of fluid buildup in the baby's brain, covering normal ventricle anatomy, the diagnostic measurement ruler, genetic and infectious testing options, fetal MRI, serial ultrasound monitoring, delivery planning, and postnatal shunting.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prenatal Ventriculomegaly &amp; Hydrocephalus - Patient Education | OpenMFM">
+<meta name="twitter:description" content="A supportive, evidence-based guide for families navigating a prenatal diagnosis of fluid buildup in the baby's brain, covering normal ventricle anatomy, the diagnostic measurement ruler, genetic and infectious testing options, fetal MRI, serial ultrasound monitoring, delivery planning, and postnatal shunting.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Prenatal Ventriculomegaly & Hydrocephalus - Patient Education",
+  "description": "A supportive, evidence-based guide for families navigating a prenatal diagnosis of fluid buildup in the baby's brain, covering normal ventricle anatomy, the diagnostic measurement ruler, genetic and infectious testing options, fetal MRI, serial ultrasound monitoring, delivery planning, and postnatal shunting.",
+  "url": "https://openmfm.org/decks/ventriculomegaly-hydrocephalus-patient/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-07-17",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Fetal Ventriculomegaly and Hydrocephalus"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Ventriculomegaly, Hydrocephalus, Prenatal Ultrasound, Fetal MRI, Pediatric Neurosurgery, Patient Education"
+}
+</script>
+</head>
+<body>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<main class="deck" id="deck" aria-live="polite">
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 1 — Cover
+  ══════════════════════════════════════════ -->
+  <section class="slide active" aria-label="Cover slide">
+    <div>
+      <div class="eyebrow">Patient Education • High-Risk Pregnancy</div>
+      <h1>Prenatal Ventriculomegaly &amp; Hydrocephalus</h1>
+    </div>
+    <div class="stage cover-layout">
+      <div>
+        <p class="subtitle">A clear, supportive guide to help families navigate fluid measurements in the baby's brain, diagnostic workup, and the care pathway.</p>
+      </div>
+      <div class="diagram-wrap" style="height: auto;" aria-hidden="true">
+        <!-- SVG visual representing head/chambers -->
+        <svg width="180" height="180" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="45" stroke="#374151" stroke-width="2" fill="#0d1321"/>
+          <!-- Symmetric ventricles -->
+          <path d="M38 42 C30 42, 34 58, 44 58 C44 58, 40 48, 38 42 Z" stroke="var(--cyan)" stroke-width="2.5" fill="none"/>
+          <path d="M62 42 C70 42, 66 58, 56 58 C56 58, 60 48, 62 42 Z" stroke="var(--cyan)" stroke-width="2.5" fill="none"/>
+          <path d="M50 35 V72" stroke="var(--line)" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">OpenMFM Patient Education</span>
+      <span>Use ← → keys or swipe to navigate</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 2 — Compass / Our Goal
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s2-title">
+    <div>
+      <div class="eyebrow">Orientation</div>
+      <h2 id="s2-title">Navigating this Journey Together</h2>
+    </div>
+    <div class="stage compass-layout">
+      <div class="compass" aria-hidden="true">
+        <div class="needle"></div>
+      </div>
+      <p class="clinical-copy" data-countable>
+        Our goal is to **explain fluid buildup** simply, differentiate borderline from progressive cases, map out the diagnostic pathway, and establish a clear **perinatal care roadmap**.
+      </p>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Partnership in Care</span>
+      <a class="source-pill" href="#references-slide">References</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 3 — What are ventricles?
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s3-title">
+    <div>
+      <div class="eyebrow">Anatomy</div>
+      <h2 id="s3-title">What are Brain Ventricles?</h2>
+    </div>
+    <div class="stage grid-2">
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          The brain has normal, open spaces called <strong>ventricles</strong>. These spaces produce a clear fluid (cerebrospinal fluid) that surrounds and cushions the brain and spinal cord.
+          <br><br>
+          This fluid is constantly circulating—made in one area and draining away in another, like a **balanced plumbing system**.
+        </p>
+      </div>
+      <div class="diagram-wrap" aria-hidden="true">
+        <div class="diagram-card">
+          <!-- Brain ventricles SVG -->
+          <svg width="220" height="180" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="160" rx="16" fill="var(--panel)" stroke="var(--line)" stroke-width="2"/>
+            <!-- Brain outline -->
+            <path d="M40 80 C40 30, 160 30, 160 80 C160 110, 140 130, 100 130 C60 130, 40 110, 40 80 Z" fill="none" stroke="var(--line)" stroke-width="2"/>
+            <!-- Ventricles inside -->
+            <path d="M80 75 C65 75, 75 95, 95 95 C95 95, 88 82, 80 75 Z" fill="none" stroke="var(--cyan)" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M120 75 C135 75, 125 95, 105 95 C105 95, 112 82, 120 75 Z" fill="none" stroke="var(--cyan)" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M100 90 V115" stroke="var(--cyan)" stroke-width="2" stroke-dasharray="3 3"/>
+          </svg>
+          <div class="diagram-label">Normal Brain Ventricle Chambers</div>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Cerebrospinal Fluid System</span>
+      <span class="muted">Natural cushioning network</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 4 — Ventriculomegaly vs. Hydrocephalus
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s4-title">
+    <div>
+      <div class="eyebrow">Pathology</div>
+      <h2 id="s4-title">Ventriculomegaly vs. Hydrocephalus</h2>
+    </div>
+    <div class="stage grid-2">
+      <div class="diagram-wrap" aria-hidden="true">
+        <div class="diagram-card">
+          <!-- Fluid block SVG -->
+          <svg width="220" height="180" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="160" rx="16" fill="var(--panel)" stroke="var(--line)" stroke-width="2"/>
+            <!-- Expanded chambers -->
+            <path d="M70 70 C45 70, 60 105, 95 105" fill="none" stroke="var(--cyan)" stroke-width="8" stroke-linecap="round"/>
+            <path d="M130 70 C155 70, 140 105, 105 105" fill="none" stroke="var(--cyan)" stroke-width="8" stroke-linecap="round"/>
+            <!-- Blockage point -->
+            <circle cx="100" cy="115" r="10" fill="var(--red)"/>
+            <text x="100" y="119" fill="white" font-size="11" font-weight="900" text-anchor="middle">X</text>
+          </svg>
+          <div class="diagram-label">Blockage &amp; Fluid Expansion</div>
+        </div>
+      </div>
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          *   <strong>Ventriculomegaly</strong> simply means the ventricles are larger than typical (mild backup of fluid).
+          <br><br>
+          *   <strong>Hydrocephalus</strong> is a more significant condition where fluid accumulates under **active pressure**, pushing against brain tissue and expanding the baby's head. This is usually caused by a physical blockage.
+        </p>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Fluid Dynamics</span>
+      <a class="source-pill" href="https://publications.smfm.org/" target="_blank" rel="noopener">SMFM Consult Series</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 5 — The Diagnostic Ruler
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s5-title">
+    <div>
+      <div class="eyebrow">Measurement</div>
+      <h2 id="s5-title">Measuring Fluid: The Diagnostic Ruler</h2>
+    </div>
+    <div class="stage" style="display: flex; flex-direction: column; justify-content: center;">
+      <p class="clinical-copy" style="font-size: 1.15rem; max-width: 800px; margin-bottom: 24px; text-align: center;">
+        Ventricle size is measured in millimeters at the back of the brain (atria). We categorize these widths to guide our monitoring and care.
+      </p>
+      <div class="ruler-container" aria-hidden="true">
+        <div class="ruler-bar">
+          <div class="ruler-segment normal">Normal (&lt;10 mm)</div>
+          <div class="ruler-segment borderline">Borderline (10-15 mm)</div>
+          <div class="ruler-segment significant">Significant (&gt;15 mm)</div>
+        </div>
+        <div class="ruler-ticks">
+          <span>0 mm</span>
+          <span>10 mm</span>
+          <span>15 mm</span>
+          <span>20+ mm</span>
+        </div>
+        <!-- Pointer to borderline range -->
+        <div class="ruler-marker" style="left: 62.5%;"></div>
+      </div>
+      <p class="muted" style="font-size: 0.85rem; text-align: center; margin-top: 10px;">
+        Marker indicates a borderline measurement of 12.5 mm.
+      </p>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Atrial Measurement Thresholds</span>
+      <span class="muted">Standard risk stratification scale</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 6 — Borderline Ventriculomegaly
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s6-title">
+    <div>
+      <div class="eyebrow">Mild Findings</div>
+      <h2 id="s6-title">Borderline Findings: Reasons for Confidence</h2>
+    </div>
+    <div class="stage grid-2">
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          If the fluid width measures between <strong>10 and 15 millimeters</strong> and no other anomalies are found, the outlook is **highly favorable**.
+          <br><br>
+          In up to half of these cases, the fluid levels **stabilize or resolve on their own** before the baby is born. The majority of these children go on to have entirely typical neurological development.
+        </p>
+      </div>
+      <div class="stat-row" aria-hidden="true">
+        <div class="stat-card">
+          <div class="stat-number green">30%–50%</div>
+          <div class="stat-desc">Spontaneous resolution rate in isolated borderline cases</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number green">&gt;90%</div>
+          <div class="stat-desc">Favorable neurodevelopmental outcomes if isolated</div>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Borderline Ventriculomegaly (10–15 mm)</span>
+      <a class="source-pill" href="https://pubmed.ncbi.nlm.nih.gov/28249826/" target="_blank" rel="noopener">PubMed 2017</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 7 — Significant Hydrocephalus
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s7-title">
+    <div>
+      <div class="eyebrow">Significant Findings</div>
+      <h2 id="s7-title">Significant Hydrocephalus (&gt;15 mm)</h2>
+    </div>
+    <div class="stage grid-2">
+      <div class="grid-2" style="grid-template-columns: 1fr; gap: 14px;" aria-hidden="true">
+        <div class="card red-border" style="padding: 18px;">
+          <div class="card-title">⚠️ Cortical Thinning</div>
+          <div class="card-body">Accumulated fluid can create pressure, thinning the outer brain mantle.</div>
+        </div>
+        <div class="card red-border" style="padding: 18px;">
+          <div class="card-title">⚠️ Dangling Choroid Plexus</div>
+          <div class="card-body">The gravity-dependent drift of tissue within the enlarged cavity.</div>
+        </div>
+      </div>
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          A measurement **above 15 millimeters** represents significant hydrocephalus. 
+          <br><br>
+          In this category, fluid pressure is actively pushing against the surrounding brain tissue. Significant hydrocephalus **does not resolve on its own** prenatally and will require surgical management shortly after birth.
+        </p>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Severe Ventriculomegaly / Hydrocephalus</span>
+      <a class="source-pill" href="https://pubmed.ncbi.nlm.nih.gov/24430154/" target="_blank" rel="noopener">Child's Nervous System</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 8 — What Drives the Outlook?
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s8-title">
+    <div>
+      <div class="eyebrow">Prognosis</div>
+      <h2 id="s8-title">What Drives Your Baby's Outlook?</h2>
+    </div>
+    <div class="stage grid-2">
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          The single most important factor for your baby’s future development is **not the amount of fluid alone**, but whether the fluid backup is an **isolated finding**.
+          <br><br>
+          We must search carefully to ensure there are no associated spinal defects (spina bifida), genetic syndromic changes, or maternal infections.
+        </p>
+      </div>
+      <div class="diagram-wrap" aria-hidden="true">
+        <div class="venn-container">
+          <div class="venn-circle c1">Structural<br>Anomalies</div>
+          <div class="venn-circle c2">Genetic<br>Factors</div>
+          <div class="venn-circle c3">Infection<br>(TORCH)</div>
+          <div class="venn-center">Outlooks</div>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Prognostic Factors</span>
+      <span class="muted">Isolated vs. non-isolated status</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 9 — The Diagnostic Plan
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s9-title">
+    <div>
+      <div class="eyebrow">Diagnostic Plan</div>
+      <h2 id="s9-title">Three Essential Steps for Answers</h2>
+    </div>
+    <div class="stage grid-3">
+      <div class="card cyan-border">
+        <div class="card-icon">🧠</div>
+        <div class="card-title">1. Fetal MRI</div>
+        <div class="card-body">High-resolution scans of the baby's brain structure. MRI shows pathways and blocks that ultrasound cannot detect.</div>
+      </div>
+      <div class="card purple-border">
+        <div class="card-icon">🧬</div>
+        <div class="card-title">2. Amniocentesis</div>
+        <div class="card-body">Testing amniotic fluid cells for definitive chromosomes and microarrays to rule out X-linked aqueductal blockages (L1CAM).</div>
+      </div>
+      <div class="card green-border">
+        <div class="card-icon">🧪</div>
+        <div class="card-title">3. Infection Screen</div>
+        <div class="card-body">Drawing maternal blood to screen for congenital viral infections (such as CMV or Toxoplasmosis) that can trigger fluid backup.</div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Definitive Diagnostics Workup</span>
+      <a class="source-pill" href="https://www.acog.org/clinical/clinical-guidance/practice-bulletin/articles/2016/05/prenatal-diagnostic-testing-for-genetic-disorders" target="_blank" rel="noopener">ACOG PB 162</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 10 — Prenatal Monitoring
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s10-title">
+    <div>
+      <div class="eyebrow">Monitoring</div>
+      <h2 id="s10-title">Tracking Fluid Trends Prenatally</h2>
+    </div>
+    <div class="stage timeline-layout">
+      <div class="timeline" aria-hidden="true">
+        <div class="timeline-item">
+          <div class="timeline-dot">🔬</div>
+          <div class="timeline-title">Weeks 20–24</div>
+          <div class="timeline-desc">Initial detection of enlarged ventricles. Diagnostic workup and fetal MRI scheduled.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">🩺</div>
+          <div class="timeline-title">Every 2–3 Weeks</div>
+          <div class="timeline-desc">Serial ultrasounds to track fluid volume (stable vs. progressive) and head size.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">🤝</div>
+          <div class="timeline-title">Weeks 32–36</div>
+          <div class="timeline-desc">Consultation with pediatric neurosurgery to plan postnatal care.</div>
+        </div>
+      </div>
+      <p class="clinical-copy" style="font-size: 1.1rem; text-align: center; margin-top: 10px;">
+        Frequent, close monitoring lets us watch how the brain is developing and ensures a smooth, prepared pathway to birth.
+      </p>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Ultrasound Surveillance</span>
+      <span class="muted">Serial measurements every 2–3 weeks</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 11 — Fetal Surgery & Birth Planning
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s11-title">
+    <div>
+      <div class="eyebrow">Fetal Surgery &amp; Birth Planning</div>
+      <h2 id="s11-title">Fetal Surgery Guidelines &amp; Birth Plan</h2>
+    </div>
+    <div class="stage grid-2">
+      <div class="card red-border">
+        <div class="card-icon">🛑</div>
+        <div class="card-title">Fetal Surgery is Not Indicated</div>
+        <div class="card-body">Operating on the brain inside the womb carries high risks of premature labor and has not shown neurodevelopmental benefits. In-utero shunts are not routinely recommended.</div>
+      </div>
+      <div class="card green-border">
+        <div class="card-icon">🏥</div>
+        <div class="card-title">Planned Level IV Delivery</div>
+        <div class="card-body">Standard obstetric delivery is planned at full term (>37 weeks) at a specialty care hospital with on-site neonatal intensive care and pediatric neurosurgery.</div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Fetal Decompression Limits</span>
+      <a class="source-pill" href="https://publications.smfm.org/" target="_blank" rel="noopener">SMFM Guidelines</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 12 — Postnatal Care: VP Shunt
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s12-title">
+    <div>
+      <div class="eyebrow">Postnatal Surgery</div>
+      <h2 id="s12-title">Relieving Fluid Pressure After Birth</h2>
+    </div>
+    <div class="stage grid-2">
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          If progressive significant hydrocephalus is confirmed after birth, a pediatric neurosurgeon will place a **ventriculoperitoneal (VP) shunt**.
+          <br><br>
+          This thin, flexible tube directs excess fluid away from the brain ventricles down to the abdomen (peritoneal cavity), where the body naturally absorbs it, **immediately protecting brain tissue**.
+        </p>
+      </div>
+      <div class="diagram-wrap" aria-hidden="true">
+        <div class="diagram-card" style="padding: 10px;">
+          <!-- Shunt diagram SVG -->
+          <svg width="220" height="200" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100" height="100" rx="12" fill="var(--panel)" stroke="var(--line)" stroke-width="1.5"/>
+            <!-- Body silhouette -->
+            <path d="M50 20 C58 20, 58 35, 50 35 C42 35, 42 20, 50 20 Z" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+            <path d="M50 35 L40 45 V85 H60 V45 Z" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+            <!-- Ventricle catheter -->
+            <circle cx="50" cy="24" r="2.5" fill="var(--cyan)"/>
+            <!-- Shunt line -->
+            <path d="M50 24 C55 24, 57 28, 56 36 S56 50, 54 60 C53 66, 50 68, 50 72" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Abdomen cavity absorption area -->
+            <circle cx="50" cy="74" r="5" fill="rgba(16, 185, 129, 0.25)" stroke="var(--green)" stroke-width="1"/>
+            <text x="78" y="27" fill="var(--cyan)" font-size="7" font-weight="bold" text-anchor="middle">Ventricle</text>
+            <text x="78" y="75" fill="var(--green)" font-size="7" font-weight="bold" text-anchor="middle">Abdomen</text>
+            <path d="M53 24 H70" stroke="var(--cyan)" stroke-width="0.5" stroke-dasharray="2 2"/>
+            <path d="M54 74 H70" stroke="var(--green)" stroke-width="0.5" stroke-dasharray="2 2"/>
+          </svg>
+          <div class="diagram-label">VP Shunt Pathway</div>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Surgical Decompression</span>
+      <span class="muted">Standard of care postnatal shunting</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 13 — Care Plan Summary (EMR Template)
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s13-title">
+    <div>
+      <div class="eyebrow">Clinical Summary</div>
+      <h2 id="s13-title">Your Perinatal Care Plan at a Glance</h2>
+    </div>
+    <div class="stage">
+      <div class="care-plan-sheet">
+        <div class="sheet-header">
+          <span>Counseling Record &amp; Care Pathway Summary</span>
+          <span style="font-size: 0.75rem; font-weight: normal; color: var(--muted);">OpenMFM Standard Template</span>
+        </div>
+        <div class="sheet-body">
+          <div class="sheet-row">
+            <span class="sheet-label">Diagnosis</span>
+            <span class="sheet-val">Fetal ventriculomegaly / suspected hydrocephalus</span>
+          </div>
+          <div class="sheet-row">
+            <span class="sheet-label">Diagnostics Plan</span>
+            <span class="sheet-val">Fetal MRI scheduled; Genetic amniocentesis (microarray) offered; TORCH infection blood panel</span>
+          </div>
+          <div class="sheet-row">
+            <span class="sheet-label">Monitoring</span>
+            <span class="sheet-val">Serial maternal-fetal medicine ultrasounds every 2 to 3 weeks to track atrium width</span>
+          </div>
+          <div class="sheet-row">
+            <span class="sheet-label">Fetal Intervention</span>
+            <span class="sheet-val">Expectant management; fetal cephalocentesis avoided (reserved for unviable macrocephaly)</span>
+          </div>
+          <div class="sheet-row">
+            <span class="sheet-label">Delivery Strategy</span>
+            <span class="sheet-val">Planned birth at full term (>37 weeks) at a Level IV Medical Center with Pediatric Neurosurgery on-site</span>
+          </div>
+          <div class="sheet-row">
+            <span class="sheet-label">Postnatal Plan</span>
+            <span class="sheet-val">Confirmatory neonatal head echo/MRI; immediate neurosurgery consult for shunt placement as needed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">EMR Documentation Template</span>
+      <span class="muted">Patient counseling framework</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 14 — Questions to Ask Your Specialist
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s14-title">
+    <div>
+      <div class="eyebrow">Shared Decisions</div>
+      <h2 id="s14-title">Questions to Ask Your MFM Specialist</h2>
+    </div>
+    <div class="stage grid-4">
+      <div class="card cyan-border">
+        <div class="card-icon">❓</div>
+        <div class="card-title">Fluid Measurement</div>
+        <div class="card-body">"What is the exact width of the fluid spaces on today's scan, and has it changed since the last appointment?"</div>
+      </div>
+      <div class="card cyan-border">
+        <div class="card-icon">❓</div>
+        <div class="card-title">Associated Findings</div>
+        <div class="card-body">"Does the baby's spine, skull shape, and other brain structures look typical and isolated?"</div>
+      </div>
+      <div class="card cyan-border">
+        <div class="card-icon">❓</div>
+        <div class="card-title">Testing Options</div>
+        <div class="card-body">"Are there specific genetic markers or infections we are looking for in the blood and fluid tests?"</div>
+      </div>
+      <div class="card cyan-border">
+        <div class="card-icon">❓</div>
+        <div class="card-title">Neurosurgery Consult</div>
+        <div class="card-body">"When can we meet with the pediatric neurosurgery team to tour the NICU and discuss the shunt procedure?"</div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Parent Question Checklist</span>
+      <span>Bring this list to your next ultrasound appointment</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 15 — Educational Disclaimer
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s15-title">
+    <div>
+      <div class="eyebrow">Disclaimer</div>
+      <h2 id="s15-title">Educational Information Only</h2>
+    </div>
+    <div class="stage">
+      <div class="card" style="max-width: 900px; margin: 0 auto; padding: 40px;">
+        <p class="clinical-copy" style="font-size: 1.25rem; text-align: left; line-height: 1.6;">
+          This presentation is provided for **general educational purposes only** and does not replace medical advice, diagnosis, or treatment. 
+          <br><br>
+          Every pregnancy is unique. Your specific ventricular measurements, laboratory panels, and fetal MRI results will shape your care plan. **Always consult your own Maternal-Fetal Medicine team** before making clinical decisions.
+        </p>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">OpenMFM Educational Disclaimer</span>
+      <span class="muted">Speak with your personal clinical team</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 16 — Your Privacy & Confidentiality
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s16-title">
+    <div>
+      <div class="eyebrow">Privacy</div>
+      <h2 id="s16-title">Protecting Your Health Information</h2>
+    </div>
+    <div class="stage grid-2">
+      <div class="diagram-wrap" aria-hidden="true">
+        <!-- Shield SVG -->
+        <svg width="180" height="180" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 15 L85 25 V55 C85 75, 70 88, 50 93 C30 88, 15 75, 15 55 V25 L50 15 Z" fill="rgba(6, 182, 212, 0.1)" stroke="var(--cyan)" stroke-width="3"/>
+          <path d="M40 52 L47 59 L62 43" stroke="var(--cyan)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          All case studies, documentation templates, and clinical examples published on OpenMFM are **fully anonymized**. 
+          <br><br>
+          No protected health information (PHI) is collected or stored. Your clinical discussions, genetic tests, and care timelines are confidential and **strictly protected by HIPAA regulations**.
+        </p>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Patient Confidentiality</span>
+      <span class="muted">Compliant with federal privacy regulations</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 17 — Linked References
+  ══════════════════════════════════════════ -->
+  <section class="slide" id="references-slide" aria-labelledby="s17-title">
+    <div>
+      <div class="eyebrow">Evidence</div>
+      <h2 id="s17-title">Professional Guidance &amp; Resources</h2>
+    </div>
+    <div class="stage">
+      <div class="refs-grid">
+        <a class="ref-card" href="https://publications.smfm.org/" target="_blank" rel="noopener">
+          <span class="ref-num">01</span>
+          <span class="ref-title">SMFM Clinical Guideline: Fetal Ventriculomegaly Evaluation</span>
+          <span class="ref-meta">Reaffirmed 2024</span>
+        </a>
+        <a class="ref-card" href="https://www.acog.org/clinical/clinical-guidance/practice-bulletin/articles/2016/05/prenatal-diagnostic-testing-for-genetic-disorders" target="_blank" rel="noopener">
+          <span class="ref-num">02</span>
+          <span class="ref-title">ACOG PB 162: Prenatal Genetic Diagnostic Testing</span>
+          <span class="ref-meta">Reaffirmed 2024</span>
+        </a>
+        <a class="ref-card" href="https://pubmed.ncbi.nlm.nih.gov/24430154/" target="_blank" rel="noopener">
+          <span class="ref-num">03</span>
+          <span class="ref-title">Eurocat Database: Fetal Hydrocephalus Incidence</span>
+          <span class="ref-meta">CNS Journal · 2024</span>
+        </a>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Evidence-Based Medicine</span>
+      <span>Guidance links open in a new tab</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 18 — Closing
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-label="Closing slide">
+    <div>
+      <div class="eyebrow">Partnership</div>
+      <h1>We Are with You Every Step</h1>
+    </div>
+    <div class="stage closing-layout">
+      <p class="subtitle" style="font-size: clamp(1.1rem, 2vw, 1.6rem); line-height: 1.45;">
+        A complex diagnosis is a roadmap, not a destination. With prenatal monitoring, detailed diagnostic scans, and a dedicated neurosurgery team, we are ready to guide your family toward a safe, prepared birth and recovery.
+      </p>
+      <div class="closing-symbol" aria-hidden="true"></div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Atlanta Perinatal Associates &amp; OpenMFM</span>
+      <span>End of Presentation</span>
+    </footer>
+  </section>
+
+</main>
+
+<!-- ─── Slide Controls ─── -->
+<nav class="controls" aria-label="Slide controls">
+  <button id="prev" type="button" aria-label="Previous slide">←</button>
+  <span class="counter" id="counter">1 / 18</span>
+  <button id="next" type="button" aria-label="Next slide">→</button>
+  <button id="helpBtn" type="button" aria-label="Keyboard help">?</button>
+  <button id="fullBtn" type="button" aria-label="Toggle fullscreen">⛶</button>
+</nav>
+
+<!-- ─── Keyboard Help Dialog ─── -->
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="help-card">
+    <h3 id="helpTitle">Presentation Controls</h3>
+    <div class="keys">
+      <kbd>→</kbd><span>Next slide</span>
+      <kbd>←</kbd><span>Previous slide</span>
+      <kbd>Space</kbd><span>Next slide</span>
+      <kbd>Home</kbd><span>First slide</span>
+      <kbd>End</kbd><span>Last slide</span>
+      <kbd>F</kbd><span>Toggle Fullscreen</span>
+      <kbd>Esc</kbd><span>Close help</span>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const slides = [...document.querySelectorAll('.slide')];
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  const help = document.getElementById('help');
+  let index = 0;
+
+  function show(n, { hash = true } = {}) {
+    slides[index].classList.remove('active');
+    slides[index].setAttribute('aria-hidden', 'true');
+    
+    index = Math.max(0, Math.min(slides.length - 1, n));
+    
+    slides[index].classList.add('active');
+    slides[index].setAttribute('aria-hidden', 'false');
+    
+    counter.textContent = `${index + 1} / ${slides.length}`;
+    progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+    
+    if (hash) {
+      history.replaceState(null, '', `#slide-${index + 1}`);
+    }
+  }
+
+  function next() {
+    show(index + 1);
+  }
+
+  function prev() {
+    show(index - 1);
+  }
+
+  document.getElementById('next').addEventListener('click', next);
+  document.getElementById('prev').addEventListener('click', prev);
+  document.getElementById('helpBtn').addEventListener('click', () => help.classList.add('open'));
+  
+  help.addEventListener('click', e => {
+    if (e.target === help) {
+      help.classList.remove('open');
+    }
+  });
+
+  async function full() {
+    if (!document.fullscreenElement) {
+      await document.documentElement.requestFullscreen?.();
+    } else {
+      await document.exitFullscreen?.();
+    }
+  }
+
+  document.getElementById('fullBtn').addEventListener('click', full);
+
+  document.addEventListener('keydown', e => {
+    if (help.classList.contains('open')) {
+      if (e.key === 'Escape') {
+        help.classList.remove('open');
+      }
+      return;
+    }
+    
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault();
+      next();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      prev();
+    } else if (e.key === 'Home') {
+      show(0);
+    } else if (e.key === 'End') {
+      show(slides.length - 1);
+    } else if (e.key.toLowerCase() === 'f') {
+      full();
+    } else if (e.key === '?') {
+      help.classList.add('open');
+    }
+  });
+
+  // Touch Swipe navigation
+  let startX = 0;
+  document.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 55) {
+      if (dx < 0) {
+        next();
+      } else {
+        prev();
+      }
+    }
+  }, { passive: true });
+
+  // Handle slide links via hashtag
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const targetId = a.getAttribute('href');
+    if (targetId === '#references-slide') {
+      e.preventDefault();
+      const targetIndex = slides.findIndex(s => s.id === 'references-slide');
+      if (targetIndex !== -1) {
+        show(targetIndex);
+      }
+    }
+  });
+
+  // Initial load hash checks
+  const m = location.hash.match(/slide-(\d+)/);
+  if (m) {
+    index = Math.max(0, Math.min(slides.length - 1, Number(m[1]) - 1));
+  }
+  show(index, { hash: false });
+})();
+</script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
