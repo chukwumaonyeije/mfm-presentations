@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Fetal AVSD with Tetralogy of Fallot Physiology — Patient Education</title>
+<style>
+/* ─── Google Fonts Import ─── */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* ─── Custom Premium Theme (Cyan, Emerald & Coral) ─── */
+:root {
+  --bg: #0b0f19;
+  --panel: #111827;
+  --panel2: #1f2937;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+  --blue: #38bdf8;
+  --cyan: #06b6d4;
+  --green: #10b981;
+  --orange: #f59e0b;
+  --red: #f43f5e;
+  --purple: #a855f7;
+  --line: #374151;
+  --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --font-title: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  width: 100%; height: 100%;
+  margin: 0; overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+/* Beautiful dynamic gradients */
+body {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.07) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 45%),
+    var(--bg);
+}
+
+a { color: inherit; }
+
+.deck {
+  width: 100%; height: 100%;
+  position: relative;
+  isolation: isolate;
+}
+
+.slide {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(12px, 2vh, 24px);
+  padding: clamp(24px, 5vw, 64px) clamp(24px, 7vw, 96px) clamp(32px, 6vh, 64px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(40px) scale(0.995);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.slide::before {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.015), transparent 45%);
+}
+
+.eyebrow {
+  font-family: var(--font-title);
+  font-size: clamp(0.75rem, 1.2vw, 0.95rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.slide h1, .slide h2 {
+  font-family: var(--font-title);
+  margin: 0;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.slide h1 {
+  font-size: clamp(2.4rem, 6.2vw, 5.5rem);
+  max-width: 15ch;
+  font-weight: 700;
+}
+
+.slide h2 {
+  font-size: clamp(1.8rem, 4.2vw, 3.8rem);
+  max-width: 20ch;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: clamp(1rem, 1.8vw, 1.4rem);
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 52ch;
+  margin-top: 10px;
+}
+
+.stage {
+  min-height: 0;
+  display: grid;
+  align-items: center;
+}
+
+.clinical-copy {
+  font-size: clamp(1.05rem, 2.1vw, 1.85rem);
+  line-height: 1.45;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.clinical-copy strong {
+  color: var(--cyan);
+  font-weight: 700;
+}
+
+.slide-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--muted);
+  font-size: clamp(0.68rem, 1vw, 0.82rem);
+  min-height: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 12px;
+}
+
+.source-pill {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 12px;
+  text-decoration: none;
+  background: rgba(17, 24, 39, 0.6);
+  color: #e5e7eb;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.source-pill:hover, .source-pill:focus {
+  border-color: var(--cyan);
+  color: white;
+  background: rgba(6, 182, 212, 0.1);
+  outline: none;
+}
+
+.brand {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--cyan);
+}
+
+.controls {
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  background: rgba(11, 15, 25, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+}
+
+.controls button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.2s;
+}
+
+.controls button:hover, .controls button:focus {
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+
+.counter {
+  min-width: 68px;
+  text-align: center;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.progress {
+  position: fixed;
+  z-index: 30;
+  left: 0; top: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--cyan), var(--green));
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.help {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  display: none;
+  place-items: center;
+  background: rgba(7, 10, 17, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.help.open {
+  display: grid;
+}
+
+.help-card {
+  width: min(520px, 90vw);
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.help-card h3 {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  margin: 0 0 16px;
+  color: var(--cyan);
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px 16px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+kbd {
+  background: #1f2937;
+  border: 1px solid #4b5563;
+  border-bottom-width: 3px;
+  border-radius: 6px;
+  padding: 2px 8px;
+  color: white;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─── Card Styling ─── */
+.card {
+  background: linear-gradient(145deg, rgba(31, 41, 55, 0.7), rgba(17, 24, 39, 0.8));
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(6, 182, 212, 0.4);
+}
+
+.card.cyan-border { border-left: 4px solid var(--cyan); }
+.card.green-border { border-left: 4px solid var(--green); }
+.card.orange-border { border-left: 4px solid var(--orange); }
+.card.red-border { border-left: 4px solid var(--red); }
+.card.purple-border { border-left: 4px solid var(--purple); }
+
+.card-icon {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+}
+
+.card-title {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.card-body {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ─── Grid layouts ─── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  width: 100%;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+/* ─── SVGs & Graphics ─── */
+.diagram-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.diagram-card {
+  padding: 16px;
+  background: rgba(17, 24, 39, 0.4);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.diagram-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* Slide 1: Cover Specifics */
+.cover-layout {
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  align-items: center;
+}
+
+/* Slide 2: Compass */
+.compass-layout {
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.compass {
+  width: min(36vh, 320px);
+  aspect-ratio: 1;
+  margin: auto;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: rgba(17, 24, 39, 0.4);
+}
+
+.compass::before, .compass::after {
+  content: "";
+  position: absolute;
+  background: var(--line);
+}
+
+.compass::before { width: 1px; height: 110%; }
+.compass::after { height: 1px; width: 110%; }
+
+.needle {
+  width: 18%;
+  height: 40%;
+  background: linear-gradient(var(--cyan) 50%, var(--panel) 50%);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  transform: rotate(45deg);
+  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.4));
+  animation: jitter 4s infinite ease-in-out;
+}
+
+@keyframes jitter {
+  0%, 100% { transform: rotate(45deg); }
+  50% { transform: rotate(48deg); }
+}
+
+/* Slide 5: Balance */
+.balance-layout {
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.balance-visual {
+  height: 280px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.balance-beam {
+  width: 240px;
+  height: 6px;
+  background: var(--line);
+  border-radius: 3px;
+  position: relative;
+  transform: rotate(0deg); /* perfectly balanced */
+  transition: transform 0.5s ease;
+}
+
+.balance-fulcrum {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 35px solid var(--cyan);
+}
+
+.pan {
+  position: absolute;
+  top: 6px;
+  width: 60px;
+  height: 10px;
+  border: 2px solid var(--line);
+  border-top: 0;
+  border-radius: 0 0 30px 30px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.pan.left { left: -20px; }
+.pan.right { right: -20px; }
+
+.weight {
+  position: absolute;
+  bottom: 10px;
+  width: 32px;
+  height: 28px;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: white;
+}
+
+.weight.left {
+  left: -6px;
+  background: var(--red);
+}
+
+.weight.right {
+  right: -6px;
+  background: var(--green);
+}
+
+/* Slide 6: Gauge */
+.gauge-layout {
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.gauge-container {
+  width: min(34vh, 280px);
+  aspect-ratio: 1;
+  margin: auto;
+  position: relative;
+}
+
+.gauge-bg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(from 220deg, var(--green) 0% 120deg, var(--orange) 120deg 200deg, var(--red) 200deg 280deg, transparent 280deg);
+  mask: radial-gradient(circle, transparent 58%, black 60%);
+  -webkit-mask: radial-gradient(circle, transparent 58%, black 60%);
+}
+
+.gauge-needle {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  width: 4px;
+  height: 45%;
+  background: white;
+  transform-origin: bottom center;
+  transform: rotate(-70deg); /* Reassuring Green Zone */
+  border-radius: 4px;
+  transition: transform 1s ease-in-out;
+  box-shadow: 0 0 8px rgba(255,255,255,0.8);
+}
+
+.gauge-needle::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: -5px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: white;
+}
+
+.gauge-value {
+  position: absolute;
+  bottom: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-title);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--green);
+}
+
+/* Slide 7: Venn Diagram */
+.venn-container {
+  width: 320px;
+  height: 240px;
+  position: relative;
+  margin: auto;
+}
+
+.venn-circle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  position: absolute;
+  top: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.venn-circle.left {
+  left: 20px;
+  background: rgba(244, 63, 94, 0.25);
+  border: 2px solid var(--red);
+  align-items: flex-start;
+  padding-left: 24px;
+}
+
+.venn-circle.right {
+  right: 20px;
+  background: rgba(168, 85, 247, 0.25);
+  border: 2px solid var(--purple);
+  align-items: flex-end;
+  padding-right: 24px;
+}
+
+.venn-overlap {
+  position: absolute;
+  left: 110px;
+  top: 65px;
+  width: 100px;
+  height: 110px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: var(--cyan);
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
+}
+
+/* Slide 8: Ladder */
+.ladder-layout {
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.ladder {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+}
+
+.ladder-step {
+  padding: 16px 20px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--cyan);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ladder-step.active {
+  border-left-color: var(--green);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.ladder-step .badge {
+  font-size: 0.7rem;
+  background: rgba(6, 182, 212, 0.1);
+  color: var(--cyan);
+  padding: 3px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.ladder-step.active .badge {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--green);
+}
+
+/* Slide 9 & 11: Timeline */
+.timeline-layout {
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.timeline {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.timeline-item {
+  flex: 1;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+}
+
+.timeline-item::after {
+  content: "→";
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--line);
+  font-size: 1.5rem;
+  z-index: 10;
+}
+
+.timeline-item:last-child::after { display: none; }
+
+.timeline-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1.5px solid var(--cyan);
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.timeline-title {
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.timeline-desc {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* Slide 12: Care plan sheet */
+.care-plan-sheet {
+  background: rgba(17, 24, 39, 0.6);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.sheet-header {
+  background: rgba(6, 182, 212, 0.1);
+  border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+  padding: 14px 20px;
+  font-family: var(--font-title);
+  font-weight: 700;
+  color: var(--cyan);
+  display: flex;
+  justify-content: space-between;
+}
+
+.sheet-body {
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 24px;
+}
+
+.sheet-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.sheet-val {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+/* References styling */
+.refs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+.ref-card {
+  padding: 20px;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.ref-card:hover {
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+}
+
+.ref-num {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--cyan);
+}
+
+.ref-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 8px 0;
+  color: var(--text);
+}
+
+.ref-meta {
+  font-size: 0.75rem;
+  color: var(--green);
+  font-weight: 700;
+}
+
+/* Slide 17: Closing Specifics */
+.closing-layout {
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.closing-symbol {
+  width: min(36vh, 320px);
+  aspect-ratio: 1;
+  margin: auto;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0% 35%, transparent 36%),
+              conic-gradient(from 220deg, var(--cyan), var(--green), var(--cyan));
+  mask: radial-gradient(circle, transparent 0% 55%, black 57%);
+  -webkit-mask: radial-gradient(circle, transparent 0% 55%, black 57%);
+  animation: spin 20s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ─── Responsive Media Queries ─── */
+@media (max-width: 960px) {
+  .slide {
+    padding: 24px 24px 64px;
+    grid-template-rows: auto 1fr auto;
+    gap: 16px;
+  }
+  .cover-layout, .compass-layout, .balance-layout, .gauge-layout, .ladder-layout, .closing-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .cover-art, .compass, .balance-visual, .gauge-container, .ladder, .closing-symbol {
+    max-height: 28vh;
+  }
+  .grid-3 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .timeline {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .timeline-item::after { display: none; }
+  .sheet-body {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .refs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .slide-footer .brand { display: none; }
+  .controls { bottom: 12px; }
+  .grid-4 { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide, .progress, .needle, .closing-symbol {
+    transition: none;
+    animation: none;
+  }
+}
+
+@media print {
+  html, body { height: auto; overflow: visible; background: white; color: black; }
+  .deck { height: auto; }
+  .slide {
+    position: relative; opacity: 1; visibility: visible; transform: none;
+    page-break-after: always; height: 100vh;
+  }
+  .controls, .progress, .help { display: none !important; }
+}
+</style>
+
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/avsd-tof-physiology-patient/index.html">
+<meta name="description" content="A supportive, evidence-based guide for families navigating a prenatal diagnosis of Atrioventricular Septal Defect (AVSD) with Tetralogy of Fallot (TOF) physiology, covering heart anatomy, the protective balance of valve narrowing, Trisomy 21 links, genetic testing options, serial fetal echocardiogram monitoring, and the postnatal surgical timeline.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="AVSD, Tetralogy of Fallot, Congenital Heart Disease, Down Syndrome, Trisomy 21, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/avsd-tof-physiology-patient/index.html">
+<meta property="og:title" content="Fetal AVSD with Tetralogy of Fallot Physiology - Patient Education | OpenMFM">
+<meta property="og:description" content="A supportive, evidence-based guide for families navigating a prenatal diagnosis of Atrioventricular Septal Defect (AVSD) with Tetralogy of Fallot (TOF) physiology, covering heart anatomy, the protective balance of valve narrowing, Trisomy 21 links, genetic testing options, serial fetal echocardiogram monitoring, and the postnatal surgical timeline.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fetal AVSD with Tetralogy of Fallot Physiology - Patient Education | OpenMFM">
+<meta name="twitter:description" content="A supportive, evidence-based guide for families navigating a prenatal diagnosis of Atrioventricular Septal Defect (AVSD) with Tetralogy of Fallot (TOF) physiology, covering heart anatomy, the protective balance of valve narrowing, Trisomy 21 links, genetic testing options, serial fetal echocardiogram monitoring, and the postnatal surgical timeline.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Fetal AVSD with Tetralogy of Fallot Physiology - Patient Education",
+  "description": "A supportive, evidence-based guide for families navigating a prenatal diagnosis of Atrioventricular Septal Defect (AVSD) with Tetralogy of Fallot (TOF) physiology, covering heart anatomy, the protective balance of valve narrowing, Trisomy 21 links, genetic testing options, serial fetal echocardiogram monitoring, and the postnatal surgical timeline.",
+  "url": "https://openmfm.org/decks/avsd-tof-physiology-patient/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-07-17",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Fetal Atrioventricular Septal Defect with Tetralogy of Fallot Physiology"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "AVSD, Tetralogy of Fallot, Congenital Heart Disease, Down Syndrome, Trisomy 21, Patient Education"
+}
+</script>
+</head>
+<body>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<main class="deck" id="deck" aria-live="polite">
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 1 — Cover
+  ══════════════════════════════════════════ -->
+  <section class="slide active" aria-label="Cover slide">
+    <div>
+      <div class="eyebrow">Patient Education • Heart Health</div>
+      <h1>Fetal AVSD with Tetralogy of Fallot Physiology</h1>
+    </div>
+    <div class="stage cover-layout">
+      <div>
+        <p class="subtitle">A reassuring, evidence-based guide to help parents navigate diagnosis, fetal stability, genetics, and the pathway of surgical repair.</p>
+      </div>
+      <div class="diagram-wrap" style="height: auto;" aria-hidden="true">
+        <!-- SVG graphic for cardiac complex -->
+        <svg width="180" height="180" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="45" stroke="#374151" stroke-width="2" fill="#111827"/>
+          <path d="M50 15 C30 15 15 30 15 50 C15 70 30 85 50 85 C70 85 85 70 85 50 C85 30 70 15 50 15 Z" stroke="var(--cyan)" stroke-width="3" stroke-dasharray="3 3"/>
+          <path d="M38 52 C38 42, 62 42, 62 52" stroke="var(--orange)" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="50" cy="52" r="5" fill="var(--red)"/>
+        </svg>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">OpenMFM Patient Education</span>
+      <span>Use ← → keys or swipe to navigate</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 2 — Compass / Our Goal
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s2-title">
+    <div>
+      <div class="eyebrow">Orientation</div>
+      <h2 id="s2-title">Navigating this Journey Together</h2>
+    </div>
+    <div class="stage compass-layout">
+      <div class="compass" aria-hidden="true">
+        <div class="needle"></div>
+      </div>
+      <p class="clinical-copy" data-countable>
+        Our goal is to **clarify your baby's diagnosis**, explain why they are stable right now, outline prenatal monitoring, and establish a clear **surgical roadmap** for a healthy future.
+      </p>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Partnership in Care</span>
+      <a class="source-pill" href="#slide-16">References</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 3 — Anatomy: AVSD
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s3-title">
+    <div>
+      <div class="eyebrow">Anatomy</div>
+      <h2 id="s3-title">Complete Atrioventricular Septal Defect</h2>
+    </div>
+    <div class="stage grid-2">
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          In a typical heart, the left and right sides are separated by walls (septa), with two separate valves controling flow. 
+          <br><br>
+          An <strong>AVSD (Atrioventricular Septal Defect)</strong> means there is a **large single opening (hole)** in the center of the heart and a **single common valve** instead of two separate ones.
+        </p>
+      </div>
+      <div class="diagram-wrap" aria-hidden="true">
+        <div class="diagram-card" style="padding: 10px; background: rgba(17, 24, 39, 0.2);">
+          <img src="avsd_heart_defect.png" alt="Atrioventricular Canal Defect" style="width: 240px; height: 240px; object-fit: contain; border-radius: 12px; border: 1px solid var(--line); box-shadow: var(--shadow);">
+          <div class="diagram-label" style="margin-top: 10px;">AVSD: Central Hole &amp; Common Valve</div>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Atrioventricular Septal Defect</span>
+      <a class="source-pill" href="https://www.isuog.org/clinical-guidance/fetal-cardiac-screening.html" target="_blank" rel="noopener">ISUOG Guidelines</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 4 — Anatomy: TOF & Pulmonary Stenosis
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s4-title">
+    <div>
+      <div class="eyebrow">Anatomy</div>
+      <h2 id="s4-title">Tetralogy of Fallot &amp; Valve Narrowing</h2>
+    </div>
+    <div class="stage grid-2">
+      <div class="diagram-wrap" aria-hidden="true">
+        <div class="diagram-card">
+          <!-- SVG for Pulmonary Stenosis -->
+          <svg width="220" height="180" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="160" rx="16" fill="var(--panel)" stroke="var(--line)" stroke-width="2"/>
+            <path d="M40 140 V70 C40 50, 70 30, 85 30" fill="none" stroke="var(--muted)" stroke-width="8" stroke-linecap="round"/>
+            <path d="M100 140 V70 C100 65, 88 55, 85 50" fill="none" stroke="var(--muted)" stroke-width="8" stroke-linecap="round"/>
+            <!-- Stenotic constriction -->
+            <circle cx="85" cy="40" r="10" fill="none" stroke="var(--orange)" stroke-width="4"/>
+            <line x1="80" y1="40" x2="90" y2="40" stroke="var(--red)" stroke-width="3"/>
+          </svg>
+          <div class="diagram-label">Stenosis: Narrowed Exit to Lungs</div>
+        </div>
+      </div>
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          The second component is <strong>Tetralogy of Fallot (TOF) physiology</strong>. 
+          <br><br>
+          This means the pathway leading from the heart to the lungs is **narrowed (pulmonary valve stenosis)**. Because of this restriction, blood has to squeeze through a smaller opening to reach the lungs.
+        </p>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Tetralogy of Fallot Physiology</span>
+      <a class="source-pill" href="https://www.isuog.org/clinical-guidance/fetal-cardiac-screening.html" target="_blank" rel="noopener">ISUOG Guidelines</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 5 — The Surprising Balance
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s5-title">
+    <div>
+      <div class="eyebrow">Physiology</div>
+      <h2 id="s5-title">A Natural, Protective Balance</h2>
+    </div>
+    <div class="stage balance-layout">
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          Normally, a large hole in the center of the heart (AVSD) causes too much blood to flood the baby's lungs. 
+          <br><br>
+          However, the **narrow pulmonary valve acts as a shield**, restricting this extra flow. This surprising balance **protects the baby's lungs** from overcirculation and fluid build-up during pregnancy.
+        </p>
+      </div>
+      <div class="balance-visual" aria-hidden="true">
+        <div class="balance-beam">
+          <div class="pan left">
+            <div class="weight left">AVSD</div>
+          </div>
+          <div class="pan right">
+            <div class="weight right">Narrow Valve</div>
+          </div>
+        </div>
+        <div class="balance-fulcrum"></div>
+        <div class="diagram-label" style="margin-top: 15px;">Pulmonary Stenosis Protects Fetal Lungs</div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Hemodynamic Interaction</span>
+      <span class="muted">Balanced intrauterine blood flow</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 6 — Fetal Stability
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s6-title">
+    <div>
+      <div class="eyebrow">Stability</div>
+      <h2 id="s6-title">Safe and Stable in the Womb</h2>
+    </div>
+    <div class="stage gauge-layout">
+      <div class="gauge-container" aria-hidden="true">
+        <div class="gauge-bg"></div>
+        <div class="gauge-needle"></div>
+        <div class="gauge-value">Stable</div>
+      </div>
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          The placenta performs all "breathing" and oxygenation for your baby during pregnancy, meaning the heart does not have to work hard to feed the lungs yet.
+          <br><br>
+          Because the **common valve does not leak (no significant regurgitation)**, your baby is at **very low risk for heart failure** or fluid build-up (hydrops) before birth.
+        </p>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Cardiovascular Stability</span>
+      <span class="muted">Non-ductal dependent status expected</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 7 — Genetics: Trisomy 21
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s7-title">
+    <div>
+      <div class="eyebrow">Genetics</div>
+      <h2 id="s7-title">Understanding the Chromosomal Link</h2>
+    </div>
+    <div class="stage grid-2">
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          Congenital heart disease is present in approximately 50% of patients with Down syndrome. 
+          <br><br>
+          Specifically, an **AVSD carries a very strong association with Trisomy 21 (Down syndrome)**. Identifying this early helps our team coordinate dedicated neonatal and developmental care.
+        </p>
+      </div>
+      <div class="diagram-wrap" aria-hidden="true">
+        <div class="venn-container">
+          <div class="venn-circle left">AVSD +<br>TOF</div>
+          <div class="venn-circle right">Down<br>Syndrome</div>
+          <div class="venn-overlap">~50%</div>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Genetic Association</span>
+      <a class="source-pill" href="https://pubmed.ncbi.nlm.nih.gov/28249826/" target="_blank" rel="noopener">PubMed 2017</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 8 — Diagnostics: Amniocentesis
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s8-title">
+    <div>
+      <div class="eyebrow">Diagnostics</div>
+      <h2 id="s8-title">Diagnostic Genetic Testing Options</h2>
+    </div>
+    <div class="stage ladder-layout">
+      <div class="ladder" aria-hidden="true">
+        <div class="ladder-step">1. Genetic Counseling Consultation <span class="badge">Recommended</span></div>
+        <div class="ladder-step active">2. Amniocentesis Procedure <span class="badge">Definitive</span></div>
+        <div class="ladder-step">3. Chromosomal Microarray <span class="badge">Detailed</span></div>
+      </div>
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          While blood screenings (like cell-free DNA) are useful, a diagnostic **amniocentesis** is the gold standard for structural heart findings.
+          <br><br>
+          Amniocentesis analyzes the actual amniotic fluid to provide a **definitive chromosomal karyotype and microarray**, giving our team exact details to plan your baby's care.
+        </p>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Diagnostics &amp; Counseling</span>
+      <a class="source-pill" href="https://www.acog.org/clinical/clinical-guidance/practice-bulletin/articles/2016/05/prenatal-diagnostic-testing-for-genetic-disorders" target="_blank" rel="noopener">ACOG PB 162</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 9 — Prenatal Monitoring Plan
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s9-title">
+    <div>
+      <div class="eyebrow">Surveillance</div>
+      <h2 id="s9-title">Your Prenatal Monitoring Timeline</h2>
+    </div>
+    <div class="stage timeline-layout">
+      <div class="timeline" aria-hidden="true">
+        <div class="timeline-item">
+          <div class="timeline-dot">🔬</div>
+          <div class="timeline-title">Weeks 20–24</div>
+          <div class="timeline-desc">Initial diagnostic fetal echo &amp; genetic evaluation.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">🩺</div>
+          <div class="timeline-title">Every 4–6 Weeks</div>
+          <div class="timeline-desc">Serial fetal echos to monitor pulmonary valve narrowing &amp; check valve leaks.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">🏥</div>
+          <div class="timeline-title">Weeks 34–36</div>
+          <div class="timeline-desc">Coordinate delivery details with pediatric cardiology &amp; neonatal ICU.</div>
+        </div>
+      </div>
+      <p class="clinical-copy" style="font-size: 1.1rem; text-align: center; margin-top: 10px;">
+        Frequent tracking ensures that if the narrowing changes or the valve develops leaks, we can adjust birth plans immediately.
+      </p>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Fetal Echocardiogram Protocol</span>
+      <a class="source-pill" href="https://www.isuog.org/clinical-guidance/fetal-cardiac-screening.html" target="_blank" rel="noopener">ISUOG Guidance</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 10 — Delivery Planning
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s10-title">
+    <div>
+      <div class="eyebrow">Delivery Planning</div>
+      <h2 id="s10-title">Delivering at a Specialty Care Center</h2>
+    </div>
+    <div class="stage grid-2">
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          Because this is a complex heart condition, delivery should be planned at a **specialty care hospital (Level IV maternal facility)**.
+          <br><br>
+          This guarantees that an **on-site pediatric cardiothoracic surgery team** and a **Level III/IV Neonatal Intensive Care Unit (NICU)** are ready to evaluate your baby the moment they are born.
+        </p>
+      </div>
+      <div class="grid-2" style="grid-template-columns: 1fr;" aria-hidden="true">
+        <div class="card green-border">
+          <div class="card-title">✓ Level III/IV NICU On-Site</div>
+          <div class="card-body">High-level neonatal care immediately available without transport delay.</div>
+        </div>
+        <div class="card green-border">
+          <div class="card-title">✓ Pediatric Heart Surgeons</div>
+          <div class="card-body">A dedicated surgical team specialized in congenital heart repairs.</div>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Levels of Maternal Care</span>
+      <a class="source-pill" href="https://www.acog.org/clinical/clinical-guidance/obstetric-care-consensus/articles/2019/08/levels-of-maternal-care" target="_blank" rel="noopener">ACOG Consensus</a>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 11 — Postnatal Surgical Pathway
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s11-title">
+    <div>
+      <div class="eyebrow">Postnatal Pathway</div>
+      <h2 id="s11-title">Your Baby's Surgical Timeline</h2>
+    </div>
+    <div class="stage timeline-layout">
+      <div class="timeline" aria-hidden="true">
+        <div class="timeline-item">
+          <div class="timeline-dot">👶</div>
+          <div class="timeline-title">Day 1 after Birth</div>
+          <div class="timeline-desc">Confirmatory echocardiogram in the nursery to assess blood flow.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">🏠</div>
+          <div class="timeline-title">Months 1–4</div>
+          <div class="timeline-desc">Home monitoring, tracking weight gain and oxygen saturation levels.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">🛠️</div>
+          <div class="timeline-title">Months 4–6</div>
+          <div class="timeline-desc">Complete surgical repair (closing septal holes &amp; opening narrowed valve).</div>
+        </div>
+      </div>
+      <p class="clinical-copy" style="font-size: 1.1rem; text-align: center; margin-top: 10px;">
+        Early correction allows the heart to grow normally, leading to **excellent long-term survival and active childhoods**.
+      </p>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Postnatal Surgery Timeline</span>
+      <span class="muted">Usually performed within first 6 months</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 12 — Care Plan Summary (EMR Template)
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s12-title">
+    <div>
+      <div class="eyebrow">Clinical Summary</div>
+      <h2 id="s12-title">Your Care Plan at a Glance</h2>
+    </div>
+    <div class="stage">
+      <div class="care-plan-sheet">
+        <div class="sheet-header">
+          <span>Patient Counseling &amp; Perinatal Record</span>
+          <span style="font-size: 0.75rem; font-weight: normal; color: var(--muted);">OpenMFM Standard Template</span>
+        </div>
+        <div class="sheet-body">
+          <div class="sheet-row">
+            <span class="sheet-label">Diagnosis</span>
+            <span class="sheet-val">Fetal AVSD with Tetralogy of Fallot physiology; suspected Trisomy 21</span>
+          </div>
+          <div class="sheet-row">
+            <span class="sheet-label">Genetic Plan</span>
+            <span class="sheet-val">Offered referral to MFM/Genetics; Diagnostic Amniocentesis with chromosomal microarray</span>
+          </div>
+          <div class="sheet-row">
+            <span class="sheet-label">Surveillance</span>
+            <span class="sheet-val">Serial fetal echocardiograms every 4–6 weeks to monitor stenosis and valve competence</span>
+          </div>
+          <div class="sheet-row">
+            <span class="sheet-label">Delivery Target</span>
+            <span class="sheet-val">Full term (>37 weeks) at Level IV Maternity Center with Pediatric Heart Surgery on-site</span>
+          </div>
+          <div class="sheet-row">
+            <span class="sheet-label">Postnatal Plan</span>
+            <span class="sheet-val">Postnatal confirmatory echo; surgical repair anticipated between 4 and 6 months of age</span>
+          </div>
+          <div class="sheet-row">
+            <span class="sheet-label">Emergency Contact</span>
+            <span class="sheet-val">Contact MFM triage immediately for signs of preterm labor or decreased fetal movement</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Perinatal Documentation Template</span>
+      <span class="muted">Copy coordinates directly into EMR chart</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 13 — Questions to Ask Your Doctor
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s13-title">
+    <div>
+      <div class="eyebrow">Shared Decisions</div>
+      <h2 id="s13-title">Questions to Ask Your MFM Specialist</h2>
+    </div>
+    <div class="stage grid-4">
+      <div class="card cyan-border">
+        <div class="card-icon">❓</div>
+        <div class="card-title">Stenosis Status</div>
+        <div class="card-body">"Is there any sign that the narrowing is getting worse or becoming duct-dependent?"</div>
+      </div>
+      <div class="card cyan-border">
+        <div class="card-icon">❓</div>
+        <div class="card-title">Valve Competence</div>
+        <div class="card-body">"Does the common heart valve show any signs of leakage on today's echo?"</div>
+      </div>
+      <div class="card cyan-border">
+        <div class="card-icon">❓</div>
+        <div class="card-title">Birth Timing</div>
+        <div class="card-body">"Do we expect a standard term delivery, or does the heart layout suggest early delivery?"</div>
+      </div>
+      <div class="card cyan-border">
+        <div class="card-icon">❓</div>
+        <div class="card-title">Care Team Setup</div>
+        <div class="card-body">"When can we schedule a prenatal consult with the pediatric cardiologist?"</div>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Patient Question Guide</span>
+      <span>Write down questions before your appointment</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 14 — Educational Disclaimer
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s14-title">
+    <div>
+      <div class="eyebrow">Disclaimer</div>
+      <h2 id="s14-title">Educational Information Only</h2>
+    </div>
+    <div class="stage">
+      <div class="card" style="max-width: 900px; margin: 0 auto; padding: 40px;">
+        <p class="clinical-copy" style="font-size: 1.25rem; text-align: left; line-height: 1.6;">
+          This presentation is provided for **general educational purposes only** and does not constitute medical advice, diagnosis, or treatment. 
+          <br><br>
+          Your personal health findings, laboratory outcomes, and fetal echocardiogram measurements determine your individual care plan. **Always consult your own Maternal-Fetal Medicine specialist** to make decisions about your pregnancy.
+        </p>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">OpenMFM Educational Disclaimer</span>
+      <span class="muted">Seek advice from your personal clinical team</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 15 — Privacy & Confidentiality
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-labelledby="s15-title">
+    <div>
+      <div class="eyebrow">Privacy</div>
+      <h2 id="s15-title">Protecting Your Health Information</h2>
+    </div>
+    <div class="stage grid-2">
+      <div class="diagram-wrap" aria-hidden="true">
+        <!-- Shield icon SVG -->
+        <svg width="180" height="180" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 15 L85 25 V55 C85 75, 70 88, 50 93 C30 88, 15 75, 15 55 V25 L50 15 Z" fill="rgba(6, 182, 212, 0.1)" stroke="var(--cyan)" stroke-width="3"/>
+          <path d="M40 52 L47 59 L62 43" stroke="var(--cyan)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <p class="clinical-copy" style="font-size: 1.15rem; text-align: left;">
+          All case studies, documentation templates, and clinical examples published on OpenMFM are **fully anonymized**. 
+          <br><br>
+          No protected health information (PHI) is collected or stored. Your clinical discussions, genetic tests, and care timelines are confidential and **strictly protected by HIPAA regulations**.
+        </p>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Patient Confidentiality</span>
+      <span class="muted">Compliant with federal privacy regulations</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 16 — Linked References
+  ══════════════════════════════════════════ -->
+  <section class="slide" id="references-slide" aria-labelledby="s16-title">
+    <div>
+      <div class="eyebrow">Evidence</div>
+      <h2 id="s16-title">Professional Guidance &amp; Resources</h2>
+    </div>
+    <div class="stage">
+      <div class="refs-grid">
+        <a class="ref-card" href="https://publications.smfm.org/" target="_blank" rel="noopener">
+          <span class="ref-num">01</span>
+          <span class="ref-title">SMFM Consult Series: Fetal Echocardiography and Anomalies</span>
+          <span class="ref-meta">Reaffirmed 2024</span>
+        </a>
+        <a class="ref-card" href="https://www.acog.org/clinical/clinical-guidance/practice-bulletin/articles/2016/05/prenatal-diagnostic-testing-for-genetic-disorders" target="_blank" rel="noopener">
+          <span class="ref-num">02</span>
+          <span class="ref-title">ACOG PB 162: Genetic Diagnostic Testing &amp; Microarray</span>
+          <span class="ref-meta">Reaffirmed 2024</span>
+        </a>
+        <a class="ref-card" href="https://pubmed.ncbi.nlm.nih.gov/28249826/" target="_blank" rel="noopener">
+          <span class="ref-num">03</span>
+          <span class="ref-title">CHD in Down Syndrome: Diagnostic Outcomes and Survival</span>
+          <span class="ref-meta">PubMed 2017</span>
+        </a>
+      </div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Evidence-Based Medicine</span>
+      <span>Guidance links open in a new tab</span>
+    </footer>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 17 — Closing
+  ══════════════════════════════════════════ -->
+  <section class="slide" aria-label="Closing slide">
+    <div>
+      <div class="eyebrow">Partnership</div>
+      <h1>We Are with You Every Step</h1>
+    </div>
+    <div class="stage closing-layout">
+      <p class="subtitle" style="font-size: clamp(1.1rem, 2vw, 1.6rem); line-height: 1.45;">
+        A complex diagnosis is a roadmap, not a destination. With prenatal monitoring and a dedicated heart team, we are ready to guide your family toward a bright, active future.
+      </p>
+      <div class="closing-symbol" aria-hidden="true"></div>
+    </div>
+    <footer class="slide-footer">
+      <span class="brand">Atlanta Perinatal Associates &amp; OpenMFM</span>
+      <span>End of Presentation</span>
+    </footer>
+  </section>
+
+</main>
+
+<!-- ─── Slide Controls ─── -->
+<nav class="controls" aria-label="Slide controls">
+  <button id="prev" type="button" aria-label="Previous slide">←</button>
+  <span class="counter" id="counter">1 / 17</span>
+  <button id="next" type="button" aria-label="Next slide">→</button>
+  <button id="helpBtn" type="button" aria-label="Keyboard help">?</button>
+  <button id="fullBtn" type="button" aria-label="Toggle fullscreen">⛶</button>
+</nav>
+
+<!-- ─── Keyboard Help Dialog ─── -->
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="help-card">
+    <h3 id="helpTitle">Presentation Controls</h3>
+    <div class="keys">
+      <kbd>→</kbd><span>Next slide</span>
+      <kbd>←</kbd><span>Previous slide</span>
+      <kbd>Space</kbd><span>Next slide</span>
+      <kbd>Home</kbd><span>First slide</span>
+      <kbd>End</kbd><span>Last slide</span>
+      <kbd>F</kbd><span>Toggle Fullscreen</span>
+      <kbd>Esc</kbd><span>Close help</span>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const slides = [...document.querySelectorAll('.slide')];
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  const help = document.getElementById('help');
+  let index = 0;
+
+  function show(n, { hash = true } = {}) {
+    slides[index].classList.remove('active');
+    slides[index].setAttribute('aria-hidden', 'true');
+    
+    index = Math.max(0, Math.min(slides.length - 1, n));
+    
+    slides[index].classList.add('active');
+    slides[index].setAttribute('aria-hidden', 'false');
+    
+    counter.textContent = `${index + 1} / ${slides.length}`;
+    progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+    
+    if (hash) {
+      history.replaceState(null, '', `#slide-${index + 1}`);
+    }
+  }
+
+  function next() {
+    show(index + 1);
+  }
+
+  function prev() {
+    show(index - 1);
+  }
+
+  document.getElementById('next').addEventListener('click', next);
+  document.getElementById('prev').addEventListener('click', prev);
+  document.getElementById('helpBtn').addEventListener('click', () => help.classList.add('open'));
+  
+  help.addEventListener('click', e => {
+    if (e.target === help) {
+      help.classList.remove('open');
+    }
+  });
+
+  async function full() {
+    if (!document.fullscreenElement) {
+      await document.documentElement.requestFullscreen?.();
+    } else {
+      await document.exitFullscreen?.();
+    }
+  }
+
+  document.getElementById('fullBtn').addEventListener('click', full);
+
+  document.addEventListener('keydown', e => {
+    if (help.classList.contains('open')) {
+      if (e.key === 'Escape') {
+        help.classList.remove('open');
+      }
+      return;
+    }
+    
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault();
+      next();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      prev();
+    } else if (e.key === 'Home') {
+      show(0);
+    } else if (e.key === 'End') {
+      show(slides.length - 1);
+    } else if (e.key.toLowerCase() === 'f') {
+      full();
+    } else if (e.key === '?') {
+      help.classList.add('open');
+    }
+  });
+
+  // Touch Swipe navigation
+  let startX = 0;
+  document.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 55) {
+      if (dx < 0) {
+        next();
+      } else {
+        prev();
+      }
+    }
+  }, { passive: true });
+
+  // Handle slide links via hashtag
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const targetId = a.getAttribute('href');
+    if (targetId === '#references-slide') {
+      e.preventDefault();
+      const targetIndex = slides.findIndex(s => s.id === 'references-slide');
+      if (targetIndex !== -1) {
+        show(targetIndex);
+      }
+    }
+  });
+
+  // Initial load hash checks
+  const m = location.hash.match(/slide-(\d+)/);
+  if (m) {
+    index = Math.max(0, Math.min(slides.length - 1, Number(m[1]) - 1));
+  }
+  show(index, { hash: false });
+})();
+</script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
