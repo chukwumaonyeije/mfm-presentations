@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1117">
+  <title>One-Step vs. Two-Step GDM Screening | OpenMFM</title>
+
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2330;--border:#30363d;--text:#e6edf3;--muted:#9ba5b1;--blue:#58a6ff;--cyan:#22d3ee;--teal:#39d0b4;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#bc8cff;--brand:#1f6feb;--shadow:0 24px 70px rgba(0,0,0,.35)}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
+    body{background:radial-gradient(circle at 85% 10%,rgba(34,211,238,.08),transparent 28%),radial-gradient(circle at 15% 85%,rgba(31,111,235,.1),transparent 32%),var(--bg)}
+    button,a{font:inherit} a{color:var(--blue)}
+    .skip-link{position:fixed;left:1rem;top:-4rem;z-index:100;background:#fff;color:#000;padding:.7rem 1rem;border-radius:.5rem}.skip-link:focus{top:1rem}
+    .progress-track{position:fixed;inset:0 0 auto;height:4px;background:rgba(255,255,255,.05);z-index:50}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--cyan));box-shadow:0 0 16px rgba(34,211,238,.45);transition:width .3s ease}
+    main{height:100%}.slide{position:absolute;inset:0;display:grid;align-content:center;gap:clamp(.75rem,1.6vh,1.2rem);padding:clamp(3.8rem,7vh,6rem) clamp(1.2rem,7vw,7rem) clamp(5rem,10vh,7rem);opacity:0;visibility:hidden;transform:translateX(28px);transition:opacity .35s ease,transform .35s ease;overflow:auto}.slide.active{opacity:1;visibility:visible;transform:none;z-index:2}
+    .slide-inner{width:min(1160px,100%);margin:auto}.kicker,.slide-label{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:800;margin-bottom:.55rem}.eyebrow{text-align:center;color:var(--cyan);font-weight:800;letter-spacing:.17em;text-transform:uppercase;font-size:.78rem}
+    h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:"Space Grotesk",Inter,ui-sans-serif,sans-serif;line-height:1.08}h1{font-size:clamp(2.1rem,5.6vw,5.1rem);letter-spacing:-.045em;margin-bottom:1rem}h2{font-size:clamp(1.7rem,3.9vw,3.4rem);letter-spacing:-.035em;margin-bottom:clamp(1rem,2.2vh,1.65rem);max-width:1000px}h3{font-size:clamp(1rem,1.55vw,1.35rem);margin-bottom:.55rem}p{font-size:clamp(.98rem,1.35vw,1.16rem);line-height:1.55;color:#c7d0da}.lead{font-size:clamp(1.12rem,1.7vw,1.4rem);max-width:840px;color:#d8e0e8}.accent{color:var(--cyan)}.muted{color:var(--muted)}
+    .title-center{text-align:center}.title-center .lead{margin-left:auto;margin-right:auto}.divider{width:78px;height:4px;border-radius:8px;background:linear-gradient(90deg,var(--blue),var(--cyan));margin:1.4rem auto 1.6rem}.pills{display:flex;justify-content:center;gap:.65rem;flex-wrap:wrap}.pill{padding:.48rem .8rem;border:1px solid var(--border);border-radius:999px;background:rgba(22,27,34,.72);font-size:.76rem;font-weight:750;color:#dbe6f0}.pill.cyan{border-color:rgba(34,211,238,.4);color:#9cecf7}.pill.green{border-color:rgba(63,185,80,.45);color:#8ce99a}.pill.purple{border-color:rgba(188,140,255,.45);color:#d8b9ff}.pill.amber{border-color:rgba(210,153,34,.45);color:#f0ce7a}
+    .grid-2,.grid-3,.grid-4{display:grid;gap:clamp(.7rem,1.35vw,1.1rem)}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .card{background:linear-gradient(145deg,rgba(28,35,48,.94),rgba(22,27,34,.88));border:1px solid var(--border);border-radius:16px;padding:clamp(1rem,2vw,1.45rem);box-shadow:0 14px 38px rgba(0,0,0,.16)}.card.blue{border-top:3px solid var(--blue)}.card.green{border-top:3px solid var(--green)}.card.amber{border-top:3px solid var(--amber)}.card.red{border-top:3px solid var(--red)}.card.purple{border-top:3px solid var(--purple)}.card p:last-child{margin-bottom:0}.card .big{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.6rem,2.6vw,2.6rem);font-weight:800;line-height:1;color:var(--text);margin-bottom:.55rem}.card .small{font-size:.86rem;color:var(--muted)}
+    .callout{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:start;padding:1rem 1.15rem;border-radius:14px;border:1px solid rgba(88,166,255,.35);background:rgba(31,111,235,.09)}.callout.amber{border-color:rgba(210,153,34,.42);background:rgba(210,153,34,.09)}.callout.red{border-color:rgba(248,81,73,.4);background:rgba(248,81,73,.08)}.callout.green{border-color:rgba(63,185,80,.4);background:rgba(63,185,80,.08)}.callout-icon{width:2rem;height:2rem;border-radius:50%;display:grid;place-items:center;background:rgba(88,166,255,.16);color:var(--blue);font-weight:900;flex-shrink:0}.callout p{margin:0}
+    .decision-map{display:grid;grid-template-columns:1fr auto 1fr;gap:.6rem;align-items:center}.decision-node{min-height:110px;display:grid;place-items:center;text-align:center;padding:1rem;border-radius:16px;border:1px solid var(--border);background:var(--surface)}.decision-node strong{display:block;font-size:1.04rem;margin-bottom:.4rem}.arrow{color:var(--cyan);font-size:1.5rem;font-weight:900}
+    .balance{display:grid;grid-template-columns:1fr 110px 1fr;align-items:center;gap:1rem}.risk-panel{padding:1.25rem;border-radius:18px;border:1px solid var(--border);background:var(--surface);min-height:230px}.risk-panel h3{font-size:1.35rem}.risk-panel ul,.pearls{margin:.8rem 0 0;padding:0;list-style:none}.risk-panel li,.pearls li{position:relative;padding:.38rem 0 .38rem 1.35rem;color:#c9d2dc;line-height:1.42}.risk-panel li::before,.pearls li::before{content:"";position:absolute;left:0;top:.85rem;width:.45rem;height:.45rem;border-radius:50%;background:var(--cyan)}.fulcrum{height:170px;display:grid;place-items:center}.fulcrum svg{width:100%;height:100%}
+    .window-banner{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:.8rem}.window-banner .range{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.8rem,4.2vw,3.6rem);font-weight:800;letter-spacing:-.04em}.window-banner .context{font-size:1rem;color:var(--muted)}
+    .split-rule{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.rule{border-radius:18px;padding:1.2rem;border:1px solid var(--border);background:var(--surface)}.rule .label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--muted);margin-bottom:.55rem}.rule strong{font-size:clamp(1.2rem,2vw,1.65rem);display:block;margin-bottom:.6rem}
+    .evidence-ladder{display:grid;gap:.75rem}.evidence-row{display:grid;grid-template-columns:150px 1fr;gap:1rem;align-items:center;padding:.8rem 1rem;border-radius:12px;background:var(--surface);border:1px solid var(--border)}.evidence-row strong{color:var(--cyan)}.evidence-row p{font-size:.92rem;margin:0}
+    .reference-list{columns:2;column-gap:2rem;margin:0;padding-left:1.2rem}.reference-list li{break-inside:avoid;margin:0 0 .75rem;font-size:clamp(.66rem,.85vw,.78rem);line-height:1.4;color:#bdc7d2}.source{font-size:.72rem;color:var(--muted);line-height:1.35;margin-top:.55rem}.source a{color:#9cc7ff}.tag{display:inline-block;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800;padding:.3rem .5rem;border-radius:6px;background:rgba(34,211,238,.1);color:#8cecf8;margin-bottom:.55rem}
+    .qtable{width:100%;border-collapse:collapse;font-size:clamp(.82rem,1.1vw,.98rem)}.qtable th,.qtable td{padding:.65rem .85rem;border:1px solid var(--border);text-align:center}.qtable th{background:var(--surface2);color:var(--cyan);font-weight:800;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}.qtable td:first-child,.qtable th:first-child{text-align:left}.qtable tr:nth-child(even) td{background:rgba(255,255,255,.02)}.qtable td.hi{color:#fff;font-weight:700}
+    .stat-row{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin:.4rem 0}.stat{text-align:center}.stat .num{font-family:"Space Grotesk",sans-serif;font-weight:800;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1}.stat .lbl{font-size:.8rem;color:var(--muted);margin-top:.3rem}
+    .quote-block{border-left:4px solid var(--cyan);padding:.4rem 0 .4rem 1.3rem;font-size:clamp(1rem,1.5vw,1.2rem);font-style:italic;color:#dfe6ec}.quote-block cite{display:block;margin-top:.6rem;font-size:.78rem;font-style:normal;color:var(--muted)}
+    .footer{position:absolute;left:clamp(1.2rem,4vw,3rem);right:clamp(1.2rem,4vw,3rem);bottom:1rem;display:flex;justify-content:space-between;gap:1rem;color:#6f7a86;font-size:.68rem;letter-spacing:.03em}.nav{position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:.55rem;padding:.38rem;border:1px solid var(--border);border-radius:999px;background:rgba(13,17,23,.88);backdrop-filter:blur(12px);box-shadow:var(--shadow)}.nav button{border:0;background:transparent;color:var(--text);width:2.4rem;height:2.4rem;border-radius:50%;cursor:pointer}.nav button:hover,.nav button:focus-visible{background:var(--surface2);outline:2px solid var(--blue);outline-offset:2px}.counter{font-variant-numeric:tabular-nums;color:var(--muted);min-width:4.3rem;text-align:center;font-size:.78rem}.help{position:fixed;right:1rem;top:1rem;z-index:31;border:1px solid var(--border);border-radius:999px;background:rgba(13,17,23,.78);color:var(--muted);padding:.45rem .65rem;cursor:pointer}.help:focus-visible{outline:2px solid var(--blue)}
+    dialog{width:min(560px,calc(100% - 2rem));border:1px solid var(--border);border-radius:18px;background:var(--surface);color:var(--text);padding:1.4rem;box-shadow:var(--shadow)}dialog::backdrop{background:rgba(0,0,0,.72)}dialog button{float:right;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);padding:.5rem .75rem}.keys{display:grid;grid-template-columns:auto 1fr;gap:.6rem 1rem}.keys kbd{border:1px solid var(--border);border-bottom-width:3px;border-radius:6px;padding:.2rem .45rem;background:var(--bg)}
+    @media(max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr)}.decision-map{grid-template-columns:1fr}.arrow{transform:rotate(90deg);text-align:center}.decision-node{min-height:86px}.balance{grid-template-columns:1fr}.fulcrum{display:none}.reference-list{columns:1}.evidence-row{grid-template-columns:1fr;gap:.3rem}.qtable{font-size:.72rem}}
+    @media(max-width:700px){.slide{padding:3.6rem 1rem 5.4rem;align-content:start}.slide-inner{margin-top:auto;margin-bottom:auto}.grid-2,.grid-3,.grid-4,.split-rule{grid-template-columns:1fr}.card{padding:.9rem}.nav{bottom:.6rem}.footer{bottom:.55rem}.footer span:first-child{display:none}.help{font-size:0;width:2.2rem;height:2.2rem;padding:0}.help::after{content:"?";font-size:.9rem}.risk-panel{min-height:0}h1{font-size:clamp(2rem,12vw,3.6rem)}h2{font-size:clamp(1.6rem,8vw,2.4rem)}.qtable{display:block;overflow-x:auto;white-space:nowrap}}
+    @media(max-height:720px){.slide{padding-top:3rem;padding-bottom:4.6rem;gap:.55rem}.card{padding:.8rem 1rem}h2{margin-bottom:.75rem}.risk-panel{min-height:180px}.source{margin-top:.3rem}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+    @media print{html,body{height:auto;overflow:visible;background:#fff;color:#111}.progress-track,.nav,.help,.skip-link{display:none!important}.slide{position:relative;display:grid!important;opacity:1!important;visibility:visible!important;transform:none!important;page-break-after:always;break-after:page;height:7.5in;padding:.45in;background:#fff;color:#111;overflow:hidden}.slide:last-child{page-break-after:auto}.card,.risk-panel,.rule,.decision-node,.evidence-row{background:#fff;color:#111;box-shadow:none;border-color:#bbb}.slide p,.card p,.risk-panel li,.pearls li,.reference-list li,.muted,.source{color:#333}.footer{color:#666}.nav{display:none}.qtable th{background:#eee;color:#111}}
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/gdm-one-step-two-step-screening/index.html">
+<meta name="description" content="A provider-focused comparison of one-step and two-step gestational diabetes screening: thresholds, the Hillier NEJM RCT, USPSTF review evidence, risks and benefits of each approach, and alternatives to a formal OGTT.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Gestational Diabetes, GDM Screening, One-Step, Two-Step, Carpenter-Coustan, IADPSG, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/gdm-one-step-two-step-screening/index.html">
+<meta property="og:title" content="One-Step vs. Two-Step GDM Screening - Provider Education | OpenMFM">
+<meta property="og:description" content="A provider-focused comparison of one-step and two-step gestational diabetes screening: thresholds, the Hillier NEJM RCT, USPSTF review evidence, risks and benefits of each approach, and alternatives to a formal OGTT.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="One-Step vs. Two-Step GDM Screening - Provider Education | OpenMFM">
+<meta name="twitter:description" content="A provider-focused comparison of one-step and two-step gestational diabetes screening: thresholds, the Hillier NEJM RCT, USPSTF review evidence, risks and benefits of each approach, and alternatives to a formal OGTT.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "One-Step vs. Two-Step GDM Screening - Provider Education",
+  "description": "A provider-focused comparison of one-step and two-step gestational diabetes screening: thresholds, the Hillier NEJM RCT, USPSTF review evidence, risks and benefits of each approach, and alternatives to a formal OGTT.",
+  "url": "https://openmfm.org/decks/gdm-one-step-two-step-screening/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-07-21",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Physicians and Advanced Practice Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "One-Step vs. Two-Step GDM Screening - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Gestational Diabetes, GDM Screening, One-Step, Two-Step, Carpenter-Coustan, IADPSG, Provider Education"
+}
+</script>
+</head>
+<body>
+  <a class="skip-link" href="#slide-1">Skip to presentation</a>
+  <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+  <button class="help" id="helpButton" aria-label="Open navigation help">Navigation help</button>
+  <main id="deck" aria-live="polite">
+
+    <section class="slide active" id="slide-1" aria-labelledby="title-1">
+      <div class="slide-inner title-center">
+        <div class="eyebrow">OpenMFM Clinician Education</div>
+        <h1 id="title-1">One-Step vs. Two-Step<br><span class="accent">Diagnosing Gestational Diabetes</span></h1>
+        <div class="divider"></div>
+        <p class="lead">Two accepted strategies, two different diagnostic philosophies. ACOG favors one; the ADA favors the other. Both are correct — and that is exactly the problem worth understanding.</p>
+        <div class="pills"><span class="pill cyan">ACOG vs. ADA</span><span class="pill green">HAPO-derived thresholds</span><span class="pill purple">Provider &amp; APP education</span></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>Maternal-Fetal Medicine</span></div>
+    </section>
+
+    <section class="slide" id="slide-2" aria-labelledby="title-2">
+      <div class="slide-inner">
+        <div class="slide-label">Why this isn't settled</div>
+        <h2 id="title-2">No professional consensus exists — and both major U.S. societies say so</h2>
+        <div class="quote-block">
+          "There is no scientific consensus on how best to diagnose gestational diabetes. Expert professional organizations acknowledge two acceptable options: the IADPSG one-step screening approach (currently preferred by the American Diabetes Association) and the two-step Carpenter&#8211;Coustan screening approach (recommended by the American College of Obstetricians and Gynecologists)."
+          <cite>Hillier TA, et al. A Pragmatic, Randomized Clinical Trial of Gestational Diabetes Screening. <em>N Engl J Med.</em> 2021.</cite>
+        </div>
+        <div class="callout" style="margin-top:1.4rem"><div class="callout-icon" aria-hidden="true">i</div><p>This deck lays out the mechanics, thresholds, comparative outcomes, and practical tradeoffs of each strategy so the choice made at your institution is an informed one, not a default.</p></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>2 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-3" aria-labelledby="title-3">
+      <div class="slide-inner">
+        <div class="slide-label">Two-step strategy &#8212; ACOG preferred</div>
+        <h2 id="title-3">A nonfasting screen filters who needs the diagnostic test</h2>
+        <div class="decision-map" role="img" aria-label="Two-step pathway: nonfasting 50 gram glucose challenge test at 24 to 28 weeks, then a fasting 3 hour 100 gram OGTT only if the screen is positive">
+          <div class="decision-node"><div><strong>Step 1: Screen</strong><span class="muted">Nonfasting 50g GCT at 24&#8211;28 weeks</span></div></div>
+          <div class="arrow" aria-hidden="true">&#x2192;</div>
+          <div class="decision-node"><div><strong>Step 2: Diagnose</strong><span class="muted">If positive: fasting 3-hr 100g OGTT</span></div></div>
+        </div>
+        <div class="grid-3" style="margin-top:1.1rem">
+          <article class="card blue"><div class="big">130/135/140</div><h3>1-hr GCT cutoff (mg/dL)</h3><p class="small">ACOG accepts any of the three; the choice is institutional.</p></article>
+          <article class="card green"><div class="big">~15&#8211;20%</div><h3>Proceed to the OGTT</h3><p class="small">Only those who screen positive need the longer, fasting test.</p></article>
+          <article class="card amber"><div class="big">2 visits</div><h3>For a positive screen</h3><p class="small">A separate fasting visit is required to complete the diagnosis.</p></article>
+        </div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>3 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-4" aria-labelledby="title-4">
+      <div class="slide-inner">
+        <div class="slide-label">Two-step diagnostic thresholds</div>
+        <h2 id="title-4">Carpenter-Coustan is preferred over the older NDDG criteria</h2>
+        <table class="qtable" aria-label="Two-step diagnostic thresholds comparing Carpenter-Coustan and NDDG criteria">
+          <tr><th>Timepoint</th><th>Carpenter&#8211;Coustan</th><th>NDDG</th></tr>
+          <tr><td>Fasting</td><td class="hi">&#8805; 95 mg/dL</td><td>&#8805; 105 mg/dL</td></tr>
+          <tr><td>1 hour</td><td class="hi">&#8805; 180 mg/dL</td><td>&#8805; 190 mg/dL</td></tr>
+          <tr><td>2 hour</td><td class="hi">&#8805; 155 mg/dL</td><td>&#8805; 165 mg/dL</td></tr>
+          <tr><td>3 hour</td><td class="hi">&#8805; 140 mg/dL</td><td>&#8805; 145 mg/dL</td></tr>
+        </table>
+        <div class="callout green" style="margin-top:1.1rem"><div class="callout-icon" aria-hidden="true">&#x2713;</div><p><strong>Diagnosis:</strong> &#8805; 2 of 4 values met or exceeded. The ADA recommends the lower Carpenter&#8211;Coustan thresholds if the two-step approach is used.</p></div>
+        <div class="callout amber" style="margin-top:.7rem"><div class="callout-icon" aria-hidden="true">!</div><p>ACOG notes a single elevated value <em>may</em> be used for diagnosis instead of two &#8212; but this would significantly increase GDM incidence and is not the default.</p></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>4 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-5" aria-labelledby="title-5">
+      <div class="slide-inner">
+        <div class="slide-label">One-step strategy &#8212; ADA preferred</div>
+        <h2 id="title-5">A single fasting test completes screening and diagnosis at once</h2>
+        <div class="grid-2">
+          <article class="card blue"><span class="tag">IADPSG criteria</span><h3>Single fasting 75g OGTT</h3><p>Performed once at 24&#8211;28 weeks. Any <strong>one</strong> of the following meets or exceeds threshold:</p>
+            <ul class="pearls"><li>Fasting &#8805; 92 mg/dL</li><li>1-hour &#8805; 180 mg/dL</li><li>2-hour &#8805; 153 mg/dL</li></ul>
+          </article>
+          <article class="card cyan" style="border-top:3px solid var(--cyan)"><span class="tag">Where the numbers come from</span><h3>HAPO study thresholds</h3><p>Set at the glucose level where the odds of adverse outcomes &#8212; LGA, neonatal hyperinsulinemia, excess adiposity &#8212; reached <strong>1.75&#215;</strong> estimated baseline odds.</p><p class="small">These are the only GDM thresholds derived directly from pregnancy outcomes rather than prediction of later maternal diabetes.</p></article>
+        </div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>5 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-6" aria-labelledby="title-6">
+      <div class="slide-inner">
+        <div class="slide-label">All thresholds, one table</div>
+        <h2 id="title-6">Glucose thresholds for diagnosing GDM after 24 weeks</h2>
+        <table class="qtable" aria-label="Full comparison of Carpenter-Coustan, NDDG, and IADPSG glucose thresholds by timepoint">
+          <tr><th>Timepoint</th><th>Carpenter&#8211;Coustan (two-step)</th><th>NDDG (two-step)</th><th>IADPSG (one-step)</th></tr>
+          <tr><td>Fasting</td><td>&#8805; 95 mg/dL</td><td>&#8805; 105 mg/dL</td><td class="hi">&#8805; 92 mg/dL</td></tr>
+          <tr><td>1 hour</td><td>&#8805; 180 mg/dL</td><td>&#8805; 190 mg/dL</td><td class="hi">&#8805; 180 mg/dL</td></tr>
+          <tr><td>2 hour</td><td>&#8805; 155 mg/dL</td><td>&#8805; 165 mg/dL</td><td class="hi">&#8805; 153 mg/dL</td></tr>
+          <tr><td>3 hour</td><td>&#8805; 140 mg/dL</td><td>&#8805; 145 mg/dL</td><td>&#8212;</td></tr>
+          <tr><td># values required</td><td>&#8805; 2 of 4</td><td>&#8805; 2 of 4</td><td class="hi">&#8805; 1 of 3</td></tr>
+        </table>
+        <p class="source">Sacks DB, et al. Guidelines and Recommendations for Laboratory Analysis in the Diagnosis and Management of Diabetes Mellitus. <em>Diabetes Care.</em> 2023. Table adapted per Will JS, Crellin H. <em>Am Fam Physician.</em> 2023.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>6 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-7" aria-labelledby="title-7">
+      <div class="slide-inner">
+        <div class="slide-label">Head-to-head evidence</div>
+        <h2 id="title-7">The Hillier 2021 pragmatic RCT: nearly double the diagnoses, no measured benefit</h2>
+        <div class="stat-row">
+          <div class="stat"><div class="num" style="color:var(--purple)">23,792</div><div class="lbl">women randomized</div></div>
+          <div class="stat"><div class="num accent">16.5%</div><div class="lbl">GDM with one-step</div></div>
+          <div class="stat"><div class="num" style="color:var(--muted)">8.5%</div><div class="lbl">GDM with two-step</div></div>
+        </div>
+        <div class="grid-4" style="margin-top:.9rem">
+          <article class="card"><h3>LGA infants</h3><p class="small">8.9% vs. 9.2% &#8212; not significant</p></article>
+          <article class="card"><h3>Perinatal composite</h3><p class="small">3.1% vs. 3.0% &#8212; not significant</p></article>
+          <article class="card"><h3>Gestational HTN / preeclampsia</h3><p class="small">13.6% vs. 13.5% &#8212; not significant</p></article>
+          <article class="card"><h3>Primary cesarean</h3><p class="small">24.0% vs. 24.6% &#8212; not significant</p></article>
+        </div>
+        <div class="callout amber" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">!</div><p>One-step screening was associated with <strong>increased neonatal hypoglycemia</strong> &#8212; possibly reflecting heightened surveillance of infants born to mothers newly labeled with GDM, rather than a true biological difference.</p></div>
+        <p class="source">Hillier TA, Pedula KL, Ogasawara KK, et al. A Pragmatic, Randomized Clinical Trial of Gestational Diabetes Screening. <em>N Engl J Med.</em> 2021.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>7 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-8" aria-labelledby="title-8">
+      <div class="slide-inner">
+        <div class="slide-label">Independent confirmation</div>
+        <h2 id="title-8">The USPSTF systematic review found the same pattern</h2>
+        <div class="split-rule">
+          <article class="rule"><div class="label">Prevalence</div><strong>One-step: 11.5% &#183; Two-step: 4.9%</strong><p>Across the pooled evidence base, one-step screening consistently identifies roughly twice the number of GDM cases.</p></article>
+          <article class="rule"><div class="label">Outcomes</div><strong>No demonstrated short-term benefit</strong><p>Despite the higher diagnosis rate, the review found no clear evidence that one-step screening improves short-term maternal or neonatal health outcomes.</p></article>
+        </div>
+        <div class="callout" style="margin-top:1.1rem"><div class="callout-icon" aria-hidden="true">i</div><p>Two independent, high-quality evidence sources &#8212; one pragmatic RCT, one systematic review &#8212; converge on the same conclusion: more diagnoses does not automatically mean better measured outcomes at delivery.</p></div>
+        <p class="source">Pillay J, Donovan L, Guitard S, et al. Screening for Gestational Diabetes. <em>JAMA.</em> 2021.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>8 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-9" aria-labelledby="title-9">
+      <div class="slide-inner">
+        <div class="slide-label">Two-step: risks &amp; benefits</div>
+        <h2 id="title-9">Fewer diagnostic tests, at the cost of a second visit</h2>
+        <div class="balance">
+          <article class="risk-panel"><h3 style="color:var(--green)">Benefits</h3><ul><li>Initial screen requires no fasting</li><li>Only ~15&#8211;20% need the 3-hour OGTT</li><li>Treating the higher-threshold hyperglycemia it identifies has proven benefit &#8212; less macrosomia, LGA, shoulder dystocia</li></ul></article>
+          <div class="fulcrum" aria-hidden="true"><svg viewBox="0 0 120 180"><line x1="12" y1="74" x2="108" y2="74" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/><circle cx="60" cy="74" r="9" fill="#58a6ff"/><path d="M60 83 L32 150 H88 Z" fill="#1c2330" stroke="#30363d" stroke-width="3"/></svg></div>
+          <article class="risk-panel"><h3 style="color:var(--amber)">Tradeoffs</h3><ul><li>Requires two visits for anyone who screens positive</li><li>Diagnostic test is longer (3 hours) with a higher glucose load (100g)</li><li>May miss milder hyperglycemia still linked to adverse outcomes</li></ul></article>
+        </div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>9 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-10" aria-labelledby="title-10">
+      <div class="slide-inner">
+        <div class="slide-label">One-step: risks &amp; benefits</div>
+        <h2 id="title-10">One visit, broader detection &#8212; and a long-term signal worth knowing</h2>
+        <div class="balance">
+          <article class="risk-panel"><h3 style="color:var(--green)">Benefits</h3><ul><li>Screening and diagnosis complete in a single visit</li><li>Shorter test (2 hours), lower glucose load (75g)</li><li>Identifies a broader at-risk population</li><li>HAPO Follow-Up: this group had a <strong>3.4&#215;</strong> higher risk of prediabetes/type 2 diabetes 11 years later, plus higher offspring obesity</li></ul></article>
+          <div class="fulcrum" aria-hidden="true"><svg viewBox="0 0 120 180"><line x1="12" y1="74" x2="108" y2="74" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/><circle cx="60" cy="74" r="9" fill="#58a6ff"/><path d="M60 83 L32 150 H88 Z" fill="#1c2330" stroke="#30363d" stroke-width="3"/></svg></div>
+          <article class="risk-panel"><h3 style="color:var(--amber)">Tradeoffs</h3><ul><li>Requires fasting for every patient screened</li><li>Roughly doubles or triples the GDM diagnosis rate (to ~15&#8211;20%)</li><li>NIH consensus panel: concern for medicalization of pregnancy and increased healthcare utilization/cost without demonstrated short-term outcome improvement</li></ul></article>
+        </div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>10 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-11" aria-labelledby="title-11">
+      <div class="slide-inner">
+        <div class="slide-label">Where the societies land</div>
+        <h2 id="title-11">ACOG and ADA endorse different strategies for different reasons</h2>
+        <div class="grid-2">
+          <article class="card green"><span class="tag">ACOG</span><h3>Two-step (Carpenter&#8211;Coustan)</h3><p>Cites proven treatment benefit at the higher thresholds and concern about over-diagnosis and unproven benefit of treating milder hyperglycemia.</p></article>
+          <article class="card blue"><span class="tag">ADA</span><h3>One-step (IADPSG)</h3><p>Favors thresholds derived directly from HAPO pregnancy-outcome data, arguing these best reflect the glucose levels that actually matter for the baby.</p></article>
+        </div>
+        <div class="callout" style="margin-top:1.1rem"><div class="callout-icon" aria-hidden="true">i</div><p>Both organizations acknowledge the need for further evidence, and <strong>either approach is considered acceptable</strong>. There is no professional or medico-legal expectation to pick one over the other.</p></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>11 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-12" aria-labelledby="title-12">
+      <div class="slide-inner">
+        <div class="slide-label">Alternatives to a formal OGTT</div>
+        <h2 id="title-12">When a full OGTT isn't feasible, the alternatives are imperfect substitutes</h2>
+        <div class="grid-2">
+          <article class="card red"><h3>HbA1c at 24&#8211;28 weeks</h3><p>Does not perform as well as the glucose load test for GDM screening. Not recommended as a standalone screening test.</p></article>
+          <article class="card amber"><h3>Self-monitored blood glucose</h3><p>Fasting &#8805; 95, 1-hr postprandial &#8805; 140, 2-hr postprandial &#8805; 120 mg/dL &#8212; suggested when an OGTT can't be performed, but no consensus on how many abnormal values are required.</p></article>
+          <article class="card blue"><h3>Fasting plasma glucose alone</h3><p>Used in some international settings (e.g., China: FPG &#8805; 5.6 mmol/L as a first-trimester screen), but lacks the sensitivity of a full OGTT.</p></article>
+          <article class="card green"><h3>Early first-trimester screening</h3><p>Recommended for women with risk factors, to identify <strong>pre-existing</strong> diabetes &#8212; managed as diabetes complicating pregnancy, not as GDM.</p></article>
+        </div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>12 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-13" aria-labelledby="title-13">
+      <div class="slide-inner">
+        <div class="slide-label">Choosing an approach in practice</div>
+        <h2 id="title-13">The right choice depends on what your practice is optimizing for</h2>
+        <div class="split-rule">
+          <article class="rule"><div class="label">Favor two-step if you value</div><strong>Fewer diagnostic tests, higher specificity</strong><p>Minimizing the number of patients labeled and treated, at higher, outcome-validated-by-treatment-trial thresholds.</p></article>
+          <article class="rule"><div class="label">Favor one-step if you value</div><strong>Single-visit efficiency, maximal sensitivity</strong><p>Capturing the broadest population linked to adverse pregnancy outcomes and later metabolic risk, in one encounter.</p></article>
+        </div>
+        <div class="callout green" style="margin-top:1.1rem"><div class="callout-icon" aria-hidden="true">&#x2713;</div><p><strong>Practical rule:</strong> whichever strategy is adopted, apply it consistently, use the paired thresholds correctly (never mix Carpenter&#8211;Coustan cutoffs with IADPSG rules), and document the protocol in your practice's standing orders.</p></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>13 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-14" aria-labelledby="title-14">
+      <div class="slide-inner">
+        <div class="slide-label">Clinical pearls</div>
+        <h2 id="title-14">Ten things to remember about GDM screening strategy</h2>
+        <div class="grid-2">
+          <ol class="pearls" style="list-style:none">
+            <li><strong>Both strategies are guideline-endorsed:</strong> two-step by ACOG, one-step by ADA/IADPSG.</li>
+            <li><strong>Thresholds are not interchangeable:</strong> never pair Carpenter&#8211;Coustan cutoffs with a one-value IADPSG rule or vice versa.</li>
+            <li><strong>One-step roughly doubles the GDM diagnosis rate</strong> compared with two-step (11.5% vs. 4.9% in the USPSTF review).</li>
+            <li><strong>The largest head-to-head RCT found no significant difference</strong> in LGA, perinatal composite outcomes, preeclampsia, or cesarean rate.</li>
+            <li><strong>IADPSG thresholds are uniquely outcome-derived</strong> &#8212; set at a 1.75&#215; odds ratio for adverse outcomes in the HAPO study.</li>
+          </ol>
+          <ol class="pearls" style="list-style:none">
+            <li><strong>Carpenter&#8211;Coustan/NDDG thresholds were derived to predict future maternal diabetes,</strong> not pregnancy outcomes directly.</li>
+            <li><strong>The two-step 50g screen requires no fasting;</strong> the one-step 75g test requires universal fasting.</li>
+            <li><strong>HAPO Follow-Up data links IADPSG-positive women to a 3.4-fold higher long-term T2DM risk</strong> &#8212; a metabolic signal, not a pregnancy-outcome one.</li>
+            <li><strong>HbA1c alone is not an adequate GDM screening test.</strong></li>
+            <li><strong>Consistency matters more than which strategy you choose</strong> &#8212; document your practice's protocol and apply it uniformly.</li>
+          </ol>
+        </div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>14 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-15" aria-labelledby="title-15">
+      <div class="slide-inner">
+        <div class="slide-label">Evidence &amp; controversies</div>
+        <h2 id="title-15">What's known, what's uncertain, and where experts still disagree</h2>
+        <div class="evidence-ladder">
+          <div class="evidence-row"><strong>Known</strong><p>One-step screening identifies roughly twice as many GDM cases as two-step, replicated across a pragmatic RCT and a systematic review.</p></div>
+          <div class="evidence-row"><strong>Uncertain</strong><p>Whether treating the additional, milder hyperglycemia identified only by one-step criteria improves clinically meaningful short-term outcomes.</p></div>
+          <div class="evidence-row"><strong>Contested</strong><p>Whether IADPSG's outcome-derived thresholds or Carpenter&#8211;Coustan's treatment-trial-validated thresholds are the more appropriate diagnostic anchor.</p></div>
+          <div class="evidence-row"><strong>Research need</strong><p>Long-term, prospective comparisons of maternal and offspring metabolic outcomes under each diagnostic strategy, beyond the pregnancy episode itself.</p></div>
+        </div>
+        <div class="callout" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">i</div><p>Both ADA and ACOG acknowledge the evidence gaps and consider either approach acceptable.</p></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>15 / 16</span></div>
+    </section>
+
+    <section class="slide" id="slide-16" aria-labelledby="title-16">
+      <div class="slide-inner">
+        <div class="slide-label">References</div>
+        <h2 id="title-16">Selected references</h2>
+        <ol class="reference-list">
+          <li>American Diabetes Association Professional Practice Committee. Diagnosis and Classification of Diabetes: Standards of Care in Diabetes&#8212;2026. <em>Diabetes Care.</em> 2026.</li>
+          <li>Hillier TA, Pedula KL, Ogasawara KK, et al. A Pragmatic, Randomized Clinical Trial of Gestational Diabetes Screening. <em>N Engl J Med.</em> 2021.</li>
+          <li>Sacks DB, Arnold M, Bakris GL, et al. Guidelines and Recommendations for Laboratory Analysis in the Diagnosis and Management of Diabetes Mellitus. <em>Diabetes Care.</em> 2023.</li>
+          <li>Committee on Practice Bulletins&#8212;Obstetrics. Gestational Diabetes Mellitus. ACOG Practice Bulletin No. 190. <em>Obstet Gynecol.</em> 2018.</li>
+          <li>Will JS, Crellin H. Gestational Diabetes Mellitus: Update on Screening, Diagnosis, and Management. <em>Am Fam Physician.</em> 2023.</li>
+          <li>Pillay J, Donovan L, Guitard S, et al. Screening for Gestational Diabetes. <em>JAMA.</em> 2021.</li>
+          <li>Hod M, Kapur A, McIntyre HD. Evidence in Support of the International Association of Diabetes in Pregnancy Study Groups' Criteria for Diagnosing Gestational Diabetes Mellitus Worldwide in 2019. <em>Am J Obstet Gynecol.</em> 2019.</li>
+          <li>Simmons D, Gupta Y, Hernandez TL, et al. Call to Action for a Life Course Approach. <em>Lancet.</em> 2024.</li>
+        </ol>
+        <p class="source">Educational material for physicians and advanced practice providers. Apply current institutional protocols and individualized clinical judgment.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>16 / 16</span></div>
+    </section>
+
+  </main>
+
+  <nav class="nav" aria-label="Slide navigation"><button id="prev" aria-label="Previous slide">&#x2190;</button><span class="counter" id="counter" aria-live="polite">1 / 16</span><button id="next" aria-label="Next slide">&#x2192;</button></nav>
+  <dialog id="helpDialog" aria-labelledby="helpTitle"><button id="closeHelp" aria-label="Close help">Close</button><h2 id="helpTitle" style="font-size:1.5rem">Navigation</h2><div class="keys"><kbd>&#x2192;</kbd><span>Next slide</span><kbd>&#x2190;</kbd><span>Previous slide</span><kbd>Space</kbd><span>Next slide</span><kbd>Home</kbd><span>First slide</span><kbd>End</kbd><span>Last slide</span><kbd>Esc</kbd><span>Close help</span></div></dialog>
+  <script>
+    (()=>{const slides=[...document.querySelectorAll('.slide')],counter=document.getElementById('counter'),bar=document.getElementById('progressBar'),prev=document.getElementById('prev'),next=document.getElementById('next');let current=0,touchX=0;
+      const fromHash=()=>{const m=location.hash.match(/slide-(\d+)/);return m?Math.min(slides.length-1,Math.max(0,Number(m[1])-1)):0};
+      const show=(n,push=true)=>{current=Math.min(slides.length-1,Math.max(0,n));slides.forEach((s,i)=>{s.classList.toggle('active',i===current);s.setAttribute('aria-hidden',i===current?'false':'true')});counter.textContent=`${current+1} / ${slides.length}`;bar.style.width=`${((current+1)/slides.length)*100}%`;prev.disabled=current===0;next.disabled=current===slides.length-1;if(push&&location.hash!==`#slide-${current+1}`)history.replaceState(null,'',`#slide-${current+1}`);slides[current].focus({preventScroll:true})};
+      prev.addEventListener('click',()=>show(current-1));next.addEventListener('click',()=>show(current+1));
+      addEventListener('keydown',e=>{if(document.getElementById('helpDialog').open)return;if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(current+1)}else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1)});
+      addEventListener('hashchange',()=>show(fromHash(),false));document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX},{passive:true});document.addEventListener('touchend',e=>{const d=e.changedTouches[0].screenX-touchX;if(Math.abs(d)>40)show(current+(d<0?1:-1))},{passive:true});
+      const dialog=document.getElementById('helpDialog');document.getElementById('helpButton').addEventListener('click',()=>dialog.showModal());document.getElementById('closeHelp').addEventListener('click',()=>dialog.close());show(fromHash(),false);
+    })();
+  </script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
