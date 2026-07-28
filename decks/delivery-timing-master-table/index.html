@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1117">
+  <title>SMFM / ACOG Delivery Timing Master Table | OpenMFM</title>
+
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2330;--border:#30363d;--text:#e6edf3;--muted:#9ba5b1;--blue:#58a6ff;--cyan:#22d3ee;--teal:#39d0b4;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#bc8cff;--brand:#1f6feb;--shadow:0 24px 70px rgba(0,0,0,.35)}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
+    body{background:radial-gradient(circle at 85% 10%,rgba(34,211,238,.08),transparent 28%),radial-gradient(circle at 15% 85%,rgba(31,111,235,.1),transparent 32%),var(--bg)}
+    button,a{font:inherit} a{color:var(--blue)}
+    .skip-link{position:fixed;left:1rem;top:-4rem;z-index:100;background:#fff;color:#000;padding:.7rem 1rem;border-radius:.5rem}.skip-link:focus{top:1rem}
+    .progress-track{position:fixed;inset:0 0 auto;height:4px;background:rgba(255,255,255,.05);z-index:50}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--cyan));box-shadow:0 0 16px rgba(34,211,238,.45);transition:width .3s ease}
+    main{height:100%}.slide{position:absolute;inset:0;display:grid;align-content:center;gap:clamp(.75rem,1.6vh,1.2rem);padding:clamp(3.8rem,7vh,6rem) clamp(1.2rem,7vw,7rem) clamp(5rem,10vh,7rem);opacity:0;visibility:hidden;transform:translateX(28px);transition:opacity .35s ease,transform .35s ease;overflow:auto}.slide.active{opacity:1;visibility:visible;transform:none;z-index:2}
+    .slide-inner{width:min(1160px,100%);margin:auto}.kicker,.slide-label{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:800;margin-bottom:.55rem}.eyebrow{text-align:center;color:var(--cyan);font-weight:800;letter-spacing:.17em;text-transform:uppercase;font-size:.78rem}
+    h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:"Space Grotesk",Inter,ui-sans-serif,sans-serif;line-height:1.08}h1{font-size:clamp(2.1rem,5.6vw,5.1rem);letter-spacing:-.045em;margin-bottom:1rem}h2{font-size:clamp(1.6rem,3.6vw,3.1rem);letter-spacing:-.035em;margin-bottom:clamp(1rem,2.2vh,1.65rem);max-width:1000px}h3{font-size:clamp(1rem,1.55vw,1.35rem);margin-bottom:.55rem}p{font-size:clamp(.98rem,1.35vw,1.16rem);line-height:1.55;color:#c7d0da}.lead{font-size:clamp(1.12rem,1.7vw,1.4rem);max-width:840px;color:#d8e0e8}.accent{color:var(--cyan)}.muted{color:var(--muted)}
+    .title-center{text-align:center}.title-center .lead{margin-left:auto;margin-right:auto}.divider{width:78px;height:4px;border-radius:8px;background:linear-gradient(90deg,var(--blue),var(--cyan));margin:1.4rem auto 1.6rem}.pills{display:flex;justify-content:center;gap:.65rem;flex-wrap:wrap}.pill{padding:.48rem .8rem;border:1px solid var(--border);border-radius:999px;background:rgba(22,27,34,.72);font-size:.76rem;font-weight:750;color:#dbe6f0}.pill.cyan{border-color:rgba(34,211,238,.4);color:#9cecf7}.pill.green{border-color:rgba(63,185,80,.45);color:#8ce99a}.pill.purple{border-color:rgba(188,140,255,.45);color:#d8b9ff}.pill.amber{border-color:rgba(210,153,34,.45);color:#f0ce7a}
+    .grid-2,.grid-3,.grid-4{display:grid;gap:clamp(.7rem,1.35vw,1.1rem)}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .card{background:linear-gradient(145deg,rgba(28,35,48,.94),rgba(22,27,34,.88));border:1px solid var(--border);border-radius:16px;padding:clamp(1rem,2vw,1.45rem);box-shadow:0 14px 38px rgba(0,0,0,.16)}.card.blue{border-top:3px solid var(--blue)}.card.green{border-top:3px solid var(--green)}.card.amber{border-top:3px solid var(--amber)}.card.red{border-top:3px solid var(--red)}.card.purple{border-top:3px solid var(--purple)}.card.cyan{border-top:3px solid var(--cyan)}.card p:last-child{margin-bottom:0}.card .big{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.4rem,2.3vw,2.3rem);font-weight:800;line-height:1;color:var(--text);margin-bottom:.55rem}.card .small{font-size:.86rem;color:var(--muted)}
+    .callout{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:start;padding:1rem 1.15rem;border-radius:14px;border:1px solid rgba(88,166,255,.35);background:rgba(31,111,235,.09)}.callout.amber{border-color:rgba(210,153,34,.42);background:rgba(210,153,34,.09)}.callout.red{border-color:rgba(248,81,73,.4);background:rgba(248,81,73,.08)}.callout.green{border-color:rgba(63,185,80,.4);background:rgba(63,185,80,.08)}.callout-icon{width:2rem;height:2rem;border-radius:50%;display:grid;place-items:center;background:rgba(88,166,255,.16);color:var(--blue);font-weight:900;flex-shrink:0}.callout p{margin:0}
+    .decision-map{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:.5rem;align-items:center}.decision-node{min-height:110px;display:grid;place-items:center;text-align:center;padding:.85rem;border-radius:16px;border:1px solid var(--border);background:var(--surface)}.decision-node strong{display:block;font-size:.98rem;margin-bottom:.35rem}.arrow{color:var(--cyan);font-size:1.35rem;font-weight:900;text-align:center}
+    .balance{display:grid;grid-template-columns:1fr 110px 1fr;align-items:center;gap:1rem}.risk-panel{padding:1.25rem;border-radius:18px;border:1px solid var(--border);background:var(--surface);min-height:230px}.risk-panel h3{font-size:1.35rem}.risk-panel ul,.pearls{margin:.8rem 0 0;padding:0;list-style:none}.risk-panel li,.pearls li{position:relative;padding:.38rem 0 .38rem 1.35rem;color:#c9d2dc;line-height:1.42}.risk-panel li::before,.pearls li::before{content:"";position:absolute;left:0;top:.85rem;width:.45rem;height:.45rem;border-radius:50%;background:var(--cyan)}.fulcrum{height:170px;display:grid;place-items:center}.fulcrum svg{width:100%;height:100%}
+    .window-banner{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:.8rem}.window-banner .range{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.8rem,4.2vw,3.6rem);font-weight:800;letter-spacing:-.04em}.window-banner .context{font-size:1rem;color:var(--muted)}
+    .split-rule{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.rule{border-radius:18px;padding:1.2rem;border:1px solid var(--border);background:var(--surface)}.rule .label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--muted);margin-bottom:.55rem}.rule strong{font-size:clamp(1.1rem,1.9vw,1.5rem);display:block;margin-bottom:.6rem}
+    .evidence-ladder{display:grid;gap:.75rem}.evidence-row{display:grid;grid-template-columns:150px 1fr;gap:1rem;align-items:center;padding:.8rem 1rem;border-radius:12px;background:var(--surface);border:1px solid var(--border)}.evidence-row strong{color:var(--cyan)}.evidence-row p{font-size:.92rem;margin:0}
+    .reference-list{columns:2;column-gap:2rem;margin:0;padding-left:1.2rem}.reference-list li{break-inside:avoid;margin:0 0 .7rem;font-size:clamp(.64rem,.82vw,.75rem);line-height:1.4;color:#bdc7d2}.source{font-size:.72rem;color:var(--muted);line-height:1.35;margin-top:.55rem}.source a{color:#9cc7ff}.tag{display:inline-block;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800;padding:.3rem .5rem;border-radius:6px;background:rgba(34,211,238,.1);color:#8cecf8;margin-bottom:.55rem}
+    .qtable{width:100%;border-collapse:collapse;font-size:clamp(.76rem,1vw,.92rem)}.qtable th,.qtable td{padding:.6rem .8rem;border:1px solid var(--border);text-align:left}.qtable th{background:var(--surface2);color:var(--cyan);font-weight:800;font-size:.74rem;text-transform:uppercase;letter-spacing:.04em}.qtable td:last-child,.qtable th:last-child{text-align:right}.qtable tr:nth-child(even) td{background:rgba(255,255,255,.02)}.qtable td.hi{color:#fff;font-weight:700}
+    .stat-row{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin:.4rem 0}.stat{text-align:center}.stat .num{font-family:"Space Grotesk",sans-serif;font-weight:800;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1}.stat .lbl{font-size:.8rem;color:var(--muted);margin-top:.3rem}
+    .quote-block{border-left:4px solid var(--cyan);padding:.4rem 0 .4rem 1.3rem;font-size:clamp(1rem,1.5vw,1.2rem);font-style:italic;color:#dfe6ec}.quote-block cite{display:block;margin-top:.6rem;font-size:.78rem;font-style:normal;color:var(--muted)}
+    .abbr-table{width:100%;border-collapse:collapse;font-size:.78rem;margin-bottom:1rem}.abbr-table td{padding:.3rem .6rem;border-bottom:1px solid var(--border);color:#c7d0da}.abbr-table td:first-child{color:var(--cyan);font-weight:700;width:5.5rem}
+    .footer{position:absolute;left:clamp(1.2rem,4vw,3rem);right:clamp(1.2rem,4vw,3rem);bottom:1rem;display:flex;justify-content:space-between;gap:1rem;color:#6f7a86;font-size:.68rem;letter-spacing:.03em}.nav{position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:.55rem;padding:.38rem;border:1px solid var(--border);border-radius:999px;background:rgba(13,17,23,.88);backdrop-filter:blur(12px);box-shadow:var(--shadow)}.nav button{border:0;background:transparent;color:var(--text);width:2.4rem;height:2.4rem;border-radius:50%;cursor:pointer}.nav button:hover,.nav button:focus-visible{background:var(--surface2);outline:2px solid var(--blue);outline-offset:2px}.counter{font-variant-numeric:tabular-nums;color:var(--muted);min-width:4.3rem;text-align:center;font-size:.78rem}.help{position:fixed;right:1rem;top:1rem;z-index:31;border:1px solid var(--border);border-radius:999px;background:rgba(13,17,23,.78);color:var(--muted);padding:.45rem .65rem;cursor:pointer}.help:focus-visible{outline:2px solid var(--blue)}
+    dialog{width:min(560px,calc(100% - 2rem));border:1px solid var(--border);border-radius:18px;background:var(--surface);color:var(--text);padding:1.4rem;box-shadow:var(--shadow)}dialog::backdrop{background:rgba(0,0,0,.72)}dialog button{float:right;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);padding:.5rem .75rem}.keys{display:grid;grid-template-columns:auto 1fr;gap:.6rem 1rem}.keys kbd{border:1px solid var(--border);border-bottom-width:3px;border-radius:6px;padding:.2rem .45rem;background:var(--bg)}
+    @media(max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}.decision-map{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}.decision-node{min-height:86px}.balance{grid-template-columns:1fr}.fulcrum{display:none}.reference-list{columns:1}.evidence-row{grid-template-columns:1fr;gap:.3rem}.qtable{font-size:.72rem}}
+    @media(max-width:700px){.slide{padding:3.6rem 1rem 5.4rem;align-content:start}.slide-inner{margin-top:auto;margin-bottom:auto}.grid-2,.grid-3,.grid-4,.split-rule{grid-template-columns:1fr}.card{padding:.9rem}.nav{bottom:.6rem}.footer{bottom:.55rem}.footer span:first-child{display:none}.help{font-size:0;width:2.2rem;height:2.2rem;padding:0}.help::after{content:"?";font-size:.9rem}.risk-panel{min-height:0}h1{font-size:clamp(2rem,12vw,3.6rem)}h2{font-size:clamp(1.5rem,8vw,2.2rem)}.qtable{display:block;overflow-x:auto;white-space:nowrap}}
+    @media(max-height:720px){.slide{padding-top:3rem;padding-bottom:4.6rem;gap:.55rem}.card{padding:.8rem 1rem}h2{margin-bottom:.75rem}.risk-panel{min-height:180px}.source{margin-top:.3rem}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+    @media print{html,body{height:auto;overflow:visible;background:#fff;color:#111}.progress-track,.nav,.help,.skip-link{display:none!important}.slide{position:relative;display:grid!important;opacity:1!important;visibility:visible!important;transform:none!important;page-break-after:always;break-after:page;height:7.5in;padding:.45in;background:#fff;color:#111;overflow:hidden}.slide:last-child{page-break-after:auto}.card,.risk-panel,.rule,.decision-node,.evidence-row{background:#fff;color:#111;box-shadow:none;border-color:#bbb}.slide p,.card p,.risk-panel li,.pearls li,.reference-list li,.muted,.source,.abbr-table td{color:#333}.footer{color:#666}.nav{display:none}.qtable th{background:#eee;color:#111}}
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/delivery-timing-master-table/index.html">
+<meta name="description" content="A physician and APP quick-reference table of evidence-based gestational-age delivery windows across twelve major maternal, fetal, and placental conditions, sourced from current ACOG and SMFM guidance.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Recently Added, Delivery Timing, SMFM Guidelines, ACOG Guidelines, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/delivery-timing-master-table/index.html">
+<meta property="og:title" content="SMFM / ACOG Delivery Timing Master Table - Provider Education | OpenMFM">
+<meta property="og:description" content="A physician and APP quick-reference table of evidence-based gestational-age delivery windows across twelve major maternal, fetal, and placental conditions, sourced from current ACOG and SMFM guidance.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SMFM / ACOG Delivery Timing Master Table - Provider Education | OpenMFM">
+<meta name="twitter:description" content="A physician and APP quick-reference table of evidence-based gestational-age delivery windows across twelve major maternal, fetal, and placental conditions, sourced from current ACOG and SMFM guidance.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "SMFM / ACOG Delivery Timing Master Table - Provider Education",
+  "description": "A physician and APP quick-reference table of evidence-based gestational-age delivery windows across twelve major maternal, fetal, and placental conditions, sourced from current ACOG and SMFM guidance.",
+  "url": "https://openmfm.org/decks/delivery-timing-master-table/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-07-28",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "SMFM / ACOG Delivery Timing Master Table - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Recently Added, Delivery Timing, SMFM Guidelines, ACOG Guidelines, Provider Education"
+}
+</script>
+</head>
+<body>
+  <a class="skip-link" href="#slide-1">Skip to presentation</a>
+  <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+  <button class="help" id="helpButton" aria-label="Open navigation help">Navigation help</button>
+  <main id="deck" aria-live="polite">
+
+    <section class="slide active" id="slide-1" aria-labelledby="title-1">
+      <div class="slide-inner title-center">
+        <div class="eyebrow">OpenMFM Clinical Reference</div>
+        <h1 id="title-1">SMFM / ACOG<br><span class="accent">Delivery Timing Master Table</span></h1>
+        <div class="divider"></div>
+        <p class="lead">Evidence-based gestational-age windows for delivery across twelve major maternal, fetal, and placental conditions &#8212; a quick-reference tool for physicians, residents, and advanced practice providers.</p>
+        <div class="pills"><span class="pill cyan">ACOG &amp; SMFM sourced</span><span class="pill green">12 clinical categories</span><span class="pill purple">Physician &amp; APP education</span></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>Maternal-Fetal Medicine</span></div>
+    </section>
+
+    <section class="slide" id="slide-2" aria-labelledby="title-2">
+      <div class="slide-inner">
+        <div class="slide-label">Before you use this table</div>
+        <h2 id="title-2">These windows assume a stable, reliably dated pregnancy &#8212; read the assumptions first</h2>
+        <div class="grid-2">
+          <ol class="pearls" style="list-style:none">
+            <li>Reliable pregnancy dating</li>
+            <li>Stable maternal condition</li>
+            <li>Reassuring fetal surveillance</li>
+          </ol>
+          <ol class="pearls" style="list-style:none">
+            <li>No labor and intact membranes</li>
+            <li>No significant vaginal bleeding</li>
+            <li>No separate indication for earlier delivery</li>
+          </ol>
+        </div>
+        <div class="callout red" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">!</div><p><strong>Maternal or fetal deterioration supersedes routine gestational-age recommendations</strong> at every point in this table.</p></div>
+        <div class="callout" style="margin-top:.7rem"><div class="callout-icon" aria-hidden="true">i</div><p>Gestational ages are expressed as completed weeks and days &#8212; e.g., <strong>37 0/7 weeks</strong> = 37 weeks 0 days; <strong>37 6/7 weeks</strong> = 37 weeks 6 days. Timing does not determine mode of delivery; that requires separate assessment.</p></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>2 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-3" aria-labelledby="title-3">
+      <div class="slide-inner">
+        <div class="slide-label">1. Hypertensive disorders &#8212; routine timing</div>
+        <h2 id="title-3">Preeclampsia and gestational hypertension without severe features: deliver at 37 weeks</h2>
+        <table class="qtable" aria-label="Delivery timing for hypertensive disorders without severe features">
+          <tr><th>Condition</th><th>Clinical status</th><th>Recommended delivery</th></tr>
+          <tr><td>Gestational hypertension</td><td>No severe features</td><td class="hi">37 0/7 weeks</td></tr>
+          <tr><td>Preeclampsia</td><td>No severe features</td><td class="hi">37 0/7 weeks</td></tr>
+          <tr><td>Superimposed preeclampsia</td><td>Without severe features</td><td class="hi">37 0/7 weeks</td></tr>
+          <tr><td>Chronic hypertension</td><td>Not requiring medication</td><td>38 0/7&#8211;39 6/7 weeks</td></tr>
+          <tr><td>Chronic hypertension</td><td>Controlled with medication</td><td>37 0/7&#8211;39 6/7 weeks</td></tr>
+          <tr><td>Chronic hypertension</td><td>Difficult to control</td><td>36 0/7&#8211;37 6/7 weeks, individualized</td></tr>
+        </table>
+        <p class="source">Primary source: ACOG Practice Bulletin No. 222; ACOG Committee Opinion No. 831.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>3 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-4" aria-labelledby="title-4">
+      <div class="slide-inner">
+        <div class="slide-label">1. Hypertensive disorders &#8212; severe disease</div>
+        <h2 id="title-4">Severe features, eclampsia, and HELLP: deliver after stabilization, not on a fixed date</h2>
+        <table class="qtable" aria-label="Delivery timing for severe hypertensive disease">
+          <tr><th>Condition</th><th>Status</th><th>Recommended delivery</th></tr>
+          <tr><td>Preeclampsia with severe features</td><td>At or beyond 34 0/7 weeks</td><td class="hi">Delivery after maternal stabilization</td></tr>
+          <tr><td>Preeclampsia with severe features</td><td>Before 34 0/7 weeks, stable</td><td>Selected inpatient expectant management may be considered</td></tr>
+          <tr><td>Eclampsia</td><td>Any viable gestational age</td><td class="hi">Delivery after stabilization</td></tr>
+          <tr><td>HELLP syndrome</td><td>Any viable gestational age</td><td class="hi">Delivery after stabilization</td></tr>
+          <tr><td>Gestational hypertension</td><td>Severe-range blood pressure</td><td>Manage as preeclampsia with severe features</td></tr>
+        </table>
+        <div class="callout amber" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">!</div><p><strong>Deliver earlier for:</strong> uncontrolled severe hypertension, eclampsia, pulmonary edema, stroke, MI, HELLP, progressive renal dysfunction, refractory headache or visual symptoms, RUQ/epigastric pain, abruption, or nonreassuring fetal status.</p></div>
+        <div class="callout red" style="margin-top:.7rem"><div class="callout-icon" aria-hidden="true">!</div><p>An indicated delivery at or beyond 34 weeks for severe features <strong>should not be delayed solely to complete antenatal corticosteroids</strong>.</p></div>
+        <p class="source">Primary source: ACOG Practice Bulletin No. 222; ACOG Committee Opinion No. 831.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>4 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-5" aria-labelledby="title-5">
+      <div class="slide-inner">
+        <div class="slide-label">2. Diabetes in pregnancy</div>
+        <h2 id="title-5">Delivery windows track glycemic control and vascular risk, not diagnosis alone</h2>
+        <table class="qtable" aria-label="Delivery timing for diabetes in pregnancy">
+          <tr><th>Condition</th><th>Glycemic status</th><th>Recommended delivery</th></tr>
+          <tr><td>GDM, A1GDM</td><td>Diet controlled</td><td class="hi">39 0/7&#8211;40 6/7 weeks</td></tr>
+          <tr><td>GDM, A2GDM</td><td>Well controlled with medication</td><td class="hi">39 0/7&#8211;39 6/7 weeks</td></tr>
+          <tr><td>GDM</td><td>Poorly controlled</td><td>Individualize; commonly 37 0/7&#8211;38 6/7 weeks</td></tr>
+          <tr><td>Pregestational T1/T2 diabetes</td><td>Well controlled, no vascular disease</td><td class="hi">39 0/7&#8211;39 6/7 weeks</td></tr>
+          <tr><td>Pregestational diabetes</td><td>Poor control, vascular disease, or prior stillbirth</td><td>36 0/7&#8211;38 6/7 weeks, individualized</td></tr>
+        </table>
+        <div class="callout" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">i</div><p><strong>Suspected macrosomia alone</strong> does not automatically establish an indication for delivery before 39 weeks.</p></div>
+        <p class="source">Primary sources: ACOG Practice Bulletins on Gestational and Pregestational Diabetes Mellitus; ACOG Committee Opinion No. 831.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>5 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-6" aria-labelledby="title-6">
+      <div class="slide-inner">
+        <div class="slide-label">3. Fetal growth restriction</div>
+        <h2 id="title-6">Delivery timing tracks umbilical-artery Doppler severity</h2>
+        <div class="grid-4">
+          <article class="card green"><div class="big">38&#8211;39wk</div><h3>Normal Doppler</h3><p class="small">EFW 3rd&#8211;10th percentile, or severe FGR below 3rd percentile with no absent/reversed flow: 37 0/7&#8211;39 0/7 weeks.</p></article>
+          <article class="card amber"><div class="big">37wk</div><h3>Decreased diastolic flow</h3><p class="small">Reduced but not absent or reversed umbilical-artery flow.</p></article>
+          <article class="card red"><div class="big">33&#8211;34wk</div><h3>AEDV</h3><p class="small">Absent end-diastolic velocity.</p></article>
+          <article class="card purple"><div class="big">30&#8211;32wk</div><h3>REDV</h3><p class="small">Reversed end-diastolic velocity.</p></article>
+        </div>
+        <div class="callout" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">i</div><p>SMFM does <strong>not</strong> recommend routine MCA, ductus venosus, or uterine-artery Doppler for otherwise uncomplicated FGR. Timing also integrates interval growth, fetal testing, amniotic fluid, and associated anomalies.</p></div>
+        <p class="source">Primary source: SMFM Consult Series No. 52; ACOG Practice Bulletin No. 227.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>6 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-7" aria-labelledby="title-7">
+      <div class="slide-inner">
+        <div class="slide-label">4. Amniotic-fluid disorders</div>
+        <h2 id="title-7">Isolated oligohydramnios: deliver by term; polyhydramnios rarely justifies early delivery</h2>
+        <table class="qtable" aria-label="Delivery timing for amniotic fluid disorders">
+          <tr><th>Condition</th><th>Status</th><th>Recommended delivery</th></tr>
+          <tr><td>Isolated oligohydramnios</td><td>Otherwise uncomplicated</td><td class="hi">36 0/7&#8211;37 6/7 weeks, or at diagnosis if later</td></tr>
+          <tr><td>Mild idiopathic polyhydramnios</td><td>Otherwise uncomplicated</td><td>Allow spontaneous labor at term; avoid planned delivery before 39 0/7 weeks without another indication</td></tr>
+          <tr><td>Moderate&#8211;severe polyhydramnios</td><td>Stable</td><td>Individualize by etiology, fetal condition, symptoms, surveillance</td></tr>
+        </table>
+        <div class="callout amber" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">!</div><p><strong>Deliver earlier for:</strong> abnormal surveillance, ROM, labor, significant maternal respiratory symptoms, cord prolapse, abruption, or an anomaly requiring coordinated delivery.</p></div>
+        <p class="source">Primary sources: ACOG Committee Opinion No. 831; SMFM Consult Series on polyhydramnios.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>7 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-8" aria-labelledby="title-8">
+      <div class="slide-inner">
+        <div class="slide-label">5. Multiple gestation</div>
+        <h2 id="title-8">Chorionicity &#8212; not simply twinning &#8212; drives the delivery window</h2>
+        <table class="qtable" aria-label="Delivery timing for twin and higher-order pregnancies">
+          <tr><th>Pregnancy type</th><th>Recommended delivery</th></tr>
+          <tr><td>Dichorionic diamniotic twins</td><td class="hi">38 0/7&#8211;38 6/7 weeks</td></tr>
+          <tr><td>Monochorionic diamniotic twins</td><td class="hi">36 0/7&#8211;37 0/7 weeks</td></tr>
+          <tr><td>Monochorionic monoamniotic twins</td><td class="hi">32 0/7&#8211;34 0/7 weeks, planned cesarean</td></tr>
+          <tr><td>Trichorionic triamniotic triplets, uncomplicated</td><td>Commonly planned during the 35th week</td></tr>
+          <tr><td>Other triplet / higher-order gestations</td><td>Individualize with MFM input</td></tr>
+        </table>
+        <div class="callout" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">i</div><p>These windows apply to <strong>uncomplicated</strong> pregnancies. Deliver earlier for TTTS, TAPS, selective FGR, abnormal Doppler, discordant growth with compromise, preeclampsia, preterm labor, ROM, abnormal surveillance, or fetal demise. Complicated monochorionic gestations require condition-specific planning.</p></div>
+        <p class="source">Primary sources: ACOG Practice Bulletin No. 231; SMFM 2026 Updated Checklists for Management of Monochorionic Twin Pregnancy; ACOG Committee Opinion No. 831.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>8 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-9" aria-labelledby="title-9">
+      <div class="slide-inner">
+        <div class="slide-label">6. Intrahepatic cholestasis of pregnancy</div>
+        <h2 id="title-9">Peak bile acids &#8212; not symptoms alone &#8212; set the delivery window</h2>
+        <table class="qtable" aria-label="Delivery timing for intrahepatic cholestasis of pregnancy">
+          <tr><th>Peak total bile acids</th><th>Recommended delivery</th></tr>
+          <tr><td>&#8805; 100 &#181;mol/L</td><td class="hi">36 0/7 weeks</td></tr>
+          <tr><td>&lt; 100 &#181;mol/L</td><td>36 0/7&#8211;39 0/7 weeks</td></tr>
+          <tr><td>Clinical symptoms without lab confirmation</td><td>Do not deliver before 37 weeks solely for suspected ICP</td></tr>
+        </table>
+        <div class="callout" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">i</div><p>Within the 36&#8211;39-week window below 100 &#181;mol/L, individualize using peak bile-acid concentration, severity/persistence of pruritus, prior ICP-associated stillbirth, coexisting preeclampsia or diabetes, fetal surveillance, and shared decision-making.</p></div>
+        <div class="callout amber" style="margin-top:.7rem"><div class="callout-icon" aria-hidden="true">!</div><p>SMFM recommends antenatal corticosteroids when delivery before 37 0/7 weeks is planned and a prior course has not been given.</p></div>
+        <p class="source">Primary source: SMFM Consult Series No. 53, endorsed by ACOG.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>9 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-10" aria-labelledby="title-10">
+      <div class="slide-inner">
+        <div class="slide-label">7. Placental and fetal-vessel disorders</div>
+        <h2 id="title-10">Placenta previa, accreta spectrum, and vasa previa each have distinct windows</h2>
+        <table class="qtable" aria-label="Delivery timing for placental and fetal vessel disorders">
+          <tr><th>Condition</th><th>Stable status</th><th>Recommended delivery</th></tr>
+          <tr><td>Placenta previa</td><td>No active bleeding/complication</td><td class="hi">36 0/7&#8211;37 6/7 weeks</td></tr>
+          <tr><td>Placenta accreta spectrum</td><td>Planned cesarean or cesarean hysterectomy</td><td class="hi">34 0/7&#8211;35 6/7 weeks</td></tr>
+          <tr><td>Vasa previa</td><td>Prenatally diagnosed, stable</td><td class="hi">Planned cesarean, 34 0/7&#8211;37 0/7 weeks</td></tr>
+          <tr><td>Chronic placental abruption</td><td>Stable maternal/fetal status</td><td>Individualize; no single universal recommendation</td></tr>
+          <tr><td>Acute placental abruption</td><td>Maternal or fetal compromise</td><td class="hi">Immediate delivery as indicated</td></tr>
+        </table>
+        <div class="callout red" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">!</div><p>With known vasa previa, <strong>labor or rupture of membranes generally requires urgent cesarean delivery</strong>, regardless of gestational age.</p></div>
+        <p class="source">Primary sources: ACOG&#8211;SMFM Obstetric Care Consensus No. 7; SMFM Consult Series No. 37; ACOG Committee Opinion No. 831.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>10 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-11" aria-labelledby="title-11">
+      <div class="slide-inner">
+        <div class="slide-label">8. Prelabor rupture of membranes</div>
+        <h2 id="title-11">Term PROM: deliver. PPROM: expectant management, with a 37-week ceiling</h2>
+        <table class="qtable" aria-label="Delivery timing for prelabor rupture of membranes">
+          <tr><th>Membrane status</th><th>Gestational age</th><th>Recommended approach</th></tr>
+          <tr><td>Term PROM</td><td>&#8805; 37 0/7 weeks</td><td class="hi">Recommend delivery</td></tr>
+          <tr><td>PPROM</td><td>24 0/7&#8211;33 6/7 weeks</td><td>Expectant inpatient management if no contraindication</td></tr>
+          <tr><td>Late-preterm PPROM</td><td>34 0/7&#8211;36 6/7 weeks</td><td>Delivery or expectant management after counseling; do not continue beyond 37 0/7 weeks</td></tr>
+          <tr><td>Previable/periviable PPROM</td><td>Before resuscitation threshold</td><td>Individualized counseling and management</td></tr>
+        </table>
+        <div class="callout amber" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">!</div><p><strong>Contraindications to expectant management:</strong> intraamniotic infection, abruption, nonreassuring fetal status, advanced labor, cord prolapse, significant hemorrhage, or maternal instability.</p></div>
+        <div class="callout" style="margin-top:.7rem"><div class="callout-icon" aria-hidden="true">i</div><p>Management should also address latency antibiotics, antenatal corticosteroids, magnesium sulfate for neuroprotection when indicated, and GBS prophylaxis.</p></div>
+        <p class="source">Primary source: ACOG Practice Bulletin No. 217.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>11 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-12" aria-labelledby="title-12">
+      <div class="slide-inner">
+        <div class="slide-label">9. Prior uterine surgery</div>
+        <h2 id="title-12">Prior classical incisions and myomectomy both call for planned early-term delivery</h2>
+        <table class="qtable" aria-label="Delivery timing for prior uterine surgery">
+          <tr><th>Uterine history</th><th>Recommended delivery</th></tr>
+          <tr><td>Prior classical cesarean incision</td><td class="hi">36 0/7&#8211;37 0/7 weeks</td></tr>
+          <tr><td>Prior T-shaped uterine incision</td><td class="hi">36 0/7&#8211;37 0/7 weeks</td></tr>
+          <tr><td>Prior uterine rupture</td><td>36 0/7&#8211;37 0/7 weeks, individualized</td></tr>
+          <tr><td>Prior myomectomy requiring cesarean delivery</td><td class="hi">37 0/7&#8211;38 6/7 weeks</td></tr>
+          <tr><td>Prior low-transverse cesarean, no contraindication to labor</td><td>Usual obstetric indications and TOLAC plan</td></tr>
+        </table>
+        <div class="callout" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">i</div><p><strong>Myomectomy timing</strong> depends on whether the endometrial cavity was entered, fibroid number/size/location, surgical approach, extent of myometrial dissection, the operative report, surgeon's recommendation, and prior pregnancy outcomes. More extensive surgery favors delivery closer to 37 weeks; less extensive surgery may permit delivery closer to 38 6/7 weeks.</p></div>
+        <p class="source">Primary source: ACOG Committee Opinion No. 831; ACOG Practice Bulletin on Vaginal Birth After Cesarean Delivery.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>12 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-13" aria-labelledby="title-13">
+      <div class="slide-inner">
+        <div class="slide-label">10. Fetal anemia and alloimmunization</div>
+        <h2 id="title-13">Stable at-risk fetuses deliver near 37&#8211;38 weeks; hydrops changes the calculus</h2>
+        <table class="qtable" aria-label="Delivery timing for fetal anemia and red-cell alloimmunization">
+          <tr><th>Clinical status</th><th>Recommended delivery</th></tr>
+          <tr><td>Significant anemia risk, stable</td><td class="hi">37 0/7&#8211;38 0/7 weeks</td></tr>
+          <tr><td>Pregnancy following intrauterine transfusion</td><td>Individualize by timing of final transfusion, fetal condition, center protocol</td></tr>
+          <tr><td>Hydrops or severe fetal anemia</td><td>Fetal therapy or delivery based on gestational age and comparative procedural risk</td></tr>
+        </table>
+        <div class="callout amber" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">!</div><p><strong>Deliver earlier for:</strong> hydrops, MCA peak systolic velocity suggesting severe anemia, abnormal surveillance, or inability to safely continue fetal therapy.</p></div>
+        <p class="source">Primary source: SMFM Clinical Guideline No. 8, reaffirmed 2025.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>13 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-14" aria-labelledby="title-14">
+      <div class="slide-inner">
+        <div class="slide-label">11. Advanced maternal age</div>
+        <h2 id="title-14">Age &#8805; 40 alone supports delivery at 39 weeks &#8212; younger age does not change routine timing</h2>
+        <table class="qtable" aria-label="Delivery timing for advanced maternal age">
+          <tr><th>Maternal age at anticipated delivery</th><th>Recommended approach</th></tr>
+          <tr><td>35&#8211;39 years, no other complication</td><td>Routine obstetric timing; age alone does not mandate early-term delivery</td></tr>
+          <tr><td>&#8805; 40 years</td><td class="hi">39 0/7&#8211;39 6/7 weeks in a well-dated pregnancy</td></tr>
+        </table>
+        <div class="callout" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">i</div><p>Earlier delivery should be based on an additional maternal, fetal, or obstetric indication &#8212; not chronological age alone.</p></div>
+        <p class="source">Primary source: ACOG&#8211;SMFM Obstetric Care Consensus: Pregnancy at Age 35 Years or Older.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>14 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-15" aria-labelledby="title-15">
+      <div class="slide-inner">
+        <div class="slide-label">12. Conditions requiring individualized timing</div>
+        <h2 id="title-15">No universal window exists for these conditions &#8212; multidisciplinary planning is the standard</h2>
+        <div class="grid-4">
+          <article class="card"><h3>Maternal cardiac disease</h3><p class="small">Lesion, ventricular function, symptoms, anticoagulation, hemodynamic risk</p></article>
+          <article class="card"><h3>Chronic kidney disease</h3><p class="small">Renal function, hypertension, proteinuria, fetal growth</p></article>
+          <article class="card"><h3>Lupus (SLE)</h3><p class="small">Disease activity, nephritis, hypertension, fetal condition</p></article>
+          <article class="card"><h3>Antiphospholipid syndrome</h3><p class="small">Thrombosis history, anticoagulation, placental dysfunction</p></article>
+          <article class="card"><h3>Pulmonary hypertension</h3><p class="small">Maternal hemodynamics, tertiary-care planning</p></article>
+          <article class="card"><h3>Major fetal anomaly</h3><p class="small">Prognosis, need for neonatal surgery, center capability</p></article>
+          <article class="card"><h3>Hydrops fetalis</h3><p class="small">Etiology, fetal therapy options, surveillance</p></article>
+          <article class="card"><h3>Prior stillbirth</h3><p class="small">Etiology, recurrence risk, neonatal risk of early delivery</p></article>
+        </div>
+        <div class="callout" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">i</div><p>Also individualized: chronic placental abruption, severe polyhydramnios, IVF pregnancy, and extreme obesity. This table does not substitute for MFM consultation, relevant subspecialty consultation, anesthesia and neonatology planning, or institutional protocol.</p></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>15 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-16" aria-labelledby="title-16">
+      <div class="slide-inner">
+        <div class="slide-label">General delivery principles</div>
+        <h2 id="title-16">Four rules apply across every condition in this table</h2>
+        <div class="grid-2">
+          <article class="card red"><h3>Deterioration overrides the table</h3><p class="small">Eclampsia, stroke, pulmonary edema, uncontrolled severe hypertension, hemorrhage, abruption, intraamniotic infection, cord prolapse, persistent Category III tracing, abnormal surveillance, or fetal death all supersede routine timing.</p></article>
+          <article class="card amber"><h3>Corticosteroids and magnesium sulfate</h3><p class="small">Give antenatal corticosteroids when delivery is expected within the recommended interval &#8212; but never delay an indicated delivery solely to complete the course. Give magnesium sulfate for maternal seizure prophylaxis or fetal neuroprotection when indicated.</p></article>
+          <article class="card blue"><h3>Timing is not mode of delivery</h3><p class="small">Gestational-age recommendations do not determine induction versus cesarean, TOLAC eligibility, operative-vaginal delivery, need for classical cesarean, or delivery location.</p></article>
+          <article class="card green"><h3>Avoid nonmedically indicated early delivery</h3><p class="small">Without a maternal, fetal, placental, or obstetric indication, avoid delivery before 39 0/7 weeks. Fetal lung-maturity testing should not be used to justify an otherwise nonmedically indicated early-term delivery.</p></article>
+        </div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>16 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-17" aria-labelledby="title-17">
+      <div class="slide-inner">
+        <div class="slide-label">Clinical pearls</div>
+        <h2 id="title-17">Ten things to remember about delivery-timing decisions</h2>
+        <div class="grid-2">
+          <ol class="pearls" style="list-style:none">
+            <li><strong>Deterioration always overrides the table:</strong> eclampsia, stroke, abruption, and Category III tracings mandate delivery regardless of the "target" week.</li>
+            <li><strong>Preeclampsia without severe features:</strong> 37 weeks. With severe features at or beyond 34 weeks: deliver after stabilization, not on a fixed date.</li>
+            <li><strong>Don't delay an indicated &#8805;34-week delivery</strong> solely to complete a corticosteroid course.</li>
+            <li><strong>Diabetes windows run 36&#8211;40 weeks</strong> depending on control and vascular disease &#8212; suspected macrosomia alone is not an indication for early delivery.</li>
+            <li><strong>FGR timing tracks Doppler severity:</strong> AEDV at 33&#8211;34 weeks, REDV at 30&#8211;32 weeks. Routine MCA/DV/UtA Doppler is not recommended for uncomplicated FGR.</li>
+          </ol>
+          <ol class="pearls" style="list-style:none">
+            <li><strong>Chorionicity drives twin timing:</strong> MCDA (36&#8211;37 weeks) delivers earlier than DCDA (38&#8211;38 6/7 weeks); MCMA by planned cesarean at 32&#8211;34 weeks.</li>
+            <li><strong>ICP timing hinges on peak bile acids:</strong> &#8805;100 &#181;mol/L mandates 36 weeks; below that, individualize within a 36&#8211;39-week window.</li>
+            <li><strong>Vasa previa in labor or with ROM</strong> is a cesarean emergency regardless of gestational age.</li>
+            <li><strong>Avoid nonmedically indicated delivery before 39 0/7 weeks</strong>, and never use fetal lung-maturity testing to justify one.</li>
+            <li><strong>Delivery timing never determines delivery mode</strong> &#8212; TOLAC eligibility, operative delivery, and route require separate assessment.</li>
+          </ol>
+        </div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>17 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-18" aria-labelledby="title-18">
+      <div class="slide-inner">
+        <div class="slide-label">Evidence &amp; controversies</div>
+        <h2 id="title-18">What's established, what's individualized, and where guidance keeps evolving</h2>
+        <div class="evidence-ladder">
+          <div class="evidence-row"><strong>Known</strong><p>Delivery-timing windows for major conditions &#8212; preeclampsia, diabetes, staged FGR, twin chorionicity &#8212; are grounded in consistent, current ACOG/SMFM guidance.</p></div>
+          <div class="evidence-row"><strong>Uncertain</strong><p>Optimal timing within broad individualized windows (chronic hypertension 36&#8211;39 6/7 weeks; ICP below 100 &#181;mol/L) where a single threshold does not fully predict risk.</p></div>
+          <div class="evidence-row"><strong>Contested</strong><p>How aggressively to expand routine Doppler surveillance &#8212; MCA, ductus venosus, uterine artery &#8212; beyond the umbilical artery in FGR management.</p></div>
+          <div class="evidence-row"><strong>Research need</strong><p>Long-term maternal and offspring outcomes tied to specific timing thresholds, particularly for conditions requiring individualized, multidisciplinary planning.</p></div>
+        </div>
+        <div class="callout" style="margin-top:1rem"><div class="callout-icon" aria-hidden="true">i</div><p>This is a living reference &#8212; version 1.0, guideline review July 2026, next scheduled review January 2027. Verify current guidance before applying to an individual patient.</p></div>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>18 / 19</span></div>
+    </section>
+
+    <section class="slide" id="slide-19" aria-labelledby="title-19">
+      <div class="slide-inner">
+        <div class="slide-label">References</div>
+        <h2 id="title-19">Abbreviations and selected references</h2>
+        <table class="abbr-table" aria-label="Abbreviations used in this table">
+          <tr><td>ACOG</td><td>American College of Obstetricians and Gynecologists</td><td>AEDV</td><td>Absent end-diastolic velocity</td></tr>
+          <tr><td>SMFM</td><td>Society for Maternal-Fetal Medicine</td><td>REDV</td><td>Reversed end-diastolic velocity</td></tr>
+          <tr><td>EFW</td><td>Estimated fetal weight</td><td>FGR</td><td>Fetal growth restriction</td></tr>
+          <tr><td>ICP</td><td>Intrahepatic cholestasis of pregnancy</td><td>PPROM</td><td>Preterm prelabor rupture of membranes</td></tr>
+        </table>
+        <ol class="reference-list">
+          <li>ACOG. Medically Indicated Late-Preterm and Early-Term Deliveries. Committee Opinion No. 831. 2021.</li>
+          <li>ACOG. Gestational Hypertension and Preeclampsia. Practice Bulletin No. 222. 2020.</li>
+          <li>ACOG. Prelabor Rupture of Membranes. Practice Bulletin No. 217.</li>
+          <li>ACOG. Gestational Diabetes Mellitus. Practice Bulletin No. 190.</li>
+          <li>ACOG. Pregestational Diabetes Mellitus. Practice Bulletin No. 201.</li>
+          <li>ACOG. Fetal Growth Restriction. Practice Bulletin No. 227.</li>
+          <li>ACOG. Multifetal Gestations: Twin, Triplet, and Higher-Order Multifetal Pregnancies. Practice Bulletin No. 231.</li>
+          <li>ACOG and SMFM. Placenta Accreta Spectrum. Obstetric Care Consensus No. 7.</li>
+          <li>ACOG and SMFM. Pregnancy at Age 35 Years or Older. Obstetric Care Consensus.</li>
+          <li>SMFM. Diagnosis and Management of Fetal Growth Restriction. Consult Series No. 52. Reaffirmed 2024.</li>
+          <li>SMFM. Intrahepatic Cholestasis of Pregnancy. Consult Series No. 53. Reaffirmed 2024, endorsed by ACOG.</li>
+          <li>SMFM. Diagnosis and Management of Vasa Previa. Consult Series No. 37. Reaffirmed 2024.</li>
+          <li>SMFM. The Fetus at Risk for Anemia: Diagnosis and Management. Clinical Guideline No. 8. Reaffirmed 2025.</li>
+          <li>SMFM. Updated Checklists for Management of Monochorionic Twin Pregnancy. Special Statement. 2026.</li>
+        </ol>
+        <p class="source">Educational reference for physicians, residents, and advanced practice providers. Individualize according to maternal condition, fetal condition, dating accuracy, labor status, and institutional capability. Maternal or fetal deterioration supersedes routine gestational-age recommendations.</p>
+      </div>
+      <div class="footer"><span>Atlanta Perinatal Associates</span><span>19 / 19</span></div>
+    </section>
+
+  </main>
+
+  <nav class="nav" aria-label="Slide navigation"><button id="prev" aria-label="Previous slide">&#x2190;</button><span class="counter" id="counter" aria-live="polite">1 / 19</span><button id="next" aria-label="Next slide">&#x2192;</button></nav>
+  <dialog id="helpDialog" aria-labelledby="helpTitle"><button id="closeHelp" aria-label="Close help">Close</button><h2 id="helpTitle" style="font-size:1.5rem">Navigation</h2><div class="keys"><kbd>&#x2192;</kbd><span>Next slide</span><kbd>&#x2190;</kbd><span>Previous slide</span><kbd>Space</kbd><span>Next slide</span><kbd>Home</kbd><span>First slide</span><kbd>End</kbd><span>Last slide</span><kbd>Esc</kbd><span>Close help</span></div></dialog>
+  <script>
+    (()=>{const slides=[...document.querySelectorAll('.slide')],counter=document.getElementById('counter'),bar=document.getElementById('progressBar'),prev=document.getElementById('prev'),next=document.getElementById('next');let current=0,touchX=0;
+      const fromHash=()=>{const m=location.hash.match(/slide-(\d+)/);return m?Math.min(slides.length-1,Math.max(0,Number(m[1])-1)):0};
+      const show=(n,push=true)=>{current=Math.min(slides.length-1,Math.max(0,n));slides.forEach((s,i)=>{s.classList.toggle('active',i===current);s.setAttribute('aria-hidden',i===current?'false':'true')});counter.textContent=`${current+1} / ${slides.length}`;bar.style.width=`${((current+1)/slides.length)*100}%`;prev.disabled=current===0;next.disabled=current===slides.length-1;if(push&&location.hash!==`#slide-${current+1}`)history.replaceState(null,'',`#slide-${current+1}`);slides[current].focus({preventScroll:true})};
+      prev.addEventListener('click',()=>show(current-1));next.addEventListener('click',()=>show(current+1));
+      addEventListener('keydown',e=>{if(document.getElementById('helpDialog').open)return;if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(current+1)}else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1)});
+      addEventListener('hashchange',()=>show(fromHash(),false));document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX},{passive:true});document.addEventListener('touchend',e=>{const d=e.changedTouches[0].screenX-touchX;if(Math.abs(d)>40)show(current+(d<0?1:-1))},{passive:true});
+      const dialog=document.getElementById('helpDialog');document.getElementById('helpButton').addEventListener('click',()=>dialog.showModal());document.getElementById('closeHelp').addEventListener('click',()=>dialog.close());show(fromHash(),false);
+    })();
+  </script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
