@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umbilical Cord Cyst Found Later in Pregnancy | MFM Patient Education</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #08131f;
+      --surface:     rgba(10, 24, 39, 0.9);
+      --surface2:    rgba(18, 34, 52, 0.94);
+      --border:      rgba(131, 193, 255, 0.16);
+      --text:        #f5f9fc;
+      --muted:       #b5c7d7;
+      --accent-blue: #69b8ff;
+      --accent-teal: #4ddcc2;
+      --accent-green:#79e09b;
+      --accent-amber:#ffbd63;
+      --accent-red:  #ff7171;
+      --accent-purple:#bfbcff;
+      --brand:       #69b8ff;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(105, 184, 255, 0.18), transparent 26%),
+        radial-gradient(circle at 88% 16%, rgba(77, 220, 194, 0.13), transparent 20%),
+        linear-gradient(180deg, #08131f 0%, #06101a 100%);
+      color: var(--text);
+      font-family: "Aptos", "Segoe UI", system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+
+    /* ─── Deck & Slide ──────────────────────────────────────────────────── */
+    .deck { width: 100%; height: 100%; position: relative; }
+    .deck::before {
+      content: "";
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.22), transparent 78%);
+      pointer-events: none;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 4.2em 4.2em 6em;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+      background: linear-gradient(180deg, rgba(8, 19, 31, 0.72), rgba(8, 19, 31, 0.32));
+      overflow-y: auto;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    /* ─── Navigation ────────────────────────────────────────────────────── */
+    .nav {
+      position: fixed; bottom: 1.2em; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 0.8em;
+      padding: 0.55em 0.7em;
+      border: 1px solid rgba(131, 193, 255, 0.16);
+      border-radius: 999px;
+      background: rgba(7, 17, 28, 0.72);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+      z-index: 100;
+    }
+    .nav button {
+      background: rgba(14, 30, 48, 0.92);
+      border: 1px solid rgba(131, 193, 255, 0.18);
+      color: var(--text); padding: 0.55em 1.15em;
+      border-radius: 999px; font-size: 1em; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav button:hover { background: rgba(31, 74, 116, 0.92); }
+    .nav .counter { color: #dce8f7; font-size: 0.9em; min-width: 5em; text-align: center; font-weight: 600; }
+
+    /* ─── Progress Bar ──────────────────────────────────────────────────── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 4px;
+      background: linear-gradient(90deg, #69b8ff 0%, #4ddcc2 100%);
+      box-shadow: 0 0 18px rgba(105, 184, 255, 0.45);
+      transition: width 0.4s ease;
+      z-index: 200;
+    }
+
+    /* ─── Typography ────────────────────────────────────────────────────── */
+    .slide-label {
+      font-size: 0.75em; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.6em;
+    }
+    h1 { font-size: clamp(2em, 4.5vw, 3.6em); font-weight: 700; line-height: 1.15; letter-spacing: -0.035em; text-wrap: balance; }
+    h2 { font-size: clamp(1.6em, 3.5vw, 2.6em); font-weight: 700; line-height: 1.2; letter-spacing: -0.035em; text-wrap: balance; }
+    h3 { font-size: clamp(1.1em, 2vw, 1.5em); font-weight: 400; }
+    p  { font-size: clamp(0.95em, 1.6vw, 1.25em); line-height: 1.7; max-width: 780px; text-align: center; color: var(--text); }
+
+    .accent-blue   { color: var(--accent-blue); }
+    .accent-teal   { color: var(--accent-teal); }
+    .accent-green  { color: var(--accent-green); }
+    .accent-amber  { color: var(--accent-amber); }
+    .accent-red    { color: var(--accent-red); }
+    .accent-purple { color: var(--accent-purple); }
+
+    /* ─── Cards & Layouts ───────────────────────────────────────────────── */
+    .two-col {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.6em; width: 100%; max-width: 1000px; margin-top: 1.4em;
+    }
+    .three-col {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.4em; width: 100%; max-width: 1020px; margin-top: 1.4em;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
+      border: 1px solid rgba(131, 193, 255, 0.16);
+      border-radius: 18px; padding: 1.5em 1.7em;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+      backdrop-filter: blur(10px);
+    }
+    .card h3 { margin-bottom: 0.5em; }
+    .card p  { text-align: left; font-size: 0.95em; max-width: none; }
+    .card .card-icon { font-size: 1.8em; margin-bottom: 0.4em; }
+
+    /* ─── Stat Box ──────────────────────────────────────────────────────── */
+    .stat-row { display: flex; gap: 1.6em; margin-top: 1.6em; flex-wrap: wrap; justify-content: center; }
+    .stat-box {
+      background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
+      border: 1px solid rgba(131, 193, 255, 0.16);
+      border-radius: 18px; padding: 1.2em 1.7em; text-align: center; min-width: 160px;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+    }
+    .stat-box .stat-num { font-size: 2em; font-weight: 700; line-height: 1; }
+    .stat-box .stat-lbl { font-size: 0.8em; color: var(--muted); margin-top: 0.4em; line-height: 1.3; }
+
+    /* ─── Alert Box ─────────────────────────────────────────────────────── */
+    .alert {
+      border-radius: 18px; padding: 1em 1.4em;
+      display: flex; align-items: flex-start; gap: 0.8em;
+      max-width: 840px; margin-top: 1.4em; font-size: 0.95em; line-height: 1.55;
+      backdrop-filter: blur(8px);
+    }
+    .alert-amber { background: rgba(255,189,99,.12); border: 1px solid rgba(255,189,99,.35); color: var(--text); }
+    .alert-green { background: rgba(121,224,155,.12);  border: 1px solid rgba(121,224,155,.35); color: var(--text); }
+    .alert-blue  { background: rgba(105,184,255,.10); border: 1px solid rgba(105,184,255,.3); color: var(--text); }
+    .alert-red   { background: rgba(255,113,113,.10); border: 1px solid rgba(255,113,113,.35); color: var(--text); }
+    .alert-icon  { font-size: 1.3em; flex-shrink: 0; margin-top: 0.05em; }
+
+    /* ─── Checklist ─────────────────────────────────────────────────────── */
+    .checklist { list-style: none; margin-top: 1.2em; max-width: 720px; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 0.7em;
+      padding: 0.5em 0; font-size: clamp(0.9em, 1.4vw, 1.1em); line-height: 1.5;
+    }
+    .checklist li::before { content: '✦'; color: var(--accent-teal); flex-shrink: 0; margin-top: 0.05em; }
+
+    /* ─── Step List ─────────────────────────────────────────────────────── */
+    .step-list { list-style: none; width: 100%; max-width: 820px; margin-top: 1.2em; }
+    .step-list li {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 0.75rem 0; border-bottom: 1px solid var(--border);
+      font-size: 0.95rem; line-height: 1.55; text-align: left;
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-num {
+      flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 50%;
+      background: var(--accent-blue); color: #06101a; font-weight: 700;
+      font-size: 0.85rem; display: flex; align-items: center; justify-content: center;
+    }
+    .step-content strong { color: var(--accent-blue); }
+
+    /* ─── Definition Box ────────────────────────────────────────────────── */
+    .def-box {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.2em 1.6em; max-width: 780px;
+      margin-top: 1.2em; font-size: clamp(0.9em, 1.4vw, 1.1em); line-height: 1.6;
+      text-align: left;
+    }
+    .def-box strong { color: var(--accent-blue); }
+
+    /* ─── Flow Diagram ──────────────────────────────────────────────────── */
+    .flow-diagram { display: flex; align-items: center; gap: 0; max-width: 900px; width: 100%; margin-top: 1.6em; flex-wrap: wrap; justify-content: center; }
+    .flow-node {
+      flex: 1; min-width: 150px;
+      background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 0.9rem 0.9rem; text-align: center; font-size: 0.82rem; line-height: 1.4;
+    }
+    .flow-node .node-label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+    .flow-node .node-value { font-size: 0.95rem; font-weight: 600; }
+    .flow-arrow { flex-shrink: 0; width: 2rem; text-align: center; color: var(--muted); font-size: 1.2rem; }
+    .node-warn   { border-color: var(--accent-amber); }
+    .node-danger { border-color: var(--accent-red); }
+
+    /* ─── Image Figure ──────────────────────────────────────────────────── */
+    figure.slide-figure { margin-top: 1.2em; max-width: 720px; width: 100%; text-align: center; }
+    figure.slide-figure img {
+      max-width: 100%; max-height: 320px; width: auto; border-radius: 14px;
+      border: 1px solid var(--border); box-shadow: 0 18px 34px rgba(0,0,0,0.3);
+    }
+    figure.slide-figure figcaption { margin-top: 0.6em; font-size: 0.78em; color: var(--muted); line-height: 1.5; }
+
+    /* ─── Footer Branding ───────────────────────────────────────────────── */
+    .slide-footer {
+      position: absolute; bottom: 3.5em; left: 4em; right: 4em;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.72em; color: var(--muted); border-top: 1px solid var(--border);
+      padding-top: 0.6em;
+    }
+
+    /* ─── Title Slide ───────────────────────────────────────────────────── */
+    .title-eyebrow {
+      font-size: 0.8em; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent-teal); margin-bottom: 0.8em;
+    }
+    .title-divider { width: 60px; height: 3px; background: var(--brand); border-radius: 2px; margin: 1em auto; }
+    .title-sub { font-size: clamp(1em, 1.8vw, 1.3em); color: var(--muted); max-width: 640px; text-align: center; line-height: 1.6; }
+
+    /* ─── Mobile ────────────────────────────────────────────────────────── */
+    @media (max-width: 700px) {
+      .slide { padding: 2em 1.6em 5.5em; }
+      .two-col, .three-col { grid-template-columns: 1fr; }
+      .slide-footer { left: 1.6em; right: 1.6em; }
+      .stat-box { min-width: 120px; }
+      .flow-diagram { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); }
+    }
+
+    /* ─── Print ─────────────────────────────────────────────────────────── */
+    @media print {
+      html, body { overflow: visible; background: #08131f; }
+      .nav, .progress-bar { display: none; }
+      .slide {
+        position: relative; opacity: 1; visibility: visible;
+        page-break-after: always; height: auto; min-height: 100vh;
+      }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/umbilical-cord-cyst-patient/index.html">
+<meta name="description" content="Patient-facing guide to a third-trimester umbilical cord cyst finding: what it is, why timing changes the evaluation, the genetic testing and monitoring plan, how to understand Doppler results, and delivery planning.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Recently Added, Umbilical Cord Cyst, Third Trimester, Prenatal Ultrasound, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/umbilical-cord-cyst-patient/index.html">
+<meta property="og:title" content="Umbilical Cord Cyst Found Later in Pregnancy - Patient Education | OpenMFM">
+<meta property="og:description" content="Patient-facing guide to a third-trimester umbilical cord cyst finding: what it is, why timing changes the evaluation, the genetic testing and monitoring plan, how to understand Doppler results, and delivery planning.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Umbilical Cord Cyst Found Later in Pregnancy - Patient Education | OpenMFM">
+<meta name="twitter:description" content="Patient-facing guide to a third-trimester umbilical cord cyst finding: what it is, why timing changes the evaluation, the genetic testing and monitoring plan, how to understand Doppler results, and delivery planning.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Umbilical Cord Cyst Found Later in Pregnancy - Patient Education",
+  "description": "Patient-facing guide to a third-trimester umbilical cord cyst finding: what it is, why timing changes the evaluation, the genetic testing and monitoring plan, how to understand Doppler results, and delivery planning.",
+  "url": "https://openmfm.org/decks/umbilical-cord-cyst-patient/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-07-29",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Umbilical Cord Cyst Found Later in Pregnancy - Patient Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Recently Added, Umbilical Cord Cyst, Third Trimester, Prenatal Ultrasound, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck" id="deck">
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide active">
+    <div class="title-eyebrow">Maternal-Fetal Medicine · Patient Education</div>
+    <h1 style="text-align:center;">Your Ultrasound Found an<br>Umbilical Cord Cyst</h1>
+    <div class="title-divider"></div>
+    <p class="title-sub">What this finding means, why it matters more later in pregnancy, and the plan your care team will follow to keep a close eye on you and your baby.</p>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 1 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 2 — WHAT IS AN UMBILICAL CORD CYST?
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Getting Oriented</div>
+    <h2>What Is an Umbilical Cord Cyst?</h2>
+    <div class="def-box">
+      Your umbilical cord is the flexible, rope-like tube that connects your baby to the placenta. It carries blood, oxygen, and nutrients back and forth. A <strong>cord cyst</strong> is a small fluid-filled area found somewhere along that cord on ultrasound.
+    </div>
+    <figure class="slide-figure">
+      <img src="images/cord-cyst-ultrasound.png" alt="Ultrasound image showing a fluid-filled cyst along the umbilical cord" loading="lazy">
+      <figcaption>Illustrative ultrasound example of a fluid-filled area (cyst) seen along the umbilical cord. Every case looks a little different.</figcaption>
+    </figure>
+    <div class="alert alert-blue">
+      <span class="alert-icon">💡</span>
+      <span>There are two technical types — a "true cyst" and a "pseudocyst" — but the type itself doesn't change your care plan. What matters most is <strong>when</strong> it was found and <strong>whether</strong> anything else was seen on the scan.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 2 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 3 — WHY TIMING MATTERS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Clinical Context</div>
+    <h2>Why Timing Matters</h2>
+    <div class="two-col">
+      <div class="card" style="border-left:4px solid var(--accent-green);">
+        <div class="card-icon">🌱</div>
+        <h3 style="color:var(--accent-green);">Early Pregnancy</h3>
+        <p>Cord cysts found in the <strong>first trimester</strong> are common and frequently go away on their own as the pregnancy progresses. In isolated cases, simply watching is often reasonable.</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--accent-amber);">
+        <div class="card-icon">🔎</div>
+        <h3 style="color:var(--accent-amber);">Later in Pregnancy</h3>
+        <p>A cyst that is <strong>newly found or still present</strong> in the second or third trimester is treated differently. It's not automatically dangerous — but it does call for a closer look.</p>
+      </div>
+    </div>
+    <div class="alert alert-amber">
+      <span class="alert-icon">📋</span>
+      <span>Because your cyst was found later in pregnancy, your care team will recommend some additional evaluation. This is a precaution to gather information — it is <strong>not</strong> a diagnosis of a problem.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 3 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 4 — WHAT IT CAN BE ASSOCIATED WITH
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Understanding the Full Picture</div>
+    <h2>What This Finding Can Be Associated With</h2>
+    <div class="three-col">
+      <div class="card" style="border-left:4px solid var(--accent-red);">
+        <div class="card-icon">🧬</div>
+        <h3 style="font-size:1em;">Genetic Conditions</h3>
+        <p>Cord cysts have a recognized association with certain chromosomal conditions, so your team will offer genetic counseling and testing.</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--accent-amber);">
+        <div class="card-icon">🫀</div>
+        <h3 style="font-size:1em;">Heart Development</h3>
+        <p>A detailed heart ultrasound (fetal echocardiogram) is a standard part of the workup to look closely at how your baby's heart has formed.</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--accent-purple);">
+        <div class="card-icon">🔵</div>
+        <h3 style="font-size:1em;">Abdominal Wall & Bladder</h3>
+        <p>The detailed anatomy scan also checks the area where the cord attaches to your baby's abdomen and the urinary tract.</p>
+      </div>
+    </div>
+    <div class="alert alert-green">
+      <span class="alert-icon">✅</span>
+      <span>Most babies found to have a cord cyst do <strong>not</strong> turn out to have one of these conditions — but checking carefully is the safest path forward for you and your baby.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 4 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 5 — PRESSURE ON BLOOD FLOW
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">The Other Consideration</div>
+    <h2>Could It Press on the Cord's Blood Vessels?</h2>
+    <p style="margin-top:0.6em;">The umbilical cord is a narrow space. If a cyst becomes large, it can — in some cases — press on the blood vessels running through the cord.</p>
+    <div class="flow-diagram">
+      <div class="flow-node node-warn">
+        <div class="node-label">If a cyst</div>
+        <div class="node-value">Grows Larger</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node node-warn">
+        <div class="node-label">It may</div>
+        <div class="node-value">Press on Cord Vessels</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node node-danger">
+        <div class="node-label">Which could</div>
+        <div class="node-value">Reduce Blood Flow</div>
+      </div>
+    </div>
+    <div class="alert alert-blue">
+      <span class="alert-icon">🩺</span>
+      <span>This does <strong>not</strong> happen in most pregnancies with a cord cyst. It's the reason your team will check blood flow with Doppler ultrasound throughout the rest of your pregnancy — so that if anything changes, it's caught early.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 5 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 6 — YOUR EVALUATION PLAN
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Next Steps</div>
+    <h2>Your Evaluation Plan</h2>
+    <ul class="step-list">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Detailed (Targeted) Ultrasound</strong> — A thorough anatomy scan to look closely at your baby's organs, heart, abdominal wall, and the cord itself.</div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Fetal Echocardiogram</strong> — A specialized ultrasound focused entirely on your baby's heart structure and function.</div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Genetic Counseling</strong> — A conversation with a genetic counselor about what testing options are available and what each can and cannot tell you.</div>
+      </li>
+      <li>
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>A Personalized Monitoring Schedule</strong> — Based on everything found, your MFM team will lay out a plan for the rest of your pregnancy.</div>
+      </li>
+    </ul>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 6 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 7 — GENETIC TESTING
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Your Choices</div>
+    <h2>Genetic Testing: What to Expect</h2>
+    <div class="two-col">
+      <div class="card" style="border-left:4px solid var(--accent-blue);">
+        <div class="card-icon">💉</div>
+        <h3>Amniocentesis</h3>
+        <p>A test that samples a small amount of the fluid around your baby to directly check the chromosomes. Given the association with certain conditions, it will likely be offered — but it is not required.</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--accent-teal);">
+        <div class="card-icon">🤝</div>
+        <h3>It's Your Decision</h3>
+        <p>Whether to pursue testing is a personal choice. Your genetic counselor will walk through the risks, benefits, and what different results would mean for your care.</p>
+      </div>
+    </div>
+    <div class="alert alert-blue">
+      <span class="alert-icon">⏱️</span>
+      <span>Results typically take one to two weeks. Your care team will discuss what the results mean for your pregnancy and delivery plan as soon as they're available.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 7 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 8 — EXTRA MONITORING GOING FORWARD
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Watching Closely</div>
+    <h2>Extra Monitoring for the Rest of Pregnancy</h2>
+    <ul class="step-list">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Biophysical Profile (BPP)</strong> — An ultrasound-based check of your baby's movement, breathing motions, muscle tone, and fluid level.</div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Non-Stress Test (NST)</strong> — A short session monitoring your baby's heart rate pattern, usually with belts placed on your belly.</div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Umbilical Artery Doppler</strong> — A specialized ultrasound that measures blood flow through the cord — the key test for catching any vessel compression early.</div>
+      </li>
+    </ul>
+    <div class="alert alert-green">
+      <span class="alert-icon">📅</span>
+      <span>How often you'll need these depends on your individual findings. Your MFM specialist will set the exact schedule for you.</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 8 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 9 — UNDERSTANDING YOUR DOPPLER RESULTS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">What Your Results Mean</div>
+    <h2>Understanding Your Doppler Results</h2>
+    <div class="three-col">
+      <div class="card" style="border-left:4px solid var(--accent-green);">
+        <div class="card-icon" style="color:var(--accent-green);">✔</div>
+        <h3 style="color:var(--accent-green); font-size:1em;">Normal Flow</h3>
+        <p>Blood is flowing through the cord normally.<br><br><strong>What happens:</strong> Continue your regular monitoring schedule and plan for delivery around your due date.</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--accent-amber);">
+        <div class="card-icon" style="color:var(--accent-amber);">⚡</div>
+        <h3 style="color:var(--accent-amber); font-size:1em;">Early Changes</h3>
+        <p>A mild change in flow resistance is seen — an early signal to pay closer attention.<br><br><strong>What happens:</strong> More frequent monitoring; your team may discuss adjusting your delivery timing.</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--accent-red);">
+        <div class="card-icon" style="color:var(--accent-red);">🚨</div>
+        <h3 style="color:var(--accent-red); font-size:1em;">Significant Change</h3>
+        <p>Blood flow through the cord is notably reduced.<br><br><strong>What happens:</strong> Your team will discuss prompt delivery, often by cesarean, to keep your baby safe.</p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 9 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 10 — PLANNING FOR DELIVERY
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Looking Ahead</div>
+    <h2>Planning for Delivery</h2>
+    <div class="three-col">
+      <div class="card" style="border-left:4px solid var(--accent-blue);">
+        <div class="card-icon">📆</div>
+        <h3 style="font-size:1em;">Timing</h3>
+        <p>Most pregnancies with a reassuring evaluation are able to reach term. Earlier delivery is only considered if monitoring shows a specific concern.</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--accent-teal);">
+        <div class="card-icon">🚼</div>
+        <h3 style="font-size:1em;">Mode of Delivery</h3>
+        <p>A vaginal delivery is often still possible. Cesarean delivery is reserved for situations where Doppler findings or fetal heart rate patterns raise concern.</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--accent-purple);">
+        <div class="card-icon">📈</div>
+        <h3 style="font-size:1em;">During Labor</h3>
+        <p>Continuous fetal heart rate monitoring is used during labor so your team can respond quickly to any change.</p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 10 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 11 — QUESTIONS TO ASK
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Your Voice Matters</div>
+    <h2>Questions to Ask Your MFM Specialist</h2>
+    <ul class="checklist" style="margin-top:1.4em; max-width:760px;">
+      <li>Was the cord cyst the only finding on my ultrasound?</li>
+      <li>How large is the cyst, and will it be measured again at future visits?</li>
+      <li>What genetic testing options do you recommend for my situation, and are they optional?</li>
+      <li>How often will I have Doppler ultrasounds, BPPs, or NSTs from here on?</li>
+      <li>What symptoms or changes should I report right away?</li>
+      <li>Does this finding change when or how you'd recommend I deliver?</li>
+      <li>Will my baby need any follow-up testing or evaluation after birth?</li>
+    </ul>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 11 of 12</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 12 — KEY TAKEAWAYS & CLOSING
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div class="slide">
+    <div class="slide-label">Summary</div>
+    <h1 style="text-align:center; font-size:clamp(1.8em,3.5vw,2.8em);">The Bottom Line</h1>
+    <div class="title-divider"></div>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num accent-amber">Worth Checking</div>
+        <div class="stat-lbl">not routine, but<br>not an emergency</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-blue">Two-Part Plan</div>
+        <div class="stat-lbl">detailed evaluation +<br>ongoing monitoring</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num accent-green">Often Reassuring</div>
+        <div class="stat-lbl">most isolated findings<br>have good outcomes</div>
+      </div>
+    </div>
+    <div class="alert alert-green">
+      <span class="alert-icon">🤝</span>
+      <span>A cord cyst found later in pregnancy means your team will look closely — with a detailed ultrasound, heart scan, genetic counseling, and regular monitoring of blood flow. Most babies with a normal evaluation and steady monitoring do well. We'll walk through every step with you.</span>
+    </div>
+    <div style="margin-top:1.6em; font-size:0.82em; color:var(--muted); text-align:center; max-width:680px; line-height:1.6;">
+      Information consistent with ACOG, SMFM, and AIUM guidance and current evidence-based literature.<br>
+      This material supports — and does not replace — a conversation with your physician.
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Maternal-Fetal Medicine</span>
+    </div>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- Navigation Controls -->
+<div class="nav">
+  <button onclick="prevSlide()" aria-label="Previous slide">&#x2190; Prev</button>
+  <span class="counter" id="counter">1 / 12</span>
+  <button onclick="nextSlide()" aria-label="Next slide">Next &#x2192;</button>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+
+  function updateUI() {
+    counter.textContent = (currentSlide + 1) + ' / ' + total;
+    progressBar.style.width = ((currentSlide + 1) / total * 100) + '%';
+    history.replaceState(null, '', '#' + (currentSlide + 1));
+  }
+
+  function showSlide(index) {
+    slides.forEach((s, i) => s.classList.toggle('active', i === index));
+    updateUI();
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % total;
+    showSlide(currentSlide);
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + total) % total;
+    showSlide(currentSlide);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') prevSlide();
+  });
+
+  // Touch / swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) > 40) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  // URL hash navigation
+  function goToHash() {
+    const n = parseInt(location.hash.replace('#', ''), 10);
+    if (!isNaN(n) && n >= 1 && n <= total) {
+      currentSlide = n - 1;
+      showSlide(currentSlide);
+    }
+  }
+  window.addEventListener('hashchange', goToHash);
+  if (location.hash) { goToHash(); } else { showSlide(0); }
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
