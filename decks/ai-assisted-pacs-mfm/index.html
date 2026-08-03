@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+
+  <title>AI-Assisted PACS for Maternal-Fetal Medicine | OpenMFM</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box}
+    :root{
+      --bg:#07111f;--bg2:#0a1727;--panel:rgba(14,31,50,.88);--panel2:rgba(20,42,65,.82);
+      --line:rgba(145,198,229,.18);--line2:rgba(34,211,238,.34);--text:#f5f9fc;--muted:#a9bfd0;
+      --cyan:#22d3ee;--blue:#69b8ff;--green:#71e6a6;--amber:#ffc46b;--red:#ff7c86;--violet:#c5b8ff;
+      --shadow:0 24px 80px rgba(0,0,0,.38);--radius:22px;--ease:cubic-bezier(.22,.8,.25,1)
+    }
+    html,body{width:100%;height:100%;margin:0;background:var(--bg);color:var(--text);overflow:hidden}
+    body{font-family:"Segoe UI",Inter,system-ui,-apple-system,sans-serif;line-height:1.45}
+    button,a{font:inherit}button{color:inherit}
+    .skip{position:fixed;left:1rem;top:-4rem;z-index:999;background:#fff;color:#07111f;padding:.7rem 1rem;border-radius:10px}
+    .skip:focus{top:1rem}
+    .app{position:relative;width:100%;max-width:100vw;height:100%;overflow:hidden;isolation:isolate;background:
+      radial-gradient(circle at 14% 12%,rgba(34,211,238,.14),transparent 26%),
+      radial-gradient(circle at 88% 16%,rgba(105,184,255,.11),transparent 25%),
+      linear-gradient(155deg,#081625 0%,#07111f 52%,#050b14 100%)}
+    .app::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.42;background-image:
+      linear-gradient(rgba(255,255,255,.026) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.026) 1px,transparent 1px);background-size:52px 52px;mask-image:linear-gradient(to bottom,#000,transparent 86%)}
+    .progress{position:fixed;left:0;top:0;height:4px;width:5%;z-index:120;background:linear-gradient(90deg,var(--cyan),var(--blue));box-shadow:0 0 22px rgba(34,211,238,.48);transition:width .35s var(--ease)}
+    .brand{position:fixed;left:clamp(1rem,2.4vw,2.4rem);top:clamp(1rem,2.4vw,2rem);z-index:80;display:flex;align-items:center;gap:.65rem;color:#dffbff;font-size:.76rem;font-weight:750;letter-spacing:.14em;text-transform:uppercase}
+    .brand-mark{width:28px;height:28px;border:1px solid var(--line2);border-radius:9px;display:grid;place-items:center;background:rgba(34,211,238,.08);box-shadow:inset 0 0 18px rgba(34,211,238,.08)}
+    .brand-mark::before{content:"";width:12px;height:12px;border-radius:50%;border:2px solid var(--cyan);box-shadow:0 0 10px var(--cyan)}
+    .deck{position:relative;width:100%;height:100%}
+    .slide{position:absolute;inset:0;width:100%;max-width:100vw;display:grid;place-items:center;padding:clamp(5.2rem,8vh,7rem) clamp(1.25rem,6vw,6rem) clamp(6rem,10vh,8rem);opacity:0;visibility:hidden;transform:translateY(14px) scale(.994);transition:opacity .42s var(--ease),transform .42s var(--ease),visibility .42s;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--line2) transparent}
+    .slide.active{opacity:1;visibility:visible;transform:none;z-index:2}
+    .frame{width:min(1180px,100%);max-width:100%;min-width:0;margin:auto;display:flex;flex-direction:column;gap:clamp(1rem,2.2vh,1.6rem)}
+    .frame>*{min-width:0;max-width:100%}
+    .eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);font-weight:800}
+    h1,h2,h3,p{margin:0}h1,h2{font-family:"Space Grotesk","Segoe UI",system-ui,sans-serif;text-wrap:balance;letter-spacing:-.035em;overflow-wrap:anywhere}
+    h1{font-size:clamp(2.6rem,6.4vw,6.2rem);line-height:.98;max-width:1020px}
+    h2{font-size:clamp(2rem,4.4vw,4.5rem);line-height:1.03;max-width:1080px}
+    h3{font-size:clamp(1rem,1.6vw,1.3rem);line-height:1.2}
+    .lead{font-size:clamp(1.05rem,1.8vw,1.45rem);color:#d1e0eb;max-width:820px;text-wrap:balance}
+    .muted{color:var(--muted)}.cyan{color:var(--cyan)}.green{color:var(--green)}.amber{color:var(--amber)}.red{color:var(--red)}.violet{color:var(--violet)}
+    .rule{height:1px;background:linear-gradient(90deg,var(--cyan),transparent);width:min(420px,42vw)}
+    .hero-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:clamp(2rem,5vw,5rem);align-items:center}
+    .hero-orbit{position:relative;width:min(380px,65vw);aspect-ratio:1;margin:auto;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,rgba(34,211,238,.1),transparent 64%)}
+    .hero-orbit::before,.hero-orbit::after{content:"";position:absolute;border-radius:50%;border:1px dashed rgba(34,211,238,.26)}
+    .hero-orbit::before{inset:14%}.hero-orbit::after{inset:31%}
+    .fetus-line{width:44%;height:44%;border:2px solid var(--cyan);border-radius:48% 52% 45% 55%/55% 47% 53% 45%;transform:rotate(-18deg);box-shadow:0 0 32px rgba(34,211,238,.18);position:relative}
+    .fetus-line::before{content:"";position:absolute;width:34%;aspect-ratio:1;border:2px solid var(--cyan);border-radius:50%;right:6%;top:5%;background:var(--bg)}
+    .fetus-line::after{content:"";position:absolute;width:58%;height:34%;border-left:2px solid var(--cyan);border-bottom:2px solid var(--cyan);border-radius:0 0 0 80%;left:19%;bottom:16%;transform:rotate(20deg)}
+    .orbit-chip{position:absolute;padding:.38rem .65rem;border:1px solid var(--line2);border-radius:999px;background:#0b1a2a;color:#dffaff;font-size:.7rem;font-weight:700;letter-spacing:.04em}
+    .orbit-chip:nth-of-type(1){top:8%;left:1%}.orbit-chip:nth-of-type(2){right:-2%;top:25%}.orbit-chip:nth-of-type(3){bottom:8%;right:10%}.orbit-chip:nth-of-type(4){bottom:18%;left:-5%}
+    .grid{display:grid;gap:1rem}.grid-4{grid-template-columns:repeat(4,1fr)}.grid-5{grid-template-columns:repeat(5,1fr)}.grid-2{grid-template-columns:repeat(2,1fr)}
+    .card{position:relative;border:1px solid var(--line);background:linear-gradient(155deg,var(--panel2),var(--panel));border-radius:var(--radius);padding:clamp(1rem,2vw,1.5rem);box-shadow:var(--shadow);min-width:0;overflow:hidden}
+    .card::after{content:"";position:absolute;inset:auto -20% -70% 25%;height:100%;background:radial-gradient(circle,rgba(34,211,238,.08),transparent 60%);pointer-events:none}
+    .card h3{color:#eafaff;margin-bottom:.35rem}.card p{color:var(--muted);font-size:.9rem}
+    .num{display:inline-grid;place-items:center;width:2.1rem;height:2.1rem;border-radius:10px;background:rgba(34,211,238,.1);border:1px solid var(--line2);color:var(--cyan);font-weight:850;margin-bottom:.8rem}
+    .icon{width:42px;height:42px;border-radius:13px;background:rgba(34,211,238,.08);border:1px solid var(--line2);display:grid;place-items:center;margin-bottom:.8rem;color:var(--cyan)}
+    .icon svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .compass{width:min(680px,82vw);aspect-ratio:1.55;margin:auto;position:relative;display:grid;place-items:center}
+    .compass::before{content:"";position:absolute;width:44%;aspect-ratio:1;border:1px solid var(--line2);border-radius:50%;box-shadow:0 0 80px rgba(34,211,238,.1),inset 0 0 60px rgba(34,211,238,.05)}
+    .compass-core{z-index:2;width:150px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;text-align:center;background:#0e2033;border:1px solid var(--line2);font-weight:850;box-shadow:0 0 32px rgba(34,211,238,.12)}
+    .compass-item{position:absolute;width:150px;padding:.75rem;border:1px solid var(--line);border-radius:14px;background:var(--panel);text-align:center;font-weight:750}
+    .compass-item:nth-of-type(1){top:0}.compass-item:nth-of-type(2){right:0}.compass-item:nth-of-type(3){bottom:0}.compass-item:nth-of-type(4){left:0}
+    .stack{display:flex;flex-direction:column;gap:.65rem;max-width:940px;width:100%}
+    .layer{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:1rem;padding:.8rem 1rem;border:1px solid var(--line);background:linear-gradient(90deg,rgba(17,38,59,.96),rgba(11,25,41,.72));border-radius:14px}
+    .layer-index{color:var(--cyan);font-weight:850}.layer-name{font-weight:780}.layer-example{color:var(--muted);font-size:.8rem}
+    .timeline{display:grid;grid-template-columns:repeat(7,1fr);gap:.45rem;position:relative;margin-top:1rem}
+    .timeline::before{content:"";position:absolute;left:6%;right:6%;top:24px;height:2px;background:linear-gradient(90deg,var(--green),var(--cyan) 46%,var(--amber) 58%,var(--red));opacity:.7}
+    .station{position:relative;text-align:center;padding-top:3.5rem;font-size:.78rem;color:var(--muted)}
+    .station::before{content:"";position:absolute;top:14px;left:50%;transform:translateX(-50%);width:22px;height:22px;border-radius:50%;background:#0a1828;border:3px solid var(--cyan);box-shadow:0 0 14px rgba(34,211,238,.3)}
+    .station.late::before{border-color:var(--amber)}.station.end::before{border-color:var(--red)}
+    .window{display:flex;align-items:center;gap:.8rem;border:1px solid rgba(113,230,166,.26);background:rgba(113,230,166,.06);padding:.8rem 1rem;border-radius:14px;color:#dffbea}
+    .task-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+    .task{min-height:190px;display:flex;flex-direction:column;justify-content:space-between}
+    .task .verb{font-size:clamp(1.35rem,2.2vw,2rem);font-weight:850;letter-spacing:-.035em}.task .output{color:var(--muted);font-size:.85rem}
+    .candidate-map{display:grid;grid-template-columns:1.2fr .8fr;gap:.55rem;align-items:stretch}
+    .candidate-map .head{padding:.55rem;color:var(--muted);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800}
+    .candidate{display:contents}.candidate>div{padding:.75rem .8rem;border-top:1px solid var(--line);background:rgba(11,27,44,.54);font-size:.82rem}.candidate .vendor{font-weight:780;color:#eefaff}.candidate .match{color:var(--cyan)}
+    .vendor-view{display:grid;grid-template-columns:.72fr 1.28fr;gap:1.2rem;align-items:stretch}
+    .vendor-name{display:flex;flex-direction:column;justify-content:space-between;min-height:320px}
+    .vendor-tag{display:inline-flex;align-items:center;gap:.5rem;width:max-content;padding:.35rem .65rem;border-radius:999px;border:1px solid var(--line2);color:var(--cyan);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .fit-meter{height:9px;border-radius:999px;background:#08131f;overflow:hidden;border:1px solid var(--line)}.fit-meter span{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--blue))}
+    .evidence-box{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.claim{border:1px solid var(--line);border-radius:16px;padding:1rem;background:rgba(8,22,37,.55)}
+    .claim-label{display:flex;align-items:center;gap:.5rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;font-weight:850;margin-bottom:.45rem}.claim-label.verified{color:var(--green)}.claim-label.caution{color:var(--amber)}
+    .claim-label::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}.claim strong{font-size:1.05rem;overflow-wrap:anywhere}
+    .reg-card{display:grid;grid-template-columns:140px 1fr;gap:1.2rem;align-items:center}.k510{width:130px;aspect-ratio:1;border-radius:24px;border:1px solid var(--line2);display:grid;place-items:center;background:rgba(34,211,238,.06);font-weight:900;font-size:1.5rem;color:var(--cyan);transform:rotate(-3deg)}
+    .fields{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem}.field{padding:.7rem;border:1px solid var(--line);border-radius:12px;background:rgba(13,30,48,.7);font-size:.75rem;text-align:center;color:#d9e9f3}
+    .validation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}.cohort{padding:1rem;border:1px solid var(--line);border-radius:14px;background:rgba(14,31,50,.72);font-weight:700;text-align:center}
+    .gate{display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:.4rem}.gate::before,.gate::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--line2))}.gate::after{background:linear-gradient(90deg,var(--line2),transparent)}
+    .sequence{display:grid;grid-template-columns:repeat(6,1fr);gap:.5rem;align-items:center}.seq{position:relative;padding:.85rem .55rem;text-align:center;border:1px solid var(--line);border-radius:12px;background:rgba(13,30,48,.75);font-size:.76rem;font-weight:760}.seq:not(:last-child)::after{content:"›";position:absolute;right:-.46rem;top:50%;transform:translateY(-50%);color:var(--cyan);font-size:1.25rem;z-index:2}.faults{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem}.fault{border-left:3px solid var(--red);background:rgba(255,124,134,.06);padding:.7rem .8rem;border-radius:5px 12px 12px 5px;font-size:.76rem;color:#ffdce0}
+    .scorecard{display:grid;grid-template-columns:1.2fr repeat(5,1fr);gap:.45rem;align-items:center}.scorecard>div{padding:.65rem;border-radius:10px;background:rgba(13,30,48,.72);font-size:.73rem;text-align:center}.scorecard .label{text-align:left;color:#eaf7ff;font-weight:750}.scorecard .header{background:transparent;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:800}.dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--line2)}.dot.must{background:var(--red);box-shadow:0 0 8px rgba(255,124,134,.3)}.dot.weight{background:var(--cyan)}
+    .algorithm{display:grid;grid-template-columns:repeat(7,1fr);gap:.5rem}.step{position:relative;min-height:146px;padding:1rem .65rem;border:1px solid var(--line);border-radius:16px;background:linear-gradient(160deg,rgba(18,39,61,.95),rgba(9,22,37,.78));display:flex;flex-direction:column;justify-content:space-between}.step small{color:var(--cyan);font-weight:850}.step strong{font-size:.82rem}.step:not(:last-child)::after{content:"";position:absolute;right:-.5rem;top:50%;width:.5rem;height:2px;background:var(--cyan)}
+    .dashboard{display:grid;grid-template-columns:1.1fr .9fr .9fr;grid-template-rows:1fr 1fr;gap:.8rem}.metric{min-height:120px;display:flex;flex-direction:column;justify-content:space-between}.metric.big{grid-row:span 2}.metric-value{font-size:clamp(2rem,4vw,4rem);font-weight:900;letter-spacing:-.05em;color:var(--cyan)}.spark{height:40px;display:flex;align-items:end;gap:5px}.spark i{display:block;flex:1;background:linear-gradient(var(--cyan),rgba(34,211,238,.16));border-radius:4px 4px 0 0}
+    .pearls{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.pearl{min-height:120px;display:flex;flex-direction:column;justify-content:space-between}.pearl b{font-size:1.5rem;color:var(--cyan)}
+    .known-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.known{min-height:250px}.known ul{list-style:none;padding:0;margin:1rem 0 0;display:grid;gap:.8rem}.known li{font-size:.86rem;color:#d5e3ed;padding-left:1rem;position:relative}.known li::before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:currentColor}.known:nth-child(1){border-top:3px solid var(--green)}.known:nth-child(2){border-top:3px solid var(--amber)}.known:nth-child(3){border-top:3px solid var(--violet)}
+    .references-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:1rem}.checklist{display:grid;gap:.5rem}.checkitem{display:flex;align-items:center;gap:.7rem;padding:.62rem .75rem;border:1px solid var(--line);border-radius:11px;background:rgba(13,30,48,.66);font-size:.77rem}.checkitem::before{content:"✓";width:22px;height:22px;border-radius:7px;display:grid;place-items:center;background:rgba(113,230,166,.1);color:var(--green);font-weight:900}.actions{display:flex;gap:.6rem;flex-wrap:wrap}
+    .action-btn{border:1px solid var(--line2);background:rgba(34,211,238,.08);padding:.65rem .9rem;border-radius:10px;cursor:pointer;font-weight:750;font-size:.8rem}.action-btn:hover{background:rgba(34,211,238,.16)}
+    .source{position:absolute;left:clamp(1.25rem,6vw,6rem);bottom:4.5rem;color:#7f9aae;font-size:.62rem;z-index:3;max-width:70vw}.source a{color:#8cb7ce;text-decoration:none}.source a:hover{text-decoration:underline}
+    .nav{position:fixed;left:50%;bottom:max(1rem,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:90;display:flex;align-items:center;gap:.55rem;padding:.45rem;border:1px solid var(--line);border-radius:999px;background:rgba(5,14,24,.78);backdrop-filter:blur(16px);box-shadow:0 14px 38px rgba(0,0,0,.32)}
+    .nav button,.utility button{border:1px solid transparent;background:transparent;border-radius:999px;cursor:pointer;color:#d8e8f1;min-width:42px;height:38px;display:grid;place-items:center}.nav button:hover,.nav button:focus-visible,.utility button:hover,.utility button:focus-visible{border-color:var(--line2);background:rgba(34,211,238,.08);outline:none}.counter{min-width:72px;text-align:center;font-size:.76rem;color:var(--muted);font-variant-numeric:tabular-nums}
+    .utility{position:fixed;right:clamp(1rem,2.4vw,2.4rem);top:clamp(.8rem,2vw,1.6rem);z-index:90;display:flex;gap:.25rem}.utility button{border-radius:11px;width:40px;min-width:40px}.utility svg,.nav svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .help{position:fixed;right:1.2rem;bottom:1.1rem;color:#6f899c;font-size:.66rem;z-index:70}
+    .panel{position:fixed;inset:0 0 0 auto;width:min(560px,94vw);z-index:200;background:#091725;border-left:1px solid var(--line2);box-shadow:-30px 0 80px rgba(0,0,0,.45);padding:2rem;overflow:auto;transform:translateX(102%);transition:transform .35s var(--ease)}
+    .panel.open{transform:none}.panel-head{display:flex;align-items:start;justify-content:space-between;gap:1rem;position:sticky;top:-2rem;background:#091725;padding:2rem 0 1rem;z-index:2}.panel h2{font-size:2rem}.panel-close{border:1px solid var(--line);background:transparent;border-radius:10px;width:40px;height:40px;cursor:pointer}.ref-list{display:grid;gap:.75rem;padding:0;list-style:none;counter-reset:refs}.ref-list li{counter-increment:refs;border:1px solid var(--line);border-radius:13px;padding:.8rem;background:rgba(15,34,53,.7);font-size:.8rem;color:#c9dbe7}.ref-list li::before{content:counter(refs);display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;background:rgba(34,211,238,.09);color:var(--cyan);font-weight:850;margin-right:.6rem}.ref-list a{color:#c8f8ff;text-underline-offset:2px}
+    .toast{position:fixed;left:50%;bottom:5.4rem;transform:translate(-50%,20px);padding:.65rem 1rem;border:1px solid var(--line2);border-radius:999px;background:#0d2236;z-index:300;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+    .overview .slide{position:relative;inset:auto;width:100%;height:auto;min-height:220px;opacity:1;visibility:visible;transform:none;padding:1.4rem;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:#07111f;cursor:pointer;display:block}.overview .deck{height:100%;overflow:auto;padding:5rem 2rem 7rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1rem}.overview .frame{transform:scale(.32);transform-origin:top left;width:312%;height:312%;pointer-events:none}.overview .source{display:none}.overview .nav{display:none}
+    :focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+    @media(max-width:900px){
+      .hero-grid,.vendor-view,.references-layout{grid-template-columns:1fr}.hero-orbit{display:none}.grid-4,.grid-5,.task-grid,.pearls{grid-template-columns:repeat(2,1fr)}
+      .timeline{grid-template-columns:repeat(4,1fr)}.timeline::before{display:none}.station{padding-top:2rem}.station::before{top:0}
+      .candidate-map{grid-template-columns:1fr 1fr}
+      .fields{grid-template-columns:repeat(2,1fr)}.sequence{grid-template-columns:repeat(3,1fr)}.algorithm{grid-template-columns:repeat(4,1fr)}.step:not(:last-child)::after{display:none}
+      .scorecard{grid-template-columns:1.2fr repeat(3,1fr)}.scorecard>div:nth-child(5),.scorecard>div:nth-child(6){display:none}.known-grid{grid-template-columns:1fr}.known{min-height:0}.dashboard{grid-template-columns:1fr 1fr}.dashboard .big{grid-row:auto;grid-column:span 2}
+    }
+    @media(max-width:600px){
+      .brand span{display:none}.utility{top:.7rem;right:.7rem}.utility button:nth-child(2){display:none}.slide{padding:4.8rem 1rem 6.2rem;align-items:start}.frame{width:calc(100vw - 2rem);max-width:calc(100vw - 2rem);gap:.8rem;min-width:0;margin:auto 0}h1{font-size:2.65rem}h2{font-size:clamp(1.72rem,8.2vw,2rem)}.lead{font-size:1rem}
+      .grid-4,.grid-5,.grid-2,.task-grid,.pearls,.evidence-box,.validation-grid,.faults{grid-template-columns:1fr}.card{border-radius:16px;padding:.9rem}.task{min-height:110px}.stack{gap:.35rem}.layer{grid-template-columns:34px 1fr;padding:.55rem}.layer-example{display:none}
+      .timeline{grid-template-columns:repeat(2,1fr)}.candidate-map{font-size:.8rem}.vendor-name{min-height:180px}.reg-card{grid-template-columns:1fr}.k510{width:90px}.sequence{grid-template-columns:repeat(2,1fr)}.scorecard{grid-template-columns:1.2fr repeat(2,1fr)}.scorecard>div:nth-child(4){display:none}.algorithm{grid-template-columns:repeat(2,1fr)}.step{min-height:96px}.dashboard{grid-template-columns:1fr}.dashboard .big{grid-column:auto}.metric{min-height:95px}.references-layout{display:block}.references-layout>.card:first-child{display:none}.source{left:1rem;bottom:4.8rem;width:calc(100% - 2rem);max-width:none;overflow-wrap:anywhere}.help{display:none}.nav{left:calc(50vw + 60px);right:auto;bottom:.75rem;transform:translateX(-50%);gap:.25rem;padding:.3rem}.nav button{min-width:34px;width:34px;height:34px}.counter{min-width:58px}.overview .deck{grid-template-columns:1fr;padding:4.5rem 1rem 6rem}
+    }
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+    @media print{
+      html,body{width:auto;height:auto;overflow:visible;background:#fff;color:#111}.app{background:#07111f}.brand,.nav,.utility,.help,.progress,.panel,.toast{display:none!important}.deck{height:auto}.slide{position:relative;inset:auto;display:grid!important;opacity:1!important;visibility:visible!important;transform:none!important;width:13.333in;height:7.5in;overflow:hidden;break-after:page;page-break-after:always;padding:.65in .75in .8in}.source{bottom:.25in;left:.75in}.frame{max-height:6.1in}.card{box-shadow:none}@page{size:13.333in 7.5in;margin:0}
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/ai-assisted-pacs-mfm/index.html">
+<meta name="description" content="An evidence-based physician and purchaser guide to AI-assisted obstetric ultrasound workflows, including product classification, FDA labeling, vendor capabilities, local validation, interoperability, implementation, monitoring, and RFP design.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Recently Added, PACS, Artificial Intelligence, Obstetric Ultrasound, Clinical Informatics, Healthcare Purchasing, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/ai-assisted-pacs-mfm/index.html">
+<meta property="og:title" content="AI-Assisted PACS for Maternal-Fetal Medicine - Provider &amp; Purchaser Education | OpenMFM">
+<meta property="og:description" content="An evidence-based physician and purchaser guide to AI-assisted obstetric ultrasound workflows, including product classification, FDA labeling, vendor capabilities, local validation, interoperability, implementation, monitoring, and RFP design.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI-Assisted PACS for Maternal-Fetal Medicine - Provider &amp; Purchaser Education | OpenMFM">
+<meta name="twitter:description" content="An evidence-based physician and purchaser guide to AI-assisted obstetric ultrasound workflows, including product classification, FDA labeling, vendor capabilities, local validation, interoperability, implementation, monitoring, and RFP design.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "AI-Assisted PACS for Maternal-Fetal Medicine - Provider & Purchaser Education",
+  "description": "An evidence-based physician and purchaser guide to AI-assisted obstetric ultrasound workflows, including product classification, FDA labeling, vendor capabilities, local validation, interoperability, implementation, monitoring, and RFP design.",
+  "url": "https://openmfm.org/decks/ai-assisted-pacs-mfm/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-08-03",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "AI-Assisted PACS for Maternal-Fetal Medicine - Provider & Purchaser Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Recently Added, PACS, Artificial Intelligence, Obstetric Ultrasound, Clinical Informatics, Healthcare Purchasing, Provider Education"
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to slide content</a>
+<div class="app" id="app">
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <div class="brand" aria-label="OpenMFM"><span class="brand-mark" aria-hidden="true"></span><span>OpenMFM</span></div>
+  <main class="deck" id="main" aria-live="polite">
+
+    <section class="slide active" data-title="AI-Assisted PACS" aria-labelledby="s1-title">
+      <div class="frame hero-grid">
+        <div>
+          <div class="eyebrow">Clinical technology review · 2026</div>
+          <h1 id="s1-title">AI-Assisted <span class="cyan">PACS</span> for MFM</h1>
+          <div class="rule"></div>
+          <p class="lead">A physician’s guide to buying image intelligence without buying ambiguity.</p>
+          <p class="muted">Chukwuma Onyeije, MD · Maternal-Fetal Medicine</p>
+        </div>
+        <div class="hero-orbit" aria-hidden="true">
+          <div class="fetus-line"></div><span class="orbit-chip">DICOM</span><span class="orbit-chip">AI QA</span><span class="orbit-chip">REPORT</span><span class="orbit-chip">EHR</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="The purchasing decision" aria-labelledby="s2-title">
+      <div class="frame">
+        <div class="eyebrow">The purchasing decision</div>
+        <h2 id="s2-title">Buy a <span class="cyan">validated workflow</span>, not an AI label.</h2>
+        <div class="compass" role="img" aria-label="A four-part purchasing compass: classify, verify, validate, monitor">
+          <div class="compass-core">Clinical<br>value</div><div class="compass-item">Classify</div><div class="compass-item">Verify</div><div class="compass-item">Validate</div><div class="compass-item">Monitor</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Five product layers" aria-labelledby="s3-title">
+      <div class="frame">
+        <div class="eyebrow">Category clarity</div>
+        <h2 id="s3-title">Five layers hide inside <span class="cyan">“AI PACS.”</span></h2>
+        <div class="stack" role="list">
+          <div class="layer" role="listitem"><span class="layer-index">01</span><span class="layer-name">Archive</span><span class="layer-example">PACS</span></div>
+          <div class="layer" role="listitem"><span class="layer-index">02</span><span class="layer-name">Reporting</span><span class="layer-example">ViewPoint</span></div>
+          <div class="layer" role="listitem"><span class="layer-index">03</span><span class="layer-name">Console AI</span><span class="layer-example">SonoLyst</span></div>
+          <div class="layer" role="listitem"><span class="layer-index">04</span><span class="layer-name">Image QA</span><span class="layer-example">Sonio Detect</span></div>
+          <div class="layer" role="listitem"><span class="layer-index">05</span><span class="layer-name">Report AI</span><span class="layer-example">PowerScribe</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Workflow timing" aria-labelledby="s4-title">
+      <div class="frame">
+        <div class="eyebrow">Workflow timing</div>
+        <h2 id="s4-title">The best correction happens <span class="green">before the patient leaves.</span></h2>
+        <div class="timeline" aria-label="MFM imaging workflow timeline">
+          <div class="station">Order</div><div class="station">Acquire</div><div class="station">Validate</div><div class="station">Archive</div><div class="station late">Interpret</div><div class="station late">Report</div><div class="station end">Audit</div>
+        </div>
+        <div class="window"><strong>Recoverability window</strong><span class="muted">Missing views remain fixable during acquisition.</span></div>
+      </div>
+      <div class="source" data-no-count>AIUM: permanent, retrievable images must permit later review for diagnostic adequacy. <a href="https://www.aium.org/docs/default-source/resources/guidelines/aium-practice-parameter-for-documentation-of-an-ultrasound-examination.pdf" target="_blank" rel="noopener">Documentation parameter</a></div>
+    </section>
+
+    <section class="slide" data-title="Four distinct AI claims" aria-labelledby="s5-title">
+      <div class="frame">
+        <div class="eyebrow">Claim discipline</div>
+        <h2 id="s5-title">Image validation is <span class="red">not</span> anomaly detection.</h2>
+        <div class="task-grid">
+          <div class="card task"><div class="verb">Recognize</div><div class="output">Which plane?</div></div>
+          <div class="card task"><div class="verb">Verify</div><div class="output">Meets criteria?</div></div>
+          <div class="card task"><div class="verb">Measure</div><div class="output">Where are calipers?</div></div>
+          <div class="card task"><div class="verb">Detect</div><div class="output">Possible abnormality?</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Candidate map" aria-labelledby="s6-title">
+      <div class="frame">
+        <div class="eyebrow">Evidence-corrected shortlist</div>
+        <h2 id="s6-title">Five names. <span class="cyan">Four categories.</span></h2>
+        <div class="candidate-map" role="table" aria-label="Candidate category comparison">
+          <div class="head" role="columnheader">Candidate</div><div class="head" role="columnheader">Primary layer</div>
+          <div class="candidate" role="row"><div class="vendor">Philips UWS</div><div>Review</div></div>
+          <div class="candidate" role="row"><div class="vendor">GE stack</div><div>Console + report</div></div>
+          <div class="candidate" role="row"><div class="vendor">Samsung stack</div><div>Console + sharing</div></div>
+          <div class="candidate" role="row"><div class="vendor">PowerScribe</div><div>Report</div></div>
+          <div class="candidate" role="row"><div class="vendor">Sonio Detect</div><div class="match">Concurrent QA</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Philips" aria-labelledby="s7-title">
+      <div class="frame vendor-view">
+        <div class="card vendor-name">
+          <div><span class="vendor-tag">Philips</span><h2 id="s7-title">Ultrasound Workspace</h2></div>
+          <div><div class="muted">Fit for stated use</div><div class="fit-meter" aria-label="Moderate fit"><span style="width:46%"></span></div></div>
+        </div>
+        <div class="evidence-box">
+          <div class="claim"><div class="claim-label verified">Verified</div><strong>Fetal review, quantification, reporting, integration</strong></div>
+          <div class="claim"><div class="claim-label caution">Do not infer</div><strong>Real-time fetal QA or anomaly detection</strong></div>
+        </div>
+      </div>
+      <div class="source" data-no-count>Philips UWS is indicated for fetal quantification/reporting; named AI functions in the verified IFU are chiefly cardiac. <a href="https://www.documents.philips.com/assets/Instruction%20for%20Use/20250711/2b423faa66f84ab4926eb3170078473d.pdf" target="_blank" rel="noopener">UWS 7.0 IFU</a> · <a href="https://www.accessdata.fda.gov/cdrh_docs/pdf24/K241659.pdf" target="_blank" rel="noopener">K241659</a></div>
+    </section>
+
+    <section class="slide" data-title="GE HealthCare" aria-labelledby="s8-title">
+      <div class="frame vendor-view">
+        <div class="card vendor-name">
+          <div><span class="vendor-tag">GE HealthCare</span><h2 id="s8-title">ViewPoint + SonoLyst</h2></div>
+          <div><div class="muted">Fit for Voluson sites</div><div class="fit-meter" aria-label="High ecosystem fit"><span style="width:84%"></span></div></div>
+        </div>
+        <div class="evidence-box">
+          <div class="claim"><div class="claim-label verified">Console</div><strong>Real-time view recognition and quality support</strong></div>
+          <div class="claim"><div class="claim-label verified">Department</div><strong>MFM reporting and image workflow</strong></div>
+        </div>
+      </div>
+      <div class="source" data-no-count>GE describes SonoLyst as Voluson AI and ViewPoint 6 as women’s-health reporting connected to PACS/EHR. <a href="https://www.gehealthcare.com/en-us/products/ultrasound/voluson/sonolyst" target="_blank" rel="noopener">SonoLyst</a> · <a href="https://www.gehealthcare.com/en-us/products/ultrasound/ultrasound-reporting/viewpoint-womens-health" target="_blank" rel="noopener">ViewPoint 6</a></div>
+    </section>
+
+    <section class="slide" data-title="Samsung Medison" aria-labelledby="s9-title">
+      <div class="frame vendor-view">
+        <div class="card vendor-name">
+          <div><span class="vendor-tag">Samsung Medison</span><h2 id="s9-title">Separate clinical AI from HelloMom.</h2></div>
+          <div><div class="muted">Two different purposes</div><div class="fit-meter" aria-label="Purpose-dependent fit"><span style="width:62%"></span></div></div>
+        </div>
+        <div class="evidence-box">
+          <div class="claim"><div class="claim-label verified">Clinical console</div><strong>BiometryAssist · ViewAssist · HeartAssist</strong></div>
+          <div class="claim"><div class="claim-label caution">Patient app</div><strong>HelloMom is non-diagnostic</strong></div>
+        </div>
+      </div>
+      <div class="source" data-no-count>Samsung documents Intelligent Assist on ultrasound systems; HelloMom labeling states it cannot be used for medical purposes. <a href="https://news.samsung.com/global/samsung-showcases-ai-based-automatic-measurement-and-diagnostic-solutions-at-isuog-world-congress-2023" target="_blank" rel="noopener">Samsung clinical AI</a> · <a href="https://play.google.com/store/apps/details?id=com.samsungmedison.sonic&amp;hl=en" target="_blank" rel="noopener">HelloMom labeling</a></div>
+    </section>
+
+    <section class="slide" data-title="PowerScribe One" aria-labelledby="s10-title">
+      <div class="frame vendor-view">
+        <div class="card vendor-name">
+          <div><span class="vendor-tag">Microsoft</span><h2 id="s10-title">PowerScribe One</h2></div>
+          <div><div class="muted">Fit for image validation</div><div class="fit-meter" aria-label="Low fit for image validation"><span style="width:28%"></span></div></div>
+        </div>
+        <div class="evidence-box">
+          <div class="claim"><div class="claim-label verified">Strong</div><strong>Reporting, quality checks, AI orchestration</strong></div>
+          <div class="claim"><div class="claim-label caution">Not established</div><strong>Fetal plane or exam-completeness validation</strong></div>
+        </div>
+      </div>
+      <div class="source" data-no-count>Microsoft positions PowerScribe One as radiology reporting with AI findings, guidance, and quality checks. <a href="https://www.microsoft.com/en-us/health-solutions/radiology-workflow/powerscribe-one" target="_blank" rel="noopener">PowerScribe One</a> · <a href="https://connect2.nuancepowerscribe.com/psonesetup/PO-PowerCastIntegrationGuide.pdf" target="_blank" rel="noopener">PowerCast guide</a></div>
+    </section>
+
+    <section class="slide" data-title="Sonio Detect" aria-labelledby="s11-title">
+      <div class="frame vendor-view">
+        <div class="card vendor-name">
+          <div><span class="vendor-tag">Sonio · Samsung</span><h2 id="s11-title">Sonio Detect</h2></div>
+          <div><div class="muted">Fit for stated use</div><div class="fit-meter" aria-label="High fit"><span style="width:92%"></span></div></div>
+        </div>
+        <div class="evidence-box">
+          <div class="claim"><div class="claim-label verified">FDA-cleared</div><strong>Concurrent fetal view,<br>anatomy, and quality analysis</strong></div>
+          <div class="claim"><div class="claim-label caution">Bounded</div><strong>Version, views, criteria, protocol coverage</strong></div>
+        </div>
+      </div>
+      <div class="source" data-no-count>Sonio Detect v3 is a concurrent reading aid for fetal images and clips; the FDA summary reports 14 T1 and 40 T2/T3 detected views. <a href="https://www.accessdata.fda.gov/cdrh_docs/pdf25/K252433.pdf" target="_blank" rel="noopener">FDA K252433</a></div>
+    </section>
+
+    <section class="slide" data-title="Read the clearance" aria-labelledby="s12-title">
+      <div class="frame">
+        <div class="eyebrow">Regulatory precision</div>
+        <h2 id="s12-title">Clearance answers <span class="cyan">one bounded question.</span></h2>
+        <div class="reg-card card">
+          <div class="k510" aria-hidden="true">510(k)</div>
+          <div class="fields" role="list"><div class="field">Trade name</div><div class="field">Version</div><div class="field">Intended use</div><div class="field">Users</div><div class="field">Population</div><div class="field">Outputs</div><div class="field">Human review</div><div class="field">Limitations</div></div>
+        </div>
+        <p class="lead">It does not prove local performance, interoperability, superiority, or ROI.</p>
+      </div>
+      <div class="source" data-no-count>FDA clearance is device- and indication-specific. Verify the decision summary, not the brand’s umbrella language. <a href="https://www.fda.gov/medical-devices/device-approvals-denials-and-clearances/510k-clearances" target="_blank" rel="noopener">FDA 510(k) overview</a></div>
+    </section>
+
+    <section class="slide" data-title="Local validation" aria-labelledby="s13-title">
+      <div class="frame">
+        <div class="eyebrow">Local evidence</div>
+        <h2 id="s13-title">Vendor accuracy is <span class="amber">not your site’s accuracy.</span></h2>
+        <div class="validation-grid"><div class="cohort">BMI</div><div class="cohort">Gestational age</div><div class="cohort">Anomalies</div><div class="cohort">Multiple gestation</div><div class="cohort">Operators</div><div class="cohort">Ultrasound vendors</div></div>
+        <div class="gate"><span class="vendor-tag">Prospective go / no-go</span></div>
+      </div>
+      <div class="source" data-no-count>FDA emphasizes representative datasets and continuing performance evaluation as AI-enabled devices evolve. <a href="https://www.fda.gov/medical-devices/medical-device-regulatory-science-research-programs-conducted-osel/performance-evaluation-methods-evolving-artificial-intelligence-ai-enabled-medical-devices" target="_blank" rel="noopener">FDA performance evaluation</a></div>
+    </section>
+
+    <section class="slide" data-title="Integration" aria-labelledby="s14-title">
+      <div class="frame">
+        <div class="eyebrow">Interoperability</div>
+        <h2 id="s14-title">Integration failure can erase <span class="red">model performance.</span></h2>
+        <div class="sequence" aria-label="Imaging integration sequence"><div class="seq">Worklist</div><div class="seq">Acquire</div><div class="seq">DICOM</div><div class="seq">AI</div><div class="seq">Report</div><div class="seq">EHR</div></div>
+        <div class="faults"><div class="fault">Wrong accession</div><div class="fault">Missing cine</div><div class="fault">Silent downtime</div></div>
+      </div>
+      <div class="source" data-no-count>Require conformance statements and test actual data flow. <a href="https://www.dicomstandard.org/" target="_blank" rel="noopener">DICOM Standard</a> · <a href="https://www.aium.org/docs/default-source/resources/guidelines/aium-practice-parameter-for-documentation-of-an-ultrasound-examination.pdf" target="_blank" rel="noopener">AIUM documentation</a></div>
+    </section>
+
+    <section class="slide" data-title="The RFP" aria-labelledby="s15-title">
+      <div class="frame">
+        <div class="eyebrow">Procurement</div>
+        <h2 id="s15-title">The RFP should purchase <span class="cyan">evidence and control.</span></h2>
+        <div class="scorecard" role="table" aria-label="RFP scoring categories">
+          <div class="header label">Domain</div><div class="header">Clinical</div><div class="header">Mixed fleet</div><div class="header">Security</div><div class="header">Operations</div><div class="header">Exit</div>
+          <div class="label">Intended-use match</div><div><i class="dot must"></i></div><div><i class="dot"></i></div><div><i class="dot"></i></div><div><i class="dot weight"></i></div><div><i class="dot"></i></div>
+          <div class="label">Site validation</div><div><i class="dot must"></i></div><div><i class="dot weight"></i></div><div><i class="dot"></i></div><div><i class="dot weight"></i></div><div><i class="dot"></i></div>
+          <div class="label">Interoperability</div><div><i class="dot weight"></i></div><div><i class="dot must"></i></div><div><i class="dot weight"></i></div><div><i class="dot weight"></i></div><div><i class="dot weight"></i></div>
+          <div class="label">Data + model terms</div><div><i class="dot weight"></i></div><div><i class="dot"></i></div><div><i class="dot must"></i></div><div><i class="dot weight"></i></div><div><i class="dot must"></i></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Pilot algorithm" aria-labelledby="s16-title">
+      <div class="frame">
+        <div class="eyebrow">Implementation algorithm</div>
+        <h2 id="s16-title">Pilot the workflow <span class="green">before enterprise commitment.</span></h2>
+        <div class="algorithm" role="list">
+          <div class="step"><small>01</small><strong>Define use</strong></div><div class="step"><small>02</small><strong>Baseline</strong></div><div class="step"><small>03</small><strong>Silent mode</strong></div><div class="step"><small>04</small><strong>Validate</strong></div><div class="step"><small>05</small><strong>Train</strong></div><div class="step"><small>06</small><strong>Launch narrow</strong></div><div class="step"><small>07</small><strong>Monitor</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Evaluation dashboard" aria-labelledby="s17-title">
+      <div class="frame">
+        <div class="eyebrow">Post-deployment monitoring</div>
+        <h2 id="s17-title">Measure patient care, <span class="cyan">not clicks.</span></h2>
+        <div class="dashboard">
+          <div class="card metric big"><h3>Incomplete exams</h3><div class="metric-value">↓</div><div class="spark" aria-hidden="true"><i style="height:90%"></i><i style="height:76%"></i><i style="height:66%"></i><i style="height:49%"></i><i style="height:38%"></i></div></div>
+          <div class="card metric"><h3>Recalls</h3><div class="metric-value">%</div></div><div class="card metric"><h3>Overrides</h3><div class="metric-value">↺</div></div><div class="card metric"><h3>Turnaround</h3><div class="metric-value">min</div></div><div class="card metric"><h3>Equity</h3><div class="metric-value">Δ</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Clinical pearls" aria-labelledby="s18-title">
+      <div class="frame">
+        <div class="eyebrow">Clinical pearls</div>
+        <h2 id="s18-title">Buy the boundary, <span class="cyan">not the brand.</span></h2>
+        <div class="pearls">
+          <div class="card pearl"><b data-no-count>01</b><strong>Classify first</strong></div><div class="card pearl"><b data-no-count>02</b><strong>Read labeling</strong></div><div class="card pearl"><b data-no-count>03</b><strong>Keep human review</strong></div><div class="card pearl"><b data-no-count>04</b><strong>Validate locally</strong></div>
+          <div class="card pearl"><b data-no-count>05</b><strong>Test downtime</strong></div><div class="card pearl"><b data-no-count>06</b><strong>Monitor drift</strong></div><div class="card pearl"><b data-no-count>07</b><strong>Audit overrides</strong></div><div class="card pearl"><b data-no-count>08</b><strong>Protect exit rights</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Evidence and controversies" aria-labelledby="s19-title">
+      <div class="frame">
+        <h2 id="s19-title">Evidence remains <span class="amber">smaller than marketing.</span></h2>
+        <div class="known-grid">
+          <div class="card known"><h3 class="green">Known</h3><ul><li>QA can standardize acquisition.</li><li>Clearance is function-specific.</li></ul></div>
+          <div class="card known"><h3 class="amber">Uncertain</h3><ul><li>Outcome improvement</li><li>Generalizability</li><li>Long-term ROI</li></ul></div>
+          <div class="card known"><h3 class="violet">Disputed</h3><ul><li>Automation bias</li><li>Vendor lock-in</li><li>Liability allocation</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="References and checklist" aria-labelledby="s20-title">
+      <div class="frame">
+        <div class="eyebrow">Make the purchase auditable</div>
+        <h2 id="s20-title">References +<br><span class="cyan">purchaser checklist</span></h2>
+        <div class="references-layout">
+          <div class="card"><div class="actions" data-no-count><button class="action-btn" data-open-refs>Open references</button><button class="action-btn" onclick="window.print()">Print / PDF</button></div></div>
+          <div class="checklist" id="checklist"><div class="checkitem">Exact intended use</div><div class="checkitem">Supported views and populations</div><div class="checkitem">Local validation plan</div><div class="checkitem">DICOM, HL7, FHIR behavior</div><div class="checkitem">Monitoring and exit rights</div></div>
+        </div>
+        <div class="actions" data-no-count><button class="action-btn" id="copyChecklist">Copy RFP checklist</button></div>
+      </div>
+      <div class="source" data-no-count>Educational review, not legal, regulatory, or purchasing advice. Product availability and labeling change; verify current documentation before contracting.</div>
+    </section>
+  </main>
+
+  <div class="utility" aria-label="Presentation tools">
+    <button type="button" id="overviewBtn" aria-label="Toggle slide overview" title="Overview (O)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+    <button type="button" id="fullscreenBtn" aria-label="Toggle fullscreen" title="Fullscreen (F)"><svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg></button>
+    <button type="button" data-open-refs aria-label="Open references" title="References (R)"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 5.5v16M8 7h8M8 11h8"/></svg></button>
+  </div>
+  <nav class="nav" aria-label="Slide navigation">
+    <button type="button" id="prev" aria-label="Previous slide"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button><div class="counter" id="counter">01 / 20</div><button type="button" id="next" aria-label="Next slide"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+  </nav>
+  <div class="help">← → navigate · O overview · R references · F fullscreen · P print</div>
+
+  <aside class="panel" id="refsPanel" aria-hidden="true" aria-labelledby="refsTitle">
+    <div class="panel-head"><div><div class="eyebrow">Primary sources</div><h2 id="refsTitle">References</h2></div><button class="panel-close" id="closeRefs" aria-label="Close references">×</button></div>
+    <ol class="ref-list">
+      <li>Philips. <a href="https://www.documents.philips.com/assets/Instruction%20for%20Use/20250711/2b423faa66f84ab4926eb3170078473d.pdf" target="_blank" rel="noopener">Ultrasound Workspace 7.0 Instructions for Use</a>. 2025.</li>
+      <li>FDA. <a href="https://www.accessdata.fda.gov/cdrh_docs/pdf24/K241659.pdf" target="_blank" rel="noopener">Ultrasound Workspace 6.0, K241659</a>. 2025.</li>
+      <li>GE HealthCare. <a href="https://www.gehealthcare.com/en-us/products/ultrasound/ultrasound-reporting/viewpoint-womens-health" target="_blank" rel="noopener">ViewPoint 6 for Women’s Health</a>.</li>
+      <li>GE HealthCare. <a href="https://www.gehealthcare.com/en-us/products/ultrasound/voluson/sonolyst" target="_blank" rel="noopener">SonoLyst</a>.</li>
+      <li>Samsung Medison. <a href="https://news.samsung.com/global/samsung-showcases-ai-based-automatic-measurement-and-diagnostic-solutions-at-isuog-world-congress-2023" target="_blank" rel="noopener">Intelligent Assist solutions</a>. 2023.</li>
+      <li>Samsung Medison. <a href="https://play.google.com/store/apps/details?id=com.samsungmedison.sonic&amp;hl=en" target="_blank" rel="noopener">HelloMom app labeling</a>.</li>
+      <li>Microsoft. <a href="https://www.microsoft.com/en-us/health-solutions/radiology-workflow/powerscribe-one" target="_blank" rel="noopener">PowerScribe One</a>.</li>
+      <li>Microsoft/Nuance. <a href="https://connect2.nuancepowerscribe.com/psonesetup/PO-PowerCastIntegrationGuide.pdf" target="_blank" rel="noopener">PowerCast Integration Guide</a>.</li>
+      <li>FDA. <a href="https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfPMN/pmn.cfm?ID=K230365" target="_blank" rel="noopener">Sonio Detect, K230365</a>. 2023.</li>
+      <li>FDA. <a href="https://www.accessdata.fda.gov/cdrh_docs/pdf25/K252433.pdf" target="_blank" rel="noopener">Sonio Detect v3, K252433</a>. 2026.</li>
+      <li>AIUM. <a href="https://www.aium.org/docs/default-source/resources/guidelines/aium-practice-parameter-for-documentation-of-an-ultrasound-examination.pdf" target="_blank" rel="noopener">Practice Parameter for Documentation of an Ultrasound Examination</a>.</li>
+      <li>FDA. <a href="https://www.fda.gov/medical-devices/medical-device-regulatory-science-research-programs-conducted-osel/performance-evaluation-methods-evolving-artificial-intelligence-ai-enabled-medical-devices" target="_blank" rel="noopener">Performance Evaluation Methods for Evolving AI-Enabled Medical Devices</a>.</li>
+      <li>DICOM Standards Committee. <a href="https://www.dicomstandard.org/" target="_blank" rel="noopener">DICOM Standard</a>.</li>
+      <li>NIST. <a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">AI Risk Management Framework</a>.</li>
+    </ol>
+  </aside>
+  <div class="toast" id="toast" role="status" aria-live="polite">Checklist copied</div>
+</div>
+
+<script>
+(() => {
+  const app=document.getElementById('app');
+  const slides=[...document.querySelectorAll('.slide')];
+  const progress=document.getElementById('progress');
+  const counter=document.getElementById('counter');
+  const refsPanel=document.getElementById('refsPanel');
+  const overviewBtn=document.getElementById('overviewBtn');
+  let index=0, touchX=0, overview=false;
+
+  const clamp=n=>Math.max(0,Math.min(slides.length-1,n));
+  function hashIndex(){const m=location.hash.match(/#\/?(\d+)/);return m?clamp(Number(m[1])-1):0}
+  function show(n,{hash=true}={}){
+    index=clamp(n);
+    slides.forEach((slide,i)=>{const active=i===index;slide.classList.toggle('active',active);slide.setAttribute('aria-hidden',String(!active));});
+    progress.style.width=`${((index+1)/slides.length)*100}%`;
+    counter.textContent=`${String(index+1).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}`;
+    document.title=`${slides[index].dataset.title} | OpenMFM`;
+    if(hash) history.replaceState(null,'',`#/${index+1}`);
+  }
+  function move(delta){if(!overview)show(index+delta)}
+  function toggleOverview(force){overview=typeof force==='boolean'?force:!overview;app.classList.toggle('overview',overview);overviewBtn.setAttribute('aria-pressed',String(overview));if(!overview)show(index)}
+  function openRefs(){refsPanel.classList.add('open');refsPanel.setAttribute('aria-hidden','false');document.getElementById('closeRefs').focus()}
+  function closeRefs(){refsPanel.classList.remove('open');refsPanel.setAttribute('aria-hidden','true')}
+  async function fullscreen(){if(!document.fullscreenElement)await document.documentElement.requestFullscreen?.();else await document.exitFullscreen?.()}
+
+  document.getElementById('prev').addEventListener('click',()=>move(-1));
+  document.getElementById('next').addEventListener('click',()=>move(1));
+  overviewBtn.addEventListener('click',()=>toggleOverview());
+  document.getElementById('fullscreenBtn').addEventListener('click',fullscreen);
+  document.querySelectorAll('[data-open-refs]').forEach(b=>b.addEventListener('click',openRefs));
+  document.getElementById('closeRefs').addEventListener('click',closeRefs);
+  refsPanel.addEventListener('click',e=>{if(e.target===refsPanel)closeRefs()});
+  window.addEventListener('hashchange',()=>show(hashIndex(),{hash:false}));
+  document.addEventListener('keydown',e=>{
+    if(refsPanel.classList.contains('open')){if(e.key==='Escape')closeRefs();return}
+    if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();move(1)}
+    else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();move(-1)}
+    else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1);
+    else if(e.key.toLowerCase()==='o')toggleOverview();else if(e.key.toLowerCase()==='r')openRefs();
+    else if(e.key.toLowerCase()==='f')fullscreen();else if(e.key.toLowerCase()==='p'){e.preventDefault();window.print()}
+    else if(e.key==='Escape'&&overview)toggleOverview(false)
+  });
+  document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].clientX},{passive:true});
+  document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-touchX;if(Math.abs(dx)>55)move(dx<0?1:-1)},{passive:true});
+  slides.forEach((slide,i)=>slide.addEventListener('click',()=>{if(overview){index=i;toggleOverview(false)}}));
+  document.getElementById('copyChecklist').addEventListener('click',async()=>{
+    const text=`AI-Assisted MFM Imaging RFP Checklist\n\n1. Exact product, version, and FDA-cleared intended use\n2. Supported gestational ages, views, structures, and quality criteria\n3. Supported ultrasound vendors and DICOM conformance\n4. HL7/FHIR/EHR/report reconciliation behavior\n5. Prospective local validation plan and acceptance thresholds\n6. Human-review, override, and audit-log design\n7. Latency, downtime, recovery, and business-continuity testing\n8. Cybersecurity, hosting, retention, and data-use terms\n9. Update notification, revalidation, and performance monitoring\n10. Pricing, support SLA, data portability, and exit rights`;
+    try{await navigator.clipboard.writeText(text);const toast=document.getElementById('toast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800)}catch{window.prompt('Copy the checklist:',text)}
+  });
+  show(hashIndex(),{hash:false});
+})();
+</script>
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

@@ -46,12 +46,12 @@ xml_content = '\n'.join(xml_lines)
 
 os.makedirs('landing-page/public', exist_ok=True)
 output_path = 'landing-page/public/sitemap.xml'
-with open(output_path, 'w', encoding='utf-8') as f:
+with open(output_path, 'w', encoding='utf-8', newline='\n') as f:
     f.write(xml_content)
 print(f"Generated {output_path} with {len(urls)} URLs.")
 
 # Also keep root sitemap.xml in sync (canonical openmfm.org URLs)
 root_output_path = 'sitemap.xml'
-with open(root_output_path, 'w', encoding='utf-8') as f:
+with open(root_output_path, 'w', encoding='utf-8', newline='\n') as f:
     f.write(xml_content)
 print(f"Generated {root_output_path} with {len(urls)} URLs.")
