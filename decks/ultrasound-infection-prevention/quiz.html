@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#06101f">
+  <meta name="description" content="A five-question interactive quiz on infection prevention during obstetric ultrasound, based on the 2026 SMFM Special Statement.">
+  <meta name="author" content="Dr. Chukwuma Onyeije, MD">
+  <link rel="canonical" href="https://openmfm.org/decks/ultrasound-infection-prevention/quiz.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="OpenMFM">
+  <meta property="og:title" content="Ultrasound Infection Prevention Quiz | OpenMFM">
+  <meta property="og:description" content="Test your understanding of the 2026 SMFM infection-prevention workflow for obstetric ultrasound with five reusable clinical questions.">
+  <meta property="og:url" content="https://openmfm.org/decks/ultrasound-infection-prevention/quiz.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Ultrasound Infection Prevention Quiz | OpenMFM">
+  <meta name="twitter:description" content="Five reusable questions for MFM physicians and ultrasound technologists, based on the 2026 SMFM Special Statement.">
+  <title>Ultrasound Infection Prevention Quiz | OpenMFM</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #020617;
+      --surface: rgba(15, 23, 42, .82);
+      --surface-strong: #0b1729;
+      --line: rgba(148, 163, 184, .23);
+      --text: #f8fafc;
+      --muted: #a9bacd;
+      --cyan: #22d3ee;
+      --green: #34d399;
+      --amber: #fbbf24;
+      --rose: #fb7185;
+      --violet: #a78bfa;
+      --shadow: 0 28px 90px rgba(0, 0, 0, .38);
+    }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; background: var(--bg); }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: "Space Grotesk", "Aptos Display", Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 13% 12%, rgba(14, 165, 233, .15), transparent 32%),
+        radial-gradient(circle at 87% 78%, rgba(167, 139, 250, .1), transparent 36%),
+        linear-gradient(145deg, #020617, #06101f 58%, #030916);
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(148,163,184,.032) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,.032) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.8), transparent 90%);
+    }
+    button, a { font: inherit; }
+    a { color: var(--cyan); }
+    .skip-link {
+      position: fixed;
+      top: -70px;
+      left: 16px;
+      z-index: 100;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--cyan);
+      color: #001018;
+      font-weight: 850;
+    }
+    .skip-link:focus { top: 12px; }
+    .topbar {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1180px;
+      margin: auto;
+      padding: max(18px, env(safe-area-inset-top)) 22px 0;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 850; letter-spacing: .02em; }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(34,211,238,.38);
+      border-radius: 11px;
+      background: rgba(34,211,238,.11);
+      color: var(--cyan);
+    }
+    .brand-mark svg { width: 20px; height: 20px; }
+    .brand span { color: var(--cyan); }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: rgba(15,23,42,.72);
+      color: #d9e6ef;
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 750;
+    }
+    .back-link:hover, .back-link:focus-visible { border-color: rgba(34,211,238,.5); color: var(--cyan); outline: none; }
+    main {
+      position: relative;
+      z-index: 2;
+      width: min(980px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: clamp(48px, 8vh, 92px) 0 70px;
+    }
+    .intro { margin-bottom: 28px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--cyan);
+      font-size: .78rem;
+      font-weight: 850;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 26px; height: 2px; border-radius: 99px; background: currentColor; box-shadow: 0 0 12px currentColor; }
+    h1, h2, p { margin: 0; }
+    h1 { margin-top: 12px; font-size: clamp(2.45rem, 6vw, 5.3rem); line-height: .98; letter-spacing: -.055em; }
+    .lede { max-width: 760px; margin-top: 16px; color: #d4e0eb; font-size: clamp(1rem, 2vw, 1.28rem); line-height: 1.55; }
+    .quiz-shell {
+      overflow: hidden;
+      border: 1px solid rgba(34,211,238,.28);
+      border-radius: 26px;
+      background: linear-gradient(145deg, rgba(15,23,42,.92), rgba(8,17,32,.82));
+      box-shadow: var(--shadow);
+    }
+    .quiz-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8, 22, 38, .7);
+    }
+    .question-count { color: var(--muted); font-size: .82rem; font-weight: 750; font-variant-numeric: tabular-nums; }
+    .question-count strong { color: var(--cyan); }
+    .score-live { color: var(--muted); font-size: .8rem; }
+    .progress-track { height: 4px; background: rgba(148,163,184,.12); }
+    .progress-bar { width: 20%; height: 100%; background: linear-gradient(90deg, var(--violet), var(--cyan)); box-shadow: 0 0 14px rgba(34,211,238,.45); transition: width .28s ease; }
+    .quiz-body { padding: clamp(22px, 4vw, 42px); }
+    .question-label { color: var(--violet); font-size: .74rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .question-text { max-width: 820px; margin-top: 9px; font-size: clamp(1.45rem, 3vw, 2.35rem); line-height: 1.16; letter-spacing: -.025em; }
+    .answers { display: grid; gap: 11px; margin-top: 26px; }
+    .answer {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      align-items: center;
+      gap: 13px;
+      min-height: 68px;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgba(15,23,42,.64);
+      color: #dce7f0;
+      text-align: left;
+      cursor: pointer;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .answer:hover:not(:disabled), .answer:focus-visible:not(:disabled) { transform: translateY(-1px); border-color: rgba(34,211,238,.52); background: rgba(8,47,73,.45); outline: none; }
+    .answer:disabled { cursor: default; }
+    .answer-letter { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: rgba(34,211,238,.1); color: var(--cyan); font-weight: 900; }
+    .answer.correct { border-color: rgba(52,211,153,.65); background: rgba(6,78,59,.32); }
+    .answer.correct .answer-letter { color: #03251b; background: var(--green); }
+    .answer.incorrect { border-color: rgba(251,113,133,.62); background: rgba(65,24,39,.33); }
+    .answer.incorrect .answer-letter { color: #2e0812; background: var(--rose); }
+    .answer.dimmed { opacity: .58; }
+    .feedback {
+      display: none;
+      margin-top: 20px;
+      padding: 18px 20px;
+      border-left: 3px solid var(--cyan);
+      border-radius: 0 15px 15px 0;
+      background: rgba(8,47,73,.36);
+      color: #d8e6ef;
+      line-height: 1.52;
+    }
+    .feedback.show { display: block; }
+    .feedback.correct { border-color: var(--green); background: rgba(6,78,59,.27); }
+    .feedback.incorrect { border-color: var(--rose); background: rgba(65,24,39,.27); }
+    .feedback strong { display: block; margin-bottom: 4px; font-size: 1.04rem; }
+    .quiz-actions { display: flex; justify-content: flex-end; margin-top: 20px; }
+    .primary-button, .secondary-button {
+      min-height: 46px;
+      padding: 11px 18px;
+      border-radius: 12px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .primary-button { display: none; border: 0; background: var(--cyan); color: #001018; }
+    .primary-button.show { display: inline-flex; align-items: center; gap: 8px; }
+    .primary-button:hover, .primary-button:focus-visible { box-shadow: 0 8px 24px rgba(34,211,238,.28); outline: 2px solid rgba(34,211,238,.35); outline-offset: 3px; }
+    .results { display: none; text-align: center; padding: clamp(28px, 5vw, 56px); }
+    .results.show { display: block; }
+    .result-ring {
+      width: min(230px, 62vw);
+      aspect-ratio: 1;
+      margin: 0 auto 24px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(34,211,238,.42);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(34,211,238,.18), rgba(8,47,73,.42) 52%, transparent 70%);
+      box-shadow: 0 0 62px rgba(34,211,238,.1);
+    }
+    .result-score { font-size: clamp(3rem, 9vw, 5.5rem); font-weight: 950; letter-spacing: -.06em; color: var(--cyan); }
+    .result-denominator { color: var(--muted); font-size: 1.15rem; }
+    .result-title { font-size: clamp(1.7rem, 4vw, 2.6rem); }
+    .result-copy { max-width: 650px; margin: 12px auto 24px; color: var(--muted); line-height: 1.55; }
+    .secondary-button { border: 1px solid rgba(34,211,238,.44); background: rgba(34,211,238,.1); color: var(--cyan); }
+    .secondary-button:hover, .secondary-button:focus-visible { background: rgba(34,211,238,.18); outline: 2px solid rgba(34,211,238,.28); outline-offset: 3px; }
+    .source-note { margin-top: 18px; color: #7f95a8; font-size: .75rem; line-height: 1.45; text-align: center; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 620px) {
+      .topbar { padding-inline: 16px; }
+      .back-link span { display: none; }
+      main { width: min(100% - 24px, 980px); padding-top: 42px; }
+      .quiz-top { padding: 15px 16px; }
+      .quiz-body { padding: 21px 16px 24px; }
+      .answer { grid-template-columns: 34px 1fr; padding: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#quiz">Skip to quiz</a>
+  <header class="topbar">
+    <div class="brand" aria-label="OpenMFM"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h3l2-5 4 10 2-5h5"/></svg></div>Open<span>MFM</span></div>
+    <a class="back-link" href="index.html"><span>Back to presentation</span><span aria-hidden="true">→</span></a>
+  </header>
+
+  <main>
+    <div class="intro">
+      <div class="eyebrow">Knowledge check · 5 questions</div>
+      <h1>Ultrasound infection prevention <span style="color:var(--cyan)">quiz</span></h1>
+      <p class="lede">Choose one answer. You will see the correct answer and explanation before moving to the next question. Retake the quiz as often as you like.</p>
+    </div>
+
+    <section class="quiz-shell" id="quiz" aria-labelledby="quizQuestion">
+      <div id="quizView">
+        <div class="quiz-top">
+          <div class="question-count">Question <strong id="questionNumber">1</strong> of 5</div>
+          <div class="score-live">Score: <span id="liveScore">0</span></div>
+        </div>
+        <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="quiz-body">
+          <div class="question-label" id="questionCategory">Core workflow</div>
+          <h2 class="question-text" id="quizQuestion"></h2>
+          <div class="answers" id="answers" role="group" aria-labelledby="quizQuestion"></div>
+          <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+          <div class="quiz-actions"><button class="primary-button" id="nextButton" type="button">Next question <span aria-hidden="true">→</span></button></div>
+        </div>
+      </div>
+
+      <div class="results" id="results" aria-live="polite">
+        <div class="result-ring" aria-hidden="true"><div><span class="result-score" id="finalScore">0</span><span class="result-denominator">/5</span></div></div>
+        <h2 class="result-title" id="resultTitle">Quiz complete</h2>
+        <p class="result-copy" id="resultCopy"></p>
+        <button class="secondary-button" id="retakeButton" type="button">Retake the quiz</button>
+      </div>
+    </section>
+
+    <p class="source-note">Based on the Society for Maternal-Fetal Medicine Special Statement: Reducing the risk of transmitting infection during ultrasound examination - Updated 2026. Educational use only; follow local policy and manufacturer instructions.</p>
+    <div class="sr-only" id="announcer" aria-live="assertive"></div>
+  </main>
+
+  <script>
+    (() => {
+      const questions = [
+        {
+          category: "Internal-use transducers",
+          prompt: "What processing is required after every transvaginal ultrasound examination?",
+          options: [
+            "Wipe away the gel only",
+            "Clean, then perform high-level disinfection of the probe and handle",
+            "Low-level disinfection if a cover was intact",
+            "Sterilization in an autoclave"
+          ],
+          correct: 1,
+          explanation: "A cover is an added barrier, not a substitute for reprocessing. Internal-use transducers must be cleaned and high-level disinfected after every patient, including the handle."
+        },
+        {
+          category: "Ultrasound-guided procedures",
+          prompt: "Which coupling gel should be used for an amniocentesis?",
+          options: [
+            "Any gel from a warmed multiuse bottle",
+            "Bacteriostatic gel from a refillable container",
+            "Gel specifically labeled sterile from a single-use packet",
+            "Nonsterile gel placed outside a sterile cover"
+          ],
+          correct: 2,
+          explanation: "Percutaneous procedures require gel specifically labeled sterile from a single-use packet. “Bacteriostatic” or “preservative” does not mean sterile."
+        },
+        {
+          category: "Transducer covers",
+          prompt: "Which statement about transducer covers is correct?",
+          options: [
+            "An intact cover eliminates the need for disinfection",
+            "All commercial covers are proven viral barriers",
+            "Covers reduce exposure but may leak and do not replace reprocessing",
+            "Standard examination gloves have the lowest documented leakage standard"
+          ],
+          correct: 2,
+          explanation: "Probe covers can leak. For internal examinations, use a documented viral-barrier cover and still clean and high-level disinfect the transducer after use."
+        },
+        {
+          category: "High-level disinfection",
+          prompt: "What is the key operational caution when using ortho-phthalaldehyde (OPA)?",
+          options: [
+            "OPA can be used only with nonlatex covers",
+            "OPA requires adequate ventilation and should not be used in patient-occupied rooms",
+            "OPA is suitable only for low-level disinfection",
+            "OPA eliminates the need to clean visible debris"
+          ],
+          correct: 1,
+          explanation: "The 2026 update allows OPA to be considered for high-level disinfection based on newer HPV data, but it is volatile and requires adequate ventilation away from patient-occupied rooms."
+        },
+        {
+          category: "Safety culture",
+          prompt: "Who holds ultimate responsibility for a reliable infection-prevention system in an ultrasound practice?",
+          options: [
+            "The individual sonographer working that day",
+            "The transducer manufacturer",
+            "Practice leadership",
+            "The patient receiving the examination"
+          ],
+          correct: 2,
+          explanation: "Staff members perform the workflow, but practice leadership owns the system: policy, supplies, space, training, supervision, documentation, and accountability."
+        }
+      ];
+
+      const questionNumber = document.getElementById("questionNumber");
+      const questionCategory = document.getElementById("questionCategory");
+      const quizQuestion = document.getElementById("quizQuestion");
+      const answers = document.getElementById("answers");
+      const feedback = document.getElementById("feedback");
+      const nextButton = document.getElementById("nextButton");
+      const progressBar = document.getElementById("progressBar");
+      const liveScore = document.getElementById("liveScore");
+      const quizView = document.getElementById("quizView");
+      const results = document.getElementById("results");
+      const finalScore = document.getElementById("finalScore");
+      const resultTitle = document.getElementById("resultTitle");
+      const resultCopy = document.getElementById("resultCopy");
+      const retakeButton = document.getElementById("retakeButton");
+      const announcer = document.getElementById("announcer");
+      let current = 0;
+      let score = 0;
+      let answered = false;
+
+      function renderQuestion() {
+        const item = questions[current];
+        answered = false;
+        questionNumber.textContent = String(current + 1);
+        questionCategory.textContent = item.category;
+        quizQuestion.textContent = item.prompt;
+        liveScore.textContent = String(score);
+        progressBar.style.width = `${((current + 1) / questions.length) * 100}%`;
+        feedback.className = "feedback";
+        feedback.innerHTML = "";
+        nextButton.classList.remove("show");
+        nextButton.innerHTML = current === questions.length - 1 ? "See my score <span aria-hidden=\"true\">→</span>" : "Next question <span aria-hidden=\"true\">→</span>";
+        answers.innerHTML = "";
+
+        item.options.forEach((option, index) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "answer";
+          button.innerHTML = `<span class="answer-letter" aria-hidden="true">${String.fromCharCode(65 + index)}</span><span>${option}</span>`;
+          button.addEventListener("click", () => selectAnswer(index));
+          answers.appendChild(button);
+        });
+        answers.querySelector("button")?.focus();
+      }
+
+      function selectAnswer(selected) {
+        if (answered) return;
+        answered = true;
+        const item = questions[current];
+        const isCorrect = selected === item.correct;
+        if (isCorrect) score += 1;
+        liveScore.textContent = String(score);
+
+        [...answers.children].forEach((button, index) => {
+          button.disabled = true;
+          if (index === item.correct) button.classList.add("correct");
+          else if (index === selected) button.classList.add("incorrect");
+          else button.classList.add("dimmed");
+        });
+
+        feedback.className = `feedback show ${isCorrect ? "correct" : "incorrect"}`;
+        feedback.innerHTML = `<strong>${isCorrect ? "Correct." : `Not quite. The correct answer is: ${item.options[item.correct]}.`}</strong><span>${item.explanation}</span>`;
+        nextButton.classList.add("show");
+        announcer.textContent = isCorrect ? "Correct answer." : "Incorrect answer. The correct answer is now shown.";
+        nextButton.focus();
+      }
+
+      function showResults() {
+        quizView.hidden = true;
+        results.classList.add("show");
+        finalScore.textContent = String(score);
+        if (score === 5) {
+          resultTitle.textContent = "Excellent. The workflow is clear.";
+          resultCopy.textContent = "You identified the correct infection-prevention action in every scenario. Retake the quiz anytime to reinforce the sequence.";
+        } else if (score >= 4) {
+          resultTitle.textContent = "Strong result.";
+          resultCopy.textContent = "You understand the core workflow. Review the explanation for the missed item, then retake the quiz to reach five out of five.";
+        } else if (score >= 3) {
+          resultTitle.textContent = "Good foundation. Review the details.";
+          resultCopy.textContent = "Focus on matching the contact route to the correct cover, gel, and processing level before trying again.";
+        } else {
+          resultTitle.textContent = "Review the presentation and try again.";
+          resultCopy.textContent = "Start with three rules: classify first, clean every probe, and match disinfection or sterilization to the contact route.";
+        }
+        retakeButton.focus();
+      }
+
+      nextButton.addEventListener("click", () => {
+        if (!answered) return;
+        if (current === questions.length - 1) showResults();
+        else { current += 1; renderQuestion(); }
+      });
+
+      retakeButton.addEventListener("click", () => {
+        current = 0;
+        score = 0;
+        results.classList.remove("show");
+        quizView.hidden = false;
+        renderQuestion();
+        announcer.textContent = "Quiz restarted.";
+      });
+
+      renderQuestion();
+    })();
+  </script>
+</body>
+</html>

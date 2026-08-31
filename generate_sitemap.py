@@ -19,6 +19,8 @@ urls.append(('/library', '0.9'))
 # Presentations
 for p in presentations:
     urls.append((f"/{p['href']}", '0.8'))
+    if p.get('quizHref'):
+        urls.append((f"/{p['quizHref']}", '0.7'))
 
 # Microsites (relative URLs only)
 for m in microsites:

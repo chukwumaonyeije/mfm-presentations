@@ -17,6 +17,7 @@ import PulseLine from './components/PulseLine';
 interface Presentation {
   title: string;
   href: string;
+  quizHref?: string;
   tags: string[];
   description: string;
 }
@@ -194,15 +195,28 @@ export default async function HomePage() {
               </span>
               <span className="feature-panel__meta-item">Feed-driven preview</span>
             </div>
-            <a
-              href={latestPresentation.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="feature-panel__link"
-            >
-              Open latest deck
-              <ArrowRight className="h-4 w-4" />
-            </a>
+            <div className="feature-panel__actions">
+              <a
+                href={latestPresentation.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="feature-panel__link"
+              >
+                Open latest deck
+                <ArrowRight className="h-4 w-4" />
+              </a>
+              {latestPresentation.quizHref && (
+                <a
+                  href={latestPresentation.quizHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="feature-panel__link feature-panel__link--quiz"
+                >
+                  Take 5-question quiz
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+              )}
+            </div>
           </aside>
         </div>
       </section>
