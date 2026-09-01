@@ -32,7 +32,7 @@ export default async function HomePage() {
 
   const presentationCount = presentations.length;
   const micrositeCount = microsites.length;
-  const latestPresentation = presentations[0];
+  const featuredPresentation = presentations[0];
   const recentPresentations = presentations.slice(0, 4);
   const curatedSlugs = ['basic-gdm', 'fetal-growth-restriction-patients', 'preeclampsia'];
   const clinicalEssentials = curatedSlugs
@@ -177,12 +177,12 @@ export default async function HomePage() {
           <aside className="feature-panel">
             <div className="feature-panel__label">
               <Clock3 className="h-4 w-4" />
-              Newest presentation
+              Featured presentation
             </div>
-            <h2 className="feature-panel__title">{latestPresentation.title}</h2>
-            <p className="feature-panel__description">{latestPresentation.description}</p>
+            <h2 className="feature-panel__title">{featuredPresentation.title}</h2>
+            <p className="feature-panel__description">{featuredPresentation.description}</p>
             <div className="mb-6 flex flex-wrap gap-2">
-              {latestPresentation.tags.slice(0, 4).map((tag) => (
+              {featuredPresentation.tags.slice(0, 4).map((tag) => (
                 <span key={tag} className="chip chip-cyan">
                   {tag}
                 </span>
@@ -197,17 +197,17 @@ export default async function HomePage() {
             </div>
             <div className="feature-panel__actions">
               <a
-                href={latestPresentation.href}
+                href={featuredPresentation.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="feature-panel__link"
               >
-                Open latest deck
+                Open featured deck
                 <ArrowRight className="h-4 w-4" />
               </a>
-              {latestPresentation.quizHref && (
+              {featuredPresentation.quizHref && (
                 <a
-                  href={latestPresentation.quizHref}
+                  href={featuredPresentation.quizHref}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="feature-panel__link feature-panel__link--quiz"
