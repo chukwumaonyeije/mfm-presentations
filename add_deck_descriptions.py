@@ -68,8 +68,8 @@ DESCRIPTIONS = {
         "Explains low PAPP-A in the first trimester: its association with FGR, preeclampsia, and preterm birth \u2014 and the surveillance protocols recommended for affected pregnancies.",
     "decks/subchorionic-hematoma/subchorionic_hematoma_patient_education.html":
         "Covers subchorionic hematoma in early pregnancy: ultrasound findings, association with bleeding and pregnancy loss, activity restrictions, and prognosis by size.",
-    "decks/morbid-obesity/morbid-obesity.html":
-        "Explores maternal and fetal risks of morbid obesity in pregnancy, including gestational diabetes, preeclampsia, sleep apnea, and cesarean delivery considerations.",
+    "decks/morbid-obesity/index.html":
+        "A respectful, evidence-based guide to pregnancy with obesity, including healthy weight gain, diabetes and sleep-apnea screening, ultrasound, fetal surveillance, delivery planning, and postpartum prevention.",
     "decks/hemoglobinopathies/hemoglobin_traits_pregnancy_patient_education.html":
         "Comprehensive overview of hemoglobin variants in pregnancy, including sickle cell, thalassemia traits, and Hb C \u2014 with screening, diagnosis, and management guidance.",
     "decks/basic-gdm/gestational_diabetes_patient_guide.html":
