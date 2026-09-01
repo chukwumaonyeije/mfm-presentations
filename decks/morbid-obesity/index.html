@@ -1,371 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Understanding Obesity in Pregnancy</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e8e8e8;
-            overflow: hidden;
-            height: 100vh;
-        }
-
-        .slide-container {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px;
-        }
-
-        .slide {
-            display: none;
-            width: 100%;
-            max-width: 1200px;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        .slide.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
-            font-size: 3.5em;
-            margin-bottom: 0.5em;
-            color: #4dd0e1;
-            line-height: 1.2;
-        }
-
-        h2 {
-            font-size: 2.8em;
-            margin-bottom: 0.6em;
-            color: #4dd0e1;
-            line-height: 1.2;
-        }
-
-        h3 {
-            font-size: 2em;
-            margin-bottom: 0.5em;
-            color: #81c784;
-            line-height: 1.3;
-        }
-
-        p {
-            font-size: 1.8em;
-            line-height: 1.6;
-            margin-bottom: 0.8em;
-            color: #e8e8e8;
-        }
-
-        .subtitle {
-            font-size: 1.5em;
-            color: #b0bec5;
-            margin-bottom: 1em;
-        }
-
-        .highlight-box {
-            background: rgba(77, 208, 225, 0.1);
-            border-left: 6px solid #4dd0e1;
-            padding: 30px;
-            margin: 30px 0;
-            border-radius: 8px;
-        }
-
-        .info-box {
-            background: rgba(129, 199, 132, 0.1);
-            border-left: 6px solid #81c784;
-            padding: 30px;
-            margin: 30px 0;
-            border-radius: 8px;
-        }
-
-        .warning-box {
-            background: rgba(255, 183, 77, 0.1);
-            border-left: 6px solid #ffb74d;
-            padding: 30px;
-            margin: 30px 0;
-            border-radius: 8px;
-        }
-
-        ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        li {
-            font-size: 1.6em;
-            line-height: 1.8;
-            margin-bottom: 0.8em;
-            padding-left: 40px;
-            position: relative;
-        }
-
-        li:before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: #4dd0e1;
-            font-weight: bold;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin: 30px 0;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 30px;
-            border-radius: 12px;
-            border: 2px solid rgba(77, 208, 225, 0.3);
-        }
-
-        .navigation {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            font-size: 1.2em;
-            color: #b0bec5;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px 25px;
-            border-radius: 8px;
-        }
-
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 5px;
-            background: #4dd0e1;
-            transition: width 0.3s ease;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-            font-size: 1.5em;
-        }
-
-        th {
-            background: rgba(77, 208, 225, 0.2);
-            padding: 20px;
-            text-align: left;
-            color: #4dd0e1;
-            border-bottom: 3px solid #4dd0e1;
-        }
-
-        td {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        tr:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .center {
-            text-align: center;
-        }
-
-        .small-text {
-            font-size: 1.3em;
-            color: #b0bec5;
-            margin-top: 20px;
-        }
-
-        .emphasis {
-            color: #81c784;
-            font-weight: 600;
-        }
-
-        .timeline {
-            position: relative;
-            padding-left: 50px;
-            margin: 30px 0;
-        }
-
-        .timeline:before {
-            content: '';
-            position: absolute;
-            left: 20px;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: #4dd0e1;
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 40px;
-        }
-
-        .timeline-item:before {
-            content: '';
-            position: absolute;
-            left: -38px;
-            top: 8px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #4dd0e1;
-            border: 4px solid #1a1a2e;
-        }
-
-        .timeline-item h3 {
-            margin-bottom: 10px;
-        }
-
-        .timeline-item p {
-            font-size: 1.5em;
-        }
-    </style>
-
-
-<style>
-/* 2026 refresh overrides */
-:root {
-  --refresh-bg: #08131f;
-  --refresh-surface: rgba(11, 26, 42, 0.88);
-  --refresh-surface-strong: rgba(15, 34, 54, 0.94);
-  --refresh-line: rgba(133, 201, 255, 0.16);
-  --refresh-text: #f4f8fc;
-  --refresh-muted: #b5c8d8;
-  --refresh-accent: #4ddcc2;
-}
-html, body {
-  background:
-    radial-gradient(circle at top left, rgba(77, 220, 194, 0.16), transparent 24%),
-    radial-gradient(circle at 85% 16%, rgba(255, 189, 99, 0.12), transparent 20%),
-    linear-gradient(180deg, #08131f 0%, #06101a 100%) !important;
-  color: var(--refresh-text) !important;
-  font-family: "Aptos", "Segoe UI", system-ui, sans-serif !important;
-}
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: linear-gradient(180deg, rgba(0,0,0,0.26), transparent 82%);
-}
-.card,
-.panel,
-.content-box,
-.info-box,
-.highlight-box,
-.summary-box,
-.comparison-card,
-.warning-box,
-.feature-box,
-.stat-box,
-.takeaway-box,
-.grid-item,
-.slide,
-.slide-content,
-.slide-container,
-table,
-blockquote {
-  border-radius: 18px !important;
-  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24) !important;
-}
-.card,
-.panel,
-.content-box,
-.info-box,
-.highlight-box,
-.summary-box,
-.comparison-card,
-.warning-box,
-.feature-box,
-.stat-box,
-.takeaway-box,
-.grid-item,
-table,
-blockquote {
-  background: var(--refresh-surface) !important;
-  border: 1px solid var(--refresh-line) !important;
-  backdrop-filter: blur(10px);
-}
-h1, h2, h3, h4, .slide-title {
-  color: var(--refresh-text) !important;
-  letter-spacing: -0.03em;
-  text-wrap: balance;
-}
-p, li, td, th, .subtitle, .muted, small {
-  color: var(--refresh-muted) !important;
-}
-strong, b, .accent, .highlight, .key-point, a {
-  color: var(--refresh-accent) !important;
-}
-button,
-.nav button,
-.controls button,
-.btn,
-.button {
-  border-radius: 999px !important;
-  border: 1px solid var(--refresh-line) !important;
-  background: var(--refresh-surface-strong) !important;
-  color: var(--refresh-text) !important;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22) !important;
-}
-.progress,
-.progress-bar,
-#progressBar,
-.progress-fill {
-  background: linear-gradient(90deg, #4ddcc2 0%, #79e09b 100%) !important;
-  box-shadow: 0 0 18px rgba(77, 220, 194, 0.38);
-}
-</style>
-
-
+  <meta name="theme-color" content="#0d1117">
+  <title>Obesity in Pregnancy: A Personalized Care Plan | OpenMFM</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box}
+    :root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2330;--border:#30363d;--text:#e6edf3;--muted:#9da7b3;--accent-blue:#58a6ff;--accent-teal:#39d0b4;--accent-green:#3fb950;--accent-amber:#d29922;--accent-red:#f85149;--accent-purple:#bc8cff;--brand:#1f6feb;--cyan:#22d3ee}
+    html,body{width:100%;min-height:100%}html{background:var(--bg)}
+    body{margin:0;overflow:hidden;background:radial-gradient(circle at 12% 12%,rgba(34,211,238,.09),transparent 31%),radial-gradient(circle at 88% 82%,rgba(31,111,235,.11),transparent 34%),var(--bg);color:var(--text);font-family:"Segoe UI",Inter,system-ui,sans-serif;font-size:16px;-webkit-font-smoothing:antialiased}
+    button,a{font:inherit}a{color:var(--accent-blue)}a:focus-visible,button:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+    .skip-link{position:fixed;left:1rem;top:-5rem;z-index:1000;border-radius:.5rem;background:#fff;color:#111;padding:.7rem 1rem;text-decoration:none}.skip-link:focus{top:1rem}
+    .progress-track{position:fixed;inset:0 0 auto;z-index:300;height:3px;background:rgba(255,255,255,.06)}.progress-bar{width:0;height:100%;background:linear-gradient(90deg,var(--brand),var(--cyan));box-shadow:0 0 16px rgba(34,211,238,.65);transition:width 240ms ease}
+    .deck{position:relative;width:100%;height:100dvh}.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;width:100%;min-height:100dvh;padding:clamp(3.8rem,7vh,5.8rem) clamp(2rem,6vw,6.5rem) clamp(5.6rem,10vh,7rem);overflow:auto;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity 260ms ease,transform 260ms ease,visibility 260ms}.slide.active{opacity:1;visibility:visible;transform:translateY(0)}.slide[hidden]{display:none}.content{width:min(1120px,100%);margin:0 auto}
+    .slide-label,.eyebrow{margin:0 0 .7rem;color:var(--cyan);font-size:clamp(.72rem,1.2vw,.86rem);font-weight:750;letter-spacing:.16em;text-transform:uppercase}.eyebrow{text-align:center}
+    h1,h2,h3,p{margin-top:0}h1,h2,h3{color:#fff;font-family:"Space Grotesk","Segoe UI",system-ui,sans-serif;letter-spacing:-.025em}h1{margin-bottom:1rem;font-size:clamp(2.25rem,6vw,5.25rem);line-height:1.02;text-align:center}h2{max-width:980px;margin-bottom:clamp(1.15rem,2.7vh,2rem);font-size:clamp(1.8rem,4.3vw,3.5rem);line-height:1.08}h3{margin-bottom:.45rem;font-size:clamp(1rem,1.8vw,1.25rem)}p{color:var(--muted);line-height:1.62}.title-sub{max-width:760px;margin:0 auto;color:var(--muted);font-size:clamp(1rem,2.2vw,1.35rem);line-height:1.6;text-align:center}.accent-blue{color:var(--accent-blue)}.accent-teal{color:var(--cyan)}.title-divider{width:86px;height:3px;margin:1.4rem auto;border-radius:999px;background:linear-gradient(90deg,var(--brand),var(--cyan));box-shadow:0 0 18px rgba(34,211,238,.55)}
+    .pill-row{display:flex;flex-wrap:wrap;justify-content:center;gap:.7rem;margin-top:1.7rem}.pill{display:inline-flex;align-items:center;border:1px solid;border-radius:999px;padding:.42rem .85rem;font-size:.78rem;font-weight:700}.pill-blue{border-color:rgba(88,166,255,.45);background:rgba(88,166,255,.11);color:#91c4ff}.pill-teal{border-color:rgba(57,208,180,.45);background:rgba(57,208,180,.11);color:#75e4d0}.pill-green{border-color:rgba(63,185,80,.45);background:rgba(63,185,80,.11);color:#7ee787}.pill-amber{border-color:rgba(210,153,34,.45);background:rgba(210,153,34,.11);color:#e3b341}
+    .two-col,.three-col,.four-col{display:grid;width:100%;gap:clamp(.8rem,2vw,1.35rem)}.two-col{grid-template-columns:repeat(2,minmax(0,1fr))}.three-col{grid-template-columns:repeat(3,minmax(0,1fr))}.four-col{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .card{position:relative;overflow:hidden;border:1px solid var(--border);border-radius:14px;background:linear-gradient(145deg,rgba(28,35,48,.96),rgba(22,27,34,.96));padding:clamp(1rem,2.2vw,1.5rem);box-shadow:0 10px 32px rgba(0,0,0,.14)}.card::before{position:absolute;inset:0 auto 0 0;width:3px;background:var(--accent-blue);content:""}.card.teal::before{background:var(--accent-teal)}.card.green::before{background:var(--accent-green)}.card.amber::before{background:var(--accent-amber)}.card.purple::before{background:var(--accent-purple)}.card p:last-child{margin-bottom:0}.card-kicker{display:block;margin-bottom:.5rem;color:var(--accent-blue);font-size:.74rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase}.teal .card-kicker{color:var(--accent-teal)}.green .card-kicker{color:var(--accent-green)}.amber .card-kicker{color:#e3b341}.purple .card-kicker{color:var(--accent-purple)}
+    .alert{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:start;margin-top:1.1rem;border:1px solid rgba(88,166,255,.32);border-radius:12px;background:rgba(31,111,235,.08);padding:1rem 1.15rem}.alert-green{border-color:rgba(63,185,80,.34);background:rgba(63,185,80,.08)}.alert-amber{border-color:rgba(210,153,34,.38);background:rgba(210,153,34,.08)}.alert-icon{display:grid;min-width:2rem;height:2rem;padding:0 .35rem;place-items:center;border-radius:999px;background:rgba(88,166,255,.17);color:var(--accent-blue);font-weight:900}.alert-green .alert-icon{background:rgba(63,185,80,.15);color:var(--accent-green)}.alert-amber .alert-icon{background:rgba(210,153,34,.15);color:#e3b341}.alert strong{display:block;margin-bottom:.15rem;color:#fff}.alert p{margin:0}
+    .stat-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem}.stat-box{border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:1rem;text-align:center}.stat-number{color:var(--cyan);font-size:clamp(1.5rem,3.4vw,2.4rem);font-weight:800}.stat-label{margin-top:.25rem;color:var(--muted);font-size:.78rem;line-height:1.35}
+    .timeline{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.7rem;margin-top:1.2rem}.timeline::before{position:absolute;top:1.15rem;left:7%;right:7%;height:2px;background:linear-gradient(90deg,var(--brand),var(--cyan));content:""}.tl-step{position:relative;text-align:center}.tl-dot{position:relative;z-index:1;display:grid;width:2.3rem;height:2.3rem;margin:0 auto .75rem;place-items:center;border:2px solid var(--cyan);border-radius:50%;background:var(--bg);color:#fff;font-size:.78rem;font-weight:800}.tl-step strong{display:block;color:#fff;font-size:.88rem}.tl-step span{display:block;margin-top:.25rem;color:var(--muted);font-size:.75rem;line-height:1.4}
+    .icon-wrap{display:grid;width:2.55rem;height:2.55rem;margin-bottom:.8rem;place-items:center;border-radius:11px;background:rgba(34,211,238,.1);color:var(--cyan)}.icon-wrap svg{width:1.35rem;height:1.35rem;stroke:currentColor}.process{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:stretch}.process-arrow{display:grid;place-items:center;color:var(--cyan);font-size:2rem}
+    .checklist{display:grid;gap:.7rem;margin:0;padding:0;list-style:none}.checklist li{position:relative;padding-left:1.65rem;color:var(--text);line-height:1.45}.checklist li::before{position:absolute;left:0;color:var(--accent-teal);content:"\2726";font-weight:900}.checklist.compact{gap:.45rem;font-size:.9rem}.risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.risk-side{border-radius:14px;border:1px solid var(--border);padding:1.15rem;background:rgba(22,27,34,.88)}.risk-side h3{display:flex;align-items:center;gap:.55rem}.risk-side h3::before{width:.7rem;height:.7rem;border-radius:50%;background:var(--accent-blue);content:""}.risk-side:last-child h3::before{background:var(--accent-teal)}
+    .sound-diagram{position:relative;min-height:260px;border:1px solid var(--border);border-radius:16px;background:radial-gradient(circle at 75% 50%,rgba(34,211,238,.14),transparent 28%),var(--surface);overflow:hidden}.probe{position:absolute;left:9%;top:39%;width:46px;height:72px;border:3px solid var(--accent-blue);border-radius:22px 22px 10px 10px;transform:rotate(90deg)}.wave{position:absolute;left:23%;top:50%;height:2px;transform-origin:left;background:linear-gradient(90deg,var(--accent-blue),transparent)}.wave.one{width:50%;transform:rotate(-15deg)}.wave.two{width:54%}.wave.three{width:50%;transform:rotate(15deg)}.layers{position:absolute;left:45%;top:18%;width:22%;height:64%;border-left:10px solid rgba(188,140,255,.26);border-right:10px solid rgba(188,140,255,.12)}.fetus-mark{position:absolute;right:9%;top:33%;width:92px;height:92px;border:2px solid var(--cyan);border-radius:48% 52% 55% 45%;box-shadow:0 0 24px rgba(34,211,238,.18)}.fetus-mark::after{position:absolute;left:28%;top:26%;width:34px;height:34px;border:2px solid var(--cyan);border-radius:50%;content:""}.diagram-label{position:absolute;bottom:.8rem;left:1rem;right:1rem;color:var(--muted);font-size:.74rem;text-align:center}
+    .surveillance{display:grid;grid-template-columns:.8fr 2.2fr;gap:1rem;align-items:stretch}.weeks{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.week{padding:.55rem .15rem;border-radius:7px;background:var(--surface2);color:var(--muted);font-size:.7rem;text-align:center}.week.active-blue{background:rgba(88,166,255,.22);color:#b9daff}.week.active-teal{background:rgba(57,208,180,.22);color:#a1f1e2}
+    .plate{position:relative;width:min(280px,70vw);aspect-ratio:1;margin:0 auto;border:10px solid #28313d;border-radius:50%;background:conic-gradient(var(--accent-green) 0 50%,var(--accent-blue) 50% 75%,var(--accent-amber) 75% 100%);box-shadow:0 22px 70px rgba(0,0,0,.32)}.plate::after{position:absolute;inset:19%;display:grid;place-items:center;border-radius:50%;background:var(--surface);color:#fff;content:"balanced meals";font-size:.84rem;font-weight:800;text-align:center}
+    .step-list{display:grid;gap:.65rem;counter-reset:steps}.step-item{display:grid;grid-template-columns:auto 1fr;gap:.8rem;align-items:start}.step-item::before{display:grid;width:1.8rem;height:1.8rem;place-items:center;border-radius:50%;background:rgba(34,211,238,.13);color:var(--cyan);content:counter(steps);counter-increment:steps;font-size:.75rem;font-weight:800}.step-item strong{display:block;color:#fff}.step-item span{color:var(--muted);font-size:.88rem;line-height:1.45}.questions{display:grid;gap:.55rem;margin:0;padding:0;list-style:none}.questions li{border-bottom:1px solid var(--border);padding:0 0 .55rem 1.5rem;color:var(--text);line-height:1.35}.questions li::before{position:absolute;margin-left:-1.5rem;color:var(--cyan);content:"?";font-weight:900}
+    .reference-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem 1rem;margin:0;padding-left:1.2rem;font-size:clamp(.65rem,1.05vw,.76rem);line-height:1.38}.reference-list li{padding-left:.15rem;color:var(--muted)}.reference-list a{color:#a8cffc;text-underline-offset:2px}.source-note{margin:.8rem 0 0;color:var(--muted);font-size:.72rem;line-height:1.4}
+    .slide-footer{position:absolute;left:clamp(1.1rem,3vw,2.5rem);right:clamp(1.1rem,3vw,2.5rem);bottom:1rem;display:flex;justify-content:space-between;gap:1rem;color:#6f7a86;font-size:.68rem;letter-spacing:.03em;pointer-events:none}
+    .navigation{position:fixed;z-index:350;left:50%;bottom:max(1.4rem,env(safe-area-inset-bottom));display:flex;align-items:center;gap:.65rem;transform:translateX(-50%);border:1px solid rgba(48,54,61,.8);border-radius:999px;background:rgba(13,17,23,.88);padding:.35rem;box-shadow:0 10px 32px rgba(0,0,0,.32);backdrop-filter:blur(12px)}.nav-button,.reference-button{display:grid;min-width:2.55rem;height:2.55rem;place-items:center;border:1px solid var(--border);border-radius:999px;background:var(--surface);color:var(--text);cursor:pointer}.nav-button:hover,.reference-button:hover{border-color:var(--accent-blue);background:var(--surface2)}.nav-button:disabled{cursor:not-allowed;opacity:.35}.slide-counter{min-width:4.2rem;color:var(--muted);font-size:.78rem;font-variant-numeric:tabular-nums;text-align:center}.reference-button{position:fixed;z-index:350;right:1.3rem;bottom:max(1.4rem,env(safe-area-inset-bottom));width:auto;padding:0 .9rem;font-size:.75rem}.announcer{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+    dialog{width:min(820px,calc(100vw - 2rem));max-height:min(760px,calc(100dvh - 2rem));overflow:auto;border:1px solid var(--border);border-radius:16px;background:var(--surface);color:var(--text);padding:clamp(1rem,3vw,2rem);box-shadow:0 22px 70px rgba(0,0,0,.32)}dialog::backdrop{background:rgba(0,0,0,.76);backdrop-filter:blur(4px)}dialog h2{font-size:1.8rem}dialog .reference-list{grid-template-columns:1fr;font-size:.84rem}.dialog-close{float:right;border:1px solid var(--border);border-radius:999px;background:var(--surface2);color:var(--text);padding:.45rem .8rem;cursor:pointer}
+    @media(max-width:900px){.four-col{grid-template-columns:repeat(2,minmax(0,1fr))}.timeline{grid-template-columns:repeat(3,minmax(0,1fr))}.timeline::before{display:none}.stat-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:700px){body{font-size:15px}.slide{justify-content:flex-start;padding:3.2rem 1rem 6.4rem}.content{margin:auto 0}.two-col,.three-col,.four-col,.risk-grid,.reference-list,.surveillance{grid-template-columns:1fr}.timeline{grid-template-columns:1fr;gap:.45rem}.tl-step{display:grid;grid-template-columns:auto 1fr;gap:.7rem;text-align:left;align-items:center}.tl-dot{margin:0}.process{grid-template-columns:1fr}.process-arrow{transform:rotate(90deg);height:1rem}.sound-diagram{min-height:210px}.reference-button{right:.7rem;bottom:max(.8rem,env(safe-area-inset-bottom))}.navigation{bottom:max(.8rem,env(safe-area-inset-bottom))}.slide-footer{bottom:4.65rem;font-size:.6rem}.source-note{font-size:.67rem}}
+    @media(max-height:720px) and (min-width:701px){body{font-size:14px}.slide{justify-content:flex-start;padding-top:2.5rem}.content{margin:auto}h2{margin-bottom:.8rem}.card{padding:.85rem 1rem}}
+    @media(max-width:700px){body,.slide{overflow-x:hidden}.content,.two-col,.three-col,.four-col,.risk-grid,.reference-list,.surveillance,.process,.card,.risk-side{min-width:0;max-width:100%}h1,h2,h3,p,li,strong,span{overflow-wrap:anywhere}.slide-footer{position:static;margin-top:1.25rem;padding:0 .15rem}.reference-button{width:2.55rem;padding:0;font-size:0}.reference-button::after{content:"R";font-size:.78rem;font-weight:800}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+    @media print{@page{size:13.333in 7.5in;margin:0}html,body{height:auto;overflow:visible;background:var(--bg)!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.progress-track,.navigation,.reference-button,.skip-link,dialog,.openmfm-back-link{display:none!important}.deck{height:auto}.slide,.slide[hidden]{position:relative;display:flex!important;min-height:7.5in;height:7.5in;opacity:1;visibility:visible;transform:none;overflow:hidden;break-after:page;page-break-after:always}}
+  </style>
 <!-- openmfm-seo-injected -->
 <link rel="canonical" href="https://openmfm.org/decks/morbid-obesity/index.html">
-<meta name="description" content="Explores maternal and fetal risks of morbid obesity in pregnancy, including gestational diabetes, preeclampsia, sleep apnea, and cesarean delivery considerations.">
+<meta name="description" content="A respectful, evidence-based guide to pregnancy with obesity, including healthy weight gain, diabetes and sleep-apnea screening, ultrasound, fetal surveillance, delivery planning, and postpartum prevention.">
 <meta name="author" content="Dr. Chukwuma Onyeije, MD">
-<meta name="keywords" content="Morbid Obesity, High-Risk Pregnancy, Patient Education">
+<meta name="keywords" content="Obesity, Pregnancy Care, Maternal-Fetal Medicine, Patient Education">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://openmfm.org/decks/morbid-obesity/index.html">
-<meta property="og:title" content="Morbid Obesity in Pregnancy - Patient Education | OpenMFM">
-<meta property="og:description" content="Explores maternal and fetal risks of morbid obesity in pregnancy, including gestational diabetes, preeclampsia, sleep apnea, and cesarean delivery considerations.">
+<meta property="og:title" content="Obesity in Pregnancy: A Personalized Care Plan | OpenMFM">
+<meta property="og:description" content="A respectful, evidence-based guide to pregnancy with obesity, including healthy weight gain, diabetes and sleep-apnea screening, ultrasound, fetal surveillance, delivery planning, and postpartum prevention.">
 <meta property="og:image" content="https://openmfm.org/og-image.png">
 <meta property="og:site_name" content="OpenMFM">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Morbid Obesity in Pregnancy - Patient Education | OpenMFM">
-<meta name="twitter:description" content="Explores maternal and fetal risks of morbid obesity in pregnancy, including gestational diabetes, preeclampsia, sleep apnea, and cesarean delivery considerations.">
+<meta name="twitter:title" content="Obesity in Pregnancy: A Personalized Care Plan | OpenMFM">
+<meta name="twitter:description" content="A respectful, evidence-based guide to pregnancy with obesity, including healthy weight gain, diabetes and sleep-apnea screening, ultrasound, fetal surveillance, delivery planning, and postpartum prevention.">
 <meta name="twitter:image" content="https://openmfm.org/og-image.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "MedicalWebPage",
-  "name": "Morbid Obesity in Pregnancy - Patient Education",
-  "description": "Explores maternal and fetal risks of morbid obesity in pregnancy, including gestational diabetes, preeclampsia, sleep apnea, and cesarean delivery considerations.",
+  "name": "Obesity in Pregnancy: A Personalized Care Plan",
+  "description": "A respectful, evidence-based guide to pregnancy with obesity, including healthy weight gain, diabetes and sleep-apnea screening, ultrasound, fetal surveillance, delivery planning, and postpartum prevention.",
   "url": "https://openmfm.org/decks/morbid-obesity/index.html",
   "author": {
     "@type": "Person",
@@ -385,7 +80,7 @@ button,
       "url": "https://openmfm.org/og-image.png"
     }
   },
-  "dateModified": "2026-07-14",
+  "dateModified": "2026-09-01",
   "inLanguage": "en",
   "audience": {
     "@type": "MedicalAudience",
@@ -393,465 +88,91 @@ button,
   },
   "about": {
     "@type": "MedicalCondition",
-    "name": "Morbid Obesity in Pregnancy - Patient Education"
+    "name": "Obesity in Pregnancy: A Personalized Care Plan"
   },
   "isPartOf": {
     "@type": "WebSite",
     "name": "OpenMFM",
     "url": "https://openmfm.org"
   },
-  "keywords": "Morbid Obesity, High-Risk Pregnancy, Patient Education"
+  "keywords": "Obesity, Pregnancy Care, Maternal-Fetal Medicine, Patient Education"
 }
 </script>
 </head>
 <body>
-    <div class="progress-bar" id="progressBar"></div>
-
-    <div class="slide-container">
-        <!-- Slide 1: Title -->
-        <div class="slide active">
-            <div class="center">
-                <span class="icon">🤰</span>
-                <h1>Understanding Obesity<br>in Pregnancy</h1>
-                <p class="subtitle">Information to Help You Have a Healthy Pregnancy</p>
-                <p class="small-text">Press the right arrow key (→) to continue</p>
-            </div>
-        </div>
-
-        <!-- Slide 2: What Is This? -->
-        <div class="slide">
-            <h2>What Does "Obesity" Mean in Pregnancy?</h2>
-            <div class="highlight-box">
-                <p><strong>Body Mass Index (BMI)</strong> is a number calculated from your height and weight before pregnancy.</p>
-            </div>
-            <ul>
-                <li>BMI 30–34.9 = Class I Obesity</li>
-                <li>BMI 35–39.9 = Class II Obesity</li>
-                <li>BMI 40 or higher = Class III Obesity</li>
-            </ul>
-            <p class="small-text">Your healthcare team uses this number to plan your pregnancy care.</p>
-        </div>
-
-        <!-- Slide 3: Why It Matters -->
-        <div class="slide">
-            <h2>Why Does This Matter?</h2>
-            <p>Higher BMI is <span class="emphasis">associated with</span> some pregnancy complications.</p>
-            <div class="info-box">
-                <p><strong>Important:</strong> This doesn't mean complications will happen—it means your care team will monitor you more closely.</p>
-            </div>
-            <p>Most women with obesity have healthy pregnancies and healthy babies.</p>
-        </div>
-
-        <!-- Slide 4: Possible Risks -->
-        <div class="slide">
-            <h2>What Could Happen?</h2>
-            <p class="subtitle">Your team watches for these conditions</p>
-            
-            <div class="grid-2">
-                <div class="card">
-                    <h3>For You</h3>
-                    <ul>
-                        <li>High blood pressure</li>
-                        <li>Gestational diabetes</li>
-                        <li>Blood clots</li>
-                        <li>Longer labor</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h3>For Baby</h3>
-                    <ul>
-                        <li>Larger birth weight</li>
-                        <li>Preterm birth</li>
-                        <li>Birth defects (rare)</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <p class="small-text">These are possibilities, not certainties. Your care is customized to prevent problems.</p>
-        </div>
-
-        <!-- Slide 5: Monitoring Plan -->
-        <div class="slide">
-            <h2>How We Monitor You</h2>
-            <p class="subtitle">Your personalized care plan includes</p>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <h3>Blood Pressure Checks</h3>
-                    <p>At every prenatal visit to watch for preeclampsia</p>
-                </div>
-                <div class="timeline-item">
-                    <h3>Diabetes Screening</h3>
-                    <p>Earlier testing (around 24-28 weeks or sooner)</p>
-                </div>
-                <div class="timeline-item">
-                    <h3>Ultrasound Exams</h3>
-                    <p>To check baby's growth and anatomy</p>
-                </div>
-                <div class="timeline-item">
-                    <h3>Fetal Heart Monitoring</h3>
-                    <p>May be done more frequently in the third trimester</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 6: Special Tests -->
-        <div class="slide">
-            <h2>Additional Tests You May Need</h2>
-            
-            <table>
-                <tr>
-                    <th>Test</th>
-                    <th>When</th>
-                    <th>Why</th>
-                </tr>
-                <tr>
-                    <td>Early glucose test</td>
-                    <td>First trimester</td>
-                    <td>Check for pre-existing diabetes</td>
-                </tr>
-                <tr>
-                    <td>Detailed ultrasound</td>
-                    <td>18-22 weeks</td>
-                    <td>Better look at baby's anatomy</td>
-                </tr>
-                <tr>
-                    <td>Growth ultrasounds</td>
-                    <td>Third trimester</td>
-                    <td>Track baby's size</td>
-                </tr>
-                <tr>
-                    <td>Non-stress tests</td>
-                    <td>36+ weeks</td>
-                    <td>Check baby's heart rate patterns</td>
-                </tr>
-            </table>
-            
-            <p class="small-text">Not everyone needs all tests—your team decides based on your specific situation.</p>
-        </div>
-
-        <!-- Slide 7: What You Can Do -->
-        <div class="slide">
-            <h2>What You Can Do</h2>
-            <p class="subtitle">Ways to help yourself and your baby</p>
-            
-            <div class="info-box">
-                <h3>Weight Gain Goals</h3>
-                <p>For BMI ≥30: Aim for 11–20 pounds total during pregnancy</p>
-                <p class="small-text">This is a guideline, not a strict rule. Focus on healthy habits, not the scale.</p>
-            </div>
-            
-            <ul>
-                <li>Eat balanced meals with vegetables, protein, and whole grains</li>
-                <li>Stay active with walking or swimming (if safe for you)</li>
-                <li>Take prenatal vitamins with folic acid daily</li>
-                <li>Attend all prenatal appointments</li>
-                <li>Ask questions when something is unclear</li>
-            </ul>
-        </div>
-
-        <!-- Slide 8: Weight Loss During Pregnancy -->
-        <div class="slide">
-            <h2>Should I Try to Lose Weight?</h2>
-            
-            <div class="warning-box">
-                <p><strong>No.</strong> Pregnancy is not the time for weight-loss diets.</p>
-            </div>
-            
-            <p>Your baby needs nutrients to grow. Instead, focus on:</p>
-            
-            <ul>
-                <li>Healthy food choices</li>
-                <li>Regular physical activity</li>
-                <li>Managing weight gain</li>
-            </ul>
-            
-            <p class="small-text">After delivery, your healthcare team can help you reach a healthy weight safely.</p>
-        </div>
-
-        <!-- Slide 9: Delivery Timing -->
-        <div class="slide">
-            <h2>When Will I Deliver?</h2>
-            <p class="subtitle">ACOG recommendations for timing</p>
-            
-            <div class="highlight-box">
-                <h3>If pregnancy is uncomplicated:</h3>
-                <p>Delivery between <span class="emphasis">39 weeks 0 days and 40 weeks 6 days</span></p>
-            </div>
-            
-            <div class="info-box">
-                <h3>If complications develop:</h3>
-                <p>Timing depends on the specific condition and how you and baby are doing</p>
-                <p class="small-text">Your team will discuss the safest plan with you</p>
-            </div>
-            
-            <p>Most women with obesity deliver at term. Early delivery is only done when medically necessary.</p>
-        </div>
-
-        <!-- Slide 10: Labor and Delivery -->
-        <div class="slide">
-            <h2>What About Labor and Delivery?</h2>
-            
-            <ul>
-                <li><strong>IV access:</strong> May be started early (in case of emergency)</li>
-                <li><strong>Anesthesia consult:</strong> May meet with anesthesia team before labor</li>
-                <li><strong>Monitoring:</strong> Continuous fetal heart rate monitoring is common</li>
-                <li><strong>Cesarean birth:</strong> Slightly higher chance, but most women deliver vaginally</li>
-            </ul>
-            
-            <p class="small-text">Your team prepares for what might happen, not what will happen.</p>
-        </div>
-
-        <!-- Slide 11: After Delivery -->
-        <div class="slide">
-            <h2>After Your Baby Is Born</h2>
-            
-            <div class="info-box">
-                <p><strong>Special attention to:</strong></p>
-                <ul>
-                    <li>Blood clot prevention (walking, sometimes medication)</li>
-                    <li>Wound healing if you had a cesarean</li>
-                    <li>Blood pressure monitoring</li>
-                    <li>Breastfeeding support (obesity doesn't prevent breastfeeding)</li>
-                </ul>
-            </div>
-            
-            <p>Your postpartum care is just as important as your prenatal care.</p>
-        </div>
-
-        <!-- Slide 12: Future Pregnancies -->
-        <div class="slide">
-            <h2>Planning Future Pregnancies</h2>
-            
-            <p>If you're thinking about another baby someday:</p>
-            
-            <ul>
-                <li>Losing weight between pregnancies reduces risks</li>
-                <li>Even 5-10% weight loss can make a difference</li>
-                <li>Your healthcare team can help with safe weight management</li>
-                <li>Wait at least 18 months between pregnancies when possible</li>
-            </ul>
-            
-            <div class="highlight-box">
-                <p>Every pregnancy is different. Past pregnancies don't predict future ones.</p>
-            </div>
-        </div>
-
-        <!-- Slide 13: Common Questions -->
-        <div class="slide">
-            <h2>Common Questions</h2>
-            
-            <div class="card" style="margin-bottom: 30px;">
-                <h3>Will I need a cesarean birth?</h3>
-                <p>Not automatically. Many women with obesity deliver vaginally. Your delivery method depends on how labor goes and your baby's position.</p>
-            </div>
-            
-            <div class="card" style="margin-bottom: 30px;">
-                <h3>Can ultrasounds see my baby clearly?</h3>
-                <p>Usually yes. Sometimes we need a longer exam or a repeat visit, but we can almost always get the images we need.</p>
-            </div>
-            
-            <div class="card">
-                <h3>Will my baby be okay?</h3>
-                <p>Most babies born to mothers with obesity are completely healthy. That's why we monitor closely—to catch and treat any problems early.</p>
-            </div>
-        </div>
-
-        <!-- Slide 14: Your Care Team -->
-        <div class="slide">
-            <h2>Who's on Your Team?</h2>
-            
-            <p class="subtitle">You're not alone—these specialists may help with your care</p>
-            
-            <ul>
-                <li><strong>Obstetrician:</strong> Manages your pregnancy</li>
-                <li><strong>Maternal-Fetal Medicine specialist:</strong> If complications arise</li>
-                <li><strong>Diabetes educator:</strong> If you develop gestational diabetes</li>
-                <li><strong>Nutritionist:</strong> Helps with meal planning</li>
-                <li><strong>Anesthesiologist:</strong> Plans pain relief options</li>
-            </ul>
-            
-            <p class="small-text">You're the most important member of the team. Speak up with questions or concerns.</p>
-        </div>
-
-        <!-- Slide 15: When to Call -->
-        <div class="slide">
-            <h2>When to Call Your Provider</h2>
-            <p class="subtitle">Don't wait—call right away if you have:</p>
-            
-            <div class="warning-box">
-                <ul>
-                    <li>Severe headache that won't go away</li>
-                    <li>Vision changes (blurry vision, seeing spots)</li>
-                    <li>Severe belly pain</li>
-                    <li>Leg swelling with pain, warmth, or redness</li>
-                    <li>Decreased baby movement</li>
-                    <li>Sudden weight gain (more than 2 pounds in a week)</li>
-                    <li>Trouble breathing or chest pain</li>
-                </ul>
-            </div>
-            
-            <p>These symptoms need immediate attention. You're not bothering anyone by calling.</p>
-        </div>
-
-        <!-- Slide 16: The Bottom Line -->
-        <div class="slide">
-            <h2>The Bottom Line</h2>
-            
-            <div class="highlight-box">
-                <p style="font-size: 2em; line-height: 1.6;">
-                    <span class="emphasis">Obesity is one factor</span> in your pregnancy—not the only factor. 
-                    Your health, your actions, and your partnership with your care team matter more.
-                </p>
-            </div>
-            
-            <ul>
-                <li>Most women with obesity have healthy pregnancies</li>
-                <li>Close monitoring helps prevent complications</li>
-                <li>You have control over many aspects of your health</li>
-                <li>Your care team is here to support you, not judge you</li>
-            </ul>
-        </div>
-
-        <!-- Slide 17: Key Takeaways -->
-        <div class="slide">
-            <h2>Remember These Key Points</h2>
-            
-            <div class="grid-2">
-                <div class="card">
-                    <span class="icon">📋</span>
-                    <h3>Attend All Appointments</h3>
-                    <p>Regular monitoring catches problems early</p>
-                </div>
-                <div class="card">
-                    <span class="icon">🥗</span>
-                    <h3>Focus on Nutrition</h3>
-                    <p>Healthy eating supports you and baby</p>
-                </div>
-                <div class="card">
-                    <span class="icon">🚶‍♀️</span>
-                    <h3>Stay Active</h3>
-                    <p>Safe exercise benefits pregnancy</p>
-                </div>
-                <div class="card">
-                    <span class="icon">💬</span>
-                    <h3>Ask Questions</h3>
-                    <p>Your care team is your partner</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 18: Resources -->
-        <div class="slide">
-            <h2>Helpful Resources</h2>
-            
-            <div class="info-box">
-                <h3>Reliable Information Sources:</h3>
-                <ul>
-                    <li>American College of Obstetricians and Gynecologists (ACOG.org)</li>
-                    <li>Society for Maternal-Fetal Medicine (SMFM.org)</li>
-                    <li>Your healthcare provider's patient portal</li>
-                </ul>
-            </div>
-            
-            <p class="small-text">Avoid internet forums and unverified websites. When in doubt, ask your care team.</p>
-        </div>
-
-        <!-- Slide 19: Final Message -->
-        <div class="slide">
-            <div class="center">
-                <span class="icon">❤️</span>
-                <h1>You've Got This</h1>
-                <div class="highlight-box">
-                    <p style="font-size: 2em;">
-                        Pregnancy is a journey. Your care team is walking beside you every step of the way.
-                    </p>
-                </div>
-                <p class="subtitle">Questions? Write them down and bring them to your next appointment.</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="navigation">
-        <span id="slideNumber">1</span> / <span id="totalSlides">19</span>
-        <span style="margin-left: 20px;">Use ← → arrow keys</span>
-    </div>
-
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        const slideNumber = document.getElementById('slideNumber');
-        const totalSlidesSpan = document.getElementById('totalSlides');
-        const progressBar = document.getElementById('progressBar');
-
-        totalSlidesSpan.textContent = totalSlides;
-
-        function showSlide(n) {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (n + totalSlides) % totalSlides;
-            slides[currentSlide].classList.add('active');
-            slideNumber.textContent = currentSlide + 1;
-            updateProgressBar();
-        }
-
-        function updateProgressBar() {
-            const progress = ((currentSlide + 1) / totalSlides) * 100;
-            progressBar.style.width = progress + '%';
-        }
-
-        function nextSlide() {
-            showSlide(currentSlide + 1);
-        }
-
-        function prevSlide() {
-            showSlide(currentSlide - 1);
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextSlide();
-            if (e.key === 'ArrowLeft') prevSlide();
-        });
-
-        // Touch support for mobile
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            if (touchEndX < touchStartX - 50) nextSlide();
-            if (touchEndX > touchStartX + 50) prevSlide();
-        }
-
-        // Click navigation
-        document.addEventListener('click', (e) => {
-            const clickX = e.clientX;
-            const windowWidth = window.innerWidth;
-            
-            if (clickX > windowWidth * 0.7) {
-                nextSlide();
-            } else if (clickX < windowWidth * 0.3) {
-                prevSlide();
-            }
-        });
-
-        // Initialize progress bar
-        updateProgressBar();
-    </script>
-
-
-
-
+  <a class="skip-link" href="#slide-1">Skip to presentation</a>
+  <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+  <main class="deck" id="deck">
+    <section class="slide active" id="slide-1" role="group" aria-roledescription="slide" aria-label="1 of 15: Obesity in Pregnancy">
+      <div class="content"><p class="eyebrow">MFM Patient Consultation</p><h1>Obesity in Pregnancy<br><span class="accent-teal">A Personalized Care Plan</span></h1><div class="title-divider"></div><p class="title-sub">BMI is one part of your health. It helps your team plan safer, more comfortable care for you and your baby.</p><div class="pill-row" aria-label="Topics covered"><span class="pill pill-blue">Prenatal care</span><span class="pill pill-teal">Fetal monitoring</span><span class="pill pill-green">Delivery planning</span></div></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Maternal-Fetal Medicine</span></div>
+    </section>
+    <section class="slide" id="slide-2" role="group" aria-roledescription="slide" aria-label="2 of 15: BMI helps your team plan care" hidden>
+      <div class="content"><p class="slide-label">Start with the definition</p><h2>BMI helps your team plan care. It does not define you.</h2><div class="two-col"><div class="card"><span class="card-kicker">Prepregnancy BMI</span><div class="stat-row"><div class="stat-box"><div class="stat-number">30</div><div class="stat-label">Class I begins</div></div><div class="stat-box"><div class="stat-number">35</div><div class="stat-label">Class II begins</div></div><div class="stat-box"><div class="stat-number">40</div><div class="stat-label">Class III begins</div></div><div class="stat-box"><div class="stat-number">kg/m<sup>2</sup></div><div class="stat-label">BMI unit</div></div></div><p class="source-note">BMI uses your height and weight before pregnancy. Your full health history matters more than a category alone.</p></div><div class="card teal"><span class="card-kicker">Singleton pregnancy goal</span><div style="display:flex;align-items:baseline;gap:.55rem;flex-wrap:wrap;margin:.25rem 0 .7rem"><strong style="font-size:clamp(2.4rem,6vw,4.2rem);color:var(--cyan);line-height:1">11&ndash;20</strong><span style="font-size:1.2rem;color:#fff;font-weight:700">lb total</span></div><p>That is 5&ndash;9 kg for all BMI classes at or above 30. Your clinician will interpret your progress alongside fetal growth.</p></div></div><div class="alert alert-green"><span class="alert-icon" aria-hidden="true">&#x2713;</span><div><strong>Respect is part of safe care.</strong><p>You can ask to discuss weight privately, use neutral language, or be weighed without seeing the number.</p></div></div><p class="source-note">Sources: ACOG Practice Bulletin No. 230; ACOG Committee Opinion No. 548.</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 2 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-3" role="group" aria-roledescription="slide" aria-label="3 of 15: Risks are higher but outcomes are not predetermined" hidden>
+      <div class="content"><p class="slide-label">Risk in perspective</p><h2>Some risks are higher. Your outcome is not predetermined.</h2><div class="risk-grid"><div class="risk-side"><h3>For you</h3><ul class="checklist compact"><li>Gestational diabetes</li><li>High blood pressure and preeclampsia</li><li>Sleep apnea and anesthesia challenges</li><li>Cesarean birth, infection, bleeding, or blood clots</li></ul></div><div class="risk-side"><h3>For your baby</h3><ul class="checklist compact"><li>Growth that is larger or smaller than expected</li><li>Preterm birth</li><li>A higher chance of some birth differences</li><li>A higher risk of stillbirth as BMI and gestational age rise</li></ul></div></div><div class="alert"><span class="alert-icon" aria-hidden="true">i</span><div><strong>Association is not destiny.</strong><p>Most patients with obesity give birth to healthy babies. Added planning helps find problems early and reduce preventable harm.</p></div></div><p class="source-note">Source: ACOG Practice Bulletin No. 230, reaffirmed 2025.</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 3 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-4" role="group" aria-roledescription="slide" aria-label="4 of 15: Your care plan changes across pregnancy" hidden>
+      <div class="content"><p class="slide-label">A plan across pregnancy</p><h2>Your care plan changes as pregnancy progresses.</h2><div class="timeline" aria-label="Pregnancy care timeline"><div class="tl-step"><div class="tl-dot">1</div><div><strong>First visit</strong><span>Review dates, blood pressure, medications, nutrition, and sleep.</span></div></div><div class="tl-step"><div class="tl-dot">&lt;15</div><div><strong>Early testing</strong><span>Consider diabetes testing based on risk and prior results.</span></div></div><div class="tl-step"><div class="tl-dot">18&ndash;22</div><div><strong>Anatomy</strong><span>Detailed ultrasound; repeat views may be needed.</span></div></div><div class="tl-step"><div class="tl-dot">24&ndash;28</div><div><strong>GDM screen</strong><span>Routine gestational diabetes screening.</span></div></div><div class="tl-step"><div class="tl-dot">3rd</div><div><strong>Prepare</strong><span>Individualize growth, fetal testing, anesthesia, and delivery.</span></div></div></div><div class="three-col" style="margin-top:1.25rem"><div class="card"><span class="card-kicker">Your history</span><p>Prior outcomes, surgery, diabetes, hypertension, and medications shape the plan.</p></div><div class="card teal"><span class="card-kicker">Your pregnancy</span><p>Growth, blood pressure, glucose, symptoms, and test results guide each next step.</p></div><div class="card green"><span class="card-kicker">Your preferences</span><p>Comfort, goals, birth preferences, and shared decisions remain central.</p></div></div><p class="source-note">Sources: ACOG Practice Bulletin No. 230; ACOG Clinical Consensus No. 8, 2025.</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 4 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-5" role="group" aria-roledescription="slide" aria-label="5 of 15: Early diabetes testing differs from routine GDM screening" hidden>
+      <div class="content"><p class="slide-label">Diabetes screening</p><h2>Early diabetes testing and routine GDM screening answer different questions.</h2><div class="process"><div class="card"><span class="card-kicker">Before 15 weeks</span><h3>Was diabetes present before pregnancy?</h3><p>Your clinician may use standard diabetes tests when your history or risk profile suggests testing is appropriate.</p></div><div class="process-arrow" aria-hidden="true">&#x2192;</div><div class="card teal"><span class="card-kicker">24&ndash;28 weeks</span><h3>Has gestational diabetes developed?</h3><p>Patients not already diagnosed with diabetes complete routine GDM screening during this window.</p></div></div><div class="alert alert-amber"><span class="alert-icon" aria-hidden="true">!</span><div><strong>Important distinction</strong><p>The 75-g GDM thresholds of 92, 180, and 153 mg/dL were developed for 24&ndash;28 weeks. ADA advises against using them as an early-pregnancy GDM test.</p></div></div><p class="source-note">Source: American Diabetes Association. Standards of Care in Diabetes&mdash;2026, Sections 2 and 15.</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 5 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-6" role="group" aria-roledescription="slide" aria-label="6 of 15: Sleep apnea deserves early attention" hidden>
+      <div class="content"><p class="slide-label">Sleep and breathing</p><h2>Sleep apnea deserves early attention.</h2><div class="two-col"><div class="card purple"><div class="icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M4 16c2.2 2 4.7 3 7.5 3A8.5 8.5 0 0 0 20 10.5C20 7.7 19 5.2 17 3a8 8 0 0 1-8.5 8.5A8 8 0 0 1 4 10c0 2.3 0 4 0 6Z"/></svg></div><span class="card-kicker">Tell your team</span><ul class="checklist compact"><li>Loud or frequent snoring</li><li>Witnessed pauses in breathing or gasping</li><li>Morning headaches or unrefreshing sleep</li><li>Severe daytime fatigue</li><li>Known sleep apnea or current CPAP use</li></ul></div><div class="card teal"><div class="icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M5 12h14M12 5v14"/><circle cx="12" cy="12" r="9"/></svg></div><span class="card-kicker">What happens next</span><p>Your team may recommend sleep testing when symptoms and clinical risk are high. If sleep apnea is confirmed, treatment such as CPAP informs anesthesia and postpartum monitoring.</p></div></div><div class="alert"><span class="alert-icon" aria-hidden="true">i</span><div><strong>Screening is a conversation, not a label.</strong><p>BMI increases risk, but symptoms, health history, and access to testing determine the next step.</p></div></div><p class="source-note">Source: SASM/SOAP Consensus Guideline on Obstructive Sleep Apnea in Pregnancy, 2023.</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 6 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-7" role="group" aria-roledescription="slide" aria-label="7 of 15: Ultrasound may take more time" hidden>
+      <div class="content"><p class="slide-label">Fetal anatomy</p><h2>Ultrasound may take more time or more than one visit.</h2><div class="two-col"><div class="sound-diagram" role="img" aria-label="Diagram showing ultrasound waves passing through tissue toward the fetus"><div class="probe" aria-hidden="true"></div><div class="wave one" aria-hidden="true"></div><div class="wave two" aria-hidden="true"></div><div class="wave three" aria-hidden="true"></div><div class="layers" aria-hidden="true"></div><div class="fetus-mark" aria-hidden="true"></div><div class="diagram-label">More tissue between the probe and fetus can reduce image detail.</div></div><div><div class="step-list"><div class="step-item"><div><strong>Plan a detailed anatomy study</strong><span>Usually at 18&ndash;22 weeks.</span></div></div><div class="step-item"><div><strong>Use time and technique</strong><span>Position changes, different probes, and additional views can help.</span></div></div><div class="step-item"><div><strong>Return if needed</strong><span>A repeat visit often means the first exam was incomplete, not abnormal.</span></div></div></div><div class="alert alert-green"><span class="alert-icon" aria-hidden="true">&#x2713;</span><div><strong>Incomplete is not abnormal.</strong><p>Your sonographer will document what was seen and what still needs evaluation.</p></div></div></div></div><p class="source-note">Sources: ACOG Practice Bulletin No. 230; Dashe JS et al. Obstet Gynecol. 2009;113:1001&ndash;1007.</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 7 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-8" role="group" aria-roledescription="slide" aria-label="8 of 15: Growth monitoring should be individualized" hidden>
+      <div class="content"><p class="slide-label">Fetal growth</p><h2>Growth monitoring should be individualized.</h2><div class="process"><div class="card"><span class="card-kicker">After 24 weeks</span><h3>Start with the clinical assessment</h3><p>Fundal height remains the usual screening tool when it can be measured reliably.</p></div><div class="process-arrow" aria-hidden="true">&#x2192;</div><div class="card teal"><span class="card-kicker">Add ultrasound when useful</span><h3>Measure growth when the answer will change care</h3><p>Ultrasound may replace fundal height when measurement is not feasible or when another maternal or fetal indication exists.</p></div></div><div class="alert"><span class="alert-icon" aria-hidden="true">i</span><div><strong>There is no universal every-four-week rule.</strong><p>Your scan schedule should reflect image quality, fetal growth, diabetes, hypertension, prior history, and local practice.</p></div></div><p class="source-note">Source: ACOG Clinical Consensus No. 8, Tailored Prenatal Care Delivery, 2025.</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 8 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-9" role="group" aria-roledescription="slide" aria-label="9 of 15: Later fetal testing depends on BMI and the clinical picture" hidden>
+      <div class="content"><p class="slide-label">Antenatal surveillance</p><h2>Later fetal testing depends on BMI and the whole clinical picture.</h2><div class="surveillance"><div class="card"><span class="card-kicker">Weekly NST or BPP</span><p>ACOG says surveillance <strong style="color:#fff">may be considered</strong>. It is not an automatic requirement for every patient.</p></div><div class="card teal"><div class="weeks" aria-label="Weeks 34 through 40"><div class="week active-teal">34</div><div class="week active-teal">35</div><div class="week active-teal">36</div><div class="week active-blue">37</div><div class="week active-blue">38</div><div class="week active-blue">39</div><div class="week active-blue">40</div></div><div class="two-col" style="margin-top:1rem"><div><span class="pill pill-teal">BMI &#x2265;40</span><p style="margin:.55rem 0 0">Consider weekly testing beginning at 34 weeks.</p></div><div><span class="pill pill-blue">BMI 35&ndash;39.9</span><p style="margin:.55rem 0 0">Consider weekly testing beginning by 37 weeks.</p></div></div></div></div><div class="alert alert-amber"><span class="alert-icon" aria-hidden="true">+</span><div><strong>Other conditions can change the start date.</strong><p>Diabetes, hypertension, fetal growth concerns, decreased movement, or prior stillbirth may lead to earlier or more frequent testing.</p></div></div><p class="source-note">Source: ACOG/SMFM Committee Opinion No. 828.</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 9 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-10" role="group" aria-roledescription="slide" aria-label="10 of 15: Healthy gain is the pregnancy goal" hidden>
+      <div class="content"><p class="slide-label">Nutrition and movement</p><h2>Healthy gain, not weight-loss dieting, is the pregnancy goal.</h2><div class="two-col"><div class="plate" role="img" aria-label="Plate diagram representing vegetables and fruit, protein, and whole grains"></div><div><ul class="checklist"><li>Build meals around vegetables or fruit, protein, fiber-rich carbohydrates, and water.</li><li>Choose activity you can sustain, such as walking, swimming, or prenatal strength work, when your clinician says it is safe.</li><li>Take a prenatal vitamin with at least 400 micrograms of folic acid unless your clinician prescribes another dose.</li><li>Track health behaviors and fetal growth, not only the number on the scale.</li></ul><div class="alert alert-green"><span class="alert-icon" aria-hidden="true">11&ndash;20</span><div><strong>The target is a guide.</strong><p>If gain is below the range but fetal growth is appropriate, forcing weight gain has not been shown to improve outcomes.</p></div></div></div></div><p class="source-note">Sources: ACOG Committee Opinion No. 548; ACOG Physical Activity and Exercise During Pregnancy and the Postpartum Period.</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 10 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-11" role="group" aria-roledescription="slide" aria-label="11 of 15: Pregnancy after bariatric surgery" hidden>
+      <div class="content"><p class="slide-label">After bariatric surgery</p><h2>Pregnancy after bariatric surgery needs a different plan.</h2><div class="three-col"><div class="card"><span class="card-kicker">Before conception</span><h3>Allow weight to stabilize</h3><p>ACOG advises delaying pregnancy for 12&ndash;24 months after surgery, during the period of fastest weight loss.</p></div><div class="card teal"><span class="card-kicker">During pregnancy</span><h3>Monitor nutrition</h3><p>Your team may check iron, folate, vitamin B12, calcium, vitamin D, and other nutrients based on the procedure.</p></div><div class="card amber"><span class="card-kicker">Glucose testing</span><h3>Avoid preventable symptoms</h3><p>Some patients cannot tolerate a glucose drink after gastric bypass. Your clinician can choose an alternative strategy.</p></div></div><div class="alert alert-amber"><span class="alert-icon" aria-hidden="true">!</span><div><strong>Severe or persistent abdominal pain, vomiting, or inability to eat needs prompt evaluation.</strong><p>Pregnancy does not protect against surgical complications.</p></div></div><p class="source-note">Sources: ACOG Interpregnancy Care; ACOG Practice Bulletin No. 105.</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 11 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-12" role="group" aria-roledescription="slide" aria-label="12 of 15: Delivery planning starts before labor" hidden>
+      <div class="content"><p class="slide-label">Labor and delivery</p><h2>Delivery planning starts before labor.</h2><div class="four-col"><div class="card"><span class="card-kicker">Anesthesia</span><p>An antenatal consultation may help with airway, IV access, pain relief, sleep apnea, and medications.</p></div><div class="card teal"><span class="card-kicker">Labor</span><p>Labor may take longer. Early epidural placement may be discussed, but the plan remains individualized.</p></div><div class="card green"><span class="card-kicker">Birth route</span><p>Many patients deliver vaginally. Obesity alone is not an indication for cesarean birth.</p></div><div class="card amber"><span class="card-kicker">Timing</span><p>Induction at 39 weeks may be offered in appropriate settings. It is not mandatory solely because of BMI.</p></div></div><div class="alert"><span class="alert-icon" aria-hidden="true">39</span><div><strong>No elective delivery before 39 weeks.</strong><p>Earlier delivery is reserved for a medical or obstetric indication. Your clinician should explain the reason and alternatives.</p></div></div><p class="source-note">Sources: ACOG Practice Bulletin No. 230; ACOG Clinical Practice Guideline No. 8; ACOG Committee Opinion No. 765.</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 12 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-13" role="group" aria-roledescription="slide" aria-label="13 of 15: Risk prevention continues after birth" hidden>
+      <div class="content"><p class="slide-label">Postpartum care</p><h2>Risk prevention continues after birth.</h2><div class="two-col"><div class="card teal"><span class="card-kicker">Before leaving the hospital</span><ul class="checklist compact"><li>Walk as soon as it is safe.</li><li>After cesarean birth, use sequential compression devices until fully mobile.</li><li>Use anticoagulant medication when your total VTE risk and hospital protocol support it.</li><li>Review blood pressure, wound, breathing, and pain concerns.</li></ul></div><div class="card green"><span class="card-kicker">After discharge</span><ul class="checklist compact"><li>Ask for lactation support early.</li><li>If you had GDM, complete a 75-g OGTT 4&ndash;12 weeks postpartum.</li><li>Continue diabetes screening every 1&ndash;3 years after GDM.</li><li>Build a sustainable interpregnancy health plan.</li></ul></div></div><div class="alert alert-amber"><span class="alert-icon" aria-hidden="true">!</span><div><strong>Get urgent help for chest pain, trouble breathing, one-sided leg pain or swelling, severe headache, vision change, heavy bleeding, or thoughts of harming yourself or your baby.</strong></div></div><p class="source-note">Sources: SMFM Consult Series No. 51, reaffirmed 2024; ADA Standards of Care in Diabetes&mdash;2026.</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 13 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-14" role="group" aria-roledescription="slide" aria-label="14 of 15: Questions to ask your MFM specialist" hidden>
+      <div class="content"><p class="slide-label">Prepare for your visit</p><h2>Bring these questions to your MFM specialist.</h2><div class="two-col"><div class="card"><span class="card-kicker">Ask your team</span><ul class="questions"><li>What weight-gain range fits my pregnancy?</li><li>Do I need early diabetes or sleep-apnea testing?</li><li>What is my anatomy and growth ultrasound plan?</li><li>Should I have NST or BPP testing, and when?</li><li>Would an anesthesia consultation help me?</li><li>How will we prevent blood clots after birth?</li></ul></div><div class="card teal"><span class="card-kicker">Remember</span><ul class="checklist"><li>BMI informs care. It does not predict your outcome.</li><li>Early diabetes testing is not the routine GDM test.</li><li>Ultrasound and fetal testing schedules are individualized.</li><li>Healthy gain is the goal. Pregnancy is not the time for restrictive dieting.</li><li>Delivery and postpartum plans should be made before labor.</li></ul></div></div><div class="alert alert-green"><span class="alert-icon" aria-hidden="true">&#x2713;</span><div><strong>You are the central member of the care team.</strong><p>Clear questions and shared decisions are part of excellent maternal-fetal medicine.</p></div></div></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 14 of 15</span></div>
+    </section>
+    <section class="slide" id="slide-15" role="group" aria-roledescription="slide" aria-label="15 of 15: Evidence and disclaimer" hidden>
+      <div class="content"><p class="slide-label">Evidence and transparency</p><h2>The plan is evidence-based and individualized.</h2><ol class="reference-list"><li>ACOG. <a href="https://www.acog.org/clinical/clinical-guidance/practice-bulletin/articles/2021/06/obesity-in-pregnancy" target="_blank" rel="noopener">Practice Bulletin No. 230: Obesity in Pregnancy</a>. Obstet Gynecol. 2021;137:e128&ndash;e144. Reaffirmed 2025.</li><li>ACOG. <a href="https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2013/01/weight-gain-during-pregnancy" target="_blank" rel="noopener">Committee Opinion No. 548: Weight Gain During Pregnancy</a>. Obstet Gynecol. 2013;121:210&ndash;212.</li><li>ACOG/SMFM. <a href="https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2021/06/indications-for-outpatient-antenatal-fetal-surveillance" target="_blank" rel="noopener">Committee Opinion No. 828</a>. Obstet Gynecol. 2021;137:e177&ndash;e197.</li><li>ACOG. <a href="https://www.acog.org/clinical/clinical-guidance/clinical-consensus/articles/2025/04/tailored-prenatal-care-delivery-for-pregnant-individuals" target="_blank" rel="noopener">Clinical Consensus No. 8: Tailored Prenatal Care Delivery</a>. 2025.</li><li>American Diabetes Association. <a href="https://diabetesjournals.org/care/article/49/Supplement_1/S27/163926/2-Diagnosis-and-Classification-of-Diabetes" target="_blank" rel="noopener">Standards of Care in Diabetes&mdash;2026</a>. Diabetes Care. 2026;49(Suppl 1).</li><li>Pacheco LD, Saade G, Metz TD. <a href="https://publications.smfm.org/publications/327-society-for-maternal-fetal-medicine-consult-series-51/" target="_blank" rel="noopener">SMFM Consult Series No. 51</a>. Am J Obstet Gynecol. 2020;223:B11&ndash;B17. Reaffirmed 2024.</li><li>Dominguez JE, et al. <a href="https://pubmed.ncbi.nlm.nih.gov/37411038/" target="_blank" rel="noopener">OSA in Pregnancy Consensus Guideline</a>. Obstet Gynecol. 2023;142:403&ndash;423.</li><li>ACOG. <a href="https://www.acog.org/clinical/clinical-guidance/obstetric-care-consensus/articles/2019/01/interpregnancy-care" target="_blank" rel="noopener">Obstetric Care Consensus No. 8: Interpregnancy Care</a>. 2019.</li></ol><div class="alert" style="margin-top:1rem"><span class="alert-icon" aria-hidden="true">i</span><div><strong>Educational information, not personal medical advice</strong><p>Recommendations change as evidence emerges. Your clinician should adapt this information to your history, pregnancy, local resources, and preferences.</p></div></div><p class="source-note" style="text-align:center">OpenMFM.org &bull; Atlanta Perinatal Associates &bull; Reviewed September 2026</p></div>
+      <div class="slide-footer"><span>Atlanta Perinatal Associates</span><span>Slide 15 of 15</span></div>
+    </section>
+  </main>
+  <nav class="navigation" aria-label="Presentation navigation"><button class="nav-button" id="prevButton" type="button" aria-label="Previous slide">&#x2190;</button><span class="slide-counter" id="slideCounter" aria-live="off">1 / 15</span><button class="nav-button" id="nextButton" type="button" aria-label="Next slide">&#x2192;</button></nav>
+  <button class="reference-button" id="referenceButton" type="button" aria-haspopup="dialog" aria-controls="referencesDialog">References</button>
+  <div class="announcer" id="announcer" aria-live="polite" aria-atomic="true"></div>
+  <dialog id="referencesDialog" aria-labelledby="referencesTitle"><button class="dialog-close" id="dialogClose" type="button">Close</button><h2 id="referencesTitle">Clinical references</h2><p>Principal sources used in this presentation:</p><ol class="reference-list"><li>ACOG Practice Bulletin No. 230, 2021; reaffirmed 2025.</li><li>ACOG Committee Opinion No. 548, 2013.</li><li>ACOG/SMFM Committee Opinion No. 828, 2021.</li><li>ACOG Clinical Consensus No. 8, 2025.</li><li>ADA Standards of Care in Diabetes&mdash;2026.</li><li>SMFM Consult Series No. 51, reaffirmed 2024.</li><li>Dominguez JE, et al. Obstet Gynecol. 2023;142:403&ndash;423.</li><li>ACOG Interpregnancy Care, 2019.</li></ol></dialog>
+  <script>
+    (()=>{const slides=[...document.querySelectorAll('.slide')],bar=document.getElementById('progressBar'),counter=document.getElementById('slideCounter'),prev=document.getElementById('prevButton'),next=document.getElementById('nextButton'),announcer=document.getElementById('announcer'),refButton=document.getElementById('referenceButton'),dialog=document.getElementById('referencesDialog'),close=document.getElementById('dialogClose');let current=0,startX=0,startY=0;const fromHash=()=>{const m=location.hash.match(/^#slide-(\d+)$/);return m?Math.min(Math.max(Number(m[1])-1,0),slides.length-1):0};const show=(index,updateHash=true)=>{current=Math.min(Math.max(index,0),slides.length-1);slides.forEach((slide,i)=>{const active=i===current;slide.classList.toggle('active',active);slide.hidden=!active;slide.setAttribute('aria-hidden',String(!active))});bar.style.width=`${(current+1)/slides.length*100}%`;counter.textContent=`${current+1} / ${slides.length}`;prev.disabled=current===0;next.disabled=current===slides.length-1;const heading=slides[current].querySelector('h1,h2');announcer.textContent=`Slide ${current+1} of ${slides.length}: ${heading?heading.textContent.trim():''}`;if(updateHash&&location.hash!==`#slide-${current+1}`)history.replaceState(null,'',`#slide-${current+1}`)};const interactive=el=>el instanceof Element&&Boolean(el.closest('a,button,input,textarea,select,dialog'));prev.addEventListener('click',()=>show(current-1));next.addEventListener('click',()=>show(current+1));addEventListener('hashchange',()=>show(fromHash(),false));addEventListener('keydown',e=>{if(dialog.open||interactive(e.target))return;if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();show(current+1)}else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(current-1)}else if(e.key==='Home'){e.preventDefault();show(0)}else if(e.key==='End'){e.preventDefault();show(slides.length-1)}else if(e.key.toLowerCase()==='r')dialog.showModal()});document.addEventListener('touchstart',e=>{startX=e.changedTouches[0].screenX;startY=e.changedTouches[0].screenY},{passive:true});document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-startX,dy=e.changedTouches[0].screenY-startY;if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1))},{passive:true});refButton.addEventListener('click',()=>dialog.showModal());close.addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});show(fromHash(),false)})();
+  </script>
 <!-- openmfm-footer-injected -->
-<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+<div class="openmfm-back-link" style="position:fixed;top:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
   <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
 </div>
 </body>
