@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#08131f" />
+  <title>Your MCDA Twin Pregnancy: Monitoring &amp; Delivery | OpenMFM Patient Education</title>
+  <style>
+    /* ─── Reset & Tokens ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #08131f;
+      --bg-deep:     #06101a;
+      --surface:     rgba(14, 30, 48, 0.92);
+      --surface-top: rgba(9, 20, 33, 0.92);
+      --surface2:    rgba(18, 34, 52, 0.94);
+      --border:      rgba(131, 193, 255, 0.16);
+      --text:        #f5f9fc;
+      --muted:       #b5c7d7;
+      --accent-blue: #69b8ff;
+      --accent-teal: #4ddcc2;
+      --accent-green:#79e09b;
+      --accent-amber:#ffbd63;
+      --accent-red:  #ff7171;
+      --accent-purple:#bfbcff;
+      --brand:       #69b8ff;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(105, 184, 255, 0.18), transparent 26%),
+        radial-gradient(circle at 88% 16%, rgba(77, 220, 194, 0.13), transparent 20%),
+        linear-gradient(180deg, #08131f 0%, #06101a 100%);
+      background-attachment: fixed;
+      color: var(--text);
+      font-family: "Aptos", "Segoe UI", system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Subtle grid overlay */
+    .deck::before {
+      content: "";
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.22), transparent 78%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── Deck & Slides ─────────────────────────────────────────────────── */
+    .deck { width: 100%; height: 100%; position: relative; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(3em, 6.5vh, 5em) clamp(1.6em, 6vw, 5em) 7em;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.45s ease;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      z-index: 1;
+    }
+    .slide.active { opacity: 1; visibility: visible; }
+
+    .wrap {
+      width: 100%; max-width: 1060px;
+      display: flex; flex-direction: column; align-items: center;
+      margin: auto 0;
+    }
+
+    /* ─── Navigation & Progress ─────────────────────────────────────────── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 4px; width: 0;
+      background: linear-gradient(90deg, #69b8ff 0%, #4ddcc2 100%);
+      box-shadow: 0 0 18px rgba(105, 184, 255, 0.45);
+      z-index: 300;
+    }
+
+    .nav {
+      position: fixed; bottom: 1.1em; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 0.7em;
+      padding: 0.5em 0.7em;
+      border: 1px solid rgba(131, 193, 255, 0.16);
+      border-radius: 999px;
+      background: rgba(7, 17, 28, 0.78);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+      z-index: 200;
+    }
+    .nav button {
+      background: rgba(14, 30, 48, 0.92);
+      border: 1px solid rgba(131, 193, 255, 0.18);
+      color: var(--text);
+      padding: 0.55em 1.15em;
+      border-radius: 999px;
+      font-size: 0.95em;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      min-height: 44px;
+    }
+    .nav button:hover:not(:disabled) { background: rgba(31, 74, 116, 0.92); }
+    .nav button:active:not(:disabled) { transform: translateY(1px); }
+    .nav button:disabled { opacity: 0.35; cursor: not-allowed; }
+    .nav button:focus-visible { outline: 2px solid var(--accent-teal); outline-offset: 2px; }
+    .nav .counter {
+      color: #dce8f7; font-weight: 600;
+      font-size: 0.9em; min-width: 5.6em; text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ─── Typography ────────────────────────────────────────────────────── */
+    .slide-label {
+      font-size: 0.74em; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--accent-teal); font-weight: 600;
+      margin-bottom: 0.9em; text-align: center;
+    }
+    h1 { font-size: clamp(1.8em, 4.6vw, 3.3em); font-weight: 700; line-height: 1.14; letter-spacing: -0.035em; text-wrap: balance; }
+    h2 { font-size: clamp(1.35em, 3.1vw, 2.3em); font-weight: 700; line-height: 1.2; letter-spacing: -0.03em; text-wrap: balance; text-align: center; max-width: 1000px; }
+    h3 { font-size: clamp(1.02em, 1.7vw, 1.25em); font-weight: 600; line-height: 1.35; }
+    p  { font-size: clamp(0.98em, 1.45vw, 1.14em); line-height: 1.68; max-width: 900px; text-align: center; color: var(--text); }
+    strong { color: var(--text); font-weight: 700; }
+    em { font-style: italic; }
+    a { color: var(--accent-blue); }
+
+    .accent-blue   { color: var(--accent-blue); }
+    .accent-teal   { color: var(--accent-teal); }
+    .accent-green  { color: var(--accent-green); }
+    .accent-amber  { color: var(--accent-amber); }
+    .accent-red    { color: var(--accent-red); }
+    .accent-purple { color: var(--accent-purple); }
+
+    .lede { margin-top: 1em; }
+
+    /* ─── Title Slide ───────────────────────────────────────────────────── */
+    .title-eyebrow {
+      font-size: 0.8em; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent-teal); margin-bottom: 0.9em; text-align: center; font-weight: 600;
+    }
+    .title-divider { width: 64px; height: 3px; background: var(--brand); border-radius: 2px; margin: 1.1em auto; }
+    .title-sub { font-size: clamp(1em, 1.8vw, 1.28em); color: var(--muted); max-width: 640px; text-align: center; line-height: 1.6; }
+
+    /* ─── Cards & Grids ─────────────────────────────────────────────────── */
+    .cols-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.3em; width: 100%; max-width: 1000px; margin-top: 1.6em; }
+    .cols-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2em; width: 100%; max-width: 1060px; margin-top: 1.6em; }
+
+    .card {
+      background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.4em 1.5em;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    }
+    .card h3 { margin-bottom: 0.5em; }
+    .card p  { text-align: left; font-size: 0.98em; }
+    .card.b-blue   { border-color: rgba(105, 184, 255, 0.35); }
+    .card.b-teal   { border-color: rgba(77, 220, 194, 0.35); }
+    .card.b-green  { border-color: rgba(121, 224, 155, 0.35); }
+    .card.b-amber  { border-color: rgba(255, 189, 99, 0.35); }
+    .card.b-red    { border-color: rgba(255, 113, 113, 0.4); }
+    .card.b-purple { border-color: rgba(191, 188, 255, 0.35); }
+
+    .card.center { text-align: center; }
+    .card.center p { text-align: center; }
+
+    /* ─── Pills ─────────────────────────────────────────────────────────── */
+    .pill {
+      display: inline-block; padding: 0.3em 0.95em;
+      border-radius: 20px; font-size: 0.8em; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap;
+    }
+    .pill-blue   { background: rgba(105,184,255,.14); color: var(--accent-blue);   border: 1px solid rgba(105,184,255,.3); }
+    .pill-teal   { background: rgba(77,220,194,.14);  color: var(--accent-teal);   border: 1px solid rgba(77,220,194,.3); }
+    .pill-green  { background: rgba(121,224,155,.13); color: var(--accent-green);  border: 1px solid rgba(121,224,155,.3); }
+    .pill-amber  { background: rgba(255,189,99,.13);  color: var(--accent-amber);  border: 1px solid rgba(255,189,99,.3); }
+
+    /* ─── Stat Boxes ────────────────────────────────────────────────────── */
+    .stat-row { display: flex; gap: 1.2em; margin-top: 1.7em; flex-wrap: wrap; justify-content: center; }
+    .stat-box {
+      background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.1em 1.5em; text-align: center; min-width: 150px; flex: 1; max-width: 240px;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+    }
+    .stat-box .stat-num { font-size: clamp(1.5em, 3vw, 2.2em); font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; }
+    .stat-box .stat-lbl { font-size: 0.8em; color: var(--muted); margin-top: 0.35em; line-height: 1.35; }
+
+    /* ─── Alerts ────────────────────────────────────────────────────────── */
+    .alert {
+      border-radius: 16px; padding: 0.95em 1.3em;
+      display: flex; align-items: flex-start; gap: 0.85em;
+      max-width: 940px; margin-top: 1.4em;
+      font-size: 0.98em; line-height: 1.6; text-align: left;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .alert-amber { background: rgba(255,189,99,.1);  border: 1px solid rgba(255,189,99,.32); color: var(--text); }
+    .alert-green { background: rgba(121,224,155,.1); border: 1px solid rgba(121,224,155,.32); color: var(--text); }
+    .alert-blue  { background: rgba(105,184,255,.1); border: 1px solid rgba(105,184,255,.28); color: var(--text); }
+    .alert-red   { background: rgba(255,113,113,.1); border: 1px solid rgba(255,113,113,.35); color: var(--text); }
+    .alert-icon  { font-size: 1.25em; flex-shrink: 0; margin-top: 0.08em; line-height: 1; }
+
+    /* ─── Checklists ────────────────────────────────────────────────────── */
+    .checklist { list-style: none; margin-top: 1.1em; max-width: 860px; width: 100%; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 0.7em;
+      padding: 0.42em 0; font-size: clamp(0.95em, 1.3vw, 1.08em); line-height: 1.5;
+      text-align: left;
+    }
+    .checklist li::before { content: '✦'; color: var(--accent-teal); flex-shrink: 0; margin-top: 0.05em; }
+
+    .checklist-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.2em 2.6em;
+      width: 100%; max-width: 1000px; margin-top: 1.1em;
+    }
+    .checklist-grid li {
+      display: flex; align-items: flex-start; gap: 0.6em;
+      padding: 0.4em 0; font-size: clamp(0.9em, 1.25vw, 1.04em); line-height: 1.5;
+      list-style: none; text-align: left;
+    }
+    .checklist-grid li::before { content: '✦'; color: var(--accent-teal); flex-shrink: 0; margin-top: 0.05em; }
+
+    /* ─── Comparison table ──────────────────────────────────────────────── */
+    .comp-table {
+      width: 100%; max-width: 980px; border-collapse: collapse;
+      font-size: clamp(0.85em, 1.25vw, 0.99em); margin-top: 1.5em;
+      border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--border);
+      background: rgba(10, 22, 36, 0.6);
+    }
+    .comp-table th {
+      background: rgba(18, 34, 52, 0.94); color: var(--accent-blue);
+      padding: 0.72em 1em; text-align: left; border-bottom: 1px solid var(--border);
+      font-weight: 600; letter-spacing: 0.02em;
+    }
+    .comp-table td {
+      padding: 0.68em 1em; border-bottom: 1px solid var(--border);
+      vertical-align: top; line-height: 1.5; text-align: left;
+    }
+    .comp-table tr:last-child td { border-bottom: none; }
+    .comp-table tr:nth-child(even) td { background: rgba(255,255,255,.025); }
+    .comp-table td:first-child { color: var(--accent-teal); font-weight: 600; }
+
+    /* ─── Definition box ────────────────────────────────────────────────── */
+    .def-box {
+      background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.15em 1.5em; max-width: 960px;
+      margin-top: 1.5em; font-size: clamp(0.95em, 1.35vw, 1.1em); line-height: 1.65;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+    }
+    .def-box strong { color: var(--accent-blue); }
+
+    /* ─── Care-path (monitoring timeline) ───────────────────────────────── */
+    .care-path {
+      display: flex; align-items: stretch; gap: 0.7em;
+      width: 100%; max-width: 1060px; margin-top: 1.6em;
+    }
+    .cp-step {
+      flex: 1; min-width: 0;
+      background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 0.9em 0.85em;
+      text-align: center;
+      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.2);
+    }
+    .cp-step .cp-wk {
+      display: block; font-size: 0.68em; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent-teal); margin-bottom: 0.45em;
+    }
+    .cp-step h3 { font-size: 0.95em; margin-bottom: 0.3em; }
+    .cp-step p { font-size: 0.78em; line-height: 1.4; text-align: center; color: var(--muted); }
+    .cp-step.hot { border-color: rgba(105, 184, 255, 0.45); }
+    .cp-step.ready { border-color: rgba(121, 224, 155, 0.45); }
+    .cp-arrow { align-self: center; color: var(--accent-teal); font-size: 1.15em; flex-shrink: 0; }
+
+    /* ─── Reference list ────────────────────────────────────────────────── */
+    .ref-list { width: 100%; max-width: 1020px; margin-top: 1.5em; text-align: left; }
+    .ref-list li {
+      display: flex; gap: 0.9em; padding: 0.72em 0;
+      border-bottom: 1px solid rgba(131,193,255,.12);
+      font-size: clamp(0.88em, 1.2vw, 1.02em); line-height: 1.55; text-align: left;
+      list-style: none;
+    }
+    .ref-list li:last-child { border-bottom: none; }
+    .ref-list .ref-num {
+      color: var(--accent-teal); font-weight: 700; flex-shrink: 0;
+      font-size: 0.9em; padding-top: 0.1em;
+    }
+    .ref-list a { word-break: break-word; }
+
+    /* ─── Source chips ──────────────────────────────────────────────────── */
+    .src {
+      display: inline-block; margin-top: 1.3em;
+      font-size: 0.72em; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--muted); text-align: center;
+    }
+
+    /* ─── Slide footer ──────────────────────────────────────────────────── */
+    .slide-footer {
+      width: 100%; max-width: 1060px;
+      margin-top: auto; padding-top: 0.7em;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.7em; color: var(--muted);
+      border-top: 1px solid rgba(131, 193, 255, 0.14);
+      letter-spacing: 0.02em;
+    }
+    /* Spacer keeps footer at bottom even when content is centered */
+    .wrap { flex: 0 0 auto; }
+    .slide > .wrap + .slide-footer { margin-top: auto; }
+
+    /* ─── Misc ──────────────────────────────────────────────────────────── */
+    .mt1 { margin-top: 1em; } .mt2 { margin-top: 1.7em; }
+    .small { font-size: 0.85em; }
+    .muted { color: var(--muted); }
+
+    /* ─── Reduced motion ────────────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+
+    /* ─── Mobile ────────────────────────────────────────────────────────── */
+    @media (max-width: 700px) {
+      html, body { overflow: hidden; }
+      .slide { padding: 2.2em 1.5em 6.5em; }
+      .hide-mobile { display: none; }
+      .cols-2, .cols-3, .checklist-grid { grid-template-columns: 1fr; gap: 1em; }
+      .stat-box { max-width: none; }
+      .care-path { flex-direction: column; }
+      .cp-arrow { transform: rotate(90deg); }
+      .nav { gap: 0.45em; padding: 0.4em 0.5em; }
+      .nav button { padding: 0.5em 0.9em; font-size: 0.9em; }
+      .slide-footer { font-size: 0.64em; }
+    }
+
+    /* ─── Print / PDF ───────────────────────────────────────────────────── */
+    @media print {
+      html, body { overflow: visible; height: auto; background: #fff; }
+      .deck::before, .progress-bar, .nav, .backlink, #backlink { display: none !important; }
+      .slide {
+        position: relative; inset: auto;
+        opacity: 1 !important; visibility: visible !important;
+        display: flex; min-height: 0; height: auto;
+        break-after: page; page-break-after: always;
+        padding: 1.5em 2em;
+        background: #fff;
+      }
+      .slide:last-child { break-after: auto; page-break-after: auto; }
+      body, .deck, .slide { background: #fff !important; }
+      h1, h2, h3, strong { color: #0f2540 !important; }
+      p, li, td, th, .slide-label { color: #2a3b52 !important; }
+      .card, .stat-box, .def-box, .comp-table {
+        background: #f4f8fc !important; border-color: #d7e3ef !important;
+        box-shadow: none !important; backdrop-filter: none !important;
+        break-inside: avoid; page-break-inside: avoid;
+      }
+      .slide-footer { color: #5a6b82 !important; border-top-color: #d7e3ef !important; }
+      a { color: #1f4fa0 !important; text-decoration: none; }
+    }
+  </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/mcda-twins/index.html">
+<meta name="description" content="Patient counseling for monochorionic-diamniotic (MCDA) twin pregnancies: why ACOG recommends closer monitoring, the every-2-week ultrasound plan from ~16 weeks, TTTS, TAPS and selective growth restriction screening, weekly fetal checks from 32 weeks, and the SMFM and ISUOG delivery timing windows.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Twin Pregnancy, MCDA, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/mcda-twins/index.html">
+<meta property="og:title" content="MCDA Twin Pregnancy Counseling | OpenMFM">
+<meta property="og:description" content="Patient counseling for monochorionic-diamniotic (MCDA) twin pregnancies: why ACOG recommends closer monitoring, the every-2-week ultrasound plan from ~16 weeks, TTTS, TAPS and selective growth restriction screening, weekly fetal checks from 32 weeks, and the SMFM and ISUOG delivery timing windows.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCDA Twin Pregnancy Counseling | OpenMFM">
+<meta name="twitter:description" content="Patient counseling for monochorionic-diamniotic (MCDA) twin pregnancies: why ACOG recommends closer monitoring, the every-2-week ultrasound plan from ~16 weeks, TTTS, TAPS and selective growth restriction screening, weekly fetal checks from 32 weeks, and the SMFM and ISUOG delivery timing windows.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "MCDA Twin Pregnancy Counseling",
+  "description": "Patient counseling for monochorionic-diamniotic (MCDA) twin pregnancies: why ACOG recommends closer monitoring, the every-2-week ultrasound plan from ~16 weeks, TTTS, TAPS and selective growth restriction screening, weekly fetal checks from 32 weeks, and the SMFM and ISUOG delivery timing windows.",
+  "url": "https://openmfm.org/decks/mcda-twins/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-09-09",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "MCDA Twin Pregnancy Counseling"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Twin Pregnancy, MCDA, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" role="presentation"></div>
+
+<main class="deck" id="deck" aria-label="MCDA twin pregnancy — patient education slide presentation">
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide active" aria-roledescription="slide" aria-label="Title">
+    <div class="wrap">
+      <div class="title-eyebrow">OpenMFM &middot; MFM Patient Education</div>
+      <h1 style="text-align:center;">
+        Your Twin Pregnancy with<br>
+        <span class="accent-blue">One Shared Placenta</span>
+      </h1>
+      <div class="title-divider"></div>
+      <p class="title-sub">
+        Understanding monochorionic&ndash;diamniotic (MCDA) twins &mdash; why you are monitored closely,
+        what the extra ultrasounds look for, and when delivery is planned
+      </p>
+      <div style="margin-top:2em; display:flex; gap:0.9em; flex-wrap:wrap; justify-content:center;">
+        <span class="pill pill-teal">Identical Twins</span>
+        <span class="pill pill-blue">Ultrasound Every 2 Weeks</span>
+        <span class="pill pill-green">Delivery 36&ndash;37 Weeks</span>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Maternal-Fetal Medicine</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 2 — WHAT MCDA MEANS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="What monochorionic diamniotic means">
+    <div class="wrap">
+      <div class="slide-label">Understanding Your Twins</div>
+      <h2>Your Babies Share One Placenta<br class="hide-mobile"> but Have <span class="accent-teal">Two Separate Sacs</span></h2>
+
+      <div class="def-box" style="text-align:left;">
+        <strong>Monochorionic</strong> (mono&nbsp;= one, chorion&nbsp;= placenta) &mdash; your twins share a single placenta. &nbsp;|&nbsp;
+        <strong>Diamniotic</strong> (di&nbsp;= two, amnion&nbsp;= sac) &mdash; each baby has its own protective fluid sac, separated by a thin dividing membrane.
+      </div>
+
+      <div class="cols-2" style="max-width:940px;">
+        <div class="card">
+          <h3 class="accent-blue">One Shared Placenta</h3>
+          <p>One placenta nourishes both babies. Tiny blood vessels connect them through it &mdash; which is why your care team watches these twins more closely than twins who have separate placentas.</p>
+        </div>
+        <div class="card">
+          <h3 class="accent-teal">Two Separate Sacs</h3>
+          <p>Each baby has their own amniotic sac and their own personal space. We always check the fluid on <strong>both sides</strong> of the dividing membrane.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">&#x1F50D;</span>
+        <span>Your team determines the <strong>chorionicity</strong> (how the placentas and membranes are arranged) and <strong>amnionicity</strong> &mdash; ideally in the first trimester. This early answer tells us exactly how closely to monitor your pregnancy. (ACOG)</span>
+      </div>
+
+      <span class="src">Source: ACOG &middot; SMFM &middot; ISUOG</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 2 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 3 — WHY CLOSER MONITORING
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Why monochorionic twins are monitored more closely">
+    <div class="wrap">
+      <div class="slide-label">Why We Watch More Closely</div>
+      <h2>Why MCDA Twins Need <span class="accent-blue">Extra Monitoring</span></h2>
+
+      <p class="lede">
+        The American College of Obstetricians and Gynecologists (ACOG) recommends that monochorionic&ndash;diamniotic twins be followed
+        <strong>more closely than dichorionic twins</strong> (twins with separate placentas), because the shared placenta carries higher risks of:
+      </p>
+
+      <div class="cols-2" style="max-width:960px;">
+        <div class="card b-red">
+          <h3 class="accent-red">Twin-to-Twin Transfusion Syndrome (TTTS)</h3>
+          <p>An imbalance of blood flow between the twins through shared placental vessels.</p>
+        </div>
+        <div class="card b-red">
+          <h3 class="accent-red">Twin Anemia-Polycythemia Sequence (TAPS)</h3>
+          <p>A subtler blood imbalance &mdash; one twin anemic, the other with too many red blood cells.</p>
+        </div>
+        <div class="card b-amber">
+          <h3 class="accent-amber">Fetal Anomalies &amp; Heart Differences</h3>
+          <p>Congenital anomalies &mdash; including congenital heart disease &mdash; are more common in monochorionic twins.</p>
+        </div>
+        <div class="card b-amber">
+          <h3 class="accent-amber">Stillbirth in Late Pregnancy</h3>
+          <p>The risk is higher than for twins with separate placentas, especially in the final weeks.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-green">
+        <span class="alert-icon">&#x2705;</span>
+        <span>Here is the reassuring part: <strong>all of these conditions can be found on ultrasound</strong> &mdash; often before symptoms ever appear. Regular, expert surveillance is exactly what lets your team act early and protect both babies.</span>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 3 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 4 — EARLY STEPS & HEART CHECK
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Early pregnancy steps and the fetal heart check">
+    <div class="wrap">
+      <div class="slide-label">Early Pregnancy Plan</div>
+      <h2>First Steps: Confirm the Type of Twins<br class="hide-mobile"> and <span class="accent-purple">Check the Heart</span></h2>
+
+      <div class="cols-3" style="max-width:1060px;">
+        <div class="card">
+          <h3 class="accent-teal">First Trimester</h3>
+          <p>Confirm the due date and determine <strong>chorionicity and amnionicity</strong> &mdash; ideally at the first-trimester scan. This sets the intensity of your entire monitoring plan.</p>
+        </div>
+        <div class="card">
+          <h3 class="accent-blue">Detailed Anatomy Survey</h3>
+          <p>ISUOG and the updated SMFM checklist both call for a detailed anatomy survey &mdash; <strong>including first-trimester anatomy</strong> &mdash; looking carefully at each baby&rsquo;s structures.</p>
+        </div>
+        <div class="card b-purple">
+          <h3 class="accent-purple">Fetal Echocardiogram &mdash; 18&ndash;22 Weeks</h3>
+          <p>Because congenital heart disease is more common in monochorionic twins, ACOG recommends a detailed <strong>fetal echocardiogram</strong> (specialized heart ultrasound) at 18&ndash;22 weeks.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">&#x1F4A1;</span>
+        <span>A fetal echo is recommended because MCDA twins have a <strong>somewhat higher chance</strong> of heart differences &mdash; not because a problem is expected. For most families, the scan is completely normal.</span>
+      </div>
+      <span class="src">Source: ACOG &middot; SMFM (updated MC/DA checklist) &middot; ISUOG</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 4 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 5 — ULTRASOUND SCHEDULE (CARE PATH)
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Ultrasound every two weeks from sixteen weeks">
+    <div class="wrap">
+      <div class="slide-label">Your Monitoring Schedule</div>
+      <h2>Ultrasound Every Two Weeks,<br class="hide-mobile"> Starting Around <span class="accent-blue">16 Weeks</span></h2>
+
+      <p class="lede">
+        Serial ultrasound begins about every 2 weeks starting around 16 weeks and continues until delivery &mdash; the schedule ACOG, SMFM, and ISUOG recommend for MCDA twins.
+      </p>
+
+      <div class="care-path" role="img" aria-label="Timeline: first trimester dating and chorionicity; 18 to 22 weeks fetal echocardiogram; from 16 weeks ultrasound every two weeks; from 32 weeks weekly fetal checks; delivery at 36 to 37 weeks.">
+        <div class="cp-step">
+          <span class="cp-wk">First Trimester</span>
+          <h3>Dating &amp; Chorionicity</h3>
+          <p>Confirm the twin type &mdash; this guides all later monitoring</p>
+        </div>
+        <span class="cp-arrow" aria-hidden="true">&#x2192;</span>
+        <div class="cp-step">
+          <span class="cp-wk">18&ndash;22 Wks</span>
+          <h3>Fetal Echo</h3>
+          <p>Specialized heart scan for both babies</p>
+        </div>
+        <span class="cp-arrow" aria-hidden="true">&#x2192;</span>
+        <div class="cp-step hot">
+          <span class="cp-wk">From ~16 Wks</span>
+          <h3>Ultrasound Every 2 Weeks</h3>
+          <p>Fluid on both sides, bladders, growth &amp; Doppler</p>
+        </div>
+        <span class="cp-arrow" aria-hidden="true">&#x2192;</span>
+        <div class="cp-step">
+          <span class="cp-wk">From 32 Wks</span>
+          <h3>Add Weekly Checks</h3>
+          <p>Antenatal fetal surveillance each week</p>
+        </div>
+        <span class="cp-arrow" aria-hidden="true">&#x2192;</span>
+        <div class="cp-step ready">
+          <span class="cp-wk">36&ndash;37 Wks</span>
+          <h3>Planned Delivery</h3>
+          <p>When the pregnancy is uncomplicated</p>
+        </div>
+      </div>
+
+      <div class="alert alert-amber" style="max-width:1000px;">
+        <span class="alert-icon">&#x1F4CB;</span>
+        <span><strong>Growth is assessed about every 4 weeks</strong> in uncomplicated pregnancies (per the updated SMFM checklist), while the 2-week visits continue for fluid, bladder, and Doppler checks. Every other week is the sweet spot &mdash; long enough for changes to appear, short enough to catch them early.</span>
+      </div>
+      <span class="src">Diagram: original summary of the ISUOG surveillance pathway &middot; Source: ACOG, SMFM, ISUOG</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 5 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 6 — WHAT EACH ULTRASOUND CHECKS / DOPPLER
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="What each ultrasound visit checks and how Doppler is used">
+    <div class="wrap">
+      <div class="slide-label">Inside Each Visit</div>
+      <h2>What We Check at Every Ultrasound &mdash;<br class="hide-mobile"> and How <span class="accent-teal">Doppler</span> Is Used</h2>
+
+      <ul class="checklist-grid" style="max-width:1000px;">
+        <li><strong>Amniotic fluid</strong> on both sides of the dividing membrane (the deepest pocket)</li>
+        <li>Each baby&rsquo;s <strong>bladder</strong> &mdash; a sign the kidneys are working</li>
+        <li><strong>Size measurements</strong> (biometry) of both babies</li>
+        <li><strong>Growth plot</strong> &mdash; formal growth assessment every 4 weeks</li>
+        <li><strong>Doppler blood flow</strong> &mdash; added when it can guide care</li>
+        <li><strong>MCA-PSV</strong> screening for TAPS &mdash; considered from 16 weeks (SMFM)</li>
+      </ul>
+
+      <div class="cols-2" style="max-width:1000px;">
+        <div class="card">
+          <h3 class="accent-teal">Umbilical Artery Doppler (the cord)</h3>
+          <p>Checks how well blood flows from the placenta to each baby. Routine cord Doppler is <strong>not beneficial</strong> when growth and fluid are normal &mdash; it is used when the babies differ in size or fluid. (ACOG)</p>
+        </div>
+        <div class="card">
+          <h3 class="accent-purple">MCA-PSV (a vessel in the brain)</h3>
+          <p>Measures blood-flow speed in each baby&rsquo;s brain. Faster flow can signal anemia &mdash; this is how we screen for <strong>TAPS</strong>, considered from 16 weeks on. (SMFM)</p>
+        </div>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">&#x1F4A1;</span>
+        <span>You may not see Doppler at every visit &mdash; and that is expected. The team adds Doppler when it can actually answer a question about your babies&rsquo; health.</span>
+      </div>
+      <span class="src">Source: ACOG &middot; SMFM Consult Series #72</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 6 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 7 — TTTS: WHAT IT IS & HOW FOUND
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Twin-to-twin transfusion syndrome what it is and how it is found">
+    <div class="wrap">
+      <div class="slide-label">The Condition We Watch For Most</div>
+      <h2>Twin-to-Twin Transfusion Syndrome <span class="accent-red">(TTTS)</span></h2>
+
+      <div class="def-box">
+        In TTTS, blood moves <strong>unevenly</strong> through the shared placental vessels &mdash; from one twin (the &ldquo;donor&rdquo;) into the other (the &ldquo;recipient&rdquo;). It affects about <strong>10&ndash;15% of MCDA pregnancies</strong>.
+      </div>
+
+      <div class="cols-2" style="max-width:960px; margin-top:1.5em;">
+        <div class="card b-red">
+          <h3 class="accent-red">The Donor Twin &mdash; Too Little Fluid</h3>
+          <p>Gives away blood, so urine and amniotic fluid drop. The diagnosis is made when the <strong>deepest fluid pocket is less than 2 cm</strong> (oligohydramnios).</p>
+        </div>
+        <div class="card b-amber">
+          <h3 class="accent-amber">The Recipient Twin &mdash; Too Much Fluid</h3>
+          <p>Receives extra blood, so urine and fluid rise. The diagnosis requires the other sac&rsquo;s <strong>deepest pocket to be more than 8 cm</strong> (polyhydramnios).</p>
+        </div>
+      </div>
+
+      <div class="alert alert-amber" style="max-width:960px;">
+        <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+        <span>Before making the diagnosis, your team <strong>rules out other causes</strong> &mdash; selective fetal growth restriction and structural, genetic, or infectious problems &mdash; so the right care plan is chosen.</span>
+      </div>
+
+      <div class="alert alert-green">
+        <span class="alert-icon">&#x2705;</span>
+        <span>TTTS is found on ultrasound &mdash; usually <strong>before you feel any difference</strong>. Fluid pockets and bladders are checked at every visit, which is exactly why the two-week schedule works.</span>
+      </div>
+      <span class="src">Source: ACOG &middot; SMFM Consult Series #72</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 7 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 8 — TTTS: STAGES & TREATMENT
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="TTTS stages and treatment with laser surgery">
+    <div class="wrap">
+      <div class="slide-label">If TTTS Develops</div>
+      <h2>TTTS Is Grouped Into Stages &mdash;<br class="hide-mobile"> and <span class="accent-blue">Laser Treatment</span> Is the Standard</h2>
+
+      <p class="lede">
+        Once TTTS is diagnosed, ultrasound findings such as bladder filling and fluid extremes group it into <strong>stages</strong> (I&ndash;IV). The stage guides your care team&rsquo;s recommendations:
+      </p>
+
+      <div class="cols-2" style="max-width:1000px;">
+        <div class="card b-green">
+          <h3 class="accent-green">Stage I &mdash; the mildest stage</h3>
+          <p>Usually managed <strong>expectantly</strong> &mdash; with surveillance at least weekly. Laser surgery may be considered if you develop symptoms from too much amniotic fluid (polyhydramnios).</p>
+        </div>
+        <div class="card b-purple">
+          <h3 class="accent-purple">Stages II&ndash;IV</h3>
+          <p><strong>Fetoscopic laser surgery</strong> is the standard treatment when TTTS presents between <strong>16 and 26 weeks</strong>. The laser seals the connecting vessels on the placenta &mdash; a recommendation carrying the strongest evidence grade (1A).</p>
+        </div>
+      </div>
+
+      <div class="alert alert-amber">
+        <span class="alert-icon">&#x1F3E5;</span>
+        <span>If you are eligible for laser treatment, your team will <strong>refer you to a fetal intervention center</strong> &mdash; a specialized unit experienced in this procedure. You will be guided through the entire process, step by step.</span>
+      </div>
+
+      <div class="alert alert-green">
+        <span class="alert-icon">&#x1F476;</span>
+        <span>Caught early and treated at a fetal center, TTTS has far better outcomes than untreated disease. Most families who need laser therapy go on to welcome healthy babies.</span>
+      </div>
+      <span class="src">Source: SMFM Consult Series #72</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 8 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 9 — TAPS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Twin anemia polycythemia sequence TAPS explained">
+    <div class="wrap">
+      <div class="slide-label">Another Blood Imbalance</div>
+      <h2>Twin Anemia-Polycythemia Sequence <span class="accent-amber">(TAPS)</span></h2>
+
+      <div class="def-box">
+        TAPS is a <strong>slower, quieter</strong> imbalance than TTTS: one twin becomes <strong>anemic</strong> (too few red blood cells) while the other develops
+        <strong>polycythemia</strong> (too many red blood cells &mdash; thicker blood). Because it develops gradually, TAPS often shows no fluid swings &mdash; so it is found by <strong>Doppler</strong>, not by symptoms.
+      </div>
+
+      <table class="comp-table" style="max-width:980px;">
+        <thead>
+          <tr>
+            <th scope="col">Twin</th>
+            <th scope="col">Blood State</th>
+            <th scope="col">MCA-PSV Finding (Doppler)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Donor twin</td>
+            <td>Anemia &mdash; too few red blood cells</td>
+            <td>Brain blood flow faster than <strong>&gt;1.5 MoM</strong></td>
+          </tr>
+          <tr>
+            <td>Recipient twin</td>
+            <td>Polycythemia &mdash; too many red blood cells</td>
+            <td>Brain blood flow slower than <strong>&lt;1.0 MoM</strong></td>
+          </tr>
+          <tr>
+            <td>Between twins</td>
+            <td>&mdash;</td>
+            <td>Difference between the twins <strong>&gt;0.5 MoM</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="lede small muted" style="max-width:900px;">
+        &ldquo;MoM&rdquo; (multiples of the median) simply compares each measurement with the normal value for that week of pregnancy &mdash; a way of saying &ldquo;higher or lower than expected.&rdquo;
+      </p>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">&#x1F4A1;</span>
+        <span>Because MCA-PSV screening for TAPS may be part of your scans from <strong>16 weeks</strong>, this condition is usually caught early &mdash; when your team has the most options to respond. (SMFM)</span>
+      </div>
+      <span class="src">Source: SMFM Consult Series #72 &middot; TAPS Delphi consensus criteria</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 9 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 10 — SELECTIVE FETAL GROWTH RESTRICTION
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Selective fetal growth restriction sFGR types">
+    <div class="wrap">
+      <div class="slide-label">Growth Differences</div>
+      <h2>When One Twin Grows More Slowly <span class="accent-amber">(sFGR)</span></h2>
+
+      <p class="lede">
+        Because the twins share one placenta, one baby can receive a smaller share of blood and grow more slowly &mdash; called <strong>selective fetal growth restriction (sFGR)</strong>.
+        Management is individualized using the <strong>Gratac&oacute;s classification</strong>, based on the smaller twin&rsquo;s umbilical artery Doppler pattern:
+      </p>
+
+      <div class="cols-3" style="max-width:1060px;">
+        <div class="card b-green">
+          <h3 class="accent-green">Type I</h3>
+          <p>Cord blood flow stays steady and forward. Generally the most stable pattern &mdash; <strong>expectant management</strong> with close ultrasound follow-up is appropriate.</p>
+        </div>
+        <div class="card b-red">
+          <h3 class="accent-red">Type II</h3>
+          <p>Blood flow is <strong>persistently absent or reversed</strong> at rest. Carries higher morbidity &mdash; may warrant fetal therapy and very close surveillance.</p>
+        </div>
+        <div class="card b-amber">
+          <h3 class="accent-amber">Type III</h3>
+          <p>Blood flow <strong>alternates unpredictably</strong> between normal and absent/reversed. Also higher risk &mdash; the plan is individualized and may include fetal therapy.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">&#x1F4A1;</span>
+        <span>Size alone does not decide the plan &mdash; the <strong>Doppler pattern</strong> does. Your MFM team uses the type to decide how closely to watch and whether a fetal treatment center should be involved. (Gratac&oacute;s classification)</span>
+      </div>
+      <span class="src">Source: Gratac&oacute;s et al. classification &middot; ACOG &middot; ISUOG</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 10 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 11 — OTHER MC CONDITIONS (TRAP / SINGLE DEMISE)
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Other monochorionic specific conditions">
+    <div class="wrap">
+      <div class="slide-label">Rarer Situations</div>
+      <h2>Other Conditions That Are Unique<br class="hide-mobile"> to a <span class="accent-blue">Shared Placenta</span></h2>
+
+      <div class="cols-2" style="max-width:1000px;">
+        <div class="card">
+          <h3 class="accent-purple">TRAP Sequence</h3>
+          <p><strong>Twin reversed arterial perfusion</strong> is an uncommon complication in which one twin&rsquo;s heart does not form properly, and blood flows in a reverse direction through the shared circulation. Evaluation and management are individualized, usually with a fetal center.</p>
+        </div>
+        <div class="card">
+          <h3 class="accent-red">Loss of One Twin</h3>
+          <p>If one baby passes away during the pregnancy, the shared blood vessels can affect the surviving co-twin &mdash; with a risk of death or <strong>neurologic injury</strong>. Rapid expert evaluation and careful surveillance are essential in this situation.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">&#x1F91D;</span>
+        <span>These situations are <strong>uncommon</strong>, and they are included so you understand why specialist teams respond quickly and carefully if anything ever changes. You will never face these decisions alone &mdash; and no amount of worry can prevent them, but monitoring is what lets us respond best.</span>
+      </div>
+      <span class="src">Source: ACOG &middot; SMFM &middot; ISUOG</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 11 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 12 — WEEKLY CHECKS AT 32 WEEKS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Weekly antenatal fetal checks from thirty two weeks">
+    <div class="wrap">
+      <div class="slide-label">Late-Pregnancy Checks</div>
+      <h2>Adding <span class="accent-teal">Weekly Checks</span> at 32 Weeks</h2>
+
+      <p class="lede">
+        For an otherwise uncomplicated MCDA pregnancy, <strong>weekly antenatal fetal surveillance</strong> may be considered beginning at <strong>32 0/7 weeks</strong> &mdash;
+        because the risk of stillbirth is higher in the final weeks of these pregnancies.
+      </p>
+
+      <div class="stat-row" style="max-width:980px;">
+        <div class="stat-box">
+          <div class="stat-num accent-teal">32 0/7</div>
+          <div class="stat-lbl">weeks &mdash; weekly fetal checks may begin</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num accent-green">&#x2193;</div>
+          <div class="stat-lbl">stillbirth risk in monitored MCDA twins</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num accent-blue">&#x2248;</div>
+          <div class="stat-lbl">risk approaches that of singletons at the same gestational age</div>
+        </div>
+      </div>
+
+      <div class="alert alert-green">
+        <span class="alert-icon">&#x2705;</span>
+        <span>These weekly visits are part of why late-pregnancy outcomes for closely monitored MCDA twins are so encouraging &mdash; the monitoring lowers stillbirth rates <strong>toward the level of singletons</strong> at similar gestational ages.</span>
+      </div>
+      <span class="src">Source: ACOG &middot; SMFM &middot; ISUOG</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 12 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 13 — DELIVERY TIMING
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Delivery timing windows">
+    <div class="wrap">
+      <div class="slide-label">Delivery Planning</div>
+      <h2>When Will Your Babies Be Born?</h2>
+
+      <p class="lede">
+        Uncomplicated MCDA twins are delivered <strong>before the due date</strong>, because the shared placenta carries a small but real risk in the final weeks.
+        Experts agree on the window &mdash; your team picks the timing within it:
+      </p>
+
+      <div class="cols-2" style="max-width:1000px;">
+        <div class="card center b-blue" style="padding:1.6em 1.4em;">
+          <div style="font-size:0.7em; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:var(--accent-blue); margin-bottom:0.6em;">SMFM 2026 Checklist</div>
+          <div style="font-size:clamp(1.7em,3.4vw,2.4em); font-weight:800; color:var(--text); line-height:1.05;">34 0/7 &ndash; 37 6/7</div>
+          <div class="muted" style="font-size:0.85em; margin-top:0.3em;">weeks &mdash; the delivery window SMFM recommends for uncomplicated MCDA twins</div>
+        </div>
+        <div class="card center b-green" style="padding:1.6em 1.4em;">
+          <div style="font-size:0.7em; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:var(--accent-green); margin-bottom:0.6em;">ISUOG Optimal Window</div>
+          <div style="font-size:clamp(1.7em,3.4vw,2.4em); font-weight:800; color:var(--text); line-height:1.05;">36 0/7 &ndash; 36 6/7</div>
+          <div class="muted" style="font-size:0.85em; margin-top:0.3em;">weeks &mdash; going beyond this may increase the risk of perinatal death</div>
+        </div>
+      </div>
+
+      <div class="alert alert-blue" style="max-width:960px;">
+        <span class="alert-icon">&#x1F4A1;</span>
+        <span>In practice, an uncomplicated MCDA pregnancy is usually delivered in the <strong>36&ndash;37 week range</strong> &mdash; inside the SMFM window and at ISUOG&rsquo;s optimal timing. If a complication develops, your MFM team may adjust the plan earlier and will always explain why.</span>
+      </div>
+      <span class="src">Source: SMFM (updated MC/DA checklist) &middot; ISUOG Practice Guidelines</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 13 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 14 — MODE OF DELIVERY & MEDICATIONS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Mode of delivery and supportive medications">
+    <div class="wrap">
+      <div class="slide-label">How Your Babies Will Be Born</div>
+      <h2>Mode of Delivery &amp; Medications<br class="hide-mobile"> That Support Your Pregnancy</h2>
+
+      <div class="cols-2" style="max-width:1000px;">
+        <div class="card">
+          <h3 class="accent-teal">Vaginal Birth May Be an Option</h3>
+          <p>In uncomplicated MCDA twins with a <strong>vertex (head-down) presenting twin</strong>, vaginal birth may be considered at <strong>32 weeks or later</strong> &mdash; regardless of the second twin&rsquo;s presentation &mdash; when an experienced obstetrician is available and decisions are made <strong>together with you</strong>. (SMFM)</p>
+        </div>
+        <div class="card">
+          <h3 class="accent-amber">Cesarean When Medically Indicated</h3>
+          <p>A cesarean delivery is used when it is the safest choice &mdash; for obstetric reasons or your babies&rsquo; needs. Your team will discuss the plan and the reasons with you as delivery approaches.</p>
+        </div>
+      </div>
+
+      <div class="cols-3" style="max-width:1060px;">
+        <div class="card">
+          <h3 class="accent-blue">Low-Dose Aspirin</h3>
+          <p>Routine <strong>low-dose aspirin</strong> to prevent preeclampsia is part of standard care for many monochorionic twin pregnancies.</p>
+        </div>
+        <div class="card">
+          <h3 class="accent-green">Antenatal Corticosteroids</h3>
+          <p>Given in <strong>anticipation of planned early delivery</strong>, these shots speed up your babies&rsquo; lung maturity before birth.</p>
+        </div>
+        <div class="card">
+          <h3 class="accent-purple">Magnesium Sulfate</h3>
+          <p>For <strong>neuroprotection</strong> &mdash; protecting your babies&rsquo; developing brains &mdash; when delivery is anticipated <strong>before 32 weeks</strong>.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-green">
+        <span class="alert-icon">&#x2705;</span>
+        <span>You do not need to memorize any of this &mdash; your team will explain each medication <strong>before</strong> it is given and why it is recommended at that moment.</span>
+      </div>
+      <span class="src">Source: SMFM (updated MC/DA checklist) &middot; ACOG &middot; ISUOG</span>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 14 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 15 — YOUR ROLE & QUESTIONS TO ASK
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Your role and questions to ask your specialist">
+    <div class="wrap">
+      <div class="slide-label">You Are Part of the Team</div>
+      <h2>Your Role &mdash; and <span class="accent-teal">Questions to Ask</span> Your MFM Specialist</h2>
+
+      <div class="cols-2" style="max-width:1060px; align-items:start;">
+        <div class="card">
+          <h3 class="accent-blue">Your Part of the Plan</h3>
+          <ul class="checklist" style="margin-top:0.4em;">
+            <li>Attend <strong>every</strong> ultrasound visit &mdash; even when you feel completely fine</li>
+            <li>Keep taking your prenatal vitamins and eating well</li>
+            <li>Rest when your body asks &mdash; twin pregnancy is hard work</li>
+            <li>Call early with concerns &mdash; don&rsquo;t wait to wonder</li>
+            <li>Write down questions between visits</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="accent-teal">Questions Worth Asking</h3>
+          <ul class="checklist" style="margin-top:0.4em;">
+            <li>What type of twins do I have, and when was that confirmed?</li>
+            <li>Which checks are part of my every-2-week ultrasound?</li>
+            <li>What would a change in fluid or Doppler mean for my babies?</li>
+            <li>If TTTS, TAPS, or a growth difference is found &mdash; what are our options?</li>
+            <li>When is delivery planned &mdash; and what could move it earlier?</li>
+            <li>Is a vaginal birth an option for me, and who would be present?</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert alert-amber" style="max-width:960px;">
+        <span class="alert-icon">&#x1F4F1;</span>
+        <span><strong>Call your care team right away</strong> if you notice vaginal bleeding, leaking fluid, regular cramping or contractions, a sudden change in your belly, shortness of breath, or decreased movement from either baby. These symptoms don&rsquo;t always mean a problem &mdash; but they deserve a prompt check.</span>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Slide 15 of 17</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 16 — BOTTOM LINE
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Bottom line summary">
+    <div class="wrap">
+      <div class="slide-label">Summary</div>
+      <h1 style="text-align:center; font-size:clamp(1.7em,3.6vw,2.7em);">
+        The Bottom Line
+      </h1>
+      <div class="title-divider"></div>
+
+      <div class="stat-row" style="max-width:1060px; gap:0.9em;">
+        <div class="stat-box">
+          <div class="stat-num accent-teal">1</div>
+          <div class="stat-lbl">shared placenta &mdash; the reason for closer monitoring</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num accent-blue">2 wks</div>
+          <div class="stat-lbl">ultrasound visits from ~16 weeks until delivery</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num accent-green">36&ndash;37</div>
+          <div class="stat-lbl">weeks &mdash; planned delivery window when uncomplicated</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num accent-purple">2</div>
+          <div class="stat-lbl">healthy babies &mdash; the goal of every visit</div>
+        </div>
+      </div>
+
+      <ul class="checklist" style="max-width:860px; margin-top:1.4em;">
+        <li>MCDA twins share one placenta &mdash; so ACOG recommends they are watched more closely than other twins</li>
+        <li>Ultrasounds every 2 weeks from ~16 weeks screen for TTTS, TAPS, and growth differences</li>
+        <li>TTTS caught early can be treated &mdash; often with laser surgery at a fetal intervention center</li>
+        <li>Weekly fetal checks may be added from 32 weeks, lowering late-pregnancy risk toward singleton levels</li>
+        <li>Uncomplicated MCDA twins are delivered between 34 0/7 and 37 6/7 weeks &mdash; optimally at 36&ndash;37 weeks</li>
+        <li>Most closely monitored MCDA pregnancies end with two healthy babies</li>
+      </ul>
+
+      <div class="alert alert-green" style="max-width:940px;">
+        <span class="alert-icon">&#x1F91D;</span>
+        <span>You and your babies are in expert hands. Attend every visit, ask every question, and trust the schedule &mdash; it exists for one reason: to bring both of your babies home safely.</span>
+      </div>
+
+      <div style="margin-top:1.5em; font-size:0.8em; color:var(--muted); text-align:center; max-width:760px; line-height:1.6;">
+        Information consistent with ACOG, SMFM, ISUOG, and current evidence-based guidelines.<br>
+        This material supports &mdash; and does not replace &mdash; a conversation with your physician.
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Maternal-Fetal Medicine</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SLIDE 17 — SOURCES & REFERENCES
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <section class="slide" aria-roledescription="slide" aria-label="Sources and references">
+    <div class="wrap">
+      <div class="slide-label">Where This Information Comes From</div>
+      <h2>Sources &amp; Guidelines</h2>
+
+      <ul class="ref-list">
+        <li><span class="ref-num">1</span>
+          <span><strong>American College of Obstetricians and Gynecologists (ACOG).</strong> Multifetal Gestations: Twin, Triplet, and Higher-Order Multifetal Pregnancy. Practice Bulletin No. 231 (2021) &mdash; basis for closer MCDA monitoring, fetal echocardiography at 18&ndash;22 weeks, serial ultrasound from ~16 weeks, and Doppler guidance.
+          <a href="https://pubmed.ncbi.nlm.nih.gov/34011891/" target="_blank" rel="noopener">View source</a></span></li>
+        <li><span class="ref-num">2</span>
+          <span><strong>Society for Maternal-Fetal Medicine (SMFM).</strong> Consult Series #72: Twin-Twin Transfusion Syndrome and Twin Anemia-Polycythemia Sequence (2024) &mdash; surveillance elements, TTTS staging and laser therapy (evidence grade 1A), and MCA-PSV screening for TAPS from 16 weeks.
+          <a href="https://publications.smfm.org/publications/574-society-for-maternal-fetal-medicine-consult-series-72/" target="_blank" rel="noopener">View source</a></span></li>
+        <li><span class="ref-num">3</span>
+          <span><strong>Society for Maternal-Fetal Medicine (SMFM).</strong> Updated MC/DA twin management checklist (2026) &mdash; delivery window 34 0/7&ndash;37 6/7 weeks, vaginal birth considerations at &#x2265;32 weeks with a vertex presenting twin, first-trimester anatomy, and 4-weekly growth assessment in uncomplicated pregnancies.</span></li>
+        <li><span class="ref-num">4</span>
+          <span><strong>ISUOG Practice Guidelines (updated):</strong> Role of ultrasound in twin pregnancy. Ultrasound in Obstetrics &amp; Gynecology, 1 February 2025 &mdash; intensified surveillance pathway and the optimal delivery window of 36 0/7&ndash;36 6/7 weeks for uncomplicated monochorionic twins.
+          <a href="https://obgyn.onlinelibrary.wiley.com/doi/full/10.1002/uog.29166" target="_blank" rel="noopener">View source</a>
+          <span class="src" style="margin-top:0.4em; display:block; text-align:left; text-transform:none; letter-spacing:0;">Figure 3 of the ISUOG guideline is summarized as an original diagram on Slide 5. ISUOG content used under license from Wiley.</span></span></li>
+        <li><span class="ref-num">5</span>
+          <span><strong>Gratac&oacute;s E, et al.</strong> A classification system for selective intrauterine growth restriction in monochorionic pregnancies according to umbilical artery Doppler flow in the smaller twin. Ultrasound in Obstetrics &amp; Gynecology 2007;30:28&ndash;34.
+          <a href="https://pubmed.ncbi.nlm.nih.gov/17542039/" target="_blank" rel="noopener">View source</a></span></li>
+        <li><span class="ref-num">6</span>
+          <span><strong>TAPS consensus criteria.</strong> Consensus diagnostic criteria and monitoring of twin anemia-polycythemia sequence: Delphi procedure (2020).</span></li>
+      </ul>
+
+      <div style="margin-top:1.6em; font-size:0.8em; color:var(--muted); text-align:center; max-width:860px; line-height:1.65;">
+        Guideline recommendations change over time &mdash; your care team&rsquo;s plan may differ slightly from this summary, and that is appropriate for your individual pregnancy.<br><br>
+        <strong style="color:var(--text);">Privacy:</strong> OpenMFM educational presentations do not request, collect, or store any personal health information.<br>
+        Prepared by <strong style="color:var(--text);">Dr. Chukwuma Onyeije, MD</strong> &middot; Atlanta Perinatal Associates &middot; OpenMFM.org
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Atlanta Perinatal Associates</span>
+      <span>Maternal-Fetal Medicine</span>
+    </div>
+  </section>
+
+</main><!-- /.deck -->
+
+<!-- Navigation Controls -->
+<nav class="nav" aria-label="Slide navigation">
+  <button type="button" id="prevBtn" aria-label="Previous slide">&#x2190; Prev</button>
+  <span class="counter" id="counter" aria-live="polite">1 / 17</span>
+  <button type="button" id="nextBtn" aria-label="Next slide">Next &#x2192;</button>
+</nav>
+
+<script>
+  (function () {
+    'use strict';
+
+    var slides    = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+    var total     = slides.length;
+    var counter   = document.getElementById('counter');
+    var progress  = document.getElementById('progressBar');
+    var prevBtn   = document.getElementById('prevBtn');
+    var nextBtn   = document.getElementById('nextBtn');
+    var current   = 0;
+
+    function clamp(n) { return Math.max(0, Math.min(total - 1, n)); }
+
+    function readHash() {
+      var m = window.location.hash.match(/^#\/(\d+)$/);
+      return m ? clamp(parseInt(m[1], 10) - 1) : 0;
+    }
+
+    function setActive(i, updateHash) {
+      current = clamp(i);
+      slides.forEach(function (s, idx) {
+        var on = idx === current;
+        s.classList.toggle('active', on);
+        s.setAttribute('aria-hidden', on ? 'false' : 'true');
+        if ('inert' in s) { s.inert = !on; }
+      });
+      counter.textContent = (current + 1) + ' / ' + total;
+      progress.style.width = ((current + 1) / total * 100) + '%';
+      prevBtn.disabled = (current === 0);
+      nextBtn.disabled = (current === total - 1);
+      if (updateHash !== false) {
+        var target = '#/' + (current + 1);
+        if (window.location.hash !== target) {
+          try { history.replaceState(null, '', target); } catch (e) {}
+        }
+      }
+    }
+
+    function go(n, updateHash) { setActive(n, updateHash); }
+
+    prevBtn.addEventListener('click', function () { go(current - 1); });
+    nextBtn.addEventListener('click', function () { go(current + 1); });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.altKey || e.ctrlKey || e.metaKey) { return; }
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) { return; }
+      switch (e.key) {
+        case 'ArrowRight': case 'PageDown': case ' ':
+          e.preventDefault(); go(current + 1); break;
+        case 'ArrowLeft': case 'PageUp':
+          e.preventDefault(); go(current - 1); break;
+        case 'Home':
+          e.preventDefault(); go(0); break;
+        case 'End':
+          e.preventDefault(); go(total - 1); break;
+      }
+    });
+
+    // Touch / swipe navigation
+    var touchX = 0, touchY = 0;
+    document.addEventListener('touchstart', function (e) {
+      touchX = e.changedTouches[0].screenX;
+      touchY = e.changedTouches[0].screenY;
+    }, { passive: true });
+    document.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].screenX - touchX;
+      var dy = e.changedTouches[0].screenY - touchY;
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
+        go(dx < 0 ? current + 1 : current - 1);
+      }
+    }, { passive: true });
+
+    // URL hash navigation
+    window.addEventListener('hashchange', function () {
+      var target = readHash();
+      if (target !== current) { setActive(target, false); }
+    });
+
+    setActive(readHash(), false);
+  })();
+</script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>

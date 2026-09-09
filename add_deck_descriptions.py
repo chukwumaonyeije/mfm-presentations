@@ -130,8 +130,8 @@ DESCRIPTIONS = {
         "Covers hypothyroidism, hyperthyroidism, and thyroid antibody screening in pregnancy, including TSH targets, medication dosing, and fetal thyroid surveillance.",
     "decks/obesity-circumvallate/obesity-circumvallate.html":
         "Covers circumvallate placenta and its association with obesity: placental anatomy, risk of abruption, preterm birth, and fetal growth restriction surveillance.",
-    "decks/mcda-twins/twin_pregnancy_counseling.html":
-        "Covers monochorionic-diamniotic (MCDA) twin pregnancy: twin-to-twin transfusion syndrome (TTTS) surveillance, Quintero staging, fetoscopic laser therapy, and delivery timing.",
+    "decks/mcda-twins/index.html":
+        "Patient counseling for monochorionic-diamniotic (MCDA) twin pregnancies: why ACOG recommends closer monitoring, the every-2-week ultrasound plan from ~16 weeks, TTTS, TAPS and selective growth restriction screening, weekly fetal checks from 32 weeks, and the SMFM and ISUOG delivery timing windows.",
     "decks/preterm-birth/preterm-birth.html":
         "Clinical management guide for preterm birth: risk stratification, cervical length screening, progesterone therapy, tocolysis, antenatal corticosteroids, and delivery planning.",
     "decks/hypertensive-disorders-doctors/hypertensive_disorders_pregnancy.html":
