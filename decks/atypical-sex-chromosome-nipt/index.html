@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atypical Sex Chromosome Finding on NIPT — A Patient Guide | OpenMFM</title>
+<style>
+  :root{
+    color-scheme: dark;
+    --bg:#07131f;
+    --bg-deep:#050e17;
+    --surface:rgba(14,30,48,.92);
+    --surface-2:rgba(18,34,52,.94);
+    --border:rgba(131,193,255,.16);
+    --border-strong:rgba(131,193,255,.34);
+    --text:#f5f9fc;
+    --muted:#b5c7d7;
+    --cyan:#22d3ee;
+    --accent-blue:#69b8ff;
+    --accent-teal:#4ddcc2;
+    --accent-green:#79e09b;
+    --accent-amber:#ffbd63;
+    --accent-red:#ff7171;
+    --accent-purple:#bfbcff;
+    --radius:16px;
+    --maxw:1080px;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{height:100%;}
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 620px at 12% -8%, rgba(34,211,238,.10), transparent 62%),
+      radial-gradient(900px 560px at 92% 108%, rgba(105,184,255,.09), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:"Aptos","Segoe UI",system-ui,-apple-system,sans-serif;
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ── Skip link ───────────────────────────────────────────────────────── */
+  .skip{
+    position:absolute;left:-9999px;top:0;z-index:10000;
+    background:var(--cyan);color:#04202a;padding:10px 16px;border-radius:0 0 8px 0;
+    font-weight:700;text-decoration:none;
+  }
+  .skip:focus{left:0;}
+
+  /* ── Deck / slides ───────────────────────────────────────────────────── */
+  .deck{position:fixed;inset:0;overflow:hidden;}
+
+  .slide{
+    position:absolute;inset:0;
+    overflow-y:auto;
+    display:flex;align-items:center;justify-content:center;
+    padding:78px 22px 104px;
+    opacity:0;visibility:hidden;transform:translateY(14px);
+    transition:opacity .34s ease, transform .34s ease;
+  }
+  .slide.is-active{opacity:1;visibility:visible;transform:none;}
+
+  .slide-inner{width:100%;max-width:var(--maxw);}
+
+  /* ── Typography ──────────────────────────────────────────────────────── */
+  .eyebrow{
+    display:inline-block;
+    font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--cyan);
+    border:1px solid rgba(34,211,238,.34);
+    background:rgba(34,211,238,.08);
+    border-radius:999px;padding:5px 13px;margin-bottom:18px;
+  }
+  .eyebrow.warm{color:var(--accent-amber);border-color:rgba(255,189,99,.36);background:rgba(255,189,99,.09);}
+  .eyebrow.calm{color:var(--accent-teal);border-color:rgba(77,220,194,.36);background:rgba(77,220,194,.09);}
+
+  h1{font-size:clamp(2rem,4.6vw,3.35rem);line-height:1.1;margin:0 0 18px;letter-spacing:-.02em;font-weight:750;}
+  h2{font-size:clamp(1.5rem,3.3vw,2.35rem);line-height:1.16;margin:0 0 20px;letter-spacing:-.015em;font-weight:720;}
+  h3{font-size:1.06rem;line-height:1.3;margin:0 0 9px;font-weight:700;}
+  p{margin:0 0 14px;color:var(--text);}
+  .lede{font-size:clamp(1.02rem,1.9vw,1.28rem);color:var(--muted);max-width:74ch;line-height:1.55;}
+  .muted{color:var(--muted);}
+  .small{font-size:.9rem;}
+  .tiny{font-size:.81rem;color:var(--muted);}
+  strong{font-weight:720;}
+  em.term{font-style:normal;color:var(--cyan);font-weight:650;}
+  .nowrap{white-space:nowrap;}
+
+  /* ── Layout helpers ──────────────────────────────────────────────────── */
+  .grid{display:grid;gap:16px;}
+  .g2{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .g3{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .g5{grid-template-columns:repeat(2,minmax(0,1fr));}
+  @media(min-width:820px){
+    .g4{grid-template-columns:repeat(4,minmax(0,1fr));}
+    .g5{grid-template-columns:repeat(5,minmax(0,1fr));}
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:20px 20px 18px;
+  }
+  .card.tint{background:var(--surface-2);}
+  .card.edge{border-left:3px solid var(--cyan);}
+  .card.edge-teal{border-left:3px solid var(--accent-teal);}
+  .card.edge-amber{border-left:3px solid var(--accent-amber);}
+  .card.edge-red{border-left:3px solid var(--accent-red);}
+  .card.edge-purple{border-left:3px solid var(--accent-purple);}
+
+  .num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:34px;height:34px;border-radius:50%;
+    background:rgba(34,211,238,.14);border:1px solid rgba(34,211,238,.4);
+    color:var(--cyan);font-weight:750;font-size:.98rem;margin-bottom:12px;
+  }
+  .num.teal{background:rgba(77,220,194,.14);border-color:rgba(77,220,194,.42);color:var(--accent-teal);}
+  .num.amber{background:rgba(255,189,99,.14);border-color:rgba(255,189,99,.42);color:var(--accent-amber);}
+  .num.purple{background:rgba(191,188,255,.14);border-color:rgba(191,188,255,.42);color:var(--accent-purple);}
+
+  ul.clean{list-style:none;margin:0;padding:0;}
+  ul.clean li{position:relative;padding-left:24px;margin-bottom:10px;color:var(--text);}
+  ul.clean li::before{
+    content:"";position:absolute;left:4px;top:.62em;
+    width:7px;height:7px;border-radius:50%;background:var(--cyan);
+  }
+  ul.clean.teal li::before{background:var(--accent-teal);}
+  ul.clean.amber li::before{background:var(--accent-amber);}
+  ul.clean.red li::before{background:var(--accent-red);}
+
+  ul.cross{list-style:none;margin:0;padding:0;}
+  ul.cross li{position:relative;padding-left:32px;margin-bottom:12px;}
+  ul.cross li::before{
+    content:"✕";position:absolute;left:5px;top:0;
+    color:var(--accent-red);font-weight:800;font-size:.95rem;
+  }
+
+  ul.tick{list-style:none;margin:0;padding:0;}
+  ul.tick li{position:relative;padding-left:34px;margin-bottom:13px;line-height:1.5;}
+  ul.tick li::before{
+    content:"";position:absolute;left:2px;top:.28em;
+    width:17px;height:17px;border-radius:5px;
+    border:1.6px solid var(--border-strong);background:rgba(131,193,255,.06);
+  }
+
+  /* ── Notes / callouts ────────────────────────────────────────────────── */
+  .note{
+    border-radius:12px;padding:15px 18px;margin:16px 0 0;
+    border:1px solid rgba(34,211,238,.3);
+    background:rgba(34,211,238,.07);
+    font-size:.96rem;
+  }
+  .note.warn{border-color:rgba(255,189,99,.36);background:rgba(255,189,99,.08);}
+  .note.ok{border-color:rgba(121,224,155,.36);background:rgba(121,224,155,.08);}
+  .note.plain{border-color:var(--border);background:rgba(131,193,255,.05);}
+  .note .note-label{
+    display:block;font-weight:750;font-size:.76rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--cyan);margin-bottom:5px;
+  }
+  .note.warn .note-label{color:var(--accent-amber);}
+  .note.ok .note-label{color:var(--accent-green);}
+  .note.plain .note-label{color:var(--muted);}
+  .note p:last-child{margin-bottom:0;}
+
+  /* ── Report table ────────────────────────────────────────────────────── */
+  .report{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .report-row{
+    display:grid;grid-template-columns:1fr;gap:6px;
+    padding:15px 18px;border-bottom:1px solid var(--border);
+    background:rgba(14,30,48,.6);
+  }
+  .report-row:last-child{border-bottom:none;}
+  @media(min-width:760px){.report-row{grid-template-columns:1.05fr 1fr;gap:22px;align-items:start;}}
+  .report-quote{color:var(--accent-amber);font-style:italic;font-size:.95rem;}
+  .report-plain{color:var(--text);font-size:.96rem;}
+
+  /* ── Steps ───────────────────────────────────────────────────────────── */
+  .steps{display:grid;gap:14px;}
+  @media(min-width:900px){.steps{grid-template-columns:repeat(5,minmax(0,1fr));}}
+  .step{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:14px;padding:16px 15px;
+    display:flex;flex-direction:column;gap:7px;
+  }
+  .step .num{margin-bottom:2px;width:30px;height:30px;font-size:.9rem;}
+  .step h3{font-size:.99rem;margin:0;}
+  .step p{font-size:.88rem;color:var(--muted);margin:0;}
+
+  /* ── Diagram frames ──────────────────────────────────────────────────── */
+  .diagram{
+    background:linear-gradient(180deg,rgba(10,24,38,.85),rgba(8,19,31,.85));
+    border:1px solid var(--border);border-radius:var(--radius);
+    padding:18px;margin-top:6px;
+  }
+  .diagram svg{display:block;width:100%;height:auto;max-height:52vh;}
+  .caption{font-size:.86rem;color:var(--muted);margin-top:11px;text-align:center;}
+
+  .svg-label{font-family:"Aptos","Segoe UI",system-ui,sans-serif;font-size:13px;fill:var(--muted);}
+  .svg-label.strong{fill:var(--text);font-weight:700;}
+  .svg-label.cyan{fill:var(--cyan);font-weight:700;}
+  .svg-label.amber{fill:var(--accent-amber);font-weight:700;}
+
+  /* ── Hub (five explanations) ─────────────────────────────────────────── */
+  .hub{
+    text-align:center;padding:20px;margin:0 auto 18px;max-width:520px;
+    background:radial-gradient(circle at 50% 50%, rgba(255,189,99,.16), rgba(255,189,99,.04));
+    border:1px solid rgba(255,189,99,.42);border-radius:999px;
+  }
+  .hub .hub-kicker{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-amber);font-weight:750;}
+  .hub .hub-main{font-size:1.12rem;font-weight:720;margin-top:4px;}
+
+  .scale{
+    display:flex;align-items:center;gap:10px;margin:0 0 14px;
+    font-size:.8rem;color:var(--muted);
+  }
+  .scale .bar{flex:1;height:6px;border-radius:999px;background:linear-gradient(90deg,rgba(121,224,155,.85),rgba(255,189,99,.75),rgba(191,188,255,.7));}
+
+  /* ── Ratio bars (slide 14, deliberately non-numeric) ─────────────────── */
+  .ratio{display:grid;gap:6px;}
+  .ratio .ratio-track{height:16px;border-radius:8px;background:rgba(131,193,255,.1);overflow:hidden;}
+  .ratio .ratio-fill{height:100%;border-radius:8px;}
+  .ratio .ratio-fill.high{width:86%;background:linear-gradient(90deg,rgba(121,224,155,.9),rgba(77,220,194,.9));}
+  .ratio .ratio-fill.low{width:30%;background:linear-gradient(90deg,rgba(255,189,99,.85),rgba(255,113,113,.7));}
+  .ratio .ratio-word{font-size:.88rem;color:var(--muted);}
+
+  /* ── Spectrum ────────────────────────────────────────────────────────── */
+  .spectrum{
+    height:18px;border-radius:999px;
+    background:linear-gradient(90deg,rgba(121,224,155,.85),rgba(255,189,99,.8) 55%,rgba(255,113,113,.75));
+    margin:8px 0 10px;
+  }
+  .spectrum-ends{display:flex;justify-content:space-between;gap:14px;font-size:.85rem;color:var(--muted);}
+
+  /* ── Timeline ────────────────────────────────────────────────────────── */
+  .timeline{position:relative;padding-left:26px;margin-top:6px;}
+  .timeline::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:rgba(131,193,255,.28);}
+  .timeline .tl-item{position:relative;margin-bottom:16px;}
+  .timeline .tl-item::before{
+    content:"";position:absolute;left:-24px;top:.45em;width:12px;height:12px;border-radius:50%;
+    background:var(--cyan);border:2px solid var(--bg);
+  }
+  .timeline .tl-item:last-child{margin-bottom:0;}
+  .timeline h3{font-size:.99rem;margin-bottom:3px;}
+  .timeline p{font-size:.9rem;color:var(--muted);margin:0;}
+
+  /* ── FAQ accordion ───────────────────────────────────────────────────── */
+  details.faq{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;padding:0;margin-bottom:10px;overflow:hidden;
+  }
+  details.faq summary{
+    cursor:pointer;padding:14px 18px;font-weight:680;font-size:.98rem;
+    list-style:none;display:flex;justify-content:space-between;gap:14px;align-items:baseline;
+  }
+  details.faq summary::-webkit-details-marker{display:none;}
+  details.faq summary::after{content:"+";color:var(--cyan);font-weight:700;font-size:1.15rem;line-height:1;}
+  details.faq[open] summary::after{content:"–";}
+  details.faq[open] summary{color:var(--cyan);}
+  details.faq .faq-body{padding:0 18px 15px;color:var(--muted);font-size:.94rem;}
+  details.faq .faq-body p:last-child{margin-bottom:0;}
+
+  /* ── Big statement slide ─────────────────────────────────────────────── */
+  .statement{
+    font-size:clamp(1.35rem,3.1vw,2.15rem);line-height:1.28;font-weight:700;
+    letter-spacing:-.01em;max-width:34ch;
+  }
+  .statement .accent{color:var(--cyan);}
+
+  /* ── References ──────────────────────────────────────────────────────── */
+  ol.refs{margin:0;padding-left:22px;}
+  ol.refs li{font-size:.88rem;color:var(--muted);margin-bottom:11px;line-height:1.5;}
+  ol.refs li strong{color:var(--text);}
+
+  /* ── HUD ─────────────────────────────────────────────────────────────── */
+  .progress{
+    position:fixed;top:0;left:0;height:3px;width:0;
+    background:linear-gradient(90deg,var(--cyan),var(--accent-teal));
+    z-index:60;transition:width .3s ease;
+  }
+  .hud{
+    position:fixed;right:16px;bottom:16px;z-index:60;
+    display:flex;align-items:center;gap:8px;
+  }
+  .hud button{
+    font-family:inherit;font-size:.86rem;font-weight:650;color:var(--text);
+    background:rgba(15,23,42,.9);border:1px solid var(--border-strong);
+    border-radius:9px;padding:9px 13px;cursor:pointer;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    transition:border-color .2s ease,color .2s ease,background .2s ease;
+  }
+  .hud button:hover{border-color:var(--cyan);color:var(--cyan);}
+  .hud button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;}
+  .hud button:disabled{opacity:.38;cursor:default;border-color:var(--border);color:var(--muted);}
+  .counter{
+    font-size:.82rem;color:var(--muted);padding:0 6px;font-variant-numeric:tabular-nums;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    background:rgba(15,23,42,.9);border:1px solid var(--border);border-radius:9px;padding:9px 12px;
+  }
+
+  .hint{
+    position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:59;
+    font-size:.76rem;color:var(--muted);background:rgba(15,23,42,.86);
+    border:1px solid var(--border);border-radius:8px;padding:6px 12px;
+    opacity:1;transition:opacity .5s ease;pointer-events:none;
+  }
+  .hint.hide{opacity:0;}
+  @media(max-width:760px){.hint{display:none;}}
+
+  /* ── References drawer ───────────────────────────────────────────────── */
+  .refs-panel{
+    position:fixed;inset:0;z-index:70;display:none;
+    background:rgba(4,10,17,.82);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+  }
+  .refs-panel.open{display:block;}
+  .refs-panel-inner{
+    position:absolute;right:0;top:0;bottom:0;width:min(620px,100%);
+    background:var(--bg-deep);border-left:1px solid var(--border-strong);
+    padding:26px 26px 90px;overflow-y:auto;
+  }
+  .refs-panel h2{font-size:1.35rem;margin-bottom:6px;}
+  .refs-panel .close{
+    position:absolute;right:18px;top:18px;font-family:inherit;font-size:.84rem;
+    background:transparent;border:1px solid var(--border-strong);color:var(--text);
+    border-radius:8px;padding:7px 12px;cursor:pointer;
+  }
+  .refs-panel .close:hover{border-color:var(--cyan);color:var(--cyan);}
+
+  .sr-only{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+  }
+
+  /* ── Reduced motion ──────────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{transition:none !important;animation:none !important;}
+    .slide{transform:none;}
+  }
+
+  /* ── Print / PDF ─────────────────────────────────────────────────────── */
+  @page{margin:14mm;}
+  @media print{
+    html,body{height:auto;background:#fff !important;color:#0b1a26 !important;font-size:11.5pt;}
+    .deck{position:static;overflow:visible;inset:auto;}
+    .slide{
+      position:static;inset:auto;opacity:1 !important;visibility:visible !important;
+      transform:none !important;display:block;overflow:visible;
+      padding:0 0 14mm;page-break-after:always;break-after:page;min-height:0;
+      border-bottom:1px solid #cdd8e0;
+    }
+    .slide:last-child{border-bottom:none;page-break-after:auto;break-after:auto;}
+    .slide-inner{max-width:none;}
+    .progress,.hud,.hint,.refs-panel,.skip{display:none !important;}
+
+    h1,h2,h3{color:#07202e !important;}
+    p,.lede,.muted,.tiny,.caption,.spectrum-ends,.ratio .ratio-word,.step p,.timeline p,
+    ol.refs li,details.faq .faq-body,.svg-label{color:#1d3644 !important;}
+    .eyebrow,.eyebrow.warm,.eyebrow.calm{color:#0a5f6f !important;background:#eaf7fa !important;border-color:#8fd3de !important;}
+    em.term{color:#0a5f6f !important;}
+    .card,.step,.diagram,details.faq,.report,.hub{
+      background:#fff !important;border-color:#c3d2dc !important;
+      box-shadow:none !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+    }
+    .report-row{background:#fff !important;border-color:#dde7ee !important;}
+    .report-quote{color:#8a5100 !important;}
+    .report-plain{color:#12303f !important;}
+    .note{background:#f1f7fa !important;border-color:#b9ced9 !important;}
+    .note.warn{border-color:#e0b877 !important;}
+    .note.ok{border-color:#9fd3a8 !important;}
+    .note .note-label{color:#0a5f6f !important;}
+    .note.warn .note-label{color:#8a5100 !important;}
+    .note.ok .note-label{color:#256b31 !important;}
+    .note.plain .note-label{color:#41606f !important;}
+    .num,.step .num{background:#eaf7fa !important;border-color:#8fd3de !important;color:#0a5f6f !important;}
+    ul.clean li::before{background:#0a5f6f !important;}
+    ul.cross li::before{color:#b3261e !important;}
+    ul.tick li::before{border-color:#8fa8b6 !important;background:#fff !important;}
+    details.faq[open] summary{color:#0a5f6f !important;}
+    details.faq summary::after{color:#0a5f6f !important;}
+    details.faq .faq-body{display:block !important;}
+    details.faq{page-break-inside:avoid;break-inside:avoid;}
+    details.faq > .faq-body{display:block !important;}
+    .card,.step,.diagram,.hub{page-break-inside:avoid;break-inside:avoid;}
+    .statement{color:#07202e !important;}
+    .statement .accent{color:#0a5f6f !important;}
+    .spectrum{background:linear-gradient(90deg,#9fd3a8,#e0b877 55%,#e2a3a0) !important;}
+    .ratio .ratio-track{background:#e6eef3 !important;}
+    .svg-label.strong{fill:#07202e !important;}
+    .svg-label.cyan{fill:#0a5f6f !important;}
+    .svg-label.amber{fill:#8a5100 !important;}
+  }
+
+  /* ── Responsive ──────────────────────────────────────────────────────── */
+  @media(max-width:819px){
+    body{font-size:16px;}
+    .slide{padding:64px 16px 92px;align-items:flex-start;}
+    .g2,.g3{grid-template-columns:1fr;}
+    .hud{right:12px;bottom:12px;gap:6px;}
+    .hud button{padding:8px 10px;font-size:.8rem;}
+    .counter{font-size:.76rem;padding:8px 10px;}
+  }
+</style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/atypical-sex-chromosome-nipt/index.html">
+<meta name="description" content="A plain-language patient guide to an atypical X-chromosome finding on NIPT (Panorama/cfDNA): why the result is unclear rather than abnormal, how placental and maternal mosaicism cause it, why repeat cell-free DNA testing is not recommended, and the stepwise pathway of genetic counseling, detailed ultrasound, and amniocentesis with karyotype and microarray. Includes common questions, a printable question checklist, and references based on ACOG Practice Bulletin 226 and SMFM Consult Series #74.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Recently Added, ✦ Featured, NIPT, Sex Chromosome Aneuploidy, Monosomy X, Confined Placental Mosaicism, Patient Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/atypical-sex-chromosome-nipt/index.html">
+<meta property="og:title" content="Atypical Sex Chromosome Finding on NIPT - A Patient Guide | OpenMFM">
+<meta property="og:description" content="A plain-language patient guide to an atypical X-chromosome finding on NIPT (Panorama/cfDNA): why the result is unclear rather than abnormal, how placental and maternal mosaicism cause it, why repeat cell-free DNA testing is not recommended, and the stepwise pathway of genetic counseling, detailed ultrasound, and amniocentesis with karyotype and microarray. Includes common questions, a printable question checklist, and references based on ACOG Practice Bulletin 226 and SMFM Consult Series #74.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Atypical Sex Chromosome Finding on NIPT - A Patient Guide | OpenMFM">
+<meta name="twitter:description" content="A plain-language patient guide to an atypical X-chromosome finding on NIPT (Panorama/cfDNA): why the result is unclear rather than abnormal, how placental and maternal mosaicism cause it, why repeat cell-free DNA testing is not recommended, and the stepwise pathway of genetic counseling, detailed ultrasound, and amniocentesis with karyotype and microarray. Includes common questions, a printable question checklist, and references based on ACOG Practice Bulletin 226 and SMFM Consult Series #74.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Atypical Sex Chromosome Finding on NIPT - A Patient Guide",
+  "description": "A plain-language patient guide to an atypical X-chromosome finding on NIPT (Panorama/cfDNA): why the result is unclear rather than abnormal, how placental and maternal mosaicism cause it, why repeat cell-free DNA testing is not recommended, and the stepwise pathway of genetic counseling, detailed ultrasound, and amniocentesis with karyotype and microarray. Includes common questions, a printable question checklist, and references based on ACOG Practice Bulletin 226 and SMFM Consult Series #74.",
+  "url": "https://openmfm.org/decks/atypical-sex-chromosome-nipt/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-09-10",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Atypical Sex Chromosome Finding on NIPT - A Patient Guide"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Recently Added, ✦ Featured, NIPT, Sex Chromosome Aneuploidy, Monosomy X, Confined Placental Mosaicism, Patient Education"
+}
+</script>
+</head>
+<body>
+
+<a class="skip" href="#s2">Skip to content</a>
+
+<div class="progress" id="progress" role="presentation"></div>
+
+<main class="deck" id="deck">
+
+<!-- ═══════════════ 1 · TITLE ═══════════════ -->
+<section class="slide is-active" id="s1" data-title="Atypical Finding on the X Chromosome" aria-label="Slide 1 of 30: Atypical Finding on the X Chromosome">
+  <div class="slide-inner">
+    <span class="eyebrow">OpenMFM &middot; Patient Education</span>
+    <h1>An Atypical Finding on the X Chromosome</h1>
+    <p class="lede">Your NIPT result came back unclear on the X chromosome. This guide explains what that means, why it happens, and what happens next &mdash; in plain language, one idea at a time.</p>
+    <div class="grid g2" style="margin-top:26px;">
+      <div class="card edge">
+        <h3>What this guide is</h3>
+        <p class="small muted" style="margin:0;">General education for expectant parents who have received an &ldquo;atypical finding&rdquo; involving the X chromosome on a cell-free DNA (NIPT) screening test.</p>
+      </div>
+      <div class="card edge-teal">
+        <h3>What this guide is not</h3>
+        <p class="small muted" style="margin:0;">It is not medical advice, and it is not a diagnosis. Your own report, your own clinician, and your own genetic counselor come first.</p>
+      </div>
+    </div>
+    <p class="tiny" style="margin-top:22px;">Dr. Chukwuma Onyeije, MD &middot; Maternal-Fetal Medicine &middot; Atlanta Perinatal Associates &middot; openmfm.org</p>
+  </div>
+</section>
+
+<!-- ═══════════════ 2 · THREE THINGS TO KNOW NOW ═══════════════ -->
+<section class="slide" id="s2" data-title="Three Things to Know Right Now" aria-label="Slide 2 of 30: Three Things to Know Right Now">
+  <div class="slide-inner">
+    <span class="eyebrow calm">Start here</span>
+    <h2>Three things to know right now</h2>
+    <div class="grid g3" style="margin-top:8px;">
+      <div class="card edge">
+        <span class="num">1</span>
+        <h3>The other conditions came back low risk</h3>
+        <p class="small muted" style="margin:0;">Your report states you are at low risk for the other chromosome conditions this test screened for. That part is genuinely reassuring, and it is worth holding on to.</p>
+      </div>
+      <div class="card edge-amber">
+        <span class="num amber">2</span>
+        <h3>This is not a diagnosis</h3>
+        <p class="small muted" style="margin:0;">The word &ldquo;atypical&rdquo; means the lab saw something it could not interpret with confidence. It does <strong>not</strong> mean your baby has Turner syndrome.</p>
+      </div>
+      <div class="card edge-teal">
+        <span class="num teal">3</span>
+        <h3>There is a clear path forward</h3>
+        <p class="small muted" style="margin:0;">A detailed ultrasound, genetic counseling, and &mdash; if you choose it &mdash; a diagnostic test can give a real answer. Nothing irreversible has to be decided today.</p>
+      </div>
+    </div>
+    <div class="note ok">
+      <span class="note-label">The short version</span>
+      <p>&ldquo;Atypical&rdquo; means <strong>unclear</strong> &mdash; not &ldquo;abnormal and confirmed.&rdquo; Most of the time, this kind of finding turns out not to be a true finding in the baby.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 3 · WHAT IS NIPT ═══════════════ -->
+<section class="slide" id="s3" data-title="What Is NIPT? A Screening Test, Not a Diagnosis" aria-label="Slide 3 of 30: What Is NIPT">
+  <div class="slide-inner">
+    <span class="eyebrow">The basics</span>
+    <h2>NIPT is a screening test, not a diagnosis</h2>
+    <p class="lede">NIPT &mdash; also called <em class="term">cell-free DNA (cfDNA) screening</em> &mdash; is a blood test taken from your arm. It examines tiny fragments of DNA floating in your bloodstream and estimates the chance of certain chromosome conditions.</p>
+    <div class="grid g2" style="margin-top:18px;">
+      <div class="card edge-teal">
+        <h3>A screening test estimates a likelihood</h3>
+        <p class="small muted" style="margin:0;">Like a smoke detector: it warns you early and it is very good at its job, but it can go off when there is no fire. It tells you whether to look closer &mdash; not what is actually there.</p>
+      </div>
+      <div class="card edge">
+        <h3>A diagnostic test gives an answer</h3>
+        <p class="small muted" style="margin:0;">Like a fire inspection: a person goes into the building, looks at the actual structure, and reports what is really present. Amniocentesis is a diagnostic test.</p>
+      </div>
+    </div>
+    <div class="note">
+      <span class="note-label">Why the distinction matters for you</span>
+      <p>Your report is a screening result. Only a diagnostic test can tell you whether your baby&rsquo;s own chromosomes are affected. That is why the report mentions the <strong>option</strong> of further testing rather than giving you an answer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 4 · WHERE THE DNA COMES FROM ═══════════════ -->
+<section class="slide" id="s4" data-title="Where Does That DNA Come From?" aria-label="Slide 4 of 30: Where the DNA comes from">
+  <div class="slide-inner">
+    <span class="eyebrow">The key fact</span>
+    <h2>Most of that DNA comes from the placenta</h2>
+    <p class="lede">This is the single most important fact in this entire guide. The DNA that NIPT reads is shed mainly by the <em class="term">placenta</em> &mdash; the organ that nourishes your baby &mdash; and not directly by the baby.</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 680 300" role="img" aria-label="Diagram of a uterus containing a fetus and a placenta, with an arrow showing DNA shed by the placenta entering the mother's bloodstream.">
+        <defs>
+          <linearGradient id="plac" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ff9db0" stop-opacity=".95"/>
+            <stop offset="1" stop-color="#e2587a" stop-opacity=".9"/>
+          </linearGradient>
+          <linearGradient id="ut" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#12304a"/>
+            <stop offset="1" stop-color="#0d2438"/>
+          </linearGradient>
+        </defs>
+
+        <!-- uterus -->
+        <path d="M40 34 q0 -14 14 -14 h206 q14 0 14 14 v196 q0 42 -42 42 h-150 q-42 0 -42 -42 z"
+              fill="url(#ut)" stroke="rgba(131,193,255,.4)" stroke-width="2"/>
+        <!-- amniotic cavity -->
+        <path d="M126 56 q0 -12 12 -12 h74 q12 0 12 12 v150 q0 26 -26 26 h-46 q-26 0 -26 -26 z"
+              fill="rgba(34,211,238,.09)" stroke="rgba(34,211,238,.3)" stroke-width="1.5" stroke-dasharray="5 5"/>
+        <text class="svg-label" x="175" y="228" text-anchor="middle">amniotic fluid</text>
+
+        <!-- placenta on the left wall -->
+        <path d="M46 44 q0 -18 18 -18 h30 q16 0 16 18 v194 q0 24 -22 24 h-24 q-18 0 -18 -24 z"
+              fill="url(#plac)" stroke="rgba(255,157,176,.6)" stroke-width="1.5"/>
+        <text class="svg-label strong" x="80" y="150" text-anchor="middle" transform="rotate(-90 80 150)">PLACENTA</text>
+
+        <!-- fetus -->
+        <circle cx="182" cy="104" r="26" fill="rgba(105,184,255,.22)" stroke="rgba(105,184,255,.65)" stroke-width="2"/>
+        <circle cx="182" cy="86" r="14" fill="rgba(105,184,255,.28)" stroke="rgba(105,184,255,.7)" stroke-width="2"/>
+        <!-- cord -->
+        <path d="M182 130 q-40 22 -62 34" stroke="rgba(191,188,255,.8)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <text class="svg-label" x="182" y="192" text-anchor="middle">your baby</text>
+
+        <!-- arrow to maternal blood -->
+        <path d="M108 268 q60 22 126 22" stroke="#22d3ee" stroke-width="2.5" fill="none" stroke-dasharray="6 5" marker-end="url(#ar)"/>
+        <defs>
+          <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0 0 L9 4.5 L0 9 z" fill="#22d3ee"/>
+          </marker>
+        </defs>
+
+        <!-- maternal blood panel -->
+        <rect x="410" y="60" width="238" height="180" rx="14" fill="rgba(14,30,48,.9)" stroke="rgba(131,193,255,.32)" stroke-width="1.5"/>
+        <text class="svg-label strong" x="529" y="88" text-anchor="middle">DNA in your bloodstream</text>
+        <g fill="#ff9db0" opacity=".92">
+          <rect x="436" y="108" width="26" height="9" rx="4.5"/>
+          <rect x="478" y="126" width="34" height="9" rx="4.5"/>
+          <rect x="530" y="106" width="22" height="9" rx="4.5"/>
+          <rect x="566" y="130" width="40" height="9" rx="4.5"/>
+          <rect x="452" y="158" width="30" height="9" rx="4.5"/>
+          <rect x="502" y="170" width="26" height="9" rx="4.5"/>
+          <rect x="548" y="156" width="34" height="9" rx="4.5"/>
+          <rect x="596" y="176" width="22" height="9" rx="4.5"/>
+          <rect x="470" y="200" width="38" height="9" rx="4.5"/>
+          <rect x="540" y="204" width="28" height="9" rx="4.5"/>
+        </g>
+        <text class="svg-label amber" x="529" y="232" text-anchor="middle">mostly fragments from the placenta</text>
+      </svg>
+      <p class="caption">NIPT reads DNA shed by the placenta into your blood.</p>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px;">
+      <div class="card edge-teal">
+        <h3>Usually this works well</h3>
+        <p class="small muted" style="margin:0;">The placenta and the baby grow from the same fertilised egg, so they usually have the same chromosomes &mdash; which is why NIPT is such a good screening test.</p>
+      </div>
+      <div class="card edge-amber">
+        <h3>But not always</h3>
+        <p class="small muted" style="margin:0;">Sometimes the placenta&rsquo;s cells and the baby&rsquo;s cells differ. When that happens, an unusual reading can come from the <strong>placenta alone</strong> and never involve your baby at all.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 5 · YOUR RESULT IN PLAIN LANGUAGE ═══════════════ -->
+<section class="slide" id="s5" data-title="Your Result, in Plain Language" aria-label="Slide 5 of 30: Your result in plain language">
+  <div class="slide-inner">
+    <span class="eyebrow">Decoding the report</span>
+    <h2>Your result, in plain language</h2>
+    <p class="lede">Here is what the wording on a report like yours actually means, line by line.</p>
+    <div class="report" style="margin-top:16px;">
+      <div class="report-row">
+        <span class="report-quote">&ldquo;Low risk for other conditions&rdquo;</span>
+        <span class="report-plain">The other chromosome conditions this test screened for came back low risk.</span>
+      </div>
+      <div class="report-row">
+        <span class="report-quote">&ldquo;Atypical finding&hellip; involves the X chromosome&rdquo;</span>
+        <span class="report-plain">Something about the X chromosome did not fit a clear, recognisable pattern.</span>
+      </div>
+      <div class="report-row">
+        <span class="report-quote">&ldquo;Suspected to be of fetal/placental origin&rdquo;</span>
+        <span class="report-plain">The signal appears to come from the baby or from the placenta &mdash; the lab cannot yet tell which.</span>
+      </div>
+      <div class="report-row">
+        <span class="report-quote">&ldquo;Appears to be mosaicism&rdquo;</span>
+        <span class="report-plain">It looks like a mixture of two different cell types rather than one consistent pattern.</span>
+      </div>
+      <div class="report-row">
+        <span class="report-quote">&ldquo;Could also be due to normal variation and/or confined to the placental tissue&rdquo;</span>
+        <span class="report-plain">It may be a harmless variation, or it may be limited to the placenta and not present in your baby.</span>
+      </div>
+      <div class="report-row">
+        <span class="report-quote">&ldquo;Fetal risk assessment for monosomy X could not be performed&rdquo;</span>
+        <span class="report-plain"><strong>The lab could not give you a risk number for monosomy X.</strong> This is the sentence that makes the result &ldquo;atypical.&rdquo;</span>
+      </div>
+      <div class="report-row">
+        <span class="report-quote">&ldquo;Genetic counseling&hellip; should be considered&rdquo;</span>
+        <span class="report-plain">A conversation with a genetics specialist is offered, along with a detailed ultrasound and the option of diagnostic testing.</span>
+      </div>
+      <div class="report-row">
+        <span class="report-quote">&ldquo;Repeat cell-free DNA testing is not recommended&rdquo;</span>
+        <span class="report-plain"><strong>Do not repeat this blood test.</strong> It will not clarify the result. (Slide 16 explains why.)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 6 · WHY ATYPICAL ═══════════════ -->
+<section class="slide" id="s6" data-title="Why the Report Says &ldquo;Atypical&rdquo; Instead of Yes or No" aria-label="Slide 6 of 30: Why the report says atypical">
+  <div class="slide-inner">
+    <span class="eyebrow">Making sense of a non-answer</span>
+    <h2>Why the report says &ldquo;atypical&rdquo; instead of yes or no</h2>
+    <p class="lede">A screening result has to fit a known pattern before the lab can attach a number to it. Yours did not fit one pattern &mdash; so there was no honest number to give.</p>
+    <div class="grid g3" style="margin-top:20px;">
+      <div class="card edge-teal">
+        <h3>A clear positive result</h3>
+        <p class="small muted" style="margin:0;">The pattern matches a known chromosome difference. The lab <em class="term">can</em> calculate a risk estimate and report it.</p>
+      </div>
+      <div class="card edge-teal">
+        <h3>A clear negative result</h3>
+        <p class="small muted" style="margin:0;">The pattern looks typical. The lab reports low risk for the conditions it screened for.</p>
+      </div>
+      <div class="card edge-amber">
+        <h3>An atypical result &mdash; yours</h3>
+        <p class="small muted" style="margin:0;">The pattern looks like a <strong>mixture</strong>, or resembles something the lab cannot classify. There is no valid number to give, so the lab says so instead of guessing.</p>
+      </div>
+    </div>
+    <div class="note">
+      <span class="note-label">An important reframe</span>
+      <p>&ldquo;We don&rsquo;t know yet&rdquo; is an <strong>honest result</strong> &mdash; not a mistake, and not a hidden bad result. Your report is telling you that this particular question needs a different kind of test to answer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 7 · WHAT IS MOSAICISM ═══════════════ -->
+<section class="slide" id="s7" data-title="What Is Mosaicism?" aria-label="Slide 7 of 30: What is mosaicism">
+  <div class="slide-inner">
+    <span class="eyebrow">Vocabulary</span>
+    <h2>What is mosaicism?</h2>
+    <p class="lede"><em class="term">Mosaicism</em> means having two different populations of cells in the same person or the same placenta.</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 680 250" role="img" aria-label="Left panel shows a mosaic wall of tiles in two colours. Right panel shows two cells, one with two X chromosomes and one with a single X chromosome.">
+        <text class="svg-label strong" x="40" y="26">Think of a mosaic tiled wall</text>
+        <g>
+          <!-- tile grid -->
+          <g>
+            <rect x="40"  y="44" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="80"  y="44" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="120" y="44" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="160" y="44" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="200" y="44" width="34" height="34" rx="5" fill="rgba(255,189,99,.85)"/>
+            <rect x="240" y="44" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+
+            <rect x="40"  y="84" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="80"  y="84" width="34" height="34" rx="5" fill="rgba(255,189,99,.85)"/>
+            <rect x="120" y="84" width="34" height="34" rx="5" fill="rgba(255,189,99,.85)"/>
+            <rect x="160" y="84" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="200" y="84" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="240" y="84" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+
+            <rect x="40"  y="124" width="34" height="34" rx="5" fill="rgba(255,189,99,.85)"/>
+            <rect x="80"  y="124" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="120" y="124" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="160" y="124" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="200" y="124" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="240" y="124" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+
+            <rect x="40"  y="164" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="80"  y="164" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="120" y="164" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="160" y="164" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="200" y="164" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+            <rect x="240" y="164" width="34" height="34" rx="5" fill="rgba(105,184,255,.8)"/>
+          </g>
+        </g>
+        <text class="svg-label" x="40" y="228">One wall &mdash; two kinds of tile.</text>
+
+        <!-- divider -->
+        <line x1="318" y1="24" x2="318" y2="226" stroke="rgba(131,193,255,.2)" stroke-width="1.5"/>
+
+        <text class="svg-label strong" x="358" y="26">In your result</text>
+
+        <circle cx="392" cy="82" r="26" fill="rgba(105,184,255,.16)" stroke="rgba(105,184,255,.55)" stroke-width="2"/>
+        <path d="M382 74 q4 -8 8 0 q4 8 8 0" stroke="#69b8ff" stroke-width="3" fill="none"/>
+        <path d="M382 90 q4 -8 8 0 q4 8 8 0" stroke="#69b8ff" stroke-width="3" fill="none"/>
+        <text class="svg-label" x="432" y="76">cells with the usual</text>
+        <text class="svg-label strong" x="432" y="94">two X chromosomes (46,XX)</text>
+
+        <circle cx="392" cy="164" r="26" fill="rgba(255,189,99,.16)" stroke="rgba(255,189,99,.6)" stroke-width="2"/>
+        <path d="M384 164 q4 -9 8 0 q4 9 8 0" stroke="#ffbd63" stroke-width="3" fill="none"/>
+        <text class="svg-label" x="432" y="158">cells with only</text>
+        <text class="svg-label amber" x="432" y="176">one X chromosome (45,X)</text>
+      </svg>
+      <p class="caption">Mosaicism = a mixture of two cell types in one person, one placenta, or both.</p>
+    </div>
+
+    <div class="note plain">
+      <span class="note-label">Where the mixture can live</span>
+      <p>Mosaicism may exist <strong>only in the placenta</strong>, in <strong>some of your baby&rsquo;s cells</strong>, or in <strong>you</strong>. Which of those it is makes a very large difference to what it means &mdash; and that is exactly what the next tests are designed to find out.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 8 · WHAT IS MONOSOMY X ═══════════════ -->
+<section class="slide" id="s8" data-title="What Is Monosomy X (Turner Syndrome)?" aria-label="Slide 8 of 30: What is monosomy X">
+  <div class="slide-inner">
+    <span class="eyebrow">Vocabulary</span>
+    <h2>What is monosomy X?</h2>
+    <p class="lede"><em class="term">Monosomy X</em> &mdash; also called <em class="term">Turner syndrome</em> &mdash; means having one X chromosome instead of two, in some or all of the body&rsquo;s cells.</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 680 200" role="img" aria-label="Comparison of a typical 46,XX chromosome pair with a 45,X karyotype showing only one X chromosome.">
+        <text class="svg-label strong" x="34" y="28">Typically two X chromosomes</text>
+        <g>
+          <path d="M58 46 q-12 34 0 68 q12 34 0 68" stroke="rgba(105,184,255,.85)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M112 46 q-12 34 0 68 q12 34 0 68" stroke="rgba(105,184,255,.85)" stroke-width="6" fill="none" stroke-linecap="round"/>
+        </g>
+        <text class="svg-label" x="34" y="192">46,XX</text>
+
+        <line x1="210" y1="20" x2="210" y2="192" stroke="rgba(131,193,255,.2)" stroke-width="1.5"/>
+
+        <text class="svg-label strong" x="248" y="28">Monosomy X</text>
+        <g>
+          <path d="M272 46 q-12 34 0 68 q12 34 0 68" stroke="rgba(255,189,99,.9)" stroke-width="6" fill="none" stroke-linecap="round"/>
+        </g>
+        <text class="svg-label amber" x="248" y="192">45,X</text>
+
+        <g opacity=".22">
+          <path d="M326 46 q-12 34 0 68 q12 34 0 68" stroke="#ffbd63" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="6 7"/>
+        </g>
+        <text class="svg-label" x="326" y="192">(missing)</text>
+
+        <line x1="452" y1="20" x2="452" y2="192" stroke="rgba(131,193,255,.2)" stroke-width="1.5"/>
+        <text class="svg-label strong" x="486" y="28">Many possible outcomes</text>
+        <text class="svg-label" x="486" y="56">No noticeable features</text>
+        <text class="svg-label" x="486" y="82">Short stature</text>
+        <text class="svg-label" x="486" y="108">Delayed puberty</text>
+        <text class="svg-label" x="486" y="134">Heart or kidney differences</text>
+        <text class="svg-label" x="486" y="160">Usually treatable or monitored</text>
+      </svg>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px;">
+      <div class="card edge-teal">
+        <h3>What it is not</h3>
+        <p class="small muted" style="margin:0;">It is not an illness you catch, and it is not caused by anything either parent did or did not do.</p>
+      </div>
+      <div class="card edge">
+        <h3>What it can look like</h3>
+        <p class="small muted" style="margin:0;">Effects vary widely. Many girls and women with monosomy X have normal intelligence and live full, healthy lives. Mosaic forms generally have milder effects than a complete 45,X.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 9 · FIVE EXPLANATIONS ═══════════════ -->
+<section class="slide" id="s9" data-title="Five Possible Explanations for This Result" aria-label="Slide 9 of 30: Five possible explanations">
+  <div class="slide-inner">
+    <span class="eyebrow">The big picture</span>
+    <h2>Five possible explanations for your result</h2>
+    <div class="hub">
+      <div class="hub-kicker">Your report</div>
+      <div class="hub-main">An atypical X-chromosome finding</div>
+    </div>
+    <div class="scale"><span>most common</span><span class="bar"></span><span>least common</span></div>
+    <div class="steps" style="grid-template-columns:1fr;">
+      <div class="grid g5">
+        <div class="card edge-teal"><span class="num teal">1</span><h3>Only the placenta</h3><p class="tiny" style="margin:0;">The placenta carried an unusual cell line. Your baby&rsquo;s chromosomes are normal.</p></div>
+        <div class="card edge-amber"><span class="num amber">2</span><h3>The baby has mosaic monosomy X</h3><p class="tiny" style="margin:0;">Some of your baby&rsquo;s cells are missing an X chromosome; others are not.</p></div>
+        <div class="card edge-teal"><span class="num teal">3</span><h3>It comes from you</h3><p class="tiny" style="margin:0;">Some women naturally have a few cells that lost an X, or a small X change.</p></div>
+        <div class="card edge-purple"><span class="num purple">4</span><h3>An unusual piece of an X</h3><p class="tiny" style="margin:0;">A small piece of an X chromosome is missing, extra, or rearranged.</p></div>
+        <div class="card edge-purple"><span class="num purple">5</span><h3>An early twin</h3><p class="tiny" style="margin:0;">DNA from a twin who stopped developing very early can linger in your blood.</p></div>
+      </div>
+    </div>
+    <div class="note ok">
+      <span class="note-label">Where the odds sit</span>
+      <p>When this kind of result is followed up, it most often turns out to be explanation <strong>1</strong>, explanation <strong>3</strong>, or normal variation &mdash; not a true finding in the baby. Explanations 2, 4, and 5 are possible but less common.</p>
+    </div>
+    <p class="tiny" style="margin-top:12px;">The next four slides take each explanation in turn.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ 10 · ONLY THE PLACENTA ═══════════════ -->
+<section class="slide" id="s10" data-title="Explanation 1 — It Is Only in the Placenta" aria-label="Slide 10 of 30: Explanation 1, only in the placenta">
+  <div class="slide-inner">
+    <span class="eyebrow calm">Explanation 1 &middot; the most common</span>
+    <h2>It is only in the placenta</h2>
+    <p class="lede">The medical name is <em class="term">confined placental mosaicism</em> (CPM). The placenta developed a second cell line. Your baby did not.</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 680 220" role="img" aria-label="Two panels: the placenta contains a mixture of normal and 45,X cells, while the fetus contains only normal cells.">
+        <rect x="26" y="22" width="290" height="176" rx="14" fill="rgba(14,30,48,.65)" stroke="rgba(255,189,99,.4)" stroke-width="1.5"/>
+        <text class="svg-label amber" x="171" y="48" text-anchor="middle">THE PLACENTA</text>
+        <g>
+          <circle cx="90"  cy="90"  r="15" fill="rgba(105,184,255,.65)"/>
+          <circle cx="132" cy="90"  r="15" fill="rgba(105,184,255,.65)"/>
+          <circle cx="174" cy="90"  r="15" fill="rgba(255,189,99,.8)"/>
+          <circle cx="216" cy="90"  r="15" fill="rgba(105,184,255,.65)"/>
+          <circle cx="111" cy="130" r="15" fill="rgba(255,189,99,.8)"/>
+          <circle cx="153" cy="130" r="15" fill="rgba(105,184,255,.65)"/>
+          <circle cx="195" cy="130" r="15" fill="rgba(105,184,255,.65)"/>
+          <circle cx="237" cy="130" r="15" fill="rgba(255,189,99,.8)"/>
+        </g>
+        <text class="svg-label" x="171" y="176" text-anchor="middle">a mixture of two cell types</text>
+
+        <rect x="364" y="22" width="290" height="176" rx="14" fill="rgba(14,30,48,.65)" stroke="rgba(121,224,155,.42)" stroke-width="1.5"/>
+        <text class="svg-label strong" x="509" y="48" text-anchor="middle" style="fill:#79e09b;">YOUR BABY</text>
+        <g>
+          <circle cx="428" cy="90"  r="15" fill="rgba(105,184,255,.65)"/>
+          <circle cx="470" cy="90"  r="15" fill="rgba(105,184,255,.65)"/>
+          <circle cx="512" cy="90"  r="15" fill="rgba(105,184,255,.65)"/>
+          <circle cx="554" cy="90"  r="15" fill="rgba(105,184,255,.65)"/>
+          <circle cx="449" cy="130" r="15" fill="rgba(105,184,255,.65)"/>
+          <circle cx="491" cy="130" r="15" fill="rgba(105,184,255,.65)"/>
+          <circle cx="533" cy="130" r="15" fill="rgba(105,184,255,.65)"/>
+          <circle cx="575" cy="130" r="15" fill="rgba(105,184,255,.65)"/>
+        </g>
+        <text class="svg-label" x="509" y="176" text-anchor="middle">all cells normal</text>
+      </svg>
+      <p class="caption">The placenta had an extra cell line. The baby&rsquo;s own chromosomes are normal.</p>
+    </div>
+
+    <div class="grid g3" style="margin-top:16px;">
+      <div class="card edge-teal"><h3>How common</h3><p class="tiny" style="margin:0;">This is the most common reason these results turn out to be nothing serious.</p></div>
+      <div class="card edge-teal"><h3>What it means for your baby</h3><p class="tiny" style="margin:0;">Normal chromosomes. No treatment is needed for this finding.</p></div>
+      <div class="card edge"><h3>What it changes</h3><p class="tiny" style="margin:0;">Because the placenta was involved, we usually recommend extra growth scans and blood-pressure checks later in pregnancy.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 11 · TRUE FETAL MOSAIC ═══════════════ -->
+<section class="slide" id="s11" data-title="Explanation 2 — The Baby Has Mosaic Monosomy X" aria-label="Slide 11 of 30: Explanation 2, the baby has mosaic monosomy X">
+  <div class="slide-inner">
+    <span class="eyebrow warm">Explanation 2</span>
+    <h2>The baby has mosaic monosomy X</h2>
+    <p class="lede">In this explanation, some of your baby&rsquo;s own cells are missing an X chromosome, while other cells are not.</p>
+    <div class="grid g2" style="margin-top:20px;">
+      <div class="card edge-amber">
+        <h3>How much it matters depends on two things</h3>
+        <ul class="clean amber small" style="margin-top:10px;">
+          <li><strong>How many</strong> of the baby&rsquo;s cells carry the change</li>
+          <li><strong>Which tissues</strong> those cells are in</li>
+        </ul>
+        <p class="tiny" style="margin-top:12px;">A small proportion of affected cells generally means milder effects. A larger proportion, or involvement of the heart or kidneys, means more monitoring.</p>
+      </div>
+      <div class="card edge">
+        <h3>Why we cannot tell from the blood test</h3>
+        <p class="small muted">The NIPT sample came from the placenta, so it cannot show us what is happening inside your baby&rsquo;s own cells.</p>
+        <p class="small muted" style="margin:0;">This is the one explanation that can be confirmed &mdash; or ruled out &mdash; only with a diagnostic test such as amniocentesis, together with a detailed ultrasound.</p>
+      </div>
+    </div>
+    <div class="note">
+      <span class="note-label">Please hold on to this</span>
+      <p>An atypical result makes this explanation <strong>possible</strong>. It does not make it <strong>likely</strong>. Most of the time, follow-up testing does not find it in the baby.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 12 · FROM YOU ═══════════════ -->
+<section class="slide" id="s12" data-title="Explanation 3 — The Finding May Come From You" aria-label="Slide 12 of 30: Explanation 3, the finding may come from you">
+  <div class="slide-inner">
+    <span class="eyebrow calm">Explanation 3</span>
+    <h2>The finding may come from you, not your baby</h2>
+    <p class="lede">This surprises most parents, and it is one of the most common explanations of all.</p>
+    <div class="grid g2" style="margin-top:20px;">
+      <div class="card edge-teal">
+        <h3>What this means</h3>
+        <p class="small muted">Some women naturally carry a small number of cells that have lost an X chromosome, or a small change on an X chromosome. This becomes more common with age.</p>
+        <p class="small muted" style="margin:0;">It usually causes <strong>no health problems at all</strong>. Many women go their whole lives without knowing.</p>
+      </div>
+      <div class="card edge">
+        <h3>Why it appears on your report</h3>
+        <p class="small muted">NIPT reads DNA in your blood &mdash; and some of that DNA is yours, not the placenta&rsquo;s. A maternal variation can therefore look like a fetal finding.</p>
+        <p class="small muted" style="margin:0;">If your baby&rsquo;s chromosomes come back normal, a simple blood test on <strong>you</strong> (a karyotype or microarray) can confirm whether this is the explanation.</p>
+      </div>
+    </div>
+    <div class="note ok">
+      <span class="note-label">This is not your fault</span>
+      <p>Nothing you did, ate, took, or were exposed to caused this. A maternal chromosome variation is simply part of your biology &mdash; and it is worth knowing about for your own health record.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 13 · EXPLANATIONS 4 AND 5 ═══════════════ -->
+<section class="slide" id="s13" data-title="Explanations 4 and 5 — Unusual X Pieces, and an Early Twin" aria-label="Slide 13 of 30: Explanations 4 and 5">
+  <div class="slide-inner">
+    <span class="eyebrow">Explanations 4 and 5</span>
+    <h2>Two less common explanations</h2>
+    <div class="grid g2" style="margin-top:20px;">
+      <div class="card edge-purple">
+        <span class="num purple">4</span>
+        <h3>An unusual piece of an X chromosome</h3>
+        <p class="small muted">Sometimes a small piece of an X chromosome is missing, extra, or rearranged &mdash; or there is a small extra marker chromosome.</p>
+        <p class="small muted" style="margin:0;">This changes how the test&rsquo;s software reads the X chromosome. It does not necessarily mean classic monosomy X. Some rearrangements are inherited from a healthy parent and cause no problems at all.</p>
+      </div>
+      <div class="card edge-purple">
+        <span class="num purple">5</span>
+        <h3>An early twin who stopped developing</h3>
+        <p class="small muted">If your pregnancy began as a twin and one twin stopped developing very early, DNA from that pregnancy can remain in your bloodstream for a while.</p>
+        <p class="small muted" style="margin:0;">If that twin had a sex-chromosome difference, it can be detected on your NIPT even though the surviving baby is unaffected. This is uncommon, but it is real.</p>
+      </div>
+    </div>
+    <div class="note plain">
+      <span class="note-label">How we sort this out</span>
+      <p>These two explanations are among the reasons a detailed ultrasound and a diagnostic test are offered. Ultrasound looks at your baby&rsquo;s structure; a diagnostic test looks at your baby&rsquo;s actual chromosomes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 14 · HOW OFTEN ═══════════════ -->
+<section class="slide" id="s14" data-title="How Often Does This Turn Out to Affect the Baby?" aria-label="Slide 14 of 30: How often does this affect the baby">
+  <div class="slide-inner">
+    <span class="eyebrow">Putting it in proportion</span>
+    <h2>How often does this turn out to affect the baby?</h2>
+    <p class="lede">Short answer: <strong>far less often than a positive result for trisomy 21.</strong> For sex-chromosome findings, the result is usually <em>not</em> confirmed in the baby.</p>
+
+    <div class="grid g2" style="margin-top:22px;">
+      <div class="card edge-teal">
+        <h3>A high-risk result for trisomy 21</h3>
+        <div class="ratio" style="margin:12px 0 10px;">
+          <div class="ratio-track"><div class="ratio-fill high"></div></div>
+          <div class="ratio-word">usually confirmed when a diagnostic test is done</div>
+        </div>
+        <p class="tiny" style="margin:0;">This is why a positive trisomy 21 screen is taken so seriously.</p>
+      </div>
+      <div class="card edge-amber">
+        <h3>An atypical sex-chromosome result like yours</h3>
+        <div class="ratio" style="margin:12px 0 10px;">
+          <div class="ratio-track"><div class="ratio-fill low"></div></div>
+          <div class="ratio-word">more often than not, <strong>not</strong> confirmed in the baby</div>
+        </div>
+        <p class="tiny" style="margin:0;">Because the signal so often comes from the placenta or from the mother.</p>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <span class="note-label">Why we have not printed a single percentage here</span>
+      <p>Published figures for this vary a great deal depending on the exact finding, the laboratory, and the population tested. Rather than give you a number that may not apply to you, we are telling you the direction of the evidence &mdash; and asking you to get the number that fits <strong>your</strong> report.</p>
+      <p style="margin-top:10px;"><strong>Ask your genetic counselor:</strong> &ldquo;For my specific finding and this specific test, how often is it confirmed in the baby?&rdquo;</p>
+    </div>
+    <p class="tiny" style="margin-top:12px;">The bars above are illustrative of the contrast in how these results behave. They are not a measurement of your individual risk.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ 15 · WHAT IT DOES NOT MEAN ═══════════════ -->
+<section class="slide" id="s15" data-title="What This Result Does NOT Mean" aria-label="Slide 15 of 30: What this result does not mean">
+  <div class="slide-inner">
+    <span class="eyebrow">Clearing up fears</span>
+    <h2>What this result does <em class="term">not</em> mean</h2>
+    <ul class="cross" style="margin-top:22px;font-size:1.04rem;">
+      <li>It does not mean your baby has Turner syndrome.</li>
+      <li>It does not mean something is definitely wrong with your baby.</li>
+      <li>It does not mean you should end or change your pregnancy based on this blood test.</li>
+      <li>It does not mean you did anything wrong.</li>
+      <li>It does not mean your baby will have health problems.</li>
+      <li>It does not mean you are required to have an amniocentesis &mdash; that is your choice to make.</li>
+      <li>It does not mean your baby&rsquo;s sex is unknowable, although this result can make the sex reported less certain.</li>
+    </ul>
+    <div class="note ok">
+      <span class="note-label">What it does mean</span>
+      <p>An open question &mdash; and there are good, well-established ways to answer it. Your care team can walk through every one of them with you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 16 · DO NOT REPEAT NIPT ═══════════════ -->
+<section class="slide" id="s16" data-title="Why We Do Not Simply Repeat the NIPT" aria-label="Slide 16 of 30: Why we do not repeat the NIPT">
+  <div class="slide-inner">
+    <span class="eyebrow warm">An important instruction</span>
+    <h2>Why we do not simply repeat the NIPT</h2>
+    <p class="lede">Your report states directly: <em class="term">&ldquo;Repeat cell-free DNA testing is not recommended.&rdquo;</em> Here is the reasoning behind that.</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 680 220" role="img" aria-label="A repeating loop showing that a second blood draw reads the same placenta and produces the same unclear result, with an arrow pointing away from the loop toward ultrasound and amniocentesis.">
+        <defs>
+          <marker id="loop-ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0 0 L9 4.5 L0 9 z" fill="#ffbd63"/>
+          </marker>
+          <marker id="exit-ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0 0 L9 4.5 L0 9 z" fill="#22d3ee"/>
+          </marker>
+        </defs>
+
+        <rect x="28" y="46" width="150" height="60" rx="12" fill="rgba(255,189,99,.12)" stroke="rgba(255,189,99,.5)" stroke-width="1.5"/>
+        <text class="svg-label amber" x="103" y="72" text-anchor="middle">Blood test</text>
+        <text class="svg-label amber" x="103" y="90" text-anchor="middle">again</text>
+
+        <path d="M178 76 h96" stroke="#ffbd63" stroke-width="2.5" marker-end="url(#loop-ar)"/>
+
+        <rect x="278" y="46" width="164" height="60" rx="12" fill="rgba(255,189,99,.12)" stroke="rgba(255,189,99,.5)" stroke-width="1.5"/>
+        <text class="svg-label amber" x="360" y="72" text-anchor="middle">Same placenta</text>
+        <text class="svg-label amber" x="360" y="90" text-anchor="middle">is read again</text>
+
+        <path d="M442 76 h60 q26 0 26 26 v20 q0 26 -26 26 h-360 q-26 0 -26 -26 v-20" stroke="#ffbd63" stroke-width="2.5" fill="none" marker-end="url(#loop-ar)"/>
+        <text class="svg-label amber" x="272" y="176" text-anchor="middle">the same unclear answer</text>
+
+        <line x1="530" y1="30" x2="530" y2="196" stroke="rgba(131,193,255,.2)" stroke-width="1.5"/>
+
+        <text class="svg-label cyan" x="596" y="62" text-anchor="middle">Instead</text>
+        <path d="M596 78 v34" stroke="#22d3ee" stroke-width="2.5" marker-end="url(#exit-ar)"/>
+        <rect x="520" y="122" width="152" height="64" rx="12" fill="rgba(34,211,238,.1)" stroke="rgba(34,211,238,.45)" stroke-width="1.5"/>
+        <text class="svg-label cyan" x="596" y="148" text-anchor="middle">Ultrasound &amp;</text>
+        <text class="svg-label cyan" x="596" y="168" text-anchor="middle">amniocentesis</text>
+      </svg>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px;">
+      <div class="card edge-amber">
+        <h3>Repeating it wastes time</h3>
+        <p class="small muted" style="margin:0;">It would cost you weeks of waiting, and some decisions and options are easier earlier in pregnancy. Getting the <em>right</em> test matters more than getting a second version of the same unclear answer.</p>
+      </div>
+      <div class="card edge">
+        <h3>The pathway moves forward instead</h3>
+        <p class="small muted" style="margin:0;">The next steps are a detailed ultrasound and, if you choose to have one, an amniocentesis with chromosome studies &mdash; tests that examine your baby rather than the placenta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 17 · CARE PATHWAY ═══════════════ -->
+<section class="slide" id="s17" data-title="Your Care Pathway at a Glance" aria-label="Slide 17 of 30: Your care pathway at a glance">
+  <div class="slide-inner">
+    <span class="eyebrow">The plan</span>
+    <h2>Your care pathway at a glance</h2>
+    <p class="lede">Five steps. You can pause at any point, ask questions, and take time to decide.</p>
+    <div class="steps" style="margin-top:22px;">
+      <div class="step">
+        <span class="num">1</span>
+        <h3>Genetic counseling</h3>
+        <p>Your own report explained, and your options laid out.</p>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <h3>Detailed ultrasound</h3>
+        <p>A close look at your baby&rsquo;s structure and growth.</p>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <h3>Decide about amniocentesis</h3>
+        <p>Your choice. For this question, amniocentesis is preferred over CVS.</p>
+      </div>
+      <div class="step">
+        <span class="num">4</span>
+        <h3>Laboratory testing</h3>
+        <p>Karyotype, microarray, and sometimes FISH on the sample.</p>
+      </div>
+      <div class="step">
+        <span class="num">5</span>
+        <h3>Sometimes we test you too</h3>
+        <p>If your baby&rsquo;s chromosomes are normal, a blood test on you can explain the result.</p>
+      </div>
+    </div>
+    <div class="note">
+      <span class="note-label">Nothing here is irreversible</span>
+      <p>Each step is an offer and a conversation, not an obligation. You can decline any step and still receive excellent care.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 18 · GENETIC COUNSELING ═══════════════ -->
+<section class="slide" id="s18" data-title="Step 1 — Genetic Counseling" aria-label="Slide 18 of 30: Step 1, genetic counseling">
+  <div class="slide-inner">
+    <span class="eyebrow calm">Step 1</span>
+    <h2>Genetic counseling</h2>
+    <p class="lede">This is a conversation, not a verdict. It is the first step because it makes every step after it easier to understand.</p>
+    <div class="grid g3" style="margin-top:20px;">
+      <div class="card edge">
+        <h3>What it is</h3>
+        <p class="tiny" style="margin:0;">Time with a specialist trained in genetics and in explaining test results clearly, without rushing you.</p>
+      </div>
+      <div class="card edge">
+        <h3>What you get</h3>
+        <p class="tiny" style="margin:0;">Your report explained line by line; what each option can and cannot tell you; space to ask anything, including &ldquo;what would you do?&rdquo;</p>
+      </div>
+      <div class="card edge">
+        <h3>What to bring</h3>
+        <p class="tiny" style="margin:0;">Your report, your questions (there is a checklist near the end of this guide), and &mdash; if you wish &mdash; someone you trust.</p>
+      </div>
+    </div>
+    <div class="note ok">
+      <span class="note-label">Offered, not required</span>
+      <p>Being offered genetic counseling does not mean something is definitely wrong. It means your team wants you to have the information you need to make your own decisions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 19 · ULTRASOUND ═══════════════ -->
+<section class="slide" id="s19" data-title="Step 2 — A Detailed Ultrasound" aria-label="Slide 19 of 30: Step 2, a detailed ultrasound">
+  <div class="slide-inner">
+    <span class="eyebrow">Step 2</span>
+    <h2>A detailed ultrasound</h2>
+    <p class="lede">Ultrasound cannot diagnose a chromosome condition. What it can do is show us features that make the finding more &mdash; or less &mdash; concerning.</p>
+    <div class="grid g3" style="margin-top:20px;">
+      <div class="card edge"><h3>Fluid at the neck</h3><p class="tiny" style="margin:0;">Extra fluid behind the neck, or a fluid collection around the neck, is one of the more common features looked for.</p></div>
+      <div class="card edge"><h3>The heart</h3><p class="tiny" style="margin:0;">The heart&rsquo;s structure and its major vessels, including the left side of the heart and the aortic arch.</p></div>
+      <div class="card edge"><h3>The kidneys</h3><p class="tiny" style="margin:0;">Kidney shape and position, including whether the kidneys are joined together (horseshoe kidney).</p></div>
+      <div class="card edge"><h3>Growth and long bones</h3><p class="tiny" style="margin:0;">Overall size and the length of the arm and leg bones, measured against expected ranges.</p></div>
+      <div class="card edge"><h3>Overall anatomy</h3><p class="tiny" style="margin:0;">A full anatomy survey, plus the amount of fluid around the baby and the placenta&rsquo;s appearance.</p></div>
+      <div class="card edge"><h3>Fluid collections</h3><p class="tiny" style="margin:0;">Swelling or fluid in the body cavities, which would be an important finding if present.</p></div>
+    </div>
+    <div class="grid g2" style="margin-top:16px;">
+      <div class="note ok" style="margin:0;">
+        <span class="note-label">If the ultrasound is normal</span>
+        <p>That is genuinely reassuring, and it makes a placenta-only explanation more likely. It is still not a diagnosis.</p>
+      </div>
+      <div class="note warn" style="margin:0;">
+        <span class="note-label">If something is seen</span>
+        <p>That raises concern, but it still cannot confirm a chromosome condition on its own. A diagnostic test is still needed before any decision.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 20 · AMNIOCENTESIS VS CVS ═══════════════ -->
+<section class="slide" id="s20" data-title="Step 3 — Amniocentesis, and Why CVS Usually Is Not the Right Test Here" aria-label="Slide 20 of 30: Step 3, amniocentesis versus CVS">
+  <div class="slide-inner">
+    <span class="eyebrow">Step 3 &middot; the most important choice</span>
+    <h2>Amniocentesis &mdash; and why CVS is usually not the right test here</h2>
+
+    <div class="diagram">
+      <svg viewBox="0 0 680 260" role="img" aria-label="Two panels comparing amniocentesis, which samples fluid around the baby, with CVS, which samples the placenta.">
+        <!-- Panel A: amniocentesis -->
+        <rect x="24" y="20" width="300" height="220" rx="14" fill="rgba(14,30,48,.65)" stroke="rgba(34,211,238,.45)" stroke-width="1.5"/>
+        <text class="svg-label cyan" x="174" y="46" text-anchor="middle">AMNIOCENTESIS</text>
+        <path d="M60 74 q0 -10 10 -10 h120 q10 0 10 10 v130 q0 30 -30 30 h-80 q-30 0 -30 -30 z"
+              fill="rgba(34,211,238,.07)" stroke="rgba(131,193,255,.4)" stroke-width="1.6"/>
+        <path d="M70 74 q0 -12 12 -12 h22 q12 0 12 12 v140 q0 18 -18 18 h-10 q-18 0 -18 -18 z" fill="rgba(255,157,176,.75)"/>
+        <circle cx="176" cy="122" r="22" fill="rgba(105,184,255,.2)" stroke="rgba(105,184,255,.6)" stroke-width="1.8"/>
+        <path d="M176 144 q-22 12 -34 20" stroke="rgba(191,188,255,.75)" stroke-width="2.4" fill="none"/>
+        <!-- needle into fluid -->
+        <line x1="272" y1="196" x2="196" y2="160" stroke="#22d3ee" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="196" cy="160" r="4" fill="#22d3ee"/>
+        <text class="svg-label cyan" x="174" y="216" text-anchor="middle">fluid around the baby</text>
+        <text class="svg-label" x="174" y="232" text-anchor="middle">the cells here are the baby&rsquo;s</text>
+
+        <!-- Panel B: CVS -->
+        <rect x="356" y="20" width="300" height="220" rx="14" fill="rgba(14,30,48,.65)" stroke="rgba(255,189,99,.42)" stroke-width="1.5"/>
+        <text class="svg-label amber" x="506" y="46" text-anchor="middle">CVS</text>
+        <path d="M392 74 q0 -10 10 -10 h120 q10 0 10 10 v130 q0 30 -30 30 h-80 q-30 0 -30 -30 z"
+              fill="rgba(34,211,238,.05)" stroke="rgba(131,193,255,.4)" stroke-width="1.6"/>
+        <path d="M402 74 q0 -12 12 -12 h22 q12 0 12 12 v140 q0 18 -18 18 h-10 q-18 0 -18 -18 z" fill="rgba(255,157,176,.75)"/>
+        <circle cx="508" cy="122" r="22" fill="rgba(105,184,255,.2)" stroke="rgba(105,184,255,.6)" stroke-width="1.8"/>
+        <!-- needle into placenta -->
+        <line x1="604" y1="196" x2="446" y2="120" stroke="#ffbd63" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="446" cy="120" r="4" fill="#ffbd63"/>
+        <text class="svg-label amber" x="506" y="216" text-anchor="middle">tissue from the placenta</text>
+        <text class="svg-label" x="506" y="232" text-anchor="middle">the same tissue that caused the unclear result</text>
+
+        <!-- shared legend -->
+        <rect x="70" y="86" width="14" height="14" rx="3" fill="rgba(255,157,176,.75)"/>
+        <rect x="402" y="86" width="14" height="14" rx="3" fill="rgba(255,157,176,.75)"/>
+      </svg>
+      <p class="caption">Amniocentesis samples your baby. CVS samples the placenta.</p>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px;">
+      <div class="card edge">
+        <h3>Amniocentesis &mdash; usually preferred here</h3>
+        <ul class="clean small" style="margin-top:10px;">
+          <li>Usually done at about 15&ndash;16 weeks or later</li>
+          <li>A small sample of the fluid around your baby, using a fine needle</li>
+          <li>The cells in that fluid come from your <strong>baby</strong>, not the placenta</li>
+          <li>Carries a small risk of miscarriage, which your team will discuss with you in numbers</li>
+        </ul>
+      </div>
+      <div class="card edge-amber">
+        <h3>CVS &mdash; usually avoided for this question</h3>
+        <ul class="clean amber small" style="margin-top:10px;">
+          <li>Can be done earlier, at about 11&ndash;14 weeks</li>
+          <li>Takes a tiny sample of the <strong>placenta</strong></li>
+          <li>But the placenta is exactly the tissue that produced this unclear result</li>
+          <li>A CVS result here can be impossible to interpret &mdash; it may not answer your question at all</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 21 · LAB TESTS ═══════════════ -->
+<section class="slide" id="s21" data-title="Step 4 — What the Laboratory Will Look For" aria-label="Slide 21 of 30: Step 4, what the laboratory will look for">
+  <div class="slide-inner">
+    <span class="eyebrow">Step 4</span>
+    <h2>What the laboratory will look for</h2>
+    <p class="lede">Three different tests answer three different questions. Often more than one is used together.</p>
+    <div class="grid g3" style="margin-top:20px;">
+      <div class="card edge">
+        <h3>Karyotype</h3>
+        <p class="small muted">A picture of the chromosomes that counts them and examines their structure. It can see missing or extra chromosomes and rearranged pieces.</p>
+        <p class="tiny" style="margin:0;"><strong>Ask for an extended cell count</strong> &mdash; counting extra cells makes low-level mosaicism much less likely to be missed.</p>
+      </div>
+      <div class="card edge">
+        <h3>Microarray (CMA)</h3>
+        <p class="small muted">A molecular scan that finds <strong>tiny</strong> pieces of chromosome that are missing or extra &mdash; far too small for a karyotype to see.</p>
+        <p class="tiny" style="margin:0;">Useful for partial X deletions or duplications, and it can detect mosaicism present at low levels.</p>
+      </div>
+      <div class="card edge">
+        <h3>FISH</h3>
+        <p class="small muted">A fast, targeted look at specific chromosomes using fluorescent probes. It can give a preliminary answer within a day or two.</p>
+        <p class="tiny" style="margin:0;">Often used to check quickly for X and Y material while the full karyotype is still being processed.</p>
+      </div>
+    </div>
+    <div class="note plain">
+      <span class="note-label">Why more than one test</span>
+      <p>A karyotype can see structural rearrangements that a microarray cannot describe, and a microarray can see tiny changes that a karyotype cannot see at all. Together they give the most complete picture.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 22 · MATERNAL TESTING ═══════════════ -->
+<section class="slide" id="s22" data-title="Step 5 — Sometimes We Check Your Chromosomes Too" aria-label="Slide 22 of 30: Step 5, sometimes we check your chromosomes too">
+  <div class="slide-inner">
+    <span class="eyebrow calm">Step 5</span>
+    <h2>Sometimes we check your chromosomes too</h2>
+    <p class="lede">If your baby&rsquo;s chromosomes come back normal, the most likely explanation is that the signal came from you.</p>
+    <div class="grid g2" style="margin-top:20px;">
+      <div class="card edge-teal">
+        <h3>What happens</h3>
+        <p class="small muted">A simple blood test from your arm &mdash; a karyotype or a microarray &mdash; can look for a small chromosome variation in you.</p>
+        <p class="small muted" style="margin:0;">This is not an accusation or a search for blame. It is simply how the puzzle gets solved, and it completes the picture for your whole family.</p>
+      </div>
+      <div class="card edge">
+        <h3>Why it is worth knowing</h3>
+        <ul class="clean teal small" style="margin-top:10px;">
+          <li>It explains your NIPT result</li>
+          <li>It usually has no effect on your health at all</li>
+          <li>It can matter for planning future pregnancies</li>
+          <li>It may be relevant for other family members</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note">
+      <span class="note-label">A normal result for you is still useful</span>
+      <p>If your chromosomes are normal too, that points toward a placenta-only explanation &mdash; which is the most reassuring outcome of all.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 23 · IF NOT AFFECTED ═══════════════ -->
+<section class="slide" id="s23" data-title="If the Baby Is Not Affected — The Most Common Outcome" aria-label="Slide 23 of 30: If the baby is not affected">
+  <div class="slide-inner">
+    <span class="eyebrow calm">The most common outcome</span>
+    <h2>If the baby is not affected</h2>
+    <p class="lede">This is what happens most of the time. The finding was confined to the placenta, and your baby&rsquo;s own chromosomes are normal.</p>
+    <div class="grid g2" style="margin-top:20px;">
+      <div class="card edge-teal">
+        <h3>What it means</h3>
+        <ul class="clean teal small" style="margin-top:10px;">
+          <li>Your baby does not have monosomy X</li>
+          <li>No treatment is needed for this finding</li>
+          <li>The unclear result has been explained</li>
+        </ul>
+      </div>
+      <div class="card edge">
+        <h3>What changes in your care</h3>
+        <p class="small muted" style="margin:0;">Because your placenta carried an unusual cell line, we usually recommend <strong>extra monitoring later in pregnancy</strong>. This is precautionary, not alarming.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:26px;">What that extra monitoring usually looks like</h3>
+    <div class="timeline" style="margin-top:14px;">
+      <div class="tl-item">
+        <h3>Third trimester &middot; growth scans</h3>
+        <p>Serial ultrasound scans to follow your baby&rsquo;s growth, because an unusual placenta can sometimes mean slower growth.</p>
+      </div>
+      <div class="tl-item">
+        <h3>Third trimester &middot; blood pressure and urine checks</h3>
+        <p>Regular monitoring for rising blood pressure, since abnormal placentation slightly increases the chance of preeclampsia.</p>
+      </div>
+      <div class="tl-item">
+        <h3>Delivery planning</h3>
+        <p>Timing and mode of delivery are based on how you and your baby are doing &mdash; not on this blood test.</p>
+      </div>
+      <div class="tl-item">
+        <h3>After birth</h3>
+        <p>No special newborn testing is needed for this finding once your baby&rsquo;s chromosomes are confirmed normal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 24 · IF MOSAIC MONOSOMY X CONFIRMED ═══════════════ -->
+<section class="slide" id="s24" data-title="If Mosaic Monosomy X Is Confirmed" aria-label="Slide 24 of 30: If mosaic monosomy X is confirmed">
+  <div class="slide-inner">
+    <span class="eyebrow warm">If it is confirmed</span>
+    <h2>If mosaic monosomy X is confirmed</h2>
+    <p class="lede">The range of outcomes is wide, and mosaic forms are generally milder than a complete 45,X. Many girls and women with monosomy X have normal intelligence and live full, healthy lives.</p>
+
+    <h3 style="margin-top:24px;">The spectrum of what this can look like</h3>
+    <div class="spectrum" role="presentation"></div>
+    <div class="spectrum-ends">
+      <span>No noticeable features &mdash; discovered by chance</span>
+      <span style="text-align:right;">Short stature, delayed puberty, or heart and kidney differences</span>
+    </div>
+
+    <div class="grid g2" style="margin-top:20px;">
+      <div class="card edge">
+        <h3>What helps most: early monitoring</h3>
+        <ul class="clean small" style="margin-top:10px;">
+          <li>Growth and height monitoring</li>
+          <li>Heart evaluation, including echocardiography</li>
+          <li>Kidney imaging</li>
+          <li>Hearing checks</li>
+          <li>Hormone monitoring around the age of puberty</li>
+        </ul>
+      </div>
+      <div class="card edge-teal">
+        <h3>What this means for you</h3>
+        <p class="small muted">If the diagnosis is confirmed, you will not be managing it alone. Your team will plan the next steps with you, and pediatric specialists will be involved from the start.</p>
+        <p class="small muted" style="margin:0;">Most of the associated features are monitorable or treatable, and knowing early is what makes that possible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 25 · IF Y MATERIAL FOUND ═══════════════ -->
+<section class="slide" id="s25" data-title="If Y-Chromosome Material Is Found" aria-label="Slide 25 of 30: If Y-chromosome material is found">
+  <div class="slide-inner">
+    <span class="eyebrow">If it is found</span>
+    <h2>If Y-chromosome material is found</h2>
+    <p class="lede">Occasionally the testing finds a small amount of Y-chromosome material along with the X-chromosome finding. When that happens, the pathway changes a little &mdash; and it becomes more of a team effort.</p>
+
+    <div class="grid g2" style="margin-top:20px;">
+      <div class="card edge-teal">
+        <h3>What it means</h3>
+        <p class="small muted">Your care team will involve specialists who manage differences in how reproductive organs develop, so that your baby receives the right monitoring from the very beginning.</p>
+        <p class="small muted" style="margin:0;">They will explain what monitoring is needed, when it starts, and what it involves &mdash; at a pace you are comfortable with.</p>
+      </div>
+      <div class="card edge">
+        <h3>Who may be involved</h3>
+        <ul class="clean teal small" style="margin-top:10px;">
+          <li>Genetics and genetic counseling</li>
+          <li>Maternal-fetal medicine</li>
+          <li>Pediatric endocrinology</li>
+          <li>Pediatric surgery or urology</li>
+          <li>A pediatric psychologist or social worker, if you would like support</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note ok">
+      <span class="note-label">What you should know</span>
+      <p>This is a <strong>well-established pathway with a plan</strong> &mdash; not an emergency. Your team will walk you through what happens next, answer your questions, and involve the right specialists at the right time.</p>
+    </div>
+    <p class="tiny" style="margin-top:12px;">If this situation applies to you, ask your care team for a written summary of the plan and the team members involved, so you have it to refer back to.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ 26 · NO DECISIONS TODAY ═══════════════ -->
+<section class="slide" id="s26" data-title="Decisions You Do Not Have to Make Today" aria-label="Slide 26 of 30: Decisions you do not have to make today">
+  <div class="slide-inner">
+    <span class="eyebrow calm">Take a breath</span>
+    <p class="statement" style="margin-bottom:26px;">You do not have to decide anything<span class="accent"> irreversible</span> based on this blood test.</p>
+    <div class="grid g2">
+      <div class="card edge-teal">
+        <h3>You can take your time</h3>
+        <ul class="clean teal" style="margin-top:10px;">
+          <li>You do not have to decide about amniocentesis today</li>
+          <li>You can ask the same question more than once</li>
+          <li>You can talk it over with your partner, your family, or your faith or community leader</li>
+          <li>You can change your mind as new information arrives</li>
+        </ul>
+      </div>
+      <div class="card edge-amber">
+        <h3>Please do two things</h3>
+        <ul class="clean amber" style="margin-top:10px;">
+          <li><strong>Keep your appointments.</strong> The ultrasound and the counseling conversation are what turn an unclear result into real information</li>
+          <li><strong>Tell your team how you are feeling.</strong> Anxiety is a normal part of this, and support is available if you want it</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 27 · FAQ ═══════════════ -->
+<section class="slide" id="s27" data-title="Common Questions, Answered" aria-label="Slide 27 of 30: Common questions, answered">
+  <div class="slide-inner">
+    <span class="eyebrow">Questions parents ask</span>
+    <h2>Common questions, answered</h2>
+    <div style="margin-top:16px;">
+      <details class="faq">
+        <summary>Can you still tell me if it&rsquo;s a girl or a boy?</summary>
+        <div class="faq-body">
+          <p>Often yes &mdash; NIPT usually reports the baby&rsquo;s sex. But when the X chromosome looks atypical, the reported sex can be less certain, so ultrasound or amniocentesis may be more reliable. Ask your counselor exactly what your report says about sex, and how confident they are in it.</p>
+        </div>
+      </details>
+      <details class="faq">
+        <summary>Will this change how I deliver, or mean a C-section?</summary>
+        <div class="faq-body">
+          <p>Not by itself. Delivery planning depends on how you and your baby are doing as the pregnancy progresses &mdash; growth, position, placental position, and your blood pressure &mdash; not on this blood test.</p>
+        </div>
+      </details>
+      <details class="faq">
+        <summary>Is the test just wrong?</summary>
+        <div class="faq-body">
+          <p>Not wrong &mdash; unclear. The test did detect a real signal. The open question is <em>where that signal came from</em>: the placenta, your baby, or you. That is a different question from &ldquo;is the test accurate.&rdquo;</p>
+        </div>
+      </details>
+      <details class="faq">
+        <summary>Will my insurance cover an amniocentesis?</summary>
+        <div class="faq-body">
+          <p>Often it is covered when there is a screening result like this, but coverage varies by plan. Ask your clinic&rsquo;s financial counselor <em>before</em> you decide, so cost is not part of the pressure you are under.</p>
+        </div>
+      </details>
+      <details class="faq">
+        <summary>Do I have to tell my family?</summary>
+        <div class="faq-body">
+          <p>No. This is your private medical information, and you choose who to tell and when. Your care team will not share it without your permission.</p>
+        </div>
+      </details>
+      <details class="faq">
+        <summary>What if I choose not to have an amniocentesis?</summary>
+        <div class="faq-body">
+          <p>That is a legitimate choice, and it is yours to make. In that case your team would rely on ultrasound monitoring during pregnancy and plan your baby&rsquo;s evaluation after birth. Please tell your team your decision so they can plan with you rather than around you.</p>
+        </div>
+      </details>
+      <details class="faq">
+        <summary>Could this affect future pregnancies?</summary>
+        <div class="faq-body">
+          <p>Usually not. The exception is if testing finds a chromosome rearrangement that a parent carries &mdash; in that case a genetic counselor will explain what it means for future pregnancies and whether other family members should be tested.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 28 · KEY TAKEAWAYS ═══════════════ -->
+<section class="slide" id="s28" data-title="Key Takeaways" aria-label="Slide 28 of 30: Key takeaways">
+  <div class="slide-inner">
+    <span class="eyebrow">Remember this</span>
+    <h2>Key takeaways</h2>
+    <div class="grid g2" style="margin-top:18px;">
+      <div class="card edge-teal"><span class="num teal">1</span><h3>This result is not a diagnosis</h3><p class="tiny" style="margin:0;">&ldquo;Atypical&rdquo; means the lab could not give a clear answer &mdash; not that something is confirmed.</p></div>
+      <div class="card edge-teal"><span class="num teal">2</span><h3>The other conditions were low risk</h3><p class="tiny" style="margin:0;">That part of your report is genuinely reassuring.</p></div>
+      <div class="card edge"><span class="num">3</span><h3>This DNA came mostly from the placenta</h3><p class="tiny" style="margin:0;">That is the reason the answer is unclear &mdash; and the reason it is often nothing.</p></div>
+      <div class="card edge"><span class="num">4</span><h3>Most of the time it is not confirmed in the baby</h3><p class="tiny" style="margin:0;">Sex-chromosome findings behave very differently from a trisomy 21 screen.</p></div>
+      <div class="card edge-amber"><span class="num amber">5</span><h3>Do not repeat the NIPT</h3><p class="tiny" style="margin:0;">Your report says so directly, and it would only cost you time.</p></div>
+      <div class="card edge-amber"><span class="num amber">6</span><h3>Ultrasound plus amniocentesis gives a real answer</h3><p class="tiny" style="margin:0;">For this question, amniocentesis is preferred over CVS.</p></div>
+      <div class="card edge-teal"><span class="num teal">7</span><h3>Nothing has to be decided today</h3><p class="tiny" style="margin:0;">Ask questions, take time, and bring someone with you if it helps.</p></div>
+      <div class="card edge-teal"><span class="num teal">8</span><h3>Whatever the answer, you will have a team</h3><p class="tiny" style="margin:0;">Confirmed or not, there is a plan &mdash; and you will not be managing it alone.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 29 · QUESTIONS TO ASK ═══════════════ -->
+<section class="slide" id="s29" data-title="Questions to Ask Your MFM Specialist" aria-label="Slide 29 of 30: Questions to ask your MFM specialist">
+  <div class="slide-inner">
+    <span class="eyebrow">Bring this to your appointment</span>
+    <h2>Questions to ask your MFM specialist</h2>
+    <p class="lede">Print this page, or take a photo of it. You are entitled to clear answers to every one of these.</p>
+    <div class="grid g2" style="margin-top:18px;">
+      <ul class="tick">
+        <li>What exactly does my report say, in plain language?</li>
+        <li>Which chromosome is involved, and what pattern did the lab see?</li>
+        <li>For <em>my</em> specific finding and this specific test, how often is it confirmed in the baby?</li>
+        <li>Can you tell me the baby&rsquo;s sex from this test &mdash; and how certain is that?</li>
+        <li>What will the detailed ultrasound look for, and when will it be done?</li>
+        <li>What is my personal risk from amniocentesis, in numbers?</li>
+      </ul>
+      <ul class="tick">
+        <li>When would the amniocentesis be done, and when would results come back?</li>
+        <li>If my baby&rsquo;s chromosomes are normal, will you test my chromosomes too?</li>
+        <li>If this turns out to be only in the placenta, what changes in my care for the rest of the pregnancy?</li>
+        <li>Who will explain the results to me, and how soon after they arrive?</li>
+        <li>What are my options if I decide not to have amniocentesis?</li>
+        <li>Can I have a written summary of my report and this plan to take home?</li>
+      </ul>
+    </div>
+    <div class="note">
+      <span class="note-label">One more question worth asking</span>
+      <p>&ldquo;If you were in my situation, what would you want to know before making a decision?&rdquo;</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 30 · REFERENCES / DISCLAIMER ═══════════════ -->
+<section class="slide" id="s30" data-title="Where to Learn More, References, and Disclaimer" aria-label="Slide 30 of 30: Where to learn more, references, and disclaimer">
+  <div class="slide-inner">
+    <span class="eyebrow">Sources and fine print</span>
+    <h2>Where to learn more</h2>
+
+    <div class="grid g2" style="margin-top:6px;">
+      <div>
+        <h3>People to ask</h3>
+        <ul class="clean small">
+          <li><strong>Your genetic counselor</strong> &mdash; the best first stop for questions about this specific result</li>
+          <li><strong>Your maternal-fetal medicine specialist</strong> &mdash; for ultrasound findings and diagnostic testing</li>
+          <li><strong>Your obstetrician or midwife</strong> &mdash; for the rest of your routine care</li>
+        </ul>
+      </div>
+      <div>
+        <h3>If your report came from Natera Panorama</h3>
+        <p class="small muted">The report itself provides a laboratory genetic counseling line for questions about your result:</p>
+        <p class="small"><strong>niptgc@natera.com</strong> &middot; <strong>650-646-9058</strong></p>
+        <p class="tiny" style="margin:0;">You can also ask your own clinic to contact the laboratory on your behalf.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px;">References</h3>
+    <ol class="refs">
+      <li>American College of Obstetricians and Gynecologists. <strong>Screening for Fetal Chromosomal Abnormalities.</strong> ACOG Practice Bulletin No. 226. <em>Obstet Gynecol.</em> 2020;136(4):e48&ndash;e69; with the subsequent ACOG practice advisory update on cell-free DNA screening.</li>
+      <li>Society for Maternal-Fetal Medicine. <strong>Consult Series #74: Cell-free DNA screening for aneuploidies &mdash; updated guidance.</strong> <em>Am J Obstet Gynecol.</em> 2023.</li>
+      <li>Society for Maternal-Fetal Medicine. <strong>Prenatal diagnostic testing for genetic disorders.</strong> ACOG Practice Bulletin No. 162. <em>Obstet Gynecol.</em> 2016;127(5):e108&ndash;e122.</li>
+      <li>Wang Y, Chen E, Pan Y, et al. <strong>Maternal mosaicism is a significant contributor to discordant sex chromosomal aneuploidies associated with noninvasive prenatal testing.</strong> <em>Clin Chem.</em> 2014;60(1):251&ndash;259.</li>
+      <li>Grati FR, Malvestiti F, Ferreira JCPB, et al. <strong>Fetoplacental mosaicism: potential implications for false-positive and false-negative noninvasive prenatal screening results.</strong> <em>Genet Med.</em> 2014;16(8):620&ndash;624.</li>
+      <li>Grati FR, Bajaj K, Zanatta V, et al. <strong>Implications of fetoplacental mosaicism on cell-free DNA testing for sex chromosome aneuploidies.</strong> <em>Prenat Diagn.</em> 2017;37(10):1017&ndash;1027.</li>
+      <li>Gravholt CH, Andersen NH, Conway GS, et al. <strong>Clinical practice guidelines for the care of girls and women with Turner syndrome: proceedings from the 2016 Cincinnati International Turner Syndrome Meeting.</strong> <em>Eur J Endocrinol.</em> 2017;177(3):G1&ndash;G70.</li>
+      <li>Gil MM, Accurti V, Santacruz B, Plana MN, Nicolaides KH. <strong>Analysis of cell-free DNA in maternal blood in screening for aneuploidies: updated meta-analysis.</strong> <em>Ultrasound Obstet Gynecol.</em> 2017;50(3):302&ndash;314.</li>
+    </ol>
+
+    <div class="note plain" style="margin-top:20px;">
+      <span class="note-label">Educational disclaimer</span>
+      <p>This presentation is <strong>general education</strong>. It is not medical advice, it is not a diagnosis, and it cannot take the place of counseling about your own pregnancy and your own test results. Decisions about your care should be made together with your own clinicians, who know your full history. If you are worried about your health or your baby&rsquo;s health, contact your care team.</p>
+      <p style="margin-top:10px;"><strong>Privacy:</strong> this presentation contains no personal health information. It is based on the standard wording of an atypical sex-chromosome finding on cell-free DNA screening and has been written to apply generally, not to any individual patient.</p>
+      <p style="margin-top:10px;">OpenMFM &middot; Dr. Chukwuma Onyeije, MD &middot; Atlanta Perinatal Associates</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════ HUD ═══════════════ -->
+<div class="hud" role="group" aria-label="Slide controls">
+  <button type="button" id="btn-refs" aria-label="Open references panel">References</button>
+  <button type="button" id="btn-prev" aria-label="Previous slide">‹ Prev</button>
+  <span class="counter" id="counter" aria-hidden="true">1 / 30</span>
+  <button type="button" id="btn-next" aria-label="Next slide">Next ›</button>
+  <button type="button" id="btn-print" aria-label="Print or save as PDF">Print / PDF</button>
+</div>
+
+<div class="hint" id="hint">Use ‹ › arrow keys, swipe, or the buttons &middot; press R for references</div>
+
+<div class="sr-only" id="live" aria-live="polite" aria-atomic="true"></div>
+
+<!-- ═══════════════ REFERENCES DRAWER ═══════════════ -->
+<div class="refs-panel" id="refs-panel" role="dialog" aria-modal="true" aria-label="References">
+  <div class="refs-panel-inner">
+    <button type="button" class="close" id="refs-close">Close ✕</button>
+    <h2>References</h2>
+    <p class="tiny">Full citations for the clinical statements in this guide.</p>
+    <ol class="refs">
+      <li>American College of Obstetricians and Gynecologists. Screening for Fetal Chromosomal Abnormalities. ACOG Practice Bulletin No. 226. <em>Obstet Gynecol.</em> 2020;136(4):e48&ndash;e69; with the subsequent ACOG practice advisory update on cell-free DNA screening.</li>
+      <li>Society for Maternal-Fetal Medicine. Consult Series #74: Cell-free DNA screening for aneuploidies &mdash; updated guidance. <em>Am J Obstet Gynecol.</em> 2023.</li>
+      <li>ACOG Practice Bulletin No. 162: Prenatal Diagnostic Testing for Genetic Disorders. <em>Obstet Gynecol.</em> 2016;127(5):e108&ndash;e122.</li>
+      <li>Wang Y, et al. Maternal mosaicism is a significant contributor to discordant sex chromosomal aneuploidies associated with noninvasive prenatal testing. <em>Clin Chem.</em> 2014;60(1):251&ndash;259.</li>
+      <li>Grati FR, et al. Fetoplacental mosaicism: potential implications for false-positive and false-negative noninvasive prenatal screening results. <em>Genet Med.</em> 2014;16(8):620&ndash;624.</li>
+      <li>Grati FR, et al. Implications of fetoplacental mosaicism on cell-free DNA testing for sex chromosome aneuploidies. <em>Prenat Diagn.</em> 2017;37(10):1017&ndash;1027.</li>
+      <li>Gravholt CH, et al. Clinical practice guidelines for the care of girls and women with Turner syndrome. <em>Eur J Endocrinol.</em> 2017;177(3):G1&ndash;G70.</li>
+      <li>Gil MM, et al. Analysis of cell-free DNA in maternal blood in screening for aneuploidies: updated meta-analysis. <em>Ultrasound Obstet Gynecol.</em> 2017;50(3):302&ndash;314.</li>
+    </ol>
+    <p class="tiny" style="margin-top:18px;">Note: this guide deliberately does not quote a single positive predictive value for atypical sex-chromosome findings, because published figures vary widely with the specific finding, laboratory, and population. Ask your genetic counselor for the figure that applies to your own report.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var slides   = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var total    = slides.length;
+  var progress = document.getElementById("progress");
+  var counter  = document.getElementById("counter");
+  var live     = document.getElementById("live");
+  var btnPrev  = document.getElementById("btn-prev");
+  var btnNext  = document.getElementById("btn-next");
+  var btnRefs  = document.getElementById("btn-refs");
+  var btnPrint = document.getElementById("btn-print");
+  var refsPanel= document.getElementById("refs-panel");
+  var refsClose= document.getElementById("refs-close");
+  var hint     = document.getElementById("hint");
+  var index    = 0;
+  var lastFocus = null;
+
+  function pad(n) { return String(n); }
+
+  function render(n, updateHash) {
+    if (n < 0) n = 0;
+    if (n > total - 1) n = total - 1;
+
+    slides.forEach(function (s, i) {
+      var active = (i === n);
+      s.classList.toggle("is-active", active);
+      if (active) {
+        s.removeAttribute("aria-hidden");
+      } else {
+        s.setAttribute("aria-hidden", "true");
+      }
+    });
+
+    index = n;
+
+    progress.style.width = (((n + 1) / total) * 100) + "%";
+    counter.textContent = pad(n + 1) + " / " + total;
+
+    btnPrev.disabled = (n === 0);
+    btnNext.disabled = (n === total - 1);
+
+    if (updateHash !== false) {
+      var id = slides[n].id;
+      if (id && window.location.hash !== "#" + id) {
+        try { history.replaceState(null, "", "#" + id); }
+        catch (e) { window.location.hash = id; }
+      }
+    }
+
+    var title = slides[n].getAttribute("data-title") || "";
+    live.textContent = "Slide " + (n + 1) + " of " + total + ": " + title;
+
+    var first = slides[n].querySelector("h1, h2");
+    if (first) { first.setAttribute("tabindex", "-1"); }
+
+    // reset scroll position of the incoming slide
+    slides[n].scrollTop = 0;
+  }
+
+  function go(delta) { render(index + delta, true); }
+
+  /* ── Hash routing ─────────────────────────────────────────────────── */
+  function fromHash() {
+    var h = window.location.hash.replace("#", "");
+    if (!h) return 0;
+    for (var i = 0; i < total; i++) {
+      if (slides[i].id === h) return i;
+    }
+    return 0;
+  }
+
+  window.addEventListener("hashchange", function () {
+    var n = fromHash();
+    if (n !== index) render(n, false);
+  });
+
+  /* ── Keyboard ─────────────────────────────────────────────────────── */
+  document.addEventListener("keydown", function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+    if (refsPanel.classList.contains("open")) {
+      if (e.key === "Escape") { closeRefs(); e.preventDefault(); }
+      return;
+    }
+
+    switch (e.key) {
+      case "ArrowRight":
+      case "PageDown":
+      case " ":
+        go(1); e.preventDefault(); break;
+      case "ArrowLeft":
+      case "PageUp":
+        go(-1); e.preventDefault(); break;
+      case "Home":
+        render(0, true); e.preventDefault(); break;
+      case "End":
+        render(total - 1, true); e.preventDefault(); break;
+      case "r":
+      case "R":
+        openRefs(); e.preventDefault(); break;
+      case "f":
+      case "F":
+        toggleFullscreen(); e.preventDefault(); break;
+      default:
+        break;
+    }
+  });
+
+  /* ── Touch / swipe ────────────────────────────────────────────────── */
+  var touchX = null, touchY = null, swiped = false;
+  document.addEventListener("touchstart", function (e) {
+    if (e.touches.length !== 1) return;
+    touchX = e.touches[0].clientX;
+    touchY = e.touches[0].clientY;
+    swiped = false;
+  }, { passive: true });
+
+  document.addEventListener("touchmove", function (e) {
+    if (e.touches.length !== 1 || touchX === null) return;
+    var dx = e.touches[0].clientX - touchX;
+    var dy = e.touches[0].clientY - touchY;
+    if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.6) {
+      if (swiped) return;
+      swiped = true;
+      go(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  /* ── Mouse wheel (horizontal / shift only, so vertical scroll still works) ── */
+  /* Intentionally not implemented: vertical wheel scrolls long slides on mobile. */
+
+  /* ── Buttons ──────────────────────────────────────────────────────── */
+  btnPrev.addEventListener("click", function () { go(-1); });
+  btnNext.addEventListener("click", function () { go(1); });
+  btnPrint.addEventListener("click", function () { window.print(); });
+
+  /* ── References drawer ────────────────────────────────────────────── */
+  function openRefs() {
+    lastFocus = document.activeElement;
+    refsPanel.classList.add("open");
+    refsClose.focus();
+  }
+  function closeRefs() {
+    refsPanel.classList.remove("open");
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  btnRefs.addEventListener("click", openRefs);
+  refsClose.addEventListener("click", closeRefs);
+  refsPanel.addEventListener("click", function (e) {
+    if (e.target === refsPanel) closeRefs();
+  });
+
+  /* ── Fullscreen ───────────────────────────────────────────────────── */
+  function toggleFullscreen() {
+    try {
+      if (!document.fullscreenElement) {
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen();
+        }
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    } catch (e) { /* not supported — ignore */ }
+  }
+
+  /* ── Before printing, reveal every <details> so nothing is lost in the PDF ── */
+  var detailsState = [];
+  window.addEventListener("beforeprint", function () {
+    detailsState = [];
+    Array.prototype.forEach.call(document.querySelectorAll("details.faq"), function (d, i) {
+      detailsState[i] = d.open;
+      d.open = true;
+    });
+  });
+  window.addEventListener("afterprint", function () {
+    Array.prototype.forEach.call(document.querySelectorAll("details.faq"), function (d, i) {
+      if (detailsState[i] !== undefined) d.open = detailsState[i];
+    });
+  });
+
+  /* ── Hide the hint after a few seconds ────────────────────────────── */
+  window.setTimeout(function () { hint.classList.add("hide"); }, 7000);
+
+  /* ── Init ─────────────────────────────────────────────────────────── */
+  render(fromHash(), false);
+  window.addEventListener("load", function () {
+    render(index, false);
+  });
+})();
+</script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
