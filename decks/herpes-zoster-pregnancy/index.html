@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herpes Zoster (Shingles) in Pregnancy | MFM Clinical Update</title>
+    <style>
+        /* ── Base Reset ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0d1117;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Progress Bar ───────────────────────────────────────── */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4db8ff, #00e5ff);
+            transition: width 0.4s ease;
+            z-index: 100;
+        }
+
+        /* ── Slide Counter ──────────────────────────────────────── */
+        #slide-counter {
+            position: fixed;
+            bottom: 1.2em; right: 1.8em;
+            font-size: 0.85em;
+            color: #555;
+            z-index: 100;
+            letter-spacing: 0.05em;
+        }
+
+        /* ── Navigation Arrows ──────────────────────────────────── */
+        .nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #aaa;
+            font-size: 1.6em;
+            width: 2.4em;
+            height: 2.4em;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: background 0.2s, color 0.2s;
+        }
+        .nav-btn:hover { background: rgba(77,184,255,0.18); color: #4db8ff; }
+        #btn-prev { left: 1em; }
+        #btn-next { right: 1em; }
+
+        /* ── Deck & Slides ──────────────────────────────────────── */
+        .deck {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3em 5em;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease;
+            overflow-y: auto;
+        }
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ── Typography ─────────────────────────────────────────── */
+        .slide-title {
+            font-size: 2.6em;
+            font-weight: 300;
+            color: #4db8ff;
+            text-align: center;
+            margin-bottom: 0.6em;
+            letter-spacing: 0.02em;
+        }
+        .slide-subtitle {
+            font-size: 1.3em;
+            font-weight: 300;
+            color: #90caf9;
+            text-align: center;
+            margin-bottom: 0.8em;
+        }
+        .slide-body {
+            font-size: 1.25em;
+            line-height: 1.7;
+            text-align: center;
+            max-width: 820px;
+            color: #ccc;
+        }
+        .highlight { color: #4db8ff; font-weight: 600; }
+        .reassurance { color: #66bb6a; font-weight: 600; }
+        .action { color: #ffa726; font-weight: 600; }
+        .caution { color: #ef5350; font-weight: 600; }
+
+        /* ── Title Slide ────────────────────────────────────────── */
+        .slide-title-main {
+            font-size: 3.1em;
+            font-weight: 200;
+            color: #4db8ff;
+            text-align: center;
+            letter-spacing: 0.02em;
+            line-height: 1.25;
+        }
+        .slide-title-sub {
+            font-size: 1.3em;
+            font-weight: 300;
+            color: #90caf9;
+            text-align: center;
+            margin-top: 0.6em;
+        }
+        .slide-tagline {
+            font-size: 1.05em;
+            color: #66bb6a;
+            margin-top: 1.2em;
+            text-align: center;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .divider {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, #4db8ff, #00e5ff);
+            margin: 1em auto;
+            border-radius: 2px;
+        }
+        .eyebrow {
+            font-size: 0.85em;
+            color: #6b7280;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 1em;
+        }
+
+        /* ── Icon Grid ──────────────────────────────────────────── */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.2em;
+            max-width: 760px;
+            width: 100%;
+            margin-top: 0.5em;
+        }
+        .icon-grid.cols-3 { grid-template-columns: repeat(3, 1fr); max-width: 900px; }
+        .icon-grid.cols-4 { grid-template-columns: repeat(4, 1fr); max-width: 980px; }
+        .icon-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.2em 1.4em;
+            text-align: left;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8em;
+        }
+        .icon-card.alert {
+            background: rgba(239,83,80,0.07);
+            border-color: rgba(239,83,80,0.3);
+        }
+        .icon-card .icon {
+            font-size: 1.7em;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        .icon-card .card-text {
+            font-size: 0.98em;
+            line-height: 1.5;
+            color: #ccc;
+        }
+        .icon-card .card-label {
+            font-size: 0.85em;
+            color: #4db8ff;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25em;
+        }
+        .icon-card.alert .card-label { color: #ef5350; }
+
+        /* ── Two-Column Layout ──────────────────────────────────── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5em;
+            max-width: 880px;
+            width: 100%;
+            margin-top: 0.5em;
+        }
+        .col-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.4em 1.6em;
+        }
+        .col-card h3 {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #4db8ff;
+            margin-bottom: 0.6em;
+            letter-spacing: 0.03em;
+        }
+        .col-card.warn h3 { color: #ef5350; }
+        .col-card.ok h3 { color: #66bb6a; }
+        .col-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .col-card ul li {
+            font-size: 0.95em;
+            color: #ccc;
+            line-height: 1.65;
+            padding: 0.2em 0;
+        }
+        .col-card ul li::before {
+            content: "▸ ";
+            color: #4db8ff;
+        }
+        .col-card.warn ul li::before { color: #ef5350; }
+        .col-card.ok ul li::before { color: #66bb6a; }
+
+        /* ── Clinical Table ─────────────────────────────────────── */
+        .clinical-table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 880px;
+            font-size: 1em;
+            margin-top: 0.6em;
+        }
+        .clinical-table th {
+            background: rgba(77,184,255,0.15);
+            color: #4db8ff;
+            padding: 0.7em 1em;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.88em;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid rgba(77,184,255,0.3);
+        }
+        .clinical-table td {
+            padding: 0.65em 1em;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            color: #ccc;
+            font-size: 0.93em;
+            line-height: 1.5;
+        }
+        .clinical-table tr:last-child td { border-bottom: none; }
+        .clinical-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+        /* ── Timeline ───────────────────────────────────────────── */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7em;
+            max-width: 720px;
+            width: 100%;
+            margin-top: 0.4em;
+        }
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1em;
+        }
+        .timeline-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(77,184,255,0.15);
+            border: 1px solid rgba(77,184,255,0.4);
+            color: #4db8ff;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            font-weight: 700;
+        }
+        .timeline-content {
+            font-size: 1em;
+            color: #ccc;
+            line-height: 1.5;
+            padding-top: 0.2em;
+        }
+        .timeline-content strong {
+            color: #e0e0e0;
+            display: block;
+            font-size: 0.98em;
+            margin-bottom: 0.15em;
+        }
+
+        /* ── Pill Badges ────────────────────────────────────────── */
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7em;
+            justify-content: center;
+            margin-top: 0.8em;
+            max-width: 900px;
+        }
+        .badge {
+            background: rgba(77,184,255,0.12);
+            border: 1px solid rgba(77,184,255,0.3);
+            color: #4db8ff;
+            border-radius: 20px;
+            padding: 0.4em 1.1em;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .badge.green {
+            background: rgba(102,187,106,0.12);
+            border-color: rgba(102,187,106,0.3);
+            color: #66bb6a;
+        }
+        .badge.orange {
+            background: rgba(255,167,38,0.12);
+            border-color: rgba(255,167,38,0.3);
+            color: #ffa726;
+        }
+        .badge.red {
+            background: rgba(239,83,80,0.12);
+            border-color: rgba(239,83,80,0.3);
+            color: #ef5350;
+        }
+
+        /* ── Warning / Reassurance Boxes ────────────────────────── */
+        .warning-box {
+            background: rgba(239,83,80,0.08);
+            border: 1px solid rgba(239,83,80,0.3);
+            border-radius: 10px;
+            padding: 0.9em 1.4em;
+            max-width: 780px;
+            width: 100%;
+            margin-top: 1em;
+            font-size: 1em;
+            color: #ef9a9a;
+            text-align: center;
+        }
+        .reassurance-box {
+            background: rgba(102,187,106,0.08);
+            border: 1px solid rgba(102,187,106,0.3);
+            border-radius: 10px;
+            padding: 0.9em 1.4em;
+            max-width: 780px;
+            width: 100%;
+            margin-top: 1em;
+            font-size: 1em;
+            color: #a5d6a7;
+            text-align: center;
+        }
+
+        /* ── Stat Hero ──────────────────────────────────────────── */
+        .stat-hero-row {
+            display: flex;
+            gap: 2.5em;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 0.5em;
+        }
+        .stat-hero {
+            text-align: center;
+        }
+        .stat-hero .num {
+            font-size: 4.2em;
+            font-weight: 200;
+            color: #4db8ff;
+            line-height: 1;
+        }
+        .stat-hero .num.green { color: #66bb6a; }
+        .stat-hero .label {
+            font-size: 0.85em;
+            color: #90caf9;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 0.4em;
+        }
+
+        /* ── Bar Chart ──────────────────────────────────────────── */
+        .bar-chart {
+            width: 100%;
+            max-width: 640px;
+            margin-top: 0.6em;
+        }
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+            margin-bottom: 1em;
+        }
+        .bar-label {
+            width: 160px;
+            flex-shrink: 0;
+            font-size: 0.92em;
+            color: #ccc;
+            text-align: right;
+        }
+        .bar-track {
+            flex: 1;
+            background: rgba(255,255,255,0.06);
+            border-radius: 6px;
+            height: 26px;
+            position: relative;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #4db8ff, #00e5ff);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.6em;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #041018;
+        }
+        .bar-fill.muted { background: linear-gradient(90deg, #4a5568, #718096); color: #e0e0e0; }
+
+        /* ── Numbered Action List ───────────────────────────────── */
+        .action-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            max-width: 780px;
+            width: 100%;
+            margin-top: 0.5em;
+        }
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.1em;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1em 1.3em;
+        }
+        .action-num {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(77,184,255,0.15);
+            border: 1px solid rgba(77,184,255,0.4);
+            color: #4db8ff;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        .action-text {
+            font-size: 1em;
+            color: #ccc;
+            line-height: 1.5;
+            padding-top: 0.3em;
+        }
+
+        /* ── Pearl List ─────────────────────────────────────────── */
+        .pearl-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7em;
+            max-width: 820px;
+            width: 100%;
+            margin-top: 0.4em;
+        }
+        .pearl-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8em;
+            font-size: 0.98em;
+            color: #ccc;
+            line-height: 1.55;
+        }
+        .pearl-item .gem { color: #ffa726; flex-shrink: 0; }
+
+        /* ── Evidence Columns ───────────────────────────────────── */
+        .evidence-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.4em;
+            max-width: 900px;
+            width: 100%;
+            margin-top: 0.5em;
+        }
+
+        /* ── References ─────────────────────────────────────────── */
+        .ref-list {
+            list-style: none;
+            max-width: 820px;
+            width: 100%;
+            text-align: left;
+            margin-top: 0.5em;
+        }
+        .ref-list li {
+            font-size: 0.92em;
+            color: #aaa;
+            line-height: 1.7;
+            padding: 0.35em 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .ref-list li:last-child { border-bottom: none; }
+        .ref-list .ref-num { color: #4db8ff; font-weight: 600; margin-right: 0.4em; }
+
+        /* ── Closing Slide ──────────────────────────────────────── */
+        .closing-icon {
+            font-size: 3.6em;
+            margin-bottom: 0.3em;
+        }
+
+        /* ── Slide Background Accents ───────────────────────────── */
+        .slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 20% 80%, rgba(77,184,255,0.04) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 20%, rgba(0,229,255,0.03) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* ── Source Note ────────────────────────────────────────── */
+        .source-note {
+            position: absolute;
+            bottom: 2em;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.68em;
+            color: #444;
+            letter-spacing: 0.03em;
+            text-align: center;
+            max-width: 90%;
+        }
+
+        /* ── Responsive ─────────────────────────────────────────── */
+        @media (max-width: 860px) {
+            .slide { padding: 2.4em 1.4em 3.5em; }
+            .slide-title { font-size: 1.9em; }
+            .slide-title-main { font-size: 2.2em; }
+            .two-col, .evidence-cols { grid-template-columns: 1fr; }
+            .icon-grid, .icon-grid.cols-3, .icon-grid.cols-4 { grid-template-columns: 1fr 1fr; max-width: 100%; }
+            .bar-label { width: 110px; font-size: 0.8em; }
+        }
+        @media (max-width: 520px) {
+            .icon-grid, .icon-grid.cols-3, .icon-grid.cols-4 { grid-template-columns: 1fr; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .slide { transition: none; }
+        }
+
+        /* ── Print ──────────────────────────────────────────────── */
+        @media print {
+            body { height: auto; overflow: visible; }
+            .slide {
+                position: relative;
+                opacity: 1;
+                visibility: visible;
+                page-break-after: always;
+                height: 100vh;
+            }
+            #progress-bar, #slide-counter, .nav-btn { display: none; }
+        }
+    </style>
+<!-- openmfm-seo-injected -->
+<link rel="canonical" href="https://openmfm.org/decks/herpes-zoster-pregnancy/index.html">
+<meta name="description" content="A 15-slide clinical update on herpes zoster (shingles) in pregnancy, emphasizing localized first-trimester disease: distinguishing zoster from primary varicella, fetal counseling, antiviral regimens and first-trimester safety data, escalation red flags, and postpartum vaccination planning. Based on CDC, RCOG Green-top Guideline 13, and key cohort evidence.">
+<meta name="author" content="Dr. Chukwuma Onyeije, MD">
+<meta name="keywords" content="Herpes Zoster, Varicella-Zoster Virus, Antiviral Therapy, Provider Education">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openmfm.org/decks/herpes-zoster-pregnancy/index.html">
+<meta property="og:title" content="Herpes Zoster (Shingles) in Pregnancy - Provider Education | OpenMFM">
+<meta property="og:description" content="A 15-slide clinical update on herpes zoster (shingles) in pregnancy, emphasizing localized first-trimester disease: distinguishing zoster from primary varicella, fetal counseling, antiviral regimens and first-trimester safety data, escalation red flags, and postpartum vaccination planning. Based on CDC, RCOG Green-top Guideline 13, and key cohort evidence.">
+<meta property="og:image" content="https://openmfm.org/og-image.png">
+<meta property="og:site_name" content="OpenMFM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Herpes Zoster (Shingles) in Pregnancy - Provider Education | OpenMFM">
+<meta name="twitter:description" content="A 15-slide clinical update on herpes zoster (shingles) in pregnancy, emphasizing localized first-trimester disease: distinguishing zoster from primary varicella, fetal counseling, antiviral regimens and first-trimester safety data, escalation red flags, and postpartum vaccination planning. Based on CDC, RCOG Green-top Guideline 13, and key cohort evidence.">
+<meta name="twitter:image" content="https://openmfm.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Herpes Zoster (Shingles) in Pregnancy - Provider Education",
+  "description": "A 15-slide clinical update on herpes zoster (shingles) in pregnancy, emphasizing localized first-trimester disease: distinguishing zoster from primary varicella, fetal counseling, antiviral regimens and first-trimester safety data, escalation red flags, and postpartum vaccination planning. Based on CDC, RCOG Green-top Guideline 13, and key cohort evidence.",
+  "url": "https://openmfm.org/decks/herpes-zoster-pregnancy/index.html",
+  "author": {
+    "@type": "Person",
+    "name": "Dr. Chukwuma Onyeije, MD",
+    "jobTitle": "Maternal-Fetal Medicine Specialist",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Atlanta Perinatal Associates"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://openmfm.org/og-image.png"
+    }
+  },
+  "dateModified": "2026-09-16",
+  "inLanguage": "en",
+  "audience": {
+    "@type": "MedicalAudience",
+    "audienceType": "Patients and Healthcare Providers"
+  },
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Herpes Zoster (Shingles) in Pregnancy - Provider Education"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "OpenMFM",
+    "url": "https://openmfm.org"
+  },
+  "keywords": "Herpes Zoster, Varicella-Zoster Virus, Antiviral Therapy, Provider Education"
+}
+</script>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Navigation Buttons -->
+<button class="nav-btn" id="btn-prev" onclick="prevSlide()" aria-label="Previous slide">&#8592;</button>
+<button class="nav-btn" id="btn-next" onclick="nextSlide()" aria-label="Next slide">&#8594;</button>
+
+<!-- Slide Counter -->
+<div id="slide-counter"></div>
+
+<div class="deck">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 1 — Title
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide active">
+        <div class="closing-icon">🛡️</div>
+        <div class="slide-title-main">Herpes Zoster (Shingles)<br>in Pregnancy</div>
+        <div class="divider"></div>
+        <div class="slide-title-sub">Diagnosis · Fetal Counseling · Maternal Treatment · Escalation</div>
+        <div class="slide-tagline">Emphasis: Localized Zoster in the First Trimester</div>
+        <div class="source-note">Maternal-Fetal Medicine Clinical Update</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 2 — The Essential Distinction
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">The Essential Distinction</div>
+        <div class="slide-subtitle">Zoster and varicella are not the same disease</div>
+        <div class="two-col">
+            <div class="col-card ok">
+                <h3>🔁 Zoster (Shingles)</h3>
+                <ul>
+                    <li>Latent VZV reactivation</li>
+                    <li>Usually dermatomal</li>
+                    <li>Focus: maternal symptoms</li>
+                    <li>Separate fetal pathway</li>
+                </ul>
+            </div>
+            <div class="col-card warn">
+                <h3>🦠 Primary Varicella</h3>
+                <ul>
+                    <li>New VZV infection</li>
+                    <li>Maternal viremia</li>
+                    <li>Congenital varicella syndrome risk pathway</li>
+                    <li>Different management course entirely</li>
+                </ul>
+            </div>
+        </div>
+        <div class="source-note">CDC Clinical Overview of Shingles (2024); Hayward et al., Obstet Gynecol Surv (2018)</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 3 — Typical Zoster
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Typical Zoster</div>
+        <div class="slide-subtitle">Recognizing the classic presentation</div>
+        <div class="icon-grid cols-3">
+            <div class="icon-card">
+                <div class="icon">⚡</div>
+                <div class="card-text">
+                    <div class="card-label">Prodrome</div>
+                    Pain or tingling, often preceding the rash by 1–4 days
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">🩹</div>
+                <div class="card-text">
+                    <div class="card-label">Rash</div>
+                    Unilateral vesicles on an erythematous base
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">📍</div>
+                <div class="card-text">
+                    <div class="card-label">Distribution</div>
+                    Confined to 1–2 dermatomes
+                </div>
+            </div>
+        </div>
+        <div class="warning-box">⚠️ Atypical presentation? Obtain lesion VZV PCR to confirm the diagnosis.</div>
+        <div class="source-note">CDC Clinical Overview of Shingles (2024)</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 4 — Fetal Counseling: Reassuring Evidence
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Fetal Counseling: Reassuring Evidence</div>
+        <div class="stat-hero-row">
+            <div class="stat-hero">
+                <div class="num">474</div>
+                <div class="label">Pregnancies with Zoster</div>
+            </div>
+            <div class="stat-hero">
+                <div class="num green">0</div>
+                <div class="label">Congenital Varicella Syndrome Cases</div>
+            </div>
+        </div>
+        <div class="reassurance-box">
+            <strong>Localized maternal zoster is not linked to congenital varicella syndrome.</strong>
+        </div>
+        <div class="slide-body" style="margin-top:1em; font-size:1em;">
+            Clinical action: routine prenatal care — <span class="highlight">no zoster-specific invasive testing or serial imaging</span> is indicated.
+        </div>
+        <div class="source-note">Pupco et al., Can Fam Physician 2011; Hayward et al., Obstet Gynecol Surv 2018</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 5 — Zoster vs Primary Varicella
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Zoster vs. Primary Varicella</div>
+        <table class="clinical-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Primary Varicella</th>
+                    <th>Zoster</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Illness</td>
+                    <td>New infection</td>
+                    <td>Reactivation</td>
+                </tr>
+                <tr>
+                    <td>Pattern</td>
+                    <td>Systemic viremia</td>
+                    <td>Dermatomal</td>
+                </tr>
+                <tr>
+                    <td>Fetal risk</td>
+                    <td>Congenital varicella syndrome risk*</td>
+                    <td>No congenital varicella syndrome signal</td>
+                </tr>
+                <tr>
+                    <td>Care pathway</td>
+                    <td>MFM referral pathway</td>
+                    <td>Routine prenatal care</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="warning-box">*Before 20 weeks. Confirm diagnosis before risk counseling.</div>
+        <div class="source-note">RCOG Green-top Guideline 13 (2024); CDC VZV Clinical Guidance</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 6 — Uncomplicated Zoster: Care Flow
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Uncomplicated Zoster: Care Flow</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot">1</div>
+                <div class="timeline-content">
+                    <strong>Confirm dermatomal zoster</strong>
+                    Unilateral vesicles with a prodrome, in 1–2 dermatomes
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">2</div>
+                <div class="timeline-content">
+                    <strong>Screen for red flags</strong>
+                    Ophthalmic, disseminated, immunocompromised, CNS/pulmonary involvement
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">3</div>
+                <div class="timeline-content">
+                    <strong>Treat maternal disease</strong>
+                    Start antiviral therapy; continue routine prenatal care
+                </div>
+            </div>
+        </div>
+        <div class="reassurance-box">Assess immune status and medication exposure when the diagnosis is uncertain.</div>
+        <div class="source-note">Hayward et al., Obstet Gynecol Surv 2018; CDC Clinical Overview of Shingles 2024</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 7 — Antiviral Regimens
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Antiviral Regimens</div>
+        <div class="slide-subtitle">Start promptly; renal-adjust as needed</div>
+        <table class="clinical-table">
+            <thead>
+                <tr>
+                    <th>Agent</th>
+                    <th>Dose</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="highlight">Acyclovir</span></td>
+                    <td>800 mg × 5 per day</td>
+                    <td>7 days</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">Valacyclovir</span></td>
+                    <td>1 g × 3 per day</td>
+                    <td>7 days</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="source-note">Hayward et al., Obstet Gynecol Surv 2018; CDC Clinical Overview of Shingles 2024</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 8 — First-Trimester Antiviral Safety
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">First-Trimester Antiviral Safety</div>
+        <div class="slide-subtitle">Danish nationwide cohort: no association with major birth defects</div>
+        <div class="bar-chart">
+            <div class="bar-row">
+                <div class="bar-label">Antiviral exposed</div>
+                <div class="bar-track"><div class="bar-fill" style="width:92%;">2.2%</div></div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Unexposed</div>
+                <div class="bar-track"><div class="bar-fill muted" style="width:100%;">2.4%</div></div>
+            </div>
+        </div>
+        <div class="badge-row">
+            <span class="badge">1,804 first-trimester exposures</span>
+            <span class="badge green">Adjusted POR 0.89 (95% CI 0.65–1.22)</span>
+        </div>
+        <div class="source-note">Pasternak &amp; Hviid, JAMA 2010; 837,795 live-born infants</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 9 — Comfort, Rash Care, and Transmission
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Comfort, Rash Care &amp; Transmission</div>
+        <div class="icon-grid cols-3">
+            <div class="icon-card">
+                <div class="icon">💊</div>
+                <div class="card-text">
+                    <div class="card-label">Pain</div>
+                    Acetaminophen first-line. Seek advice before NSAIDs.
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">🩹</div>
+                <div class="card-text">
+                    <div class="card-label">Rash</div>
+                    Keep lesions clean. Avoid excoriation.
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">🤝</div>
+                <div class="card-text">
+                    <div class="card-label">Contacts</div>
+                    Cover lesions; hand hygiene. Avoid susceptible contacts.
+                </div>
+            </div>
+        </div>
+        <div class="source-note">CDC About Shingles and Clinical Overview of Shingles (2024)</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 10 — Escalate Without Delay
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Escalate Without Delay</div>
+        <div class="slide-subtitle">Red flags that change the management plan</div>
+        <div class="icon-grid cols-4">
+            <div class="icon-card alert">
+                <div class="icon">👁️</div>
+                <div class="card-text">
+                    <div class="card-label">Ophthalmic</div>
+                    V1 or eye lesions: urgent ophthalmology
+                </div>
+            </div>
+            <div class="icon-card alert">
+                <div class="icon">🚨</div>
+                <div class="card-text">
+                    <div class="card-label">Disseminated</div>
+                    Diffuse lesions: admit; consider IV acyclovir
+                </div>
+            </div>
+            <div class="icon-card alert">
+                <div class="icon">🛡️</div>
+                <div class="card-text">
+                    <div class="card-label">Immunocompromised</div>
+                    Early ID / dermatology input
+                </div>
+            </div>
+            <div class="icon-card alert">
+                <div class="icon">🧠</div>
+                <div class="card-text">
+                    <div class="card-label">CNS / Pulmonary</div>
+                    Emergency evaluation and inpatient care
+                </div>
+            </div>
+        </div>
+        <div class="source-note">Hayward et al., Obstet Gynecol Surv 2018; CDC Clinical Overview of Shingles 2024</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 11 — Vaccination and Postpartum Planning
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Vaccination &amp; Postpartum Planning</div>
+        <div class="icon-grid cols-3">
+            <div class="icon-card">
+                <div class="icon">🚫</div>
+                <div class="card-text">
+                    <div class="card-label">During Pregnancy</div>
+                    Live varicella vaccine is contraindicated
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">💉</div>
+                <div class="card-text">
+                    <div class="card-label">Nonimmune Patients</div>
+                    2-dose varicella series after delivery
+                </div>
+            </div>
+            <div class="icon-card">
+                <div class="icon">🛡️</div>
+                <div class="card-text">
+                    <div class="card-label">RZV / Shingrix</div>
+                    If otherwise indicated, consider after pregnancy
+                </div>
+            </div>
+        </div>
+        <div class="source-note">CDC Guidelines for Vaccinating Pregnant Women; CDC Varicella Vaccine Considerations</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 12 — Clinical Pearls
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Clinical Pearls</div>
+        <div class="pearl-list">
+            <div class="pearl-item"><span class="gem">💎</span>Zoster is VZV reactivation, not new maternal viremia — the fetal risk pathway differs entirely from primary varicella.</div>
+            <div class="pearl-item"><span class="gem">💎</span>Confirm the diagnosis: unilateral, dermatomal vesicles preceded by pain or tingling. Atypical presentation warrants lesion VZV PCR.</div>
+            <div class="pearl-item"><span class="gem">💎</span>Localized maternal zoster has not been linked to congenital varicella syndrome — routine prenatal care is appropriate, with no zoster-specific invasive testing or serial imaging.</div>
+            <div class="pearl-item"><span class="gem">💎</span>Start oral antiviral therapy promptly — acyclovir 800 mg 5×/day or valacyclovir 1 g 3×/day for 7 days — and renal-adjust as needed.</div>
+            <div class="pearl-item"><span class="gem">💎</span>The largest available cohort found no association between first-trimester antiviral exposure and major birth defects.</div>
+            <div class="pearl-item"><span class="gem">💎</span>Escalate immediately for ophthalmic (V1), disseminated, immunocompromised, or CNS/pulmonary involvement — these require urgent subspecialty input and possible inpatient IV therapy.</div>
+            <div class="pearl-item"><span class="gem">💎</span>Live varicella vaccine remains contraindicated during pregnancy; nonimmune patients complete the 2-dose series postpartum.</div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 13 — Evidence & Controversies
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Evidence &amp; Controversies</div>
+        <div class="evidence-cols">
+            <div class="col-card ok">
+                <h3>✅ What's Known</h3>
+                <ul>
+                    <li>Reassuring cohort data show no congenital varicella syndrome signal after localized maternal zoster</li>
+                    <li>Danish registry data (837,795 infants) found no association between first-trimester antiviral exposure and major birth defects</li>
+                    <li>Dermatomal presentation reliably distinguishes zoster from primary varicella at the bedside</li>
+                </ul>
+            </div>
+            <div class="col-card warn">
+                <h3>❓ What Remains Uncertain</h3>
+                <ul>
+                    <li>Data on disseminated zoster or zoster in immunocompromised pregnant patients are sparse</li>
+                    <li>Pregnancy-specific antiviral dosing evidence is limited; regimens are extrapolated from non-pregnant zoster trials</li>
+                    <li>Institutional variation exists in baseline immune testing when the diagnosis is uncertain</li>
+                </ul>
+            </div>
+        </div>
+        <div class="source-note">Pupco et al., Can Fam Physician 2011; Pasternak &amp; Hviid, JAMA 2010; RCOG Green-top Guideline 13 (2024)</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 14 — Three Clinical Actions
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">Three Clinical Actions</div>
+        <div class="action-list">
+            <div class="action-item">
+                <div class="action-num">1</div>
+                <div class="action-text">Name zoster versus primary varicella — the dermatomal pattern and clinical context establish the diagnosis.</div>
+            </div>
+            <div class="action-item">
+                <div class="action-num">2</div>
+                <div class="action-text">Counsel: minimal fetal risk with localized zoster; treat maternal symptoms with prompt antiviral therapy and routine prenatal care.</div>
+            </div>
+            <div class="action-item">
+                <div class="action-num">3</div>
+                <div class="action-text">Escalate without delay for eye involvement, diffuse/disseminated disease, or immunocompromised status.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SLIDE 15 — References
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="slide">
+        <div class="slide-title">References</div>
+        <ol class="ref-list">
+            <li><span class="ref-num">1.</span>CDC. Clinical Overview of Shingles. 2024.</li>
+            <li><span class="ref-num">2.</span>Hayward K, et al. Management of herpes zoster during pregnancy. Obstet Gynecol Surv. 2018.</li>
+            <li><span class="ref-num">3.</span>Pasternak B, Hviid A. Antiviral use in the first trimester and birth defects. JAMA. 2010 (837,795 live-born infants).</li>
+            <li><span class="ref-num">4.</span>Pupco A, et al. Congenital varicella syndrome and localized maternal zoster. Can Fam Physician. 2011.</li>
+            <li><span class="ref-num">5.</span>Royal College of Obstetricians and Gynaecologists. Green-top Guideline No. 13: Chickenpox in Pregnancy. 2024.</li>
+            <li><span class="ref-num">6.</span>CDC. Guidelines for Vaccinating Pregnant Women. 2024.</li>
+            <li><span class="ref-num">7.</span>CDC. Varicella Vaccine Considerations.</li>
+            <li><span class="ref-num">8.</span>CDC. About Shingles.</li>
+        </ol>
+    </div>
+
+</div><!-- end .deck -->
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    const progressBar = document.getElementById('progress-bar');
+    const counter = document.getElementById('slide-counter');
+
+    function updateUI() {
+        progressBar.style.width = ((currentSlide + 1) / total * 100) + '%';
+        counter.textContent = (currentSlide + 1) + ' / ' + total;
+    }
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+        updateUI();
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % total;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + total) % total;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+    });
+
+    // URL hash navigation
+    function goToHash() {
+        const n = parseInt(window.location.hash.replace('#', ''), 10);
+        if (!isNaN(n) && n >= 1 && n <= total) {
+            currentSlide = n - 1;
+            showSlide(currentSlide);
+        }
+    }
+    window.addEventListener('hashchange', goToHash);
+    if (window.location.hash) goToHash();
+
+    showSlide(currentSlide);
+</script>
+
+<!-- openmfm-footer-injected -->
+<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
+  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
+</div>
+</body>
+</html>
