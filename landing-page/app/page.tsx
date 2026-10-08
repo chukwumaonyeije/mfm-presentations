@@ -35,6 +35,8 @@ export default async function HomePage() {
   const featuredArticle = articles[0];
   const featuredPresentation = featuredArticle ?? presentations[0];
   const recentPresentations = presentations.slice(0, 4);
+  const featuredSlideshow = microsites.find((resource) => resource.href === 'https://manus.im/share/file/b69e2697-c8f7-45c2-b7bb-732e53c8f8a2');
+  const mortalityNavigator = microsites.find((resource) => resource.href.includes('maternal-mortality-interventions'));
   const curatedSlugs = ['basic-gdm', 'fetal-growth-restriction-patients', 'preeclampsia'];
   const clinicalEssentials = curatedSlugs
     .map((slug) => presentations.find((presentation) => presentation.href.includes(slug)))
@@ -221,6 +223,29 @@ export default async function HomePage() {
           </aside>
         </div>
       </section>
+
+      {featuredSlideshow && (
+        <section aria-labelledby="featured-slideshow-title" className="container mx-auto px-4 pb-8 pt-4">
+          <div className="card-glow rounded-3xl p-7 md:p-9">
+            <p className="section-kicker mb-4">Featured slideshow · Global maternal health</p>
+            <h2 id="featured-slideshow-title" className="mb-4 text-3xl font-bold text-white"
+              style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}>
+              {featuredSlideshow.title}
+            </h2>
+            <p className="mb-6 max-w-3xl text-base leading-7 text-slate-300">{featuredSlideshow.description}</p>
+            <div className="flex flex-wrap gap-4">
+              <a href={featuredSlideshow.href} target="_blank" rel="noopener noreferrer" className="feature-panel__link">
+                Open interactive slideshow on Manus <ArrowRight className="h-4 w-4" />
+              </a>
+              {mortalityNavigator && (
+                <a href={mortalityNavigator.href + '#navigator'} className="feature-panel__link">
+                  Launch systems navigator <ArrowRight className="h-4 w-4" />
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="container mx-auto px-4 py-16">
         <div className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
