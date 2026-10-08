@@ -16,6 +16,10 @@ urls = []
 urls.append(('/', '1.0'))
 urls.append(('/library', '0.9'))
 
+# Featured articles
+for article in data.get('articles', []):
+    urls.append((f"/{article['href']}", '0.9'))
+
 # Presentations
 for p in presentations:
     urls.append((f"/{p['href']}", '0.8'))

@@ -27,12 +27,13 @@ type Microsite = Presentation;
 export default async function HomePage() {
   const jsonPath = path.join(process.cwd(), 'data', 'presentations.json');
   const fileContents = await fs.readFile(jsonPath, 'utf8');
-  const { presentations, microsites }: { presentations: Presentation[]; microsites: Microsite[] } =
+  const { presentations, microsites, articles = [] }: { presentations: Presentation[]; microsites: Microsite[]; articles?: Presentation[] } =
     JSON.parse(fileContents);
 
   const presentationCount = presentations.length;
   const micrositeCount = microsites.length;
-  const featuredPresentation = presentations[0];
+  const featuredArticle = articles[0];
+  const featuredPresentation = featuredArticle ?? presentations[0];
   const recentPresentations = presentations.slice(0, 4);
   const curatedSlugs = ['basic-gdm', 'fetal-growth-restriction-patients', 'preeclampsia'];
   const clinicalEssentials = curatedSlugs
@@ -90,7 +91,7 @@ export default async function HomePage() {
               </span>
               <span className="eyebrow-pill subtle">
                 <Sparkles className="h-3.5 w-3.5" />
-                Latest deck pinned from the library feed
+                {featuredArticle ? 'SMFM 2026 · Featured article' : 'Latest from the library'}
               </span>
             </div>
 
@@ -177,7 +178,7 @@ export default async function HomePage() {
           <aside className="feature-panel">
             <div className="feature-panel__label">
               <Clock3 className="h-4 w-4" />
-              Featured presentation
+              {featuredArticle ? 'Featured article' : 'Featured presentation'}
             </div>
             <h2 className="feature-panel__title">{featuredPresentation.title}</h2>
             <p className="feature-panel__description">{featuredPresentation.description}</p>
@@ -191,9 +192,9 @@ export default async function HomePage() {
             <div className="feature-panel__meta">
               <span className="feature-panel__meta-item">
                 <Stethoscope className="h-4 w-4" />
-                Patient-centered counseling
+                {featuredArticle ? 'Posters 341 & 342' : 'Patient-centered counseling'}
               </span>
-              <span className="feature-panel__meta-item">Feed-driven preview</span>
+              <span className="feature-panel__meta-item">{featuredArticle ? 'Global Congress · Utrecht' : 'Library preview'}</span>
             </div>
             <div className="feature-panel__actions">
               <a
@@ -202,7 +203,7 @@ export default async function HomePage() {
                 rel="noopener noreferrer"
                 className="feature-panel__link"
               >
-                Open featured deck
+                {featuredArticle ? 'Read featured article' : 'Open featured deck'}
                 <ArrowRight className="h-4 w-4" />
               </a>
               {featuredPresentation.quizHref && (
