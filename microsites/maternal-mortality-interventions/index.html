@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="An interactive systems-planning tool based on global maternal mortality trends, the SDG 3.1 target, and SMFM Global Conference 2026 notes.">
+  <title>Maternal Mortality Systems Navigator | OpenMFM</title>
+  <style>
+    :root {
+      --ink: #07111c;
+      --panel: #0b1c2c;
+      --panel-2: #10283d;
+      --line: #21425f;
+      --text: #f4f7fb;
+      --muted: #b7c4d6;
+      --cyan: #35d0ff;
+      --cyan-dark: #0a9cc6;
+      --coral: #ff4d6d;
+      --gold: #ffc857;
+      --focus: rgba(53, 208, 255, .22);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(circle at 14% 4%, rgba(53,208,255,.13), transparent 32rem), radial-gradient(circle at 88% 20%, rgba(255,77,109,.09), transparent 28rem), var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .shell { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+    .site-header { padding: 22px 0; border-bottom: 1px solid rgba(183,196,214,.16); }
+    .header-row { display: flex; gap: 24px; align-items: center; justify-content: space-between; }
+    .brand { color: var(--text); text-decoration: none; font-size: 23px; font-weight: 800; letter-spacing: -.04em; }
+    .brand span { color: var(--cyan); text-shadow: 0 0 24px rgba(53,208,255,.45); }
+    .header-nav { display: flex; gap: 9px; align-items: center; }
+    .text-button { padding: 9px 12px; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 8px; }
+    .text-button:hover, .text-button:focus-visible { color: var(--text); border-color: var(--line); outline: none; }
+    .eyebrow { margin: 0 0 15px; color: var(--cyan); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(285px, .65fr); gap: 60px; padding: 88px 0 62px; align-items: center; }
+    .hero h1 { max-width: 780px; margin: 0; font-size: clamp(40px, 6vw, 72px); letter-spacing: -.065em; line-height: .98; }
+    .hero h1 span { color: var(--cyan); }
+    .hero-copy { max-width: 690px; margin: 27px 0 0; color: var(--muted); font-size: 20px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+    .button-primary, .button-secondary { min-height: 48px; padding: 12px 20px; border-radius: 9px; font-weight: 800; text-decoration: none; transition: transform .16s ease, box-shadow .16s ease, background .16s ease; }
+    .button-primary { color: var(--ink); background: var(--cyan); border: 1px solid var(--cyan); }
+    .button-primary:hover, .button-primary:focus-visible { background: #74e1ff; box-shadow: 0 8px 24px rgba(53,208,255,.28); transform: translateY(-1px); outline: none; }
+    .button-secondary { color: var(--text); background: transparent; border: 1px solid var(--line); }
+    .button-secondary:hover, .button-secondary:focus-visible { border-color: var(--cyan); background: rgba(53,208,255,.08); outline: none; }
+    .hero-stat { padding: 30px; border: 1px solid rgba(53,208,255,.42); border-radius: 18px; background: linear-gradient(135deg, rgba(16,40,61,.96), rgba(11,28,44,.76)); box-shadow: 0 14px 60px rgba(0,0,0,.22); }
+    .hero-stat .stat-number { color: var(--cyan); font-size: 76px; font-weight: 850; letter-spacing: -.08em; line-height: .9; }
+    .hero-stat p { margin: 14px 0 0; color: var(--muted); font-size: 16px; }
+    .hero-stat .target { display: block; margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(183,196,214,.18); color: var(--text); font-size: 15px; }
+    .target strong { color: var(--coral); }
+    .snapshot { padding: 0 0 74px; }
+    .section-heading { display: flex; gap: 18px; align-items: end; justify-content: space-between; margin-bottom: 22px; }
+    .section-heading h2 { margin: 0; font-size: 28px; letter-spacing: -.045em; }
+    .section-heading p { max-width: 530px; margin: 0; color: var(--muted); font-size: 15px; }
+    .data-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .data-point { min-height: 174px; padding: 22px; border: 1px solid var(--line); border-radius: 12px; background: rgba(11,28,44,.72); }
+    .data-point .value { margin: 0; color: var(--cyan); font-size: 44px; font-weight: 850; letter-spacing: -.06em; line-height: 1; }
+    .data-point .label { margin: 12px 0 0; font-size: 15px; font-weight: 700; }
+    .data-point .detail { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+    .navigator { margin: 0 0 84px; padding: 40px; border: 1px solid rgba(53,208,255,.35); border-radius: 18px; background: linear-gradient(150deg, rgba(16,40,61,.95), rgba(11,28,44,.92)); }
+    .navigator-header { display: flex; gap: 28px; justify-content: space-between; align-items: end; padding-bottom: 25px; border-bottom: 1px solid rgba(183,196,214,.18); }
+    .navigator-header h2 { margin: 0; font-size: 34px; letter-spacing: -.05em; }
+    .navigator-header p { max-width: 470px; margin: 0; color: var(--muted); font-size: 15px; }
+    .progress-label { margin: 18px 0 7px; color: var(--muted); font-size: 13px; }
+    .progress-track { height: 6px; border-radius: 50px; overflow: hidden; background: #18334b; }
+    .progress-fill { width: 0; height: 100%; background: var(--cyan); transition: width .25s ease; }
+    .screen { padding-top: 34px; }
+    .screen[hidden] { display: none; }
+    .screen-title { max-width: 720px; margin: 0; font-size: clamp(28px, 4vw, 42px); letter-spacing: -.05em; line-height: 1.06; }
+    .screen-instruction { max-width: 700px; margin: 12px 0 28px; color: var(--muted); font-size: 17px; }
+    .choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .choice {
+      display: flex; gap: 14px; align-items: flex-start; min-height: 103px; padding: 20px; text-align: left; color: var(--text); border: 1px solid var(--line); border-radius: 11px; background: #0a1a2a; transition: border .15s ease, background .15s ease, transform .15s ease;
+    }
+    .choice:hover { border-color: rgba(53,208,255,.75); transform: translateY(-1px); }
+    .choice[aria-pressed="true"] { border-color: var(--cyan); background: rgba(53,208,255,.105); box-shadow: inset 0 0 0 1px rgba(53,208,255,.2); }
+    .choice-mark { flex: 0 0 22px; width: 22px; height: 22px; margin-top: 1px; border: 2px solid #63839c; border-radius: 5px; background: transparent; }
+    .choice.radio .choice-mark { border-radius: 50%; }
+    .choice[aria-pressed="true"] .choice-mark { border-color: var(--cyan); background: radial-gradient(circle, var(--cyan) 39%, transparent 43%); }
+    .choice-body strong { display: block; font-size: 17px; }
+    .choice-body span { display: block; margin-top: 5px; color: var(--muted); font-size: 13px; line-height: 1.35; }
+    .navigator-controls { display: flex; gap: 12px; justify-content: space-between; margin-top: 30px; padding-top: 24px; border-top: 1px solid rgba(183,196,214,.18); }
+    .navigator-controls .right { margin-left: auto; }
+    .button-muted { min-height: 45px; padding: 10px 16px; color: var(--muted); border: 1px solid transparent; border-radius: 8px; background: transparent; font-weight: 700; }
+    .button-muted:hover, .button-muted:focus-visible { color: var(--text); border-color: var(--line); outline: none; }
+    .button-primary:disabled { cursor: not-allowed; opacity: .45; transform: none; box-shadow: none; }
+    .result-kicker { margin: 0 0 11px; color: var(--cyan); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .result-title { max-width: 700px; margin: 0; font-size: clamp(30px, 4vw, 46px); letter-spacing: -.055em; line-height: 1.05; }
+    .result-lede { max-width: 800px; margin: 17px 0 28px; color: var(--muted); font-size: 18px; }
+    .recommendation { padding: 24px; border-left: 5px solid var(--cyan); border-radius: 5px 12px 12px 5px; background: rgba(53,208,255,.09); }
+    .recommendation h4 { margin: 0 0 7px; color: var(--text); font-size: 16px; }
+    .recommendation p { margin: 0; color: var(--text); font-size: 18px; font-weight: 700; }
+    .action-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 22px 0; }
+    .action-item { padding: 18px; border: 1px solid var(--line); border-radius: 10px; background: rgba(7,17,28,.35); }
+    .action-item strong { display: block; margin-bottom: 8px; color: var(--gold); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+    .action-item p { margin: 0; color: var(--muted); font-size: 14px; }
+    .result-note { margin: 24px 0 0; color: var(--muted); font-size: 13px; }
+    .framework { display: grid; grid-template-columns: 1.05fr .95fr; gap: 44px; padding: 18px 0 80px; }
+    .framework h2 { margin: 0 0 13px; font-size: 34px; letter-spacing: -.05em; }
+    .framework p { color: var(--muted); }
+    .stack { display: grid; gap: 9px; }
+    .stack-row { display: grid; grid-template-columns: 65px 1fr; gap: 16px; align-items: center; padding: 15px 17px; border: 1px solid var(--line); border-radius: 10px; background: rgba(11,28,44,.65); }
+    .stack-number { color: var(--cyan); font-size: 22px; font-weight: 850; letter-spacing: -.06em; }
+    .stack-row strong { display: block; }
+    .stack-row span { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; }
+    .site-footer { padding: 24px 0 34px; border-top: 1px solid rgba(183,196,214,.16); color: var(--muted); font-size: 13px; }
+    .footer-row { display: flex; justify-content: space-between; gap: 18px; }
+    dialog { max-width: 720px; width: calc(100% - 34px); padding: 0; color: var(--text); border: 1px solid rgba(53,208,255,.42); border-radius: 16px; background: var(--panel); box-shadow: 0 24px 70px rgba(0,0,0,.55); }
+    dialog::backdrop { background: rgba(1,8,16,.78); backdrop-filter: blur(3px); }
+    .modal-inner { padding: 34px; }
+    .modal-close { float: right; min-width: 36px; min-height: 36px; color: var(--muted); border: 1px solid var(--line); border-radius: 8px; background: transparent; font-size: 22px; }
+    .modal-close:hover { color: var(--text); border-color: var(--cyan); }
+    .modal-inner h2 { margin: 0 48px 16px 0; font-size: 28px; letter-spacing: -.04em; }
+    .modal-inner h3 { margin: 24px 0 8px; color: var(--cyan); font-size: 16px; }
+    .modal-inner p, .modal-inner li { color: var(--muted); }
+    .modal-inner ul { padding-left: 20px; }
+    .source-link { color: var(--cyan); }
+    @media (max-width: 850px) {
+      .hero, .framework { grid-template-columns: 1fr; gap: 32px; }
+      .data-grid { grid-template-columns: repeat(2, 1fr); }
+      .navigator-header { display: block; }
+      .navigator-header p { margin-top: 12px; }
+      .action-list { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .shell { padding: 0 18px; }
+      .header-nav { gap: 0; }
+      .hero { padding: 58px 0 46px; }
+      .data-grid, .choice-grid { grid-template-columns: 1fr; }
+      .navigator { margin-left: -2px; margin-right: -2px; padding: 24px 18px; }
+      .navigator-controls { align-items: center; }
+      .hero-stat .stat-number { font-size: 62px; }
+      .footer-row { display: block; }
+      .footer-row p + p { margin-top: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell header-row">
+      <a class="brand" href="https://openmfm.org/" aria-label="OpenMFM home">Open<span>MFM</span></a>
+      <nav class="header-nav" aria-label="Page navigation">
+        <a class="text-button" href="#navigator">Navigator</a>
+        <button class="text-button" type="button" id="openEvidence">Evidence &amp; scope</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="shell hero" aria-labelledby="pageTitle">
+      <div>
+        <p class="eyebrow">SMFM Global Conference 2026 · Systems Planning Tool</p>
+        <h1 id="pageTitle">Maternal mortality is a <span>systems</span> problem.</h1>
+        <p class="hero-copy">Translate local mortality patterns, care delays, and continuity gaps into a pragmatic intervention focus. Built from conference notes and aligned with current WHO global estimates.</p>
+        <div class="hero-actions">
+          <a class="button-primary" href="#navigator">Start the systems navigator</a>
+          <button class="button-secondary" type="button" id="openEvidenceHero">Review evidence &amp; sources</button>
+        </div>
+      </div>
+      <aside class="hero-stat" aria-label="Global maternal mortality target status">
+        <p class="eyebrow">2030 SDG 3.1 target</p>
+        <div class="stat-number">&lt;70</div>
+        <p>maternal deaths per 100,000 live births. WHO estimated the global MMR at <strong>197</strong> in 2023.</p>
+        <span class="target">The SMFM conference session cited a 2030 projection near <strong>167</strong>. That remains well above the target.</span>
+      </aside>
+    </section>
+
+    <section class="shell snapshot" aria-labelledby="snapshotTitle">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Global snapshot</p>
+          <h2 id="snapshotTitle">Progress is real. The distribution remains unacceptable.</h2>
+        </div>
+        <p>Use these figures to frame the local question: Which part of the care system is failing patients before, during, or after pregnancy?</p>
+      </div>
+      <div class="data-grid">
+        <article class="data-point">
+          <p class="value">260k</p>
+          <p class="label">maternal deaths globally in 2023</p>
+          <p class="detail">Over 700 each day. Most were preventable.</p>
+        </article>
+        <article class="data-point">
+          <p class="value">70%</p>
+          <p class="label">of global deaths in sub-Saharan Africa</p>
+          <p class="detail">About 182,000 deaths in 2023.</p>
+        </article>
+        <article class="data-point">
+          <p class="value">92%</p>
+          <p class="label">in low- and lower-middle-income countries</p>
+          <p class="detail">The gap reflects access and quality inequities.</p>
+        </article>
+        <article class="data-point">
+          <p class="value">1 year</p>
+          <p class="label">is the necessary postpartum horizon</p>
+          <p class="detail">Late deaths require continuity beyond the 6-week visit.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell navigator" id="navigator" aria-labelledby="navigatorTitle">
+      <div class="navigator-header">
+        <div>
+          <p class="eyebrow">Interactive systems navigator</p>
+          <h2 id="navigatorTitle">Where should your next intervention focus?</h2>
+        </div>
+        <p>This educational tool prioritizes a systems strategy. It is not a patient-level risk calculator, clinical protocol, or substitute for local data review.</p>
+      </div>
+      <p class="progress-label" id="progressLabel">Step 1 of 3</p>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
+      <section class="screen" id="stepScreen" aria-live="polite">
+        <h3 class="screen-title" id="stepTitle"></h3>
+        <p class="screen-instruction" id="stepInstruction"></p>
+        <div class="choice-grid" id="choiceGrid"></div>
+        <div class="navigator-controls">
+          <button class="button-muted" type="button" id="backButton">← Back</button>
+          <button class="button-primary right" type="button" id="nextButton" disabled>Continue →</button>
+        </div>
+      </section>
+
+      <section class="screen" id="resultScreen" hidden aria-live="polite">
+        <p class="result-kicker">Planning result</p>
+        <h3 class="result-title" id="resultTitle"></h3>
+        <p class="result-lede" id="resultLede"></p>
+        <div class="recommendation">
+          <h4>Primary intervention focus</h4>
+          <p id="resultPriority"></p>
+        </div>
+        <div class="action-list" id="actionList"></div>
+        <p class="result-note" id="resultNote"></p>
+        <div class="navigator-controls">
+          <button class="button-muted" type="button" id="restartButton">↻ Start over</button>
+          <button class="button-secondary right" type="button" id="openEvidenceResult">Evidence &amp; sources</button>
+        </div>
+      </section>
+    </section>
+
+    <section class="shell framework" aria-labelledby="frameworkTitle">
+      <div>
+        <p class="eyebrow">The implementation stack</p>
+        <h2 id="frameworkTitle">No single intervention closes the gap.</h2>
+        <p>Past reductions came from family planning, skilled attendance, and facility birth. The next gains demand reliable emergency readiness, equity, and postpartum continuity. Every layer must hold.</p>
+      </div>
+      <div class="stack" aria-label="Four-layer maternal mortality systems stack">
+        <div class="stack-row"><div class="stack-number">01</div><div><strong>Prevent unintended pregnancy</strong><span>Contraception, safe abortion where legal, and high-quality post-abortion care.</span></div></div>
+        <div class="stack-row"><div class="stack-number">02</div><div><strong>Reach skilled care</strong><span>Skilled birth attendance, transport, referral paths, and financial protection.</span></div></div>
+        <div class="stack-row"><div class="stack-number">03</div><div><strong>Deliver facility readiness</strong><span>Blood, uterotonics, magnesium sulfate, surgery, teams, and accountable response.</span></div></div>
+        <div class="stack-row"><div class="stack-number">04</div><div><strong>Extend continuity and equity</strong><span>Cardiovascular, mental health, substance-use, and social care throughout year one.</span></div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-row">
+      <p>OpenMFM · Dr. Chukwuma Onyeije · Educational systems-planning resource</p>
+      <p>Not medical advice. Adapt recommendations to local data, guidelines, and governance.</p>
+    </div>
+  </footer>
+
+  <dialog id="evidenceDialog" aria-labelledby="evidenceTitle">
+    <div class="modal-inner">
+      <button class="modal-close" type="button" id="closeEvidence" aria-label="Close evidence and sources">×</button>
+      <h2 id="evidenceTitle">Evidence, scope, and sources</h2>
+      <p>The navigator is a structured prompt for quality-improvement and health-system discussions. It does not estimate an individual patient's mortality risk, diagnose conditions, or replace a guideline-based protocol.</p>
+      <h3>How to use the result</h3>
+      <ul>
+        <li>Review it with local maternal mortality review data, disaggregated by race, geography, and access.</li>
+        <li>Pair it with local referral maps, supply-chain readiness, staffing models, and postpartum access data.</li>
+        <li>Use clinical guidelines and multidisciplinary leadership to define any protocol or patient-care action.</li>
+      </ul>
+      <h3>Sources</h3>
+      <ul>
+        <li><a class="source-link" href="https://www.who.int/news-room/fact-sheets/detail/maternal-mortality" target="_blank" rel="noopener">World Health Organization. Maternal mortality fact sheet, 2025.</a> Global and regional estimates, cause categories, SDG target, and high-level interventions.</li>
+        <li><a class="source-link" href="https://www.unfpa.org/publications/trends-maternal-mortality-2000-2023" target="_blank" rel="noopener">WHO/UNICEF/UNFPA/World Bank/UN DESA. Trends in Maternal Mortality 2000–2023.</a> Comparative estimates and regional distribution.</li>
+        <li><a class="source-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8475675/" target="_blank" rel="noopener">Luther et al. Reducing Cardiovascular Maternal Mortality by Extending Postpartum Coverage. JAHA, 2021.</a> U.S. postpartum and cardiovascular context.</li>
+        <li>SMFM Global Conference 2026 presentation notes supplied by the requester. Used for the session-specific projection and intervention synthesis; interpret alongside the primary reports above.</li>
+      </ul>
+    </div>
+  </dialog>
+
+  <script>
+    const STEPS = [
+      {
+        title: 'Start with the care context.',
+        instruction: 'Choose the setting that most closely reflects the population and system you are planning for.',
+        type: 'single',
+        choices: [
+          { id: 'direct', title: 'Limited-resource or fragile setting', detail: 'Direct obstetric causes, access barriers, conflict, rural distance, or constrained facility capacity dominate.' },
+          { id: 'indirect', title: 'Higher-resource setting with inequitable outcomes', detail: 'Chronic disease, cardiovascular causes, mental health, substance use, or structural inequity dominate.' },
+          { id: 'mixed', title: 'Mixed or uncertain profile', detail: 'Data show a combination of direct and indirect causes or need further local characterization.' }
+        ]
+      },
+      {
+        title: 'Where does the pathway break?',
+        instruction: 'Select every systems gap that meaningfully contributes to preventable death in your setting.',
+        type: 'multiple',
+        choices: [
+          { id: 'access', title: 'Access and referral', detail: 'Patients cannot reach appropriate care in time; transport, cost, referral, or skilled-attendance gaps persist.' },
+          { id: 'quality', title: 'Facility readiness', detail: 'Patients arrive but face delays in assessment, blood, medications, surgery, escalation, or respectful care.' },
+          { id: 'continuity', title: 'Postpartum continuity', detail: 'Coverage, follow-up, handoffs, or longitudinal care fail after delivery and discharge.' }
+        ]
+      },
+      {
+        title: 'What is driving mortality now?',
+        instruction: 'Select every priority driver visible in local review data.',
+        type: 'multiple',
+        choices: [
+          { id: 'hemorrhage', title: 'Hemorrhage or hypertensive emergencies', detail: 'Time-critical direct causes requiring prevention, early recognition, and emergency treatment.' },
+          { id: 'cv', title: 'Cardiovascular or chronic disease', detail: 'Cardiomyopathy, hypertensive disease, diabetes, and other indirect contributors.' },
+          { id: 'mental', title: 'Mental health, substance use, or violence', detail: 'Postpartum risk requiring integrated behavioral health, safety, and social support.' },
+          { id: 'climate', title: 'Heat, climate, or humanitarian stress', detail: 'Environmental exposure or instability compounds baseline access and capacity constraints.' }
+        ]
+      }
+    ];
+
+    let currentStep = 0;
+    let selections = [[], [], []];
+    const stepScreen = document.getElementById('stepScreen');
+    const resultScreen = document.getElementById('resultScreen');
+    const stepTitle = document.getElementById('stepTitle');
+    const stepInstruction = document.getElementById('stepInstruction');
+    const choiceGrid = document.getElementById('choiceGrid');
+    const progressLabel = document.getElementById('progressLabel');
+    const progressFill = document.getElementById('progressFill');
+    const nextButton = document.getElementById('nextButton');
+    const backButton = document.getElementById('backButton');
+
+    function renderStep() {
+      const step = STEPS[currentStep];
+      stepTitle.textContent = step.title;
+      stepInstruction.textContent = step.instruction;
+      progressLabel.textContent = `Step ${currentStep + 1} of ${STEPS.length}`;
+      progressFill.style.width = `${((currentStep + 1) / STEPS.length) * 100}%`;
+      backButton.style.visibility = currentStep === 0 ? 'hidden' : 'visible';
+      nextButton.textContent = currentStep === STEPS.length - 1 ? 'See priority focus →' : 'Continue →';
+      choiceGrid.innerHTML = '';
+      step.choices.forEach(choice => {
+        const selected = selections[currentStep].includes(choice.id);
+        const button = document.createElement('button');
+        button.className = `choice ${step.type === 'single' ? 'radio' : ''}`;
+        button.type = 'button';
+        button.setAttribute('aria-pressed', String(selected));
+        button.innerHTML = `<span class="choice-mark" aria-hidden="true"></span><span class="choice-body"><strong>${choice.title}</strong><span>${choice.detail}</span></span>`;
+        button.addEventListener('click', () => chooseOption(choice.id));
+        choiceGrid.appendChild(button);
+      });
+      nextButton.disabled = selections[currentStep].length === 0;
+    }
+
+    function chooseOption(id) {
+      const step = STEPS[currentStep];
+      if (step.type === 'single') {
+        selections[currentStep] = [id];
+      } else if (selections[currentStep].includes(id)) {
+        selections[currentStep] = selections[currentStep].filter(item => item !== id);
+      } else {
+        selections[currentStep].push(id);
+      }
+      renderStep();
+    }
+
+    function calculateResult() {
+      const context = selections[0][0];
+      const gaps = selections[1];
+      const drivers = selections[2];
+      const hasFacilityGap = gaps.includes('quality');
+      const hasContinuityGap = gaps.includes('continuity');
+      const indirectDriver = drivers.includes('cv') || drivers.includes('mental');
+      const directDriver = drivers.includes('hemorrhage') || drivers.includes('climate');
+
+      if ((context === 'indirect' && (hasContinuityGap || indirectDriver)) || (hasContinuityGap && indirectDriver)) {
+        return {
+          title: 'Build an extended postpartum continuity model.',
+          lede: 'The selected pattern centers indirect causes and/or loss to follow-up after delivery. A six-week endpoint does not match the risk horizon.',
+          priority: 'Create a 12-month postpartum pathway that connects obstetric care to primary care, cardiology, behavioral health, substance-use treatment, and social support.',
+          actions: [
+            ['Care transition', 'Define warm handoffs before discharge, including explicit ownership of blood pressure, cardiovascular, and behavioral health follow-up.'],
+            ['Equity audit', 'Review access, readmission, treatment, and mortality data by race, payer, geography, and language.'],
+            ['Longitudinal access', 'Close coverage and scheduling gaps that interrupt care beyond 42 days postpartum.']
+          ],
+          note: 'U.S. evidence identifies a substantial postpartum burden for cardiovascular deaths. Local programs should align with current ACOG, SMFM, public-health, and payer guidance.'
+        };
+      }
+
+      if (hasFacilityGap || (context === 'direct' && drivers.includes('hemorrhage'))) {
+        return {
+          title: 'Make facility readiness the immediate intervention.',
+          lede: 'The selected pattern indicates patients reach care but may not receive reliable time-critical treatment after arrival.',
+          priority: 'Operationalize a rapid-response emergency obstetric care bundle for hemorrhage and hypertensive emergencies, with accountable team escalation.',
+          actions: [
+            ['Response design', 'Standardize recognition, activation, roles, debriefing, and transfer/escalation processes.'],
+            ['Resource reliability', 'Protect availability of blood, uterotonics, magnesium sulfate, surgery, and trained response teams.'],
+            ['Respectful quality', 'Measure timeliness and experience of care, not delivery location alone.']
+          ],
+          note: 'Conference notes highlight the third delay, inadequate care after facility arrival, as a key residual contributor across multiple African settings.'
+        };
+      }
+
+      if (gaps.includes('access') || context === 'direct' || directDriver) {
+        return {
+          title: 'Strengthen the access-to-care foundation.',
+          lede: 'The selected pattern points to direct obstetric risk coupled with a pathway that breaks before the patient receives skilled, emergency-capable care.',
+          priority: 'Expand skilled birth attendance, referral/transport systems, family planning access, and community-level support while building facility capacity in parallel.',
+          actions: [
+            ['Reach care', 'Map referral routes, transport options, communication channels, and financial barriers.'],
+            ['Prevent risk', 'Ensure voluntary contraception and evidence-based reproductive care are available before and between pregnancies.'],
+            ['Community link', 'Equip community health workers and local partners to support early recognition, transport, and follow-up.']
+          ],
+          note: 'WHO identifies access to skilled care before, during, and after childbirth as central to preventing maternal deaths.'
+        };
+      }
+
+      return {
+        title: 'Use a layered maternal health strategy.',
+        lede: 'The selections do not point to a single dominant failure point. The response must link prevention, facility readiness, equity, and continuity.',
+        priority: 'Begin with a multidisciplinary review of local causes, preventability factors, and care delays; select a small set of measurable priorities across the pathway.',
+        actions: [
+          ['Characterize', 'Disaggregate mortality and severe morbidity data, then map causal pathways and avoidable delays.'],
+          ['Prioritize', 'Select one access, one facility-readiness, and one postpartum-continuity measure for improvement.'],
+          ['Accountability', 'Publish measures, learn from cases, and involve communities in redesigning the care pathway.']
+        ],
+        note: 'This result is an implementation starting point. It should be refined with local review data, patient voice, and guideline-based governance.'
+      };
+    }
+
+    function showResults() {
+      const result = calculateResult();
+      stepScreen.hidden = true;
+      resultScreen.hidden = false;
+      document.getElementById('resultTitle').textContent = result.title;
+      document.getElementById('resultLede').textContent = result.lede;
+      document.getElementById('resultPriority').textContent = result.priority;
+      document.getElementById('resultNote').textContent = result.note;
+      const actionList = document.getElementById('actionList');
+      actionList.innerHTML = '';
+      result.actions.forEach(([label, text]) => {
+        const item = document.createElement('article');
+        item.className = 'action-item';
+        item.innerHTML = `<strong>${label}</strong><p>${text}</p>`;
+        actionList.appendChild(item);
+      });
+      progressLabel.textContent = 'Planning result';
+      progressFill.style.width = '100%';
+      document.getElementById('resultTitle').focus({ preventScroll: true });
+    }
+
+    nextButton.addEventListener('click', () => {
+      if (selections[currentStep].length === 0) return;
+      if (currentStep < STEPS.length - 1) {
+        currentStep += 1;
+        renderStep();
+      } else {
+        showResults();
+      }
+    });
+    backButton.addEventListener('click', () => {
+      if (currentStep === 0) return;
+      currentStep -= 1;
+      renderStep();
+    });
+    document.getElementById('restartButton').addEventListener('click', () => {
+      currentStep = 0;
+      selections = [[], [], []];
+      resultScreen.hidden = true;
+      stepScreen.hidden = false;
+      renderStep();
+    });
+
+    const evidenceDialog = document.getElementById('evidenceDialog');
+    ['openEvidence', 'openEvidenceHero', 'openEvidenceResult'].forEach(id => {
+      document.getElementById(id).addEventListener('click', () => evidenceDialog.showModal());
+    });
+    document.getElementById('closeEvidence').addEventListener('click', () => evidenceDialog.close());
+    evidenceDialog.addEventListener('click', event => { if (event.target === evidenceDialog) evidenceDialog.close(); });
+
+    renderStep();
+  </script>
+</body>
+</html>
