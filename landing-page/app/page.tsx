@@ -18,6 +18,9 @@ interface Presentation {
   title: string;
   href: string;
   quizHref?: string;
+  featured?: boolean;
+  slideCount?: number;
+  duration?: string;
   tags: string[];
   description: string;
 }
@@ -32,8 +35,9 @@ export default async function HomePage() {
 
   const presentationCount = presentations.length;
   const micrositeCount = microsites.length;
-  const featuredArticle = articles[0];
-  const featuredPresentation = featuredArticle ?? presentations[0];
+  const highlightedDeck = presentations.find((presentation) => presentation.featured);
+  const featuredArticle = highlightedDeck ? undefined : articles[0];
+  const featuredPresentation = highlightedDeck ?? featuredArticle ?? presentations[0];
   const recentPresentations = presentations.slice(0, 4);
   const featuredSlideshow = microsites.find((resource) => resource.href === 'https://manus.im/share/file/b69e2697-c8f7-45c2-b7bb-732e53c8f8a2');
   const mortalityNavigator = microsites.find((resource) => resource.href.includes('maternal-mortality-interventions'));
@@ -93,7 +97,7 @@ export default async function HomePage() {
               </span>
               <span className="eyebrow-pill subtle">
                 <Sparkles className="h-3.5 w-3.5" />
-                {featuredArticle ? 'SMFM 2026 · Featured article' : 'Latest from the library'}
+                {featuredArticle ? 'SMFM 2026 · Featured article' : 'Featured clinical presentation'}
               </span>
             </div>
 
@@ -194,9 +198,9 @@ export default async function HomePage() {
             <div className="feature-panel__meta">
               <span className="feature-panel__meta-item">
                 <Stethoscope className="h-4 w-4" />
-                {featuredArticle ? 'Posters 341 & 342' : 'Patient-centered counseling'}
+                {featuredArticle ? 'Posters 341 & 342' : (featuredPresentation.slideCount ? `${featuredPresentation.slideCount} slides · Provider education` : 'Clinical education')}
               </span>
-              <span className="feature-panel__meta-item">{featuredArticle ? 'Global Congress · Utrecht' : 'Library preview'}</span>
+              <span className="feature-panel__meta-item">{featuredArticle ? 'Global Congress · Utrecht' : (featuredPresentation.duration ?? 'Library preview')}</span>
             </div>
             <div className="feature-panel__actions">
               <a
