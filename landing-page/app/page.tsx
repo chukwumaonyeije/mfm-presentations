@@ -18,6 +18,7 @@ interface Presentation {
   title: string;
   href: string;
   quizHref?: string;
+  checklistHref?: string;
   featured?: boolean;
   slideCount?: number;
   duration?: string;
@@ -35,11 +36,11 @@ export default async function HomePage() {
 
   const presentationCount = presentations.length;
   const micrositeCount = microsites.length;
-  const highlightedDeck = presentations.find((presentation) => presentation.featured);
+  const highlightedDeck = [...presentations, ...microsites].find((presentation) => presentation.featured);
   const featuredArticle = highlightedDeck ? undefined : articles[0];
   const featuredPresentation = highlightedDeck ?? featuredArticle ?? presentations[0];
   const recentPresentations = presentations.slice(0, 4);
-  const featuredSlideshow = microsites.find((resource) => resource.href === 'https://manus.im/share/file/b69e2697-c8f7-45c2-b7bb-732e53c8f8a2');
+  const datingToolkit = presentations.find((presentation) => presentation.href === 'decks/gestational-dating/index.html');
   const mortalityNavigator = microsites.find((resource) => resource.href.includes('maternal-mortality-interventions'));
   const curatedSlugs = ['basic-gdm', 'fetal-growth-restriction-patients', 'preeclampsia'];
   const clinicalEssentials = curatedSlugs
@@ -78,7 +79,7 @@ export default async function HomePage() {
         </nav>
       </header>
 
-      <section className="relative container mx-auto px-4 pb-18 pt-8 md:pt-12">
+      <section className="relative container mx-auto overflow-hidden px-4 pb-18 pt-8 md:pt-12">
         <div
           className="hero-glow pointer-events-none absolute"
           style={{
@@ -209,7 +210,7 @@ export default async function HomePage() {
                 rel="noopener noreferrer"
                 className="feature-panel__link"
               >
-                {featuredArticle ? 'Read featured article' : 'Open featured deck'}
+                {featuredArticle ? 'Read featured article' : 'Open featured presentation'}
                 <ArrowRight className="h-4 w-4" />
               </a>
               {featuredPresentation.quizHref && (
@@ -219,8 +220,13 @@ export default async function HomePage() {
                   rel="noopener noreferrer"
                   className="feature-panel__link feature-panel__link--quiz"
                 >
-                  Take 5-question quiz
+                  Take the quiz
                   <ArrowRight className="h-4 w-4" />
+                </a>
+              )}
+              {featuredPresentation.href.includes('manus.im') && mortalityNavigator && (
+                <a href={mortalityNavigator.href + '#navigator'} className="feature-panel__link">
+                  Launch systems navigator <ArrowRight className="h-4 w-4" />
                 </a>
               )}
             </div>
@@ -228,22 +234,27 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {featuredSlideshow && (
-        <section aria-labelledby="featured-slideshow-title" className="container mx-auto px-4 pb-8 pt-4">
+      {datingToolkit && (
+        <section id="edd-checklist" aria-labelledby="edd-checklist-title" className="container mx-auto px-4 pb-8 pt-4">
           <div className="card-glow rounded-3xl p-7 md:p-9">
-            <p className="section-kicker mb-4">Featured slideshow · Global maternal health</p>
-            <h2 id="featured-slideshow-title" className="mb-4 text-3xl font-bold text-white"
+            <p className="section-kicker mb-4">Updated clinical toolkit · Sonographers and providers</p>
+            <h2 id="edd-checklist-title" className="mb-4 text-3xl font-bold text-white"
               style={{ fontFamily: "var(--font-space-grotesk, 'Space Grotesk', sans-serif)" }}>
-              {featuredSlideshow.title}
+              Verify the EDD: presentation, quiz and printable checklist
             </h2>
-            <p className="mb-6 max-w-3xl text-base leading-7 text-slate-300">{featuredSlideshow.description}</p>
+            <p className="mb-6 max-w-3xl text-base leading-7 text-slate-300">Review the dating history, retrieve the earliest reliable scan, and document the final EDD. The one-page checklist includes the dating documentation template.</p>
             <div className="flex flex-wrap gap-4">
-              <a href={featuredSlideshow.href} target="_blank" rel="noopener noreferrer" className="feature-panel__link">
-                Open interactive slideshow on Manus <ArrowRight className="h-4 w-4" />
+              <a href={datingToolkit.href} className="feature-panel__link">
+                View presentation <ArrowRight className="h-4 w-4" />
               </a>
-              {mortalityNavigator && (
-                <a href={mortalityNavigator.href + '#navigator'} className="feature-panel__link">
-                  Launch systems navigator <ArrowRight className="h-4 w-4" />
+              {datingToolkit.quizHref && (
+                <a href={datingToolkit.quizHref} className="feature-panel__link">
+                  Take the 10-question quiz <ArrowRight className="h-4 w-4" />
+                </a>
+              )}
+              {datingToolkit.checklistHref && (
+                <a href={datingToolkit.checklistHref} download className="feature-panel__link">
+                  Download EDD checklist (1-page PDF) <ArrowRight className="h-4 w-4" />
                 </a>
               )}
             </div>
