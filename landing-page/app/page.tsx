@@ -253,8 +253,8 @@ export default async function HomePage() {
                 </a>
               )}
               {datingToolkit.checklistHref && (
-                <a href={datingToolkit.checklistHref} download className="feature-panel__link">
-                  Download EDD checklist (1-page PDF) <ArrowRight className="h-4 w-4" />
+                <a href={datingToolkit.checklistHref} target="_blank" rel="noopener noreferrer" aria-label="Open EDD checklist PDF in a new tab" className="feature-panel__link">
+                  Open EDD checklist (1-page PDF, new tab) <ArrowRight className="h-4 w-4" />
                 </a>
               )}
             </div>
