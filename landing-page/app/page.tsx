@@ -18,6 +18,8 @@ interface Presentation {
   title: string;
   href: string;
   quizHref?: string;
+  pdfHref?: string;
+  patientPdfHref?: string;
   checklistHref?: string;
   featured?: boolean;
   slideCount?: number;
@@ -213,6 +215,16 @@ export default async function HomePage() {
                 {featuredArticle ? 'Read featured article' : 'Open featured presentation'}
                 <ArrowRight className="h-4 w-4" />
               </a>
+              {featuredPresentation.pdfHref && (
+                <a href={featuredPresentation.pdfHref} className="feature-panel__link" target="_blank" rel="noopener noreferrer">
+                  Presentation PDF <ArrowRight className="h-4 w-4" />
+                </a>
+              )}
+              {featuredPresentation.patientPdfHref && (
+                <a href={featuredPresentation.patientPdfHref} className="feature-panel__link" target="_blank" rel="noopener noreferrer">
+                  Patient counseling PDF <ArrowRight className="h-4 w-4" />
+                </a>
+              )}
               {featuredPresentation.quizHref && (
                 <a
                   href={featuredPresentation.quizHref}
