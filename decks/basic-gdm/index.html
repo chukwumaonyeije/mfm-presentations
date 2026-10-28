@@ -1,730 +1,1113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestational Diabetes (GDM) | MFM Patient Education</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:          #0d1117;
-      --surface:     #161b22;
-      --surface2:    #1c2330;
-      --border:      #30363d;
-      --text:        #e6edf3;
-      --muted:       #8b949e;
-      --accent-blue: #58a6ff;
-      --accent-teal: #39d0b4;
-      --accent-green:#3fb950;
-      --accent-amber:#d29922;
-      --accent-red:  #f85149;
-      --accent-purple:#bc8cff;
-      --brand:       #1f6feb;
-    }
-
-    html, body {
-      width: 100%; height: 100%;
-      background: var(--bg); color: var(--text);
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      overflow: hidden;
-    }
-
-    .deck { width: 100%; height: 100%; position: relative; }
-
-    .slide {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      padding: 3em 4em;
-      opacity: 0; visibility: hidden;
-      transition: opacity 0.45s ease;
-    }
-    .slide.active { opacity: 1; visibility: visible; }
-
-    .progress-bar {
-      position: fixed; top: 0; left: 0; height: 3px;
-      background: var(--brand); transition: width 0.4s ease; z-index: 200;
-    }
-
-    .nav {
-      position: fixed; bottom: 1.6em; left: 50%;
-      transform: translateX(-50%);
-      display: flex; align-items: center; gap: 1.2em; z-index: 100;
-    }
-    .nav button {
-      background: var(--surface2); border: 1px solid var(--border);
-      color: var(--text); padding: 0.45em 1.2em;
-      border-radius: 6px; font-size: 1em; cursor: pointer;
-      transition: background 0.2s;
-    }
-    .nav button:hover { background: var(--brand); border-color: var(--brand); }
-    .nav .counter { color: var(--muted); font-size: 0.9em; min-width: 5em; text-align: center; }
-
-    .slide-footer {
-      position: absolute; bottom: 3.5em; left: 4em; right: 4em;
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.72em; color: var(--muted);
-      border-top: 1px solid var(--border); padding-top: 0.6em;
-    }
-
-    .slide-label {
-      font-size: 0.75em; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--muted); margin-bottom: 0.6em;
-    }
-
-    h1 { font-size: clamp(2em, 4.5vw, 3.6em); font-weight: 300; line-height: 1.15; }
-    h2 { font-size: clamp(1.6em, 3.5vw, 2.6em); font-weight: 300; line-height: 1.2; }
-    h3 { font-size: clamp(1.1em, 2vw, 1.5em); font-weight: 400; }
-    p  { font-size: clamp(0.95em, 1.6vw, 1.25em); line-height: 1.7; max-width: 780px; text-align: center; }
-
-    .accent-blue   { color: var(--accent-blue); }
-    .accent-teal   { color: var(--accent-teal); }
-    .accent-green  { color: var(--accent-green); }
-    .accent-amber  { color: var(--accent-amber); }
-    .accent-red    { color: var(--accent-red); }
-    .accent-purple { color: var(--accent-purple); }
-
-    .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 2em; width: 100%; max-width: 1000px; margin-top: 1.5em; }
-    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.6em; width: 100%; max-width: 1000px; margin-top: 1.5em; }
-
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.6em 1.8em; }
-    .card h3 { margin-bottom: 0.6em; }
-    .card p  { text-align: left; font-size: 1em; }
-
-    .pill { display: inline-block; padding: 0.25em 0.85em; border-radius: 20px; font-size: 0.8em; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
-    .pill-blue   { background: rgba(88,166,255,.15);  color: var(--accent-blue);   border: 1px solid rgba(88,166,255,.3); }
-    .pill-teal   { background: rgba(57,208,180,.15);  color: var(--accent-teal);   border: 1px solid rgba(57,208,180,.3); }
-    .pill-green  { background: rgba(63,185,80,.15);   color: var(--accent-green);  border: 1px solid rgba(63,185,80,.3); }
-    .pill-amber  { background: rgba(210,153,34,.15);  color: var(--accent-amber);  border: 1px solid rgba(210,153,34,.3); }
-
-    .stat-row { display: flex; gap: 2em; margin-top: 1.6em; flex-wrap: wrap; justify-content: center; }
-    .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2em 1.8em; text-align: center; min-width: 160px; }
-    .stat-box .stat-num { font-size: 2.4em; font-weight: 700; line-height: 1; }
-    .stat-box .stat-lbl { font-size: 0.8em; color: var(--muted); margin-top: 0.3em; line-height: 1.3; }
-
-    .alert { border-radius: 10px; padding: 1em 1.4em; display: flex; align-items: flex-start; gap: 0.8em; max-width: 820px; margin-top: 1.4em; font-size: 0.95em; line-height: 1.55; }
-    .alert-amber  { background: rgba(210,153,34,.12); border: 1px solid rgba(210,153,34,.35); color: var(--text); }
-    .alert-green  { background: rgba(63,185,80,.12);  border: 1px solid rgba(63,185,80,.35);  color: var(--text); }
-    .alert-blue   { background: rgba(88,166,255,.10); border: 1px solid rgba(88,166,255,.3);  color: var(--text); }
-    .alert-icon   { font-size: 1.3em; flex-shrink: 0; margin-top: 0.05em; }
-
-    .checklist { list-style: none; margin-top: 1.2em; max-width: 700px; }
-    .checklist li { display: flex; align-items: flex-start; gap: 0.7em; padding: 0.5em 0; font-size: clamp(0.9em, 1.4vw, 1.1em); line-height: 1.5; }
-    .checklist li::before { content: '✦'; color: var(--accent-teal); flex-shrink: 0; margin-top: 0.05em; }
-
-    .checklist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.2em 3em; width: 100%; max-width: 900px; margin-top: 1.2em; }
-    .checklist-grid li { display: flex; align-items: flex-start; gap: 0.6em; padding: 0.4em 0; font-size: clamp(0.85em, 1.3vw, 1.05em); line-height: 1.5; list-style: none; }
-    .checklist-grid li::before { content: '✦'; color: var(--accent-teal); flex-shrink: 0; margin-top: 0.05em; }
-
-    .comp-table { width: 100%; max-width: 960px; border-collapse: collapse; font-size: clamp(0.8em, 1.3vw, 1em); margin-top: 1.4em; }
-    .comp-table th { background: var(--surface2); color: var(--accent-blue); padding: 0.7em 1em; text-align: left; border-bottom: 2px solid var(--border); font-weight: 600; }
-    .comp-table td { padding: 0.65em 1em; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
-    .comp-table tr:nth-child(even) td { background: rgba(255,255,255,.025); }
-    .comp-table td:first-child { color: var(--muted); font-weight: 500; }
-
-    .timeline { display: flex; align-items: flex-start; gap: 0; width: 100%; max-width: 900px; margin-top: 1.8em; }
-    .tl-step  { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
-    .tl-step:not(:last-child)::after { content: ''; position: absolute; top: 22px; left: 50%; width: 100%; height: 2px; background: var(--border); z-index: 0; }
-    .tl-dot   { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1em; font-weight: 700; z-index: 1; border: 2px solid; }
-    .tl-dot.blue  { background: rgba(88,166,255,.15); border-color: var(--accent-blue);  color: var(--accent-blue); }
-    .tl-dot.amber { background: rgba(210,153,34,.15); border-color: var(--accent-amber); color: var(--accent-amber); }
-    .tl-dot.red   { background: rgba(248,81,73,.15);  border-color: var(--accent-red);   color: var(--accent-red); }
-    .tl-dot.green { background: rgba(63,185,80,.15);  border-color: var(--accent-green); color: var(--accent-green); }
-    .tl-dot.teal  { background: rgba(57,208,180,.15); border-color: var(--accent-teal);  color: var(--accent-teal); }
-    .tl-label { font-size: 0.78em; text-align: center; margin-top: 0.6em; color: var(--muted); max-width: 110px; line-height: 1.35; }
-    .tl-title { font-size: 0.9em; text-align: center; margin-top: 0.3em; font-weight: 500; max-width: 120px; line-height: 1.3; }
-
-    .title-eyebrow  { font-size: 0.8em; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-teal); margin-bottom: 0.8em; }
-    .title-divider  { width: 60px; height: 3px; background: var(--brand); border-radius: 2px; margin: 1em auto; }
-    .title-sub      { font-size: clamp(1em, 1.8vw, 1.3em); color: var(--muted); max-width: 620px; text-align: center; line-height: 1.6; }
-
-    @media (max-width: 700px) {
-      .slide { padding: 2em 1.6em 5em; }
-      .two-col, .three-col, .checklist-grid { grid-template-columns: 1fr; }
-      .slide-footer { left: 1.6em; right: 1.6em; }
-      .stat-box { min-width: 120px; }
-    }
-    /* 2026 refresh overrides */
-    :root {
-      --bg: #08131f;
-      --surface: rgba(10, 24, 39, 0.9);
-      --surface2: rgba(18, 34, 52, 0.94);
-      --border: rgba(131, 193, 255, 0.16);
-      --text: #f5f9fc;
-      --muted: #b5c7d7;
-      --accent-blue: #69b8ff;
-      --accent-teal: #4ddcc2;
-      --accent-green: #79e09b;
-      --accent-amber: #ffbd63;
-      --accent-red: #ff7171;
-      --accent-purple: #bfbcff;
-      --brand: #69b8ff;
-    }
-
-    html, body {
-      background:
-        radial-gradient(circle at top left, rgba(105, 184, 255, 0.18), transparent 26%),
-        radial-gradient(circle at 88% 16%, rgba(77, 220, 194, 0.13), transparent 20%),
-        linear-gradient(180deg, #08131f 0%, #06101a 100%);
-      font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
-    }
-
-    .deck::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: linear-gradient(180deg, rgba(0,0,0,0.22), transparent 78%);
-      pointer-events: none;
-    }
-
-    .slide {
-      padding: 4.2em 4.2em 6em;
-      background: linear-gradient(180deg, rgba(8, 19, 31, 0.72), rgba(8, 19, 31, 0.32));
-    }
-
-    h1, h2 {
-      letter-spacing: -0.035em;
-      font-weight: 700;
-      text-wrap: balance;
-    }
-
-    .card, .stat-box {
-      background: linear-gradient(180deg, rgba(14, 30, 48, 0.92), rgba(9, 20, 33, 0.92));
-      border: 1px solid rgba(131, 193, 255, 0.16);
-      border-radius: 18px;
-      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
-      backdrop-filter: blur(10px);
-    }
-
-    .alert {
-      border-radius: 18px;
-      backdrop-filter: blur(8px);
-    }
-
-    .progress-bar {
-      height: 4px;
-      background: linear-gradient(90deg, #69b8ff 0%, #4ddcc2 100%);
-      box-shadow: 0 0 18px rgba(105, 184, 255, 0.45);
-    }
-
-    .nav {
-      bottom: 1.2em;
-      gap: 0.8em;
-      padding: 0.55em 0.7em;
-      border: 1px solid rgba(131, 193, 255, 0.16);
-      border-radius: 999px;
-      background: rgba(7, 17, 28, 0.72);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
-    }
-
-    .nav button {
-      background: rgba(14, 30, 48, 0.92);
-      border: 1px solid rgba(131, 193, 255, 0.18);
-      border-radius: 999px;
-      padding: 0.55em 1.15em;
-    }
-
-    .nav button:hover { background: rgba(31, 74, 116, 0.92); }
-    .nav .counter { color: #dce8f7; font-weight: 600; }
-  </style>
-
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestational Diabetes: Your Plan for Pregnancy and Beyond | OpenMFM</title>
 <!-- openmfm-seo-injected -->
+<meta name="description" content="A 32-slide patient guide to gestational diabetes: testing, glucose targets, food, medication, pregnancy monitoring, delivery, and postpartum care. Updated with ADA 2026 guidance.">
+<meta name="author" content="Dr. Chukwuma Onyeije">
+<meta name="theme-color" content="#0d1117">
 <link rel="canonical" href="https://openmfm.org/decks/basic-gdm/index.html">
-<meta name="description" content="Comprehensive patient education on gestational diabetes: mechanism, screening (GCT/GTT), A1 vs A2 classification, blood sugar targets, medical nutrition therapy, exercise, insulin vs metformin, fetal surveillance, delivery timing, breastfeeding benefits, and long-term diabetes prevention. Based on ACOG PB #190, SMFM, and ADA 2025.">
-<meta name="author" content="Dr. Chukwuma Onyeije, MD">
-<meta name="keywords" content="Gestational Diabetes, Blood Sugar Management, Nutrition, Fetal Monitoring, Patient Education">
-<meta property="og:type" content="article">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Gestational Diabetes: Your Plan for Pregnancy and Beyond">
+<meta property="og:description" content="A 32-slide patient guide to gestational diabetes: testing, glucose targets, food, medication, pregnancy monitoring, delivery, and postpartum care. Updated with ADA 2026 guidance.">
 <meta property="og:url" content="https://openmfm.org/decks/basic-gdm/index.html">
-<meta property="og:title" content="Gestational Diabetes - Patient Guide | OpenMFM">
-<meta property="og:description" content="Comprehensive patient education on gestational diabetes: mechanism, screening (GCT/GTT), A1 vs A2 classification, blood sugar targets, medical nutrition therapy, exercise, insulin vs metformin, fetal surveillance, delivery timing, breastfeeding benefits, and long-term diabetes prevention. Based on ACOG PB #190, SMFM, and ADA 2025.">
-<meta property="og:image" content="https://openmfm.org/og-image.png">
 <meta property="og:site_name" content="OpenMFM">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Gestational Diabetes - Patient Guide | OpenMFM">
-<meta name="twitter:description" content="Comprehensive patient education on gestational diabetes: mechanism, screening (GCT/GTT), A1 vs A2 classification, blood sugar targets, medical nutrition therapy, exercise, insulin vs metformin, fetal surveillance, delivery timing, breastfeeding benefits, and long-term diabetes prevention. Based on ACOG PB #190, SMFM, and ADA 2025.">
-<meta name="twitter:image" content="https://openmfm.org/og-image.png">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "MedicalWebPage",
-  "name": "Gestational Diabetes - Patient Guide",
-  "description": "Comprehensive patient education on gestational diabetes: mechanism, screening (GCT/GTT), A1 vs A2 classification, blood sugar targets, medical nutrition therapy, exercise, insulin vs metformin, fetal surveillance, delivery timing, breastfeeding benefits, and long-term diabetes prevention. Based on ACOG PB #190, SMFM, and ADA 2025.",
-  "url": "https://openmfm.org/decks/basic-gdm/index.html",
-  "author": {
-    "@type": "Person",
-    "name": "Dr. Chukwuma Onyeije, MD",
-    "jobTitle": "Maternal-Fetal Medicine Specialist",
-    "worksFor": {
-      "@type": "Organization",
-      "name": "Atlanta Perinatal Associates"
-    }
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "OpenMFM",
-    "url": "https://openmfm.org",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://openmfm.org/og-image.png"
-    }
-  },
-  "dateModified": "2026-07-14",
-  "inLanguage": "en",
-  "audience": {
-    "@type": "MedicalAudience",
-    "audienceType": "Patients and Healthcare Providers"
-  },
-  "about": {
-    "@type": "MedicalCondition",
-    "name": "Gestational Diabetes - Patient Guide"
-  },
-  "isPartOf": {
-    "@type": "WebSite",
-    "name": "OpenMFM",
-    "url": "https://openmfm.org"
-  },
-  "keywords": "Gestational Diabetes, Blood Sugar Management, Nutrition, Fetal Monitoring, Patient Education"
-}
-</script>
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "MedicalWebPage", "name": "Gestational Diabetes: Your Plan for Pregnancy and Beyond", "description": "A 32-slide patient guide to gestational diabetes: testing, glucose targets, food, medication, pregnancy monitoring, delivery, and postpartum care. Updated with ADA 2026 guidance.", "url": "https://openmfm.org/decks/basic-gdm/index.html", "dateModified": "2026-10-28", "author": {"@type": "Person", "name": "Dr. Chukwuma Onyeije"}, "audience": {"@type": "Audience", "audienceType": "Patients and families"}}</script>
+<style>
+:root{color-scheme:dark;--bg:#0d1117;--surface:#161b22;--surface2:#1c2330;--border:#303c4e;--text:#e6edf3;--muted:#b1bdcc;--blue:#58a6ff;--teal:#39d0b4;--cyan:#22d3ee;--brand:#1f6feb;--amber:#f0c36b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Segoe UI,system-ui,-apple-system,sans-serif;line-height:1.55}button,select,input{font:inherit}a{color:var(--cyan);text-underline-offset:4px}button,select{background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:9px;padding:9px 15px;min-height:44px;cursor:pointer}button:hover,a:hover{color:#fff}button:hover{border-color:var(--cyan)}button:disabled{opacity:.45;cursor:default}:focus-visible{outline:3px solid var(--amber);outline-offset:4px}.skip{position:fixed;top:-100px;z-index:20;background:var(--bg);padding:12px}.skip:focus{top:8px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px max(24px,calc((100vw - 1180px)/2));border-bottom:1px solid var(--border);background:#0d1117f5}.brand{font-weight:800;letter-spacing:.02em;color:var(--text);text-decoration:none}.brand span{color:var(--cyan)}.edition{font-size:12px;color:var(--muted)}.tools{display:flex;gap:8px}.tools button{font-size:13px}.progress{display:none;position:fixed;top:0;height:3px;z-index:12;width:100%;background:var(--border)}.progress span{display:block;height:100%;width:0;background:var(--cyan);transition:width .2s}.slide{position:relative;max-width:1180px;margin:auto;padding:48px 36px 32px;border-bottom:1px solid var(--border);min-height:80vh;scroll-margin-top:80px}.slide[hidden]{display:none!important}.eyebrow{text-transform:uppercase;letter-spacing:.16em;color:var(--teal);font-size:12px;font-weight:700;margin:0 0 20px}h1,h2{font-family:Segoe UI,system-ui,sans-serif;font-size:clamp(32px,4.2vw,58px);font-weight:700;letter-spacing:-.045em;line-height:1.08;margin:0 0 22px;max-width:1000px}h1{font-size:clamp(40px,5.5vw,76px)}em{font-style:normal;color:var(--cyan)}h3{font-size:21px;line-height:1.25;letter-spacing:-.02em;margin:0 0 10px}p{margin:0 0 12px}.lead{color:var(--muted);font-size:clamp(18px,2vw,23px);max-width:870px;margin-bottom:28px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.card{padding:23px;background:var(--surface);border:1px solid var(--border);border-radius:16px;border-top:3px solid var(--teal)}.card p,.flow p{font-size:18px;color:var(--muted);margin:0}.flow{padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px}.flow li{position:relative;border-top:1px solid var(--border);padding-top:16px}.step{display:block;color:var(--teal);font-size:14px;font-weight:700;letter-spacing:.1em;margin-bottom:14px}.takeaway{border-left:3px solid var(--cyan);padding:10px 16px;margin:26px 0 18px;font-size:18px;color:var(--text);background:linear-gradient(90deg,#22d3ee09,transparent)}.slide-footer{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding-top:16px;margin-top:22px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}.citations{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0 0;font-size:12px}.citations a{padding:4px 0}details{margin-top:18px;font-size:16px;background:var(--surface);border:1px solid var(--border);border-radius:10px}summary{padding:12px 16px;cursor:pointer;color:var(--blue);min-height:44px}.detail-body{padding:0 18px 18px;color:var(--muted)}.detail-body p{margin-top:12px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:15px}caption{text-align:left;margin:8px 0 12px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--border)}thead{color:var(--teal)}.targets{display:grid;grid-template-columns:1fr 1fr auto 1fr;gap:14px;align-items:center}.target{padding:24px;background:var(--surface);border:1px solid var(--border);border-radius:18px}.target span,.target small{display:block}.target strong{font-size:clamp(44px,5.6vw,76px);letter-spacing:-.06em;color:var(--cyan)}.target small{color:var(--muted)}.or{color:var(--teal);font-weight:700}.hero-stat{display:flex;gap:30px;align-items:center;padding:26px 0}.hero-stat strong{font-size:clamp(48px,7vw,96px);color:var(--cyan);letter-spacing:-.05em;white-space:nowrap}.hero-stat span{font-size:21px;color:var(--muted)}.delivery{display:grid;gap:16px}.delivery>div{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:22px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}.delivery strong{font-size:32px;color:var(--cyan)}.plate-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}.plate{aspect-ratio:1;max-width:280px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;border-radius:50%;overflow:hidden;border:6px solid var(--surface2);gap:4px;background:var(--bg)}.plate span{display:grid;place-content:center;text-align:center;background:#193e3a;color:#d5fff5;font-size:15px;padding:10px}.plate span:first-child{grid-row:1/3;background:#143a4a}.plate span:last-child{background:#35354d}.plate-layout p{font-size:19px;color:var(--muted)}.pearls{padding-left:28px;font-size:22px}.pearls li{padding:8px 0 8px 10px}.pearls li::marker{color:var(--teal);font-weight:bold}.questions{display:grid;grid-template-columns:1fr 1fr;gap:14px 36px;font-size:20px;padding-left:24px}.questions li::marker{color:var(--teal)}.reference-list{padding-left:25px;font-size:15px}.reference-list li{padding:10px 0;break-inside:avoid}.reference-list p{margin:5px 0;color:var(--muted)}.nav{display:none;align-items:center;justify-content:center;gap:12px;padding:10px 16px;background:#0d1117f5;border-top:1px solid var(--border)}.nav label{font-size:12px;color:var(--muted)}#slide-menu{max-width:300px;width:28vw}#counter{font-variant-numeric:tabular-nums;min-width:62px;text-align:center;font-size:14px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}.js .topbar{position:sticky;top:0;z-index:5}.js .slide{min-height:calc(100dvh - 145px);padding-bottom:30px}.js main{padding-bottom:80px}.js .nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:6}.js .progress{display:block}.js .slide.active{animation:appear .2s ease-out}.js.reading .slide{min-height:0;margin-top:20px;padding-top:40px}.js.reading .slide:last-child{margin-bottom:20px}dialog{width:min(880px,94vw);max-height:85dvh;padding:26px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:18px}dialog::backdrop{background:#000b}dialog h2{font-size:30px}.dialog-head{display:flex;justify-content:space-between;gap:20px;align-items:start}dialog input{width:100%;padding:12px;margin:12px 0;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:8px}.noscript{padding:16px;background:var(--surface)}@keyframes appear{from{opacity:.6;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(max-width:700px){.topbar{padding:12px 16px;gap:8px}.edition{display:none}.tools{gap:5px}.tools button{font-size:12px;padding:8px}.slide{padding:30px 20px 25px}.eyebrow{font-size:11px;margin-bottom:18px}h1,h2{letter-spacing:-.035em}h2 br{display:none}.cards,.flow,.plate-layout,.questions{grid-template-columns:1fr}.flow{gap:14px}.flow li{padding-top:12px}.step{margin-bottom:8px}.target{padding:16px}.targets{grid-template-columns:1fr}.or{text-align:center}.target strong{display:block;font-size:56px}.hero-stat{display:block;padding:10px 0}.hero-stat span{display:block;font-size:19px}.delivery>div{display:block}.delivery strong{display:block;font-size:27px;margin-top:8px}.plate{width:240px;justify-self:center}.plate-layout{gap:22px}.slide-footer{font-size:11px}.nav{gap:7px;padding:8px}.nav button{padding:8px 12px}#slide-menu{width:30vw;font-size:12px;padding:9px 4px}.nav label{display:none}#counter{min-width:48px;font-size:12px}.questions{gap:8px}.pearls{font-size:19px}.js main{padding-bottom:74px}.js .slide{min-height:calc(100dvh - 140px)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{html,body{color-scheme:light!important}@page{size:A4 landscape;margin:13mm}html,body{background:white!important;color:#111!important;font-size:11pt}body{--text:#111;--muted:#333;--cyan:#075c70;--teal:#086458;--blue:#164d81;--border:#bbb;--surface:#fff;--surface2:#fff}.topbar,.nav,.progress,.skip,dialog,.noscript{display:none!important}.js main{padding:0}.slide,.js .slide,.js.reading .slide,.slide[hidden]{display:block!important;min-height:0!important;margin:0!important;padding:0!important;border:0;break-before:page;animation:none!important}.slide:first-child{break-before:auto}h1,h2{font-size:29pt!important;margin:0 0 12px}h1 br,h2 br{display:none}.eyebrow{margin:0 0 12px}.lead{font-size:14pt;margin-bottom:15px}.card,.target{padding:14px;box-shadow:none}.card p,.flow p,.takeaway{font-size:11pt}.cards,.flow{gap:12px}.takeaway{margin:14px 0 10px}.slide-footer{margin-top:12px;font-size:8pt}.citations{font-size:8pt}.hero-stat strong{font-size:48pt}.hero-stat{padding:10px 0}.hero-stat span{font-size:14pt}.target strong{font-size:40pt}.detail-body{font-size:10pt}details{break-inside:avoid;margin-top:12px}summary{padding:8px 12px;font-size:10pt}.detail-body{padding:0 12px 12px}a{color:#075c70}.reference-list{font-size:10pt}.reference-list li{padding:5px 0}.reference-list a::after{content:' (' attr(href) ')';font-size:8pt;overflow-wrap:anywhere}.plate{width:180px}.plate-layout{gap:20px}.pearls{font-size:16pt}.questions{font-size:14pt}}
+
+@media print{#slide-9 h2{font-size:25pt!important}#slide-9 .lead{margin-bottom:8px}#slide-9 .card{padding:8px 12px}#slide-9 h3{font-size:15pt;margin-bottom:4px}#slide-9 th,#slide-9 td{padding:4px 8px;font-size:10pt}#slide-9 caption{margin:3px 0 6px;font-size:10pt}#slide-9 .takeaway{margin:8px 0}#slide-9 details{margin-top:6px}#slide-9 .detail-body{padding-bottom:6px}#slide-9 .detail-body p{margin:5px 0}#slide-9 .slide-footer{margin-top:8px;padding-top:8px}}</style>
 </head>
 <body>
-
-<div class="progress-bar" id="progressBar"></div>
-
-<div class="deck">
-
-  <!-- SLIDE 1 — TITLE -->
-  <div class="slide active">
-    <div class="title-eyebrow">MFM Patient Education</div>
-    <h1 style="text-align:center;">
-      Understanding Your<br>
-      <span class="accent-amber">Gestational Diabetes</span>
-    </h1>
-    <div class="title-divider"></div>
-    <p class="title-sub">A complete guide to GDM — what it means, how to manage it, and how to protect your baby</p>
-    <div style="margin-top:2em; display:flex; gap:1em; flex-wrap:wrap; justify-content:center;">
-      <span class="pill pill-amber">High Blood Sugar</span>
-      <span class="pill pill-green">Manageable with Care</span>
-      <span class="pill pill-teal">Team-Based Approach</span>
-    </div>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Maternal-Fetal Medicine</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 2 — YOU ARE NOT ALONE -->
-  <div class="slide">
-    <div class="slide-label">Prevalence</div>
-    <h2>You Are <span class="accent-teal">Not Alone</span></h2>
-    <p>Gestational diabetes is one of the most common pregnancy complications — and it is not caused by anything you did.</p>
-    <div class="stat-row">
-      <div class="stat-box">
-        <div class="stat-num accent-blue">9–15%</div>
-        <div class="stat-lbl">of all pregnancies<br>worldwide</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num accent-amber">2&#xD7;</div>
-        <div class="stat-lbl">rates have doubled<br>since 2006</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num accent-green">Most</div>
-        <div class="stat-lbl">women have<br>healthy pregnancies</div>
-      </div>
-    </div>
-    <div class="alert alert-green" style="margin-top:1.6em;">
-      <span class="alert-icon">&#x2705;</span>
-      <span>GDM is a natural response to pregnancy hormones — not a result of anything you ate or did. With the right care, the vast majority of women have healthy pregnancies and healthy babies.</span>
-    </div>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Slide 2 of 13</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 3 — WHAT IS GDM -->
-  <div class="slide">
-    <div class="slide-label">The Mechanism</div>
-    <h2>What Is <span class="accent-blue">Gestational Diabetes</span>?</h2>
-    <p>High blood sugar that develops during pregnancy — usually between 24 and 28 weeks — because pregnancy hormones block insulin from working normally.</p>
-    <div class="timeline">
-      <div class="tl-step">
-        <div class="tl-dot blue">1</div>
-        <div class="tl-title">The Placenta's Role</div>
-        <div class="tl-label">Produces hormones that naturally increase insulin resistance</div>
-      </div>
-      <div class="tl-step">
-        <div class="tl-dot amber">2</div>
-        <div class="tl-title">Normal Response</div>
-        <div class="tl-label">Pancreas works up to 30% harder to produce extra insulin</div>
-      </div>
-      <div class="tl-step">
-        <div class="tl-dot red">3</div>
-        <div class="tl-title">GDM</div>
-        <div class="tl-label">Pancreas cannot keep up — blood sugar rises above normal range</div>
-      </div>
-    </div>
-    <div class="alert alert-blue" style="margin-top:1.6em;">
-      <span class="alert-icon">&#x1F4A1;</span>
-      <span>Think of insulin as a key that unlocks your cells so sugar can enter. In GDM, the lock is stuck — and the pancreas cannot make enough extra keys to compensate.</span>
-    </div>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Slide 3 of 13</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 4 — RISK FACTORS -->
-  <div class="slide">
-    <div class="slide-label">Risk Factors</div>
-    <h2>Who Is at <span class="accent-amber">Higher Risk</span>?</h2>
-    <div class="three-col">
-      <div class="card">
-        <h3 class="accent-blue">History</h3>
-        <p>Family history of diabetes (parent or sibling)<br>Prior pregnancy with GDM<br>Prior large baby (&gt;9 lbs / 4,000 g)<br>Polycystic ovary syndrome (PCOS)</p>
-      </div>
-      <div class="card">
-        <h3 class="accent-amber">Body &amp; Lifestyle</h3>
-        <p>BMI &#x2265;25 before pregnancy (&#x2265;23 in Asian Americans)<br>Physical inactivity<br>Age 35 or older<br>Hypertension or heart disease</p>
-      </div>
-      <div class="card">
-        <h3 class="accent-teal">Background</h3>
-        <p>Hispanic / Latina<br>African American<br>Native American<br>Asian American<br>Pacific Islander</p>
-      </div>
-    </div>
-    <div class="alert alert-amber">
-      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
-      <span>More than half of women with GDM have <strong>none</strong> of these risk factors — which is why all pregnant women are screened regardless of history.</span>
-    </div>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Slide 4 of 13</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 5 — TESTING -->
-  <div class="slide">
-    <div class="slide-label">Screening</div>
-    <h2>How Will I Be <span class="accent-blue">Tested</span>?</h2>
-    <p>Screening typically happens between 24 and 28 weeks using a two-step approach.</p>
-    <div class="two-col" style="margin-top:1.6em;">
-      <div class="card" style="border-color:rgba(88,166,255,.4);">
-        <h3 class="accent-blue">Step 1 &#x2014; Glucose Challenge Test (GCT)</h3>
-        <p>Drink a 50g glucose liquid. Blood drawn 1 hour later. <strong>No fasting required.</strong> If result &#x2265;130&#x2013;140 mg/dL &#x2192; proceed to Step 2.</p>
-      </div>
-      <div class="card" style="border-color:rgba(57,208,180,.4);">
-        <h3 class="accent-teal">Step 2 &#x2014; 3-Hour GTT</h3>
-        <p><strong>Fasting required.</strong> Drink 100g glucose liquid. Blood drawn 4 times: fasting, 1hr, 2hr, and 3hr. GDM diagnosed if 2 or more values are elevated.</p>
-      </div>
-    </div>
-    <div class="alert alert-blue">
-      <span class="alert-icon">&#x1F4A1;</span>
-      <span>If you have high-risk factors (obesity, prior GDM, or family history), your doctor may screen you earlier — even in the first trimester.</span>
-    </div>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Slide 5 of 13</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 6 — DIAGNOSIS TYPES -->
-  <div class="slide">
-    <div class="slide-label">Diagnosis</div>
-    <h2>Understanding Your <span class="accent-blue">Diagnosis</span></h2>
-    <table class="comp-table">
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Treatment Plan</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>A1GDM<br><small>Diet-Controlled</small></td>
-          <td>Blood sugar stays in range with healthy eating and activity alone</td>
-          <td>Medical nutrition therapy + exercise + daily glucose monitoring</td>
-        </tr>
-        <tr>
-          <td>A2GDM<br><small>Medication-Controlled</small></td>
-          <td>Blood sugar requires medication to stay consistently in range</td>
-          <td>All lifestyle changes PLUS insulin or metformin + additional fetal monitoring</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="alert alert-green">
-      <span class="alert-icon">&#x2705;</span>
-      <span>Most women start with A1GDM. About 1 in 3 will eventually need medication. This is <strong>not a failure</strong> — it is simply a biological necessity for some placentas to keep your baby healthy.</span>
-    </div>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Slide 6 of 13</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 7 — BLOOD SUGAR GOALS -->
-  <div class="slide">
-    <div class="slide-label">Targets &amp; Monitoring</div>
-    <h2>Your Blood Sugar <span class="accent-teal">Goals</span></h2>
-    <div class="stat-row">
-      <div class="stat-box">
-        <div class="stat-num accent-blue">&lt;95</div>
-        <div class="stat-lbl">mg/dL — Fasting<br>(morning, before eating)</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num accent-teal">&lt;140</div>
-        <div class="stat-lbl">mg/dL — 1 Hour<br>after meal</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num accent-green">&lt;120</div>
-        <div class="stat-lbl">mg/dL — 2 Hours<br>after meal</div>
-      </div>
-    </div>
-    <div class="two-col" style="margin-top:1.6em;">
-      <div class="card">
-        <h3 class="accent-blue">Fingerstick (Gold Standard)</h3>
-        <p>Most accurate — measures glucose directly from blood. Required for all treatment decisions. Test fasting + 1 or 2 hours after each meal.</p>
-      </div>
-      <div class="card">
-        <h3 class="accent-teal">CGM (Continuous Monitor)</h3>
-        <p>Reads glucose in interstitial fluid — runs 15&#x2013;20 min behind actual blood sugar. Great for spotting food trends. Always confirm very low or high readings with a fingerstick.</p>
-      </div>
-    </div>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Slide 7 of 13</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 8 — NUTRITION -->
-  <div class="slide">
-    <div class="slide-label">Nutrition</div>
-    <h2>Food Is Your <span class="accent-green">First Medicine</span></h2>
-    <p>You don't need to eliminate carbohydrates. The goal is to choose the right type and amount to keep blood sugar stable.</p>
-    <div class="two-col" style="margin-top:1.4em;">
-      <div class="card" style="border-color:rgba(63,185,80,.4);">
-        <h3 class="accent-green">Choose More Often</h3>
-        <p>Whole grains (brown rice, quinoa, oats, whole wheat)<br>Non-starchy vegetables (spinach, broccoli, peppers)<br>Legumes &amp; beans (lentils, chickpeas, black beans)<br>Whole fruits in moderation<br>Healthy proteins &amp; fats (nuts, eggs, avocado, lean meats)</p>
-      </div>
-      <div class="card" style="border-color:rgba(248,81,73,.4);">
-        <h3 class="accent-red">Limit or Avoid</h3>
-        <p>White bread, white rice, regular pasta<br>Sugary drinks (juice, soda, sweet tea, flavored coffee)<br>Processed snacks (chips, crackers, granola bars)<br>Sweets &amp; desserts<br>Sweetened breakfast foods (sugary cereals, flavored yogurt)</p>
-      </div>
-    </div>
-    <ul class="checklist" style="margin-top:1.2em; flex-direction:row; display:flex; gap:2em; max-width:900px;">
-      <li style="flex:1;">Eat every 2&#x2013;3 hours &#x2014; 3 meals and 2&#x2013;3 snacks daily</li>
-      <li style="flex:1;">Always pair carbohydrates with protein or healthy fat</li>
-      <li style="flex:1;">Focus on complex carbs that digest slowly</li>
-    </ul>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Slide 8 of 13</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 9 — EXERCISE & MEDICATION -->
-  <div class="slide">
-    <div class="slide-label">Treatment</div>
-    <h2>Movement &amp; <span class="accent-teal">Medication</span></h2>
-    <div class="two-col" style="margin-top:1.4em;">
-      <div class="card">
-        <h3 class="accent-green">Exercise Is Powerful Medicine</h3>
-        <p>Walking, swimming, and prenatal yoga help muscles use glucose, naturally lowering blood sugar. Aim for 30 minutes most days. Use the <strong>Talk Test</strong> &#x2014; you should be able to hold a conversation while exercising. A 10&#x2013;15 min walk after meals is one of the most effective tools.</p>
-      </div>
-      <div class="card">
-        <h3 class="accent-blue">When Medication Is Needed</h3>
-        <p><strong>Insulin</strong> (preferred by ACOG/SMFM) &#x2014; does NOT cross the placenta, highly effective, precisely dosed.<br><br><strong>Metformin</strong> &#x2014; oral pill taken with meals; does cross the placenta but is generally safe; often used when insulin is declined.</p>
-      </div>
-    </div>
-    <div class="alert alert-green">
-      <span class="alert-icon">&#x2705;</span>
-      <span>Needing medication is <strong>not a failure</strong>. It is simply a biological necessity for some placentas. The goal is the same: a healthy baby.</span>
-    </div>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Slide 9 of 13</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 10 — FETAL MONITORING -->
-  <div class="slide">
-    <div class="slide-label">Fetal Surveillance</div>
-    <h2>Watching Your <span class="accent-blue">Baby Grow</span></h2>
-    <div class="two-col" style="margin-top:1.4em;">
-      <div class="card">
-        <h3 class="accent-blue">Growth Ultrasounds</h3>
-        <p>We measure the baby's head, belly, and leg bone to estimate weight and check amniotic fluid. Typically around <strong>32 and 36 weeks</strong>. Goal: detect macrosomia (large baby) early so we can plan a safe delivery.</p>
-      </div>
-      <div class="card">
-        <h3 class="accent-teal">Fetal Surveillance Tests</h3>
-        <p><strong>NST</strong> (Non-Stress Test) &#x2014; monitors baby's heart rate for 20 min. <strong>BPP</strong> (Biophysical Profile) &#x2014; checks movement, breathing, tone, and fluid. Typically starts at <strong>32 weeks</strong>, done 1&#x2013;2&#xD7; per week for A2GDM.</p>
-      </div>
-    </div>
-    <div class="alert alert-blue">
-      <span class="alert-icon">&#x1F4A1;</span>
-      <span>If your blood sugar is well-controlled by diet alone (A1GDM), you may not need weekly surveillance testing until 40 weeks.</span>
-    </div>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Slide 10 of 13</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 11 — DELIVERY PLANNING -->
-  <div class="slide">
-    <div class="slide-label">Delivery</div>
-    <h2>Planning Your <span class="accent-teal">Delivery</span></h2>
-    <table class="comp-table">
-      <thead>
-        <tr><th>GDM Type</th><th>Typical Delivery Timing</th><th>Notes</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>A1GDM<br><small>Diet-Controlled</small></td>
-          <td class="accent-green">39&#x2013;40 weeks</td>
-          <td>Can often wait for labor to start naturally. Delivery by 40w6d recommended.</td>
-        </tr>
-        <tr>
-          <td>A2GDM<br><small>Medication-Controlled</small></td>
-          <td class="accent-amber">39 weeks</td>
-          <td>Induction typically scheduled at 39w0d&#x2013;39w6d. Placenta may age faster.</td>
-        </tr>
-        <tr>
-          <td>Complications</td>
-          <td class="accent-red">37&#x2013;38 weeks</td>
-          <td>Poor glucose control, preeclampsia, or fetal growth concerns.</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="alert alert-amber" style="margin-top:1.2em;">
-      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
-      <span>During labor: blood sugar is checked every 1&#x2013;2 hours (goal: 70&#x2013;110 mg/dL). Your baby's blood sugar will be checked shortly after birth and monitored for 12&#x2013;24 hours. Early breastfeeding or formula feeding is the best prevention for neonatal hypoglycemia.</span>
-    </div>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Slide 11 of 13</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 12 — AFTER DELIVERY -->
-  <div class="slide">
-    <div class="slide-label">Postpartum</div>
-    <h2>After Your <span class="accent-teal">Delivery</span></h2>
-    <div class="three-col" style="margin-top:1.4em;">
-      <div class="card">
-        <h3 class="accent-teal">Breastfeeding</h3>
-        <p>Improves insulin sensitivity. Supports healthy weight. Breastfeeding &#x2265;3 months can cut your lifetime Type 2 Diabetes risk by up to <strong>50%</strong>.</p>
-      </div>
-      <div class="card">
-        <h3 class="accent-blue">Postpartum Glucose Test</h3>
-        <p>Schedule between <strong>4 and 12 weeks</strong> after delivery. Test: 75g 2-Hour Oral GTT (not A1C &#x2014; inaccurate this soon postpartum). Normal &#x2192; re-screen every 1&#x2013;3 years.</p>
-      </div>
-      <div class="card">
-        <h3 class="accent-amber">Long-Term Risk</h3>
-        <p><strong>50&#x2013;70%</strong> of women with GDM develop Type 2 Diabetes within 10 years. Continue healthy eating, stay active, and maintain a healthy weight. Don't skip follow-up screening.</p>
-      </div>
-    </div>
-    <div class="alert alert-amber">
-      <span class="alert-icon">&#x26A0;&#xFE0F;</span>
-      <span>Women with GDM have a 7-fold increased risk of Type 2 Diabetes. Your GDM diagnosis is an early warning — acting now with lifestyle changes protects your long-term health and your baby's future.</span>
-    </div>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Slide 12 of 13</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 13 — KEY TAKEAWAYS -->
-  <div class="slide">
-    <div class="slide-label">Summary</div>
-    <h1 style="text-align:center; font-size:clamp(1.8em,3.5vw,2.8em);">
-      You've <span class="accent-teal">Got This</span>
-    </h1>
-    <div class="title-divider"></div>
-    <div class="stat-row">
-      <div class="stat-box">
-        <div class="stat-num accent-teal">Not</div>
-        <div class="stat-lbl">your fault &#x2014;<br>caused by placental hormones</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num accent-green">Food</div>
-        <div class="stat-lbl">first &#x2014; complex carbs<br>+ protein keeps levels stable</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num accent-blue">Move</div>
-        <div class="stat-lbl">daily &#x2014; 30 min walk<br>lowers blood sugar naturally</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num accent-amber">Follow</div>
-        <div class="stat-lbl">up &#x2014; 2-hr glucose test<br>4&#x2013;12 weeks postpartum</div>
-      </div>
-    </div>
-    <div class="alert alert-green" style="margin-top:1.6em;">
-      <span class="alert-icon">&#x1F91D;</span>
-      <span>Gestational diabetes is a challenge, but it is temporary. Every healthy meal, every walk, and every fingerstick is an act of love for your baby. We are with you every step of the way.</span>
-    </div>
-    <div style="margin-top:1.4em; font-size:0.82em; color:var(--muted); text-align:center; max-width:680px; line-height:1.6;">
-      Based on ACOG Practice Bulletin No. 190, SMFM Consult Series #58, and ADA Standards of Care 2025.<br>
-      This material supports &#x2014; and does not replace &#x2014; a conversation with your physician.
-    </div>
-    <div class="slide-footer">
-      <span>Atlanta Perinatal Associates</span>
-      <span>Maternal-Fetal Medicine</span>
-    </div>
-  </div>
-
+<a href="#main" class="skip">Skip to presentation</a>
+<div id="progress" class="progress" role="progressbar" aria-label="Presentation progress" aria-valuemin="1" aria-valuemax="32" aria-valuenow="1">
+<span id="progress-fill">
+</span>
 </div>
-
-<div class="nav">
-  <button onclick="prevSlide()">&#x2190; Prev</button>
-  <span class="counter" id="counter">1 / 13</span>
-  <button onclick="nextSlide()">Next &#x2192;</button>
+<!-- openmfm-footer-injected: library link integrated into accessible header -->
+<header class="topbar">
+<div>
+<a class="brand" href="/library">Open<span>MFM</span> <span aria-hidden="true">/</span> <small>Library</small>
+</a>
+<div class="edition">PATIENT EDUCATION · UPDATED OCT 2026</div>
 </div>
-
+<div class="tools">
+<button id="mode" aria-pressed="false">Read all</button>
+<button id="sources" aria-haspopup="dialog">Sources</button>
+<button id="print">Print / PDF</button>
+</div>
+</header>
+<noscript>
+<p class="noscript">All slides are shown below. Enable JavaScript for slide navigation and the searchable sources panel.</p>
+</noscript>
+<main id="main" tabindex="-1">
+<section class="slide" id="slide-1" aria-labelledby="title-1">
+<p class="eyebrow">A patient & family guide</p>
+<h1 id="title-1" tabindex="-1">Gestational diabetes.<br> <em>A clear plan for the road ahead.</em>
+</h1>
+<p class="lead">Understand your numbers. Care for your pregnancy. Protect your health after birth.</p>
+<ol class="flow">
+<li>
+<span class="step">01</span>
+<h3>Understand</h3>
+<p>What the diagnosis means</p>
+</li>
+<li>
+<span class="step">02</span>
+<h3>Act</h3>
+<p>Food, movement & treatment</p>
+</li>
+<li>
+<span class="step">03</span>
+<h3>Follow through</h3>
+<p>Birth & lifelong health</p>
+</li>
+</ol>
+<p class="takeaway">Dr. Chukwuma Onyeije · Atlanta Perinatal Associates</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>01 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-2" aria-labelledby="title-2">
+<p class="eyebrow">01 / Understand</p>
+<h2 id="title-2" tabindex="-1">Know your numbers.<br> Know your next step.</h2>
+<p class="lead">By the end, you will be able to:</p>
+<div class="cards">
+<div class="card">
+<h3>Explain your test</h3>
+<p>Know how GDM is diagnosed.</p>
+</div>
+<div class="card">
+<h3>Use your daily plan</h3>
+<p>Check glucose and know when to ask for help.</p>
+</div>
+<div class="card">
+<h3>Plan beyond birth</h3>
+<p>Arrange pregnancy follow-up and postpartum testing.</p>
+</div>
+</div>
+<p class="takeaway">Read in order or use the slide menu to jump to a topic.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>02 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-3" aria-labelledby="title-3">
+<p class="eyebrow">01 / Understand</p>
+<h2 id="title-3" tabindex="-1">Pregnancy makes insulin<br> work less effectively.</h2>
+<p class="lead">Glucose is sugar in your blood. Insulin helps your body use it for energy.</p>
+<ol class="flow">
+<li>
+<span class="step">01</span>
+<h3>Placenta</h3>
+<p>Pregnancy hormones increase insulin resistance.</p>
+</li>
+<li>
+<span class="step">02</span>
+<h3>Pancreas</h3>
+<p>Your body needs to make more insulin.</p>
+</li>
+<li>
+<span class="step">03</span>
+<h3>GDM</h3>
+<p>If it cannot keep up, blood glucose rises.</p>
+</li>
+</ol>
+<p class="takeaway">GDM is a health condition, not a personal failure.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+<a href="#ref-2" data-ref="2">[2] ADA diagnosis · 2026</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>03 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-4" aria-labelledby="title-4">
+<p class="eyebrow">01 / Understand</p>
+<h2 id="title-4" tabindex="-1">Risk factors matter.<br> Screening still matters.</h2>
+<p class="lead">GDM can occur even without obvious risk factors.</p>
+<div class="cards">
+<div class="card">
+<h3>Your history</h3>
+<p>Prior GDM, a previous large baby, or a close relative with diabetes.</p>
+</div>
+<div class="card">
+<h3>Your health</h3>
+<p>PCOS, higher body weight, increasing age, or high blood pressure.</p>
+</div>
+</div>
+<p class="takeaway">Routine testing helps find GDM that has no symptoms.</p>
+<details>
+<summary>Clinician context</summary>
+<div class="detail-body">Risk varies across populations and reflects biological, social, and health-care factors. Risk factors guide early assessment for unrecognized diabetes; they do not replace routine GDM screening. PCOS means polycystic ovary syndrome.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-2" data-ref="2">[2] ADA diagnosis · 2026</a>
+<a href="#ref-7" data-ref="7">[7] USPSTF screening</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>04 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-5" aria-labelledby="title-5">
+<p class="eyebrow">01 / Understand</p>
+<h2 id="title-5" tabindex="-1">Treatment lowers important<br> pregnancy risks.</h2>
+<p class="lead">The goal is a healthier pregnancy, not a perfect glucose log.</p>
+<div class="cards">
+<div class="card">
+<h3>For you</h3>
+<p>Reduce the risk of pregnancy-related high blood pressure and some delivery complications.</p>
+</div>
+<div class="card">
+<h3>For your baby</h3>
+<p>Reduce excessive growth and shoulder dystocia: difficulty delivering the shoulders.</p>
+</div>
+</div>
+<p class="takeaway">After birth, babies may need extra support for low blood glucose.</p>
+<details>
+<summary>What the evidence shows</summary>
+<div class="detail-body">Randomized trials support a package of nutrition counseling, glucose monitoring, follow-up, and insulin when needed. ACHOIS reduced serious perinatal complications. In the MFMU mild-GDM trial, the primary composite did not significantly improve, but excessive growth, shoulder dystocia, cesarean delivery, and hypertensive disorders were reduced. These trials do not prove one medication is best for every outcome.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-5" data-ref="5">[5] ACHOIS randomized trial</a>
+<a href="#ref-6" data-ref="6">[6] Mild GDM randomized trial</a>
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>05 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-6" aria-labelledby="title-6">
+<p class="eyebrow">02 / Testing</p>
+<h2 id="title-6" tabindex="-1">Most GDM testing happens<br> at 24–28 weeks.</h2>
+<p class="lead">Earlier testing answers a different question: was diabetes already present?</p>
+<ol class="flow">
+<li>
+<span class="step">01</span>
+<h3>Early pregnancy</h3>
+<p>Assess for previously unrecognized diabetes when indicated.</p>
+</li>
+<li>
+<span class="step">02</span>
+<h3>24–28 weeks</h3>
+<p>Use the practice’s standard GDM testing pathway.</p>
+</li>
+</ol>
+<p class="takeaway">A normal early test does not replace later GDM testing.</p>
+<details>
+<summary>Clinician context</summary>
+<div class="detail-body">Overt diabetes may be identified by fasting plasma glucose ≥126 mg/dL or A1C ≥6.5%, with confirmation when appropriate. Mild early hyperglycemia below overt-diabetes criteria has a less settled treatment pathway. Do not automatically apply later-pregnancy GDM thresholds early.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-2" data-ref="2">[2] ADA diagnosis · 2026</a>
+<a href="#ref-4" data-ref="4">[4] ACOG screening update · 2024</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>06 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-7" aria-labelledby="title-7">
+<p class="eyebrow">02 / Testing</p>
+<h2 id="title-7" tabindex="-1">An abnormal screen usually<br> means another test.</h2>
+<p class="lead">The common U.S. two-step pathway starts with a screening drink.</p>
+<ol class="flow">
+<li>
+<span class="step">01</span>
+<h3>50-g screen</h3>
+<p>No fasting. Blood drawn after 1 hour.</p>
+</li>
+<li>
+<span class="step">02</span>
+<h3>If screen is elevated</h3>
+<p>The practice uses a cutoff of 130, 135, or 140 mg/dL.</p>
+</li>
+<li>
+<span class="step">03</span>
+<h3>100-g diagnostic test</h3>
+<p>Fast beforehand. Blood drawn fasting and at 1, 2, and 3 hours.</p>
+</li>
+</ol>
+<p class="takeaway">The first test screens for risk; the next test usually establishes the diagnosis.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-2" data-ref="2">[2] ADA diagnosis · 2026</a>
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>07 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-8" aria-labelledby="title-8">
+<p class="eyebrow">02 / Testing</p>
+<h2 id="title-8" tabindex="-1">Some practices use<br> one diagnostic test.</h2>
+<p class="lead">The one-step pathway uses a fasting 75-g glucose drink.</p>
+<ol class="flow">
+<li>
+<span class="step">01</span>
+<h3>Before the drink</h3>
+<p>Measure fasting glucose.</p>
+</li>
+<li>
+<span class="step">02</span>
+<h3>After the drink</h3>
+<p>Measure at 1 hour and 2 hours.</p>
+</li>
+<li>
+<span class="step">03</span>
+<h3>Interpret the results</h3>
+<p>One value at or above its threshold establishes GDM.</p>
+</li>
+</ol>
+<p class="takeaway">Follow the preparation instructions for the test your practice orders.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-2" data-ref="2">[2] ADA diagnosis · 2026</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>08 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-9" aria-labelledby="title-9">
+<p class="eyebrow">02 / Testing</p>
+<h2 id="title-9" tabindex="-1">The diagnosis rule<br> depends on the test.</h2>
+<p class="lead">These laboratory cutoffs diagnose GDM. They are not your home glucose goals.</p>
+<div class="cards">
+<div class="card">
+<h3>100-g test · two-step</h3>
+<p>Usually <strong>2 or more</strong> abnormal values.</p>
+</div>
+<div class="card">
+<h3>75-g test · one-step</h3>
+<p>
+<strong>1 or more</strong> abnormal values.</p>
+</div>
+</div>
+<p class="takeaway">Ask which pathway was used before interpreting a result.</p>
+<details>
+<summary>View diagnostic thresholds</summary>
+<div class="detail-body">
+<div class="table-wrap">
+<table>
+<caption>Diagnostic thresholds, mg/dL; values at or above the cutoff are abnormal</caption>
+<thead>
+<tr>
+<th scope="col">Time</th>
+<th scope="col">100-g / Carpenter–Coustan</th>
+<th scope="col">75-g / one-step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">Fasting</th>
+<td>95</td>
+<td>92</td>
+</tr>
+<tr>
+<th scope="row">1 hour</th>
+<td>180</td>
+<td>180</td>
+</tr>
+<tr>
+<th scope="row">2 hours</th>
+<td>155</td>
+<td>153</td>
+</tr>
+<tr>
+<th scope="row">3 hours</th>
+<td>140</td>
+<td>Not measured</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Document the local protocol. A single abnormal 100-g value may prompt additional assessment or management under local guidance; do not mix the one-step and two-step rules.</p>
+</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-2" data-ref="2">[2] ADA diagnosis · 2026</a>
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>09 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-10" aria-labelledby="title-10">
+<p class="eyebrow">02 / Testing</p>
+<h2 id="title-10" tabindex="-1">A1C does not replace<br> the glucose tolerance test.</h2>
+<p class="lead">A1C reflects average glucose over time. Pregnancy can affect its interpretation.</p>
+<div class="cards">
+<div class="card">
+<h3>Useful context</h3>
+<p>It can help identify previously unrecognized diabetes early.</p>
+</div>
+<div class="card">
+<h3>Daily decisions</h3>
+<p>Fasting and postmeal readings guide the GDM treatment plan.</p>
+</div>
+</div>
+<p class="takeaway">A reassuring A1C does not rule out GDM.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+<a href="#ref-2" data-ref="2">[2] ADA diagnosis · 2026</a>
+<a href="#ref-4" data-ref="4">[4] ACOG screening update · 2024</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>10 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-11" aria-labelledby="title-11">
+<p class="eyebrow">03 / Daily care</p>
+<h2 id="title-11" tabindex="-1">Start with three<br> practical tools.</h2>
+<p class="lead">Your team will help you build a plan that fits your life.</p>
+<div class="cards">
+<div class="card">
+<h3>Food</h3>
+<p>Individual nutrition counseling.</p>
+</div>
+<div class="card">
+<h3>Movement</h3>
+<p>Activity that is safe for your pregnancy.</p>
+</div>
+<div class="card">
+<h3>Monitoring</h3>
+<p>A meter or agreed device, supplies, and a review plan.</p>
+</div>
+</div>
+<p class="takeaway">Ask who reviews your readings and how to contact them.</p>
+<details>
+<summary>What A1GDM and A2GDM mean</summary>
+<div class="detail-body">A1GDM describes glucose controlled without medication. A2GDM describes GDM requiring medication. Both need glucose monitoring and obstetric follow-up. These labels describe treatment needs, not personal success.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>11 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-12" aria-labelledby="title-12">
+<p class="eyebrow">03 / Daily care</p>
+<h2 id="title-12" tabindex="-1">Check fasting glucose<br> and one postmeal time.</h2>
+<p class="lead">A common starting routine is four checks each day.</p>
+<ol class="flow">
+<li>
+<span class="step">01</span>
+<h3>Morning</h3>
+<p>Before breakfast, after the overnight fast.</p>
+</li>
+<li>
+<span class="step">02</span>
+<h3>After each meal</h3>
+<p>At 1 hour OR 2 hours, as your team directs.</p>
+</li>
+<li>
+<span class="step">03</span>
+<h3>Share the pattern</h3>
+<p>Record readings, timing, and relevant food or medication changes.</p>
+</li>
+</ol>
+<p class="takeaway">Agree on when the postmeal clock starts, usually the first bite.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>12 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-13" aria-labelledby="title-13">
+<p class="eyebrow">03 / Daily care</p>
+<h2 id="title-13" tabindex="-1">Three numbers guide<br> your daily plan.</h2>
+<p class="lead">Common treatment targets, in mg/dL:</p>
+<div class="targets">
+<div class="target">
+<span>Fasting</span>
+<strong>&lt;95</strong>
+<small>Before breakfast</small>
+</div>
+<div class="target">
+<span>1 hour after a meal</span>
+<strong>&lt;140</strong>
+<small>Use this timing</small>
+</div>
+<span class="or">OR</span>
+<div class="target">
+<span>2 hours after a meal</span>
+<strong>&lt;120</strong>
+<small>Use this timing</small>
+</div>
+</div>
+<p class="takeaway">Use the goals your team sets, especially if you have low glucose.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>13 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-14" aria-labelledby="title-14">
+<p class="eyebrow">03 / Daily care</p>
+<h2 id="title-14" tabindex="-1">A sensor adds trends.<br> You still need a plan.</h2>
+<p class="lead">A continuous glucose monitor (CGM) measures glucose in fluid under the skin.</p>
+<div class="cards">
+<div class="card">
+<h3>What it adds</h3>
+<p>Shows patterns between meals and overnight.</p>
+</div>
+<div class="card">
+<h3>What to check</h3>
+<p>Use a fingerstick when symptoms disagree with the sensor or your device instructions require it.</p>
+</div>
+</div>
+<p class="takeaway">Ask which readings should guide treatment and when to confirm them.</p>
+<details>
+<summary>Clinician context</summary>
+<div class="detail-body">Tissue and blood glucose can differ, especially during rapid changes. CGM evidence is strongest for type 1 diabetes in pregnancy; GDM use should be individualized. A sensor does not replace the diagnostic glucose tolerance test.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>14 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-15" aria-labelledby="title-15">
+<p class="eyebrow">03 / Daily care</p>
+<h2 id="title-15" tabindex="-1">Keep carbohydrates.<br> Build a balanced plate.</h2>
+<p class="lead">The goal is enough nutrition with portions that fit your glucose pattern.</p>
+<div class="plate-layout">
+<div class="plate" role="img" aria-label="Illustrative balanced plate: nonstarchy vegetables, protein, and carbohydrate foods">
+<span>Nonstarchy<br>vegetables</span>
+<span>Protein</span>
+<span>Carbohydrate<br>foods</span>
+</div>
+<div>
+<h3>Make room for variety</h3>
+<p>Vegetables, beans, whole grains, protein, and healthy fats can all fit.</p>
+<p>Fruit and dairy can fit too; ask about portions.</p>
+</div>
+</div>
+<p class="takeaway">Avoid skipping meals or cutting carbohydrates too sharply.</p>
+<details>
+<summary>Make it personal</summary>
+<div class="detail-body">The plate is an illustration, not a fixed meal prescription. A dietitian can tailor carbohydrate distribution, snacks, cultural food preferences, gestational weight gain, and food access. Avoid nutritionally inadequate restriction and ketosis.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>15 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-16" aria-labelledby="title-16">
+<p class="eyebrow">03 / Daily care</p>
+<h2 id="title-16" tabindex="-1">Small changes can make<br> eating easier.</h2>
+<p class="lead">Build a sustainable plan with familiar foods.</p>
+<div class="cards">
+<div class="card">
+<h3>Drinks</h3>
+<p>Choose water or an unsweetened drink more often.</p>
+</div>
+<div class="card">
+<h3>Meals</h3>
+<p>Try a fiber-rich carbohydrate with protein and vegetables.</p>
+</div>
+<div class="card">
+<h3>Timing</h3>
+<p>Distribute food across the day; tailor snacks to your needs.</p>
+</div>
+</div>
+<p class="takeaway">Use your readings to learn what works. No single food defines your care.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>16 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-17" aria-labelledby="title-17">
+<p class="eyebrow">03 / Daily care</p>
+<h2 id="title-17" tabindex="-1">Comfortable movement<br> can help glucose.</h2>
+<p class="lead">If your obstetric team agrees, start with something manageable.</p>
+<div class="hero-stat">
+<strong>10–15</strong>
+<span>minutes of walking after a meal<br>is one practical starting option.</span>
+</div>
+<div class="cards">
+<div class="card">
+<h3>Choose what fits</h3>
+<p>Walking, swimming, or suitable prenatal activity.</p>
+</div>
+<div class="card">
+<h3>Keep it comfortable</h3>
+<p>You should be able to hold a conversation.</p>
+</div>
+</div>
+<p class="takeaway">Your activity plan depends on your pregnancy and any restrictions.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>17 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-18" aria-labelledby="title-18">
+<p class="eyebrow">03 / Daily care</p>
+<h2 id="title-18" tabindex="-1">Repeated high readings<br> mean the plan needs adjusting.</h2>
+<p class="lead">Needing medication is not a failure.</p>
+<ol class="flow">
+<li>
+<span class="step">01</span>
+<h3>Notice</h3>
+<p>Is fasting glucose high? Is one meal repeatedly above target?</p>
+</li>
+<li>
+<span class="step">02</span>
+<h3>Share</h3>
+<p>Send readings on the schedule your team gives you.</p>
+</li>
+<li>
+<span class="step">03</span>
+<h3>Adjust</h3>
+<p>Review food, timing, and medication needs together.</p>
+</li>
+</ol>
+<p class="takeaway">Do not wait for the next routine visit if readings remain above your agreed limits.</p>
+<details>
+<summary>Follow-up and escalation</summary>
+<div class="detail-body">Review commonly occurs within about 1–2 weeks of starting nutrition therapy, sooner with marked elevations or advancing gestation. There is no universal percentage of elevated readings that mandates medication. Establish individualized call thresholds and sick-day instructions.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>18 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-19" aria-labelledby="title-19">
+<p class="eyebrow">04 / Medication</p>
+<h2 id="title-19" tabindex="-1">Insulin can target<br> the times glucose is high.</h2>
+<p class="lead">Insulin is the preferred medication in ADA and ACOG guidance when lifestyle measures are not enough.</p>
+<div class="cards">
+<div class="card">
+<h3>Fasting elevations</h3>
+<p>Background insulin can address overnight glucose.</p>
+</div>
+<div class="card">
+<h3>After-meal elevations</h3>
+<p>Mealtime insulin can address a specific meal.</p>
+</div>
+</div>
+<p class="takeaway">Your team teaches the dose, timing, injection technique, and low-glucose plan.</p>
+<details>
+<summary>Clinician context</summary>
+<div class="detail-body">Insulin does not cross the placenta in clinically significant amounts. Regimens and titration depend on the glucose pattern, gestational age, weight, meals, and hypoglycemia risk. Needs can change as pregnancy progresses. Do not use a generic starting dose as an individual prescription.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>19 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-20" aria-labelledby="title-20">
+<p class="eyebrow">04 / Medication</p>
+<h2 id="title-20" tabindex="-1">Discuss the tradeoffs<br> of medication choices.</h2>
+<p class="lead">An oral medicine may be considered after counseling.</p>
+<div class="cards">
+<div class="card">
+<h3>Metformin</h3>
+<p>Crosses the placenta. Some patients still need insulin; long-term offspring outcomes remain a consideration.</p>
+</div>
+<div class="card">
+<h3>Glyburide</h3>
+<p>Generally not a first-line choice because of less favorable newborn outcomes.</p>
+</div>
+</div>
+<p class="takeaway">Tell your team about cost, access, injection concerns, and side effects.</p>
+<details>
+<summary>Why guideline recommendations differ</summary>
+<div class="detail-body">ADA/ACOG prefer insulin. SMFM’s statement, reaffirmed in 2024, considers metformin a reasonable first-line alternative and notes that about half may still require insulin. The difference reflects how experts weigh the evidence. Renal function and other contraindications matter.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+<a href="#ref-8" data-ref="8">[8] SMFM medication statement</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>20 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-21" aria-labelledby="title-21">
+<p class="eyebrow">04 / Medication</p>
+<h2 id="title-21" tabindex="-1">Know how to respond<br> to low glucose.</h2>
+<p class="lead">Shakiness, sweating, hunger, or confusion can be warning signs.</p>
+<ol class="flow">
+<li>
+<span class="step">01</span>
+<h3>Below 70 mg/dL</h3>
+<p>If awake and able to swallow: take 15 g of fast-acting carbohydrate.</p>
+</li>
+<li>
+<span class="step">02</span>
+<h3>Wait 15 minutes</h3>
+<p>Recheck. Repeat if still below 70 mg/dL.</p>
+</li>
+<li>
+<span class="step">03</span>
+<h3>After recovery</h3>
+<p>Follow your meal/snack plan and tell your team about the low.</p>
+</li>
+</ol>
+<p class="takeaway">If unable to swallow, unconscious, or having a seizure: no food by mouth. Use prescribed glucagon and call emergency services.</p>
+<details>
+<summary>Examples and safety</summary>
+<div class="detail-body">Examples of 15 g carbohydrate include about 4 oz (½ cup) regular juice or glucose tablets according to their label. Severe confusion or inability to self-treat requires another person’s help. Your diabetes team may individualize this plan.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-10" data-ref="10">[10] CDC low-glucose treatment</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>21 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-22" aria-labelledby="title-22">
+<p class="eyebrow">05 / Pregnancy & birth</p>
+<h2 id="title-22" tabindex="-1">Your baby’s testing plan<br> depends on the whole pregnancy.</h2>
+<p class="lead">Ultrasound estimates growth. Other tests assess fetal well-being.</p>
+<div class="cards">
+<div class="card">
+<h3>Diet-controlled GDM</h3>
+<p>Routine extra testing is not automatically needed in every uncomplicated pregnancy.</p>
+</div>
+<div class="card">
+<h3>Medication or other concerns</h3>
+<p>Fetal testing is often considered around 32 weeks; timing and frequency vary.</p>
+</div>
+</div>
+<p class="takeaway">Blood pressure, glucose control, growth, and other conditions can change the plan.</p>
+<details>
+<summary>What the tests mean</summary>
+<div class="detail-body">NST (nonstress test) records the fetal heart rate. BPP (biophysical profile) combines ultrasound observations, sometimes with an NST. ACOG suggests considering once- or twice-weekly testing from 32 weeks for medication-controlled GDM, and twice weekly with poor control. Growth scan timing is individualized; estimated weight has uncertainty.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+<a href="#ref-9" data-ref="9">[9] ACOG fetal surveillance</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>22 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-23" aria-labelledby="title-23">
+<p class="eyebrow">05 / Pregnancy & birth</p>
+<h2 id="title-23" tabindex="-1">Well-controlled GDM does not<br> automatically mean early birth.</h2>
+<p class="lead">Typical delivery windows when there are no other complications:</p>
+<div class="delivery">
+<div>
+<span>Diet-controlled · A1GDM</span>
+<strong>39w0d–40w6d</strong>
+</div>
+<div>
+<span>Medication-controlled · A2GDM</span>
+<strong>39w0d–39w6d</strong>
+</div>
+</div>
+<p class="takeaway">Poor control or another complication needs a separate, individualized timing decision.</p>
+<details>
+<summary>How to interpret these windows</summary>
+<div class="detail-body">w = weeks; d = days. Diet-controlled GDM alone does not require delivery before 39 weeks; expectant management up to 40w6d may be appropriate with indicated surveillance. These windows are not a promise that every pregnancy can safely wait.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>23 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-24" aria-labelledby="title-24">
+<p class="eyebrow">05 / Pregnancy & birth</p>
+<h2 id="title-24" tabindex="-1">A very large estimated baby<br> changes the birth discussion.</h2>
+<p class="lead">GDM alone does not mean you need a cesarean birth.</p>
+<div class="hero-stat">
+<strong>≥4,500 g</strong>
+<span>estimated fetal weight with diabetes:<br>discuss the option of planned cesarean birth.</span>
+</div>
+<p class="takeaway">Ultrasound weight estimates are imperfect. Discuss benefits, risks, and your preferences.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>24 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-25" aria-labelledby="title-25">
+<p class="eyebrow">05 / Pregnancy & birth</p>
+<h2 id="title-25" tabindex="-1">Glucose checks continue<br> through birth.</h2>
+<p class="lead">Your care team plans for both you and your baby.</p>
+<div class="cards">
+<div class="card">
+<h3>During labor</h3>
+<p>Your glucose is checked. Insulin or fluids may be adjusted under the hospital’s protocol.</p>
+</div>
+<div class="card">
+<h3>After birth</h3>
+<p>Your baby’s glucose is checked. Early feeding and additional treatment may be needed.</p>
+</div>
+</div>
+<p class="takeaway">Ask what to expect if your baby needs extra monitoring.</p>
+<details>
+<summary>Hospital care varies</summary>
+<div class="detail-body">Frequency and maternal intrapartum glucose targets vary by hospital protocol. Newborn screening and treatment depend on symptoms, age after birth, glucose results, and pediatric guidance. Feeding helps but does not guarantee prevention of hypoglycemia.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>25 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-26" aria-labelledby="title-26">
+<p class="eyebrow">06 / After birth</p>
+<h2 id="title-26" tabindex="-1">Insulin needs usually fall<br> quickly after delivery.</h2>
+<p class="lead">Once the placenta is delivered, much of pregnancy’s insulin resistance falls.</p>
+<ol class="flow">
+<li>
+<span class="step">01</span>
+<h3>Reassess</h3>
+<p>Check glucose after delivery.</p>
+</li>
+<li>
+<span class="step">02</span>
+<h3>Review medication</h3>
+<p>GDM-only medication is often stopped under supervision.</p>
+</li>
+<li>
+<span class="step">03</span>
+<h3>Follow persistent highs</h3>
+<p>Ongoing high glucose needs a diabetes evaluation and treatment plan.</p>
+</li>
+</ol>
+<p class="takeaway">Do not assume glucose has returned to normal without follow-up.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>26 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-27" aria-labelledby="title-27">
+<p class="eyebrow">06 / After birth</p>
+<h2 id="title-27" tabindex="-1">Book your glucose test<br> for 4–12 weeks after birth.</h2>
+<p class="lead">Before leaving the hospital, ask who will order the test and review the result.</p>
+<div class="hero-stat">
+<strong>75 g</strong>
+<span>fasting, 2-hour oral glucose tolerance test<br>at 4–12 weeks postpartum.</span>
+</div>
+<p class="takeaway">A1C alone is less suitable this soon after birth.</p>
+<details>
+<summary>Postpartum testing context</summary>
+<div class="detail-body">Blood loss and pregnancy-related red cell changes can affect A1C. The OGTT uses nonpregnancy criteria postpartum. ACOG also recognizes testing during the delivery admission as an alternative in some settings; coordinate interpretation and follow-up with the care team.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+<a href="#ref-4" data-ref="4">[4] ACOG screening update · 2024</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>27 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-28" aria-labelledby="title-28">
+<p class="eyebrow">06 / After birth</p>
+<h2 id="title-28" tabindex="-1">Follow-up protects<br> your future health.</h2>
+<p class="lead">A history of GDM raises your future risk of type 2 diabetes.</p>
+<ol class="flow">
+<li>
+<span class="step">01</span>
+<h3>Every 1–3 years</h3>
+<p>Repeat diabetes screening, even if the postpartum result was normal.</p>
+</li>
+<li>
+<span class="step">02</span>
+<h3>Between pregnancies</h3>
+<p>Keep sustainable food and activity habits; request feeding support if desired.</p>
+</li>
+<li>
+<span class="step">03</span>
+<h3>Before another pregnancy</h3>
+<p>Check for diabetes and plan care before conception.</p>
+</li>
+</ol>
+<p class="takeaway">Breastfeeding has health benefits, but it does not replace diabetes screening.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>28 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-29" aria-labelledby="title-29">
+<p class="eyebrow">07 / Take home</p>
+<h2 id="title-29" tabindex="-1">Five actions<br> worth remembering.</h2>
+<p class="lead">You do not have to manage GDM alone.</p>
+<ol class="pearls">
+<li>Complete the right diagnostic test.</li>
+<li>Know your fasting and postmeal targets.</li>
+<li>Share patterns and ask for help early.</li>
+<li>Follow your individualized pregnancy and birth plan.</li>
+<li>Keep your postpartum glucose appointment.</li>
+</ol>
+<p class="takeaway">A workable plan matters more than blame or perfection.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+<a href="#ref-2" data-ref="2">[2] ADA diagnosis · 2026</a>
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+<a href="#ref-4" data-ref="4">[4] ACOG screening update · 2024</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>29 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-30" aria-labelledby="title-30">
+<p class="eyebrow">07 / Evidence</p>
+<h2 id="title-30" tabindex="-1">Strong evidence guides care.<br> Some questions remain.</h2>
+<p class="lead">Guidelines combine research with clinical judgment.</p>
+<div class="cards">
+<div class="card">
+<h3>Well supported</h3>
+<p>Treating diagnosed GDM reduces important growth and birth complications.</p>
+</div>
+<div class="card">
+<h3>Still being studied</h3>
+<p>Who benefits most from early treatment or CGM in GDM; long-term effects of fetal medication exposure.</p>
+</div>
+<div class="card">
+<h3>Experts differ</h3>
+<p>How to weigh insulin and metformin as initial medication choices.</p>
+</div>
+</div>
+<p class="takeaway">Ask how the evidence applies to your own pregnancy.</p>
+<details>
+<summary>Research context</summary>
+<div class="detail-body">TOBOGM found a modest reduction in a composite neonatal outcome with early treatment in an at-risk population, without a material effect on pregnancy-related hypertension. This does not establish one early-pregnancy treatment threshold for everyone. CGM studies differ in populations, devices, and outcomes.</div>
+</details>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-5" data-ref="5">[5] ACHOIS randomized trial</a>
+<a href="#ref-6" data-ref="6">[6] Mild GDM randomized trial</a>
+<a href="#ref-8" data-ref="8">[8] SMFM medication statement</a>
+<a href="#ref-11" data-ref="11">[11] TOBOGM early-treatment trial</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>30 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-31" aria-labelledby="title-31">
+<p class="eyebrow">07 / Your next conversation</p>
+<h2 id="title-31" tabindex="-1">Ask for a plan<br> you can use.</h2>
+<p class="lead">Bring these questions to your MFM or obstetric team.</p>
+<ul class="questions">
+<li>What are my targets and testing times?</li>
+<li>Which readings or symptoms mean I should call?</li>
+<li>When would medication help?</li>
+<li>What fetal testing do I need?</li>
+<li>What is my birth plan?</li>
+<li>Who arranges my postpartum test?</li>
+</ul>
+<p class="takeaway">This education supports a conversation with your care team; it does not replace individualized medical advice.</p>
+<div class="citations" aria-label="Slide sources">
+<a href="#ref-1" data-ref="1">[1] ADA pregnancy care · 2026</a>
+<a href="#ref-3" data-ref="3">[3] ACOG GDM guidance</a>
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>31 / 32</span>
+</footer>
+</section>
+<section class="slide" id="slide-32" aria-labelledby="title-32">
+<p class="eyebrow">08 / Sources</p>
+<h2 id="title-32" tabindex="-1">Evidence you can<br> follow back to its source.</h2>
+<p class="lead">Guidelines, randomized trials, and patient safety resources. Links open in a new tab.</p>
+<ol class="reference-list">
+<li id="ref-1">
+<a href="https://doi.org/10.2337/dc26-S015" target="_blank" rel="noopener noreferrer">ADA pregnancy care · 2026</a>
+<p>American Diabetes Association Professional Practice Committee for Diabetes. 15. Management of Diabetes in Pregnancy: Standards of Care in Diabetes—2026. Diabetes Care. 2026;49(Suppl 1):S321–S338.</p>
+</li>
+<li id="ref-2">
+<a href="https://doi.org/10.2337/dc26-S002" target="_blank" rel="noopener noreferrer">ADA diagnosis · 2026</a>
+<p>American Diabetes Association Professional Practice Committee for Diabetes. 2. Diagnosis and Classification of Diabetes: Standards of Care in Diabetes—2026. Diabetes Care. 2026;49(Suppl 1):S27–S49.</p>
+</li>
+<li id="ref-3">
+<a href="https://doi.org/10.1097/AOG.0000000000002501" target="_blank" rel="noopener noreferrer">ACOG GDM guidance</a>
+<p>American College of Obstetricians and Gynecologists. ACOG Practice Bulletin No. 190: Gestational Diabetes Mellitus. Obstet Gynecol. 2018;131:e49–e64.</p>
+</li>
+<li id="ref-4">
+<a href="https://doi.org/10.1097/AOG.0000000000005612" target="_blank" rel="noopener noreferrer">ACOG screening update · 2024</a>
+<p>American College of Obstetricians and Gynecologists. ACOG Clinical Practice Update: Screening for Gestational and Pregestational Diabetes in Pregnancy and Postpartum. Obstet Gynecol. 2024;144:e20–e23.</p>
+</li>
+<li id="ref-5">
+<a href="https://doi.org/10.1056/NEJMoa042973" target="_blank" rel="noopener noreferrer">ACHOIS randomized trial</a>
+<p>Crowther CA, Hiller JE, Moss JR, et al. Effect of treatment of gestational diabetes mellitus on pregnancy outcomes. N Engl J Med. 2005;352:2477–2486.</p>
+</li>
+<li id="ref-6">
+<a href="https://doi.org/10.1056/NEJMoa0902430" target="_blank" rel="noopener noreferrer">Mild GDM randomized trial</a>
+<p>Landon MB, Spong CY, Thom E, et al. A multicenter, randomized trial of treatment for mild gestational diabetes. N Engl J Med. 2009;361:1339–1348.</p>
+</li>
+<li id="ref-7">
+<a href="https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/gestational-diabetes-screening" target="_blank" rel="noopener noreferrer">USPSTF screening</a>
+<p>US Preventive Services Task Force. Screening for Gestational Diabetes: US Preventive Services Task Force Recommendation Statement. JAMA. 2021;326:531–538.</p>
+</li>
+<li id="ref-8">
+<a href="https://publications.smfm.org/publications/252-society-for-maternal-fetal-medicine-statement-pharmacological-treatment/" target="_blank" rel="noopener noreferrer">SMFM medication statement</a>
+<p>Society for Maternal-Fetal Medicine Publications Committee. SMFM Statement: Pharmacological treatment of gestational diabetes. Am J Obstet Gynecol. 2018;218:B2–B4. Reaffirmed 2024.</p>
+</li>
+<li id="ref-9">
+<a href="https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2021/06/indications-for-outpatient-antenatal-fetal-surveillance" target="_blank" rel="noopener noreferrer">ACOG fetal surveillance</a>
+<p>American College of Obstetricians and Gynecologists. Indications for Outpatient Antenatal Fetal Surveillance. Committee Opinion No. 828. Obstet Gynecol. 2021;137:e177–e197.</p>
+</li>
+<li id="ref-10">
+<a href="https://www.cdc.gov/diabetes/treatment/treatment-low-blood-sugar-hypoglycemia.html" target="_blank" rel="noopener noreferrer">CDC low-glucose treatment</a>
+<p>Centers for Disease Control and Prevention. Treatment of Low Blood Sugar (Hypoglycemia). May 15, 2024. Accessed October 28, 2026.</p>
+</li>
+<li id="ref-11">
+<a href="https://doi.org/10.1056/NEJMoa2214956" target="_blank" rel="noopener noreferrer">TOBOGM early-treatment trial</a>
+<p>Simmons D, Immanuel J, Hague WM, et al. Treatment of gestational diabetes mellitus diagnosed early in pregnancy. N Engl J Med. 2023;388:2132–2144.</p>
+</li>
+</ol>
+<p class="takeaway">Updated October 28, 2026 · OpenMFM Presentation Standard v1.0</p>
+<div class="citations" aria-label="Slide sources">
+</div>
+<footer class="slide-footer">
+<span>OpenMFM · Atlanta Perinatal Associates</span>
+<span>32 / 32</span>
+</footer>
+</section>
+</main>
+<nav class="nav" aria-label="Slide navigation">
+<button id="prev" aria-label="Previous slide">← Prev</button>
+<span id="counter">1 / 32</span>
+<label for="slide-menu">Jump to</label>
+<select id="slide-menu" aria-label="Jump to slide">
+</select>
+<button id="next" aria-label="Next slide">Next →</button>
+</nav>
+<p id="status" class="sr-only" role="status" aria-live="polite" aria-atomic="true">
+</p>
+<dialog id="references" aria-labelledby="refs-title">
+<div class="dialog-head">
+<h2 id="refs-title">Sources & further reading</h2>
+<button id="close-refs" aria-label="Close sources">Close</button>
+</div>
+<label for="ref-search">Find a source</label>
+<input id="ref-search" type="search" placeholder="Try: diagnosis, insulin, screening…">
+<p>Links open in a new tab. Updated October 28, 2026.</p>
+<ol class="reference-list">
+<li data-source="1">
+<a href="https://doi.org/10.2337/dc26-S015" target="_blank" rel="noopener noreferrer">ADA pregnancy care · 2026</a>
+<p>American Diabetes Association Professional Practice Committee for Diabetes. 15. Management of Diabetes in Pregnancy: Standards of Care in Diabetes—2026. Diabetes Care. 2026;49(Suppl 1):S321–S338.</p>
+</li>
+<li data-source="2">
+<a href="https://doi.org/10.2337/dc26-S002" target="_blank" rel="noopener noreferrer">ADA diagnosis · 2026</a>
+<p>American Diabetes Association Professional Practice Committee for Diabetes. 2. Diagnosis and Classification of Diabetes: Standards of Care in Diabetes—2026. Diabetes Care. 2026;49(Suppl 1):S27–S49.</p>
+</li>
+<li data-source="3">
+<a href="https://doi.org/10.1097/AOG.0000000000002501" target="_blank" rel="noopener noreferrer">ACOG GDM guidance</a>
+<p>American College of Obstetricians and Gynecologists. ACOG Practice Bulletin No. 190: Gestational Diabetes Mellitus. Obstet Gynecol. 2018;131:e49–e64.</p>
+</li>
+<li data-source="4">
+<a href="https://doi.org/10.1097/AOG.0000000000005612" target="_blank" rel="noopener noreferrer">ACOG screening update · 2024</a>
+<p>American College of Obstetricians and Gynecologists. ACOG Clinical Practice Update: Screening for Gestational and Pregestational Diabetes in Pregnancy and Postpartum. Obstet Gynecol. 2024;144:e20–e23.</p>
+</li>
+<li data-source="5">
+<a href="https://doi.org/10.1056/NEJMoa042973" target="_blank" rel="noopener noreferrer">ACHOIS randomized trial</a>
+<p>Crowther CA, Hiller JE, Moss JR, et al. Effect of treatment of gestational diabetes mellitus on pregnancy outcomes. N Engl J Med. 2005;352:2477–2486.</p>
+</li>
+<li data-source="6">
+<a href="https://doi.org/10.1056/NEJMoa0902430" target="_blank" rel="noopener noreferrer">Mild GDM randomized trial</a>
+<p>Landon MB, Spong CY, Thom E, et al. A multicenter, randomized trial of treatment for mild gestational diabetes. N Engl J Med. 2009;361:1339–1348.</p>
+</li>
+<li data-source="7">
+<a href="https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/gestational-diabetes-screening" target="_blank" rel="noopener noreferrer">USPSTF screening</a>
+<p>US Preventive Services Task Force. Screening for Gestational Diabetes: US Preventive Services Task Force Recommendation Statement. JAMA. 2021;326:531–538.</p>
+</li>
+<li data-source="8">
+<a href="https://publications.smfm.org/publications/252-society-for-maternal-fetal-medicine-statement-pharmacological-treatment/" target="_blank" rel="noopener noreferrer">SMFM medication statement</a>
+<p>Society for Maternal-Fetal Medicine Publications Committee. SMFM Statement: Pharmacological treatment of gestational diabetes. Am J Obstet Gynecol. 2018;218:B2–B4. Reaffirmed 2024.</p>
+</li>
+<li data-source="9">
+<a href="https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2021/06/indications-for-outpatient-antenatal-fetal-surveillance" target="_blank" rel="noopener noreferrer">ACOG fetal surveillance</a>
+<p>American College of Obstetricians and Gynecologists. Indications for Outpatient Antenatal Fetal Surveillance. Committee Opinion No. 828. Obstet Gynecol. 2021;137:e177–e197.</p>
+</li>
+<li data-source="10">
+<a href="https://www.cdc.gov/diabetes/treatment/treatment-low-blood-sugar-hypoglycemia.html" target="_blank" rel="noopener noreferrer">CDC low-glucose treatment</a>
+<p>Centers for Disease Control and Prevention. Treatment of Low Blood Sugar (Hypoglycemia). May 15, 2024. Accessed October 28, 2026.</p>
+</li>
+<li data-source="11">
+<a href="https://doi.org/10.1056/NEJMoa2214956" target="_blank" rel="noopener noreferrer">TOBOGM early-treatment trial</a>
+<p>Simmons D, Immanuel J, Hague WM, et al. Treatment of gestational diabetes mellitus diagnosed early in pregnancy. N Engl J Med. 2023;388:2132–2144.</p>
+</li>
+</ol>
+</dialog>
 <script>
-  let currentSlide = 0;
-  const slides = document.querySelectorAll('.slide');
-  const total = slides.length;
-  const counter = document.getElementById('counter');
-  const progressBar = document.getElementById('progressBar');
-
-  function updateUI() {
-    counter.textContent = (currentSlide + 1) + ' / ' + total;
-    progressBar.style.width = ((currentSlide + 1) / total * 100) + '%';
-  }
-  function showSlide(index) {
-    slides.forEach((s, i) => s.classList.toggle('active', i === index));
-    updateUI();
-  }
-  function nextSlide() { currentSlide = (currentSlide + 1) % total; showSlide(currentSlide); }
-  function prevSlide() { currentSlide = (currentSlide - 1 + total) % total; showSlide(currentSlide); }
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
-    else if (e.key === 'ArrowLeft') prevSlide();
-  });
-
-  let touchStartX = 0;
-  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
-  document.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].screenX - touchStartX;
-    if (Math.abs(dx) > 40) { dx < 0 ? nextSlide() : prevSlide(); }
-  });
-
-  showSlide(0);
+(()=>{'use strict';const slides=[...document.querySelectorAll('.slide')],menu=document.querySelector('#slide-menu'),counter=document.querySelector('#counter'),bar=document.querySelector('#progress-fill'),status=document.querySelector('#status'),prev=document.querySelector('#prev'),next=document.querySelector('#next'),mode=document.querySelector('#mode'),dialog=document.querySelector('#references'),search=document.querySelector('#ref-search');let index=0,reading=false,returnFocus=null;
+slides.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`${i+1}. ${s.querySelector('h1,h2').textContent}`;menu.append(o)});
+function fromHash(){const m=location.hash.match(/^#slide-(\d+)$/);return m?Math.max(0,Math.min(slides.length-1,Number(m[1])-1)):0}
+function render(focus=false){slides.forEach((s,i)=>{s.hidden=!reading&&i!==index;s.classList.toggle('active',i===index)});counter.textContent=`${index+1} / ${slides.length}`;menu.value=index;bar.style.width=`${(index+1)/slides.length*100}%`;document.querySelector('#progress').setAttribute('aria-valuenow',index+1);prev.disabled=index===0;next.disabled=index===slides.length-1;status.textContent=`Slide ${index+1} of ${slides.length}: ${slides[index].querySelector('h1,h2').textContent}`;if(focus)slides[index].querySelector('h1,h2').focus({preventScroll:true})}
+function go(n,focus=true){index=Math.max(0,Math.min(slides.length-1,n));history.replaceState(null,'',`#slide-${index+1}`);render(focus);if(reading)slides[index].scrollIntoView({block:'start'});else window.scrollTo(0,0)}
+prev.addEventListener('click',()=>go(index-1));next.addEventListener('click',()=>go(index+1));menu.addEventListener('change',()=>go(Number(menu.value)));
+document.addEventListener('keydown',e=>{if(dialog.open||reading||e.ctrlKey||e.metaKey||e.altKey||e.target.closest('button,a,input,select,textarea,summary,[contenteditable]'))return;if(['ArrowRight','ArrowLeft',' ','Home','End'].includes(e.key)){e.preventDefault();go(e.key==='Home'?0:e.key==='End'?slides.length-1:index+(['ArrowRight',' '].includes(e.key)?1:-1))}});
+let touch=null;document.querySelector('main').addEventListener('touchstart',e=>{if(e.target.closest('a,button,details,select')||e.touches.length!==1){touch=null;return}touch={x:e.touches[0].clientX,y:e.touches[0].clientY}},{passive:true});document.querySelector('main').addEventListener('touchend',e=>{if(!touch||reading||dialog.open)return;const dx=e.changedTouches[0].clientX-touch.x,dy=e.changedTouches[0].clientY-touch.y;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)go(index+(dx<0?1:-1));touch=null},{passive:true});
+mode.addEventListener('click',()=>{reading=!reading;document.body.classList.toggle('reading',reading);mode.textContent=reading?'Slide view':'Read all';mode.setAttribute('aria-pressed',String(reading));render();if(reading)slides[index].scrollIntoView({block:'start'});else window.scrollTo(0,0)});
+function openRefs(ref){returnFocus=document.activeElement;search.value='';filterRefs();dialog.showModal();if(ref){const el=dialog.querySelector(`[data-source="${ref}"]`);el?.scrollIntoView({block:'center'})}else search.focus()}
+function filterRefs(){const q=search.value.toLowerCase();dialog.querySelectorAll('[data-source]').forEach(li=>li.hidden=!li.textContent.toLowerCase().includes(q))}
+document.querySelector('#sources').addEventListener('click',()=>openRefs());document.querySelectorAll('[data-ref]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();openRefs(a.dataset.ref)}));search.addEventListener('input',filterRefs);document.querySelector('#close-refs').addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>returnFocus?.focus());
+dialog.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();dialog.close()}});
+let opened=[];window.addEventListener('beforeprint',()=>{opened=[...document.querySelectorAll('main details')].filter(d=>!d.open);opened.forEach(d=>d.open=true)});window.addEventListener('afterprint',()=>{opened.forEach(d=>d.open=false)});document.querySelector('#print').addEventListener('click',()=>window.print());
+window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#ref-')){go(31);return}if(!location.hash.startsWith('#slide-'))return;index=fromHash();render(true);window.scrollTo(0,0)});document.body.classList.add('js');index=fromHash();render();
+})();
 </script>
-
-
-<!-- openmfm-footer-injected -->
-<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
-  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
-</div>
 </body>
 </html>

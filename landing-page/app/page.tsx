@@ -201,7 +201,7 @@ export default async function HomePage() {
             <div className="feature-panel__meta">
               <span className="feature-panel__meta-item">
                 <Stethoscope className="h-4 w-4" />
-                {featuredArticle ? 'Posters 341 & 342' : (featuredPresentation.slideCount ? `${featuredPresentation.slideCount} slides · Provider education` : 'Clinical education')}
+                {featuredArticle ? 'Posters 341 & 342' : (featuredPresentation.slideCount ? `${featuredPresentation.slideCount} slides · ${featuredPresentation.tags.find((tag) => tag.endsWith('Education')) ?? 'Clinical education'}` : 'Clinical education')}
               </span>
               <span className="feature-panel__meta-item">{featuredArticle ? 'Global Congress · Utrecht' : (featuredPresentation.duration ?? 'Library preview')}</span>
             </div>
