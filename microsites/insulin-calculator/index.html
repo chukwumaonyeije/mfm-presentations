@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pregnancy Insulin Initiation Calculator | OpenMFM</title>
+  <meta name="description" content="A transparent, weight-based pregnancy insulin initiation calculator with consistent rounding and printable results.">
+  <link rel="canonical" href="https://openmfm.org/microsites/insulin-calculator/index.html"><meta name="theme-color" content="#07111c">
+  <link rel="stylesheet" href="styles.css">
+  <script src="calculator.js" defer></script><script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to calculator</a>
+  <nav aria-label="Site"><a class="brand" href="/">open<span>MFM</span></a><a href="/interactive">All interactive tools ↗</a></nav>
+  <main id="main">
+    <header><p class="eyebrow">INTERACTIVE CLINICAL TOOL · VERSION 2.0</p><h1>Pregnancy insulin<br><span>initiation calculator.</span></h1><p class="intro">A starting estimate, with the assumptions in view. Review the glucose pattern, regimen, and individual circumstances before prescribing.</p></header>
+    <aside class="notice"><strong>For clinician use.</strong> This tool estimates a full basal–bolus starting regimen for clinician review in insulin-naïve gestational diabetes. It does not determine whether insulin is needed. Patients should not use these results to start or change insulin.</aside>
+    <div class="workspace">
+      <section class="panel inputs" aria-labelledby="input-title">
+        <p class="eyebrow">01 / ENTER PARAMETERS</p><h2 id="input-title">Build the estimate</h2>
+        <form id="calculator-form" novalidate>
+          <fieldset><legend>Gestational age</legend><div class="pair"><div><label for="weeks">Completed weeks</label><input id="weeks" name="weeks" type="number" min="1" max="42" step="1" inputmode="numeric" required></div><div><label for="days">Additional days</label><input id="days" name="days" type="number" min="0" max="6" step="1" value="0" inputmode="numeric" required></div></div><p class="hint">Enter 27 weeks + 6 days, rather than 27.6 weeks.</p></fieldset>
+          <fieldset><legend>Current maternal weight</legend><div class="pair"><div><label for="weight">Weight</label><input id="weight" name="weight" type="number" min="0" step="any" inputmode="decimal" required></div><div><label for="unit">Unit</label><select id="unit" name="unit"><option value="lb">Pounds (lb)</option><option value="kg">Kilograms (kg)</option></select></div></div><p class="hint">Current weight is this model’s explicit assumption. Changing units clears the weight to prevent misinterpretation.</p></fieldset>
+          <label for="increment">Dose rounding increment</label><select id="increment" name="increment"><option value="1">Whole units (1 unit)</option><option value="0.5">Half units (0.5 unit)</option></select><p class="hint">Choose an increment supported by the intended delivery device.</p>
+          <label class="check"><input id="scope" type="checkbox" required><span>I am a clinician reviewing a full starting basal–bolus regimen for insulin-naïve GDM and have reviewed the scope below.</span></label>
+          <p id="error" class="error" role="alert" hidden></p>
+          <button type="submit">Calculate starting estimate <span aria-hidden="true">→</span></button><button class="secondary" type="reset">Clear inputs</button>
+        </form>
+      </section>
+      <section class="panel output" aria-labelledby="result-title">
+        <p class="eyebrow">02 / REVIEW THE CALCULATION</p><h2 id="result-title">Starting estimate</h2>
+        <p id="status" role="status" aria-live="polite">Enter the parameters to see the estimate and dose allocation.</p>
+        <div id="results" hidden>
+          <p id="context"></p><div class="total"><strong id="total"></strong><span>units / day · rounded estimate</span></div><p id="formula" class="formula"></p>
+          <table><caption>Illustrative allocation for clinician review</caption><thead><tr><th scope="col">Component</th><th scope="col">Units</th></tr></thead><tbody><tr><th scope="row">Basal · total per day</th><td id="basal"></td></tr><tr><th scope="row">Breakfast bolus</th><td id="breakfast"></td></tr><tr><th scope="row">Lunch bolus</th><td id="lunch"></td></tr><tr><th scope="row">Dinner bolus</th><td id="dinner"></td></tr></tbody><tfoot><tr><th scope="row">Total mealtime insulin</th><td id="bolus"></td></tr></tfoot></table>
+          <p class="hint">Basal starts near 50% of the total; the remaining dose is distributed as evenly as the increment permits. Remainder increments go to breakfast, then lunch. This is an arithmetic allocation, not a glucose-pattern-based meal prescription.</p>
+          <p class="notice">Choose the insulin preparation, basal timing, meal doses, monitoring, and follow-up individually. This table does not specify an injection schedule or a correction dose.</p>
+          <div class="actions"><button id="copy" type="button">Copy review summary</button><button id="print" type="button" class="secondary">Print</button></div>
+          <textarea id="copy-fallback" aria-label="Review summary to copy manually" readonly hidden></textarea>
+        </div>
+      </section>
+    </div>
+    <section class="panel methodology" aria-labelledby="scope-title"><p class="eyebrow">03 / SCOPE & EVIDENCE</p><h2 id="scope-title">Know what the estimate assumes</h2>
+      <div class="columns"><div><h3>One starting-dose model</h3><p>This tool retains the original calculator’s 0.7 / 0.8 / 0.9 units/kg/day factors. The MEMS 2024 guide lists these trimester-based factors; ADA 2026 supports individualized insulin management, not this exact calculator or a universal 50/50 split.</p><table><caption>Gestational bands used by this tool</caption><thead><tr><th scope="col">Gestational age</th><th scope="col">Units/kg/day</th></tr></thead><tbody><tr><td>1w0d–13w6d</td><td>0.7</td></tr><tr><td>14w0d–27w6d</td><td>0.8</td></tr><tr><td>28w0d–42w0d</td><td>0.9</td></tr></tbody></table><p>The exact day boundaries, current-weight basis, 50/50 allocation, and rounding policy are implementation choices reviewed for this release. This simplified model has no separate late-third-trimester increase.</p></div>
+      <div><h3>Outside this tool’s scope</h3><p>Preexisting type 1 or type 2 diabetes; an existing insulin regimen; pump settings; correction doses; isolated fasting or isolated postmeal treatment; intrapartum or postpartum dosing; acute illness or ketosis; steroid-related changes; significant renal impairment; and recurrent hypoglycemia require an individualized approach.</p><p>Supported input range: 1w0d–42w0d and 30–200 kg. These are software limits, not physiological safety thresholds. Glucose readings, meal carbohydrate intake, and insulin sensitivity are not evaluated.</p><h3>Transparent rounding</h3><p>Calculate with full precision, round the total to the selected increment, then allocate that total in integer increments. Halfway totals round upward; an odd increment in the basal–bolus split goes to basal. All displayed doses sum to the rounded total.</p></div></div>
+      <h3>Sources and review status</h3><ul class="references"><li><a href="https://doi.org/10.2337/dc26-S015">ADA. Management of Diabetes in Pregnancy: Standards of Care in Diabetes—2026.</a> Current guidance for individualized care, glucose monitoring, and frequent insulin adjustment.</li><li><a href="https://mems.my/wp-content/uploads/2024/11/Practical-Guide-to-Insulin-Therapy-in-Type-2-Diabetes-Mellitus_2nd-Edition-2024-1.pdf">MEMS. Practical Guide to Insulin Therapy in Type 2 Diabetes Mellitus, 2nd edition (2024), pregnancy section.</a> Source for the trimester-factor table; not validation of this application.</li></ul>
+      <p class="hint">Source check: November 4, 2026. Clinical reviewer: Chukwuma Onyeije, MD. Validation confirmed November 4, 2026. No patient identifiers are requested. This page sends no calculation inputs to a server and does not save them to browser storage.</p>
+    </section>
+    <noscript><p class="notice">JavaScript is required for this calculator. The scope and references remain available above.</p></noscript>
+  </main>
+  <footer>Created by Chukwuma Onyeije, MD · Atlanta Perinatal Associates<br>OpenMFM · 2.0.0 · Clinically reviewed November 4, 2026</footer>
+</body></html>
