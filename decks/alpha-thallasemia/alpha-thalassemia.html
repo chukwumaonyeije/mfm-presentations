@@ -1,244 +1,403 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Alpha Thalassemia Trait in Pregnancy</title>
-  <style>
-    :root{
-      --bg:#0b1220;
-      --card:#101a33;
-      --text:#eef2ff;
-      --muted:#c7d2fe;
-      --accent:#7dd3fc;
-      --accent2:#a7f3d0;
-      --warning:#fde68a;
-      --border:rgba(255,255,255,0.10);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 20% 10%, rgba(125,211,252,0.18), transparent 55%),
-                  radial-gradient(900px 500px at 85% 15%, rgba(167,243,208,0.14), transparent 50%),
-                  var(--bg);
-      color:var(--text);
-      line-height:1.35;
-    }
-    header{
-      padding:18px 18px 0 18px;
-      max-width:1100px;
-      margin:0 auto;
-    }
-    .badge{
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      padding:8px 12px;
-      border:1px solid var(--border);
-      border-radius:999px;
-      background:rgba(16,26,51,0.6);
-      color:var(--muted);
-      font-size:14px;
-    }
-    .dot{
-      width:10px;height:10px;border-radius:50%;
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow:0 0 18px rgba(125,211,252,0.45);
-    }
-    main{
-      max-width:1100px;
-      margin:0 auto;
-      padding:18px;
-    }
-    .deck{
-      position:relative;
-      border:1px solid var(--border);
-      border-radius:18px;
-      overflow:hidden;
-      background:rgba(16,26,51,0.75);
-      box-shadow:0 18px 60px rgba(0,0,0,0.35);
-      min-height:72vh;
-    }
-    .slide{
-      display:none;
-      padding:34px 34px 22px 34px;
-      min-height:72vh;
-    }
-    .slide.active{display:block}
-    .kicker{
-      color:var(--muted);
-      font-size:14px;
-      letter-spacing:0.08em;
-      text-transform:uppercase;
-      margin:0 0 10px 0;
-    }
-    h1{
-      font-size:38px;
-      margin:0 0 14px 0;
-      line-height:1.1;
-    }
-    h2{
-      font-size:30px;
-      margin:0 0 10px 0;
-      line-height:1.15;
-    }
-    p, li{
-      font-size:20px;
-      color:var(--text);
-      margin:10px 0;
-    }
-    ul{margin:10px 0 0 22px}
-    .grid{
-      display:grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap:18px;
-      align-items:start;
-      margin-top:14px;
-    }
-    .panel{
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:16px 16px 14px 16px;
-      background:rgba(11,18,32,0.35);
-    }
-    .panel h3{
-      margin:0 0 10px 0;
-      font-size:18px;
-      color:var(--muted);
-      letter-spacing:0.02em;
-    }
-    .callout{
-      border-left:6px solid var(--accent);
-      padding:14px 14px 14px 14px;
-      border-radius:14px;
-      background:rgba(125,211,252,0.10);
-      border:1px solid rgba(125,211,252,0.25);
-      margin-top:14px;
-    }
-    .callout.warn{
-      border-left-color: var(--warning);
-      background: rgba(253,230,138,0.10);
-      border-color: rgba(253,230,138,0.25);
-    }
-    .small{
-      font-size:16px;
-      color:var(--muted);
-    }
-    .nav{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      padding:14px 18px;
-      border-top:1px solid var(--border);
-      background:rgba(11,18,32,0.35);
-    }
-    .btn{
-      appearance:none;
-      border:1px solid var(--border);
-      background:rgba(16,26,51,0.75);
-      color:var(--text);
-      padding:10px 14px;
-      border-radius:12px;
-      font-size:16px;
-      cursor:pointer;
-    }
-    .btn:hover{border-color:rgba(125,211,252,0.45)}
-    .btn.primary{
-      border-color:rgba(125,211,252,0.55);
-      background:rgba(125,211,252,0.14);
-    }
-    .progress{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      color:var(--muted);
-      font-size:14px;
-    }
-    .pip{
-      width:10px;height:10px;border-radius:50%;
-      border:1px solid var(--border);
-      background:transparent;
-    }
-    .pip.on{
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      border-color:rgba(125,211,252,0.55);
-    }
-    .two-col{
-      columns:2;
-      column-gap:26px;
-    }
-    @media (max-width:900px){
-      .grid{grid-template-columns:1fr}
-      h1{font-size:32px}
-      h2{font-size:26px}
-      p, li{font-size:18px}
-      .two-col{columns:1}
-      .slide{padding:26px 18px 18px 18px}
-    }
-    .footer-note{
-      margin-top:14px;
-      padding-top:12px;
-      border-top:1px dashed rgba(255,255,255,0.18);
-      color:var(--muted);
-      font-size:14px;
-    }
-    .term{
-      color:var(--accent);
-      font-weight:600;
-    }
-    /* 2026 refresh overrides */
-    :root{
-      --bg:#08131f;
-      --card:rgba(10,24,39,0.9);
-      --text:#f5f9fc;
-      --muted:#c9d8e8;
-      --accent:#8fd2ff;
-      --accent2:#8be9c3;
-      --warning:#ffd78a;
-      --border:rgba(131,193,255,0.16);
-    }
-    body{
-      font-family:"Aptos","Segoe UI",system-ui,sans-serif;
-      background:
-        radial-gradient(1200px 600px at 20% 10%, rgba(143,210,255,0.18), transparent 55%),
-        radial-gradient(900px 500px at 85% 15%, rgba(139,233,195,0.12), transparent 50%),
-        linear-gradient(180deg, #08131f 0%, #06101a 100%);
-    }
-    .deck,
-    .panel,
-    .callout,
-    .nav{
-      border-radius:18px;
-      backdrop-filter:blur(10px);
-      box-shadow:0 18px 34px rgba(0,0,0,0.24);
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alpha Thalassemia Trait in Pregnancy | OpenMFM</title>
+<style>
+:root {
+  color-scheme:dark;
+  --bg:#0d1117;
+  --surface:#161f29;
+  --ink:#ecf3f7;
+  --muted:#bbcad5;
+  --accent:#8aebd9;
+  --border:#394b58;
+  font:100%/1.55 system-ui,"Segoe UI",sans-serif;
+  color:var(--ink);
+  background:var(--bg)}
 
+* {
+  box-sizing:border-box}
+body {
+  margin:0;
+  background:radial-gradient(ellipse at 78% 20%,#152731,transparent 48%),var(--bg);
+  min-height:100vh}
+a {
+  color:var(--accent);
+  text-underline-offset:.18em}
+button {
+  font:inherit;
+  color:var(--ink);
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:.55rem;
+  padding:.55rem .95rem;
+  cursor:pointer;
+  min-height:44px}
+button:disabled {
+  opacity:.45;
+  cursor:default}
+button:hover:enabled {
+  border-color:var(--accent)}
+:focus-visible {
+  outline:3px solid #ffd387;
+  outline-offset:3px}
+.sr,.skip:not(:focus) {
+  position:absolute;
+  clip-path:inset(50%);
+  width:1px;
+  height:1px;
+  overflow:hidden}
+.skip:focus {
+  position:fixed;
+  background:var(--bg);
+  z-index:4}
+header,footer,main {
+  max-width:76rem;
+  margin:auto}
+header,footer {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.75rem;
+  padding:1rem clamp(1rem,4vw,3.5rem)}
+header {
+  border-bottom:1px solid var(--border)}
+.brand {
+  font-size:1.35rem;
+  font-weight:750;
+  text-decoration:none;
+  color:var(--ink)}
+.brand span,.topic,.figtitle {
+  color:var(--accent)}
+.topic,.figtitle {
+  font-size:.81rem;
+  font-weight:700;
+  letter-spacing:.075em;
+  text-transform:uppercase}
+main {
+  padding:clamp(1.25rem,4vw,3.7rem) clamp(1rem,4vw,3.5rem) 2rem}
+h1,h2 {
+  font-size:clamp(2rem,4vw,3.85rem);
+  letter-spacing:-.045em;
+  line-height:1.07;
+  max-width:25ch;
+  margin:.55rem 0 1rem}
+h3 {
+  font-size:1.12rem;
+  line-height:1.3;
+  margin:0 0 .24rem}
+p {
+  margin:0}
+.lead {
+  font-size:clamp(1.08rem,1.55vw,1.28rem);
+  max-width:76ch;
+  color:#d1dce4}
+.grid {
+  display:grid;
+  grid-template-columns: .93fr 1.07fr;
+  align-items:center;
+  gap:clamp(1rem,4vw,4.25rem);
+  margin-top:clamp(1.25rem,3vw,2.5rem)}
+.item+.item,.item+aside {
+  margin-top:1.12rem}
+.item p,dd,li,aside p {
+  color:var(--muted)}
+figure {
+  margin:0;
+  border:1px solid var(--border);
+  border-top:3px solid var(--accent);
+  background:linear-gradient(130deg,#1b2e39,#16202b);
+  padding:clamp(1rem,2.3vw,1.7rem);
+  border-radius:.4rem 1.2rem 1.2rem 1.2rem}
+.figtitle {
+  margin-bottom:.75rem}
+figcaption,.citations {
+  color:var(--muted);
+  font-size:.89rem}
+figcaption {
+  padding-top:.75rem;
+  margin-top:.9rem;
+  border-top:1px solid var(--border)}
+svg {
+  width:100%;
+  height:auto;
+  max-height:15rem;
+  display:block}
+svg text {
+  fill:#edf6fa;
+  font:600 17px system-ui}
+svg text[fill="#0a2830"] {
+  fill:#0a2830}
+svg .minor {
+  font-size:14px;
+  fill:#c5d9e2}
+.line {
+  fill:none;
+  stroke:var(--accent);
+  stroke-width:3.5;
+  stroke-linecap:round}
+dl,ul,ol {
+  margin:.65rem 0;
+  padding:0}
+dt {
+  font-weight:700;
+  color:#e7f7fa}
+dd {
+  margin:0 0 .65rem}
+li {
+  margin:.55rem 0 0 1.3rem;
+  padding-left:.15rem}
+li::marker {
+  color:var(--accent)}
+table {
+  width:100%;
+  border-spacing:.24rem;
+  table-layout:fixed;
+  text-align:center;
+  font-size:.98rem}
+th:first-child,thead td {
+  width:14%}
+td,th {
+  background:#253a48;
+  padding:.55rem .18rem;
+  border-radius:.3rem}
+thead td {
+  background:none}
+th {
+  color:var(--accent)}
+td.warm {
+  background:#463b30;
+  color:#ffe2ad}
+aside {
+  border-left:3px solid #eebf79;
+  padding:.8rem 1rem;
+  background:#262627}
+aside p {
+  margin-top:.4rem}
+.citations {
+  margin-top:1.3rem}
+.citations a {
+  margin-left:.45rem}
+.bibliography p {
+  font-size:.91rem}
+.controls {
+  display:flex;
+  align-items:center;
+  gap:.7rem}
+footer {
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  color:var(--muted)}
+.enhanced footer {
+  position:sticky;
+  bottom:0;
+  z-index:2}
+.enhanced body {
+  display:flex;
+  min-height:100dvh;
+  flex-direction:column}
+.enhanced main {
+  flex:1;
+  width:100%}
+.enhanced header,.enhanced footer {
+  width:100%}
+.next {
+  background:var(--accent);
+  color:#102a2b;
+  font-weight:700}
+.progress {
+  position:fixed;
+  inset:0 0 auto;
+  z-index:3;
+  height:3px;
+  background:#344452}
+.progress i {
+  display:block;
+  height:100%;
+  background:var(--accent)}
+dialog {
+  color:var(--ink);
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:1rem;
+  width:min(36rem,94vw);
+  max-height:88dvh;
+  padding:1.5rem}
+dialog::backdrop {
+  background:#05090dd9}
+dialog h2 {
+  font-size:1.7rem}
+dialog button {
+  margin-right:.6rem}
+.tools {
+  display:none}
+.enhanced .tools {
+  display:flex}
+.slide+.slide {
+  margin-top:3rem}
+.enhanced .slide {
+  margin:0}
 
+@media(max-width:700px) {
+  .grid {
+  grid-template-columns:1fr}
+.enhanced footer {
+  padding:.5rem 1rem}
+.practice {
+  display:none}
+.controls {
+  justify-content:space-between;
+  width:100%}
+header {
+  padding:.5rem 1rem}
+.lead {
+  font-size:1.07rem}
+.grid {
+  gap:1.1rem}
+.topic {
+  font-size:.76rem}
+h1,h2 {
+  max-width:none}
+main {
+  padding-bottom:1.2rem}
+}
 
+@media(prefers-reduced-motion:reduce) {
+  * {
+  scroll-behavior:auto!important}
+}
+
+@page {
+  size:A4 landscape;
+  margin:11mm}
+
+@media print {
+  :root {
+  color-scheme:light}
+body,.enhanced body {
+  display:block;
+  background:white;
+  color:#15222d;
+  font:11pt/1.38 Arial,sans-serif}
+header,footer,.enhanced footer,.progress,dialog,.skip,.tools {
+  display:none!important}
+main,.enhanced main {
+  padding:0;
+  max-width:none}
+.slide,.slide[hidden] {
+  display:block!important;
+  break-after:page;
+  margin:0!important}
+.slide:last-child {
+  break-after:auto}
+h1,h2 {
+  font-size:29pt;
+  max-width:36ch}
+.lead {
+  font-size:13pt;
+  color:#25333b}
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8mm;
+  margin-top:5mm}
+.topic,.figtitle,a {
+  color:#105765}
+figure,aside,td,th {
+  background:#f0f5f6;
+  color:#15222d}
+figure {
+  border:1pt solid #75939c}
+svg {
+  background:#1b2e39;
+  print-color-adjust:exact;
+  max-height:56mm}
+dt,.item p,dd,li,aside p,figcaption,.citations {
+  color:#25333b}
+th,.warm,td.warm {
+  color:#15222d}
+h3 {
+  font-size:13pt}
+.item+.item {
+  margin-top:3mm}
+.citations {
+  margin-top:3mm}
+.bibliography p {
+  font-size:10pt}
+}
+
+/* Trace each possible partner result back to the same test. */
+#testing figure .item  {
+  border-left:2px solid var(--accent);
+  padding-left:1.2rem;
+  position:relative;
+  margin:0 0 0 .45rem;
+  padding-bottom:.8rem}
+
+#testing figure .item::before  {
+  content:"";
+  position:absolute;
+  left:-.34rem;
+  top:.55rem;
+  width:.55rem;
+  height:.55rem;
+  border-radius:50%;
+  background:var(--accent)}
+
+#testing figure .item:last-of-type  {
+  padding-bottom:0}
+
+@media screen and (min-width:701px) and (max-height:830px) {
+
+  main {
+  padding-top:1.15rem;
+  padding-bottom:1rem}
+
+  header,footer {
+  padding-top:.55rem;
+  padding-bottom:.55rem}
+
+  h1,h2 {
+  font-size:clamp(2.1rem,3vw,2.7rem);
+  max-width:36ch}
+
+  .grid {
+  margin-top:1.1rem}
+
+  figure {
+  padding:1rem 1.3rem}
+
+  svg {
+  max-height:10.5rem}
+
+  .citations {
+  margin-top:.65rem}
+
+}
+</style>
 <!-- openmfm-seo-injected -->
 <link rel="canonical" href="https://openmfm.org/decks/alpha-thallasemia/alpha-thalassemia.html">
-<meta name="description" content="Explains alpha thalassemia trait: gene deletion patterns, MCV/MCB findings, partner testing, and the risk of Hb Bart's hydrops fetalis when both partners are carriers.">
+<meta name="description" content="An illustrated patient guide to iron tests, partner testing, inheritance and prenatal care.">
 <meta name="author" content="Dr. Chukwuma Onyeije, MD">
 <meta name="keywords" content="Alpha Thalassemia, Genetics, Carrier Screening, Patient Education">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://openmfm.org/decks/alpha-thallasemia/alpha-thalassemia.html">
-<meta property="og:title" content="Alpha Thalassemia Trait in Pregnancy - Patient Education | OpenMFM">
-<meta property="og:description" content="Explains alpha thalassemia trait: gene deletion patterns, MCV/MCB findings, partner testing, and the risk of Hb Bart's hydrops fetalis when both partners are carriers.">
+<meta property="og:title" content="Alpha Thalassemia Trait in Pregnancy | OpenMFM">
+<meta property="og:description" content="An illustrated patient guide to iron tests, partner testing, inheritance and prenatal care.">
 <meta property="og:image" content="https://openmfm.org/og-image.png">
 <meta property="og:site_name" content="OpenMFM">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Alpha Thalassemia Trait in Pregnancy - Patient Education | OpenMFM">
-<meta name="twitter:description" content="Explains alpha thalassemia trait: gene deletion patterns, MCV/MCB findings, partner testing, and the risk of Hb Bart's hydrops fetalis when both partners are carriers.">
+<meta name="twitter:title" content="Alpha Thalassemia Trait in Pregnancy | OpenMFM">
+<meta name="twitter:description" content="An illustrated patient guide to iron tests, partner testing, inheritance and prenatal care.">
 <meta name="twitter:image" content="https://openmfm.org/og-image.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "MedicalWebPage",
-  "name": "Alpha Thalassemia Trait in Pregnancy - Patient Education",
-  "description": "Explains alpha thalassemia trait: gene deletion patterns, MCV/MCB findings, partner testing, and the risk of Hb Bart's hydrops fetalis when both partners are carriers.",
+  "name": "Alpha Thalassemia Trait in Pregnancy",
+  "description": "An illustrated patient guide to iron tests, partner testing, inheritance and prenatal care.",
   "url": "https://openmfm.org/decks/alpha-thallasemia/alpha-thalassemia.html",
   "author": {
     "@type": "Person",
@@ -258,7 +417,7 @@
       "url": "https://openmfm.org/og-image.png"
     }
   },
-  "dateModified": "2026-07-14",
+  "dateModified": "2026-11-05",
   "inLanguage": "en",
   "audience": {
     "@type": "MedicalAudience",
@@ -266,7 +425,7 @@
   },
   "about": {
     "@type": "MedicalCondition",
-    "name": "Alpha Thalassemia Trait in Pregnancy - Patient Education"
+    "name": "Alpha Thalassemia Trait in Pregnancy"
   },
   "isPartOf": {
     "@type": "WebSite",
@@ -278,298 +437,277 @@
 </script>
 </head>
 <body>
-  <header>
-    <div class="badge">
-      <span class="dot" aria-hidden="true"></span>
-      <span>Patient education • Alpha thalassemia trait in pregnancy</span>
-    </div>
-  </header>
+<a class="skip" href="#content">Skip to presentation</a>
+<div class="progress" aria-hidden="true"><i></i></div>
+<header><a aria-label="OpenMFM library" class="brand" href="/library">Open<span>MFM</span></a><button class="tools" id="refs">References &amp; print</button></header>
+<main id="content" tabindex="-1">
+<section class="slide" id="start" aria-labelledby="start-title">
+  <div class="topic">Patient guide</div>
+  <h1 tabindex="-1" id="start-title">Alpha thalassemia trait in pregnancy</h1>
+  <p class="lead">Most people with this trait feel well and have healthy pregnancies. A carrier result raises two separate questions.</p>
+  <div class="grid">
+<div>
+<div class="item"><h3>How is my health?</h3><p>Your blood count and iron levels help explain small red blood cells or mild anemia.</p></div>
+<div class="item"><h3>What could my baby inherit?</h3><p>Your partner’s gene pattern helps your care team estimate the chance of a more serious condition.</p></div></div>
+<div>
+<figure>
+<div class="figtitle">From one carrier result</div>
+<svg role="img" aria-label="A red blood cell and two paths from a carrier result to your blood tests and partner testing" viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="cell"><stop offset="0" stop-color="#9e3a52"/><stop offset=".45" stop-color="#d95d70"/><stop offset=".74" stop-color="#ff9d96"/><stop offset="1" stop-color="#b74259"/></radialGradient></defs><g transform="rotate(-15 97 88)"><ellipse cx="97" cy="88" rx="74" ry="44" fill="url(#cell)"/>
+  <path d="M61 88q36 28 74-1" fill="none" stroke="#95384b" stroke-width="4"/></g>
+  <path d="M96 138v20h198v-46 M96 158v22" class="line"/>
+  <text x="294" y="78" text-anchor="middle">Your baby</text>
+  <text x="294" y="102" class="minor" text-anchor="middle">Partner testing</text>
+  <text x="96" y="202" text-anchor="middle">Your health</text>
+  <text x="96" y="224" class="minor" text-anchor="middle">Blood tests</text></svg>
+<figcaption>The two sets of results answer different questions.</figcaption></figure></div></div>
+  <p class="citations">Sources <a href="https://www.ncbi.nlm.nih.gov/books/NBK1435/">GeneReviews</a> · <a href="https://www.ncbi.nlm.nih.gov/books/NBK602223/">TIF guidelines</a></p>
+</section>
 
-  <main>
-    <section class="deck" aria-label="Slide deck">
-      <!-- Slide 1 -->
-      <article class="slide active" id="slide-1" role="group" aria-roledescription="slide" aria-label="Slide 1">
-        <p class="kicker">Patient question</p>
-        <h1>What is alpha thalassemia trait?</h1>
+<section class="slide" id="trait" aria-labelledby="trait-title">
+  <div class="topic">Understanding your result</div>
+  <h2 tabindex="-1" id="trait-title">With trait, two of four gene copies work</h2>
+  <p class="lead">Hemoglobin is the protein in red blood cells that carries oxygen. Alpha-globin genes give the body instructions for making part of that protein.</p>
+  <div class="grid">
+<div>
+<div class="item"><h3>Why you may feel well</h3><p>Two working copies usually make enough alpha globin for daily life. The trait is common worldwide and is often found on routine blood work.</p></div>
+<div class="item"><h3>What may show up</h3><p>Your red cells may be smaller than average (microcytosis). Your hemoglobin level may also be mildly low (anemia).</p></div></div>
+<div>
+<figure>
+<div class="figtitle">From genes to oxygen delivery</div>
+<svg role="img" aria-label="Two chromosome tracks with two working copies total, beside a red blood cell containing hemoglobin" viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="trait-cell"><stop offset="0" stop-color="#9e3a52"/><stop offset=".45" stop-color="#d95d70"/><stop offset=".74" stop-color="#ff9d96"/><stop offset="1" stop-color="#b74259"/></radialGradient></defs><g transform="rotate(-15 97 88)"><ellipse cx="97" cy="88" rx="74" ry="44" fill="url(#trait-cell)"/>
+  <path d="M61 88q36 28 74-1" fill="none" stroke="#95384b" stroke-width="4"/></g>
+  <rect x="235" y="40" width="125" height="38" rx="19" fill="#263c50" stroke="#7092a7"/>
+  <rect x="249" y="46" width="42" height="26" rx="8" fill="#8aebd9" stroke="#8aebd9" />
+  <text x="270" y="65" text-anchor="middle" fill="#0a2830">α</text>
+  <rect x="304" y="46" width="42" height="26" rx="8" fill="#8aebd9" stroke="#8aebd9" />
+  <text x="325" y="65" text-anchor="middle" fill="#0a2830">α</text>
+  <rect x="235" y="92" width="125" height="38" rx="19" fill="#263c50" stroke="#7092a7"/>
+  <rect x="249" y="98" width="42" height="26" rx="8" fill="#26394b" stroke="#adc1d1" stroke-dasharray="4 3"/>
+  <text x="270" y="117" text-anchor="middle" fill="#eff8ff">−</text>
+  <rect x="304" y="98" width="42" height="26" rx="8" fill="#26394b" stroke="#adc1d1" stroke-dasharray="4 3"/>
+  <text x="325" y="117" text-anchor="middle" fill="#eff8ff">−</text>
+  <text x="94" y="160" text-anchor="middle">Red blood cell</text>
+  <text x="294" y="160" text-anchor="middle">Gene copies</text>
+  <text x="197" y="205" text-anchor="middle" class="minor">α = working copy     − = inactive copy</text></svg>
+<figcaption>One possible arrangement is shown. The next genetic question is how the copies are paired.</figcaption></figure></div></div>
+  <p class="citations">Sources <a href="https://www.ncbi.nlm.nih.gov/books/NBK1435/">GeneReviews</a></p>
+</section>
 
-        <div class="grid">
-          <div>
-            <p>
-              <span class="term">Alpha thalassemia trait</span> is an inherited (genetic) blood condition.
-            </p>
-            <p>
-              It affects how your body makes <span class="term">hemoglobin</span>.
-              Hemoglobin is the part of red blood cells that carries oxygen to you and your baby.
-            </p>
-            <p>
-              Most people have 4 working “alpha” hemoglobin genes.
-              With the <span class="term">trait</span>, 2 of those genes are not working.
-            </p>
+<section class="slide" id="iron" aria-labelledby="iron-title">
+  <div class="topic">Understanding your result</div>
+  <h2 tabindex="-1" id="iron-title">Small red cells alone cannot tell you whether you need iron</h2>
+  <p class="lead">Iron deficiency and alpha thalassemia trait can both cause small red cells. You can have both at the same time.</p>
+  <div class="grid">
+<div>
+<div class="item"><h3>What guides treatment?</h3><p>Keep taking prenatal vitamins as prescribed. Ask about your iron results before starting extra iron for anemia.</p></div>
+<div class="item"><h3>What confirms the trait?</h3><p>Routine hemoglobin testing can look normal. A DNA test can identify changes in the alpha-globin genes.</p></div></div>
+<div>
+<figure>
+<div class="figtitle">Reading your blood tests</div><dl><dt>Complete blood count (CBC)</dt><dd>How much hemoglobin is there? How large are the red cells?</dd><dt>Ferritin and iron studies</dt><dd>Are iron stores low?</dd><dt>Alpha-globin DNA test</dt><dd>Which gene changes do I carry?</dd></dl>
+<figcaption>Each test answers a different question. Bring copies of prior results if you have them.</figcaption></figure></div></div>
+  <p class="citations">Sources <a href="https://www.ncbi.nlm.nih.gov/books/NBK1435/">GeneReviews</a> · <a href="https://www.ncbi.nlm.nih.gov/books/NBK602223/">TIF guidelines</a></p>
+</section>
 
-            <div class="callout">
-              <p style="margin:0">
-                Many people with the trait feel well.
-                It often causes <span class="term">small red blood cells</span> and mild anemia.
-              </p>
-            </div>
+<section class="slide" id="patterns" aria-labelledby="patterns-title">
+  <div class="topic">Inheritance</div>
+  <h2 tabindex="-1" id="patterns-title">The same two changes can sit in different places</h2>
+  <p class="lead">You have two copies of chromosome 16, one from each genetic parent. Each chromosome usually carries two alpha-globin genes.</p>
+  <div class="grid">
+<div>
+<div class="item"><h3>Together on one chromosome (cis)</h3><p>A parent with this pattern can pass on a chromosome with two working copies or a chromosome with both copies inactive.</p></div>
+<div class="item"><h3>Split across chromosomes (trans)</h3><p>In this common deletion pattern, either chromosome a parent passes on carries one working copy.</p></div></div>
+<div>
+<figure>
+<div class="figtitle">Two ways to have trait</div>
+<svg role="img" aria-label="Cis has two working copies on one chromosome and zero on the other. Trans has one working copy on each chromosome." viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg">
+  <text x="95" y="44" text-anchor="middle">Together · cis</text>
+  <text x="296" y="44" text-anchor="middle">Split · trans</text>
+  <rect x="32" y="69" width="125" height="38" rx="19" fill="#263c50" stroke="#7092a7"/>
+  <rect x="46" y="75" width="42" height="26" rx="8" fill="#8aebd9" stroke="#8aebd9" />
+  <text x="67" y="94" text-anchor="middle" fill="#0a2830">α</text>
+  <rect x="101" y="75" width="42" height="26" rx="8" fill="#8aebd9" stroke="#8aebd9" />
+  <text x="122" y="94" text-anchor="middle" fill="#0a2830">α</text>
+  <rect x="32" y="121" width="125" height="38" rx="19" fill="#263c50" stroke="#7092a7"/>
+  <rect x="46" y="127" width="42" height="26" rx="8" fill="#26394b" stroke="#adc1d1" stroke-dasharray="4 3"/>
+  <text x="67" y="146" text-anchor="middle" fill="#eff8ff">−</text>
+  <rect x="101" y="127" width="42" height="26" rx="8" fill="#26394b" stroke="#adc1d1" stroke-dasharray="4 3"/>
+  <text x="122" y="146" text-anchor="middle" fill="#eff8ff">−</text>
+  <rect x="234" y="69" width="125" height="38" rx="19" fill="#263c50" stroke="#7092a7"/>
+  <rect x="248" y="75" width="42" height="26" rx="8" fill="#8aebd9" stroke="#8aebd9" />
+  <text x="269" y="94" text-anchor="middle" fill="#0a2830">α</text>
+  <rect x="303" y="75" width="42" height="26" rx="8" fill="#26394b" stroke="#adc1d1" stroke-dasharray="4 3"/>
+  <text x="324" y="94" text-anchor="middle" fill="#eff8ff">−</text>
+  <rect x="234" y="121" width="125" height="38" rx="19" fill="#263c50" stroke="#7092a7"/>
+  <rect x="248" y="127" width="42" height="26" rx="8" fill="#8aebd9" stroke="#8aebd9" />
+  <text x="269" y="146" text-anchor="middle" fill="#0a2830">α</text>
+  <rect x="303" y="127" width="42" height="26" rx="8" fill="#26394b" stroke="#adc1d1" stroke-dasharray="4 3"/>
+  <text x="324" y="146" text-anchor="middle" fill="#eff8ff">−</text>
+  <text x="200" y="205" text-anchor="middle" class="minor">Each horizontal bar is one chromosome.</text></svg>
+<figcaption>A baby inherits one chromosome from each genetic parent. Partner testing shows which pairings are possible.</figcaption></figure></div></div>
+  <p class="citations">Sources <a href="https://www.ncbi.nlm.nih.gov/books/NBK1435/">GeneReviews</a> · <a href="https://www.ncbi.nlm.nih.gov/books/NBK602223/">TIF guidelines</a></p>
+</section>
 
-            <div class="callout warn">
-              <p style="margin:0">
-                Important point: This can look like <span class="term">iron deficiency</span>.
-                Iron deficiency means your body is low on iron.
-                Alpha thalassemia trait means the genes for hemoglobin work differently.
-                The treatment is not the same.
-              </p>
-            </div>
-          </div>
+<section class="slide" id="chance" aria-labelledby="chance-title">
+  <div class="topic">Inheritance</div>
+  <h2 tabindex="-1" id="chance-title">Two cis carriers have a 1 in 4 chance of the major form in each pregnancy</h2>
+  <p class="lead">This example applies when both genetic parents carry two inactive copies together. Each square is equally likely.</p>
+  <div class="grid">
+<div>
+<div class="item"><h3>Read the grid</h3><p>The top row shows the chromosome one parent passes on. The left column shows the chromosome from the other parent.</p></div>
+<div class="item"><h3>Other pairings give different chances</h3><p>Three inactive copies usually cause hemoglobin H (HbH) disease. If the other parent has four working copies, the baby can inherit a carrier pattern but will have at least two working copies.</p></div></div>
+<div>
+<figure>
+<div class="figtitle">Example • both parents carry the cis pattern</div><table><caption class="sr">Possible results for a child of two cis carriers</caption><thead><tr><td></td><th scope="col">αα</th><th scope="col">−−</th></tr></thead><tbody><tr><th scope="row">αα</th><td>4 working<br><b>Usual pattern</b></td><td>2 working<br><b>Trait</b></td></tr><tr><th scope="row">−−</th><td>2 working<br><b>Trait</b></td><td class="warm">0 working<br><b>Major form</b></td></tr></tbody></table>
+<figcaption>Each pregnancy has a fresh chance: 1 in 4 usual pattern, 2 in 4 trait, 1 in 4 major form.</figcaption></figure></div></div>
+  <p class="citations">Sources <a href="https://www.ncbi.nlm.nih.gov/books/NBK1435/">GeneReviews</a> · <a href="https://www.ncbi.nlm.nih.gov/books/NBK602223/">TIF guidelines</a></p>
+</section>
 
-          <aside class="panel">
-            <h3>Quick definitions</h3>
-            <p class="small"><span class="term">Trait</span> = a mild gene change you can carry.</p>
-            <p class="small"><span class="term">Anemia</span> = lower hemoglobin than expected.</p>
-            <p class="small"><span class="term">Microcytosis</span> = red blood cells are smaller than average.</p>
-            <div class="footer-note">
-              This is common worldwide and often discovered on routine blood tests.
-            </div>
-          </aside>
-        </div>
-      </article>
+<section class="slide" id="testing" aria-labelledby="testing-title">
+  <div class="topic">Your care plan</div>
+  <h2 tabindex="-1" id="testing-title">Your family’s results guide the next test</h2>
+  <p class="lead">Ask whether the baby’s other genetic parent needs alpha-globin DNA testing. The exact changes help your team interpret the result.</p>
+  <div class="grid">
+<div>
+<div class="item"><h3>If you want a fetal diagnosis</h3><p>Chorionic villus sampling (CVS) tests a small sample of placenta. Amniocentesis tests fluid around the baby. The sample can be checked for the family’s gene changes.</p></div>
+<div class="item"><h3>You decide with your care team</h3><p>Ask how timing, procedure risks and the information you would gain fit your goals.</p></div></div>
+<div>
+<figure>
+<div class="figtitle">After partner testing</div>
+<div class="item"><h3>Low chance of severe disease</h3><p>Routine prenatal care usually continues.</p></div>
+<div class="item"><h3>Increased chance</h3><p>Meet with genetics or maternal-fetal medicine (MFM) to discuss fetal testing and targeted scans.</p></div>
+<div class="item"><h3>Partner unavailable or result unclear</h3><p>Ask a genetic counselor what can still be learned and which options are available.</p></div>
+<figcaption>A missing result leaves uncertainty. Your team can help you plan around it.</figcaption></figure></div></div>
+  <p class="citations">Sources <a href="https://www.ncbi.nlm.nih.gov/books/NBK1435/">GeneReviews</a> · <a href="https://www.ncbi.nlm.nih.gov/books/NBK602223/">TIF guidelines</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8714716/">Perinatal consensus</a></p>
+</section>
 
-      <!-- Slide 2 -->
-      <article class="slide" id="slide-2" role="group" aria-roledescription="slide" aria-label="Slide 2">
-        <p class="kicker">Patient question</p>
-        <h2>Why does it matter in pregnancy?</h2>
+<section class="slide" id="ultrasound" aria-labelledby="ultrasound-title">
+  <div class="topic">Targeted monitoring</div>
+  <h2 tabindex="-1" id="ultrasound-title">Ultrasound checks for signs of fetal anemia</h2>
+  <p class="lead">In the major form, also called hemoglobin Bart’s syndrome, the baby makes too little functional hemoglobin. Severe anemia reduces oxygen delivery.</p>
+  <div class="grid">
+<div>
+<div class="item"><h3>Blood flow in the brain</h3><p>Doppler ultrasound measures blood speed in the middle cerebral artery (MCA). Faster flow can signal anemia.</p></div>
+<div class="item"><h3>Fluid buildup (hydrops)</h3><p>The team looks for fluid under the skin, around the lungs or heart, and in the belly. Ask what each scan will assess and when to return.</p></div></div>
+<div>
+<figure>
+<div class="figtitle">What the specialist looks for</div>
+<svg role="img" aria-label="Schematic of a fetal head with the middle cerebral artery highlighted, and a curled fetus with the chest and belly marked as sites of fluid assessment" viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg"><ellipse cx="91" cy="88" rx="61" ry="48" fill="#243b4c" stroke="#a1c5d6" stroke-width="2"/>
+  <path d="M91 41v94" stroke="#627889" stroke-dasharray="4 5"/>
+  <path d="M86 99q14-12 30-17l18-9m-19 10 10 4" class="line"/><circle cx="117" cy="82" r="6" fill="#ffce8a"/><circle cx="280" cy="61" r="29" fill="#294354" stroke="#a1c5d6" stroke-width="2"/>
+  <path d="M277 91q-38 12-31 48 6 33 48 29 27-2 34-23 3-13-13-14l-18 2q12-26-7-36z" fill="#294354" stroke="#a1c5d6" stroke-width="2"/><circle cx="274" cy="112" r="8" fill="none" stroke="#8aebd9" stroke-width="3"/><ellipse cx="272" cy="139" rx="11" ry="7" fill="none" stroke="#8aebd9" stroke-width="3"/>
+  <text x="90" y="198" text-anchor="middle">Brain artery</text>
+  <text x="284" y="198" text-anchor="middle">Chest and belly</text></svg>
+<figcaption>These are teaching illustrations. Scans assess how the baby is doing. Genetic testing can establish the inherited condition.</figcaption></figure></div></div>
+  <p class="citations">Sources <a href="https://www.ncbi.nlm.nih.gov/books/NBK602223/">TIF guidelines</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8714716/">Perinatal consensus</a></p>
+</section>
 
-        <div class="grid">
-          <div>
-            <p>
-              For most pregnant patients, alpha thalassemia trait does <strong>not</strong> cause major problems.
-              We still pay attention to anemia and your overall health.
-            </p>
+<section class="slide" id="specialist" aria-labelledby="specialist-title">
+  <div class="topic">If the major form is confirmed</div>
+  <h2 tabindex="-1" id="specialist-title">A fetal therapy team can explain your choices</h2>
+  <p class="lead">This conversation is for families facing a confirmed severe diagnosis. A fetal medicine specialist and a pediatric blood specialist can meet with you together.</p>
+  <div class="grid">
+<div>
+<div class="item"><h3>What to weigh</h3><p>Untreated hydrops can threaten both your health and the baby’s life. Fetal transfusions can allow survival. Outcomes vary, and surviving children generally need regular transfusions and treatment for iron buildup.</p></div>
+<div class="item"><h3>What matters to you?</h3><p>Ask about expected outcomes, access to treatment and support for your family.</p></div></div>
+<div>
+<figure>
+<div class="figtitle">Choices to discuss</div>
+<div class="item"><h3>Continue with fetal transfusions</h3><p>An experienced center can give the baby blood before birth and coordinate specialized newborn care.</p></div>
+<div class="item"><h3>Continue with close monitoring</h3><p>Discuss the risks of continuing without transfusions, monitoring for maternal complications and planning care for the baby.</p></div>
+<div class="item"><h3>End the pregnancy</h3><p>Ask about available options and support.</p></div>
+<figcaption>Your team should explain the risks and benefits of each option and listen to your priorities.</figcaption></figure></div></div>
+  <p class="citations">Sources <a href="https://www.ncbi.nlm.nih.gov/books/NBK602223/">TIF guidelines</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8714716/">Perinatal consensus</a></p>
+</section>
 
-            <p>
-              The main reason it matters is the baby’s genetic risk.
-              This depends on whether the baby’s father is also a carrier.
-            </p>
+<section class="slide" id="visits" aria-labelledby="visits-title">
+  <div class="topic">Everyday care</div>
+  <h2 tabindex="-1" id="visits-title">Bring your results and know when to seek care</h2>
+  <p class="lead">Share any family history of anemia or thalassemia. Keep your lab and ultrasound appointments so your team can adjust the plan as results arrive.</p>
+  <div class="grid">
+<div>
+<div class="item"><h3>At routine prenatal visits</h3><p>Your team follows your anemia and blood pressure. If gestational diabetes develops, they will treat it and monitor the baby’s growth as indicated.</p></div><aside><strong>Seek medical care immediately</strong><p>Chest pain, trouble breathing, fainting, or sudden overwhelming tiredness can be urgent in pregnancy.</p></aside></div>
+<div>
+<figure>
+<div class="figtitle">Your appointment checklist</div><ul><li>Bring your CBC, iron studies and genetic test report.</li><li>Arrange partner testing and ask who will explain both results.</li><li>Review your prenatal vitamin and any additional iron.</li><li>Write down the date and purpose of the next visit.</li></ul>
+<figcaption>Keep a copy of the gene results for future pregnancies.</figcaption></figure></div></div>
+  <p class="citations">Sources <a href="https://www.ncbi.nlm.nih.gov/books/NBK1435/">GeneReviews</a> · <a href="https://www.ncbi.nlm.nih.gov/books/NBK602223/">TIF guidelines</a> · <a href="https://www.cdc.gov/hearher/maternal-warning-signs/index.html">Maternal warning signs</a></p>
+</section>
 
-            <div class="callout">
-              <p style="margin:0">
-                If <strong>both</strong> parents carry certain alpha-thalassemia gene changes,
-                the baby can inherit a severe form called
-                <span class="term">alpha thalassemia major</span>
-                (also called <span class="term">Hemoglobin Bart’s</span>).
-              </p>
-            </div>
+<section class="slide" id="questions" aria-labelledby="questions-title">
+  <div class="topic">Visit guide</div>
+  <h2 tabindex="-1" id="questions-title">Questions to ask your MFM specialist</h2>
+  <p class="lead">Start with the question that matters most to you. You can revisit each decision as new information arrives.</p>
+  <div class="grid">
+<div>
+<div class="item"><h3>A good place to start</h3><p>“Can you show me our two gene patterns and explain what our baby could inherit?”</p></div></div>
+<div>
+<figure>
+<div class="figtitle">Take these questions to your visit</div><ul><li>What did my iron studies show? Do I need extra iron?</li><li>Has my partner been tested? Do either of us need DNA testing?</li><li>What could CVS or amniocentesis tell us in this pregnancy?</li><li>How often do I need ultrasound, and what are you checking?</li><li>What is our next step, and who will call with the result?</li></ul>
+<figcaption>Use Print in the references panel to save a copy of this guide.</figcaption></figure></div></div>
+  <p class="citations">Sources <a href="https://www.ncbi.nlm.nih.gov/books/NBK1435/">GeneReviews</a> · <a href="https://www.ncbi.nlm.nih.gov/books/NBK602223/">TIF guidelines</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8714716/">Perinatal consensus</a></p>
+</section>
 
-            <p>
-              In alpha thalassemia major, the fetus cannot make functional alpha hemoglobin.
-              That can cause <span class="term">severe fetal anemia</span> (very low fetal hemoglobin).
-              It can lead to <span class="term">hydrops</span>, which means abnormal fluid buildup in the fetus.
-            </p>
+<section class="slide" id="sources" aria-labelledby="sources-title">
+  <div class="topic">Further reading</div>
+  <h2 tabindex="-1" id="sources-title">Evidence behind this guide</h2>
+  <p class="lead">These sources cover inheritance, pregnancy testing, specialist care and symptoms that need urgent assessment.</p>
+  <div class="grid">
+<div><ol class="bibliography"><li><a href="https://www.ncbi.nlm.nih.gov/books/NBK1435/">GeneReviews</a><p>Tamary H, Dgany O. Alpha-Thalassemia. In: GeneReviews®. University of Washington, Seattle. NCBI Bookshelf, NBK1435.</p></li><li><a href="https://www.ncbi.nlm.nih.gov/books/NBK602223/">TIF guidelines</a><p>Amid A, Lal A, Coates TD, Fucharoen S, eds. Guidelines for the Management of α-Thalassaemia. Thalassaemia International Federation, 2023. See the prenatal management and genetic counseling chapters.</p></li><li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8714716/">Perinatal consensus</a><p>MacKenzie TC, et al. Consensus statement for the perinatal management of patients with α thalassemia major. Blood Advances. 2021;5(24):5636–5639. doi:10.1182/bloodadvances.2021005916.</p></li><li><a href="https://www.cdc.gov/hearher/maternal-warning-signs/index.html">Maternal warning signs</a><p>Centers for Disease Control and Prevention. Urgent Maternal Warning Signs and Symptoms. Hear Her Campaign, 2024.</p></li></ol></div>
+<div><aside><strong>About this patient guide</strong><p>This material supports discussion with your own care team. Your test results, your baby’s findings and your preferences guide individual medical decisions.</p><p>OpenMFM · Atlanta Perinatal Associates</p></aside></div></div>
 
-            <p>
-              The good news: we can usually define the baby’s risk early.
-              We can monitor closely and act based on results.
-            </p>
-          </div>
-
-          <aside class="panel">
-            <h3>Why partner testing matters</h3>
-            <ul class="small">
-              <li>If the father is not a carrier: the baby will not have the severe form.</li>
-              <li>If the father is a carrier: we check which gene changes each parent has.</li>
-              <li>Some combinations create a higher fetal risk. Some do not.</li>
-            </ul>
-
-            <div class="footer-note">
-              Our plan is always tailored to your exact test results.
-            </div>
-          </aside>
-        </div>
-      </article>
-
-      <!-- Slide 3 -->
-      <article class="slide" id="slide-3" role="group" aria-roledescription="slide" aria-label="Slide 3">
-        <p class="kicker">Patient question</p>
-        <h2>What happens next?</h2>
-
-        <div class="grid">
-          <div>
-            <p>
-              Next steps focus on confirming the diagnosis and checking the baby’s risk.
-              We do this step by step.
-            </p>
-
-            <div class="panel" style="margin-top:14px">
-              <h3>Step 1: Confirm what is causing the anemia</h3>
-              <ul>
-                <li>We review your complete blood count (CBC) and iron studies.</li>
-                <li>We may use special blood tests (like hemoglobin testing) and, when needed, DNA testing.</li>
-                <li>This helps us separate alpha thalassemia trait from iron deficiency.</li>
-              </ul>
-            </div>
-
-            <div class="panel" style="margin-top:14px">
-              <h3>Step 2: Test the baby’s father</h3>
-              <ul>
-                <li>This is the most important next step for fetal risk.</li>
-                <li>If he is a carrier, we look at the specific gene pattern in both parents.</li>
-              </ul>
-            </div>
-
-            <div class="panel" style="margin-top:14px">
-              <h3>Step 3: Decide if the fetus needs targeted monitoring or testing</h3>
-              <ul>
-                <li>If fetal risk is low, routine prenatal care usually continues.</li>
-                <li>If fetal risk is higher, we may offer genetic testing of the pregnancy:
-                  <span class="term">CVS</span> (placenta test) or <span class="term">amniocentesis</span> (amniotic fluid test).</li>
-                <li>If the fetus could be anemic, we use ultrasound to look for early signs.</li>
-              </ul>
-            </div>
-          </div>
-
-          <aside class="panel">
-            <h3>Ultrasound tools we may use</h3>
-            <p class="small">
-              <span class="term">Doppler ultrasound</span> measures blood flow.
-              One helpful measure is the
-              <span class="term">MCA Doppler</span> (a blood-flow check in a fetal brain artery).
-              It can help us estimate whether the fetus may be anemic.
-            </p>
-            <p class="small">
-              We also watch for signs of <span class="term">hydrops</span> (fluid buildup),
-              such as fluid around the lungs, heart, belly, or under the skin.
-            </p>
-
-            <div class="callout">
-              <p style="margin:0" class="small">
-                If extra monitoring is needed, we will explain the schedule and what we are looking for each visit.
-              </p>
-            </div>
-          </aside>
-        </div>
-      </article>
-
-      <!-- Slide 4 -->
-      <article class="slide" id="slide-4" role="group" aria-roledescription="slide" aria-label="Slide 4">
-        <p class="kicker">Patient question</p>
-        <h2>What can I do?</h2>
-
-        <div class="grid">
-          <div>
-            <p>
-              You are not alone in this.
-              Our goal is a calm, clear plan and close teamwork.
-            </p>
-
-            <div class="panel" style="margin-top:14px">
-              <h3>Your action checklist</h3>
-              <ul class="two-col">
-                <li><strong>Ask for partner testing.</strong> This guides nearly everything else.</li>
-                <li><strong>Take prenatal vitamins</strong> as prescribed.</li>
-                <li><strong>Do not take iron</strong> unless your iron tests show you need it.</li>
-                <li><strong>Keep appointments</strong> for labs and ultrasounds.</li>
-                <li><strong>Tell us symptoms</strong> like new shortness of breath, chest pain, fainting, or severe fatigue.</li>
-                <li><strong>Share family history</strong> of anemia or thalassemia if you know it.</li>
-              </ul>
-            </div>
-
-            <div class="callout">
-              <p style="margin:0">
-                If you have alpha thalassemia trait, we will also watch your pregnancy the usual way.
-                We may pay extra attention to anemia and blood pressure.
-                If you develop gestational diabetes, we will treat it and monitor your baby’s growth.
-              </p>
-            </div>
-
-            <div class="callout warn">
-              <p style="margin:0">
-                Reassurance: Most people with alpha thalassemia trait have healthy pregnancies.
-                The key is getting the right tests so we can choose the right level of monitoring.
-              </p>
-            </div>
-          </div>
-
-          <aside class="panel">
-            <h3>Questions you can ask at your visit</h3>
-            <ul class="small">
-              <li>What did my iron studies show?</li>
-              <li>Has the baby’s father been tested? What were his results?</li>
-              <li>Do we need DNA testing to define the gene pattern?</li>
-              <li>Do you recommend CVS or amniocentesis in my case?</li>
-              <li>How often will I need ultrasounds, and what are we checking?</li>
-            </ul>
-
-            <div class="footer-note">
-              We will revisit the plan as new information comes in.
-              You will always be part of each decision.
-            </div>
-          </aside>
-        </div>
-      </article>
-
-      <div class="nav" aria-label="Slide navigation">
-        <button class="btn" id="prevBtn" type="button" aria-label="Previous slide">← Back</button>
-
-        <div class="progress" aria-label="Slide progress">
-          <span id="counter">1 / 4</span>
-          <span class="pip on" aria-hidden="true"></span>
-          <span class="pip" aria-hidden="true"></span>
-          <span class="pip" aria-hidden="true"></span>
-          <span class="pip" aria-hidden="true"></span>
-        </div>
-
-        <button class="btn primary" id="nextBtn" type="button" aria-label="Next slide">Next →</button>
-      </div>
-    </section>
-
-    <p class="small" style="margin-top:14px">
-      This deck is educational and does not replace personalized medical advice.
-      Your care plan depends on your lab results, partner testing, and ultrasound findings.
-    </p>
-  </main>
-
-  <script>
-    (function(){
-      const slides = Array.from(document.querySelectorAll('.slide'));
-      const prevBtn = document.getElementById('prevBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      const counter = document.getElementById('counter');
-      const pips = Array.from(document.querySelectorAll('.pip'));
-      let idx = 0;
-
-      function render(){
-        slides.forEach((s,i)=>s.classList.toggle('active', i===idx));
-        counter.textContent = (idx+1) + " / " + slides.length;
-        pips.forEach((p,i)=>p.classList.toggle('on', i===idx));
-        prevBtn.disabled = idx===0;
-        nextBtn.disabled = idx===slides.length-1;
-        prevBtn.style.opacity = idx===0 ? 0.6 : 1;
-        nextBtn.style.opacity = idx===slides.length-1 ? 0.6 : 1;
-      }
-
-      function next(){ if(idx < slides.length-1){ idx++; render(); } }
-      function prev(){ if(idx > 0){ idx--; render(); } }
-
-      nextBtn.addEventListener('click', next);
-      prevBtn.addEventListener('click', prev);
-
-      window.addEventListener('keydown', (e)=>{
-        if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ next(); }
-        if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ prev(); }
-        if(e.key === 'Home'){ idx = 0; render(); }
-        if(e.key === 'End'){ idx = slides.length-1; render(); }
-      });
-
-      render();
-    })();
-  </script>
-
-
-
-<!-- openmfm-footer-injected -->
-<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
-  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
-</div>
+</section>
+</main>
+<footer><span class="practice">Atlanta Perinatal Associates</span><nav class="controls tools" aria-label="Slide navigation"><button id="previous">← Back</button><span id="counter" aria-live="polite" aria-atomic="true"></span><button class="next" id="next">Next →</button></nav></footer>
+<dialog aria-labelledby="panel-title"><h2 id="panel-title">References</h2><ol class="bibliography"><li><a href="https://www.ncbi.nlm.nih.gov/books/NBK1435/">GeneReviews</a><p>Tamary H, Dgany O. Alpha-Thalassemia. In: GeneReviews®. University of Washington, Seattle. NCBI Bookshelf, NBK1435.</p></li><li><a href="https://www.ncbi.nlm.nih.gov/books/NBK602223/">TIF guidelines</a><p>Amid A, Lal A, Coates TD, Fucharoen S, eds. Guidelines for the Management of α-Thalassaemia. Thalassaemia International Federation, 2023. See the prenatal management and genetic counseling chapters.</p></li><li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8714716/">Perinatal consensus</a><p>MacKenzie TC, et al. Consensus statement for the perinatal management of patients with α thalassemia major. Blood Advances. 2021;5(24):5636–5639. doi:10.1182/bloodadvances.2021005916.</p></li><li><a href="https://www.cdc.gov/hearher/maternal-warning-signs/index.html">Maternal warning signs</a><p>Centers for Disease Control and Prevention. Urgent Maternal Warning Signs and Symptoms. Hear Her Campaign, 2024.</p></li></ol><button id="close" autofocus>Close</button><button id="print">Print guide</button></dialog>
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const counter = document.querySelector('#counter');
+const previous = document.querySelector('#previous');
+const next = document.querySelector('#next');
+const panel = document.querySelector('dialog');
+let current = 0;
+function show(focusHeading) {
+  const matched = slides.findIndex(slide => '#' + slide.id === location.hash);
+  current = Math.max(0, matched);
+  slides.forEach((slide, index) => { slide.hidden = index !== current; });
+  previous.disabled = current === 0;
+  next.disabled = current === slides.length - 1;
+  counter.textContent = (current + 1) + ' / ' + slides.length;
+  document.querySelector('.progress i').style.width = ((current + 1) / slides.length * 100) + '%';
+  if (focusHeading) slides[current].querySelector('h1,h2').focus({preventScroll:true});
+  window.scrollTo(0, 0);
+}
+function go(index) {
+  if (index >= 0 && index < slides.length) location.hash = slides[index].id;
+}
+document.querySelector('.skip').onclick = event => { event.preventDefault(); slides[current].querySelector('h1,h2').focus(); };
+previous.onclick = () => go(current - 1);
+next.onclick = () => go(current + 1);
+window.addEventListener('hashchange', () => show(true));
+document.querySelector('#refs').onclick = () => panel.showModal();
+document.querySelector('#close').onclick = () => panel.close();
+document.querySelector('#print').onclick = () => { panel.close(); window.print(); };
+document.addEventListener('keydown', event => {
+  if (panel.open || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.target.closest('input,textarea,select')) return;
+  if (event.key === ' ' && event.target.closest('button,a')) return;
+  const targets = {ArrowRight:current + 1, ' ':current + 1, ArrowLeft:current - 1, Home:0, End:slides.length - 1};
+  if (Object.hasOwn(targets, event.key)) { event.preventDefault(); go(targets[event.key]); }
+});
+const main = document.querySelector('main');
+let start = null;
+main.addEventListener('touchstart', event => {
+  start = event.touches.length === 1 ? event.touches[0] : null;
+}, {passive:true});
+main.addEventListener('touchcancel', () => { start = null; });
+main.addEventListener('touchend', event => {
+  if (!start) return;
+  const dx = event.changedTouches[0].clientX - start.clientX;
+  const dy = event.changedTouches[0].clientY - start.clientY;
+  start = null;
+  if (Math.abs(dx) > 48 && Math.abs(dx) > 1.6 * Math.abs(dy)) go(current + (dx < 0 ? 1 : -1));
+}, {passive:true});
+document.documentElement.classList.add('enhanced');
+show(false);
+</script>
 </body>
 </html>
