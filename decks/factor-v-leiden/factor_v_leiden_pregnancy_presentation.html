@@ -1,742 +1,308 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pregnancy and Factor V Leiden: Your Guide</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f5f5;
-            overflow-x: hidden;
-        }
-
-        .presentation {
-            max-width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .slide {
-            width: 100vw;
-            height: 100vh;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 60px;
-            position: relative;
-            background: white;
-        }
-
-        .slide.active {
-            display: flex;
-        }
-
-        .slide-content {
-            max-width: 900px;
-            width: 100%;
-            z-index: 2;
-        }
-
-        h1 {
-            color: #2c5f7c;
-            font-size: 3em;
-            margin-bottom: 30px;
-            line-height: 1.2;
-        }
-
-        h2 {
-            color: #2c5f7c;
-            font-size: 2.5em;
-            margin-bottom: 25px;
-            border-bottom: 3px solid #5eb3d6;
-            padding-bottom: 15px;
-        }
-
-        h3 {
-            color: #3a7a9a;
-            font-size: 1.6em;
-            margin: 25px 0 15px 0;
-        }
-
-        p, li {
-            font-size: 1.3em;
-            line-height: 1.7;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .definition {
-            background: #e8f4f8;
-            border-left: 5px solid #5eb3d6;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-
-        .reassurance {
-            background: #d4edda;
-            border-left: 5px solid #28a745;
-            padding: 20px;
-            margin: 25px 0;
-            border-radius: 5px;
-            font-weight: 500;
-        }
-
-        .important {
-            background: #fff3cd;
-            border-left: 5px solid #ffc107;
-            padding: 20px;
-            margin: 25px 0;
-            border-radius: 5px;
-        }
-
-        .key-point {
-            background: #f8f9fa;
-            padding: 15px 20px;
-            margin: 15px 0;
-            border-radius: 8px;
-            border-left: 4px solid #5eb3d6;
-        }
-
-        ul {
-            margin-left: 30px;
-            margin-bottom: 20px;
-        }
-
-        li {
-            margin-bottom: 12px;
-        }
-
-        .navigation {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-        }
-
-        button {
-            background: #2c5f7c;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.1em;
-            margin: 0 5px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background: #3a7a9a;
-        }
-
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .slide-number {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            color: #666;
-            font-size: 1.1em;
-            z-index: 1000;
-        }
-
-        .title-slide {
-            background: linear-gradient(135deg, #2c5f7c 0%, #5eb3d6 100%);
-        }
-
-        .title-slide h1 {
-            color: white;
-            font-size: 3.5em;
-            text-align: center;
-        }
-
-        .title-slide p {
-            color: white;
-            font-size: 1.5em;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .highlight {
-            color: #2c5f7c;
-            font-weight: 600;
-        }
-
-        .symptom-box {
-            background: white;
-            border: 2px solid #dc3545;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-
-        .team-member {
-            background: #f8f9fa;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border-left: 4px solid #5eb3d6;
-        }
-
-        @media print {
-            .slide {
-                page-break-after: always;
-                display: flex !important;
-                height: auto;
-                min-height: 100vh;
-            }
-            .navigation, .slide-number {
-                display: none;
-            }
-        }
-    /* 2026 refresh overrides */
-    body {
-        font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
-        background:
-            radial-gradient(circle at top left, rgba(94,179,214,0.18), transparent 24%),
-            radial-gradient(circle at 85% 12%, rgba(40,167,69,0.12), transparent 18%),
-            linear-gradient(180deg, #eef4f8 0%, #dfeaf1 100%);
-    }
-    .slide,
-    .definition,
-    .reassurance,
-    .important,
-    .key-point,
-    .navigation {
-        border-radius: 18px;
-    }
-    .slide {
-        box-shadow: 0 18px 34px rgba(0,0,0,0.14);
-    }
-    h1, h2 { letter-spacing: -0.03em; text-wrap: balance; }
-</style>
-
-
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factor V Leiden in pregnancy | OpenMFM patient guide</title>
 <!-- openmfm-seo-injected -->
 <link rel="canonical" href="https://openmfm.org/decks/factor-v-leiden/factor_v_leiden_pregnancy_presentation.html">
-<meta name="description" content="Explains Factor V Leiden thrombophilia in pregnancy: VTE risk stratification, anticoagulation indications, LMWH dosing, and postpartum thromboprophylaxis guidance.">
-<meta name="author" content="Dr. Chukwuma Onyeije, MD">
-<meta name="keywords" content="Thrombophilia, Blood Clots, Patient Education">
+<meta name="description" content="A patient guide to Factor V Leiden, blood clot warning signs, heparin, delivery planning and recovery after birth.">
+<meta property="og:title" content="Factor V Leiden in pregnancy | OpenMFM patient guide">
+<meta property="og:description" content="Understand your result, recognize a clot and plan for birth and recovery.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://openmfm.org/decks/factor-v-leiden/factor_v_leiden_pregnancy_presentation.html">
-<meta property="og:title" content="Factor V Leiden in Pregnancy | OpenMFM">
-<meta property="og:description" content="Explains Factor V Leiden thrombophilia in pregnancy: VTE risk stratification, anticoagulation indications, LMWH dosing, and postpartum thromboprophylaxis guidance.">
 <meta property="og:image" content="https://openmfm.org/og-image.png">
-<meta property="og:site_name" content="OpenMFM">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Factor V Leiden in Pregnancy | OpenMFM">
-<meta name="twitter:description" content="Explains Factor V Leiden thrombophilia in pregnancy: VTE risk stratification, anticoagulation indications, LMWH dosing, and postpartum thromboprophylaxis guidance.">
-<meta name="twitter:image" content="https://openmfm.org/og-image.png">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "MedicalWebPage",
-  "name": "Factor V Leiden in Pregnancy",
-  "description": "Explains Factor V Leiden thrombophilia in pregnancy: VTE risk stratification, anticoagulation indications, LMWH dosing, and postpartum thromboprophylaxis guidance.",
-  "url": "https://openmfm.org/decks/factor-v-leiden/factor_v_leiden_pregnancy_presentation.html",
-  "author": {
-    "@type": "Person",
-    "name": "Dr. Chukwuma Onyeije, MD",
-    "jobTitle": "Maternal-Fetal Medicine Specialist",
-    "worksFor": {
-      "@type": "Organization",
-      "name": "Atlanta Perinatal Associates"
-    }
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "OpenMFM",
-    "url": "https://openmfm.org",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://openmfm.org/og-image.png"
-    }
-  },
-  "dateModified": "2026-07-14",
-  "inLanguage": "en",
-  "audience": {
-    "@type": "MedicalAudience",
-    "audienceType": "Patients and Healthcare Providers"
-  },
-  "about": {
-    "@type": "MedicalCondition",
-    "name": "Factor V Leiden in Pregnancy"
-  },
-  "isPartOf": {
-    "@type": "WebSite",
-    "name": "OpenMFM",
-    "url": "https://openmfm.org"
-  },
-  "keywords": "Thrombophilia, Blood Clots, Patient Education"
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"LearningResource","name":"Factor V Leiden in pregnancy","learningResourceType":"Patient education presentation","inLanguage":"en","publisher":{"@type":"Organization","name":"OpenMFM"}}</script>
+<style>
+:root {
+  color-scheme:dark;
+  --bg:#0d1117; --surface:#161e29; --ink:#e6edf3; --soft:#bccad7;
+  --line:#344454; --accent:#68e3cf; --blue:#8fc7ff;
+  font-family:"Segoe UI",system-ui,sans-serif;
 }
-</script>
+* {box-sizing:border-box}
+body {margin:0;background:radial-gradient(ellipse at 90% 0%,#16313d 0,transparent 52rem),var(--bg);color:var(--ink);line-height:1.5}
+a {color:var(--blue);text-underline-offset:.2em}
+a:focus-visible,button:focus-visible,h1:focus-visible,h2:focus-visible {outline:3px solid #ffda88;outline-offset:3px}
+header,main,footer {width:min(100% - 2.25rem,72rem);margin-inline:auto}
+header,footer,nav,.tools {display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+header {padding:.85rem 0;border-bottom:1px solid var(--line);justify-content:space-between}
+.brand {color:var(--ink);font-weight:750;font-size:1.18rem;text-decoration:none}
+.brand span {color:var(--accent)}
+button,.tools a {display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.5rem .9rem;border:1px solid var(--line);border-radius:.55rem;background:var(--surface);color:var(--ink);font:inherit;text-decoration:none;cursor:pointer}
+button:hover,.tools a:hover {border-color:var(--accent)}
+button:disabled {opacity:.4;cursor:default}
+.primary {background:var(--accent);color:#09241f;font-weight:700}
+main {padding-block:clamp(1.4rem,5vh,4rem)}
+.slide {padding-block:.5rem 1rem}
+.slide + .slide {border-top:1px solid var(--line)}
+.ready .slide {border:0}
+.eyebrow {margin:0 0 .7rem;color:var(--accent);font-size:.84rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+h1,h2 {font-family:"Space Grotesk","Segoe UI",sans-serif;max-width:26ch;margin:0;line-height:1.08;font-size:clamp(2rem,4.25vw,3.85rem);letter-spacing:-.035em;text-wrap:balance}
+.lead {max-width:70ch;color:var(--soft);font-size:clamp(1.08rem,1.6vw,1.36rem);margin:.95rem 0 1.5rem}
+.cards {display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:1rem}
+article {padding:clamp(1rem,2.1vw,1.65rem);background:var(--surface);border:1px solid var(--line);border-top:3px solid #498c90;border-radius:.8rem}
+h3 {margin:0 0 .55rem;font-size:1.23rem;line-height:1.25}
+article p {margin:0;color:var(--soft);font-size:1.05rem}
+.urgent {border-top-color:#ffcd76}.emergency {border-top-color:#ffa297}
+.urgent h3 {color:#ffcd76}.emergency h3 {color:#ffa297}
+.figure {display:block;font-size:2rem;color:var(--accent);margin-bottom:.5rem}
+#start .cards,#clotting .cards,#recovery .cards {gap:0;border-block:1px solid var(--line)}
+#start article,#clotting article,#recovery article {border:0;border-radius:0;background:transparent;padding-inline:1rem}
+#start article + article,#clotting article + article,#recovery article + article {border-left:1px solid var(--line)}
+.citations,.paper,footer {font-size:.875rem;color:var(--soft)}
+.citations {margin:1.4rem 0 0}
+.references {padding-left:1.4rem;max-width:83ch}
+.references li {padding:.3rem 0 .5rem .3rem}
+.note,.write {border-left:3px solid var(--accent);padding:.65rem 1rem;background:var(--surface)}
+footer {justify-content:space-between;border-top:1px solid var(--line);padding:1rem 0}
+progress {position:fixed;z-index:2;top:0;left:0;width:100%;height:4px;border:0;appearance:none;background:var(--line);color:var(--accent)}
+progress::-webkit-progress-bar {background:var(--line)}
+progress::-webkit-progress-value {background:var(--accent)}
+progress::-moz-progress-bar {background:var(--accent)}
+dialog {width:min(38rem,94vw);max-height:85dvh;overflow:auto;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:1rem;padding:1.5rem}
+dialog::backdrop {background:#000b}
+dialog h2 {font-size:1.8rem}
+[hidden],.paper,.js-only {display:none}
+.ready .js-only {display:flex}
+.skip {position:absolute;left:1rem;top:-5rem;background:var(--bg);padding:.5rem;z-index:3}
+.skip:focus {top:1rem}
+@media(max-width:700px){
+  header,main,footer {width:calc(100% - 1.6rem)}
+  header,.tools,nav {gap:.35rem}
+  .tools button,.tools a {font-size:.88rem;padding:.4rem .6rem}
+  .cards {grid-auto-flow:row;grid-template-columns:1fr;gap:.65rem}
+  #start article + article,#clotting article + article,#recovery article + article {border-left:0;border-top:1px solid var(--line)}
+  footer {align-items:flex-start}
+  main {padding-block:1.4rem .8rem}
+}
+@media(prefers-reduced-motion:reduce){* {scroll-behavior:auto!important}}
+@page {size:letter landscape;margin:.55in}
+@media print {
+  :root {color-scheme:light;--ink:#101820;--soft:#263540;--line:#a7b2b8;--accent:#115c53;--blue:#174c70;--surface:white}
+  body {background:white;font-size:12pt}
+  header,footer,progress,.ready .js-only,dialog,.skip {display:none!important}
+  main {width:100%;padding:0}
+  .slide,.slide[hidden] {display:block!important;break-after:page;padding:.1in 0;border:0!important}
+  .slide:last-child {break-after:auto}
+  h1,h2 {font-size:30pt;max-width:100%}.lead {font-size:15pt}
+  .cards {grid-auto-flow:column;grid-template-columns:none}
+  article {padding:12pt}article p {font-size:12pt}
+  .urgent h3,.emergency h3 {color:#512d20}
+  .references {max-width:none;font-size:11pt}
+  .paper {display:block;margin-top:.25in}
+}
+</style>
 </head>
 <body>
-    <div class="presentation">
-        
-        <!-- Slide 1: Title -->
-        <div class="slide active title-slide">
-            <div class="slide-content">
-                <h1>Pregnancy and Factor V Leiden Mutation</h1>
-                <p>What You Need to Know</p>
-                <p style="font-size: 1.2em; margin-top: 40px;">A guide to help you understand your condition and feel confident during pregnancy</p>
-            </div>
-        </div>
-
-        <!-- Slide 2: What is Factor V Leiden? -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>What is Factor V Leiden?</h2>
-                
-                <div class="definition">
-                    <p><strong>Factor V Leiden is a gene change that makes your blood clot more easily than usual.</strong></p>
-                </div>
-
-                <p>Your body naturally forms blood clots to stop bleeding when you're injured. Factor V (say "Factor Five") is a protein that helps blood clot.</p>
-
-                <p>The Leiden mutation changes how this protein works. This means your blood may clot when it shouldn't.</p>
-
-                <h3>How common is it?</h3>
-                <p>About 5 out of every 100 people have this gene change. Many people don't know they have it until they're tested.</p>
-
-                <div class="reassurance">
-                    <p>✓ Having Factor V Leiden does not mean you will have problems during pregnancy. It just means we will watch you more closely.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 3: Why It Matters in Pregnancy -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>Why It Matters in Pregnancy</h2>
-
-                <p>Pregnancy naturally increases the risk of blood clots for all women. This is your body's way of preparing to prevent too much bleeding during delivery.</p>
-
-                <h3>The combination effect</h3>
-                <p>When you have Factor V Leiden AND you're pregnant, these two factors work together. This slightly increases your chance of developing a blood clot.</p>
-
-                <div class="key-point">
-                    <p><strong>Important to know:</strong> Most women with Factor V Leiden have healthy pregnancies and healthy babies. We monitor you carefully to keep both of you safe.</p>
-                </div>
-
-                <h3>What this means for your care</h3>
-                <p>We will create a care plan designed just for you. This plan focuses on prevention and watching for any early signs of problems.</p>
-
-                <div class="reassurance">
-                    <p>✓ You are not alone. We have experience caring for many pregnant women with Factor V Leiden. We know how to keep you and your baby healthy.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 4: Possible Complications -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>Possible Complications</h2>
-
-                <p>Being informed helps you partner with us in your care. Here are the things we watch for:</p>
-
-                <h3>Blood clots (thrombosis)</h3>
-                <p>Blood clots can form in veins, usually in the legs. This is called deep vein thrombosis or DVT. Less commonly, a clot can travel to the lungs.</p>
-
-                <h3>Pregnancy-related concerns</h3>
-                <p>Some research suggests Factor V Leiden may be linked to pregnancy complications like preeclampsia or placental problems. The research is still unclear, but we monitor for these conditions.</p>
-
-                <div class="important">
-                    <p><strong>Remember:</strong> These are possible risks, not guaranteed outcomes. The vast majority of women with Factor V Leiden deliver healthy babies without these complications.</p>
-                </div>
-
-                <div class="reassurance">
-                    <p>✓ We are watching closely for any signs of problems. Early detection allows us to take action quickly if needed.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 5: Managing Your Pregnancy -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>Managing Your Pregnancy</h2>
-                <h3>Thromboprophylaxis (Preventing Blood Clots)</h3>
-
-                <div class="definition">
-                    <p><strong>Thromboprophylaxis</strong> means steps we take to prevent blood clots from forming.</p>
-                </div>
-
-                <h3>Medication options</h3>
-                <p>Based on your personal history and risk factors, we may recommend blood thinning medication. The most common choice is low molecular weight heparin (LMWH), which is safe during pregnancy.</p>
-
-                <p><span class="highlight">How it works:</span> You give yourself a small injection under the skin once or twice daily. Most patients find this easier than expected.</p>
-
-                <h3>Non-medication approaches</h3>
-                <ul>
-                    <li>Staying active and avoiding long periods of sitting</li>
-                    <li>Wearing compression stockings if recommended</li>
-                    <li>Drinking plenty of water</li>
-                    <li>Elevating your legs when resting</li>
-                </ul>
-
-                <div class="reassurance">
-                    <p>✓ We will teach you everything you need to know. You'll have support every step of the way.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 6: Regular Monitoring -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>Regular Monitoring</h2>
-
-                <p>Monitoring helps us catch any concerns early when they're easier to manage.</p>
-
-                <h3>What to expect at visits</h3>
-                <ul>
-                    <li><strong>Blood pressure checks:</strong> We monitor for signs of preeclampsia</li>
-                    <li><strong>Ultrasounds:</strong> Regular scans to check your baby's growth and the placenta</li>
-                    <li><strong>Physical exams:</strong> Checking your legs for swelling or tenderness</li>
-                    <li><strong>Questions about symptoms:</strong> We want to hear about any changes you notice</li>
-                </ul>
-
-                <h3>How often will I be seen?</h3>
-                <p>Your visit schedule depends on your individual risk. You may have more frequent appointments than a standard pregnancy. This extra attention is a good thing.</p>
-
-                <div class="reassurance">
-                    <p>✓ These visits are opportunities to ask questions and make sure you feel confident in your care plan.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 7: Delivery Planning -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>Delivery Planning</h2>
-
-                <p>We start talking about delivery plans in your third trimester. Planning ahead reduces stress and ensures everyone is prepared.</p>
-
-                <h3>Timing of delivery</h3>
-                <p>Most women with Factor V Leiden can deliver at full term. We only consider early delivery if there are specific medical concerns.</p>
-
-                <h3>Mode of delivery</h3>
-                <p>Having Factor V Leiden alone does not mean you need a cesarean section. You can plan for vaginal delivery unless there are other medical reasons for a C-section.</p>
-
-                <h3>Coordinating your care</h3>
-                <p>We work with your delivery team to ensure they know about your condition. If you're on blood thinning medication, we'll plan when to stop it before delivery.</p>
-
-                <div class="important">
-                    <p><strong>Anesthesia planning:</strong> If you want an epidural for pain relief, we time the stopping of blood thinners to make this safe. We discuss this plan with you well before delivery.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 8: Labor and Delivery Precautions -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>Labor and Delivery Precautions</h2>
-
-                <h3>Managing blood thinners</h3>
-                <p>If you're taking medication to prevent clots, we typically stop it 24 hours before a scheduled delivery. For unplanned labor, we assess the timing and plan accordingly.</p>
-
-                <h3>Pain management options</h3>
-                <p>You have options for pain relief. Epidurals are usually safe, but timing matters if you're on blood thinners. We work with the anesthesia team to keep you safe and comfortable.</p>
-
-                <h3>After delivery</h3>
-                <p>We monitor you closely in the hours after birth. This is when the risk of bleeding and clotting both need careful attention.</p>
-
-                <div class="key-point">
-                    <p><strong>Your delivery team knows your history.</strong> We communicate your care plan to everyone involved in your delivery.</p>
-                </div>
-
-                <div class="reassurance">
-                    <p>✓ The goal is a safe delivery for you and your baby. We have done this many times and know how to care for you.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 9: Postpartum Care -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>Postpartum Care</h2>
-
-                <p>The weeks after delivery are actually the highest risk time for blood clots. This is true for all new mothers, and especially for those with Factor V Leiden.</p>
-
-                <h3>Medication after delivery</h3>
-                <p>We typically restart blood thinning medication within 12-24 hours after delivery. You'll continue this for at least 6 weeks postpartum.</p>
-
-                <p><span class="highlight">Breastfeeding:</span> Blood thinning medications like heparin are safe while breastfeeding. They don't pass into breast milk in significant amounts.</p>
-
-                <h3>Activity and movement</h3>
-                <ul>
-                    <li>Get up and walk as soon as you're able after delivery</li>
-                    <li>Do ankle exercises while resting in bed</li>
-                    <li>Avoid sitting or lying still for long periods</li>
-                    <li>Stay well hydrated</li>
-                </ul>
-
-                <h3>Follow-up visits</h3>
-                <p>We'll see you for regular postpartum checks. We want to make sure you're recovering well and that you know when to stop medication.</p>
-
-                <div class="reassurance">
-                    <p>✓ Most of your pregnancy care team will continue caring for you after delivery. We're here for the whole journey.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 10: Your Care Team -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>Your Care Team</h2>
-
-                <p>You have a team of specialists working together to care for you:</p>
-
-                <div class="team-member">
-                    <h3>Maternal-Fetal Medicine Specialist</h3>
-                    <p>Expert in high-risk pregnancies. Coordinates your overall pregnancy care plan.</p>
-                </div>
-
-                <div class="team-member">
-                    <h3>Hematologist</h3>
-                    <p>Blood disorder specialist who manages your clotting risk and medications.</p>
-                </div>
-
-                <div class="team-member">
-                    <h3>Obstetrician</h3>
-                    <p>Provides routine pregnancy care and delivers your baby.</p>
-                </div>
-
-                <div class="team-member">
-                    <h3>Nurse Specialists</h3>
-                    <p>Available to answer questions and teach you about medications and self-care.</p>
-                </div>
-
-                <p style="margin-top: 30px;">Communication between team members happens regularly. Everyone stays updated on your care.</p>
-
-                <div class="reassurance">
-                    <p>✓ You are at the center of this team. Your questions and concerns guide our care decisions.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 11: Can I Have a Normal Pregnancy? -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>Can I Have a Normal Pregnancy?</h2>
-
-                <div class="reassurance" style="font-size: 1.4em; margin-bottom: 30px;">
-                    <p>✓ Yes! Most women with Factor V Leiden have successful, healthy pregnancies.</p>
-                </div>
-
-                <h3>What "normal" looks like with Factor V Leiden</h3>
-                <p>You'll have more medical appointments than some pregnant women. You might need to take medication daily. But you can still:</p>
-
-                <ul>
-                    <li>Work during pregnancy (unless you have other medical restrictions)</li>
-                    <li>Exercise with your doctor's approval</li>
-                    <li>Travel with planning and precautions</li>
-                    <li>Enjoy your pregnancy and prepare for your baby</li>
-                </ul>
-
-                <h3>The difference is awareness</h3>
-                <p>You know about your condition, which means we can take steps to keep you safe. Many people with Factor V Leiden don't know they have it until a problem occurs. You have the advantage of prevention.</p>
-
-                <div class="key-point">
-                    <p><strong>Your role matters:</strong> Taking medication as prescribed, attending appointments, and reporting symptoms quickly all contribute to a healthy outcome.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 12: Symptoms to Watch For -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>Symptoms to Watch For</h2>
-
-                <p>Call us right away if you notice any of these symptoms:</p>
-
-                <div class="symptom-box">
-                    <h3>Signs of a blood clot in your leg</h3>
-                    <ul>
-                        <li>Swelling in one leg (especially if just one leg)</li>
-                        <li>Pain or tenderness in your calf or thigh</li>
-                        <li>Warmth in the affected area</li>
-                        <li>Red or discolored skin on your leg</li>
-                    </ul>
-                </div>
-
-                <div class="symptom-box">
-                    <h3>Signs of a blood clot in your lungs</h3>
-                    <ul>
-                        <li>Sudden shortness of breath</li>
-                        <li>Chest pain that gets worse with deep breaths</li>
-                        <li>Rapid heartbeat</li>
-                        <li>Coughing up blood</li>
-                    </ul>
-                </div>
-
-                <div class="important">
-                    <p><strong>When to call 911:</strong> Sudden severe chest pain, difficulty breathing, or coughing up blood requires immediate emergency care. Don't wait.</p>
-                </div>
-
-                <p style="margin-top: 25px;">It's always better to call about a symptom that turns out to be nothing than to wait on something serious.</p>
-            </div>
-        </div>
-
-        <!-- Slide 13: What About My Family? -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>What About My Family?</h2>
-
-                <h3>Is Factor V Leiden genetic?</h3>
-                <p>Yes. Factor V Leiden is inherited, meaning it runs in families.</p>
-
-                <p>If you have Factor V Leiden, each of your children has a 50% chance of inheriting it. Your siblings and parents may also have it.</p>
-
-                <h3>Should my family be tested?</h3>
-                <p>We don't routinely recommend testing family members unless they have symptoms or specific risk factors. Talk to your doctor about whether testing makes sense for your family.</p>
-
-                <h3>What about my baby?</h3>
-                <p>Even if your baby inherits Factor V Leiden, most children with this gene change have no problems. It typically doesn't cause issues until adulthood, if at all.</p>
-
-                <div class="reassurance">
-                    <p>✓ Knowing you have Factor V Leiden helps us make informed decisions for your health and potentially helps your family members too.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 14: Key Takeaways -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>Key Takeaways</h2>
-
-                <div class="key-point">
-                    <p><strong>1. Factor V Leiden increases clotting risk, but most women have healthy pregnancies.</strong></p>
-                </div>
-
-                <div class="key-point">
-                    <p><strong>2. Prevention is key.</strong> Medication and lifestyle measures reduce your risk significantly.</p>
-                </div>
-
-                <div class="key-point">
-                    <p><strong>3. Close monitoring helps us catch problems early.</strong> Extra appointments mean extra safety.</p>
-                </div>
-
-                <div class="key-point">
-                    <p><strong>4. You have a team of specialists.</strong> We work together to care for you and your baby.</p>
-                </div>
-
-                <div class="key-point">
-                    <p><strong>5. Know the warning signs.</strong> Call us if you notice symptoms of a blood clot.</p>
-                </div>
-
-                <div class="key-point">
-                    <p><strong>6. The highest risk time is after delivery.</strong> Continue medication and stay active postpartum.</p>
-                </div>
-
-                <div class="reassurance">
-                    <p>✓ You are not defined by Factor V Leiden. It's one part of your health that we manage together.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 15: Questions -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>Questions?</h2>
-
-                <p style="font-size: 1.4em; margin-bottom: 30px;">We're here to answer your questions and address your concerns.</p>
-
-                <h3>How to reach us</h3>
-                <p>Keep our contact information handy. Call with questions about:</p>
-                <ul>
-                    <li>Medications and how to take them</li>
-                    <li>Symptoms you're experiencing</li>
-                    <li>Activity and lifestyle questions</li>
-                    <li>Anything that worries you</li>
-                </ul>
-
-                <div class="important">
-                    <p><strong>No question is too small.</strong> If something is on your mind, we want to hear about it.</p>
-                </div>
-
-                <div class="reassurance">
-                    <p>✓ We're partners in your care. Together, we'll help you have the healthiest pregnancy possible.</p>
-                </div>
-
-                <p style="margin-top: 40px; font-size: 1.3em; text-align: center; color: #2c5f7c;"><strong>Thank you for trusting us with your care.</strong></p>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="slide-number">
-        <span id="current-slide">1</span> / <span id="total-slides">15</span>
-    </div>
-
-    <div class="navigation">
-        <button id="prev-btn" onclick="previousSlide()">← Previous</button>
-        <button id="next-btn" onclick="nextSlide()">Next →</button>
-    </div>
-
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        
-        document.getElementById('total-slides').textContent = totalSlides;
-
-        function showSlide(n) {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (n + totalSlides) % totalSlides;
-            slides[currentSlide].classList.add('active');
-            
-            document.getElementById('current-slide').textContent = currentSlide + 1;
-            
-            // Update button states
-            document.getElementById('prev-btn').disabled = currentSlide === 0;
-            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
-        }
-
-        function nextSlide() {
-            if (currentSlide < totalSlides - 1) {
-                showSlide(currentSlide + 1);
-            }
-        }
-
-        function previousSlide() {
-            if (currentSlide > 0) {
-                showSlide(currentSlide - 1);
-            }
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
-                e.preventDefault();
-                nextSlide();
-            } else if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                previousSlide();
-            }
-        });
-
-        // Initialize
-        showSlide(0);
-    </script>
-
-
-
-<!-- openmfm-footer-injected -->
-<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
-  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
-</div>
+<a class="skip" href="#content">Skip to presentation</a>
+<progress class="js-only" id="progress" value="1" max="12" aria-label="Presentation progress"></progress>
+<header>
+  <a class="brand" href="https://openmfm.org/library" aria-label="OpenMFM library">Open<span>MFM</span></a>
+  <div class="tools"><a href="#warning-signs">Warning signs</a><button class="js-only" id="show-sources">References</button><button class="js-only" id="print">Print</button></div>
+</header>
+<main id="content" tabindex="-1">
+<section id="start" class="slide" aria-labelledby="heading-0">
+  <p class="eyebrow">Your pregnancy guide</p>
+  <h1 id="heading-0" tabindex="-1">Most people with Factor V Leiden have healthy pregnancies</h1>
+  <p class="lead">If you just learned you have Factor V Leiden, bring your test result to your next visit and tell your team whether you have ever had a blood clot.</p>
+  <div class="cards"><article><h3>Understand your result</h3><p>Learn what the gene change does and how one or two copies can affect your care.</p></article>
+    <article><h3>Recognize a clot</h3><p>Know which symptoms need an urgent call and when to call 911.</p></article>
+    <article><h3>Plan through recovery</h3><p>Ask for instructions that cover pregnancy, labor and the weeks after birth.</p></article></div>
+
+  <p class="citations">Sources · <a href="https://www.ncbi.nlm.nih.gov/books/NBK1368/">GeneReviews</a> · <a href="https://doi.org/10.1182/bloodadvances.2018024802">ASH pregnancy guideline</a></p>
+  <small class="paper">OpenMFM · Atlanta Perinatal Associates · 1 / 12</small>
+</section>
+
+<section id="clotting" class="slide" aria-labelledby="heading-1">
+  <p class="eyebrow">How clotting works</p>
+  <h2 id="heading-1" tabindex="-1">Factor V Leiden slows one of the brakes on clotting</h2>
+  <p class="lead">Factor V (say “factor five”) is a protein that helps stop bleeding. Leiden is the name of an inherited change in the gene for that protein.</p>
+  <div class="cards"><article><h3>When a vessel is injured</h3><p>Factor V helps blood form a clot that seals the injury.</p></article>
+    <article><h3>As the clot forms</h3><p>Another protein helps switch factor V off. The Leiden form stays active longer, making a clot in a vein more likely.</p></article>
+    <article><h3>How common is it?</h3><p>About 1 in 20 people of European ancestry carry the change. How common it is varies by ancestry. Many carriers never have a clot.</p></article></div>
+
+  <p class="citations">Sources · <a href="https://www.ncbi.nlm.nih.gov/books/NBK1368/">GeneReviews</a></p>
+  <small class="paper">OpenMFM · Atlanta Perinatal Associates · 2 / 12</small>
+</section>
+
+<section id="warning-signs" class="slide" aria-labelledby="heading-2">
+  <p class="eyebrow">Warning signs</p>
+  <h2 id="heading-2" tabindex="-1">Know when to call your care team and when to call 911</h2>
+  <p class="lead">A clot deep in a leg vein is called deep vein thrombosis (DVT). Part of it can travel to the lungs and cause a pulmonary embolism (PE). Either can happen during pregnancy or after birth.</p>
+  <div class="cards"><article class="urgent"><h3>Get urgent assessment today</h3><p>If one leg becomes swollen, painful, tender, warm or discolored, call your maternity team right away. If you cannot reach them promptly, seek urgent medical assessment.</p></article>
+    <article class="emergency"><h3>Call 911 now</h3><p>Sudden trouble breathing, chest pain (especially with a deep breath), coughing up blood or collapse can signal a lung clot. Your heart may race. Call emergency services immediately.</p></article></div>
+
+  <p class="citations">Sources · <a href="https://www.rcog.org.uk/for-the-public/browse-our-patient-information/reducing-the-risk-of-venous-thrombosis-in-pregnancy-and-after-birth/">RCOG patient guide</a></p>
+  <small class="paper">OpenMFM · Atlanta Perinatal Associates · 3 / 12</small>
+</section>
+
+<section id="risk" class="slide" aria-labelledby="heading-3">
+  <p class="eyebrow">Your risk</p>
+  <h2 id="heading-3" tabindex="-1">Your clot history helps explain what your test means</h2>
+  <p class="lead">Pregnancy itself makes blood clot more easily. Your daily risk is highest in the first weeks after birth. Bring your lab report and clot history to your visit.</p>
+  <div class="cards"><article><h3>Read your report</h3><p>Heterozygous means one changed copy. Homozygous means two. Two copies carry a higher clot risk.</p></article>
+    <article><h3>Tell the story of any past clot</h3><p>Did it happen during pregnancy, while taking estrogen, after surgery or without a clear trigger? Tell your team about clots in close relatives, too.</p></article>
+    <article><h3>Report changes</h3><p>A hospital stay, surgery or a long spell of limited movement can change your prevention plan.</p></article></div>
+
+  <p class="citations">Sources · <a href="https://www.ncbi.nlm.nih.gov/books/NBK1368/">GeneReviews</a> · <a href="https://doi.org/10.1182/bloodadvances.2018024802">ASH pregnancy guideline</a></p>
+  <small class="paper">OpenMFM · Atlanta Perinatal Associates · 4 / 12</small>
+</section>
+
+<section id="prevention" class="slide" aria-labelledby="heading-4">
+  <p class="eyebrow">Preventing clots</p>
+  <h2 id="heading-4" tabindex="-1">Some people need heparin during pregnancy</h2>
+  <p class="lead">Two people with the same gene result can need different care. These examples show what your team considers.</p>
+  <div class="cards"><article><h3>One copy, no previous clot</h3><p>If you have no other major risks, your team may recommend watching for symptoms and reviewing your risk at visits.</p></article>
+    <article><h3>A clot during a previous pregnancy</h3><p>Your team will usually recommend preventive blood thinner injections during pregnancy and after birth. Two changed copies can also lead to a recommendation for prevention.</p></article>
+    <article><h3>If heparin is prescribed</h3><p>Low-molecular-weight heparin goes under the skin and does not cross the placenta. A nurse can teach you how and when to inject it and what bleeding to report. A new clot needs prompt treatment at a different dose.</p></article></div>
+
+  <p class="citations">Sources · <a href="https://www.rcog.org.uk/for-the-public/browse-our-patient-information/reducing-the-risk-of-venous-thrombosis-in-pregnancy-and-after-birth/">RCOG patient guide</a> · <a href="https://doi.org/10.1182/bloodadvances.2018024802">ASH pregnancy guideline</a></p>
+  <small class="paper">OpenMFM · Atlanta Perinatal Associates · 5 / 12</small>
+</section>
+
+<section id="daily-life" class="slide" aria-labelledby="heading-5">
+  <p class="eyebrow">Daily life</p>
+  <h2 id="heading-5" tabindex="-1">Build movement into your usual day</h2>
+  <p class="lead">Most people can keep working and stay active during pregnancy. Ask about activities that fit your pregnancy and any restrictions your team has given you.</p>
+  <div class="cards"><article><h3>During a long trip</h3><p>Plan regular chances to get up and walk. When seated, flex your ankles and move your legs.</p></article>
+    <article><h3>At work and at home</h3><p>Break up long periods of sitting and drink water regularly. Raising your legs when resting may ease discomfort.</p></article>
+    <article><h3>If your team recommends stockings</h3><p>Ask how to fit and wear them. Keep taking any prescribed blood thinner as directed, even on days when you are active.</p></article></div>
+
+  <p class="citations">Sources · <a href="https://www.rcog.org.uk/for-the-public/browse-our-patient-information/reducing-the-risk-of-venous-thrombosis-in-pregnancy-and-after-birth/">RCOG patient guide</a></p>
+  <small class="paper">OpenMFM · Atlanta Perinatal Associates · 6 / 12</small>
+</section>
+
+<section id="visits" class="slide" aria-labelledby="heading-6">
+  <p class="eyebrow">Prenatal visits</p>
+  <h2 id="heading-6" tabindex="-1">Tell your team when symptoms or circumstances change</h2>
+  <p class="lead">At each visit, bring questions about symptoms, medicines and anything that has limited your movement. Your team can adjust how often you need to be seen.</p>
+  <div class="cards"><article><h3>Routine pregnancy care</h3><p>Your team checks your blood pressure and asks how you and your baby are doing. New pain or swelling in one leg needs assessment before the next visit.</p></article>
+    <article><h3>When extra scans help</h3><p>Your clinician may suggest growth scans based on your pregnancy. The link between Factor V Leiden and placental problems, including preeclampsia, is less certain than its link to blood clots.</p></article></div>
+
+  <p class="citations">Sources · <a href="https://www.ncbi.nlm.nih.gov/books/NBK1368/">GeneReviews</a> · <a href="https://www.rcog.org.uk/for-the-public/browse-our-patient-information/reducing-the-risk-of-venous-thrombosis-in-pregnancy-and-after-birth/">RCOG patient guide</a></p>
+  <small class="paper">OpenMFM · Atlanta Perinatal Associates · 7 / 12</small>
+</section>
+
+<section id="birth" class="slide" aria-labelledby="heading-7">
+  <p class="eyebrow">Labor and birth</p>
+  <h2 id="heading-7" tabindex="-1">Make a written plan before labor starts</h2>
+  <p class="lead">Most people with Factor V Leiden can plan for a full-term vaginal birth. Your obstetric team will discuss any separate reason for earlier delivery or a cesarean.</p>
+  <div class="cards"><article><h3>Before your due date</h3><p>If you use a blood thinner, ask when to hold it for a planned birth. The time needed before an epidural or spinal depends on the medicine and dose.</p></article>
+    <article><h3>If labor starts or bleeding begins</h3><p>Call the birth unit right away, before taking another injection. Tell them the medicine, dose and exact time of your last injection.</p></article>
+    <article><h3>After birth</h3><p>Your team checks bleeding and coordinates with anesthesia before telling you when to restart. Ask for that instruction in writing.</p></article></div>
+
+  <p class="citations">Sources · <a href="https://www.rcog.org.uk/for-the-public/browse-our-patient-information/reducing-the-risk-of-venous-thrombosis-in-pregnancy-and-after-birth/">RCOG patient guide</a> · <a href="https://doi.org/10.1182/bloodadvances.2018024802">ASH pregnancy guideline</a></p>
+  <small class="paper">OpenMFM · Atlanta Perinatal Associates · 8 / 12</small>
+</section>
+
+<section id="recovery" class="slide" aria-labelledby="heading-8">
+  <p class="eyebrow">After birth</p>
+  <h2 id="heading-8" tabindex="-1">Before going home, confirm your postpartum plan</h2>
+  <p class="lead">Clot prevention still matters once your baby is born. Ask your team to review your delivery, bleeding and current risks with you before discharge.</p>
+  <div class="cards"><article><h3>Before discharge</h3><p>If medicine is prescribed, write down your first dose at home and stop date. Some people need six weeks of prevention. After a cesarean, SMFM suggests six weeks of medication for patients with inherited clotting conditions such as Factor V Leiden.</p></article>
+    <article><h3>As you recover</h3><p>Walk as soon as your team says you can. Move your ankles while resting and drink water regularly. Heparin is compatible with breastfeeding.</p></article>
+    <article><h3>At follow-up</h3><p>Confirm how long to continue treatment and who handles refills. If you develop warning signs, seek help immediately, even if you are taking heparin.</p></article></div>
+
+  <p class="citations">Sources · <a href="https://www.rcog.org.uk/for-the-public/browse-our-patient-information/reducing-the-risk-of-venous-thrombosis-in-pregnancy-and-after-birth/">RCOG patient guide</a> · <a href="https://publications.smfm.org/publications/327-society-for-maternal-fetal-medicine-consult-series-51/">SMFM cesarean guidance</a></p>
+  <small class="paper">OpenMFM · Atlanta Perinatal Associates · 9 / 12</small>
+</section>
+
+<section id="family" class="slide" aria-labelledby="heading-9">
+  <p class="eyebrow">Your family</p>
+  <h2 id="heading-9" tabindex="-1">Your child can inherit the gene change and stay healthy</h2>
+  <p class="lead">Each parent passes on one copy of the factor V gene. The chances below describe what a child inherits from the parent with Factor V Leiden.</p>
+  <div class="cards"><article><strong class="figure">1 in 2</strong><h3>Parent with one changed copy</h3><p>In each pregnancy, there is a 1 in 2 chance that this parent passes on the changed copy.</p></article>
+    <article><strong class="figure">Every child</strong><h3>Parent with two changed copies</h3><p>Each child inherits one changed copy from this parent. The other parent contributes the child’s second copy.</p></article>
+    <article><h3>Should relatives be tested?</h3><p>Most children with the change never develop a clot in childhood. Testing healthy relatives is an individual decision. Ask whether a result would change their care.</p></article></div>
+
+  <p class="citations">Sources · <a href="https://www.ncbi.nlm.nih.gov/books/NBK1368/">GeneReviews</a></p>
+  <small class="paper">OpenMFM · Atlanta Perinatal Associates · 10 / 12</small>
+</section>
+
+<section id="questions" class="slide" aria-labelledby="heading-10">
+  <p class="eyebrow">Appointment card</p>
+  <h2 id="heading-10" tabindex="-1">Questions to ask your MFM specialist</h2>
+  <p class="lead">Your maternal-fetal medicine (MFM) specialist helps plan higher-risk pregnancy care with your obstetrician. A hematologist can advise on clotting, a nurse can teach injections, and an anesthesiologist can help plan pain relief.</p>
+  <div class="cards"><article><h3>My result and history</h3><p>Do I have one changed copy or two? How does my own or my family’s clot history affect my plan?</p></article>
+    <article><h3>My medicine and birth plan</h3><p>Do I need injections during pregnancy or after birth? What should I do if labor starts? When could I have an epidural?</p></article>
+    <article><h3>My contacts and follow-up</h3><p>Which number do I call after hours? When is my postpartum visit, and who will confirm when to stop medicine?</p></article></div>
+  <p class="write">Birth unit phone ____________________ &nbsp; Follow-up date ____________________</p>
+  <p class="citations">Sources · <a href="https://www.rcog.org.uk/for-the-public/browse-our-patient-information/reducing-the-risk-of-venous-thrombosis-in-pregnancy-and-after-birth/">RCOG patient guide</a> · <a href="https://doi.org/10.1182/bloodadvances.2018024802">ASH pregnancy guideline</a></p>
+  <small class="paper">OpenMFM · Atlanta Perinatal Associates · 11 / 12</small>
+</section>
+
+<section id="sources" class="slide" aria-labelledby="heading-11">
+  <p class="eyebrow">Sources and scope</p>
+  <h2 id="heading-11" tabindex="-1">Where to read more about your care</h2>
+  <p class="lead">Start with the patient guide for everyday questions. The other sources explain the genetics and the evidence your care team uses.</p>
+  <ol class="references"><li><a href="https://www.rcog.org.uk/for-the-public/browse-our-patient-information/reducing-the-risk-of-venous-thrombosis-in-pregnancy-and-after-birth/">RCOG patient guide</a><br>Royal College of Obstetricians and Gynaecologists. Reducing the risk of venous thrombosis in pregnancy and after birth. 2015.</li>
+<li><a href="https://www.ncbi.nlm.nih.gov/books/NBK1368/">GeneReviews</a><br>Pastori D, Menichelli D, Valeriani E, Pignatelli P. Factor V Leiden Thrombophilia. GeneReviews®. Updated May 16, 2024.</li>
+<li><a href="https://doi.org/10.1182/bloodadvances.2018024802">ASH pregnancy guideline</a><br>Bates SM, Rajasekhar A, Middeldorp S, et al. American Society of Hematology 2018 guidelines for management of venous thromboembolism in the context of pregnancy. Blood Advances. 2018;2:3317–3359.</li>
+<li><a href="https://publications.smfm.org/publications/327-society-for-maternal-fetal-medicine-consult-series-51/">SMFM cesarean guidance</a><br>Society for Maternal-Fetal Medicine, Pacheco LD, Saade G, Metz TD. Consult Series #51: Thromboembolism prophylaxis for cesarean delivery. 2020. Reaffirmed 2024.</li></ol>
+
+  <p class="note">This guide supports conversations with your care team. Follow their personal instructions for starting, pausing and restarting medicine.</p>
+  <small class="paper">OpenMFM · Atlanta Perinatal Associates · 12 / 12</small>
+</section>
+</main>
+<footer><span>Atlanta Perinatal Associates</span><nav class="js-only" aria-label="Slide navigation"><button id="previous">← Previous</button><span id="count" aria-live="polite"></span><button class="primary" id="next">Next →</button></nav></footer>
+<dialog aria-labelledby="ref-title"><h2 id="ref-title">References</h2><div id="source-list"></div><form method="dialog"><button>Close references</button></form></dialog>
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const previous = document.querySelector('#previous');
+const next = document.querySelector('#next');
+const dialog = document.querySelector('dialog');
+let current = 0;
+
+function render(focusHeading = false) {
+  const index = slides.findIndex(slide => '#' + slide.id === location.hash);
+  current = index >= 0 ? index : 0;
+  slides.forEach((slide, position) => { slide.hidden = position !== current; });
+  previous.disabled = current === 0;
+  next.disabled = current === slides.length - 1;
+  document.querySelector('#count').textContent = (current + 1) + ' / ' + slides.length;
+  document.querySelector('#progress').value = current + 1;
+  if (focusHeading) slides[current].querySelector('h1,h2').focus({preventScroll:true});
+  window.scrollTo(0, 0);
+}
+function step(offset) {
+  const target = slides[current + offset];
+  if (target) location.hash = target.id;
+}
+previous.onclick = () => step(-1);
+next.onclick = () => step(1);
+window.addEventListener('hashchange', () => render(true));
+document.querySelector('.skip').onclick = event => {
+  event.preventDefault();
+  slides[current].querySelector('h1,h2').focus();
+};
+document.querySelector('#source-list').append(document.querySelector('.references').cloneNode(true));
+document.querySelector('#show-sources').onclick = () => dialog.showModal();
+document.querySelector('#print').onclick = () => window.print();
+document.addEventListener('keydown', event => {
+  if (dialog.open || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+    event.preventDefault();
+    step(event.key === 'ArrowRight' ? 1 : -1);
+  } else if (event.key === ' ' && !event.target.closest('button,a')) {
+    event.preventDefault();
+    step(1);
+  }
+});
+let start = null;
+const content = document.querySelector('main');
+content.addEventListener('touchstart', event => {
+  start = event.touches.length === 1 ? event.touches[0] : null;
+}, {passive:true});
+content.addEventListener('touchcancel', () => { start = null; });
+content.addEventListener('touchend', event => {
+  if (!start) return;
+  const dx = event.changedTouches[0].clientX - start.clientX;
+  const dy = event.changedTouches[0].clientY - start.clientY;
+  start = null;
+  if (Math.abs(dx) > 45 && Math.abs(dx) > 1.5 * Math.abs(dy)) step(dx < 0 ? 1 : -1);
+}, {passive:true});
+document.documentElement.classList.add('ready');
+render();
+</script>
 </body>
 </html>
