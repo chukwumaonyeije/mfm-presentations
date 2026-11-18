@@ -1,777 +1,705 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Understanding Clubfoot — MFM Patient Education</title>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Understanding Clubfoot: A Guide for Parents | OpenMFM
+  </title>
+  <meta content="#0d1117" name="theme-color"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg-primary:    #0a0e1a;
-      --bg-slide:      #111827;
-      --bg-card:       #1a2235;
-      --bg-header:     #0d1424;
-      --accent-teal:   #4ecdc4;
-      --accent-blue:   #3b82f6;
-      --accent-amber:  #f59e0b;
-      --accent-red:    #ef4444;
-      --text-primary:  #e8edf5;
-      --text-secondary:#94a3b8;
-      --text-muted:    #64748b;
-      --border:        #1e293b;
-      --border-bright: #2d3f5e;
-      --font-main:     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    }
-
-    html {
-      height: 100%;
-      height: -webkit-fill-available;
-    }
-
-    body {
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
-      min-height: 100dvh;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      font-family: var(--font-main);
-      overflow: hidden;
-    }
-
-    #app {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      height: 100dvh;
-      width: 100vw;
-      max-width: 100%;
-    }
-
-    /* ── TOP BAR ── */
-    #topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 1rem;
-      background: var(--bg-header);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-      z-index: 10;
-    }
-
-    @media (min-width: 768px) {
-      #topbar { padding: 0.6rem 2rem; }
-    }
-
-    #topbar .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    #topbar .brand-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--accent-teal);
-      flex-shrink: 0;
-    }
-
-    #slide-counter {
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      font-weight: 500;
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* ── STAGE ── */
-    #stage {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* ── SLIDES ── */
-    .slide {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg-slide);
-      opacity: 0;
-      pointer-events: none;
-      transform: translateX(60px);
-      transition: opacity 0.28s ease, transform 0.28s ease;
-    }
-
-    .slide.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(0);
-    }
-
-    .slide.exit-left {
-      opacity: 0;
-      transform: translateX(-60px);
-    }
-
-    /* ── SLIDE HEADER ── */
-    .slide-header {
-      padding: 1.2rem 1.2rem 0.9rem;
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-
-    @media (min-width: 768px) {
-      .slide-header { padding: 2rem 3.5rem 1.4rem; }
-    }
-
-    .slide-tag {
-      display: inline-block;
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent-teal);
-      margin-bottom: 0.5rem;
-      padding: 0.15rem 0.5rem;
-      border: 1px solid var(--accent-teal);
-      border-radius: 2px;
-      opacity: 0.85;
-    }
-
-    .slide-tag.tag-amber { color: var(--accent-amber); border-color: var(--accent-amber); }
-    .slide-tag.tag-blue  { color: var(--accent-blue);  border-color: var(--accent-blue);  }
-
-    .slide-header h2 {
-      font-size: clamp(1.4rem, 4vw, 2.4rem);
-      font-weight: 700;
-      line-height: 1.2;
-      color: var(--text-primary);
-      letter-spacing: -0.02em;
-    }
-
-    /* ── SLIDE BODY ── */
-    .slide-body {
-      flex: 1;
-      padding: 1.2rem 1.2rem 1rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    @media (min-width: 768px) {
-      .slide-body { padding: 2rem 3.5rem 2rem; }
-    }
-
-    /* ── TITLE SLIDE ── */
-    .slide.slide-title {
-      background: linear-gradient(135deg, #0a0e1a 0%, #0f1e35 60%, #0a1628 100%);
-      justify-content: center;
-      align-items: flex-start;
-      padding: 2rem 1.5rem;
-    }
-
-    @media (min-width: 768px) {
-      .slide.slide-title { padding: 0 3.5rem; }
-    }
-
-    .slide.slide-title .title-eyebrow {
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent-teal);
-      margin-bottom: 1rem;
-      font-weight: 600;
-    }
-
-    .title-accent-line {
-      width: 48px; height: 4px;
-      background: var(--accent-teal);
-      margin-bottom: 1.4rem;
-      border-radius: 2px;
-    }
-
-    .slide.slide-title h1 {
-      font-size: clamp(2rem, 7vw, 3.5rem);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      color: var(--text-primary);
-      max-width: 90%;
-      margin-bottom: 1rem;
-    }
-
-    @media (min-width: 768px) {
-      .slide.slide-title h1 { max-width: 75%; margin-bottom: 1.5rem; }
-    }
-
-    .slide.slide-title .title-subtitle {
-      font-size: clamp(0.85rem, 2.5vw, 1.1rem);
-      color: var(--text-secondary);
-      max-width: 90%;
-      line-height: 1.6;
-      margin-bottom: 1.5rem;
-    }
-
-    @media (min-width: 768px) {
-      .slide.slide-title .title-subtitle { max-width: 55%; margin-bottom: 2rem; }
-    }
-
-    .slide.slide-title .title-meta {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .slide.slide-title .meta-item {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      letter-spacing: 0.06em;
-    }
-
-    /* ── STAT CALLOUT ── */
-    .stat-callout {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.4rem;
-      padding: 1.2rem 1.5rem;
-      background: var(--bg-card);
-      border-left: 4px solid var(--accent-teal);
-      border-radius: 0 8px 8px 0;
-      max-width: 320px;
-    }
-
-    @media (min-width: 768px) {
-      .stat-callout { padding: 1.5rem 2rem; max-width: 420px; }
-    }
-
-    .stat-number {
-      font-size: clamp(2.4rem, 7vw, 3.8rem);
-      font-weight: 800;
-      color: var(--accent-teal);
-      line-height: 1;
-      letter-spacing: -0.03em;
-    }
-
-    .stat-label {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      font-weight: 500;
-      line-height: 1.4;
-    }
-
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 0.9rem;
-      width: 100%;
-    }
-
-    .stat-grid .stat-callout { max-width: none; }
-
-    /* ── ICON LIST ── */
-    .icon-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .icon-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      font-size: clamp(0.9rem, 2.5vw, 1.05rem);
-      line-height: 1.5;
-      color: var(--text-primary);
-    }
-
-    .icon-list .icon {
-      color: var(--accent-teal);
-      font-style: normal;
-      flex-shrink: 0;
-      margin-top: 0.1em;
-      font-size: 0.85em;
-    }
-
-    .icon-list.icon-amber .icon { color: var(--accent-amber); }
-
-    /* ── CLINICAL TABLE ── */
-    .clinical-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: clamp(0.78rem, 2vw, 0.95rem);
-    }
-
-    .clinical-table th {
-      background: var(--bg-card);
-      color: var(--accent-teal);
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-weight: 700;
-      padding: 0.7rem 0.9rem;
-      text-align: left;
-      border-bottom: 2px solid var(--border-bright);
-    }
-
-    .clinical-table td {
-      padding: 0.65rem 0.9rem;
-      border-bottom: 1px solid var(--border);
-      color: var(--text-primary);
-      line-height: 1.5;
-    }
-
-    .clinical-table tbody tr:last-child td { border-bottom: none; }
-
-    /* ── TIMELINE — vertical on mobile, horizontal on desktop ── */
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0;
-      position: relative;
-      padding: 0.5rem 0;
-    }
-
-    @media (min-width: 600px) {
-      .timeline {
-        flex-direction: row;
-        align-items: stretch;
-        overflow-x: auto;
-        padding: 1rem 0;
-      }
-    }
-
-    .tl-item {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 0.4rem 0;
-      position: relative;
-    }
-
-    @media (min-width: 600px) {
-      .tl-item {
-        flex: 1;
-        flex-direction: column;
-        align-items: center;
-        gap: 0;
-        padding: 0;
-        min-width: 90px;
-      }
-    }
-
-    /* Vertical connector line on mobile */
-    .tl-item:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      left: 7px;
-      top: 30px;
-      bottom: -8px;
-      width: 2px;
-      background: var(--border-bright);
-      z-index: 0;
-    }
-
-    /* Horizontal connector on desktop */
-    @media (min-width: 600px) {
-      .tl-item:not(:last-child)::after { display: none; }
-      .tl-item:not(:last-child)::before {
-        content: '';
-        position: absolute;
-        top: 7px;
-        left: 50%;
-        right: -50%;
-        height: 2px;
-        background: var(--border-bright);
-        z-index: 0;
-      }
-    }
-
-    @media (max-width: 599px) {
-      .tl-item::before { display: none !important; }
-    }
-
-    .tl-dot {
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      background: var(--accent-teal);
-      border: 3px solid var(--bg-slide);
-      flex-shrink: 0;
-      position: relative;
-      z-index: 1;
-    }
-
-    @media (min-width: 600px) {
-      .tl-dot { margin-bottom: 0.65rem; }
-    }
-
-    .tl-content {
-      display: flex;
-      flex-direction: column;
-      gap: 0.15rem;
-      padding-bottom: 0.65rem;
-    }
-
-    @media (min-width: 600px) {
-      .tl-content { align-items: center; padding-bottom: 0; }
-    }
-
-    .tl-week {
-      font-size: 0.68rem;
-      font-weight: 700;
-      color: var(--accent-teal);
-      letter-spacing: 0.06em;
-    }
-
-    @media (min-width: 600px) {
-      .tl-week { text-align: center; margin-bottom: 0.3rem; }
-    }
-
-    .tl-label {
-      font-size: clamp(0.78rem, 2vw, 0.88rem);
-      color: var(--text-primary);
-      line-height: 1.4;
-    }
-
-    @media (min-width: 600px) {
-      .tl-label { text-align: center; padding: 0 0.3rem; }
-    }
-
-    /* ── TWO-COLUMN ── */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
-      width: 100%;
-      align-items: start;
-    }
-
-    @media (min-width: 600px) {
-      .two-col { grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-    }
-
-    @media (min-width: 768px) {
-      .two-col { gap: 2rem; }
-    }
-
-    .col-card {
-      background: var(--bg-card);
-      border-radius: 8px;
-      padding: 1rem 1.1rem;
-      border-top: 3px solid var(--accent-teal);
-    }
-
-    @media (min-width: 768px) {
-      .col-card { padding: 1.4rem 1.6rem; }
-    }
-
-    .col-card.col-card-blue  { border-top-color: var(--accent-blue); }
-    .col-card.col-card-amber { border-top-color: var(--accent-amber); }
-
-    .col-card h3 {
-      font-size: 0.7rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent-teal);
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-    }
-
-    .col-card.col-card-blue  h3 { color: var(--accent-blue); }
-    .col-card.col-card-amber h3 { color: var(--accent-amber); }
-
-    /* ── HIGHLIGHT BOX ── */
-    .highlight-box {
-      background: var(--bg-card);
-      border-left: 4px solid var(--accent-teal);
-      border-radius: 0 8px 8px 0;
-      padding: 1rem 1.2rem;
-      margin-top: 0.9rem;
-    }
-
-    .highlight-box p {
-      font-size: clamp(0.85rem, 2.3vw, 1rem);
-      line-height: 1.6;
-      color: var(--text-secondary);
-    }
-
-    .highlight-box.hb-amber { border-left-color: var(--accent-amber); }
-    .highlight-box.hb-teal  { border-left-color: var(--accent-teal); }
-
-    /* ── KEY POINTS ── */
-    .key-points {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      width: 100%;
-    }
-
-    .kp-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      background: var(--bg-card);
-      border-radius: 8px;
-      padding: 0.85rem 1.1rem;
-    }
-
-    .kp-num {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--accent-teal);
-      line-height: 1;
-      min-width: 1.8rem;
-      text-align: center;
-    }
-
-    .kp-text {
-      font-size: clamp(0.85rem, 2.3vw, 0.95rem);
-      color: var(--text-primary);
-      line-height: 1.5;
-    }
-
-    /* ── BOTTOM NAV ── */
-    #navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem 0.9rem;
-      background: var(--bg-header);
-      border-top: 1px solid var(--border);
-      flex-shrink: 0;
-      z-index: 10;
-    }
-
-    @media (min-width: 768px) {
-      #navbar { padding: 0.75rem 2rem; }
-    }
-
-    .nav-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      background: none;
-      border: 1px solid var(--border-bright);
-      color: var(--text-secondary);
-      font-size: 0.82rem;
-      font-family: var(--font-main);
-      padding: 0.55rem 1rem;
-      min-height: 44px;
-      min-width: 80px;
-      border-radius: 4px;
-      cursor: pointer;
-      letter-spacing: 0.04em;
-      transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
-      font-weight: 500;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-      user-select: none;
-    }
-
-    .nav-btn:hover {
-      border-color: var(--accent-teal);
-      color: var(--accent-teal);
-      background: rgba(78,205,196,0.05);
-    }
-
-    .nav-btn:active {
-      background: rgba(78,205,196,0.12);
-    }
-
-    .nav-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
-
-    .nav-btn:disabled:hover {
-      border-color: var(--border-bright);
-      color: var(--text-secondary);
-      background: none;
-    }
-
-    #progress-bar-wrap {
-      flex: 1;
-      margin: 0 0.75rem;
-      height: 3px;
-      background: var(--border);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    @media (min-width: 768px) {
-      #progress-bar-wrap { margin: 0 1.5rem; }
-    }
-
-    #progress-bar {
-      height: 100%;
-      background: var(--accent-teal);
-      border-radius: 2px;
-      transition: width 0.3s ease;
-    }
-
-    /* Desktop keyboard hint */
-    .kbd-hint {
-      display: none;
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-      text-align: center;
-    }
-
-    @media (min-width: 768px) {
-      .kbd-hint { display: block; }
-    }
-
-    /* Mobile swipe hint */
-    .swipe-hint {
-      display: block;
-      font-size: 0.62rem;
-      color: var(--text-muted);
-      text-align: center;
-      letter-spacing: 0.03em;
-    }
-
-    @media (min-width: 768px) {
-      .swipe-hint { display: none; }
-    }
+   :root{
+  color-scheme:dark;
+  --bg:#0d1117;
+  --surface:#161b22;
+  --surface2:#1c2330;
+  --border:#30363d;
+  --text:#e6edf3;
+  --muted:#b0becd;
+  --accent-blue:#58a6ff;
+  --accent-teal:#39d0b4;
+  --accent-green:#3fb950;
+  --accent-amber:#d29922;
+  --accent-red:#f85149;
+  --accent-purple:#bc8cff;
+  --brand:#1f6feb;
+  --cyan:#22d3ee
+}
+*{
+  box-sizing:border-box
+}
+html{
+  scroll-behavior:smooth
+}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:clamp(18px,1.55vw,23px);
+  line-height:1.5
+}
+a{
+  color:var(--cyan);
+  text-underline-offset:4px
+}
+button,select{
+  font:inherit
+}
+button,a,summary,select{
+  -webkit-tap-highlight-color:transparent
+}
+button{
+  cursor:pointer
+}
+button:disabled{
+  opacity:.45;
+  cursor:default
+}
+:focus-visible{
+  outline:3px solid #f5d471;
+  outline-offset:5px
+}
+h1,h2,h3,p,figure{
+  margin:0
+}
+h1,h2{
+  font-weight:750;
+  letter-spacing:-.045em;
+  line-height:1.1;
+  max-width:1050px;
+  text-wrap:balance
+}
+h1{
+  font-size:clamp(42px,5.2vw,76px)
+}
+h2{
+  font-size:clamp(30px,3.6vw,52px)
+}
+h3{
+  font-size:1.1em;
+  line-height:1.3;
+  letter-spacing:-.02em;
+  margin:12px 0 8px
+}
+p+p{
+  margin-top:20px
+}
+.topbar{
+  min-height:70px;
+  max-width:1440px;
+  margin:auto;
+  padding:16px 4vw;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  font-size:15px
+}
+.brand{
+  text-decoration:none;
+  font-size:21px;
+  font-weight:750;
+  color:var(--text);
+  letter-spacing:-1px
+}
+.brand span{
+  color:var(--cyan)
+}
+.tools{
+  display:none;
+  gap:10px;
+  align-items:center
+}
+.enhanced .tools{
+  display:flex
+}
+.tools button{
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--surface);
+  color:var(--text);
+  padding:10px 15px;
+  min-height:44px;
+  font-size:15px
+}
+.progress{
+  height:3px;
+  background:var(--surface2);
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:4
+}
+.progress div{
+  height:100%;
+  background:var(--brand);
+  width:0;
+  transition:width .18s
+}
+.slide{
+  max-width:1280px;
+  margin:0 auto;
+  padding:36px 44px 20px;
+  min-height:calc(100svh - 160px);
+  display:flex;
+  flex-direction:column;
+  background:radial-gradient(ellipse at 95% 0%,#142332 0%,transparent 58%);
+  border-top:1px solid var(--border)
+}
+.slide[hidden]{
+  display:none
+}
+.eyebrow{
+  color:var(--cyan);
+  font-size:13px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-weight:700;
+  margin-bottom:20px
+}
+.content{
+  margin:30px 0;
+  display:grid;
+  gap:24px;
+  flex:1;
+  align-content:center
+}
+.lead{
+  font-size:1.2em;
+  max-width:900px;
+  color:var(--muted)
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px
+}
+.card{
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:26px;
+  background:var(--surface)
+}
+.card p{
+  color:var(--muted)
+}
+.icon{
+  width:40px;
+  height:40px;
+  color:var(--accent-teal);
+  flex-shrink:0
+}
+.split{
+  display:grid;
+  grid-template-columns:1.1fr 1fr;
+  align-items:center;
+  gap:44px
+}
+.split>div>p{
+  max-width:31em
+}
+.callout{
+  border-left:4px solid var(--accent-teal);
+  padding:18px 24px;
+  background:#122a2b;
+  border-radius:0 12px 12px 0;
+  font-size:.95em
+}
+.quiet,figcaption{
+  font-size:15px;
+  color:var(--muted);
+  line-height:1.55
+}
+.stat{
+  font-size:clamp(38px,4.6vw,64px);
+  font-weight:750;
+  color:var(--cyan);
+  line-height:1.1;
+  letter-spacing:-.04em
+}
+.diagram{
+  width:100%;
+  max-height:325px;
+  height:auto;
+  display:block;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px
+}
+.diagram text{
+  fill:var(--text);
+  font:18px system-ui,sans-serif
+}
+.skin{
+  fill:#254e60;
+  stroke:#7ed6e5;
+  stroke-width:3;
+  stroke-linejoin:round
+}
+.guide{
+  fill:none;
+  stroke:var(--muted);
+  stroke-width:1.5;
+  stroke-dasharray:4 4
+}
+.arrow{
+  fill:none;
+  stroke:#f5d471;
+  stroke-width:4;
+  stroke-linecap:round
+}
+.cast-fill{
+  fill:#d6e4ed;
+  stroke:#88a9bc;
+  stroke-width:3
+}
+.wrap{
+  fill:none;
+  stroke:#738da2;
+  stroke-width:2
+}
+.tendon{
+  fill:none;
+  stroke:#f5d471;
+  stroke-width:7;
+  stroke-linecap:round
+}
+.bar{
+  fill:#b0becd
+}
+.boot{
+  fill:#204e58;
+  stroke:#65dfd2;
+  stroke-width:3
+}
+.strap{
+  fill:none;
+  stroke:#b5f4ec;
+  stroke-width:7
+}
+figcaption{
+  margin-top:12px
+}
+.schedule>div{
+  border-bottom:1px solid var(--border);
+  padding:12px 0 20px
+}
+.schedule .icon{
+  float:left;
+  margin:0 16px 10px 0
+}
+.schedule h3{
+  margin-top:0
+}
+.schedule>p{
+  margin-top:16px
+}
+.slide-footer{
+  border-top:1px solid var(--border);
+  padding-top:16px;
+  display:flex;
+  gap:12px;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  font-size:13px;
+  color:var(--muted)
+}
+.slide-footer a{
+  display:inline-flex;
+  min-height:32px;
+  min-width:26px;
+  align-items:center;
+  justify-content:center
+}
+.page-number{
+  margin-left:18px
+}
+.navigation{
+  display:none;
+  position:sticky;
+  bottom:0;
+  background:#0d1117f5;
+  border-top:1px solid var(--border);
+  padding:12px 20px;
+  z-index:3;
+  gap:16px;
+  justify-content:center;
+  align-items:center;
+  backdrop-filter:blur(12px)
+}
+.enhanced .navigation{
+  display:flex
+}
+.navigation button{
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 22px;
+  min-height:48px;
+  background:var(--surface);
+  color:var(--text);
+  font-size:16px
+}
+.navigation #next{
+  background:var(--cyan);
+  color:#0d1117;
+  font-weight:700
+}
+.navigation select{
+  max-width:200px;
+  min-height:44px;
+  background:var(--surface);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:6px;
+  font-size:14px
+}
+.skip{
+  position:fixed;
+  top:-100px;
+  left:20px;
+  padding:12px;
+  background:var(--surface);
+  z-index:20
+}
+.skip:focus{
+  top:10px
+}
+.sr-only{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  overflow:hidden;
+  clip-path:inset(50%);
+  white-space:nowrap
+}
+.teachback{
+  border:1px solid var(--border);
+  padding:16px 22px;
+  border-radius:12px
+}
+.teachback summary{
+  cursor:pointer;
+  min-height:44px;
+  display:list-item;
+  align-content:center
+}
+.teachback p{
+  margin-top:12px;
+  color:var(--muted)
+}
+.questions{
+  padding:0;
+  margin:0;
+  list-style:none;
+  display:grid;
+  gap:12px
+}
+.questions li{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:12px 20px;
+  border-bottom:1px solid var(--border)
+}
+.questions .icon{
+  width:28px;
+  height:28px
+}
+.reference-list{
+  font-size:16px;
+  line-height:1.6;
+  padding-left:24px;
+  margin:0;
+  display:grid;
+  gap:16px
+}
+.reference-list a{
+  overflow-wrap:anywhere
+}
+.reference-list li:target{
+  outline:2px solid var(--cyan);
+  outline-offset:5px
+}
+dialog{
+  max-width:780px;
+  width:calc(100% - 32px);
+  max-height:85svh;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:var(--surface);
+  color:var(--text);
+  padding:28px
+}
+dialog::backdrop{
+  background:#000b
+}
+dialog h2{
+  font-size:30px;
+  margin-bottom:18px
+}
+dialog .close{
+  float:right;
+  min-height:44px;
+  padding:8px 16px;
+  margin-left:16px;
+  background:var(--surface2);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:8px
+}
+dialog .reference-list{
+  clear:both
+}
+.nojs{
+  padding:12px 24px;
+  text-align:center;
+  font-size:16px
+}
+body:has(dialog[open]){
+  overflow:hidden
+}
+@media(min-width:1500px){
+  .slide{
+    padding-top:50px
+  }
+  .content{
+    gap:36px
+  }
+}
+@media(max-width:700px){
+  .topbar{
+    padding:14px 18px;
+    gap:8px
+  }
+  .brand{
+    font-size:19px
+  }
+  .tools{
+    gap:6px
+  }
+  .tools button{
+    padding:8px 10px;
+    font-size:13px
+  }
+  .slide{
+    padding:26px 20px 18px;
+    min-height:calc(100svh - 152px)
+  }
+  .content{
+    margin:24px 0;
+    gap:20px
+  }
+  .grid,.split{
+    grid-template-columns:1fr;
+    gap:16px
+  }
+  .card{
+    padding:20px
+  }
+  .card .icon{
+    width:30px;
+    height:30px
+  }
+  .card h3{
+    margin-top:8px
+  }
+  .diagram{
+    max-height:280px
+  }
+  .eyebrow{
+    font-size:11px;
+    margin-bottom:16px
+  }
+  .navigation{
+    gap:8px;
+    padding:10px 12px
+  }
+  .navigation button{
+    padding:10px 16px
+  }
+  .navigation select{
+    width:115px
+  }
+  .slide-footer{
+    font-size:12px
+  }
+  .page-number{
+    margin-left:8px
+  }
+  .reference-list{
+    font-size:15px
+  }
+  .callout{
+    padding:16px
+  }
+  .questions li{
+    padding:10px 0;
+    gap:12px
+  }
+  h2{
+    font-size:32px
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html{
+    scroll-behavior:auto
+  }
+  *,*::before,*::after{
+    transition:none!important;
+    animation:none!important
+  }
+}
+@page{
+  size:A4 landscape;
+  margin:12mm
+}
+@media print{
+  *{
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact
+  }
+  html,body{
+    background:#fff;
+    color:#17212b;
+    font-size:13px
+  }
+  body{
+    --text:#17212b;
+    --muted:#384955;
+    --surface:#f3f7fa;
+    --border:#b7c7d2;
+    --cyan:#006475;
+    --accent-teal:#00685b
+  }
+  .topbar,.navigation,.progress,.skip,dialog,.nojs{
+    display:none!important
+  }
+  .slide,.slide[hidden]{
+    display:flex!important;
+    min-height:0;
+    height:181mm;
+    max-width:none;
+    padding:6mm 3mm 3mm;
+    margin:0;
+    break-after:page;
+    break-inside:avoid;
+    background:#fff
+  }
+  .slide:last-child{
+    break-after:auto
+  }
+  .eyebrow{
+    font-size:10px;
+    margin-bottom:12px
+  }
+  h1{
+    font-size:46px
+  }
+  h2{
+    font-size:34px
+  }
+  h3{
+    font-size:18px
+  }
+  .content{
+    margin:16px 0;
+    gap:16px
+  }
+  .grid{
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:14px
+  }
+  .card{
+    padding:18px
+  }
+  .split{
+    grid-template-columns:1.1fr 1fr;
+    gap:25px
+  }
+  .diagram{
+    max-height:255px
+  }
+  .diagram text{
+    fill:#17212b
+  }
+  .skin{
+    fill:#d9eef3;
+    stroke:#226377
+  }
+  .bar{
+    fill:#566f82
+  }
+  .boot{
+    fill:#d4eeea;
+    stroke:#17695e
+  }
+  .strap{
+    stroke:#17695e
+  }
+  .arrow,.tendon{
+    stroke:#8b5600
+  }
+  .guide{
+    stroke:#536575
+  }
+  .quiet,figcaption{
+    font-size:12px
+  }
+  .callout{
+    background:#edf7f5
+  }
+  .slide-footer{
+    font-size:10px
+  }
+  .reference-list{
+    font-size:13px;
+    gap:12px
+  }
+  .questions{
+    gap:8px
+  }
+  .questions li{
+    padding:8px 16px
+  }
+  .teachback p{
+    display:block!important
+  }
+  .stat{
+    font-size:48px
+  }
+  a{
+    color:#006475
+  }
+  .page-number{
+    margin-left:15px
+  }
+}
   </style>
-
-
-<style>
-/* 2026 refresh overrides */
-:root {
-  --refresh-bg: #08131f;
-  --refresh-surface: rgba(11, 26, 42, 0.88);
-  --refresh-surface-strong: rgba(15, 34, 54, 0.94);
-  --refresh-line: rgba(133, 201, 255, 0.16);
-  --refresh-text: #f4f8fc;
-  --refresh-muted: #b5c8d8;
-  --refresh-accent: #4ddcc2;
-}
-html, body {
-  background:
-    radial-gradient(circle at top left, rgba(77, 220, 194, 0.16), transparent 24%),
-    radial-gradient(circle at 85% 16%, rgba(255, 189, 99, 0.12), transparent 20%),
-    linear-gradient(180deg, #08131f 0%, #06101a 100%) !important;
-  color: var(--refresh-text) !important;
-  font-family: "Aptos", "Segoe UI", system-ui, sans-serif !important;
-}
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: linear-gradient(180deg, rgba(0,0,0,0.26), transparent 82%);
-}
-.card,
-.panel,
-.content-box,
-.info-box,
-.highlight-box,
-.summary-box,
-.comparison-card,
-.warning-box,
-.feature-box,
-.stat-box,
-.takeaway-box,
-.grid-item,
-.slide,
-.slide-content,
-.slide-container,
-table,
-blockquote {
-  border-radius: 18px !important;
-  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24) !important;
-}
-.card,
-.panel,
-.content-box,
-.info-box,
-.highlight-box,
-.summary-box,
-.comparison-card,
-.warning-box,
-.feature-box,
-.stat-box,
-.takeaway-box,
-.grid-item,
-table,
-blockquote {
-  background: var(--refresh-surface) !important;
-  border: 1px solid var(--refresh-line) !important;
-  backdrop-filter: blur(10px);
-}
-h1, h2, h3, h4, .slide-title {
-  color: var(--refresh-text) !important;
-  letter-spacing: -0.03em;
-  text-wrap: balance;
-}
-p, li, td, th, .subtitle, .muted, small {
-  color: var(--refresh-muted) !important;
-}
-strong, b, .accent, .highlight, .key-point, a {
-  color: var(--refresh-accent) !important;
-}
-button,
-.nav button,
-.controls button,
-.btn,
-.button {
-  border-radius: 999px !important;
-  border: 1px solid var(--refresh-line) !important;
-  background: var(--refresh-surface-strong) !important;
-  color: var(--refresh-text) !important;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22) !important;
-}
-.progress,
-.progress-bar,
-#progressBar,
-.progress-fill {
-  background: linear-gradient(90deg, #4ddcc2 0%, #79e09b 100%) !important;
-  box-shadow: 0 0 18px rgba(77, 220, 194, 0.38);
-}
-</style>
-
-
-<!-- openmfm-seo-injected -->
-<link rel="canonical" href="https://openmfm.org/decks/fetal-club-foot-deformity/index.html">
-<meta name="description" content="Covers fetal clubfoot (talipes equinovarus): isolated vs. associated findings, postnatal Ponseti casting treatment, and counseling on long-term outcomes.">
-<meta name="author" content="Dr. Chukwuma Onyeije, MD">
-<meta name="keywords" content="Clubfoot, Talipes, Orthopedic, Patient Education">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://openmfm.org/decks/fetal-club-foot-deformity/index.html">
-<meta property="og:title" content="Fetal Clubfoot - Patient Consultation Guide | OpenMFM">
-<meta property="og:description" content="Covers fetal clubfoot (talipes equinovarus): isolated vs. associated findings, postnatal Ponseti casting treatment, and counseling on long-term outcomes.">
-<meta property="og:image" content="https://openmfm.org/og-image.png">
-<meta property="og:site_name" content="OpenMFM">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Fetal Clubfoot - Patient Consultation Guide | OpenMFM">
-<meta name="twitter:description" content="Covers fetal clubfoot (talipes equinovarus): isolated vs. associated findings, postnatal Ponseti casting treatment, and counseling on long-term outcomes.">
-<meta name="twitter:image" content="https://openmfm.org/og-image.png">
-<script type="application/ld+json">
-{
+  <!-- openmfm-seo-injected -->
+  <link href="https://openmfm.org/decks/fetal-club-foot-deformity/index.html" rel="canonical"/>
+  <meta content="A visual guide to clubfoot for parents: scans, birth planning, casts, heel-cord care, braces, and questions for your care team." name="description"/>
+  <meta content="Dr. Chukwuma Onyeije, MD" name="author"/>
+  <meta content="Clubfoot, Talipes, Orthopedic, Patient Education" name="keywords"/>
+  <meta content="article" property="og:type"/>
+  <meta content="https://openmfm.org/decks/fetal-club-foot-deformity/index.html" property="og:url"/>
+  <meta content="Understanding Clubfoot: A Guide for Parents | OpenMFM" property="og:title"/>
+  <meta content="A visual guide to clubfoot for parents: scans, birth planning, casts, heel-cord care, braces, and questions for your care team." property="og:description"/>
+  <meta content="https://openmfm.org/og-image.png" property="og:image"/>
+  <meta content="OpenMFM" property="og:site_name"/>
+  <meta content="summary_large_image" name="twitter:card"/>
+  <meta content="Understanding Clubfoot: A Guide for Parents | OpenMFM" name="twitter:title"/>
+  <meta content="A visual guide to clubfoot for parents: scans, birth planning, casts, heel-cord care, braces, and questions for your care team." name="twitter:description"/>
+  <meta content="https://openmfm.org/og-image.png" name="twitter:image"/>
+  <script type="application/ld+json">
+   {
   "@context": "https://schema.org",
   "@type": "MedicalWebPage",
-  "name": "Fetal Clubfoot - Patient Consultation Guide",
-  "description": "Covers fetal clubfoot (talipes equinovarus): isolated vs. associated findings, postnatal Ponseti casting treatment, and counseling on long-term outcomes.",
+  "name": "Understanding Clubfoot: A Guide for Parents",
+  "description": "A visual guide to clubfoot for parents: scans, birth planning, casts, heel-cord care, braces, and questions for your care team.",
   "url": "https://openmfm.org/decks/fetal-club-foot-deformity/index.html",
   "author": {
     "@type": "Person",
@@ -791,7 +719,7 @@ button,
       "url": "https://openmfm.org/og-image.png"
     }
   },
-  "dateModified": "2026-07-14",
+  "dateModified": "2026-11-18",
   "inLanguage": "en",
   "audience": {
     "@type": "MedicalAudience",
@@ -799,7 +727,7 @@ button,
   },
   "about": {
     "@type": "MedicalCondition",
-    "name": "Fetal Clubfoot - Patient Consultation Guide"
+    "name": "Understanding Clubfoot: A Guide for Parents"
   },
   "isPartOf": {
     "@type": "WebSite",
@@ -808,333 +736,1274 @@ button,
   },
   "keywords": "Clubfoot, Talipes, Orthopedic, Patient Education"
 }
-</script>
-</head>
-<body>
-
-<div id="app">
-
-  <!-- TOP BAR -->
-  <div id="topbar">
-    <div class="brand">
-      <div class="brand-dot"></div>
-      MFM Patient Education
-    </div>
-    <div id="slide-counter">1 / 10</div>
+  </script>
+ </head>
+ <body>
+  <a class="skip" href="#main">
+   Skip to presentation
+  </a>
+  <div aria-label="Presentation progress" aria-valuemax="15" aria-valuemin="1" aria-valuenow="1" class="progress" id="progress-track" role="progressbar">
+   <div id="progress">
+   </div>
   </div>
-
-  <!-- STAGE -->
-  <div id="stage">
-    <div id="slides-container">
-
-      <!-- SLIDE 1 — TITLE -->
-      <div class="slide slide-title active">
-        <div class="title-eyebrow">Patient Education · Maternal-Fetal Medicine</div>
-        <div class="title-accent-line"></div>
-        <h1>Understanding Clubfoot</h1>
-        <p class="title-subtitle">What to expect when your baby's foot turns inward</p>
-        <div class="title-meta">
-          <span class="meta-item">For expecting parents</span>
-          <span class="meta-item">Fetal diagnosis consultation</span>
-        </div>
-      </div>
-
-      <!-- SLIDE 2 — WHAT IS CLUBFOOT -->
-      <div class="slide">
-        <div class="slide-header">
-          <span class="slide-tag">Definition</span>
-          <h2>What Is Clubfoot?</h2>
-        </div>
-        <div class="slide-body">
-          <ul class="icon-list">
-            <li><span class="icon">▶</span> Foot turns inward and downward at birth</li>
-            <li><span class="icon">▶</span> Medical term: <em>talipes equinovarus</em></li>
-            <li><span class="icon">▶</span> One or both feet may be affected</li>
-            <li><span class="icon">▶</span> Detected on prenatal ultrasound</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- SLIDE 3 — HOW COMMON -->
-      <div class="slide">
-        <div class="slide-header">
-          <span class="slide-tag">Epidemiology</span>
-          <h2>How Common Is It?</h2>
-        </div>
-        <div class="slide-body">
-          <div class="stat-callout">
-            <span class="stat-number">1 in 1,000</span>
-            <span class="stat-label">babies are born with clubfoot</span>
-          </div>
-          <div class="highlight-box hb-teal">
-            <p>One of the most common structural birth conditions. Your care team has extensive experience treating it.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 4 — CAUSES -->
-      <div class="slide">
-        <div class="slide-header">
-          <span class="slide-tag">Etiology</span>
-          <h2>What Causes Clubfoot?</h2>
-        </div>
-        <div class="slide-body">
-          <div class="two-col">
-            <div class="col-card">
-              <h3>Contributing Factors</h3>
-              <ul class="icon-list">
-                <li><span class="icon">▶</span> Often no clear cause identified</li>
-                <li><span class="icon">▶</span> Genetic predisposition</li>
-                <li><span class="icon">▶</span> Family history increases risk</li>
-              </ul>
-            </div>
-            <div class="col-card col-card-amber">
-              <h3>Important to Know</h3>
-              <ul class="icon-list icon-amber">
-                <li><span class="icon">▶</span> Not caused by anything you did</li>
-                <li><span class="icon">▶</span> Cannot be prevented</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 5 — PROGNOSIS -->
-      <div class="slide">
-        <div class="slide-header">
-          <span class="slide-tag">Outcomes</span>
-          <h2>Will My Baby Be Okay?</h2>
-        </div>
-        <div class="slide-body">
-          <div class="stat-callout">
-            <span class="stat-number">&gt;95%</span>
-            <span class="stat-label">treatment success rate with the Ponseti method</span>
-          </div>
-          <ul class="icon-list" style="margin-top: 1.2rem;">
-            <li><span class="icon">▶</span> Walk, run, and play normally</li>
-            <li><span class="icon">▶</span> Treatment begins shortly after birth</li>
-            <li><span class="icon">▶</span> Most children have no long-term limitations</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- SLIDE 6 — TREATMENT TIMELINE -->
-      <div class="slide">
-        <div class="slide-header">
-          <span class="slide-tag">Treatment</span>
-          <h2>The Ponseti Method</h2>
-        </div>
-        <div class="slide-body">
-          <div class="timeline">
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-content">
-                <span class="tl-week">Birth – 2 wks</span>
-                <span class="tl-label">Assessment &amp; planning</span>
-              </div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-content">
-                <span class="tl-week">2 – 8 wks</span>
-                <span class="tl-label">Serial casting (weekly)</span>
-              </div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-content">
-                <span class="tl-week">~8 wks</span>
-                <span class="tl-label">Tenotomy (if needed)</span>
-              </div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-content">
-                <span class="tl-week">Age 0 – 4 yrs</span>
-                <span class="tl-label">Brace wear</span>
-              </div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-content">
-                <span class="tl-week">Long-term</span>
-                <span class="tl-label">Normal activity</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 7 — CASTING -->
-      <div class="slide">
-        <div class="slide-header">
-          <span class="slide-tag">Treatment — Phase 1</span>
-          <h2>Serial Casting</h2>
-        </div>
-        <div class="slide-body">
-          <ul class="icon-list">
-            <li><span class="icon">▶</span> Begins within days of birth</li>
-            <li><span class="icon">▶</span> New cast applied weekly for 6–8 weeks</li>
-            <li><span class="icon">▶</span> Gently repositions foot with each change</li>
-            <li><span class="icon">▶</span> Performed by pediatric orthopedic specialist</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- SLIDE 8 — TENOTOMY & BRACING -->
-      <div class="slide">
-        <div class="slide-header">
-          <span class="slide-tag">Treatment — Phase 2</span>
-          <h2>Tenotomy &amp; Bracing</h2>
-        </div>
-        <div class="slide-body">
-          <div class="two-col">
-            <div class="col-card col-card-blue">
-              <h3>Tenotomy</h3>
-              <ul class="icon-list">
-                <li><span class="icon">▶</span> Small Achilles tendon procedure</li>
-                <li><span class="icon">▶</span> Needed in ~80% of cases</li>
-                <li><span class="icon">▶</span> Done under local anesthesia</li>
-              </ul>
-            </div>
-            <div class="col-card">
-              <h3>Bracing</h3>
-              <ul class="icon-list">
-                <li><span class="icon">▶</span> 23 hrs/day for first 3 months</li>
-                <li><span class="icon">▶</span> Nights/naps until age 4–5</li>
-                <li><span class="icon">▶</span> Prevents recurrence</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 9 — LONG-TERM OUTLOOK -->
-      <div class="slide">
-        <div class="slide-header">
-          <span class="slide-tag">Long-term</span>
-          <h2>Long-Term Outlook</h2>
-        </div>
-        <div class="slide-body">
-          <ul class="icon-list">
-            <li><span class="icon">▶</span> Most children walk and run normally</li>
-            <li><span class="icon">▶</span> Can participate in sports and physical activities</li>
-            <li><span class="icon">▶</span> Treated foot may be slightly smaller</li>
-            <li><span class="icon">▶</span> Periodic follow-up until skeletal maturity</li>
-          </ul>
-          <div class="highlight-box hb-amber" style="margin-top: 1rem;">
-            <p>Athletes with treated clubfoot compete at the highest levels of sport.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 10 — KEY TAKEAWAYS -->
-      <div class="slide">
-        <div class="slide-header">
-          <span class="slide-tag">Summary</span>
-          <h2>Key Takeaways</h2>
-        </div>
-        <div class="slide-body">
-          <div class="key-points">
-            <div class="kp-item">
-              <span class="kp-num">1</span>
-              <span class="kp-text">Clubfoot is treatable — outcomes with the Ponseti method are excellent</span>
-            </div>
-            <div class="kp-item">
-              <span class="kp-num">2</span>
-              <span class="kp-text">Treatment begins shortly after birth with gentle serial casting</span>
-            </div>
-            <div class="kp-item">
-              <span class="kp-num">3</span>
-              <span class="kp-text">With proper care, most children have no long-term activity limitations</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /#slides-container -->
-  </div><!-- /#stage -->
-
-  <!-- BOTTOM NAV -->
-  <div id="navbar">
-    <button class="nav-btn" id="btn-prev" disabled>&#8592; Prev</button>
-    <div id="progress-bar-wrap">
-      <div id="progress-bar"></div>
+  <!-- openmfm-footer-injected -->
+  <header class="topbar">
+   <a aria-label="OpenMFM library" class="brand" href="https://openmfm.org/library">
+    Open
+    <span>
+     MFM
+    </span>
+   </a>
+   <div class="tools">
+    <button aria-haspopup="dialog" id="reference-button">
+     Sources
+    </button>
+    <button id="print-button">
+     Print / PDF
+    </button>
+   </div>
+  </header>
+  <noscript>
+   <p class="nojs">
+    All slides appear below. Scroll to read or use your browser’s print menu.
+   </p>
+  </noscript>
+  <main id="main" tabindex="-1">
+   <section aria-labelledby="heading-1" class="slide" data-sources="1, 2, 3" id="welcome">
+    <div class="eyebrow">
+     A guide for parents · Understanding clubfoot
     </div>
-    <button class="nav-btn" id="btn-next">Next &#8594;</button>
-  </div>
-
-</div><!-- /#app -->
-
-<script>
-  (function () {
-    const slides      = document.querySelectorAll('.slide');
-    const counter     = document.getElementById('slide-counter');
-    const btnPrev     = document.getElementById('btn-prev');
-    const btnNext     = document.getElementById('btn-next');
-    const progressBar = document.getElementById('progress-bar');
-    const stage       = document.getElementById('stage');
-    let current = 0;
-    const total = slides.length;
-
-    counter.textContent = '1 / ' + total;
-
-    function goTo(idx) {
-      if (idx < 0 || idx >= total) return;
-      slides[current].classList.remove('active');
-      slides[current].classList.add('exit-left');
-      const prev = current;
-      setTimeout(() => slides[prev].classList.remove('exit-left'), 300);
-      current = idx;
-      slides[current].classList.add('active');
-      counter.textContent = (current + 1) + ' / ' + total;
-      btnPrev.disabled = current === 0;
-      btnNext.disabled = current === total - 1;
-      progressBar.style.width = ((current + 1) / total * 100) + '%';
-    }
-
-    btnPrev.addEventListener('click', () => goTo(current - 1));
-    btnNext.addEventListener('click', () => goTo(current + 1));
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown') {
-        e.preventDefault(); goTo(current + 1);
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
-        e.preventDefault(); goTo(current - 1);
-      }
-    });
-
-    // Touch swipe navigation
-    let touchStartX = 0;
-    let touchStartY = 0;
-
-    stage.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].clientX;
-      touchStartY = e.changedTouches[0].clientY;
-    }, { passive: true });
-
-    stage.addEventListener('touchend', (e) => {
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      const dy = e.changedTouches[0].clientY - touchStartY;
-      // Only trigger on dominant horizontal swipe of ≥40px
-      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-        if (dx < 0) goTo(current + 1);
-        else        goTo(current - 1);
-      }
-    }, { passive: true });
-
-    goTo(0);
-  })();
-</script>
-
-
-
-
-
-<!-- openmfm-footer-injected -->
-<div style="position:fixed;bottom:16px;left:16px;z-index:9999;background:rgba(15,23,42,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:5px 14px;font-family:system-ui,-apple-system,sans-serif;pointer-events:auto;">
-  <a href="https://openmfm.org/library" style="color:#22d3ee;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;">&#8592; OpenMFM Library</a>
-</div>
-</body>
+    <h1 id="heading-1" tabindex="-1">
+     Clubfoot can be treated
+    </h1>
+    <div class="content">
+     <p class="lead">
+      A step-by-step guide from the first scan to your child’s first steps.
+     </p>
+     <div class="grid">
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <rect height="18" rx="3" width="24" x="4" y="4">
+        </rect>
+        <path d="M10 28h12M16 22v6M9 15q7-12 14 0M11 17q5-7 10 0">
+        </path>
+       </svg>
+       <h3>
+        Understand the scan
+       </h3>
+       <p>
+        What does the foot finding mean?
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <circle cx="16" cy="9" r="4">
+        </circle>
+        <path d="M8 28v-5a8 8 0 0 1 16 0v5M5 9a3 3 0 0 0 0 6M27 9a3 3 0 0 1 0 6M3 26v-5M29 26v-5">
+        </path>
+       </svg>
+       <h3>
+        Plan the next steps
+       </h3>
+       <p>
+        Who will help care for your baby?
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M11 4c-5 2-7 9-4 13s9 2 9-3-1-12-5-10ZM12 22c-5-1-6 7-1 7s6-6 1-7ZM24 7c-4 0-5 9-2 12s7 1 7-3-1-9-5-9ZM25 23c-4 0-4 6 0 6s4-6 0-6Z">
+        </path>
+       </svg>
+       <h3>
+        Learn about treatment
+       </h3>
+       <p>
+        How do casts and braces help?
+       </p>
+      </div>
+     </div>
+     <p class="quiet">
+      Use the arrows below, your keyboard, or swipe left to begin.
+     </p>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 1" href="#ref-1">
+       [1]
+      </a>
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <a aria-label="Read source 3" href="#ref-3">
+       [3]
+      </a>
+      <span class="page-number">
+       1 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-2" class="slide" data-sources="2, 3" id="what-is-clubfoot">
+    <div class="eyebrow">
+     01 / Understand the finding
+    </div>
+    <h2 id="heading-2" tabindex="-1">
+     Clubfoot turns the foot inward and down
+    </h2>
+    <div class="content">
+     <div class="split">
+      <figure>
+       <svg aria-labelledby="position-title position-desc" class="diagram" role="img" viewbox="0 0 520 310">
+        <title id="position-title">
+         The foot turns inward and down
+        </title>
+        <desc id="position-desc">
+         Front and side views show the inward turn of the forefoot and the downward point of the toes. These are simplified drawings, not a scan.
+        </desc>
+        <text text-anchor="middle" x="125" y="30">
+         Front view
+        </text>
+        <text text-anchor="middle" x="390" y="30">
+         Side view
+        </text>
+        <path class="skin" d="M104 60h58l-4 108q0 22-23 30l-58 28q-30 11-35-10t25-34l39-23Z">
+        </path>
+        <path class="guide" d="M131 65v146">
+        </path>
+        <path class="arrow" d="M183 213q-28 30-76 14m0 0 9-12m-9 12 16 4">
+        </path>
+        <text text-anchor="middle" x="130" y="274">
+         Turns inward
+        </text>
+        <path class="skin" d="M345 60h55l-2 104 43 58q15 21-4 32t-35-10l-50-62q-15-17-11-37Z">
+        </path>
+        <path class="guide" d="M350 188h109">
+        </path>
+        <path class="arrow" d="M457 179q29 34-1 68m0 0 0-17m0 17 17-4">
+        </path>
+        <text text-anchor="middle" x="389" y="290">
+         Points down
+        </text>
+       </svg>
+       <figcaption>
+        Simplified views of one foot. The amount of turning can vary.
+       </figcaption>
+      </figure>
+      <div>
+       <p>
+        One or both feet may be affected.
+       </p>
+       <p class="stat">
+        1 in 1,000
+       </p>
+       <p>
+        About this many babies in the US are born with clubfoot.
+       </p>
+       <p class="quiet">
+        The medical name is
+        <em>
+         talipes equinovarus
+        </em>
+        .
+       </p>
+      </div>
+     </div>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <a aria-label="Read source 3" href="#ref-3">
+       [3]
+      </a>
+      <span class="page-number">
+       2 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-3" class="slide" data-sources="2, 3" id="causes">
+    <div class="eyebrow">
+     01 / Understand the finding
+    </div>
+    <h2 id="heading-3" tabindex="-1">
+     The cause is often unknown
+    </h2>
+    <div class="content">
+     <div class="grid">
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <circle cx="16" cy="6" r="4">
+        </circle>
+        <path d="M16 10v7M6 23v-6h20v6">
+        </path>
+        <circle cx="6" cy="27" r="3">
+        </circle>
+        <circle cx="26" cy="27" r="3">
+        </circle>
+       </svg>
+       <h3>
+        Family history can play a role
+       </h3>
+       <p>
+        Genes are traits passed down in families. They can affect how the foot forms.
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M16 28 4 15C-3 4 10-2 16 8c6-10 19-4 12 7Z">
+        </path>
+       </svg>
+       <h3>
+        This is not a reason for blame
+       </h3>
+       <p>
+        Finding clubfoot does not mean you did something wrong.
+       </p>
+      </div>
+     </div>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <a aria-label="Read source 3" href="#ref-3">
+       [3]
+      </a>
+      <span class="page-number">
+       3 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-4" class="slide" data-sources="1, 2" id="scan">
+    <div class="eyebrow">
+     02 / Make a care plan
+    </div>
+    <h2 id="heading-4" tabindex="-1">
+     A scan is the start of the assessment
+    </h2>
+    <div class="content">
+     <p class="lead">
+      A baby’s position can sometimes look like clubfoot.
+     </p>
+     <div class="grid">
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <rect height="18" rx="3" width="24" x="4" y="4">
+        </rect>
+        <path d="M10 28h12M16 22v6M9 15q7-12 14 0M11 17q5-7 10 0">
+        </path>
+       </svg>
+       <h3>
+        1. Review the scan
+       </h3>
+       <p>
+        Your team takes a closer look at the foot.
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <circle cx="16" cy="9" r="4">
+        </circle>
+        <path d="M8 28v-5a8 8 0 0 1 16 0v5M5 9a3 3 0 0 0 0 6M27 9a3 3 0 0 1 0 6M3 26v-5M29 26v-5">
+        </path>
+       </svg>
+       <h3>
+        2. Talk about the findings
+       </h3>
+       <p>
+        Ask what is clear and what is still unknown.
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M11 4c-5 2-7 9-4 13s9 2 9-3-1-12-5-10ZM12 22c-5-1-6 7-1 7s6-6 1-7ZM24 7c-4 0-5 9-2 12s7 1 7-3-1-9-5-9ZM25 23c-4 0-4 6 0 6s4-6 0-6Z">
+        </path>
+       </svg>
+       <h3>
+        3. Check after birth
+       </h3>
+       <p>
+        An exam helps confirm the diagnosis.
+       </p>
+      </div>
+     </div>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 1" href="#ref-1">
+       [1]
+      </a>
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <span class="page-number">
+       4 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-5" class="slide" data-sources="1" id="other-findings">
+    <div class="eyebrow">
+     02 / Make a care plan
+    </div>
+    <h2 id="heading-5" tabindex="-1">
+     Other findings help guide the care plan
+    </h2>
+    <div class="content">
+     <p>
+      A detailed scan checks the rest of your baby.
+     </p>
+     <div class="grid">
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <circle cx="16" cy="16" r="13">
+        </circle>
+        <path d="m9 16 5 5 9-10">
+        </path>
+       </svg>
+       <h3>
+        Foot finding alone
+       </h3>
+       <p>
+        This is called “isolated” clubfoot.
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <rect height="18" rx="3" width="24" x="4" y="4">
+        </rect>
+        <path d="M10 28h12M16 22v6M9 15q7-12 14 0M11 17q5-7 10 0">
+        </path>
+       </svg>
+       <h3>
+        Other findings present
+       </h3>
+       <p>
+        The team may suggest more tests or care.
+       </p>
+      </div>
+     </div>
+     <p class="callout">
+      Ask about genetic counseling and testing. One option is amniocentesis: testing a small sample of fluid around the baby for chromosome changes. Chromosomes carry genetic information. You can discuss the benefits and risks before you choose.
+     </p>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 1" href="#ref-1">
+       [1]
+      </a>
+      <span class="page-number">
+       5 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-6" class="slide" data-sources="1" id="birth">
+    <div class="eyebrow">
+     02 / Make a care plan
+    </div>
+    <h2 id="heading-6" tabindex="-1">
+     Clubfoot alone usually does not change birth plans
+    </h2>
+    <div class="content">
+     <div class="grid">
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M16 28 4 15C-3 4 10-2 16 8c6-10 19-4 12 7Z">
+        </path>
+       </svg>
+       <h3>
+        During pregnancy
+       </h3>
+       <p>
+        The timing and type of birth usually follow your other pregnancy needs.
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <circle cx="16" cy="9" r="4">
+        </circle>
+        <path d="M8 28v-5a8 8 0 0 1 16 0v5M5 9a3 3 0 0 0 0 6M27 9a3 3 0 0 1 0 6M3 26v-5M29 26v-5">
+        </path>
+       </svg>
+       <h3>
+        Before treatment
+       </h3>
+       <p>
+        Meet a children’s foot specialist, called a pediatric orthopedic specialist.
+       </p>
+      </div>
+     </div>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 1" href="#ref-1">
+       [1]
+      </a>
+      <span class="page-number">
+       6 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-7" class="slide" data-sources="2, 3" id="treatment">
+    <div class="eyebrow">
+     03 / Follow the treatment steps
+    </div>
+    <h2 id="heading-7" tabindex="-1">
+     Treatment happens in steps
+    </h2>
+    <div class="content">
+     <p class="lead">
+      This plan is called the
+      <strong>
+       Ponseti method
+      </strong>
+      .
+     </p>
+     <div class="grid">
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M12 3h10v17l5 3v6H8v-6l4-4ZM12 9h10M12 15h10M8 24h19">
+        </path>
+       </svg>
+       <h3>
+        1. Casts
+       </h3>
+       <p>
+        Gently move the foot over time.
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M11 4c-5 2-7 9-4 13s9 2 9-3-1-12-5-10ZM12 22c-5-1-6 7-1 7s6-6 1-7ZM24 7c-4 0-5 9-2 12s7 1 7-3-1-9-5-9ZM25 23c-4 0-4 6 0 6s4-6 0-6Z">
+        </path>
+       </svg>
+       <h3>
+        2. Heel-cord care
+       </h3>
+       <p>
+        Often, a small procedure releases a tight cord.
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <circle cx="16" cy="16" r="13">
+        </circle>
+        <path d="M16 7v10l6 3">
+        </path>
+       </svg>
+       <h3>
+        3. A brace
+       </h3>
+       <p>
+        Helps hold the corrected position.
+       </p>
+      </div>
+     </div>
+     <p class="callout">
+      Keep follow-up visits through treatment and as your child grows.
+     </p>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <a aria-label="Read source 3" href="#ref-3">
+       [3]
+      </a>
+      <span class="page-number">
+       7 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-8" class="slide" data-sources="2, 3" id="casts">
+    <div class="eyebrow">
+     03 / Follow the treatment steps
+    </div>
+    <h2 id="heading-8" tabindex="-1">
+     Each cast gently changes the foot’s position
+    </h2>
+    <div class="content">
+     <div class="split">
+      <figure>
+       <svg aria-labelledby="casting-title casting-desc" class="diagram" role="img" viewbox="0 0 520 310">
+        <title id="casting-title">
+         A cast reaches from the toes to the thigh
+        </title>
+        <desc id="casting-desc">
+         A bent knee is held in a long-leg cast. The toes remain visible at the end.
+        </desc>
+        <path class="skin" d="M110 75h106l11 27 49 56 77 13 43 29q17 16 1 29t-36 4l-76-20-57-14-70-78Z">
+        </path>
+        <path class="cast-fill" d="m110 81 105 4 13 22 47 51 74 11 21 41-85-2-55-16-67-69-42-6Z">
+        </path>
+        <path class="wrap" d="m135 85-5 34m32-33-9 45m32-43-13 61m36-38-17 58m36-34-22 51m40-29-17 37m46-32-7 46m39-40-4 43m27-39 7 39">
+        </path>
+        <path class="guide" d="M174 80V48h-62M300 177v80h-62M393 216h66">
+        </path>
+        <text x="76" y="36">
+         Thigh
+        </text>
+        <text x="166" y="281">
+         Long-leg cast
+        </text>
+        <text x="405" y="248">
+         Toes
+        </text>
+       </svg>
+       <figcaption>
+        A trained foot specialist gently moves the foot, then applies the cast.
+       </figcaption>
+      </figure>
+      <div>
+       <p>
+        Treatment starts soon after birth.
+       </p>
+       <p>
+        A new cast is placed about once a week, often for several weeks.
+       </p>
+       <p>
+        The number of casts depends on your baby’s foot.
+       </p>
+      </div>
+     </div>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <a aria-label="Read source 3" href="#ref-3">
+       [3]
+      </a>
+      <span class="page-number">
+       8 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-9" class="slide" data-sources="2, 3" id="heel-cord">
+    <div class="eyebrow">
+     03 / Follow the treatment steps
+    </div>
+    <h2 id="heading-9" tabindex="-1">
+     Many babies need a small heel-cord procedure
+    </h2>
+    <div class="content">
+     <div class="split">
+      <figure>
+       <svg aria-labelledby="heel-title heel-desc" class="diagram" role="img" viewbox="0 0 520 310">
+        <title id="heel-title">
+         The heel cord connects the calf to the heel
+        </title>
+        <desc id="heel-desc">
+         Two side views show a tight heel cord before treatment and a longer heel cord after healing. The drawings explain the goal, not the steps of surgery.
+        </desc>
+        <text text-anchor="middle" x="127" y="29">
+         Before
+        </text>
+        <text text-anchor="middle" x="389" y="29">
+         After healing
+        </text>
+        <path class="skin" d="M83 55h56l-2 112 48 57q18 21 1 33t-34-6l-55-64q-12-14-10-39Z">
+        </path>
+        <path class="tendon" d="M94 74 102 173">
+        </path>
+        <path class="guide" d="M101 117H28">
+        </path>
+        <text x="25" y="142">
+         Tight
+        </text>
+        <text x="25" y="165">
+         cord
+        </text>
+        <path class="skin" d="M337 55h56l-2 139 66 9q23 3 23 21t-22 19h-97q-28-2-28-26Z">
+        </path>
+        <path class="tendon" d="M348 74 347 214">
+        </path>
+        <path class="guide" d="M348 144h-58">
+        </path>
+        <text x="276" y="168">
+         Longer
+        </text>
+        <text x="276" y="191">
+         cord
+        </text>
+        <text text-anchor="middle" x="260" y="294">
+         Heel cord = Achilles tendon
+        </text>
+       </svg>
+       <figcaption>
+        Simple side views. The foot heals in a cast after the procedure.
+       </figcaption>
+      </figure>
+      <div>
+       <p>
+        The heel cord links the calf muscle to the heel.
+       </p>
+       <p>
+        A small procedure, called a
+        <strong>
+         tenotomy
+        </strong>
+        , releases the tight cord.
+       </p>
+       <p>
+        It is often done with numbing medicine. A final cast protects the cord as it heals.
+       </p>
+      </div>
+     </div>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <a aria-label="Read source 3" href="#ref-3">
+       [3]
+      </a>
+      <span class="page-number">
+       9 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-10" class="slide" data-sources="2, 3" id="bracing">
+    <div class="eyebrow">
+     03 / Follow the treatment steps
+    </div>
+    <h2 id="heading-10" tabindex="-1">
+     The brace helps keep the foot straight
+    </h2>
+    <div class="content">
+     <div class="split">
+      <figure>
+       <svg aria-labelledby="brace-title brace-desc" class="diagram" role="img" viewbox="0 0 520 310">
+        <title id="brace-title">
+         Two boots linked by a bar
+        </title>
+        <desc id="brace-desc">
+         A brace has two boots joined by a bar. The boots hold the feet turned outward. The specialist sets the fit and angles.
+        </desc>
+        <rect class="bar" height="22" rx="11" width="314" x="103" y="176">
+        </rect>
+        <g transform="translate(125 145) rotate(-30)">
+         <path class="boot" d="M-24 42Q-33 18-30-30Q-35-76-5-82Q29-89 34-52L26 40Q24 62 0 64Q-24 62-24 42Z">
+         </path>
+         <path class="strap" d="M-29-42h60M-29-17h58M-28 17h55">
+         </path>
+        </g>
+        <g transform="translate(395 145) rotate(30)">
+         <path class="boot" d="M-24 42Q-33 18-30-30Q-35-76-5-82Q29-89 34-52L26 40Q24 62 0 64Q-24 62-24 42Z">
+         </path>
+         <path class="strap" d="M-29-42h60M-29-17h58M-28 17h55">
+         </path>
+        </g>
+        <text text-anchor="middle" x="260" y="70">
+         Boots (top view)
+        </text>
+        <path class="guide" d="m231 77-74 17m132-17 74 17">
+        </path>
+        <text text-anchor="middle" x="260" y="261">
+         Connecting bar
+        </text>
+        <path class="guide" d="M260 238v-39">
+        </path>
+       </svg>
+       <figcaption>
+        The specialist sets the fit and angles. This is not a fitting guide.
+       </figcaption>
+      </figure>
+      <div class="schedule">
+       <div>
+        <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+         <circle cx="16" cy="16" r="13">
+         </circle>
+         <path d="M16 7v10l6 3">
+         </path>
+        </svg>
+        <h3>
+         After the casts
+        </h3>
+        <p>
+         Often 23 hours a day for the first 3 months.
+        </p>
+       </div>
+       <div>
+        <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+         <path d="M25 22A13 13 0 0 1 11 3a13 13 0 1 0 14 19Z">
+         </path>
+        </svg>
+        <h3>
+         Then, during sleep
+        </h3>
+        <p>
+         Nights and naps, often until age 4–5.
+        </p>
+       </div>
+       <p class="quiet">
+        Follow your specialist’s schedule.
+       </p>
+      </div>
+     </div>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <a aria-label="Read source 3" href="#ref-3">
+       [3]
+      </a>
+      <span class="page-number">
+       10 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-11" class="slide" data-sources="2, 3" id="outlook">
+    <div class="eyebrow">
+     04 / Look ahead
+    </div>
+    <h2 id="heading-11" tabindex="-1">
+     Most treated children can walk, run, and play
+    </h2>
+    <div class="content">
+     <div class="grid">
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M11 4c-5 2-7 9-4 13s9 2 9-3-1-12-5-10ZM12 22c-5-1-6 7-1 7s6-6 1-7ZM24 7c-4 0-5 9-2 12s7 1 7-3-1-9-5-9ZM25 23c-4 0-4 6 0 6s4-6 0-6Z">
+        </path>
+       </svg>
+       <h3>
+        An active life
+       </h3>
+       <p>
+        Most children with isolated clubfoot do well with treatment.
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <circle cx="16" cy="16" r="13">
+        </circle>
+        <path d="m9 16 5 5 9-10">
+        </path>
+       </svg>
+       <h3>
+        Some differences may remain
+       </h3>
+       <p>
+        The foot or calf may stay smaller.
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <circle cx="16" cy="9" r="4">
+        </circle>
+        <path d="M8 28v-5a8 8 0 0 1 16 0v5M5 9a3 3 0 0 0 0 6M27 9a3 3 0 0 1 0 6M3 26v-5M29 26v-5">
+        </path>
+       </svg>
+       <h3>
+        Follow-up still matters
+       </h3>
+       <p>
+        The foot can turn back. Some children need more treatment.
+       </p>
+      </div>
+     </div>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <a aria-label="Read source 3" href="#ref-3">
+       [3]
+      </a>
+      <span class="page-number">
+       11 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-12" class="slide" data-sources="2, 3" id="changes">
+    <div class="eyebrow">
+     04 / Look ahead
+    </div>
+    <h2 id="heading-12" tabindex="-1">
+     A strong plan leaves room for changes
+    </h2>
+    <div class="content">
+     <div class="grid">
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <circle cx="16" cy="16" r="13">
+        </circle>
+        <path d="m9 16 5 5 9-10">
+        </path>
+       </svg>
+       <h3>
+        What we know
+       </h3>
+       <p>
+        Casts and braces help many children. A good early result still needs follow-up.
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <circle cx="16" cy="16" r="13">
+        </circle>
+        <path d="M16 7v10l6 3">
+        </path>
+       </svg>
+       <h3>
+        What may vary
+       </h3>
+       <p>
+        The time in treatment and the long-term result differ from child to child.
+       </p>
+      </div>
+     </div>
+     <p class="callout">
+      If brace wear is hard, ask your team for help. The foot can turn back even when families follow the plan.
+     </p>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <a aria-label="Read source 3" href="#ref-3">
+       [3]
+      </a>
+      <span class="page-number">
+       12 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-13" class="slide" data-sources="2, 3" id="remember">
+    <div class="eyebrow">
+     05 / Take the next step
+    </div>
+    <h2 id="heading-13" tabindex="-1">
+     Remember: check, treat, and keep follow-up
+    </h2>
+    <div class="content">
+     <div class="grid">
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <rect height="18" rx="3" width="24" x="4" y="4">
+        </rect>
+        <path d="M10 28h12M16 22v6M9 15q7-12 14 0M11 17q5-7 10 0">
+        </path>
+       </svg>
+       <h3>
+        Check
+       </h3>
+       <p>
+        Review the scan findings with your team.
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <circle cx="16" cy="9" r="4">
+        </circle>
+        <path d="M8 28v-5a8 8 0 0 1 16 0v5M5 9a3 3 0 0 0 0 6M27 9a3 3 0 0 1 0 6M3 26v-5M29 26v-5">
+        </path>
+       </svg>
+       <h3>
+        Treat
+       </h3>
+       <p>
+        Meet the foot specialist and make a plan.
+       </p>
+      </div>
+      <div class="card">
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M11 4c-5 2-7 9-4 13s9 2 9-3-1-12-5-10ZM12 22c-5-1-6 7-1 7s6-6 1-7ZM24 7c-4 0-5 9-2 12s7 1 7-3-1-9-5-9ZM25 23c-4 0-4 6 0 6s4-6 0-6Z">
+        </path>
+       </svg>
+       <h3>
+        Keep follow-up
+       </h3>
+       <p>
+        Use the brace as prescribed, even when the foot looks straight.
+       </p>
+      </div>
+     </div>
+     <details class="teachback">
+      <summary>
+       Why is the brace needed after the casts?
+      </summary>
+      <p>
+       It helps keep the foot in its new position and lowers the chance of it turning back.
+      </p>
+     </details>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <a aria-label="Read source 3" href="#ref-3">
+       [3]
+      </a>
+      <span class="page-number">
+       13 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-14" class="slide" data-sources="1, 2, 3" id="questions">
+    <div class="eyebrow">
+     05 / Take the next step
+    </div>
+    <h2 id="heading-14" tabindex="-1">
+     Ask your MFM specialist these questions
+    </h2>
+    <div class="content">
+     <p class="quiet">
+      MFM means maternal-fetal medicine: care for pregnancies that need extra attention.
+     </p>
+     <ul class="questions">
+      <li>
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M5 5h22v17H14l-7 6v-6H5ZM11 11h10M11 16h7">
+        </path>
+       </svg>
+       <span>
+        Is clubfoot the only finding?
+       </span>
+      </li>
+      <li>
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M5 5h22v17H14l-7 6v-6H5ZM11 11h10M11 16h7">
+        </path>
+       </svg>
+       <span>
+        What tests can I choose?
+       </span>
+      </li>
+      <li>
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M5 5h22v17H14l-7 6v-6H5ZM11 11h10M11 16h7">
+        </path>
+       </svg>
+       <span>
+        Does this change my birth plan?
+       </span>
+      </li>
+      <li>
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M5 5h22v17H14l-7 6v-6H5ZM11 11h10M11 16h7">
+        </path>
+       </svg>
+       <span>
+        When should we meet the foot specialist?
+       </span>
+      </li>
+      <li>
+       <svg aria-hidden="true" class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 32 32">
+        <path d="M5 5h22v17H14l-7 6v-6H5ZM11 11h10M11 16h7">
+        </path>
+       </svg>
+       <span>
+        Who can help us with the brace?
+       </span>
+      </li>
+     </ul>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 1" href="#ref-1">
+       [1]
+      </a>
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <a aria-label="Read source 3" href="#ref-3">
+       [3]
+      </a>
+      <span class="page-number">
+       14 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+   <section aria-labelledby="heading-15" class="slide" data-sources="1, 2, 3" id="sources">
+    <div class="eyebrow">
+     Sources &amp; support
+    </div>
+    <h2 id="heading-15" tabindex="-1">
+     Learn more and make a plan with your team
+    </h2>
+    <div class="content">
+     <ol class="reference-list">
+      <li id="ref-1">
+       <strong>
+        Professional guidance.
+       </strong>
+       Society for Maternal-Fetal Medicine; McKinney J, Rac MWF, Gandhi M.
+       <a href="https://publications.smfm.org/publications/283-smfm-fetal-anomalies-consult-series-2-extremities/">
+        SMFM Fetal Anomalies Consult Series #2: Extremities.
+       </a>
+       2019. Clubfoot section, pp. B10–B12.
+      </li>
+      <li id="ref-2">
+       <strong>
+        Parent education.
+       </strong>
+       American Academy of Pediatrics.
+       <a href="https://www.healthychildren.org/English/health-issues/conditions/orthopedic/Pages/clubfoot-diagnosis-and-treatment-for-babies.aspx">
+        Clubfoot: Diagnosis and Treatment for Babies.
+       </a>
+       HealthyChildren.org. Updated January 25, 2022.
+      </li>
+      <li id="ref-3">
+       <strong>
+        Specialist education.
+       </strong>
+       American Academy of Orthopaedic Surgeons.
+       <a href="https://www.orthoinfo.org/bodypart/foot-ankle/clubfoot/">
+        Clubfoot.
+       </a>
+       OrthoInfo. Accessed November 18, 2026.
+      </li>
+     </ol>
+     <p class="callout">
+      This guide helps you talk with your care team. It does not replace medical advice. Your baby’s care plan may differ.
+     </p>
+     <p class="quiet">
+      Evidence checked November 18, 2026 · OpenMFM Presentation Standard v1.0
+      <br/>
+      Original teaching diagrams. No patient images or personal health information.
+     </p>
+    </div>
+    <footer class="slide-footer">
+     <span>
+      Atlanta Perinatal Associates
+     </span>
+     <span>
+      Sources
+      <a aria-label="Read source 1" href="#ref-1">
+       [1]
+      </a>
+      <a aria-label="Read source 2" href="#ref-2">
+       [2]
+      </a>
+      <a aria-label="Read source 3" href="#ref-3">
+       [3]
+      </a>
+      <span class="page-number">
+       15 / 15
+      </span>
+     </span>
+    </footer>
+   </section>
+  </main>
+  <nav aria-label="Slide navigation" class="navigation">
+   <button aria-label="Previous slide" id="previous">
+    ← Back
+   </button>
+   <label class="sr-only" for="jump">
+    Choose a slide
+   </label>
+   <select id="jump">
+   </select>
+   <button aria-label="Next slide" id="next">
+    Next →
+   </button>
+  </nav>
+  <p aria-atomic="true" aria-live="polite" class="sr-only" id="status" role="status">
+  </p>
+  <dialog aria-labelledby="reference-title" id="references">
+   <button class="close" id="close-references">
+    Close
+   </button>
+   <h2 id="reference-title">
+    Sources for this guide
+   </h2>
+   <ol class="reference-list">
+    <li id="panel-ref-1">
+     <strong>
+      Professional guidance.
+     </strong>
+     Society for Maternal-Fetal Medicine; McKinney J, Rac MWF, Gandhi M.
+     <a href="https://publications.smfm.org/publications/283-smfm-fetal-anomalies-consult-series-2-extremities/">
+      SMFM Fetal Anomalies Consult Series #2: Extremities.
+     </a>
+     2019. Clubfoot section, pp. B10–B12.
+    </li>
+    <li id="panel-ref-2">
+     <strong>
+      Parent education.
+     </strong>
+     American Academy of Pediatrics.
+     <a href="https://www.healthychildren.org/English/health-issues/conditions/orthopedic/Pages/clubfoot-diagnosis-and-treatment-for-babies.aspx">
+      Clubfoot: Diagnosis and Treatment for Babies.
+     </a>
+     HealthyChildren.org. Updated January 25, 2022.
+    </li>
+    <li id="panel-ref-3">
+     <strong>
+      Specialist education.
+     </strong>
+     American Academy of Orthopaedic Surgeons.
+     <a href="https://www.orthoinfo.org/bodypart/foot-ankle/clubfoot/">
+      Clubfoot.
+     </a>
+     OrthoInfo. Accessed November 18, 2026.
+    </li>
+   </ol>
+   <p class="quiet" style="margin-top:20px">
+    Evidence checked November 18, 2026. Care plans may vary.
+   </p>
+  </dialog>
+  <script>
+   (() => {
+  'use strict';
+  const slides = [...document.querySelectorAll('.slide')];
+  const previous = document.getElementById('previous');
+  const next = document.getElementById('next');
+  const jump = document.getElementById('jump');
+  const status = document.getElementById('status');
+  const progress = document.getElementById('progress');
+  const panel = document.getElementById('references');
+  const referenceButton = document.getElementById('reference-button');
+  let current = 0;
+  slides.forEach((slide, i) => {
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = `${i + 1}. ${slide.querySelector('h1,h2').textContent}`;
+    jump.append(option);
+  });
+  function show(index, focus = false) {
+    current = Math.max(0, Math.min(index, slides.length - 1));
+    slides.forEach((slide, i) => { slide.hidden = i !== current; });
+    previous.disabled = current === 0;
+    next.disabled = current === slides.length - 1;
+    jump.value = String(current);
+    status.textContent = `Slide ${current + 1} of ${slides.length}: ${slides[current].querySelector('h1,h2').textContent}`;
+    progress.style.width = `${(current + 1) / slides.length * 100}%`;
+    document.getElementById('progress-track').setAttribute('aria-valuenow', current + 1);
+    if (focus) slides[current].querySelector('h1,h2').focus({preventScroll:true});
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+  function fromHash(focus = false) {
+    let id;
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch { id = ''; }
+    let target = document.getElementById(id);
+    let index = slides.findIndex(slide => slide === target || slide.contains(target));
+    show(index < 0 ? 0 : index, focus);
+    if (target && target.matches('.reference-list li')) { target.tabIndex = -1; target.focus({preventScroll:true}); target.scrollIntoView({block:'center'}); }
+  }
+  function go(index) {
+    if (index < 0 || index >= slides.length) return;
+    history.pushState(null, '', '#' + slides[index].id);
+    show(index, true);
+  }
+  previous.addEventListener('click', () => go(current - 1));
+  next.addEventListener('click', () => go(current + 1));
+  jump.addEventListener('change', () => go(Number(jump.value)));
+  window.addEventListener('hashchange', () => fromHash(true));
+  document.addEventListener('keydown', event => {
+    if (panel.open || event.altKey || event.ctrlKey || event.metaKey || event.target.closest('button,a,input,select,textarea,summary,[contenteditable]')) return;
+    const map = {ArrowRight:current+1, PageDown:current+1, ' ':current+1, ArrowLeft:current-1, PageUp:current-1, Home:0, End:slides.length-1};
+    if (Object.hasOwn(map,event.key)) { event.preventDefault(); go(map[event.key]); }
+  });
+  let touch = null;
+  const main = document.querySelector('main');
+  main.addEventListener('touchstart', event => {
+    touch = event.touches.length === 1 && !event.target.closest('a,button,summary,select') ? {x:event.touches[0].clientX,y:event.touches[0].clientY} : null;
+  },{passive:true});
+  main.addEventListener('touchcancel', () => {touch=null;},{passive:true});
+  main.addEventListener('touchend', event => {
+    if (!touch || !event.changedTouches.length) return;
+    const dx=event.changedTouches[0].clientX-touch.x, dy=event.changedTouches[0].clientY-touch.y;
+    touch=null;
+    if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)*1.5) go(current+(dx<0?1:-1));
+  },{passive:true});
+  referenceButton.addEventListener('click', () => panel.showModal());
+  panel.addEventListener('keydown', event => {
+    if (event.key !== 'Tab') return;
+    const controls = [...panel.querySelectorAll('button,a[href]')];
+    const first = controls[0], last = controls[controls.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  });
+  document.getElementById('close-references').addEventListener('click', () => panel.close());
+  panel.addEventListener('close', () => referenceButton.focus());
+  document.getElementById('print-button').addEventListener('click', () => window.print());
+  let detailStates=[];
+  window.addEventListener('beforeprint', () => { detailStates=[...document.querySelectorAll('details')].map(d=>[d,d.open]); detailStates.forEach(([d])=>d.open=true); });
+  window.addEventListener('afterprint', () => detailStates.forEach(([d,open])=>d.open=open));
+  document.documentElement.classList.add('enhanced');
+  fromHash();
+})();
+  </script>
+ </body>
 </html>
